@@ -1,5 +1,0 @@
-/** @jsx dom */
-/** @jsxRuntime classic */
-
-
-<></>

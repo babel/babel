@@ -1,0 +1,33 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":16,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":16,"index":16}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": {
+              "type": "NullLiteral",
+              "start":12,"end":16,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":16,"index":16}}
+            }
+          }
+        ],
+        "kind": "using"
+      }
+    ],
+    "directives": []
+  }
+}

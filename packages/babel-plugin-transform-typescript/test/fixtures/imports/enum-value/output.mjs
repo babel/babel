@@ -1,8 +1,6 @@
 import { A } from 'lib';
-var Enum;
-
-(function (Enum) {
+var Enum = /*#__PURE__*/function (Enum) {
   Enum[Enum["id"] = A] = "id";
-})(Enum || (Enum = {}));
-
+  return Enum;
+}(Enum || {});
 ;

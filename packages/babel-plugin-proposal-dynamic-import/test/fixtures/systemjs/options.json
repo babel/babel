@@ -1,7 +1,0 @@
-{
-  "plugins": [
-    "proposal-dynamic-import",
-    "transform-modules-systemjs",
-    "external-helpers"
-  ]
-}

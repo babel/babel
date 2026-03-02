@@ -1,0 +1,4 @@
+{
+  "presets": [["typescript", { "allowDeclareFields": true }]],
+  "throws": "The .allowDeclareFields option has been removed and it's now always enabled. Please remove it from your config."
+}

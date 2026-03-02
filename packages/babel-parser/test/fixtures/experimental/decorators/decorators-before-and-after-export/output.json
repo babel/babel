@@ -1,0 +1,101 @@
+{
+  "type": "File",
+  "start":0,"end":72,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":39,"index":72}},
+  "errors": [
+    "SyntaxError: Decorators can be placed *either* before or after the 'export' keyword, but not in both locations at the same time. (1:13)",
+    "SyntaxError: Decorators can be placed *either* before or after the 'export' keyword, but not in both locations at the same time. (3:21)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":72,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":39,"index":72}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":31,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":31,"index":31}},
+        "specifiers": [],
+        "source": null,
+        "attributes": [],
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start":0,"end":31,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":31,"index":31}},
+          "decorators": [
+            {
+              "type": "Decorator",
+              "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5}},
+              "expression": {
+                "type": "Identifier",
+                "start":1,"end":5,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":5,"index":5},"identifierName":"dec1"},
+                "name": "dec1"
+              }
+            },
+            {
+              "type": "Decorator",
+              "start":13,"end":18,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":18,"index":18}},
+              "expression": {
+                "type": "Identifier",
+                "start":14,"end":18,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":18,"index":18},"identifierName":"dec2"},
+                "name": "dec2"
+              }
+            }
+          ],
+          "id": {
+            "type": "Identifier",
+            "start":25,"end":28,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":28,"index":28},"identifierName":"Foo"},
+            "name": "Foo"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":29,"end":31,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":31,"index":31}},
+            "body": []
+          }
+        }
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":33,"end":72,"loc":{"start":{"line":3,"column":0,"index":33},"end":{"line":3,"column":39,"index":72}},
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start":33,"end":72,"loc":{"start":{"line":3,"column":0,"index":33},"end":{"line":3,"column":39,"index":72}},
+          "decorators": [
+            {
+              "type": "Decorator",
+              "start":33,"end":38,"loc":{"start":{"line":3,"column":0,"index":33},"end":{"line":3,"column":5,"index":38}},
+              "expression": {
+                "type": "Identifier",
+                "start":34,"end":38,"loc":{"start":{"line":3,"column":1,"index":34},"end":{"line":3,"column":5,"index":38},"identifierName":"dec3"},
+                "name": "dec3"
+              }
+            },
+            {
+              "type": "Decorator",
+              "start":54,"end":59,"loc":{"start":{"line":3,"column":21,"index":54},"end":{"line":3,"column":26,"index":59}},
+              "expression": {
+                "type": "Identifier",
+                "start":55,"end":59,"loc":{"start":{"line":3,"column":22,"index":55},"end":{"line":3,"column":26,"index":59},"identifierName":"dec2"},
+                "name": "dec2"
+              }
+            }
+          ],
+          "id": {
+            "type": "Identifier",
+            "start":66,"end":69,"loc":{"start":{"line":3,"column":33,"index":66},"end":{"line":3,"column":36,"index":69},"identifierName":"Bar"},
+            "name": "Bar"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":70,"end":72,"loc":{"start":{"line":3,"column":37,"index":70},"end":{"line":3,"column":39,"index":72}},
+            "body": []
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

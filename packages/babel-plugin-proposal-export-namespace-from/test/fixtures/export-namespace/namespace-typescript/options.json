@@ -1,3 +1,0 @@
-{
-  "plugins": ["proposal-export-namespace-from", "transform-typescript"]
-}

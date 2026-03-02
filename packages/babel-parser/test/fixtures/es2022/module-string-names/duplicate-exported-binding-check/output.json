@@ -1,0 +1,103 @@
+{
+  "type": "File",
+  "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":28,"index":54}},
+  "errors": [
+    "SyntaxError: `foo` has already been exported. Exported identifiers must be unique. (2:14)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":28,"index":54}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":25,"index":25}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":14,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":14,"index":14}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":12,"end":14,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":14,"index":14}},
+              "extra": {
+                "rawValue": 42,
+                "raw": "42"
+              },
+              "value": 42
+            }
+          },
+          {
+            "type": "VariableDeclarator",
+            "start":16,"end":24,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":24,"index":24}},
+            "id": {
+              "type": "Identifier",
+              "start":16,"end":19,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":19,"index":19},"identifierName":"bar"},
+              "name": "bar"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":22,"end":24,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":24,"index":24}},
+              "extra": {
+                "rawValue": 42,
+                "raw": "42"
+              },
+              "value": 42
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":26,"end":54,"loc":{"start":{"line":2,"column":0,"index":26},"end":{"line":2,"column":28,"index":54}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":35,"end":38,"loc":{"start":{"line":2,"column":9,"index":35},"end":{"line":2,"column":12,"index":38}},
+            "local": {
+              "type": "Identifier",
+              "start":35,"end":38,"loc":{"start":{"line":2,"column":9,"index":35},"end":{"line":2,"column":12,"index":38},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":35,"end":38,"loc":{"start":{"line":2,"column":9,"index":35},"end":{"line":2,"column":12,"index":38},"identifierName":"foo"},
+              "name": "foo"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start":40,"end":52,"loc":{"start":{"line":2,"column":14,"index":40},"end":{"line":2,"column":26,"index":52}},
+            "local": {
+              "type": "Identifier",
+              "start":40,"end":43,"loc":{"start":{"line":2,"column":14,"index":40},"end":{"line":2,"column":17,"index":43},"identifierName":"bar"},
+              "name": "bar"
+            },
+            "exported": {
+              "type": "StringLiteral",
+              "start":47,"end":52,"loc":{"start":{"line":2,"column":21,"index":47},"end":{"line":2,"column":26,"index":52}},
+              "extra": {
+                "rawValue": "foo",
+                "raw": "\"foo\""
+              },
+              "value": "foo"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null,
+        "attributes": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

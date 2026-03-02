@@ -1,10 +1,14 @@
-const x = n => function () {
-  switch (n) {
-    case 0:
-    case 6:
-      return "weekend 🚵";
-
-    default:
-      return "weekday 🚴";
+const x = n => {
+  {
+    var _do;
+    switch (n) {
+      case 0:
+      case 6:
+        _do = "weekend 🚵";
+        break;
+      default:
+        _do = "weekday 🚴";
+    }
   }
-}();
+  return _do;
+};

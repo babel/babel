@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+"plugins": [["proposal-discard-binding", { "syntaxType": "void" }], "../../../scripts/check-transform-scope-integrity.cjs", "transform-modules-commonjs"]
+}

@@ -1,7 +1,7 @@
 {
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "targets": {
           "chrome": "55",
@@ -10,7 +10,7 @@
         "modules": false,
         "useBuiltIns": "entry",
         "forceAllTransforms": true,
-        "corejs": 3
+        "corejs": "3.0"
       }
     ]
   ]

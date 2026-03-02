@@ -2,7 +2,7 @@
 
 > Compile ES2015 computed properties to ES5
 
-See our website [@babel/plugin-transform-computed-properties](https://babeljs.io/docs/en/next/babel-plugin-transform-computed-properties.html) for more information.
+See our website [@babel/plugin-transform-computed-properties](https://babeljs.io/docs/babel-plugin-transform-computed-properties) for more information.
 
 ## Install
 

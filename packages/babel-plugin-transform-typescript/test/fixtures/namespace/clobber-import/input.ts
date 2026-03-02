@@ -1,3 +1,3 @@
 import N from 'n';
 
-namespace N {}
+namespace N { var x }

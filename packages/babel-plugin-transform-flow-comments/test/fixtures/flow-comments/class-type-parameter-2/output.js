@@ -1,3 +1,1 @@
-class Foo
-/*:: implements Bar, Baz*/
-{}
+class Foo /*:: implements Bar, Baz*/{}

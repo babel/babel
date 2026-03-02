@@ -2,7 +2,7 @@
 
 > This plugin transforms all the ES2015 'instanceof' methods
 
-See our website [@babel/plugin-transform-instanceof](https://babeljs.io/docs/en/next/babel-plugin-transform-instanceof.html) for more information.
+See our website [@babel/plugin-transform-instanceof](https://babeljs.io/docs/babel-plugin-transform-instanceof) for more information.
 
 ## Install
 

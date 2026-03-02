@@ -1,0 +1,54 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":49}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":49}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":49}},
+        "importKind": "value",
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":7,"end":10,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":10}},
+            "local": {
+              "type": "Identifier",
+              "start":7,"end":10,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":10},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": {
+          "type": "Literal",
+          "start":16,"end":26,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":26}},
+          "value": "foo.json",
+          "raw": "\"foo.json\""
+        },
+        "attributes": [
+          {
+            "type": "ImportAttribute",
+            "start":34,"end":46,"loc":{"start":{"line":1,"column":34},"end":{"line":1,"column":46}},
+            "key": {
+              "type": "Identifier",
+              "start":34,"end":38,"loc":{"start":{"line":1,"column":34},"end":{"line":1,"column":38},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "Literal",
+              "start":40,"end":46,"loc":{"start":{"line":1,"column":40},"end":{"line":1,"column":46}},
+              "value": "json",
+              "raw": "\"json\""
+            }
+          }
+        ]
+      }
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

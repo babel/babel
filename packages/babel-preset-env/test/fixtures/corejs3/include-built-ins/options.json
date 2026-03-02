@@ -1,7 +1,7 @@
 {
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "targets": {
           "chrome": 55
@@ -9,7 +9,7 @@
         "include": ["es.map", "es.set"],
         "modules": false,
         "useBuiltIns": "entry",
-        "corejs": 3
+        "corejs": "3.0"
       }
     ]
   ]

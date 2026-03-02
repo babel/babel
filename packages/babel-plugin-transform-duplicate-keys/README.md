@@ -2,7 +2,7 @@
 
 > Compile objects with duplicate keys to valid strict ES5
 
-See our website [@babel/plugin-transform-duplicate-keys](https://babeljs.io/docs/en/next/babel-plugin-transform-duplicate-keys.html) for more information.
+See our website [@babel/plugin-transform-duplicate-keys](https://babeljs.io/docs/babel-plugin-transform-duplicate-keys) for more information.
 
 ## Install
 

@@ -1,0 +1,52 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":39}},
+  "errors": [
+    "SyntaxError: Missing initializer in await using declaration. (2:15)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":39}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":39}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":39,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":3,"column":1,"index":39}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":23,"end":37,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":16,"index":37}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":35,"end":36,"loc":{"start":{"line":2,"column":14,"index":35},"end":{"line":2,"column":15,"index":36}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":35,"end":36,"loc":{"start":{"line":2,"column":14,"index":35},"end":{"line":2,"column":15,"index":36},"identifierName":"f"},
+                    "name": "f"
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "await using"
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

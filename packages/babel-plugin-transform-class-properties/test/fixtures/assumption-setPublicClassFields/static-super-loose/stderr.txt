@@ -1,0 +1,5 @@
+[transform-class-properties]: You are using the "loose: true" option and you are explicitly setting a value for the "setPublicClassFields" assumption. The "loose" option can cause incompatibilities with the other class features plugins, so it's recommended that you replace it with the following top-level option:
+	"assumptions": {
+		"setPublicClassFields": true,
+		"privateFieldsAsSymbols": true
+	}

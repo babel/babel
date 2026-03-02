@@ -1,0 +1,8 @@
+{
+  "minNodeVersion": "10.0.0",
+  "plugins": [
+    "transform-private-methods",
+    "transform-class-properties",
+    "transform-block-scoping"
+  ]
+}

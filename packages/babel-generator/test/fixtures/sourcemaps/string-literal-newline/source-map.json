@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "names": [],
+  "sources": [
+    "fixtures/sourcemaps/string-literal-newline/input.js"
+  ],
+  "sourcesContent": [
+    "\"before\\\nafter\";\n\n\"before\\\n\\\nafter\";"
+  ],
+  "mappings": "AAAA;AACA,MAAM;AAEN;AACA;AACA,MAAM",
+  "ignoreList": []
+}

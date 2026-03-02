@@ -1,0 +1,107 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":46}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":46}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":46}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":46,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":4,"column":1,"index":46}},
+          "body": [
+            {
+              "type": "ClassPrivateProperty",
+              "start":12,"end":19,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":9,"index":19}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":12,"end":14,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":4,"index":14}},
+                "id": {
+                  "type": "Identifier",
+                  "start":13,"end":14,"loc":{"start":{"line":2,"column":3,"index":13},"end":{"line":2,"column":4,"index":14},"identifierName":"x"},
+                  "name": "x"
+                }
+              },
+              "value": {
+                "type": "NumericLiteral",
+                "start":17,"end":18,"loc":{"start":{"line":2,"column":7,"index":17},"end":{"line":2,"column":8,"index":18}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ClassPrivateProperty",
+              "start":22,"end":44,"loc":{"start":{"line":3,"column":2,"index":22},"end":{"line":3,"column":24,"index":44}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":22,"end":24,"loc":{"start":{"line":3,"column":2,"index":22},"end":{"line":3,"column":4,"index":24}},
+                "id": {
+                  "type": "Identifier",
+                  "start":23,"end":24,"loc":{"start":{"line":3,"column":3,"index":23},"end":{"line":3,"column":4,"index":24},"identifierName":"p"},
+                  "name": "p"
+                }
+              },
+              "value": {
+                "type": "ArrowFunctionExpression",
+                "start":27,"end":44,"loc":{"start":{"line":3,"column":7,"index":27},"end":{"line":3,"column":24,"index":44}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "ObjectPattern",
+                    "start":28,"end":37,"loc":{"start":{"line":3,"column":8,"index":28},"end":{"line":3,"column":17,"index":37}},
+                    "properties": [
+                      {
+                        "type": "ObjectProperty",
+                        "start":30,"end":35,"loc":{"start":{"line":3,"column":10,"index":30},"end":{"line":3,"column":15,"index":35}},
+                        "method": false,
+                        "key": {
+                          "type": "PrivateName",
+                          "start":30,"end":32,"loc":{"start":{"line":3,"column":10,"index":30},"end":{"line":3,"column":12,"index":32}},
+                          "id": {
+                            "type": "Identifier",
+                            "start":31,"end":32,"loc":{"start":{"line":3,"column":11,"index":31},"end":{"line":3,"column":12,"index":32},"identifierName":"x"},
+                            "name": "x"
+                          }
+                        },
+                        "shorthand": false,
+                        "value": {
+                          "type": "Identifier",
+                          "start":34,"end":35,"loc":{"start":{"line":3,"column":14,"index":34},"end":{"line":3,"column":15,"index":35},"identifierName":"x"},
+                          "name": "x"
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":42,"end":44,"loc":{"start":{"line":3,"column":22,"index":42},"end":{"line":3,"column":24,"index":44}},
+                  "body": [],
+                  "directives": []
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

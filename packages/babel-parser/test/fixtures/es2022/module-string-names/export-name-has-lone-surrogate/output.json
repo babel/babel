@@ -1,0 +1,149 @@
+{
+  "type": "File",
+  "start":0,"end":127,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":52,"index":127}},
+  "errors": [
+    "SyntaxError: An export name cannot include a lone surrogate, found '\\ud800'. (2:16)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":127,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":52,"index":127}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":25,"index":25}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":14,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":14,"index":14}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":12,"end":14,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":14,"index":14}},
+              "extra": {
+                "rawValue": 42,
+                "raw": "42"
+              },
+              "value": 42
+            }
+          },
+          {
+            "type": "VariableDeclarator",
+            "start":16,"end":24,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":24,"index":24}},
+            "id": {
+              "type": "Identifier",
+              "start":16,"end":19,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":19,"index":19},"identifierName":"bar"},
+              "name": "bar"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":22,"end":24,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":24,"index":24}},
+              "extra": {
+                "rawValue": 42,
+                "raw": "42"
+              },
+              "value": 42
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":26,"end":58,"loc":{"start":{"line":2,"column":0,"index":26},"end":{"line":2,"column":32,"index":58}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":35,"end":56,"loc":{"start":{"line":2,"column":9,"index":35},"end":{"line":2,"column":30,"index":56}},
+            "local": {
+              "type": "Identifier",
+              "start":35,"end":38,"loc":{"start":{"line":2,"column":9,"index":35},"end":{"line":2,"column":12,"index":38},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "exported": {
+              "type": "StringLiteral",
+              "start":42,"end":56,"loc":{"start":{"line":2,"column":16,"index":42},"end":{"line":2,"column":30,"index":56}},
+              "extra": {
+                "rawValue": "\ud800\udbff",
+                "raw": "\"\\ud800\\udbff\""
+              },
+              "value": "\ud800\udbff"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null,
+        "attributes": [],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " should throw",
+            "start":59,"end":74,"loc":{"start":{"line":2,"column":33,"index":59},"end":{"line":2,"column":48,"index":74}}
+          }
+        ]
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":75,"end":107,"loc":{"start":{"line":3,"column":0,"index":75},"end":{"line":3,"column":32,"index":107}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":84,"end":105,"loc":{"start":{"line":3,"column":9,"index":84},"end":{"line":3,"column":30,"index":105}},
+            "local": {
+              "type": "Identifier",
+              "start":84,"end":87,"loc":{"start":{"line":3,"column":9,"index":84},"end":{"line":3,"column":12,"index":87},"identifierName":"bar"},
+              "name": "bar"
+            },
+            "exported": {
+              "type": "StringLiteral",
+              "start":91,"end":105,"loc":{"start":{"line":3,"column":16,"index":91},"end":{"line":3,"column":30,"index":105}},
+              "extra": {
+                "rawValue": "􏿿",
+                "raw": "\"\\udbff\\udfff\""
+              },
+              "value": "􏿿"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null,
+        "attributes": [],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " should not throw",
+            "start":108,"end":127,"loc":{"start":{"line":3,"column":33,"index":108},"end":{"line":3,"column":52,"index":127}}
+          }
+        ],
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " should throw",
+            "start":59,"end":74,"loc":{"start":{"line":2,"column":33,"index":59},"end":{"line":2,"column":48,"index":74}}
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " should throw",
+      "start":59,"end":74,"loc":{"start":{"line":2,"column":33,"index":59},"end":{"line":2,"column":48,"index":74}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " should not throw",
+      "start":108,"end":127,"loc":{"start":{"line":3,"column":33,"index":108},"end":{"line":3,"column":52,"index":127}}
+    }
+  ]
+}

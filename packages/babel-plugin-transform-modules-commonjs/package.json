@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-modules-commonjs",
-  "version": "7.10.1",
+  "version": "8.0.0-rc.2",
   "description": "This plugin transforms ES2015 modules to CommonJS",
   "repository": {
     "type": "git",
@@ -11,22 +11,33 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-module-transforms": "^7.10.1",
-    "@babel/helper-plugin-utils": "^7.10.1",
-    "@babel/helper-simple-access": "^7.10.1",
-    "babel-plugin-dynamic-import-node": "^2.3.3"
+    "@babel/helper-module-transforms": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^"
   },
   "keywords": [
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1",
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.0"
-  }
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/plugin-external-helpers": "workspace:^"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-modules-commonjs",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "type": "module"
 }

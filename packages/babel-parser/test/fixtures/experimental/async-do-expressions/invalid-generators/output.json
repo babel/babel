@@ -1,0 +1,77 @@
+{
+  "type": "File",
+  "start":0,"end":63,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":63}},
+  "errors": [
+    "SyntaxError: 'yield' is only allowed within generator functions. (3:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":63,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":63}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":62}},
+        "id": {
+          "type": "Identifier",
+          "start":16,"end":20,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":20,"index":20},"identifierName":"iter"},
+          "name": "iter"
+        },
+        "generator": true,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":23,"end":62,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":5,"column":1,"index":62}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":27,"end":60,"loc":{"start":{"line":2,"column":2,"index":27},"end":{"line":4,"column":3,"index":60}},
+              "expression": {
+                "type": "AwaitExpression",
+                "start":27,"end":60,"loc":{"start":{"line":2,"column":2,"index":27},"end":{"line":4,"column":3,"index":60}},
+                "argument": {
+                  "type": "DoExpression",
+                  "start":33,"end":60,"loc":{"start":{"line":2,"column":8,"index":33},"end":{"line":4,"column":3,"index":60}},
+                  "async": true,
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":42,"end":60,"loc":{"start":{"line":2,"column":17,"index":42},"end":{"line":4,"column":3,"index":60}},
+                    "body": [
+                      {
+                        "type": "ExpressionStatement",
+                        "start":48,"end":56,"loc":{"start":{"line":3,"column":4,"index":48},"end":{"line":3,"column":12,"index":56}},
+                        "expression": {
+                          "type": "YieldExpression",
+                          "start":48,"end":55,"loc":{"start":{"line":3,"column":4,"index":48},"end":{"line":3,"column":11,"index":55}},
+                          "delegate": false,
+                          "argument": {
+                            "type": "NumericLiteral",
+                            "start":54,"end":55,"loc":{"start":{"line":3,"column":10,"index":54},"end":{"line":3,"column":11,"index":55}},
+                            "extra": {
+                              "rawValue": 1,
+                              "raw": "1"
+                            },
+                            "value": 1
+                          }
+                        }
+                      }
+                    ],
+                    "directives": []
+                  }
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start":62,"end":63,"loc":{"start":{"line":5,"column":1,"index":62},"end":{"line":5,"column":2,"index":63}}
+      }
+    ],
+    "directives": []
+  }
+}

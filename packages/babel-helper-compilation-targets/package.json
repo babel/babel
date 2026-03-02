@@ -1,17 +1,21 @@
 {
   "name": "@babel/helper-compilation-targets",
-  "version": "7.10.2",
-  "author": "The Babel Team (https://babeljs.io/team)",
+  "version": "8.0.0-rc.2",
+  "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
-  "description": "Engine compat data used in @babel/preset-env",
+  "description": "Helper functions on Babel compilation targets",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-compilation-targets"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "exports": {
-    ".": "./lib/index.js"
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "publishConfig": {
     "access": "public"
@@ -21,17 +25,19 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/compat-data": "^7.10.1",
-    "browserslist": "^4.12.0",
-    "invariant": "^2.2.4",
-    "levenary": "^1.1.1",
-    "semver": "^5.5.0"
-  },
-  "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/compat-data": "workspace:^",
+    "@babel/helper-validator-option": "workspace:^",
+    "browserslist": "^4.24.0",
+    "lru-cache": "^7.14.1",
+    "semver": "^7.7.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.2",
-    "@babel/helper-plugin-test-runner": "^7.10.1"
-  }
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@types/lru-cache": "^5.1.1",
+    "@types/semver": "^5.5.0"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "type": "module"
 }

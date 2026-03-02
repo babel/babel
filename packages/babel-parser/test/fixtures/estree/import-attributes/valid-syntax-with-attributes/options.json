@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "flow",
+    "jsx",
+    "estree"
+  ],
+  "sourceType": "module"
+}

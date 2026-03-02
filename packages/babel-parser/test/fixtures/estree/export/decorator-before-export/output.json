@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":51,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":28}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":51,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":28}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":5,"end":22,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":22}},
+        "specifiers": [],
+        "source": null,
+        "attributes": [],
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
+          "id": {
+            "type": "Identifier",
+            "start":18,"end":19,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":19},"identifierName":"C"},
+            "name": "C"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":20,"end":22,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":22}},
+            "body": []
+          },
+          "decorators": [
+            {
+              "type": "Decorator",
+              "start":0,"end":4,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":4}},
+              "expression": {
+                "type": "Identifier",
+                "start":1,"end":4,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":4},"identifierName":"dec"},
+                "name": "dec"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":28,"end":51,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":28}},
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start":23,"end":51,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":28}},
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":49,"end":51,"loc":{"start":{"line":2,"column":26},"end":{"line":2,"column":28}},
+            "body": []
+          },
+          "decorators": [
+            {
+              "type": "Decorator",
+              "start":23,"end":27,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":4}},
+              "expression": {
+                "type": "Identifier",
+                "start":24,"end":27,"loc":{"start":{"line":2,"column":1},"end":{"line":2,"column":4},"identifierName":"dec"},
+                "name": "dec"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

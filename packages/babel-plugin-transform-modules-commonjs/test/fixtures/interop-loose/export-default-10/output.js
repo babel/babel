@@ -2,9 +2,6 @@
 
 exports.__esModule = true;
 exports.default = void 0;
-
-var _default = function () {
+var _default = exports.default = function () {
   return "foo";
 }();
-
-exports.default = _default;

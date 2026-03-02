@@ -1,20 +1,15 @@
-var _ref2 = <div>child</div>;
-
-var _ref3 = <p>Parent</p>;
-
+var _p, _div2;
 (function () {
+  var _div;
   class App extends React.Component {
     render() {
-      return _ref;
-    }
-
-  }
-
-  const AppItem = () => {
-    return _ref2;
-  },
-        _ref = <div>
-          {_ref3}
+      return _div || (_div = <div>
+          {_p || (_p = <p>Parent</p>)}
           <AppItem />
-        </div>;
+        </div>);
+    }
+  }
+  const AppItem = () => {
+    return _div2 || (_div2 = <div>child</div>);
+  };
 });

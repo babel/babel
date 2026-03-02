@@ -1,7 +1,14 @@
 {
-  "mappings": "AAAA,IAAA,GAAA,GAAU,Y;SAAM,C;AAAC,CAAjB",
-  "names": [],
-  "sources": ["original.js"],
-  "sourcesContent": ["var foo = () => 4;"],
-  "version": 3
+  "version": 3,
+  "names": [
+    "foo"
+  ],
+  "sources": [
+    "original.js"
+  ],
+  "sourcesContent": [
+    "var foo = () => 4;"
+  ],
+  "mappings": "AAAA,IAAAA,GAAA,GAAU,SAAAA,CAAA,E;SAAM,C;CAAC",
+  "ignoreList": []
 }

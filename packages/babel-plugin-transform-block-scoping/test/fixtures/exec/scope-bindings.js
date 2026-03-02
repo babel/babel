@@ -3,16 +3,20 @@ if (x) {
   const bar = 1;
 }`;
 
+var expected = `var foo = 1;
+if (x) {
+  var bar = 1;
+}`;
+
 var innerScope = true;
-var res = transform(code, {
+return transformAsync(code, {
   configFile: false,
   plugins: opts.plugins.concat([
-    function (b) {
-      var t = b.types;
+    function ({ types: t }) {
       return {
         visitor: {
           Scope: {
-            exit: function(path) {
+            exit: function (path) {
               if (innerScope) {
                 expect(Object.keys(path.scope.bindings)).toHaveLength(0);
                 innerScope = false;
@@ -20,19 +24,13 @@ var res = transform(code, {
               }
 
               expect(Object.keys(path.scope.bindings)).toHaveLength(2);
-            }
-          }
-        }
-      }
-    }
+            },
+          },
+        },
+      };
+    },
   ]),
+}).then(res => {
+  expect(res.code).toBe(expected);
+  expect(innerScope).toBe(false);
 });
-
-var expected = `var foo = 1;
-
-if (x) {
-  var bar = 1;
-}`;
-
-expect(res.code).toBe(expected);
-expect(innerScope).toBe(false);

@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-typescript",
+    ["transform-class-properties", { "loose": true }]
+  ]
+}

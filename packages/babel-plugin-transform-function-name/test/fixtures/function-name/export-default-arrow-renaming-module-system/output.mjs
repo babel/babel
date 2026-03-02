@@ -3,7 +3,7 @@ System.register([], function (_export, _context) {
 
   return {
     setters: [],
-    execute: function () {
+    execute: function execute() {
       _export("default", function (_a) {
         return {
           a: function a() {

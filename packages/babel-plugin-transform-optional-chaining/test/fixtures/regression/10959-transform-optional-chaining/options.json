@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-optional-chaining",
+    "syntax-typescript"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "version": 3,
+  "sources": [
+    "source-maps/input-source-map-same-location/input.js"
+  ],
+  "names": [],
+  "mappings": "AAAA,UAAU,Y;SAAM,C;CAAC",
+  "sourcesContent": [
+    "var foo = () => 4;"
+  ]
+}

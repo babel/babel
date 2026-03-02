@@ -1,0 +1,192 @@
+{
+  "type": "File",
+  "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":23,"index":79}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":23,"index":79}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "NumericLiteral",
+            "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          },
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2}},
+                "name": {
+                  "type": "Identifier",
+                  "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            ],
+            "extra": {
+              "trailingComma": 2
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":13,"end":26,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":13,"index":26}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":13,"end":25,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":12,"index":25}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":18,"end":19,"loc":{"start":{"line":2,"column":5,"index":18},"end":{"line":2,"column":6,"index":19},"identifierName":"x"},
+              "name": "x"
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":24,"end":25,"loc":{"start":{"line":2,"column":11,"index":24},"end":{"line":2,"column":12,"index":25}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          },
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start":13,"end":17,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":4,"index":17}},
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start":14,"end":15,"loc":{"start":{"line":2,"column":1,"index":14},"end":{"line":2,"column":2,"index":15}},
+                "name": {
+                  "type": "Identifier",
+                  "start":14,"end":15,"loc":{"start":{"line":2,"column":1,"index":14},"end":{"line":2,"column":2,"index":15},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            ],
+            "extra": {
+              "trailingComma": 15
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":27,"end":55,"loc":{"start":{"line":3,"column":0,"index":27},"end":{"line":3,"column":28,"index":55}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":27,"end":54,"loc":{"start":{"line":3,"column":0,"index":27},"end":{"line":3,"column":27,"index":54}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":47,"end":48,"loc":{"start":{"line":3,"column":20,"index":47},"end":{"line":3,"column":21,"index":48},"identifierName":"x"},
+              "name": "x"
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":53,"end":54,"loc":{"start":{"line":3,"column":26,"index":53},"end":{"line":3,"column":27,"index":54}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          },
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start":27,"end":46,"loc":{"start":{"line":3,"column":0,"index":27},"end":{"line":3,"column":19,"index":46}},
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start":28,"end":45,"loc":{"start":{"line":3,"column":1,"index":28},"end":{"line":3,"column":18,"index":45}},
+                "name": {
+                  "type": "Identifier",
+                  "start":28,"end":29,"loc":{"start":{"line":3,"column":1,"index":28},"end":{"line":3,"column":2,"index":29},"identifierName":"T"},
+                  "name": "T"
+                },
+                "constraint": {
+                  "type": "TSUnknownKeyword",
+                  "start":38,"end":45,"loc":{"start":{"line":3,"column":11,"index":38},"end":{"line":3,"column":18,"index":45}}
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":56,"end":79,"loc":{"start":{"line":4,"column":0,"index":56},"end":{"line":4,"column":23,"index":79}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":56,"end":78,"loc":{"start":{"line":4,"column":0,"index":56},"end":{"line":4,"column":22,"index":78}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":71,"end":72,"loc":{"start":{"line":4,"column":15,"index":71},"end":{"line":4,"column":16,"index":72},"identifierName":"x"},
+              "name": "x"
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":77,"end":78,"loc":{"start":{"line":4,"column":21,"index":77},"end":{"line":4,"column":22,"index":78}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          },
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start":56,"end":70,"loc":{"start":{"line":4,"column":0,"index":56},"end":{"line":4,"column":14,"index":70}},
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start":57,"end":68,"loc":{"start":{"line":4,"column":1,"index":57},"end":{"line":4,"column":12,"index":68}},
+                "name": {
+                  "type": "Identifier",
+                  "start":57,"end":58,"loc":{"start":{"line":4,"column":1,"index":57},"end":{"line":4,"column":2,"index":58},"identifierName":"T"},
+                  "name": "T"
+                },
+                "default": {
+                  "type": "TSUnknownKeyword",
+                  "start":61,"end":68,"loc":{"start":{"line":4,"column":5,"index":61},"end":{"line":4,"column":12,"index":68}}
+                }
+              }
+            ],
+            "extra": {
+              "trailingComma": 68
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

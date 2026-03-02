@@ -1,0 +1,27 @@
+import { declare } from "@babel/helper-plugin-utils";
+import { types as t } from "@babel/core";
+
+export default declare(api => {
+  api.assertVersion(REQUIRED_VERSION(7));
+
+  return {
+    name: "transform-member-expression-literals",
+
+    visitor: {
+      MemberExpression: {
+        exit({ node }) {
+          const prop = node.property;
+          if (
+            !node.computed &&
+            t.isIdentifier(prop) &&
+            !t.isValidES3Identifier(prop.name)
+          ) {
+            // foo.default -> foo["default"]
+            (node as t.MemberExpression).property = t.stringLiteral(prop.name);
+            (node as t.MemberExpression).computed = true;
+          }
+        },
+      },
+    },
+  };
+});

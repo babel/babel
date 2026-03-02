@@ -4,5 +4,4 @@ class X {
     this.b = '3';
     this.c = void 0;
   }
-
 }

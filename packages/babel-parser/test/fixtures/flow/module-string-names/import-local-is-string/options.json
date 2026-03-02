@@ -1,0 +1,3 @@
+{
+  "throws": "A string literal cannot be used as an imported binding.\n- Did you mean `import { \"foo\" as foo }`? (1:9)"
+}

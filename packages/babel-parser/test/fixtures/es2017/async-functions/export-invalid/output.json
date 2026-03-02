@@ -1,0 +1,49 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+  "errors": [
+    "SyntaxError: Missing semicolon. (1:20)",
+    "SyntaxError: Missing semicolon. (1:33)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+        "declaration": {
+          "type": "Identifier",
+          "start":15,"end":20,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":20,"index":20},"identifierName":"async"},
+          "name": "async"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":21,"end":33,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":33,"index":33}},
+        "expression": {
+          "type": "CallExpression",
+          "start":21,"end":33,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":33,"index":33}},
+          "callee": {
+            "type": "Identifier",
+            "start":21,"end":30,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":30,"index":30},"identifierName":"functionX"},
+            "name": "functionX"
+          },
+          "arguments": []
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":34,"end":36,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":36,"index":36}},
+        "body": [],
+        "directives": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "rootDir": ".",
+    "target": "ESNext",
+    "module": "Preserve",
+    "lib": ["ESNext"],
+    "declaration": false,
+    "noEmit": true,
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true,
+    "strict": true
+  },
+  "include": ["./*.ts"],
+  "exclude": ["./applyDecs2305.ts"]
+}

@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "transform-typescript",
-    ["proposal-class-properties", { "loose": true }]
-  ]
-}

@@ -1,5 +1,7 @@
-import traverse from "../lib";
 import { parse } from "@babel/parser";
+
+import _traverse from "../lib/index.js";
+const traverse = _traverse.default || _traverse;
 
 function getPath(code) {
   const ast = parse(code);
@@ -13,15 +15,34 @@ function getPath(code) {
   return path;
 }
 
+function addDeoptTest(code, type, expectedType) {
+  it(type + " deopt: " + code, function () {
+    const visitor = {};
+
+    visitor[type] = function (path) {
+      const evaluate = path.evaluate();
+      expect(evaluate.confident).toBeFalsy();
+      expect(evaluate.deopt.type).toEqual(expectedType);
+    };
+
+    traverse(
+      parse(code, {
+        plugins: ["*"],
+      }),
+      visitor,
+    );
+  });
+}
+
 describe("evaluation", function () {
   describe("evaluateTruthy", function () {
-    it("it should work with null", function () {
+    it("should work with null", function () {
       expect(
         getPath("false || a.length === 0;").get("body")[0].evaluateTruthy(),
       ).toBeUndefined();
     });
 
-    it("it should not mistake lack of confidence for falsy", function () {
+    it("should not mistake lack of confidence for falsy", function () {
       expect(
         getPath("foo || 'bar'").get("body")[0].evaluate().value,
       ).toBeUndefined();
@@ -45,6 +66,14 @@ describe("evaluation", function () {
     );
     expect(getPath("42 || x === 'y'").get("body")[0].evaluate().value).toBe(42);
     expect(getPath("0 && x === 'y'").get("body")[0].evaluate().value).toBe(0);
+  });
+
+  it("should handle ??", function () {
+    expect(getPath("null ?? 42").get("body")[0].evaluate().value).toBe(42);
+    expect(getPath("void 0 ?? 42").get("body")[0].evaluate().value).toBe(42);
+    expect(getPath("0 ?? 42").get("body")[0].evaluate().value).toBe(0);
+    expect(getPath("x ?? 42").get("body")[0].evaluate().confident).toBe(false);
+    expect(getPath("42 ?? x === 'y'").get("body")[0].evaluate().value).toBe(42);
   });
 
   it("should work with repeated, indeterminate identifiers", function () {
@@ -71,12 +100,27 @@ describe("evaluation", function () {
     ).toBe(false);
   });
 
-  it("should evaluate template literals", function () {
-    expect(
-      getPath("var x = 8; var y = 1; var z = `value is ${x >>> y}`")
-        .get("body.2.declarations.0.init")
-        .evaluate().value,
-    ).toBe("value is 4");
+  describe("template literals", function () {
+    it("should evaluate template literals", function () {
+      expect(
+        getPath("var x = 8; var y = 1; var z = `value is ${x >>> y}`")
+          .get("body.2.declarations.0.init")
+          .evaluate().value,
+      ).toBe("value is 4");
+    });
+
+    it("should evaluate String.raw tags", function () {
+      expect(
+        getPath("String.raw`a\\n${1}\\u`;").get("body.0.expression").evaluate()
+          .value,
+      ).toBe("a\\n1\\u");
+    });
+
+    addDeoptTest(
+      "a`x${b}y`",
+      "TaggedTemplateExpression",
+      "TaggedTemplateExpression",
+    );
   });
 
   it("should evaluate member expressions", function () {
@@ -85,6 +129,16 @@ describe("evaluation", function () {
         .get("body.0.declarations.0.init")
         .evaluate().value,
     ).toBe(3);
+    expect(
+      getPath("var x = 'hello world'[6]")
+        .get("body.0.declarations.0.init")
+        .evaluate().value,
+    ).toBe("w");
+    expect(
+      getPath("var length = 1; var x = 'abc'[length];")
+        .get("body.1.declarations.0.init")
+        .evaluate().value,
+    ).toBe("b");
     const member_expr = getPath(
       "var x = Math.min(2,Math.max(3,4));var y = Math.random();",
     );
@@ -98,7 +152,66 @@ describe("evaluation", function () {
     expect(eval_invalid_call.confident).toBe(false);
   });
 
-  it("it should not deopt vars in different scope", function () {
+  it("should not evaluate inherited methods", function () {
+    const path = getPath("Math.hasOwnProperty('min')");
+    const evalResult = path.get("body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should evaluate global call expressions", function () {
+    expect(
+      getPath("isFinite(1);").get("body.0.expression").evaluate().value,
+    ).toBe(true);
+
+    expect(
+      getPath("isFinite(Infinity);").get("body.0.expression").evaluate().value,
+    ).toBe(false);
+
+    expect(
+      getPath("isNaN(NaN);").get("body.0.expression").evaluate().value,
+    ).toBe(true);
+
+    expect(getPath("isNaN(1);").get("body.0.expression").evaluate().value).toBe(
+      false,
+    );
+
+    expect(
+      getPath("parseFloat('1.1');").get("body.0.expression").evaluate().value,
+    ).toBe(1.1);
+
+    expect(
+      getPath("parseFloat('1');").get("body.0.expression").evaluate().value,
+    ).toBe(1);
+
+    expect(
+      getPath("encodeURI('x 1');").get("body.0.expression").evaluate().value,
+    ).toBe("x%201");
+
+    expect(
+      getPath("decodeURI('x%201');").get("body.0.expression").evaluate().value,
+    ).toBe("x 1");
+
+    expect(
+      getPath("encodeURIComponent('?x=1');").get("body.0.expression").evaluate()
+        .value,
+    ).toBe("%3Fx%3D1");
+
+    expect(
+      getPath("decodeURIComponent('%3Fx%3D1');")
+        .get("body.0.expression")
+        .evaluate().value,
+    ).toBe("?x=1");
+
+    expect(
+      getPath("btoa('babel');").get("body.0.expression").evaluate().value,
+    ).toBe("YmFiZWw=");
+
+    expect(
+      getPath("atob('YmFiZWw=');").get("body.0.expression").evaluate().value,
+    ).toBe("babel");
+  });
+
+  it("should not deopt vars in different scope", function () {
     const input =
       "var a = 5; function x() { var a = 5; var b = a + 1; } var b = a + 2";
     expect(
@@ -110,7 +223,7 @@ describe("evaluation", function () {
     ).toBe(7);
   });
 
-  it("it should not deopt let/const inside blocks", function () {
+  it("should not deopt let/const inside blocks", function () {
     expect(
       getPath("let x = 5; { let x = 1; } let y = x + 5")
         .get("body.2.declarations.0.init")
@@ -228,4 +341,135 @@ describe("evaluation", function () {
     expect(result.deopt).toBeNull();
     expect(result.value).toEqual(["foo", "bar"]);
   });
+
+  it("should not evaluate vars in child scope", function () {
+    const path = getPath(`
+      if (typeof Bar != "undefined") {
+        var doesExist = true;
+      }
+      doesExist;
+    `);
+    const evalResult = path.get("body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should not evaluate vars in child scope 2", function () {
+    const path = getPath(`
+      {
+        var doesExist = true;
+        doesExist;
+      }
+    `);
+    const evalResult = path.get("body.0.body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
+  it("should not evaluate vars in child scope 3", function () {
+    const path = getPath(`
+      var doesExist = true;
+      { doesExist }
+    `);
+    const evalResult = path.get("body.1.body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
+  it("should not evaluate vars in child scope 4", function () {
+    const path = getPath(`
+      {
+        var doesExist = true;
+        { doesExist }
+      }
+    `);
+    const evalResult = path.get("body.0.body.1.body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
+  it("should not evaluate vars in child scope 5", function () {
+    const path = getPath(`
+      { { var doesExist = true; } }
+      doesExist
+    `);
+    const evalResult = path.get("body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
+  it("should not evaluate vars in child scope 6", function () {
+    const path = getPath(`
+      for (var i = 0; i < 1; i++) { var doesExist = true; }
+      doesExist
+    `);
+    const evalResult = path.get("body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should not evaluate vars in child scope 7", function () {
+    const path = getPath(`
+      do { break; var doesExist = true; } while (false);
+      doesExist
+    `);
+    const evalResult = path.get("body.1.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should not evaluate arrays with multiple references", function () {
+    const path = getPath(`
+      const value = [];
+      value.push(Math.random());
+      value;
+    `);
+    const evalResult = path.get("body.2.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should not evaluate objects with multiple references", function () {
+    const path = getPath(`
+      const value = {};
+      value.x = Math.random();
+      value;
+    `);
+    const evalResult = path.get("body.2.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should evaluate strings with multiple references", function () {
+    const path = getPath(`
+      const value = "hello";
+      ref(value);
+      value;
+    `);
+    const evalResult = path.get("body.2.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+  });
+
+  it("should not evaluate arrays with new references", function () {
+    const path = getPath(`
+      let value = [];
+      value.push(Math.random());
+      let value2 = value;
+      value2;
+    `);
+    const evalResult = path.get("body.3.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should not evaluate Math.method when Math is shadowed by local variable", function () {
+    const path = getPath(`
+      function test(Math) {
+        Math.min(1, 2);
+      }
+    `);
+    const evalResult = path.get("body.0.body.body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should evaluate standard global objects when not shadowed", function () {
+    const path = getPath("Math.min(1, 2);");
+    const evalResult = path.get("body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(true);
+    expect(evalResult.value).toBe(1);
+  });
+
+  addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
+  addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
+  addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
 });

@@ -1,4 +1,0 @@
-{
-  "presets": ["env"],
-  "plugins": ["proposal-class-properties"]
-}

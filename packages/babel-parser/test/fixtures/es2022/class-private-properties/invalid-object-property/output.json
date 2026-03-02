@@ -1,0 +1,80 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":32}},
+  "errors": [
+    "SyntaxError: Unexpected private name. (2:10)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":32}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":32}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":32,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":3,"column":1,"index":32}},
+          "body": [
+            {
+              "type": "ClassPrivateProperty",
+              "start":12,"end":30,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":20,"index":30}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":12,"end":14,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":4,"index":14}},
+                "id": {
+                  "type": "Identifier",
+                  "start":13,"end":14,"loc":{"start":{"line":2,"column":3,"index":13},"end":{"line":2,"column":4,"index":14},"identifierName":"p"},
+                  "name": "p"
+                }
+              },
+              "value": {
+                "type": "ObjectExpression",
+                "start":18,"end":28,"loc":{"start":{"line":2,"column":8,"index":18},"end":{"line":2,"column":18,"index":28}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":20,"end":26,"loc":{"start":{"line":2,"column":10,"index":20},"end":{"line":2,"column":16,"index":26}},
+                    "method": false,
+                    "key": {
+                      "type": "PrivateName",
+                      "start":20,"end":22,"loc":{"start":{"line":2,"column":10,"index":20},"end":{"line":2,"column":12,"index":22}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":21,"end":22,"loc":{"start":{"line":2,"column":11,"index":21},"end":{"line":2,"column":12,"index":22},"identifierName":"x"},
+                        "name": "x"
+                      }
+                    },
+                    "shorthand": false,
+                    "value": {
+                      "type": "NumericLiteral",
+                      "start":24,"end":26,"loc":{"start":{"line":2,"column":14,"index":24},"end":{"line":2,"column":16,"index":26}},
+                      "extra": {
+                        "rawValue": 42,
+                        "raw": "42"
+                      },
+                      "value": 42
+                    }
+                  }
+                ],
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 17
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

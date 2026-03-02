@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "targets": { "node": "20.6" },
+  "plugins": ["transform-json-modules"]
+}

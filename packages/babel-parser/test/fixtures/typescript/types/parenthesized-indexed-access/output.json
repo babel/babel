@@ -1,0 +1,70 @@
+{
+  "type": "File",
+  "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":34,"index":34}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":34,"index":34}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":34,"index":34}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeAnnotation": {
+          "type": "TSIndexedAccessType",
+          "start":9,"end":33,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":33,"index":33}},
+          "objectType": {
+            "type": "TSTypeLiteral",
+            "start":10,"end":25,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":25,"index":25}},
+            "members": [
+              {
+                "type": "TSPropertySignature",
+                "start":12,"end":23,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":23,"index":23}},
+                "key": {
+                  "type": "Identifier",
+                  "start":12,"end":15,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":15,"index":15},"identifierName":"foo"},
+                  "name": "foo"
+                },
+                "computed": false,
+                "typeAnnotation": {
+                  "type": "TSTypeAnnotation",
+                  "start":15,"end":23,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":23,"index":23}},
+                  "typeAnnotation": {
+                    "type": "TSStringKeyword",
+                    "start":17,"end":23,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":23,"index":23}}
+                  }
+                }
+              }
+            ],
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 9
+            }
+          },
+          "indexType": {
+            "type": "TSLiteralType",
+            "start":27,"end":32,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":32,"index":32}},
+            "literal": {
+              "type": "StringLiteral",
+              "start":27,"end":32,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":32,"index":32}},
+              "extra": {
+                "rawValue": "foo",
+                "raw": "\"foo\""
+              },
+              "value": "foo"
+            }
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

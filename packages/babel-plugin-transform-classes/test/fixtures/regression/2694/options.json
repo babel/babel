@@ -1,4 +1,3 @@
 {
-  "plugins": ["external-helpers"],
-  "presets": ["env"]
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }]]
 }

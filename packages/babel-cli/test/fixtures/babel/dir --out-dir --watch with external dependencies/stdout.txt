@@ -1,0 +1,7 @@
+Successfully compiled 2 files with Babel (123ms).
+The watcher is ready.
+EXECUTOR lib/index.js "let str = /"Hi :)/";"
+EXECUTOR lib/main.js "console.log(/"Hi :)/");"
+Successfully compiled 2 files with Babel (123ms).
+EXECUTOR lib/index.js "let str = /"Updated!/";"
+EXECUTOR lib/main.js "console.log(/"Updated!/");"

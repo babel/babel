@@ -1,19 +1,18 @@
 // from code:
 // export default {
-//   plugins: [
-//     require('../../../../../babel-plugin-syntax-decorators'),
-//   ]
+//   plugins: [__dirname + "/../../../../../babel-plugin-syntax-decorators/lib/index.js"]
 // };
-'use strict';
+"use strict";
 
 exports.__esModule = true;
-module.exports = function() {
+module.exports = function () {
   return {
     plugins: [
       [
-        require('../../../../../babel-plugin-syntax-decorators'),
-        { legacy: true }
+        __dirname +
+          "/../../../../../babel-plugin-syntax-decorators/lib/index.js",
+        { version: "legacy" },
       ],
-    ]
+    ],
   };
 };

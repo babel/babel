@@ -1,1 +1,1 @@
-export as namespace A
+export as namespace A;

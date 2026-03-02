@@ -1,4 +1,4 @@
 {
   "plugins": ["transform-arrow-functions"],
-  "sourceMap": "inline"
+  "sourceMaps": "inline"
 }

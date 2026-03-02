@@ -1,0 +1,8 @@
+{
+  "sourceType": "module",
+  "targets": { "firefox": "41" },
+  "plugins": [
+    "transform-json-modules",
+    ["babel-plugin-polyfill-corejs3", { "method": "usage-pure" }]
+  ]
+}

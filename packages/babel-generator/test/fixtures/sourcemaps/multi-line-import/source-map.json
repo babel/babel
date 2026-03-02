@@ -1,0 +1,15 @@
+{
+  "version": 3,
+  "names": [
+    "RecordAndTuplePluginOptions",
+    "PipelineOperatorPluginOptions"
+  ],
+  "sources": [
+    "fixtures/sourcemaps/multi-line-import/input.ts"
+  ],
+  "sourcesContent": [
+    "import type {\n  RecordAndTuplePluginOptions,\n  PipelineOperatorPluginOptions,\n} from \"@babel/parser\";"
+  ],
+  "mappings": "AAAA,cACEA,2BAA2B,EAC3BC,6BAA6B,QACxB,eAAe",
+  "ignoreList": []
+}

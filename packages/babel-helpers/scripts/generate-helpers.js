@@ -1,0 +1,184 @@
+import fs from "node:fs";
+import { join } from "node:path";
+import { URL, fileURLToPath } from "node:url";
+import { minify } from "terser";
+import { babel, presetTypescript } from "$repo-utils/babel-top-level";
+import { gzipSync } from "node:zlib";
+
+import {
+  getHelperMetadata,
+  stringifyMetadata,
+} from "./build-helper-metadata.js";
+
+const HELPERS_FOLDER = new URL("../src/helpers", import.meta.url);
+const IGNORED_FILES = new Set(["package.json", "tsconfig.json"]);
+
+/**
+ * Generate Babel plugin for helpers processing
+ * The plugin will
+ * - rewrite relative imports to other helpers and remove .ts extension
+ * - collect function names to `noMangleFns` if `mangleFns` is `true`.
+ * @param {boolean} mangleFns Whether the function names in the helper should be mangled
+ * @param {string[]} noMangleFns A list of function names that should not be mangled
+ * @returns
+ */
+function BabelPluginProcessHelpersFactory(mangleFns, noMangleFns) {
+  /**
+   * @param {import("@babel/core").PluginAPI} api
+   * @returns {import("@babel/core").PluginObject}
+   */
+  return function BabelPluginProcessHelpers() {
+    /**
+     * @type {import("@babel/core").PluginObject}
+     */
+    const pluginObj = {
+      pre: undefined,
+      post: undefined,
+      visitor: {
+        ImportDeclaration(path) {
+          const source = path.node.source;
+          source.value = source.value.replace(/(^\.\/|\.ts$)/g, "");
+        },
+        FunctionDeclaration: mangleFns
+          ? path => {
+              if (
+                path.node.leadingComments?.find(c =>
+                  c.value.includes("@no-mangle")
+                )
+              ) {
+                const name = path.node.id.name;
+                if (name) noMangleFns.push(name);
+              }
+            }
+          : () => {},
+      },
+    };
+    return pluginObj;
+  };
+}
+export default async function generateHelpers() {
+  let output = `/*
+ * This file is auto-generated! Do not modify it directly.
+ * To re-generate run 'yarn gulp generate-runtime-helpers'
+ */
+
+import template from "@babel/template";
+import type * as t from "@babel/types";
+
+interface Helper {
+  minVersion: string;
+  ast: () => t.Program;
+  metadata: HelperMetadata;
+}
+
+export interface HelperMetadata {
+  globals: string[];
+  locals: Record<string, string[]>;
+  dependencies: Record<string, string[]>;
+  exportBindingAssignments: string[];
+  exportName: string;
+  internal: boolean;
+}
+
+function helper(minVersion: string, source: string, metadata: HelperMetadata): Helper {
+  return Object.freeze({
+    minVersion,
+    ast: () => template.program.ast(source, { preserveComments: true }),
+    metadata,
+  })
+}
+
+export { helpers as default };
+const helpers: Record<string, Helper> = {
+  // @ts-expect-error __proto__: null
+  __proto__: null,
+`;
+
+  for (const file of (await fs.promises.readdir(HELPERS_FOLDER)).sort()) {
+    if (IGNORED_FILES.has(file)) continue;
+    if (file.startsWith(".")) continue; // ignore e.g. vim swap files
+
+    const [helperName] = file.split(".");
+
+    const isTs = file.endsWith(".ts");
+
+    const filePath = join(fileURLToPath(HELPERS_FOLDER), file);
+    if (!file.endsWith(".js") && !isTs) {
+      console.error("ignoring", filePath);
+      continue;
+    }
+
+    let code = await fs.promises.readFile(filePath, "utf8");
+    const minVersionMatch = code.match(
+      /^\s*\/\*\s*@minVersion\s+(?<minVersion>\S+)\s*\*\/\s*$/m
+    );
+    if (!minVersionMatch) {
+      throw new Error(`@minVersion number missing in ${filePath}`);
+    }
+    const { minVersion } = minVersionMatch.groups;
+
+    const internal = code.includes("@internal");
+    const onlyBabel8 = code.includes("@onlyBabel8");
+    const mangleFns = code.includes("@mangleFns");
+    const noMangleFns = [];
+
+    code = babel.transformSync(code, {
+      configFile: false,
+      babelrc: false,
+      filename: filePath,
+      presets: [
+        [
+          presetTypescript,
+          {
+            onlyRemoveTypeImports: true,
+            optimizeConstEnums: true,
+          },
+        ],
+      ],
+      plugins: [BabelPluginProcessHelpersFactory(mangleFns, noMangleFns)],
+    }).code;
+    code = (
+      await minify(code, {
+        ecma: 5,
+        mangle: {
+          keep_fnames: mangleFns
+            ? noMangleFns.length
+              ? // eslint-disable-next-line regexp/no-empty-capturing-group, regexp/no-empty-group
+                new RegExp("^(" + noMangleFns.join("|") + ")$")
+              : false
+            : true,
+        },
+        // The _typeof helper has a custom directive that we must keep
+        compress: {
+          directives: false,
+          passes: 10,
+          unsafe: true,
+          unsafe_proto: true,
+        },
+      })
+    ).code;
+
+    let metadata;
+    // eslint-disable-next-line prefer-const
+    [code, metadata] = getHelperMetadata(babel, code, helperName, internal);
+
+    const helperStr = `\
+  // size: ${code.length}, gzip size: ${gzipSync(code).length}
+  ${JSON.stringify(helperName)}: helper(
+    ${JSON.stringify(minVersion)},
+    ${JSON.stringify(code)},
+    ${stringifyMetadata(metadata)}
+  ),
+`;
+
+    if (onlyBabel8 && process.env.BABEL_9_BREAKING) {
+      // This helper is only for Babel 8
+    } else {
+      output += helperStr;
+    }
+  }
+
+  output += "};";
+
+  return output;
+}

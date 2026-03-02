@@ -20,4 +20,4 @@ class E {}
 
 expect(Object.getPrototypeOf(E)).toBe(Function.prototype);
 expect(Object.getPrototypeOf(E.prototype)).toBe(Object.prototype);
-expect(E).not.toContain('keys');
+expect(E).not.toHaveProperty('keys');

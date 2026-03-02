@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    "transform-modules-commonjs",
-    "transform-destructuring",
-    "proposal-object-rest-spread",
-    "external-helpers"
-  ]
-}

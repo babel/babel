@@ -1,24 +1,15 @@
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = babelHelpers.getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = babelHelpers.getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return babelHelpers.possibleConstructorReturn(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-let Array = function Array() {
+let Array = /*#__PURE__*/babelHelpers.createClass(function Array() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Array);
-};
-
+});
 let List = /*#__PURE__*/function (_Array) {
   "use strict";
 
-  babelHelpers.inherits(List, _Array);
-
-  var _super = _createSuper(List);
-
   function List() {
     babelHelpers.classCallCheck(this, List);
-    return _super.apply(this, arguments);
+    return babelHelpers.callSuper(this, List, arguments);
   }
-
-  return List;
+  babelHelpers.inherits(List, _Array);
+  return babelHelpers.createClass(List);
 }(Array);

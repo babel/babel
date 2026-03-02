@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":37}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":37}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":37}},
+        "body": [
+          {
+            "type": "ForStatement",
+            "start":4,"end":35,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":33,"index":35}},
+            "init": {
+              "type": "VariableDeclaration",
+              "start":9,"end":31,"loc":{"start":{"line":2,"column":7,"index":9},"end":{"line":2,"column":29,"index":31}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":15,"end":31,"loc":{"start":{"line":2,"column":13,"index":15},"end":{"line":2,"column":29,"index":31}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":15,"end":20,"loc":{"start":{"line":2,"column":13,"index":15},"end":{"line":2,"column":18,"index":20},"identifierName":"basic"},
+                    "name": "basic"
+                  },
+                  "init": {
+                    "type": "CallExpression",
+                    "start":23,"end":31,"loc":{"start":{"line":2,"column":21,"index":23},"end":{"line":2,"column":29,"index":31}},
+                    "callee": {
+                      "type": "Identifier",
+                      "start":23,"end":29,"loc":{"start":{"line":2,"column":21,"index":23},"end":{"line":2,"column":27,"index":29},"identifierName":"reader"},
+                      "name": "reader"
+                    },
+                    "arguments": []
+                  }
+                }
+              ],
+              "kind": "using"
+            },
+            "test": null,
+            "update": null,
+            "body": {
+              "type": "EmptyStatement",
+              "start":34,"end":35,"loc":{"start":{"line":2,"column":32,"index":34},"end":{"line":2,"column":33,"index":35}}
+            }
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

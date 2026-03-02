@@ -1,36 +1,36 @@
 namespace N {
-  namespace N {}
-  namespace constructor {}
-  namespace length {}
-  namespace concat {}
-  namespace copyWithin {}
-  namespace fill {}
-  namespace find {}
-  namespace findIndex {}
-  namespace lastIndexOf {}
-  namespace pop {}
-  namespace push {}
-  namespace reverse {}
-  namespace shift {}
-  namespace unshift {}
-  namespace slice {}
-  namespace sort {}
-  namespace splice {}
-  namespace includes {}
-  namespace indexOf {}
-  namespace join {}
-  namespace keys {}
-  namespace entries {}
-  namespace values {}
-  namespace forEach {}
-  namespace filter {}
-  namespace map {}
-  namespace every {}
-  namespace some {}
-  namespace reduce {}
-  namespace reduceRight {}
-  namespace toLocaleString {}
-  namespace toString {}
-  namespace flat {}
-  namespace flatMap {}
+  namespace N { var x }
+  namespace constructor { var x }
+  namespace length { var x }
+  namespace concat { var x }
+  namespace copyWithin { var x }
+  namespace fill { var x }
+  namespace find { var x }
+  namespace findIndex { var x }
+  namespace lastIndexOf { var x }
+  namespace pop { var x }
+  namespace push { var x }
+  namespace reverse { var x }
+  namespace shift { var x }
+  namespace unshift { var x }
+  namespace slice { var x }
+  namespace sort { var x }
+  namespace splice { var x }
+  namespace includes { var x }
+  namespace indexOf { var x }
+  namespace join { var x }
+  namespace keys { var x }
+  namespace entries { var x }
+  namespace values { var x }
+  namespace forEach { var x }
+  namespace filter { var x }
+  namespace map { var x }
+  namespace every { var x }
+  namespace some { var x }
+  namespace reduce { var x }
+  namespace reduceRight { var x }
+  namespace toLocaleString { var x }
+  namespace toString { var x }
+  namespace flat { var x }
+  namespace flatMap { var x }
 }

@@ -1,0 +1,7 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "transform-classes",
+    ["transform-runtime", { "moduleName": "lol" }]
+  ]
+}

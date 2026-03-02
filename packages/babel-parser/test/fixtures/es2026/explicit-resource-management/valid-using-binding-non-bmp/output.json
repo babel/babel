@@ -1,0 +1,46 @@
+{
+  "type": "File",
+  "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":2,"end":19,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":19,"index":19}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":8,"end":18,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":18,"index":18}},
+                "id": {
+                  "type": "Identifier",
+                  "start":8,"end":10,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":10,"index":10},"identifierName":"𠮷"},
+                  "name": "𠮷"
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":13,"end":18,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":18,"index":18}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":13,"end":16,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":16,"index":16},"identifierName":"foo"},
+                    "name": "foo"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "kind": "using"
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

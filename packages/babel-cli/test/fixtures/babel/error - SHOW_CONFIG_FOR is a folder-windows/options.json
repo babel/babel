@@ -1,0 +1,8 @@
+{
+  "args": ["./src", "-d", "lib"],
+  "env": {
+    "BABEL_SHOW_CONFIG_FOR": "./src"
+  },
+  "os": ["win32"],
+  "stderrContains": true
+}

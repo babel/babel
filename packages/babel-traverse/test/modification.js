@@ -1,7 +1,10 @@
-import traverse from "../lib";
 import { parse } from "@babel/parser";
-import generate from "@babel/generator";
 import * as t from "@babel/types";
+
+import _traverse from "../lib/index.js";
+import _generate from "@babel/generator";
+const traverse = _traverse.default || _traverse;
+const generate = _generate.default || _generate;
 
 function getPath(code, parserOpts) {
   const ast = parse(code, parserOpts);
@@ -49,6 +52,26 @@ describe("modification", function () {
         },
       });
     });
+
+    it("should set the correct path.context", function () {
+      expect.assertions(2);
+
+      const ast = parse("[b];");
+      traverse(ast, {
+        skipKeys: ["consequent"],
+        ExpressionStatement(path) {
+          path.traverse({ Identifier() {}, skipKeys: [] });
+
+          const arr = path.get("expression");
+          const x = arr.pushContainer("elements", [
+            { type: "Identifier", name: "x" },
+          ])[0];
+
+          expect(x.node.name).toBe("x");
+          expect(x.opts.skipKeys).toEqual(["consequent"]);
+        },
+      });
+    });
   });
   describe("unshiftContainer", function () {
     it("unshifts identifier into params", function () {
@@ -75,6 +98,26 @@ describe("modification", function () {
           expect(generateCode(path)).toBe("foo(d, a, b);");
           path.unshiftContainer("arguments", t.stringLiteral("s"));
           expect(generateCode(path)).toBe(`foo("s", d, a, b);`);
+        },
+      });
+    });
+
+    it("should set the correct path.context", function () {
+      expect.assertions(2);
+
+      const ast = parse("[b];");
+      traverse(ast, {
+        skipKeys: ["consequent"],
+        ExpressionStatement(path) {
+          path.traverse({ Identifier() {}, skipKeys: [] });
+
+          const arr = path.get("expression");
+          const x = arr.unshiftContainer("elements", [
+            { type: "Identifier", name: "x" },
+          ])[0];
+
+          expect(x.node.name).toBe("x");
+          expect(x.opts.skipKeys).toEqual(["consequent"]);
         },
       });
     });
@@ -112,7 +155,7 @@ describe("modification", function () {
       expect(result).toHaveLength(1);
       expect(result[result.length - 1].node).toEqual(t.identifier("b"));
       expect(generateCode(rootPath)).toBe(
-        "if (x) {\n  b\n\n  for (var i = 0; i < 0; i++) {}\n}",
+        "if (x) {\n  b\n  for (var i = 0; i < 0; i++) {}\n}",
       );
     });
 
@@ -125,7 +168,7 @@ describe("modification", function () {
       expect(result).toHaveLength(1);
       expect(result[result.length - 1].node).toEqual(t.identifier("b"));
       expect(generateCode(rootPath)).toBe(
-        "if (x) {\n  b\n\n  for (var i = 0; i < 0; i++) {}\n}",
+        "if (x) {\n  b\n  for (var i = 0; i < 0; i++) {}\n}",
       );
     });
 
@@ -142,9 +185,9 @@ describe("modification", function () {
           const tagName = path.node.openingElement.name.name;
           if (tagName !== "span") return;
           path.insertBefore(
-            t.JSXElement(
-              t.JSXOpeningElement(t.JSXIdentifier("div"), [], false),
-              t.JSXClosingElement(t.JSXIdentifier("div")),
+            t.jsxElement(
+              t.jsxOpeningElement(t.jsxIdentifier("div"), [], false),
+              t.jsxClosingElement(t.jsxIdentifier("div")),
               [],
             ),
           );
@@ -179,13 +222,13 @@ describe("modification", function () {
       });
 
       it("the exported expression", function () {
-        const declPath = getPath("export default 2;", {
+        const declPath = getPath("export default fn();", {
           sourceType: "module",
         });
         const path = declPath.get("declaration");
         path.insertBefore(t.identifier("x"));
 
-        expect(generateCode(declPath)).toBe("export default (x, 2);");
+        expect(generateCode(declPath)).toBe("export default (x, fn());");
       });
     });
   });
@@ -222,7 +265,7 @@ describe("modification", function () {
       expect(result).toHaveLength(1);
       expect(result[result.length - 1].node).toEqual(t.identifier("b"));
       expect(generateCode(rootPath)).toBe(
-        "if (x) {\n  for (var i = 0; i < 0; i++) {}\n\n  b\n}",
+        "if (x) {\n  for (var i = 0; i < 0; i++) {}\n  b\n}",
       );
     });
 
@@ -235,7 +278,7 @@ describe("modification", function () {
       expect(result).toHaveLength(1);
       expect(result[result.length - 1].node).toEqual(t.identifier("b"));
       expect(generateCode(rootPath)).toBe(
-        "if (x) {\n  for (var i = 0; i < 0; i++) {}\n\n  b\n}",
+        "if (x) {\n  for (var i = 0; i < 0; i++) {}\n  b\n}",
       );
     });
 
@@ -252,9 +295,9 @@ describe("modification", function () {
           const tagName = path.node.openingElement.name.name;
           if (tagName !== "span") return;
           path.insertAfter(
-            t.JSXElement(
-              t.JSXOpeningElement(t.JSXIdentifier("div"), [], false),
-              t.JSXClosingElement(t.JSXIdentifier("div")),
+            t.jsxElement(
+              t.jsxOpeningElement(t.jsxIdentifier("div"), [], false),
+              t.jsxClosingElement(t.jsxIdentifier("div")),
               [],
             ),
           );
@@ -293,15 +336,60 @@ describe("modification", function () {
       });
 
       it("the exported expression", function () {
-        const bodyPath = getPath("export default 2;", {
+        const bodyPath = getPath("export default fn();", {
           sourceType: "module",
         }).parentPath;
         const path = bodyPath.get("body.0.declaration");
         path.insertAfter(t.identifier("x"));
 
         expect(generateCode({ parentPath: bodyPath })).toBe(
-          "var _temp;\n\nexport default (_temp = 2, x, _temp);",
+          "var _temp;\nexport default (_temp = fn(), x, _temp);",
         );
+      });
+
+      it("edge case for babel-plugin-jest-hoist", function () {
+        let varsHoistPoint;
+        let i = 0;
+        const logs = [[], []];
+        traverse(parse(`{a;}`), {
+          BlockStatement(path) {
+            [varsHoistPoint] = path.unshiftContainer(
+              "body",
+              t.emptyStatement(),
+            );
+            path.traverse({
+              Identifier(path) {
+                if (i++ >= 5) {
+                  return;
+                }
+                logs[0].push(path.node.name);
+                varsHoistPoint.insertBefore(t.identifier("b"));
+              },
+            });
+          },
+        });
+        i = 0;
+        traverse(parse(`{a;}`), {
+          BlockStatement(path) {
+            [varsHoistPoint] = path.unshiftContainer(
+              "body",
+              t.emptyStatement(),
+            );
+            path.traverse({
+              enter() {},
+              Identifier(path) {
+                if (i++ >= 5) {
+                  return;
+                }
+                logs[1].push(path.node.name);
+                varsHoistPoint.insertBefore(t.identifier("b"));
+              },
+            });
+          },
+        });
+
+        expect(logs[0]).toEqual(["a", "b", "b", "b", "b"]);
+        expect(logs[1]).toEqual(["a", "b", "b", "b", "b"]);
       });
     });
   });

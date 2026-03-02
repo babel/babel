@@ -1,1 +1,1 @@
-new A<T>;
+new A < B > C

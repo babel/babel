@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+          "left": {
+            "type": "Identifier",
+            "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5},"identifierName":"value"},
+            "name": "value"
+          },
+          "operator": "|>",
+          "right": {
+            "type": "DoExpression",
+            "start":9,"end":47,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":47,"index":47}},
+            "async": false,
+            "body": {
+              "type": "BlockStatement",
+              "start":12,"end":47,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":47,"index":47}},
+              "body": [
+                {
+                  "type": "IfStatement",
+                  "start":14,"end":45,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":45,"index":45}},
+                  "test": {
+                    "type": "Identifier",
+                    "start":18,"end":21,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":21,"index":21},"identifierName":"yes"},
+                    "name": "yes"
+                  },
+                  "consequent": {
+                    "type": "ExpressionStatement",
+                    "start":23,"end":28,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":28,"index":28}},
+                    "expression": {
+                      "type": "NullLiteral",
+                      "start":23,"end":27,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":27,"index":27}}
+                    }
+                  },
+                  "alternate": {
+                    "type": "IfStatement",
+                    "start":34,"end":45,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":45,"index":45}},
+                    "test": {
+                      "type": "Identifier",
+                      "start":38,"end":40,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":1,"column":40,"index":40},"identifierName":"no"},
+                      "name": "no"
+                    },
+                    "consequent": {
+                      "type": "ExpressionStatement",
+                      "start":42,"end":45,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":45,"index":45}},
+                      "expression": {
+                        "type": "TopicReference",
+                        "start":42,"end":44,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":44,"index":44}}
+                      }
+                    },
+                    "alternate": null
+                  }
+                }
+              ],
+              "directives": []
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

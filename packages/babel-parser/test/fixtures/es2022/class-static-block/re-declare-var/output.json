@@ -1,0 +1,102 @@
+{
+  "type": "File",
+  "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":41,"index":54}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":41,"index":54}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":11,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":11,"index":11}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"y"},
+              "name": "y"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":13,"end":54,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":41,"index":54}},
+        "id": {
+          "type": "Identifier",
+          "start":19,"end":20,"loc":{"start":{"line":2,"column":6,"index":19},"end":{"line":2,"column":7,"index":20},"identifierName":"x"},
+          "name": "x"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":21,"end":54,"loc":{"start":{"line":2,"column":8,"index":21},"end":{"line":2,"column":41,"index":54}},
+          "body": [
+            {
+              "type": "StaticBlock",
+              "start":23,"end":52,"loc":{"start":{"line":2,"column":10,"index":23},"end":{"line":2,"column":39,"index":52}},
+              "body": [
+                {
+                  "type": "VariableDeclaration",
+                  "start":32,"end":43,"loc":{"start":{"line":2,"column":19,"index":32},"end":{"line":2,"column":30,"index":43}},
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start":36,"end":42,"loc":{"start":{"line":2,"column":23,"index":36},"end":{"line":2,"column":29,"index":42}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":36,"end":37,"loc":{"start":{"line":2,"column":23,"index":36},"end":{"line":2,"column":24,"index":37},"identifierName":"x"},
+                        "name": "x"
+                      },
+                      "init": {
+                        "type": "NumericLiteral",
+                        "start":40,"end":42,"loc":{"start":{"line":2,"column":27,"index":40},"end":{"line":2,"column":29,"index":42}},
+                        "extra": {
+                          "rawValue": 42,
+                          "raw": "42"
+                        },
+                        "value": 42
+                      }
+                    }
+                  ],
+                  "kind": "var"
+                },
+                {
+                  "type": "VariableDeclaration",
+                  "start":44,"end":50,"loc":{"start":{"line":2,"column":31,"index":44},"end":{"line":2,"column":37,"index":50}},
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start":48,"end":49,"loc":{"start":{"line":2,"column":35,"index":48},"end":{"line":2,"column":36,"index":49}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":48,"end":49,"loc":{"start":{"line":2,"column":35,"index":48},"end":{"line":2,"column":36,"index":49},"identifierName":"y"},
+                        "name": "y"
+                      },
+                      "init": null
+                    }
+                  ],
+                  "kind": "var"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

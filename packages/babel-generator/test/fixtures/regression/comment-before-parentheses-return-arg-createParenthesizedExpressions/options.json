@@ -1,0 +1,4 @@
+{
+  "retainLines": true,
+  "parserOpts": { "createParenthesizedExpressions": true }
+}

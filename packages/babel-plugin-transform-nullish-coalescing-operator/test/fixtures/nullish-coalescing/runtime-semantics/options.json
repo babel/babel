@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-nullish-coalescing-operator"],
+  "minNodeVersion": "14.0.0"
+}

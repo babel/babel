@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":7,"index":16}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":7,"index":16}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
+          "callee": {
+            "type": "Identifier",
+            "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4},"identifierName":"call"},
+            "name": "call"
+          },
+          "arguments": [
+            {
+              "type": "NumericLiteral",
+              "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":9,"end":16,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":7,"index":16}},
+        "expression": {
+          "type": "CallExpression",
+          "start":9,"end":15,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":6,"index":15}},
+          "callee": {
+            "type": "Identifier",
+            "start":9,"end":12,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":3,"index":12},"identifierName":"run"},
+            "name": "run"
+          },
+          "arguments": [
+            {
+              "type": "NumericLiteral",
+              "start":13,"end":14,"loc":{"start":{"line":2,"column":4,"index":13},"end":{"line":2,"column":5,"index":14}},
+              "extra": {
+                "rawValue": 2,
+                "raw": "2"
+              },
+              "value": 2
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

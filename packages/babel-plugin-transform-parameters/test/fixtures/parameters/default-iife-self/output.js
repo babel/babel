@@ -6,10 +6,8 @@ var Ref = /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, Ref);
     this.ref = ref;
   }
-
-  return Ref;
+  return babelHelpers.createClass(Ref);
 }();
-
 var X = /*#__PURE__*/function () {
   "use strict";
 
@@ -18,6 +16,5 @@ var X = /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, X);
     this.x = x;
   }
-
-  return X;
+  return babelHelpers.createClass(X);
 }();

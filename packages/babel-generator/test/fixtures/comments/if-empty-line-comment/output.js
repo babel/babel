@@ -1,2 +1,3 @@
-if (cond) // Leading to EmptyStatement
+if (cond)
+  // Leading to EmptyStatement
   ; // Trailing to EmptyStatement

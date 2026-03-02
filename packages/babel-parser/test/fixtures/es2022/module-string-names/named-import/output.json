@@ -1,0 +1,50 @@
+{
+  "type": "File",
+  "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":8,"end":34,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":34,"index":34}},
+            "imported": {
+              "type": "StringLiteral",
+              "start":8,"end":21,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":21,"index":21}},
+              "extra": {
+                "rawValue": "學而時習之，不亦說乎？",
+                "raw": "\"學而時習之，不亦說乎？\""
+              },
+              "value": "學而時習之，不亦說乎？"
+            },
+            "local": {
+              "type": "Identifier",
+              "start":25,"end":34,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":34,"index":34},"identifierName":"quotation"},
+              "name": "quotation"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":41,"end":52,"loc":{"start":{"line":1,"column":41,"index":41},"end":{"line":1,"column":52,"index":52}},
+          "extra": {
+            "rawValue": "Confucius",
+            "raw": "\"Confucius\""
+          },
+          "value": "Confucius"
+        },
+        "attributes": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

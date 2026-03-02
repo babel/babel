@@ -1,0 +1,81 @@
+{
+  "extends": ["config:base"],
+  "dependencyDashboardApproval": true,
+  "labels": ["PR: Dependency ⬆️", "repo automation 🤖"],
+  "postUpdateOptions": ["yarnDedupeHighest"],
+  "regexManagers": [
+    {
+      "fileMatch": ["^Makefile$"],
+      "matchStrings": ["TEST262_COMMIT = (?<currentDigest>.*)\\n"],
+      "datasourceTemplate": "git-refs",
+      "depNameTemplate": "tests-test262",
+      "lookupNameTemplate": "https://github.com/tc39/test262.git",
+      "currentValueTemplate": "main"
+    },
+    {
+      "fileMatch": ["^Makefile$"],
+      "matchStrings": ["FLOW_COMMIT = (?<currentDigest>.*)\\n"],
+      "datasourceTemplate": "git-refs",
+      "depNameTemplate": "tests-flow",
+      "lookupNameTemplate": "https://github.com/facebook/flow.git",
+      "currentValueTemplate": "master"
+    },
+    {
+      "fileMatch": ["^Makefile$"],
+      "matchStrings": ["TYPESCRIPT_COMMIT = (?<currentDigest>.*)\\n"],
+      "datasourceTemplate": "git-refs",
+      "depNameTemplate": "tests-typescript",
+      "lookupNameTemplate": "https://github.com/Microsoft/TypeScript.git",
+      "currentValueTemplate": "main"
+    },
+    {
+      "fileMatch": ["^Makefile$"],
+      "matchStrings": ["COMPAT_TABLE_COMMIT=(?<currentDigest>.*)\\n"],
+      "datasourceTemplate": "git-refs",
+      "depNameTemplate": "compat-table",
+      "lookupNameTemplate": "https://github.com/kangax/compat-table.git",
+      "currentValueTemplate": "gh-pages"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchDepTypes": ["dependencies", "devDependencies"],
+      "rangeStrategy": "replace",
+      "ignoreDeps": [
+        "@babel/core-7.12",
+        "@babel/helper-validator-identifier-baseline"
+      ],
+      "postUpgradeTasks": {
+        "commands": ["make"]
+      }
+    },
+    {
+      "matchPackagePatterns": ["^eslint"],
+      "groupName": "eslint packages"
+    },
+    {
+      "matchPackagePatterns": ["^rollup", "^@rollup"],
+      "groupName": "rollup packages"
+    },
+    {
+      "matchPackagePatterns": ["^gulp"],
+      "groupName": "gulp packages"
+    },
+    {
+      "matchPackageNames": ["tests-test262", "tests-flow", "tests-typescript"],
+      "groupName": "third-party parser tests",
+      "schedule": ["before 00:05 on Friday"],
+      "postUpgradeTasks": {
+        "commands": [
+          "yarn install --immutable --mode=skip-build",
+          "yarn gulp build-rollup",
+          "make test-test262-update-allowlist",
+          "make test-flow-update-allowlist",
+          "make test-typescript-update-allowlist"
+        ],
+        "fileFilters": ["scripts/parser-tests/*/allowlist.txt"],
+        "executionMode": "branch"
+      }
+    }
+  ]
+}

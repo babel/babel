@@ -1,2 +1,0 @@
-@dec()
-class A {}

@@ -1,0 +1,32 @@
+// Targets, engine names defined in compat-tables
+export type Target =
+  | "node"
+  | "deno"
+  | "chrome"
+  | "opera"
+  | "edge"
+  | "firefox"
+  | "safari"
+  | "ie"
+  | "ios"
+  | "android"
+  | "electron"
+  | "samsung"
+  | "opera_mobile";
+
+export type Targets = Partial<Record<Target, string>>;
+
+export type TargetsTuple = Omit<Targets, "node"> & {
+  node?: string | true;
+};
+
+export type Browsers = string | readonly string[];
+
+export type InputTargets = {
+  browsers?: Browsers;
+  // When `true` or `"intersect"`, this is intersected with the `browsers`
+  // option (giving the higher browsers as the result).
+  esmodules?: boolean | "intersect";
+} & Targets;
+
+export type { BrowserslistBrowserName } from "./targets.ts";

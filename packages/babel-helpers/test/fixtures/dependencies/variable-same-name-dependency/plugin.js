@@ -1,21 +1,29 @@
-const defineHelper = require("../../../helpers/define-helper").default;
+import { stringifyMetadata } from "../../../../scripts/build-helper-metadata.js";
+import defineHelper, {
+  defineHelperAndGetMetadata,
+} from "../../../helpers/define-helper.js";
 
-const dependency = defineHelper(__dirname, "dependency", `
-  export default function fn() {}
-`);
+export default function (babel) {
+  const dependency = defineHelper(babel, import.meta.url, "dependency", `
+    export default function fn() {}
+  `);
 
-const main = defineHelper(__dirname, "main", `
-  import dep from "${dependency}";
+  const { id: main, metadata } = defineHelperAndGetMetadata(
+    babel,
+    import.meta.url,
+    "main",
+    `
+      import dep from "${dependency}";
 
-  export default function helper() {
-    let x = dep;
-    return function (dep) {
-      return x() + dep;
-    }
-  }
-`);
+      export default function helper() {
+        let x = dep;
+        return function (dep) {
+          return x() + dep;
+        }
+      }
+    `
+  );
 
-module.exports = function() {
   return {
     visitor: {
       Identifier(path) {
@@ -23,6 +31,13 @@ module.exports = function() {
         const helper = this.addHelper(main);
         path.replaceWith(helper);
       },
+      Program(path) {
+        babel.types.addComment(
+          path.node,
+          "trailing",
+          `"main" metadata:${stringifyMetadata(metadata)}`
+        );
+      },
     },
   };
-};
+}

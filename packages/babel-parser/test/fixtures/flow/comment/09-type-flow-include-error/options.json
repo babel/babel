@@ -1,3 +1,15 @@
 {
-  "throws": "Unterminated comment (2:2)"
+  "sourceType": "module",
+  "plugins": [
+    [
+      "jsx"
+    ],
+    [
+      "flow"
+    ],
+    [
+      "flowComments"
+    ]
+  ],
+  "throws": "Unterminated comment. (2:2)"
 }

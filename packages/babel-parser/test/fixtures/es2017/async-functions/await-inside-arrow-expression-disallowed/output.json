@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+  "errors": [
+    "SyntaxError: 'await' is only allowed within async functions and at the top levels of modules. (1:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":6,"end":17,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":17,"index":17}},
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start":8,"end":15,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":15,"index":15}},
+                "expression": {
+                  "type": "AwaitExpression",
+                  "start":8,"end":15,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":15,"index":15}},
+                  "argument": {
+                    "type": "Identifier",
+                    "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"x"},
+                    "name": "x"
+                  }
+                }
+              }
+            ],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

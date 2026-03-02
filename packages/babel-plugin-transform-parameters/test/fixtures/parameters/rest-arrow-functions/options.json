@@ -1,7 +1,6 @@
 {
   "plugins": [
-    ["proposal-class-properties", { "loose": true }],
-    "external-helpers",
+    ["transform-class-properties", { "loose": true }],
     "syntax-flow",
     "transform-parameters",
     "transform-block-scoping",

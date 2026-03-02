@@ -1,4 +1,4 @@
-# Babel v4-v6 Changelog
+# Babel v6 Changelog
 
 ## 6.26.3 (2018-04-27)
 

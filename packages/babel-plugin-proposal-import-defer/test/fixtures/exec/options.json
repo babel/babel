@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "plugins": ["proposal-import-defer", "transform-modules-commonjs"]
+}

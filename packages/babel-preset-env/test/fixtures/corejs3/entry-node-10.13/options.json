@@ -1,14 +1,14 @@
 {
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "targets": {
           "node": "10.13"
         },
         "modules": false,
         "useBuiltIns": "entry",
-        "corejs": 3
+        "corejs": "3.0"
       }
     ]
   ]

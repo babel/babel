@@ -1,15 +1,18 @@
 {
   "name": "@babel/eslint-tests",
-  "version": "0.0.0",
+  "version": "8.0.0-rc.2",
   "description": "Tests for babel/eslint-* packages",
-  "license": "MIT",
   "private": true,
-  "devDependencies": {
-    "@babel/eslint-parser": "*",
-    "@babel/eslint-plugin": "*",
-    "@babel/eslint-shared-fixtures": "*",
-    "dedent": "^0.7.0",
-    "eslint": "^6.0.0",
-    "eslint-plugin-import": "^2.20.1"
-  }
+  "dependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/eslint-parser": "workspace:^",
+    "@babel/preset-flow": "workspace:^",
+    "@babel/preset-react": "workspace:^",
+    "dedent": "^1.5.3",
+    "eslint": "^10.0.0",
+    "eslint-plugin-import": "^2.31.0",
+    "globals": "^15.9.0",
+    "npm-babel-parser": "npm:@babel/parser@^7.14.0"
+  },
+  "type": "module"
 }

@@ -1,0 +1,137 @@
+{
+  "type": "File",
+  "start":0,"end":134,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":1,"index":134}},
+  "errors": [
+    "SyntaxError: Using declaration cannot appear in the top level when source type is `script` or in the bare case statement. (5:6)",
+    "SyntaxError: Using declaration cannot appear in the top level when source type is `script` or in the bare case statement. (8:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":134,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":1,"index":134}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":134,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":1,"index":134}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":134,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":1,"index":134}},
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":12,"end":134,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":10,"column":1,"index":134}},
+            "body": [
+              {
+                "type": "SwitchStatement",
+                "start":16,"end":132,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":9,"column":3,"index":132}},
+                "discriminant": {
+                  "type": "NumericLiteral",
+                  "start":23,"end":24,"loc":{"start":{"line":2,"column":9,"index":23},"end":{"line":2,"column":10,"index":24}},
+                  "extra": {
+                    "rawValue": 1,
+                    "raw": "1"
+                  },
+                  "value": 1
+                },
+                "cases": [
+                  {
+                    "type": "SwitchCase",
+                    "start":32,"end":77,"loc":{"start":{"line":3,"column":4,"index":32},"end":{"line":5,"column":28,"index":77}},
+                    "consequent": [
+                      {
+                        "type": "BlockStatement",
+                        "start":46,"end":48,"loc":{"start":{"line":4,"column":6,"index":46},"end":{"line":4,"column":8,"index":48}},
+                        "body": [],
+                        "directives": []
+                      },
+                      {
+                        "type": "VariableDeclaration",
+                        "start":55,"end":77,"loc":{"start":{"line":5,"column":6,"index":55},"end":{"line":5,"column":28,"index":77}},
+                        "declarations": [
+                          {
+                            "type": "VariableDeclarator",
+                            "start":67,"end":76,"loc":{"start":{"line":5,"column":18,"index":67},"end":{"line":5,"column":27,"index":76}},
+                            "id": {
+                              "type": "Identifier",
+                              "start":67,"end":68,"loc":{"start":{"line":5,"column":18,"index":67},"end":{"line":5,"column":19,"index":68},"identifierName":"x"},
+                              "name": "x"
+                            },
+                            "init": {
+                              "type": "CallExpression",
+                              "start":71,"end":76,"loc":{"start":{"line":5,"column":22,"index":71},"end":{"line":5,"column":27,"index":76}},
+                              "callee": {
+                                "type": "Identifier",
+                                "start":71,"end":74,"loc":{"start":{"line":5,"column":22,"index":71},"end":{"line":5,"column":25,"index":74},"identifierName":"bar"},
+                                "name": "bar"
+                              },
+                              "arguments": []
+                            }
+                          }
+                        ],
+                        "kind": "await using"
+                      }
+                    ],
+                    "test": {
+                      "type": "NumericLiteral",
+                      "start":37,"end":38,"loc":{"start":{"line":3,"column":9,"index":37},"end":{"line":3,"column":10,"index":38}},
+                      "extra": {
+                        "rawValue": 1,
+                        "raw": "1"
+                      },
+                      "value": 1
+                    }
+                  },
+                  {
+                    "type": "SwitchCase",
+                    "start":82,"end":128,"loc":{"start":{"line":6,"column":4,"index":82},"end":{"line":8,"column":28,"index":128}},
+                    "consequent": [
+                      {
+                        "type": "BlockStatement",
+                        "start":97,"end":99,"loc":{"start":{"line":7,"column":6,"index":97},"end":{"line":7,"column":8,"index":99}},
+                        "body": [],
+                        "directives": []
+                      },
+                      {
+                        "type": "VariableDeclaration",
+                        "start":106,"end":128,"loc":{"start":{"line":8,"column":6,"index":106},"end":{"line":8,"column":28,"index":128}},
+                        "declarations": [
+                          {
+                            "type": "VariableDeclarator",
+                            "start":118,"end":127,"loc":{"start":{"line":8,"column":18,"index":118},"end":{"line":8,"column":27,"index":127}},
+                            "id": {
+                              "type": "Identifier",
+                              "start":118,"end":119,"loc":{"start":{"line":8,"column":18,"index":118},"end":{"line":8,"column":19,"index":119},"identifierName":"y"},
+                              "name": "y"
+                            },
+                            "init": {
+                              "type": "CallExpression",
+                              "start":122,"end":127,"loc":{"start":{"line":8,"column":22,"index":122},"end":{"line":8,"column":27,"index":127}},
+                              "callee": {
+                                "type": "Identifier",
+                                "start":122,"end":125,"loc":{"start":{"line":8,"column":22,"index":122},"end":{"line":8,"column":25,"index":125},"identifierName":"bar"},
+                                "name": "bar"
+                              },
+                              "arguments": []
+                            }
+                          }
+                        ],
+                        "kind": "await using"
+                      }
+                    ],
+                    "test": null
+                  }
+                ]
+              }
+            ],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "type": "File",
+  "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":61}},
+  "errors": [
+    "SyntaxError: Deleting a private field is not allowed. (4:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":61}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":61}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":61,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":6,"column":1,"index":61}},
+          "body": [
+            {
+              "type": "ClassPrivateProperty",
+              "start":14,"end":17,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":5,"index":17}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":14,"end":16,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":4,"index":16}},
+                "id": {
+                  "type": "Identifier",
+                  "start":15,"end":16,"loc":{"start":{"line":2,"column":3,"index":15},"end":{"line":2,"column":4,"index":16},"identifierName":"x"},
+                  "name": "x"
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassMethod",
+              "start":20,"end":59,"loc":{"start":{"line":3,"column":2,"index":20},"end":{"line":5,"column":3,"index":59}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":20,"end":31,"loc":{"start":{"line":3,"column":2,"index":20},"end":{"line":3,"column":13,"index":31},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":34,"end":59,"loc":{"start":{"line":3,"column":16,"index":34},"end":{"line":5,"column":3,"index":59}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":40,"end":55,"loc":{"start":{"line":4,"column":4,"index":40},"end":{"line":4,"column":19,"index":55}},
+                    "expression": {
+                      "type": "UnaryExpression",
+                      "start":40,"end":54,"loc":{"start":{"line":4,"column":4,"index":40},"end":{"line":4,"column":18,"index":54}},
+                      "operator": "delete",
+                      "prefix": true,
+                      "argument": {
+                        "type": "MemberExpression",
+                        "start":47,"end":54,"loc":{"start":{"line":4,"column":11,"index":47},"end":{"line":4,"column":18,"index":54}},
+                        "object": {
+                          "type": "ThisExpression",
+                          "start":47,"end":51,"loc":{"start":{"line":4,"column":11,"index":47},"end":{"line":4,"column":15,"index":51}}
+                        },
+                        "computed": false,
+                        "property": {
+                          "type": "PrivateName",
+                          "start":52,"end":54,"loc":{"start":{"line":4,"column":16,"index":52},"end":{"line":4,"column":18,"index":54}},
+                          "id": {
+                            "type": "Identifier",
+                            "start":53,"end":54,"loc":{"start":{"line":4,"column":17,"index":53},"end":{"line":4,"column":18,"index":54},"identifierName":"x"},
+                            "name": "x"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

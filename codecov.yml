@@ -5,8 +5,9 @@ coverage:
   status:
     project:
       default:
-        target: "90%"
+        target: "90.0%"
     patch:
       enabled: false
 ignore:
-  - packages/babel-types/src/*/generated/index.js
+  - packages/babel-types/src/*/generated/*
+  - packages/babel-helpers/src/helpers/*

@@ -1,18 +1,22 @@
 type U = {};
 type V = {};
-type T1 = { ...U
+type T1 = {
+  ...U
 };
-type T2 = { ...U,
+type T2 = {
+  ...U,
   ...V,
 };
 type T3 = {
   p: V,
   ...U,
 };
-type T4 = { ...U,
+type T4 = {
+  ...U,
   p: V,
 };
-type T5 = { ...{} | {
+type T5 = {
+  ...{} | {
     p: V
   }
 };

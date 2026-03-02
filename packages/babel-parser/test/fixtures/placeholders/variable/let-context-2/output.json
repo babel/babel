@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":31,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":17,"index":31}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":31,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":17,"index":31}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "test": {
+          "type": "Identifier",
+          "start":4,"end":8,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":8,"index":8},"identifierName":"cond"},
+          "name": "cond"
+        },
+        "consequent": {
+          "type": "ExpressionStatement",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13}},
+          "expression": {
+            "type": "Identifier",
+            "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13},"identifierName":"let"},
+            "name": "let"
+          }
+        },
+        "alternate": null
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":31,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":17,"index":31}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":14,"end":31,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":17,"index":31}},
+          "operator": "=",
+          "left": {
+            "type": "Placeholder",
+            "start":14,"end":21,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":7,"index":21}},
+            "name": {
+              "type": "Identifier",
+              "start":16,"end":19,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":2,"column":5,"index":19},"identifierName":"LHS"},
+              "name": "LHS"
+            },
+            "expectedNode": "Pattern"
+          },
+          "right": {
+            "type": "Placeholder",
+            "start":24,"end":31,"loc":{"start":{"line":2,"column":10,"index":24},"end":{"line":2,"column":17,"index":31}},
+            "name": {
+              "type": "Identifier",
+              "start":26,"end":29,"loc":{"start":{"line":2,"column":12,"index":26},"end":{"line":2,"column":15,"index":29},"identifierName":"RHS"},
+              "name": "RHS"
+            },
+            "expectedNode": "Expression"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

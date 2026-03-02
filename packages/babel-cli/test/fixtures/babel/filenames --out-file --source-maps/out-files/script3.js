@@ -3,6 +3,8 @@
 (function () {
   return 42;
 });
+
+// some comments
 "use strict";
 
 arr.map(function (x) {

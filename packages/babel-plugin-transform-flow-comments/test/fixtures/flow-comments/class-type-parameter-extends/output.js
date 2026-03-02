@@ -1,3 +1,1 @@
-class Foo
-/*:: <T>*/
-extends Bar {}
+class Foo /*:: <T>*/ extends Bar {}

@@ -1,11 +1,5 @@
 {
-  "plugins": [
-    [
-      "moduleAttributes",
-      {
-        "version": "may-2020"
-      }
-    ]
-  ],
-  "sourceType": "module"
+  "plugins": [["importAttributes", { "importAttributesKeyword": "with" }]],
+  "sourceType": "module",
+  "parserOpts": { "createImportExpressions": true }
 }

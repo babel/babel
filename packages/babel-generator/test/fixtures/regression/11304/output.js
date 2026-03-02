@@ -1,2 +1,2 @@
-function f(){return/*#__PURE__*/ (//test
+function f(){return(/*#__PURE__*///test
 0);}

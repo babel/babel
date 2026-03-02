@@ -1,21 +1,21 @@
-const code = multiline([
-  "for (const {foo, ...bar} of { bar: [] }) {",
-    "() => foo;",
-    "const [qux] = bar;",
-    "try {} catch (e) {",
-      "let quux = qux;",
-    "}",
-  "}"
-]);
+const code = `
+  for (const {foo, ...bar} of { bar: [] }) {
+    () => foo;
+    const [qux] = bar;
+    try {} catch (e) {
+      let quux = qux;
+    }
+  }
+`;
 
 let programPath;
 let forOfPath;
 let functionPath;
 
-transform(code, {
+return transformAsync(code, {
   configFile: false,
   plugins: [
-    "../../../../lib",
+    __dirname + "/../../../../lib/index.js",
     {
       post({ path }) {
         programPath = path;
@@ -26,13 +26,13 @@ transform(code, {
       }
     }
   ]
+}).then(() => {
+  expect(Object.keys(programPath.scope.bindings)).toEqual(["foo", "bar"]);
+
+  // for declarations should be transformed to for bindings
+  expect(forOfPath.scope.bindings).toEqual({});
+  // The body should be wrapped into closure
+  expect(forOfPath.get("body").scope.bindings).toEqual({});
+
+  expect(Object.keys(functionPath.scope.bindings)).toEqual(["foo", "qux", "quux"]);
 });
-
-expect(Object.keys(programPath.scope.bindings)).toEqual(["foo", "bar"]);
-
-// for declarations should be transformed to for bindings
-expect(forOfPath.scope.bindings).toEqual({});
-// The body should be wrapped into closure
-expect(forOfPath.get("body").scope.bindings).toEqual({});
-
-expect(Object.keys(functionPath.scope.bindings)).toEqual(["foo", "bar", "qux", "quux"]);

@@ -3,5 +3,4 @@ class C extends Object {
     super();
     this.x = x;
   }
-
 }

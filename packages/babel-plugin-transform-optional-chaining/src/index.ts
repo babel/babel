@@ -1,0 +1,28 @@
+import { declare } from "@babel/helper-plugin-utils";
+import { transform, transformOptionalChain } from "./transform.ts";
+import type { NodePath, types as t } from "@babel/core";
+
+export interface Options {
+  loose?: boolean;
+}
+export default declare((api, options: Options) => {
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  const { loose = false } = options;
+  const noDocumentAll = api.assumption("noDocumentAll") ?? loose;
+  const pureGetters = api.assumption("pureGetters") ?? loose;
+
+  return {
+    name: "transform-optional-chaining",
+    manipulateOptions: undefined,
+    visitor: {
+      "OptionalCallExpression|OptionalMemberExpression"(
+        path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
+      ) {
+        transform(path, { noDocumentAll, pureGetters });
+      },
+    },
+  };
+});
+
+export { transform, transformOptionalChain };

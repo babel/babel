@@ -1,0 +1,69 @@
+{
+  "type": "File",
+  "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":64}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":64}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":64}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":11,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":11,"index":11},"identifierName":"Hotel"},
+          "name": "Hotel"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":12,"end":64,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":5,"column":1,"index":64}},
+          "body": [
+            {
+              "type": "ClassPrivateMethod",
+              "start":16,"end":62,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":4,"column":3,"index":62}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":16,"end":26,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":2,"column":12,"index":26}},
+                "id": {
+                  "type": "Identifier",
+                  "start":17,"end":26,"loc":{"start":{"line":2,"column":3,"index":17},"end":{"line":2,"column":12,"index":26},"identifierName":"getBanned"},
+                  "name": "getBanned"
+                }
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":29,"end":62,"loc":{"start":{"line":2,"column":15,"index":29},"end":{"line":4,"column":3,"index":62}},
+                "body": [
+                  {
+                    "type": "ReturnStatement",
+                    "start":35,"end":58,"loc":{"start":{"line":3,"column":4,"index":35},"end":{"line":3,"column":27,"index":58}},
+                    "argument": {
+                      "type": "CallExpression",
+                      "start":42,"end":57,"loc":{"start":{"line":3,"column":11,"index":42},"end":{"line":3,"column":26,"index":57}},
+                      "callee": {
+                        "type": "Identifier",
+                        "start":42,"end":55,"loc":{"start":{"line":3,"column":11,"index":42},"end":{"line":3,"column":24,"index":55},"identifierName":"violentPeople"},
+                        "name": "violentPeople"
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

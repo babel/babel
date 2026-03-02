@@ -11,12 +11,13 @@ var test = {
   ["c"
   /*
    * After bracket key
-   */
-  ]: "3",
+   */]: "3",
   // Before bracket, line comment
   ["d"]: "4",
-  [// Inside bracket, line comment
+  [
+  // Inside bracket, line comment
   "e"]: "5",
-  ["f" // After bracket, line comment
+  ["f"
+  // After bracket, line comment
   ]: "6"
 };

@@ -1,11 +1,11 @@
 var fn = async (
-  arg
-) => {};
+arg) =>
+{};
 
 async (x) =>
 {};
 
-async x => {};
+async (x) => {};
 
 async (x) =>
 {};

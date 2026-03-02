@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "flow",
+    ["pipelineOperator", { "proposal": "hack", "topicToken": "@@" }]
+  ]
+}

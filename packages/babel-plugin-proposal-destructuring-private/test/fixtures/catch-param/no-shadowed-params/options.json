@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-destructuring-private"],
+  "minNodeVersion": "16.11.0"
+}

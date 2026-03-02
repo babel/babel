@@ -1,0 +1,10 @@
+{
+  "name": "@babel/test-esm",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@babel/runtime": "workspace:^",
+    "@babel/runtime-corejs3": "workspace:^"
+  },
+  "version": "8.0.0-rc.2"
+}

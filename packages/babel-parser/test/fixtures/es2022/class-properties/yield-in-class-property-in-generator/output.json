@@ -1,0 +1,95 @@
+{
+  "type": "File",
+  "start":0,"end":100,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":100}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'yield'. (4:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":100,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":100}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":100,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":100}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":16,"end":100,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":6,"column":1,"index":100}},
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start":20,"end":98,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":5,"column":3,"index":98}},
+              "id": {
+                "type": "Identifier",
+                "start":26,"end":27,"loc":{"start":{"line":2,"column":8,"index":26},"end":{"line":2,"column":9,"index":27},"identifierName":"C"},
+                "name": "C"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start":28,"end":98,"loc":{"start":{"line":2,"column":10,"index":28},"end":{"line":5,"column":3,"index":98}},
+                "body": [
+                  {
+                    "type": "ClassProperty",
+                    "start":79,"end":94,"loc":{"start":{"line":4,"column":4,"index":79},"end":{"line":4,"column":19,"index":94}},
+                    "static": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":79,"end":80,"loc":{"start":{"line":4,"column":4,"index":79},"end":{"line":4,"column":5,"index":80},"identifierName":"p"},
+                      "name": "p"
+                    },
+                    "computed": false,
+                    "value": {
+                      "type": "BinaryExpression",
+                      "start":83,"end":93,"loc":{"start":{"line":4,"column":8,"index":83},"end":{"line":4,"column":18,"index":93}},
+                      "left": {
+                        "type": "Identifier",
+                        "start":83,"end":88,"loc":{"start":{"line":4,"column":8,"index":83},"end":{"line":4,"column":13,"index":88},"identifierName":"yield"},
+                        "name": "yield"
+                      },
+                      "operator": "+",
+                      "right": {
+                        "type": "NumericLiteral",
+                        "start":91,"end":93,"loc":{"start":{"line":4,"column":16,"index":91},"end":{"line":4,"column":18,"index":93}},
+                        "extra": {
+                          "rawValue": 42,
+                          "raw": "42"
+                        },
+                        "value": 42
+                      }
+                    },
+                    "leadingComments": [
+                      {
+                        "type": "CommentLine",
+                        "value": " here yield is an identifier reference",
+                        "start":34,"end":74,"loc":{"start":{"line":3,"column":4,"index":34},"end":{"line":3,"column":44,"index":74}}
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " here yield is an identifier reference",
+      "start":34,"end":74,"loc":{"start":{"line":3,"column":4,"index":34},"end":{"line":3,"column":44,"index":74}}
+    }
+  ]
+}

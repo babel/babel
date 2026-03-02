@@ -1,2 +1,2 @@
 declare
-const x: number, y: string;
+const x: number = 10, y: string = "something";

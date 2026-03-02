@@ -16,12 +16,8 @@
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _exports.Cachier = Cachier;
+  _exports.Cacher = Cacher;
   _exports.default = void 0;
-
-  var _default = new Cachier();
-
-  _exports.default = _default;
-
-  function Cachier(databaseName) {}
+  var _default = _exports.default = new Cacher();
+  function Cacher(databaseName) {}
 });

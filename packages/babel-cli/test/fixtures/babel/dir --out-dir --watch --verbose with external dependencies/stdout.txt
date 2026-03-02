@@ -1,0 +1,11 @@
+BATCHED(0) src/index.js -> lib/index.js
+BATCHED(0) src/main.js -> lib/main.js
+Successfully compiled 2 files with Babel (123ms).
+The watcher is ready.
+EXECUTOR lib/index.js "let str = /"Hi :)/";"
+EXECUTOR lib/main.js "console.log(/"Hi :)/");"
+BATCHED(1) src/index.js -> lib/index.js
+BATCHED(1) src/main.js -> lib/main.js
+Successfully compiled 2 files with Babel (123ms).
+EXECUTOR lib/index.js "let str = /"Updated!/";"
+EXECUTOR lib/main.js "console.log(/"Updated!/");"

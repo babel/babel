@@ -11,9 +11,7 @@ System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export, _c
     }, function (_fooBar) {}, function (_directoryFooBar) {}],
     execute: function () {
       _export("foo", foo);
-
       _export("test2", test2 = 5);
-
       _export("default", foo);
     }
   };

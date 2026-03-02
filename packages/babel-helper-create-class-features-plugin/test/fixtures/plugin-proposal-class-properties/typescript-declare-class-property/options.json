@@ -1,0 +1,5 @@
+{
+  "presets": ["typescript"],
+  "plugins": ["transform-class-properties"],
+  "throws": "TypeScript 'declare' fields must first be transformed by @babel/plugin-transform-typescript."
+}

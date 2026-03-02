@@ -2,7 +2,7 @@
 
 > Babel plugin to ensure function declarations at the block level are block scoped
 
-See our website [@babel/plugin-transform-block-scoped-functions](https://babeljs.io/docs/en/next/babel-plugin-transform-block-scoped-functions.html) for more information.
+See our website [@babel/plugin-transform-block-scoped-functions](https://babeljs.io/docs/babel-plugin-transform-block-scoped-functions) for more information.
 
 ## Install
 

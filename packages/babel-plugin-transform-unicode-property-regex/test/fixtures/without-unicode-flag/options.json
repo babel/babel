@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    [
+      "transform-unicode-property-regex",
+      {
+        "useUnicodeFlag": false
+      }
+    ]
+  ]
+}

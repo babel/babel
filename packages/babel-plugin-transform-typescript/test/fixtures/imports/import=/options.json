@@ -1,3 +1,0 @@
-{
-  "throws": "`import =` is not supported by @babel/plugin-transform-typescript\nPlease consider using `import <moduleName> from '<moduleName>';` alongside Typescript's --allowSyntheticDefaultImports option."
-}

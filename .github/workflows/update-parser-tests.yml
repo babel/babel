@@ -1,0 +1,59 @@
+name: Update Test262 parser tests
+env:
+  YARN_ENABLE_SCRIPTS: false # disable post-install scripts
+on:
+  workflow_dispatch:
+    inputs: {}
+  schedule:
+    - cron: "0 0 * * 5"
+
+permissions:
+  contents: read
+
+jobs:
+  createPullRequest:
+    name: Update parser test262 tests
+    permissions:
+      contents: write # for Git to git push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: tc39/test262
+          path: build/test262
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: "*"
+          cache: "yarn"
+      - name: Get latest test262 version
+        id: test262
+        run: echo "sha1=$(sh ./scripts/parser-tests/get-test262-version.sh)" >> $GITHUB_OUTPUT
+      - name: Update test262 commit
+        run: |
+          echo ${{ steps.test262.outputs.sha1 }} | ./scripts/parser-tests/bump-test262-version.sh
+      - name: Build babel parser
+        run: |
+          yarn install --immutable --mode=skip-build
+          yarn gulp build-rollup
+      - name: Update test262 allow list
+        run: |
+          make test-test262-update-allowlist
+      - name: Commit changes
+        run: |
+          git config user.name "Babel Bot"
+          git config user.email "babel-bot@users.noreply.github.com"
+          git checkout -b update-test262-parser
+          git commit -am "chore: update test262 to ${{ steps.test262.outputs.sha1 }}"
+          git push --force origin update-test262-parser
+      - name: Create Pull Request
+        uses: babel/actions/create-pull-request@v2
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          branch: update-test262-parser
+          title: Update test262
+          description: Update test262 to [${{ steps.test262.outputs.sha1 }}](https://github.com/tc39/test262/commit/${{ steps.test262.outputs.sha1 }}).
+          labels: |
+            area: test262
+            repo automation :robot:

@@ -1,5 +1,5 @@
 {
-  "mappings": "AAAA;AAEAA,OAAO,CAACC,GAAR,CAAY,eAAZ",
+  "version": 3,
   "names": [
     "console",
     "log"
@@ -10,5 +10,6 @@
   "sourcesContent": [
     "#!env node\n\nconsole.log(\"Hello, world!\");"
   ],
-  "version": 3
+  "mappings": "AAAA;AAEAA,OAAO,CAACC,GAAG,CAAC,eAAe,CAAC",
+  "ignoreList": []
 }

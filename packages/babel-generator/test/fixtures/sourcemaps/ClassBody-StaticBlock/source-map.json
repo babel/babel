@@ -1,0 +1,18 @@
+{
+  "version": 3,
+  "names": [
+    "Foo",
+    "A1",
+    "foo",
+    "A2",
+    "bar"
+  ],
+  "sources": [
+    "fixtures/sourcemaps/ClassBody-StaticBlock/input.js"
+  ],
+  "sourcesContent": [
+    "class Foo {\n  static {}\n}\n\nclass A1 {\n  static{\n    foo;\n  }\n}\n\nclass A2 {\n  static {\n    foo;bar;\n  }\n}"
+  ],
+  "mappings": "AAAA,MAAMA,GAAG,CAAC;EACR;AACF;AAEA,MAAMC,EAAE,CAAC;EACP;IACEC,GAAG;EACL;AACF;AAEA,MAAMC,EAAE,CAAC;EACP;IACED,GAAG;IAACE,GAAG;EACT;AACF",
+  "ignoreList": []
+}

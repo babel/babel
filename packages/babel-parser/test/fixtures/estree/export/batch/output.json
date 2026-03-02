@@ -16,8 +16,12 @@
           "value": "foo",
           "raw": "\"foo\""
         },
+        "attributes": [],
         "exported": null
       }
-    ]
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
   }
 }

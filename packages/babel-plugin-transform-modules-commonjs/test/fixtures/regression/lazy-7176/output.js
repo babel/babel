@@ -1,14 +1,12 @@
 "use strict";
 
-function mod() {
-  const data = babelHelpers.interopRequireDefault(require("mod"));
-
-  mod = function () {
+function _mod() {
+  const data = babelHelpers.interopRequireWildcard(require("mod"));
+  _mod = function () {
     return data;
   };
-
   return data;
 }
-
-mod().named;
+var mod = _mod;
+_mod().named;
 mod();

@@ -1,7 +1,4 @@
 {
-  "plugins": [
-    "transform-for-of",
-    "transform-flow-strip-types",
-     ["external-helpers", { "helperVersion": "7.100.0" }]
-  ]
+  "plugins": ["transform-for-of"],
+  "presets": ["typescript"]
 }

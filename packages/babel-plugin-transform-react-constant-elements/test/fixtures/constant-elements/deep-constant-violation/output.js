@@ -1,13 +1,8 @@
-var _ref = <b></b>;
-
-var _ref2 = <span></span>;
-
+var _b, _span;
 function render() {
-  var children = _ref;
-
+  var children = _b || (_b = <b></b>);
   if (someCondition) {
-    children = _ref2;
+    children = _span || (_span = <span></span>);
   }
-
   return <div>{children}</div>;
 }

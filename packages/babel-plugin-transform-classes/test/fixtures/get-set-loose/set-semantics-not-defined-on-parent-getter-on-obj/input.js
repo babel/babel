@@ -19,7 +19,7 @@ const obj = new Obj();
 // expect(obj.set()).toBe(3);
 expect(() => {
   obj.set();
-}).toThrow();
+}).toThrow(TypeError);
 
 expect(called).toBe(false);
 expect(Base.prototype.test).toBeUndefined();

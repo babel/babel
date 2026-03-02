@@ -1,11 +1,7 @@
-var _ref = <foo />;
-
+var _foo, _div;
 function render() {
-  return _ref;
+  return _foo || (_foo = <foo />);
 }
-
-var _ref2 = <div className="foo"><input type="checkbox" checked={true} /></div>;
-
 function render() {
-  return _ref2;
+  return _div || (_div = <div className="foo"><input type="checkbox" checked={true} /></div>);
 }

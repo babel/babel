@@ -1,0 +1,18 @@
+{
+  "validateLogs": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "safari": "9"
+        },
+        "exclude": [
+          "transform-for-of",
+          "transform-arrow-functions"
+        ]
+      }
+    ]
+  ]
+}

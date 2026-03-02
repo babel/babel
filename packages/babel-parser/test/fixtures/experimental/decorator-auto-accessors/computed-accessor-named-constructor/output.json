@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":41}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":41}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":41}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":41,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":1,"index":41}},
+          "body": [
+            {
+              "type": "ClassAccessorProperty",
+              "start":14,"end":39,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":27,"index":39}},
+              "static": false,
+              "key": {
+                "type": "StringLiteral",
+                "start":24,"end":37,"loc":{"start":{"line":2,"column":12,"index":24},"end":{"line":2,"column":25,"index":37}},
+                "extra": {
+                  "rawValue": "constructor",
+                  "raw": "\"constructor\""
+                },
+                "value": "constructor"
+              },
+              "computed": true,
+              "value": null
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

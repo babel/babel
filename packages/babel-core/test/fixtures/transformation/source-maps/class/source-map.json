@@ -1,0 +1,22 @@
+{
+  "version": 3,
+  "names": [
+    "Test",
+    "babelHelpers",
+    "classCallCheck",
+    "createClass",
+    "key",
+    "get",
+    "Error",
+    "test",
+    "bar"
+  ],
+  "sources": [
+    "source-maps/class/input.js"
+  ],
+  "sourcesContent": [
+    "class Test {\n  get bar() {\n    throw new Error(\"wow\");\n  }\n}\n\nvar test = new Test;\ntest.bar;"
+  ],
+  "mappings": "IAAMA,IAAI;EAAA;;EAAA,SAAAA,KAAA;IAAAC,YAAA,CAAAC,cAAA,OAAAF,IAAA;EAAA;EAAA,OAAAC,YAAA,CAAAE,WAAA,CAAAH,IAAA;IAAAI,GAAA;IAAAC,GAAA,EACR,SAAAA,CAAA,EAAU;MACR,MAAM,IAAIC,KAAK,CAAC,KAAK,CAAC;IACxB;EAAC;AAAA;AAGH,IAAIC,IAAI,GAAG,IAAIP,IAAI,CAAD,CAAC;AACnBO,IAAI,CAACC,GAAG",
+  "ignoreList": []
+}

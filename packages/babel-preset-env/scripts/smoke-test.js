@@ -1,6 +1,6 @@
-const fs = require("fs-extra");
-const execSync = require("child_process").execSync;
-const path = require("path");
+const fs = require("node:fs");
+const execSync = require("node:child_process").execSync;
+const path = require("node:path");
 const pkg = require("../package.json");
 
 let errorOccurred = false;
@@ -14,7 +14,7 @@ try {
 
   console.log("Setting up smoke test dependencies");
 
-  fs.ensureDirSync(tempFolderPath);
+  fs.mkdirSync(tempFolderPath);
   process.chdir(tempFolderPath);
 
   const babelCliVersion = pkg.devDependencies["babel-cli"];

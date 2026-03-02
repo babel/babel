@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "jsx",
+    "typescript"
+  ],
+  "parserOpts": {
+    "errorRecovery": true
+  },
+  "throwMsg": true
+}

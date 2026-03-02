@@ -1,6 +1,6 @@
 {
   "presets": [
-    ["env", { "useBuiltIns": "usage", "corejs": 3, "modules": false }]
+    ["env", { "useBuiltIns": "usage", "corejs": "3.0", "modules": false }]
   ],
   "plugins": ["./plugin.js"]
 }

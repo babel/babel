@@ -1,9 +1,16 @@
 {
-  "mappings": "AAAAA,GAAG;AACHA,GAAG;AACHA,GAAG,GAAGC,GAAN;AACAC,GAAG,CAACF,GAAJ;AACAE,GAAG,CAACF,GAAJ;AACAE,GAAG,CAACF,GAAJ,CAAQC,GAAR;AACAC,GAAG,CAACF,GAAJ,GAAUC,GAAV;AACA;AACED,EAAAA,GAAG;AACHA,EAAAA,GAAG;AACHA,EAAAA,GAAG,GAAGC,GAAN;AACAC,EAAAA,GAAG,CAACF,GAAJ;AACAE,EAAAA,GAAG,CAACF,GAAJ;AACAE,EAAAA,GAAG,CAACF,GAAJ,CAAQC,GAAR;AACAC,EAAAA,GAAG,CAACF,GAAJ,GAAUC,GAAV;AACD",
-  "names": ["foo", "bar", "obj"],
-  "sources": ["fixtures/sourcemaps/call-identifiers/input.js"],
+  "version": 3,
+  "names": [
+    "foo",
+    "bar",
+    "obj"
+  ],
+  "sources": [
+    "fixtures/sourcemaps/call-identifiers/input.js"
+  ],
   "sourcesContent": [
     "foo;\nfoo();\nfoo().bar;\nobj.foo;\nobj.foo();\nobj.foo.bar;\nobj.foo().bar;\n{\n  foo;\n  foo();\n  foo().bar;\n  obj.foo;\n  obj.foo();\n  obj.foo.bar;\n  obj.foo().bar;\n}"
   ],
-  "version": 3
+  "mappings": "AAAAA,GAAG;AACHA,GAAG,CAAC,CAAC;AACLA,GAAG,CAAC,CAAC,CAACC,GAAG;AACTC,GAAG,CAACF,GAAG;AACPE,GAAG,CAACF,GAAG,CAAC,CAAC;AACTE,GAAG,CAACF,GAAG,CAACC,GAAG;AACXC,GAAG,CAACF,GAAG,CAAC,CAAC,CAACC,GAAG;AACb;EACED,GAAG;EACHA,GAAG,CAAC,CAAC;EACLA,GAAG,CAAC,CAAC,CAACC,GAAG;EACTC,GAAG,CAACF,GAAG;EACPE,GAAG,CAACF,GAAG,CAAC,CAAC;EACTE,GAAG,CAACF,GAAG,CAACC,GAAG;EACXC,GAAG,CAACF,GAAG,CAAC,CAAC,CAACC,GAAG;AACf",
+  "ignoreList": []
 }

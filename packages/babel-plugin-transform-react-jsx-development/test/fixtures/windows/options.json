@@ -1,9 +1,0 @@
-{
-  "plugins": [
-    "external-helpers",
-    "transform-react-jsx-development",
-    "transform-react-display-name",
-    "transform-arrow-functions"
-  ],
-  "os": ["win32"]
-}

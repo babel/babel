@@ -1,0 +1,79 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":28}},
+  "errors": [
+    "SyntaxError: Private name #dec is not defined. (2:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":28}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":28}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":28,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":3,"column":1,"index":28}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":12,"end":26,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":16,"index":26}},
+              "decorators": [
+                {
+                  "type": "Decorator",
+                  "start":12,"end":19,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":9,"index":19}},
+                  "expression": {
+                    "type": "MemberExpression",
+                    "start":13,"end":19,"loc":{"start":{"line":2,"column":3,"index":13},"end":{"line":2,"column":9,"index":19}},
+                    "object": {
+                      "type": "Identifier",
+                      "start":13,"end":14,"loc":{"start":{"line":2,"column":3,"index":13},"end":{"line":2,"column":4,"index":14},"identifierName":"C"},
+                      "name": "C"
+                    },
+                    "property": {
+                      "type": "PrivateName",
+                      "start":15,"end":19,"loc":{"start":{"line":2,"column":5,"index":15},"end":{"line":2,"column":9,"index":19}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":16,"end":19,"loc":{"start":{"line":2,"column":6,"index":16},"end":{"line":2,"column":9,"index":19},"identifierName":"dec"},
+                        "name": "dec"
+                      }
+                    },
+                    "computed": false
+                  }
+                }
+              ],
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":20,"end":21,"loc":{"start":{"line":2,"column":10,"index":20},"end":{"line":2,"column":11,"index":21},"identifierName":"m"},
+                "name": "m"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":24,"end":26,"loc":{"start":{"line":2,"column":14,"index":24},"end":{"line":2,"column":16,"index":26}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

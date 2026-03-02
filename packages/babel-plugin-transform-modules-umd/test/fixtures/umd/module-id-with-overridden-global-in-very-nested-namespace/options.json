@@ -1,15 +1,14 @@
 {
   "plugins": [
-    "external-helpers",
     [
       "transform-modules-umd",
       {
         "globals": {
           "my custom module name": "foo.bar.baz.qux"
         },
-        "exactGlobals": true
+        "exactGlobals": true,
+        "moduleId": "my custom module name"
       }
     ]
-  ],
-  "moduleId": "my custom module name"
+  ]
 }

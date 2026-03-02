@@ -1,0 +1,14 @@
+{
+  "validateLogs": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "edge": "17"
+        }
+      }
+    ]
+  ]
+}

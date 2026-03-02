@@ -2,7 +2,7 @@
 
 > Ensure that no reserved words are used.
 
-See our website [@babel/plugin-transform-reserved-words](https://babeljs.io/docs/en/next/babel-plugin-transform-reserved-words.html) for more information.
+See our website [@babel/plugin-transform-reserved-words](https://babeljs.io/docs/babel-plugin-transform-reserved-words) for more information.
 
 ## Install
 

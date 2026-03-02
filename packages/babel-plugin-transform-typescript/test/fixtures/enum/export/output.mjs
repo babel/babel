@@ -1,9 +1,8 @@
-export let E;
-
-(function (E) {
+export let E = /*#__PURE__*/function (E) {
   E[E["A"] = 1] = "A";
-})(E || (E = {}));
-
-(function (E) {
+  return E;
+}({});
+E = /*#__PURE__*/function (E) {
   E[E["B"] = 2] = "B";
-})(E || (E = {}));
+  return E;
+}(E || {});

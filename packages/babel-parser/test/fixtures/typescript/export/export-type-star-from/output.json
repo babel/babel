@@ -1,0 +1,123 @@
+{
+  "type": "File",
+  "start":0,"end":209,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":36,"index":209}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":209,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":36,"index":209}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportAllDeclaration",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+        "exportKind": "type",
+        "source": {
+          "type": "StringLiteral",
+          "start":19,"end":26,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":26,"index":26}},
+          "extra": {
+            "rawValue": "./mod",
+            "raw": "'./mod'"
+          },
+          "value": "./mod"
+        },
+        "attributes": []
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":28,"end":61,"loc":{"start":{"line":2,"column":0,"index":28},"end":{"line":2,"column":33,"index":61}},
+        "exportKind": "type",
+        "specifiers": [
+          {
+            "type": "ExportNamespaceSpecifier",
+            "start":40,"end":47,"loc":{"start":{"line":2,"column":12,"index":40},"end":{"line":2,"column":19,"index":47}},
+            "exported": {
+              "type": "Identifier",
+              "start":45,"end":47,"loc":{"start":{"line":2,"column":17,"index":45},"end":{"line":2,"column":19,"index":47},"identifierName":"ns"},
+              "name": "ns"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":53,"end":60,"loc":{"start":{"line":2,"column":25,"index":53},"end":{"line":2,"column":32,"index":60}},
+          "extra": {
+            "rawValue": "./mod",
+            "raw": "'./mod'"
+          },
+          "value": "./mod"
+        },
+        "attributes": [],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Note: TSC doesn't support string module specifiers yet,",
+            "start":62,"end":120,"loc":{"start":{"line":3,"column":0,"index":62},"end":{"line":3,"column":58,"index":120}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " but it's easier for us to support them than not.",
+            "start":121,"end":172,"loc":{"start":{"line":4,"column":0,"index":121},"end":{"line":4,"column":51,"index":172}}
+          }
+        ]
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":173,"end":209,"loc":{"start":{"line":5,"column":0,"index":173},"end":{"line":5,"column":36,"index":209}},
+        "exportKind": "type",
+        "specifiers": [
+          {
+            "type": "ExportNamespaceSpecifier",
+            "start":185,"end":195,"loc":{"start":{"line":5,"column":12,"index":185},"end":{"line":5,"column":22,"index":195}},
+            "exported": {
+              "type": "StringLiteral",
+              "start":190,"end":195,"loc":{"start":{"line":5,"column":17,"index":190},"end":{"line":5,"column":22,"index":195}},
+              "extra": {
+                "rawValue": "ns2",
+                "raw": "\"ns2\""
+              },
+              "value": "ns2"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":201,"end":208,"loc":{"start":{"line":5,"column":28,"index":201},"end":{"line":5,"column":35,"index":208}},
+          "extra": {
+            "rawValue": "./mod",
+            "raw": "'./mod'"
+          },
+          "value": "./mod"
+        },
+        "attributes": [],
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Note: TSC doesn't support string module specifiers yet,",
+            "start":62,"end":120,"loc":{"start":{"line":3,"column":0,"index":62},"end":{"line":3,"column":58,"index":120}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " but it's easier for us to support them than not.",
+            "start":121,"end":172,"loc":{"start":{"line":4,"column":0,"index":121},"end":{"line":4,"column":51,"index":172}}
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Note: TSC doesn't support string module specifiers yet,",
+      "start":62,"end":120,"loc":{"start":{"line":3,"column":0,"index":62},"end":{"line":3,"column":58,"index":120}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " but it's easier for us to support them than not.",
+      "start":121,"end":172,"loc":{"start":{"line":4,"column":0,"index":121},"end":{"line":4,"column":51,"index":172}}
+    }
+  ]
+}

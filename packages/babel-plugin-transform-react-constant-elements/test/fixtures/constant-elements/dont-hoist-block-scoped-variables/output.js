@@ -4,6 +4,5 @@ function render(flag) {
     [].map(() => bar);
     return <foo bar={bar} />;
   }
-
   return null;
 }

@@ -1,0 +1,64 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":15,"index":32}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":15,"index":32}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":14,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":14,"index":14}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start":12,"end":14,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":14,"index":14}},
+              "extra": {
+                "rawValue": "",
+                "raw": "\"\""
+              },
+              "value": ""
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":17,"end":32,"loc":{"start":{"line":3,"column":0,"index":17},"end":{"line":3,"column":15,"index":32}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":26,"end":29,"loc":{"start":{"line":3,"column":9,"index":26},"end":{"line":3,"column":12,"index":29}},
+            "local": {
+              "type": "Identifier",
+              "start":26,"end":29,"loc":{"start":{"line":3,"column":9,"index":26},"end":{"line":3,"column":12,"index":29},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":26,"end":29,"loc":{"start":{"line":3,"column":9,"index":26},"end":{"line":3,"column":12,"index":29},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": null,
+        "declaration": null,
+        "attributes": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

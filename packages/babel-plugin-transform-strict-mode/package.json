@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-strict-mode",
-  "version": "7.10.1",
+  "version": "8.0.0-rc.2",
   "description": "This plugin places a 'use strict'; directive at the top of all files to enable strict mode",
   "repository": {
     "type": "git",
@@ -11,18 +11,31 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "keywords": [
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.10.1"
+    "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "workspace:^"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1",
-    "@babel/helper-plugin-test-runner": "^7.10.1"
-  }
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-strict-mode",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "type": "module"
 }

@@ -1,0 +1,120 @@
+{
+  "type": "File",
+  "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+  "errors": [
+    "SyntaxError: Class methods cannot have the 'declare' modifier. (4:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"C"},
+          "name": "C",
+          "decorators": [],
+          "optional": false
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":56,"loc":{"start":{"line":1,"column":8},"end":{"line":5,"column":1}},
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "start":12,"end":21,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":11}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":12,"end":18,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":8},"identifierName":"method"},
+                "name": "method",
+                "decorators": [],
+                "optional": false
+              },
+              "computed": false,
+              "kind": "method",
+              "value": {
+                "type": "TSEmptyBodyFunctionExpression",
+                "start":18,"end":21,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":11}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "expression": false,
+                "params": [],
+                "body": null,
+                "declare": false
+              },
+              "decorators": [],
+              "override": false,
+              "optional": false
+            },
+            {
+              "type": "MethodDefinition",
+              "start":24,"end":34,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":12}},
+              "static": false,
+              "key": {
+                "type": "PrivateIdentifier",
+                "start":24,"end":31,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":9}},
+                "name": "method"
+              },
+              "kind": "method",
+              "value": {
+                "type": "TSEmptyBodyFunctionExpression",
+                "start":31,"end":34,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":12}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "expression": false,
+                "params": [],
+                "body": null,
+                "declare": false
+              },
+              "computed": false,
+              "decorators": [],
+              "override": false,
+              "optional": false
+            },
+            {
+              "type": "MethodDefinition",
+              "start":37,"end":54,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":19}},
+              "declare": true,
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":45,"end":51,"loc":{"start":{"line":4,"column":10},"end":{"line":4,"column":16},"identifierName":"method"},
+                "name": "method",
+                "decorators": [],
+                "optional": false
+              },
+              "computed": false,
+              "kind": "method",
+              "value": {
+                "type": "TSEmptyBodyFunctionExpression",
+                "start":51,"end":54,"loc":{"start":{"line":4,"column":16},"end":{"line":4,"column":19}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "expression": false,
+                "params": [],
+                "body": null,
+                "declare": false
+              },
+              "decorators": [],
+              "override": false,
+              "optional": false
+            }
+          ]
+        },
+        "abstract": false,
+        "declare": false,
+        "decorators": [],
+        "implements": []
+      }
+    ]
+  }
+}

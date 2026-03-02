@@ -1,11 +1,12 @@
 function foo1() {
-  return (// foobar
+  return (
+    // foobar
     "bar"
   );
 }
-
 function foo2() {
-  return (// foobar
+  return (
+    // foobar
     "bar"
   );
 }

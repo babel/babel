@@ -1,0 +1,66 @@
+{
+  "type": "File",
+  "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+  "errors": [
+    "SyntaxError: Unexpected trailing comma after rest element. (1:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "expression": {
+          "type": "AssignmentExpression",
+          "start":1,"end":18,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":18,"index":18}},
+          "operator": "=",
+          "left": {
+            "type": "ObjectPattern",
+            "start":1,"end":13,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":13,"index":13}},
+            "properties": [
+              {
+                "type": "RestElement",
+                "start":2,"end":9,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":9,"index":9}},
+                "argument": {
+                  "type": "Identifier",
+                  "start":5,"end":9,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":9,"index":9},"identifierName":"rest"},
+                  "name": "rest"
+                }
+              },
+              {
+                "type": "ObjectProperty",
+                "start":11,"end":12,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":12,"index":12}},
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":11,"end":12,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":12,"index":12},"identifierName":"b"},
+                  "name": "b"
+                },
+                "computed": false,
+                "shorthand": true,
+                "value": {
+                  "type": "Identifier",
+                  "start":11,"end":12,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":12,"index":12},"identifierName":"b"},
+                  "name": "b"
+                }
+              }
+            ]
+          },
+          "right": {
+            "type": "ObjectExpression",
+            "start":16,"end":18,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":18,"index":18}},
+            "properties": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

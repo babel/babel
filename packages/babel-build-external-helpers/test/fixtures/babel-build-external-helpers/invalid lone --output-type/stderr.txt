@@ -1,0 +1,1 @@
+error: option '-t, --output-type <type>' argument missing

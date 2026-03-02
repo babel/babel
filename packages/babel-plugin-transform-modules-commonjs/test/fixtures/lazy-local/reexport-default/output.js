@@ -9,5 +9,4 @@ Object.defineProperty(exports, "default", {
     return _foo.default;
   }
 });
-
 var _foo = babelHelpers.interopRequireDefault(require("./foo"));

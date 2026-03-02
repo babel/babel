@@ -1,7 +1,4 @@
 {
-  "plugins": [
-    "external-helpers",
-    "transform-classes",
-    "transform-block-scoping"
-  ]
+  "plugins": ["transform-classes", "transform-block-scoping"],
+  "sourceMaps": true
 }

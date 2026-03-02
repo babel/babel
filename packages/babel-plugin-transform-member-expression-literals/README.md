@@ -2,7 +2,7 @@
 
 > Ensure that reserved words are quoted in property accesses
 
-See our website [@babel/plugin-transform-member-expression-literals](https://babeljs.io/docs/en/next/babel-plugin-transform-member-expression-literals.html) for more information.
+See our website [@babel/plugin-transform-member-expression-literals](https://babeljs.io/docs/babel-plugin-transform-member-expression-literals) for more information.
 
 ## Install
 

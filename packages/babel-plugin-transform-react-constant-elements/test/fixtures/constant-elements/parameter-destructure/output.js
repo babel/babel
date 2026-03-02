@@ -1,7 +1,5 @@
 function render(_ref) {
+  var _Component;
   let text = _ref.text;
-
-  var _ref2 = <Component text={text} />;
-
-  return () => _ref2;
+  return () => _Component || (_Component = <Component text={text} />);
 }

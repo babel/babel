@@ -1,3 +1,11 @@
 import runner from "@babel/helper-transform-fixture-test-runner";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 
-runner(`${__dirname}/fixtures/transformation`, "transformation");
+(runner.default || runner)(
+  path.join(
+    path.dirname(fileURLToPath(import.meta.url)),
+    "/fixtures/transformation",
+  ),
+  "transformation",
+);

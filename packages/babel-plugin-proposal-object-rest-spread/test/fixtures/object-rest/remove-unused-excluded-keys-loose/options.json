@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "external-helpers",
-    ["proposal-object-rest-spread", { "loose": true }]
-  ]
-}

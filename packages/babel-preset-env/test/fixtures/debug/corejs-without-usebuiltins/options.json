@@ -6,7 +6,8 @@
       "env",
       {
         "debug": true,
-        "corejs": 3
+        "targets": { "browsers": "ie 6" },
+        "corejs": "3.0"
       }
     ]
   ]

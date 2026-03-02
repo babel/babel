@@ -1,5 +1,7 @@
-import traverse from "../lib";
 import { parse } from "@babel/parser";
+
+import _traverse from "../lib/index.js";
+const traverse = _traverse.default || _traverse;
 
 describe("path/ancestry", function () {
   describe("isAncestor", function () {

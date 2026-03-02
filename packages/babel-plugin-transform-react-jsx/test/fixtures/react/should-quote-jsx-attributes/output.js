@@ -1,4 +1,3 @@
-/*#__PURE__*/
-React.createElement("button", {
+/*#__PURE__*/React.createElement("button", {
   "data-value": "a value"
 }, "Button");

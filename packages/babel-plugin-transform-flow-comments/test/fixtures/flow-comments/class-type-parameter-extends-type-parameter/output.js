@@ -1,30 +1,13 @@
 class Foo
 /*:: <T>*/
-
 /* inner */
-extends Bar
-/*:: <R>*/
-{}
+extends Bar /*:: <R>*/{}
+
 /*a*/
-
-
-class
-/*b*/
-Baz
-/*c*/
-
+class /*b*/Baz /*c*/
 /*:: <T>*/
-
 /*d*/
-extends
-/*e*/
-Bar
-/*f*/
-
+extends /*e*/Bar /*f*/
 /*:: <R>*/
-
 /*g*/
-{
-  /*h*/
-}
-/*i*/
+{/*h*/} /*i*/

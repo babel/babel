@@ -1,0 +1,105 @@
+{
+  "type": "File",
+  "start":0,"end":86,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":14,"index":86}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":86,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":14,"index":86}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":40,"index":40}},
+        "importKind": "type",
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":13,"end":19,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":19,"index":19}},
+            "imported": {
+              "type": "Identifier",
+              "start":13,"end":19,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":19,"index":19},"identifierName":"Global"},
+              "name": "Global"
+            },
+            "importKind": "value",
+            "local": {
+              "type": "Identifier",
+              "start":13,"end":19,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":19,"index":19},"identifierName":"Global"},
+              "name": "Global"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":26,"end":39,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":39,"index":39}},
+          "extra": {
+            "rawValue": "@jest/types",
+            "raw": "'@jest/types'"
+          },
+          "value": "@jest/types"
+        },
+        "attributes": []
+      },
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":42,"end":70,"loc":{"start":{"line":3,"column":0,"index":42},"end":{"line":3,"column":28,"index":70}},
+        "id": {
+          "type": "Identifier",
+          "start":47,"end":53,"loc":{"start":{"line":3,"column":5,"index":47},"end":{"line":3,"column":11,"index":53},"identifierName":"Global"},
+          "name": "Global"
+        },
+        "typeAnnotation": {
+          "type": "TSTypeReference",
+          "start":56,"end":69,"loc":{"start":{"line":3,"column":14,"index":56},"end":{"line":3,"column":27,"index":69}},
+          "typeName": {
+            "type": "TSQualifiedName",
+            "start":56,"end":69,"loc":{"start":{"line":3,"column":14,"index":56},"end":{"line":3,"column":27,"index":69}},
+            "left": {
+              "type": "Identifier",
+              "start":56,"end":62,"loc":{"start":{"line":3,"column":14,"index":56},"end":{"line":3,"column":20,"index":62},"identifierName":"Global"},
+              "name": "Global"
+            },
+            "right": {
+              "type": "Identifier",
+              "start":63,"end":69,"loc":{"start":{"line":3,"column":21,"index":63},"end":{"line":3,"column":27,"index":69},"identifierName":"Global"},
+              "name": "Global"
+            }
+          }
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":72,"end":86,"loc":{"start":{"line":5,"column":0,"index":72},"end":{"line":5,"column":14,"index":86}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":76,"end":85,"loc":{"start":{"line":5,"column":4,"index":76},"end":{"line":5,"column":13,"index":85}},
+            "id": {
+              "type": "Identifier",
+              "start":76,"end":85,"loc":{"start":{"line":5,"column":4,"index":76},"end":{"line":5,"column":13,"index":85},"identifierName":"a"},
+              "name": "a",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":77,"end":85,"loc":{"start":{"line":5,"column":5,"index":77},"end":{"line":5,"column":13,"index":85}},
+                "typeAnnotation": {
+                  "type": "TSTypeReference",
+                  "start":79,"end":85,"loc":{"start":{"line":5,"column":7,"index":79},"end":{"line":5,"column":13,"index":85}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":79,"end":85,"loc":{"start":{"line":5,"column":7,"index":79},"end":{"line":5,"column":13,"index":85},"identifierName":"Global"},
+                    "name": "Global"
+                  }
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

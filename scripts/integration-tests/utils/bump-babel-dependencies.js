@@ -1,29 +1,39 @@
-const fs = require("fs");
-const path = require("path");
-const cwd = process.cwd();
-const packageJSONPath = path.resolve(cwd, "./package.json");
-const content = JSON.parse(fs.readFileSync(packageJSONPath));
+import fs from "node:fs";
+import path from "node:path";
 
-let bumped = false;
-function bumpBabelDependency(dependencies) {
+const packageJSONPath = path.resolve(process.cwd(), "./package.json");
+const content = (await import(packageJSONPath, { with: { type: "json" } }))
+  .default;
+
+function bumpBabelDependency(type, version) {
+  const dependencies = content[type];
   for (const dep of Object.keys(dependencies)) {
-    if (dep.startsWith("@babel/")) {
-      dependencies[dep] = "latest";
-      bumped = true;
+    if (dep.startsWith("@babel/") && !dependencies[dep].includes(":")) {
+      dependencies[dep] = version;
+      console.log(`Bumped ${type}:${dep} to ${version}`);
     }
   }
 }
 
-if ("peerDependencies" in content) {
-  bumpBabelDependency(content.peerDependencies);
-}
-if ("devDependencies" in content) {
-  bumpBabelDependency(content.devDependencies);
-}
-if ("dependencies" in content) {
-  bumpBabelDependency(content.dependencies);
+if (process.argv[2] === "resolutions") {
+  const resolutions = content.resolutions || {};
+  for (const name of fs.readdirSync(
+    new URL("../../../packages", import.meta.url)
+  )) {
+    if (!name.startsWith("babel-")) continue;
+    resolutions[name.replace("babel-", "@babel/")] = "*";
+  }
+  content.resolutions = resolutions;
+} else {
+  if ("peerDependencies" in content) {
+    bumpBabelDependency("peerDependencies", "*");
+  }
+  if ("devDependencies" in content) {
+    bumpBabelDependency("devDependencies", "latest");
+  }
+  if ("dependencies" in content) {
+    bumpBabelDependency("dependencies", "latest");
+  }
 }
 
-if (bumped) {
-  fs.writeFileSync(packageJSONPath, JSON.stringify(content, undefined, 2));
-}
+fs.writeFileSync(packageJSONPath, JSON.stringify(content, undefined, 2));

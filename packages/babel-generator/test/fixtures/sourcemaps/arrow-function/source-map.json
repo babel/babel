@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "names": [],
+  "sources": [
+    "fixtures/sourcemaps/arrow-function/input.js"
+  ],
+  "sourcesContent": [
+    "(() => { return 42; })"
+  ],
+  "mappings": "AAAC,MAAM;EAAE,OAAO,EAAE;AAAE,CAAC",
+  "ignoreList": []
+}

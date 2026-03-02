@@ -1,0 +1,30 @@
+{
+  "type": "File",
+  "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+  "errors": [
+    "SyntaxError: Numeric separators are not allowed inside unicode escape sequences or hex escape sequences. (1:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "\\u{1F_639}",
+            "raw": "\"\\u{1F_639}\"",
+            "expressionValue": "😹"
+          },
+          "value": "\\u{1F_639}"
+        }
+      }
+    ]
+  }
+}

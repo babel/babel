@@ -1,0 +1,14 @@
+{
+  "validateLogs": true,
+  "targets": {
+    "firefox": 90
+  },
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true
+      }
+    ]
+  ]
+}

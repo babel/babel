@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+  "errors": [
+    "SyntaxError: Can not use 'await' as identifier inside an async function. (1:20)",
+    "SyntaxError: Missing semicolon. (1:30)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+        "expression": {
+          "type": "FunctionExpression",
+          "start":1,"end":34,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":34,"index":34}},
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":18,"end":34,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":34,"index":34}},
+            "body": [
+              {
+                "type": "ExpressionStatement",
+                "start":20,"end":30,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":30,"index":30}},
+                "expression": {
+                  "type": "Identifier",
+                  "start":20,"end":30,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":30,"index":30},"identifierName":"await"},
+                  "name": "await"
+                }
+              },
+              {
+                "type": "ExpressionStatement",
+                "start":31,"end":32,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":32,"index":32}},
+                "expression": {
+                  "type": "Identifier",
+                  "start":31,"end":32,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":32,"index":32},"identifierName":"x"},
+                  "name": "x"
+                }
+              }
+            ],
+            "directives": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

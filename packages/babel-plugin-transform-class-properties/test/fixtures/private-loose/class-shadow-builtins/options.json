@@ -1,0 +1,4 @@
+{
+  "plugins": [["transform-class-properties", { "loose": true }]],
+  "externalHelpers": false
+}

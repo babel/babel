@@ -1,0 +1,27 @@
+{
+  "version": 3,
+  "names": [
+    "A",
+    "constructor",
+    "babelHelpers",
+    "classPrivateMethodInitSpec",
+    "_A_brand",
+    "classPrivateFieldInitSpec",
+    "_field",
+    "method",
+    "classPrivateFieldSet2",
+    "classPrivateSetter",
+    "_set_setter",
+    "inExpr",
+    "_this",
+    "value"
+  ],
+  "sources": [
+    "source-maps/private-set/input.js"
+  ],
+  "sourcesContent": [
+    "class A {\n  #field;\n\n  set #setter(value) {}\n\n  method() {\n    this.#field = 42;\n    this.#setter = 43;\n\n\n    inExpr(this.#field = 5);\n  }\n}"
+  ],
+  "mappings": ";;AAAA,MAAMA,CAAC,CAAC;EAAAC,YAAA;IAAAC,YAAA,CAAAC,0BAAA,OAAAC,QAAA;IACNF,YAAA,CAAAG,yBAAA,OAAAC,MAAM;EAAC;EAIPC,MAAMA,CAAA,EAAG;IACPL,YAAA,CAAAM,qBAAA,CAAKF,MAAM,EAAX,IAAI,EAAU,EAAJ,CAAC;IACXJ,YAAA,CAAAO,kBAAA,CAAAL,QAAA,EAAKM,WAAO,EAAZ,IAAI,EAAW,EAAJ,CAAC;IAGZC,MAAM,CAACT,YAAA,CAAAM,qBAAA,CAAKF,MAAM,EAAX,IAAI,EAAU,CAAJ,CAAK,CAAC;EACzB;AACF;AAAC,SAAAI,YAAAE,KAAA,EATaC,KAAK,EAAE,CAAC",
+  "ignoreList": []
+}

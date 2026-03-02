@@ -1,0 +1,178 @@
+{
+  "type": "File",
+  "start":0,"end":232,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":9,"index":232}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":232,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":9,"index":232}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":22,"end":153,"loc":{"start":{"line":2,"column":0,"index":22},"end":{"line":7,"column":1,"index":153}},
+        "kind": "global",
+        "id": {
+          "type": "Identifier",
+          "start":30,"end":36,"loc":{"start":{"line":2,"column":8,"index":30},"end":{"line":2,"column":14,"index":36},"identifierName":"global"},
+          "name": "global"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":37,"end":153,"loc":{"start":{"line":2,"column":15,"index":37},"end":{"line":7,"column":1,"index":153}},
+          "body": [
+            {
+              "type": "ExportNamedDeclaration",
+              "start":43,"end":151,"loc":{"start":{"line":3,"column":4,"index":43},"end":{"line":6,"column":5,"index":151}},
+              "exportKind": "value",
+              "specifiers": [],
+              "source": null,
+              "attributes": [],
+              "declaration": {
+                "type": "TSModuleDeclaration",
+                "start":50,"end":151,"loc":{"start":{"line":3,"column":11,"index":50},"end":{"line":6,"column":5,"index":151}},
+                "kind": "namespace",
+                "id": {
+                  "type": "Identifier",
+                  "start":60,"end":62,"loc":{"start":{"line":3,"column":21,"index":60},"end":{"line":3,"column":23,"index":62},"identifierName":"ns"},
+                  "name": "ns"
+                },
+                "body": {
+                  "type": "TSModuleBlock",
+                  "start":63,"end":151,"loc":{"start":{"line":3,"column":24,"index":63},"end":{"line":6,"column":5,"index":151}},
+                  "body": [
+                    {
+                      "type": "ExportNamedDeclaration",
+                      "start":73,"end":102,"loc":{"start":{"line":4,"column":8,"index":73},"end":{"line":4,"column":37,"index":102}},
+                      "exportKind": "value",
+                      "specifiers": [],
+                      "source": null,
+                      "attributes": [],
+                      "declaration": {
+                        "type": "TSDeclareFunction",
+                        "start":80,"end":102,"loc":{"start":{"line":4,"column":15,"index":80},"end":{"line":4,"column":37,"index":102}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":89,"end":93,"loc":{"start":{"line":4,"column":24,"index":89},"end":{"line":4,"column":28,"index":93},"identifierName":"eval"},
+                          "name": "eval"
+                        },
+                        "generator": false,
+                        "async": false,
+                        "params": [],
+                        "returnType": {
+                          "type": "TSTypeAnnotation",
+                          "start":95,"end":101,"loc":{"start":{"line":4,"column":30,"index":95},"end":{"line":4,"column":36,"index":101}},
+                          "typeAnnotation": {
+                            "type": "TSVoidKeyword",
+                            "start":97,"end":101,"loc":{"start":{"line":4,"column":32,"index":97},"end":{"line":4,"column":36,"index":101}}
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "ExportNamedDeclaration",
+                      "start":111,"end":145,"loc":{"start":{"line":5,"column":8,"index":111},"end":{"line":5,"column":42,"index":145}},
+                      "exportKind": "value",
+                      "specifiers": [],
+                      "source": null,
+                      "attributes": [],
+                      "declaration": {
+                        "type": "TSDeclareFunction",
+                        "start":118,"end":145,"loc":{"start":{"line":5,"column":15,"index":118},"end":{"line":5,"column":42,"index":145}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":127,"end":136,"loc":{"start":{"line":5,"column":24,"index":127},"end":{"line":5,"column":33,"index":136},"identifierName":"arguments"},
+                          "name": "arguments"
+                        },
+                        "generator": false,
+                        "async": false,
+                        "params": [],
+                        "returnType": {
+                          "type": "TSTypeAnnotation",
+                          "start":138,"end":144,"loc":{"start":{"line":5,"column":35,"index":138},"end":{"line":5,"column":41,"index":144}},
+                          "typeAnnotation": {
+                            "type": "TSVoidKeyword",
+                            "start":140,"end":144,"loc":{"start":{"line":5,"column":37,"index":140},"end":{"line":5,"column":41,"index":144}}
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "declare": true,
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " @filename: /a.d.ts",
+            "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}}
+          }
+        ]
+      },
+      {
+        "type": "TSDeclareFunction",
+        "start":155,"end":185,"loc":{"start":{"line":9,"column":0,"index":155},"end":{"line":9,"column":30,"index":185}},
+        "declare": true,
+        "id": {
+          "type": "Identifier",
+          "start":172,"end":176,"loc":{"start":{"line":9,"column":17,"index":172},"end":{"line":9,"column":21,"index":176},"identifierName":"eval"},
+          "name": "eval"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "returnType": {
+          "type": "TSTypeAnnotation",
+          "start":178,"end":184,"loc":{"start":{"line":9,"column":23,"index":178},"end":{"line":9,"column":29,"index":184}},
+          "typeAnnotation": {
+            "type": "TSVoidKeyword",
+            "start":180,"end":184,"loc":{"start":{"line":9,"column":25,"index":180},"end":{"line":9,"column":29,"index":184}}
+          }
+        }
+      },
+      {
+        "type": "TSDeclareFunction",
+        "start":186,"end":221,"loc":{"start":{"line":10,"column":0,"index":186},"end":{"line":10,"column":35,"index":221}},
+        "declare": true,
+        "id": {
+          "type": "Identifier",
+          "start":203,"end":212,"loc":{"start":{"line":10,"column":17,"index":203},"end":{"line":10,"column":26,"index":212},"identifierName":"arguments"},
+          "name": "arguments"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "returnType": {
+          "type": "TSTypeAnnotation",
+          "start":214,"end":220,"loc":{"start":{"line":10,"column":28,"index":214},"end":{"line":10,"column":34,"index":220}},
+          "typeAnnotation": {
+            "type": "TSVoidKeyword",
+            "start":216,"end":220,"loc":{"start":{"line":10,"column":30,"index":216},"end":{"line":10,"column":34,"index":220}}
+          }
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":223,"end":232,"loc":{"start":{"line":12,"column":0,"index":223},"end":{"line":12,"column":9,"index":232}},
+        "exportKind": "value",
+        "specifiers": [],
+        "source": null,
+        "attributes": [],
+        "declaration": null
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " @filename: /a.d.ts",
+      "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}}
+    }
+  ]
+}

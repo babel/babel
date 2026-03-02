@@ -1,0 +1,84 @@
+{
+  "type": "File",
+  "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":28,"index":51}},
+  "errors": [
+    "SyntaxError: In non-strict mode code, functions can only be declared at top level or inside a block. (1:7)",
+    "SyntaxError: In non-strict mode code, functions can only be declared at top level or inside a block. (2:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":28,"index":51}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "test": {
+          "type": "NumericLiteral",
+          "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5}},
+          "extra": {
+            "rawValue": 0,
+            "raw": "0"
+          },
+          "value": 0
+        },
+        "consequent": {
+          "type": "FunctionDeclaration",
+          "start":7,"end":22,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":22,"index":22}},
+          "id": {
+            "type": "Identifier",
+            "start":16,"end":17,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":17,"index":17},"identifierName":"f"},
+            "name": "f"
+          },
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":20,"end":22,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":22,"index":22}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "alternate": null
+      },
+      {
+        "type": "IfStatement",
+        "start":23,"end":51,"loc":{"start":{"line":2,"column":0,"index":23},"end":{"line":2,"column":28,"index":51}},
+        "test": {
+          "type": "NumericLiteral",
+          "start":27,"end":28,"loc":{"start":{"line":2,"column":4,"index":27},"end":{"line":2,"column":5,"index":28}},
+          "extra": {
+            "rawValue": 0,
+            "raw": "0"
+          },
+          "value": 0
+        },
+        "consequent": {
+          "type": "EmptyStatement",
+          "start":29,"end":30,"loc":{"start":{"line":2,"column":6,"index":29},"end":{"line":2,"column":7,"index":30}}
+        },
+        "alternate": {
+          "type": "FunctionDeclaration",
+          "start":36,"end":51,"loc":{"start":{"line":2,"column":13,"index":36},"end":{"line":2,"column":28,"index":51}},
+          "id": {
+            "type": "Identifier",
+            "start":45,"end":46,"loc":{"start":{"line":2,"column":22,"index":45},"end":{"line":2,"column":23,"index":46},"identifierName":"g"},
+            "name": "g"
+          },
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":49,"end":51,"loc":{"start":{"line":2,"column":26,"index":49},"end":{"line":2,"column":28,"index":51}},
+            "body": [],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

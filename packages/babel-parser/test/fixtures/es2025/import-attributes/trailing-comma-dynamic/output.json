@@ -1,0 +1,100 @@
+{
+  "type": "File",
+  "start":0,"end":67,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":48,"index":67}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":67,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":48,"index":67}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "expression": {
+          "type": "ImportExpression",
+          "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+          "source": {
+            "type": "StringLiteral",
+            "start":7,"end":15,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":15,"index":15}},
+            "extra": {
+              "rawValue": "foo.js",
+              "raw": "\"foo.js\"",
+              "trailingComma": 15
+            },
+            "value": "foo.js"
+          },
+          "options": null
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":19,"end":67,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":48,"index":67}},
+        "expression": {
+          "type": "ImportExpression",
+          "start":19,"end":66,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":47,"index":66}},
+          "source": {
+            "type": "StringLiteral",
+            "start":26,"end":36,"loc":{"start":{"line":2,"column":7,"index":26},"end":{"line":2,"column":17,"index":36}},
+            "extra": {
+              "rawValue": "foo.json",
+              "raw": "\"foo.json\""
+            },
+            "value": "foo.json"
+          },
+          "options": {
+            "type": "ObjectExpression",
+            "start":38,"end":64,"loc":{"start":{"line":2,"column":19,"index":38},"end":{"line":2,"column":45,"index":64}},
+            "properties": [
+              {
+                "type": "ObjectProperty",
+                "start":40,"end":62,"loc":{"start":{"line":2,"column":21,"index":40},"end":{"line":2,"column":43,"index":62}},
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":40,"end":44,"loc":{"start":{"line":2,"column":21,"index":40},"end":{"line":2,"column":25,"index":44},"identifierName":"with"},
+                  "name": "with"
+                },
+                "computed": false,
+                "shorthand": false,
+                "value": {
+                  "type": "ObjectExpression",
+                  "start":46,"end":62,"loc":{"start":{"line":2,"column":27,"index":46},"end":{"line":2,"column":43,"index":62}},
+                  "properties": [
+                    {
+                      "type": "ObjectProperty",
+                      "start":48,"end":60,"loc":{"start":{"line":2,"column":29,"index":48},"end":{"line":2,"column":41,"index":60}},
+                      "method": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start":48,"end":52,"loc":{"start":{"line":2,"column":29,"index":48},"end":{"line":2,"column":33,"index":52},"identifierName":"type"},
+                        "name": "type"
+                      },
+                      "computed": false,
+                      "shorthand": false,
+                      "value": {
+                        "type": "StringLiteral",
+                        "start":54,"end":60,"loc":{"start":{"line":2,"column":35,"index":54},"end":{"line":2,"column":41,"index":60}},
+                        "extra": {
+                          "rawValue": "json",
+                          "raw": "\"json\""
+                        },
+                        "value": "json"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "extra": {
+              "trailingComma": 64
+            }
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

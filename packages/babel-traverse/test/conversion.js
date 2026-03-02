@@ -1,7 +1,10 @@
-import traverse from "../lib";
 import { parse } from "@babel/parser";
-import generate from "@babel/generator";
 import * as t from "@babel/types";
+
+import _traverse from "../lib/index.js";
+import _generate from "@babel/generator";
+const traverse = _traverse.default || _traverse;
+const generate = _generate.default || _generate;
 
 function getPath(code) {
   const ast = parse(code);
@@ -43,11 +46,19 @@ describe("conversion", function () {
       expect(generateCode(rootPath)).toBe("() => {\n  return true;\n};");
     });
 
-    it("preserves arrow function body's context", function () {
+    it("preserves arrow function body's context when replaced with a boolean literal", function () {
       const rootPath = getPath("() => true").get("expression");
       const body = rootPath.get("body");
       rootPath.ensureBlock();
       body.replaceWith(t.booleanLiteral(false));
+      expect(generateCode(rootPath)).toBe("() => {\n  return false;\n};");
+    });
+
+    it("preserves arrow function body's context when replace with multiple nodes", function () {
+      const rootPath = getPath("() => true").get("expression");
+      const body = rootPath.get("body");
+      rootPath.ensureBlock();
+      body.replaceWithMultiple([t.booleanLiteral(false), t.emptyStatement()]);
       expect(generateCode(rootPath)).toBe("() => {\n  return false;\n};");
     });
 

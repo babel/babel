@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint no-var: 0 */
+/* eslint-disable no-var, unicorn/prefer-node-protocol */
 
 var parser = require("..");
 var fs = require("fs");

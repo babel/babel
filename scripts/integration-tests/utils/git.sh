@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 original_git_branch=`git rev-parse --abbrev-ref HEAD`
 tmp_branch_name="integration-tests-$(date +'%F-%H-%M-%N')"
@@ -10,7 +10,7 @@ export GIT_E2E_SETUP="true"
 function initializeE2Egit {
   git checkout -b $tmp_branch_name
 
-  # This is needed by lerna, which commits when publishing
+  # This is needed by "yarn release-tool", which commits when publishing
   git config user.name "Babel E2E Test"
   git config user.email "babel-e2e@example.com"
 }

@@ -1,8 +1,8 @@
 var arrayInstance = [];
-var inclidesStr = "includes";
+var includesStr = "includes";
 var findStr = "find";
 
 // Allow instance methods be assigned to variables.
-arrayInstance[inclidesStr](); // include
+arrayInstance[includesStr](); // include
 externalVar[findStr]; // include
 

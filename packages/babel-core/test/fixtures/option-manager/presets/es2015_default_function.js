@@ -1,22 +1,23 @@
 // from code:
 // export default function() {
 //   return {
-//     plugins: [require('../../../../../babel-plugin-syntax-decorators'),]
+//     plugins: ["__dirname + "/../../../../../babel-plugin-syntax-decorators/lib/index.js"]
 //   };
 // }
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 
 exports.default = function () {
   return {
     plugins: [
       [
-        require('../../../../../babel-plugin-syntax-decorators'),
-        { legacy: true }
+        __dirname +
+          "/../../../../../babel-plugin-syntax-decorators/lib/index.js",
+        { version: "legacy" },
       ],
-    ]
+    ],
   };
 };

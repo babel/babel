@@ -1,0 +1,94 @@
+{
+  "type": "File",
+  "start":0,"end":120,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":120}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":120,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":120}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":120,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":120}},
+        "kind": "module",
+        "id": {
+          "type": "StringLiteral",
+          "start":15,"end":38,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":38,"index":38}},
+          "extra": {
+            "rawValue": "~popsicle/dist/common",
+            "raw": "'~popsicle/dist/common'"
+          },
+          "value": "~popsicle/dist/common"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":39,"end":120,"loc":{"start":{"line":1,"column":39,"index":39},"end":{"line":4,"column":1,"index":120}},
+          "body": [
+            {
+              "type": "ImportDeclaration",
+              "start":45,"end":94,"loc":{"start":{"line":2,"column":4,"index":45},"end":{"line":2,"column":53,"index":94}},
+              "importKind": "value",
+              "specifiers": [
+                {
+                  "type": "ImportSpecifier",
+                  "start":54,"end":61,"loc":{"start":{"line":2,"column":13,"index":54},"end":{"line":2,"column":20,"index":61}},
+                  "imported": {
+                    "type": "Identifier",
+                    "start":54,"end":61,"loc":{"start":{"line":2,"column":13,"index":54},"end":{"line":2,"column":20,"index":61},"identifierName":"Request"},
+                    "name": "Request"
+                  },
+                  "importKind": "value",
+                  "local": {
+                    "type": "Identifier",
+                    "start":54,"end":61,"loc":{"start":{"line":2,"column":13,"index":54},"end":{"line":2,"column":20,"index":61},"identifierName":"Request"},
+                    "name": "Request"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":69,"end":93,"loc":{"start":{"line":2,"column":28,"index":69},"end":{"line":2,"column":52,"index":93}},
+                "extra": {
+                  "rawValue": "~popsicle/dist/request",
+                  "raw": "'~popsicle/dist/request'"
+                },
+                "value": "~popsicle/dist/request"
+              },
+              "attributes": []
+            },
+            {
+              "type": "ExportNamedDeclaration",
+              "start":99,"end":118,"loc":{"start":{"line":3,"column":4,"index":99},"end":{"line":3,"column":23,"index":118}},
+              "exportKind": "value",
+              "specifiers": [
+                {
+                  "type": "ExportSpecifier",
+                  "start":108,"end":115,"loc":{"start":{"line":3,"column":13,"index":108},"end":{"line":3,"column":20,"index":115}},
+                  "local": {
+                    "type": "Identifier",
+                    "start":108,"end":115,"loc":{"start":{"line":3,"column":13,"index":108},"end":{"line":3,"column":20,"index":115},"identifierName":"Request"},
+                    "name": "Request"
+                  },
+                  "exportKind": "value",
+                  "exported": {
+                    "type": "Identifier",
+                    "start":108,"end":115,"loc":{"start":{"line":3,"column":13,"index":108},"end":{"line":3,"column":20,"index":115},"identifierName":"Request"},
+                    "name": "Request"
+                  }
+                }
+              ],
+              "source": null,
+              "declaration": null,
+              "attributes": []
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

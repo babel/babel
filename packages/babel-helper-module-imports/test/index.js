@@ -1,22 +1,24 @@
 import * as babel from "@babel/core";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 
-import { ImportInjector } from "../";
+import { ImportInjector } from "../lib/index.js";
 
-function test(sourceType, opts, initializer, expectedCode) {
-  if (typeof opts === "function") {
-    expectedCode = initializer;
-    initializer = opts;
-    opts = null;
-  }
+const cwd = path.dirname(fileURLToPath(import.meta.url));
 
-  const result = babel.transform("", {
-    cwd: __dirname,
+function transform(sourceType, opts, initializer, inputCode) {
+  return babel.transformSync(inputCode, {
+    cwd,
     sourceType,
     filename: "example" + (sourceType === "module" ? ".mjs" : ".js"),
     babelrc: false,
+    configFile: false,
     plugins: [
       function ({ types: t }) {
         return {
+          manipulateOptions({ parserOpts }) {
+            parserOpts.plugins.push("typescript");
+          },
           pre(file) {
             file.set("helperGenerator", name =>
               t.memberExpression(
@@ -36,11 +38,26 @@ function test(sourceType, opts, initializer, expectedCode) {
         };
       },
     ],
-  });
+  }).code;
+}
 
-  expect(result.code.replace(/\s+/g, " ").trim()).toBe(
-    (expectedCode || "").replace(/\s+/g, " ").trim(),
-  );
+function test(sourceType, opts, initializer, inputCode, expectedCode) {
+  if (typeof opts === "function") {
+    expectedCode = inputCode;
+    inputCode = initializer;
+    initializer = opts;
+    opts = null;
+  }
+  if (expectedCode === undefined) {
+    expectedCode = inputCode;
+    inputCode = "";
+  }
+
+  expect(
+    transform(sourceType, opts, initializer, inputCode)
+      .replace(/\s+/g, " ")
+      .trim(),
+  ).toBe((expectedCode || "").replace(/\s+/g, " ").trim());
 }
 const testScript = test.bind(undefined, "script");
 const testModule = test.bind(undefined, "module");
@@ -1097,6 +1114,155 @@ describe("@babel/helper-module-imports", () => {
             addSideEffect(),
             `
               require("source");
+            `,
+          );
+        });
+      });
+    });
+  });
+
+  describe("importPosition: after", () => {
+    it("works in ES modules", () => {
+      testModule(
+        { importPosition: "after" },
+        m => m.addNamed("read", "source"),
+        `
+          import f from "foo";
+          f();
+          import b from "bar";
+          b();
+        `,
+        `
+          import f from "foo";
+          f();
+          import b from "bar";
+          import { read as _read } from "source";
+          b();
+          _read;
+        `,
+      );
+    });
+
+    it("is disallowed in CJS modules", () => {
+      expect(() =>
+        testScript({ importPosition: "after" }, m =>
+          m.addNamed("read", "source"),
+        ),
+      ).toThrow(`"importPosition": "after" is only supported in modules`);
+    });
+
+    describe("imports merging", () => {
+      const opts = { importPosition: "after" };
+      const addNamespace = m => void m.addNamespace("s", opts);
+      const addDefault = m => void m.addDefault("s", opts);
+      const addNamed = m => void m.addNamed("n", "s", opts);
+      const addSideEffect = m => void m.addSideEffect("s", opts);
+
+      it.each`
+        input                                              | operation        | expected
+        ${`import "s"`}                                    | ${addNamespace}  | ${`import * as _s from "s";`}
+        ${`import x from "s"`}                             | ${addNamespace}  | ${`import x from "s"; import * as _s from "s";`}
+        ${`import { x } from "s"`}                         | ${addNamespace}  | ${`import { x } from "s"; import * as _s from "s";`}
+        ${`import * as x from "s"`}                        | ${addNamespace}  | ${`import * as x from "s"; import * as _s from "s";`}
+        ${`import "s"`}                                    | ${addNamed}      | ${`import { n as _n } from "s";`}
+        ${`import x from "s"`}                             | ${addNamed}      | ${`import x, { n as _n } from  "s";`}
+        ${`import { x } from "s"`}                         | ${addNamed}      | ${`import { x, n as _n } from "s";`}
+        ${`import x, { y } from "s"`}                      | ${addNamed}      | ${`import x, { y, n as _n } from  "s";`}
+        ${`import * as x from "s"`}                        | ${addNamed}      | ${`import * as x from "s"; import { n as _n } from "s";`}
+        ${`import { x } from "s"; import { y } from "s";`} | ${addNamed}      | ${`import { x, n as _n } from "s"; import { y } from "s";`}
+        ${`import "s"`}                                    | ${addDefault}    | ${`import _default from "s";`}
+        ${`import x from "s"`}                             | ${addDefault}    | ${`import x, { default as _default } from  "s";`}
+        ${`import { x } from "s"`}                         | ${addDefault}    | ${`import _default, { x } from "s";`}
+        ${`import x, { y } from "s"`}                      | ${addDefault}    | ${`import x, { y, default as _default } from  "s";`}
+        ${`import * as x from "s"`}                        | ${addDefault}    | ${`import * as x from "s"; import _default from "s";`}
+        ${`import "s"`}                                    | ${addSideEffect} | ${`import "s";`}
+        ${`import x from "s"`}                             | ${addSideEffect} | ${`import x from "s";`}
+        ${`import { x } from "s"`}                         | ${addSideEffect} | ${`import { x } from "s";`}
+        ${`import * as x from "s"`}                        | ${addSideEffect} | ${`import * as x from "s";`}
+        ${`import "u"; import type T from "s"`}            | ${addSideEffect} | ${`import "u"; import "s"; import type T from "s";`}
+      `(
+        "$operation.name works with `$input`",
+        ({ input, operation, expected }) => {
+          const out = transform(
+            "module",
+            { importingInterop: "babel", importedType: "es6" },
+            operation,
+            input,
+          );
+          expect(out.replace(/\s+/g, " ")).toBe(expected.replace(/\s+/g, " "));
+        },
+      );
+
+      describe("ordering", () => {
+        it("should try to merge imports", () => {
+          testModule(
+            { importingInterop: "babel", importedType: "es6" },
+            m => {
+              return babel.types.arrayExpression([
+                m.addNamed("x", "modA", { importPosition: "after" }),
+                m.addNamed("y", "modA", { importPosition: "after" }),
+                m.addNamed("z", "modB", { importPosition: "after" }),
+                m.addNamed("w", "modA", { importPosition: "after" }),
+              ]);
+            },
+            `
+              import { x as _x, y as _y, w as _w } from "modA";
+              import { z as _z } from "modB";
+              [_x, _y, _z, _w];
+            `,
+          );
+        });
+
+        it("with user imports", () => {
+          testModule(
+            { importingInterop: "babel", importedType: "es6" },
+            m => {
+              return babel.types.arrayExpression([
+                m.addNamed("x", "modA", { importPosition: "after" }),
+                m.addNamed("y", "modB", { importPosition: "after" }),
+                m.addNamed("z", "modC", { importPosition: "after" }),
+                m.addNamed("w", "modD", { importPosition: "after" }),
+              ]);
+            },
+            `
+              import { foo } from "modA";
+              import bar from "modB";
+              import * as baz from "modC";
+              import "modD";
+            `,
+            `
+              import { foo, x as _x } from "modA";
+              import bar, { y as _y } from "modB";
+              import * as baz from "modC";
+              import { w as _w } from "modD";
+              import { z as _z } from "modC";
+              [_x, _y, _z, _w];
+            `,
+          );
+        });
+
+        it("with importPosition: before", () => {
+          testModule(
+            { importingInterop: "babel", importedType: "es6" },
+            m => {
+              return babel.types.arrayExpression([
+                m.addNamed("x", "modA", { importPosition: "before" }),
+                m.addNamed("y", "modB", { importPosition: "before" }),
+                m.addNamed("z", "modC", { importPosition: "before" }),
+              ]);
+            },
+            `
+              import { foo } from "modA";
+              import bar from "modB";
+              import * as baz from "modC";
+            `,
+            `
+              import { z as _z } from "modC";
+              import { y as _y } from "modB";
+              import { foo, x as _x } from "modA";
+              import bar from "modB";
+              import * as baz from "modC";
+              [_x, _y, _z];
             `,
           );
         });

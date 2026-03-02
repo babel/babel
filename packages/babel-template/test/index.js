@@ -1,6 +1,9 @@
-import generator from "../../babel-generator";
-import template from "../lib";
 import * as t from "@babel/types";
+
+import _generator from "../../babel-generator/lib/index.js";
+import _template from "../lib/index.js";
+const generator = _generator.default || _generator;
+const template = _template.default || _template;
 
 const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
 
@@ -28,16 +31,34 @@ describe("@babel/template", function () {
     expect(generator(output).code).toBe(comments);
   });
 
-  it("should preserve comments with a flag", function () {
-    const output = template(comments, { preserveComments: true })();
-    expect(generator(output).code).toBe(comments);
-  });
-
   it("should preserve comments with a flag when using .ast", function () {
     const output1 = template.ast(comments, { preserveComments: true });
     const output2 = template({ preserveComments: true }).ast(comments);
     expect(generator(output1).code).toBe(comments);
     expect(generator(output2).code).toBe(comments);
+  });
+
+  it("should allow yield outside generator function by default", function () {
+    expect(template.ast("yield 1")).toMatchInlineSnapshot(`
+      Object {
+        "expression": Object {
+          "argument": Object {
+            "extra": Object {
+              "raw": "1",
+              "rawValue": 1,
+            },
+            "loc": undefined,
+            "type": "NumericLiteral",
+            "value": 1,
+          },
+          "delegate": false,
+          "loc": undefined,
+          "type": "YieldExpression",
+        },
+        "loc": undefined,
+        "type": "ExpressionStatement",
+      }
+    `);
   });
 
   describe("string-based", () => {
@@ -138,6 +159,14 @@ describe("@babel/template", function () {
       }).toThrow('Unknown substitution "ANOTHER_ID" given');
     });
 
+    it("should throw if VariableDeclaration without init", () => {
+      expect(() => {
+        template(`
+          const %%ID%%;
+        `)({ ID: t.identifier("someIdent") });
+      }).toThrow("Missing initializer in destructuring declaration. (3:22)");
+    });
+
     it("should throw if placeholders are not given explicit values", () => {
       expect(() => {
         template(`
@@ -215,6 +244,55 @@ describe("@babel/template", function () {
       expect(result.test.left).toBe(value);
     });
 
+    it("should correctly handle empty string as computed property key", () => {
+      const result = template.ast`obj["${""}"] = 1`;
+      expect(result.type).toBe("ExpressionStatement");
+    });
+
+    it("should return assertions in ImportDeclaration when using .ast", () => {
+      const result = template.ast(
+        `import json from "./foo.json" with { type: "json" };`,
+        {
+          plugins: ["importAttributes"],
+        },
+      );
+
+      expect(result.attributes[0].type).toBe("ImportAttribute");
+    });
+
+    it("should return assertions in ExportNamedDeclaration when using .ast", () => {
+      const result = template.ast(
+        `export { default as foo2 } from "foo.json" with { type: "json" };`,
+        {
+          plugins: ["importAttributes"],
+        },
+      );
+
+      expect(result.attributes[0].type).toBe("ImportAttribute");
+    });
+
+    it("should return assertions in ExportDefaultDeclaration when using .ast", () => {
+      const result = template.ast(
+        `export foo2 from "foo.json" with { type: "json" };`,
+        {
+          plugins: ["importAttributes", "exportDefaultFrom"],
+        },
+      );
+
+      expect(result.attributes[0].type).toBe("ImportAttribute");
+    });
+
+    it("should return assertions in ExportAllDeclaration when using .ast", () => {
+      const result = template.ast(
+        `export * from "foo.json" with { type: "json" };`,
+        {
+          plugins: ["importAttributes"],
+        },
+      );
+
+      expect(result.attributes[0].type).toBe("ImportAttribute");
+    });
+
     it("should replace JSX placeholder", () => {
       const result = template.expression(
         `
@@ -229,6 +307,83 @@ describe("@babel/template", function () {
 
       expect(generator(result).code).toEqual("<div>{'content'}</div>");
     });
+
+    it("should work with `export { x }`", () => {
+      const result = template.ast`
+        export { ${t.identifier("x")} }
+        $$$$BABEL_TPL$0;
+      `;
+      expect(result).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "attributes": Array [],
+            "declaration": null,
+            "loc": undefined,
+            "source": null,
+            "specifiers": Array [
+              Object {
+                "exported": Object {
+                  "name": "x",
+                  "type": "Identifier",
+                },
+                "loc": undefined,
+                "local": Object {
+                  "name": "x",
+                  "type": "Identifier",
+                },
+                "type": "ExportSpecifier",
+              },
+            ],
+            "type": "ExportNamedDeclaration",
+          },
+          Object {
+            "expression": Object {
+              "loc": undefined,
+              "name": "$$$$BABEL_TPL$0",
+              "type": "Identifier",
+            },
+            "loc": undefined,
+            "type": "ExpressionStatement",
+          },
+        ]
+      `);
+    });
+
+    it("should work with `const a = { x }`", () => {
+      const result = template.ast`
+        {
+          const a = { ${t.identifier("x")} };
+          $$$$BABEL_TPL$0;
+        }
+      `;
+
+      expect(generator(result).code).toMatchInlineSnapshot(`
+        "{
+          const a = {
+            x
+          };
+          $$$$BABEL_TPL$0;
+        }"
+      `);
+    });
+  });
+
+  it("error stack", () => {
+    let error;
+    try {
+      function create() {
+        return template(``);
+      }
+      function call(tpl) {
+        tpl({
+          FOO: t.numericLiteral(1),
+        });
+      }
+      call(create());
+    } catch (e) {
+      error = e;
+    }
+    expect(error.stack).toMatch("=============\n    at create");
   });
 
   describe(".syntacticPlaceholders", () => {
@@ -348,6 +503,112 @@ describe("@babel/template", function () {
           expect(generator(output).code).toMatchInlineSnapshot(`"FOO + 1;"`);
         });
       });
+    });
+
+    it("works in var declaration", () => {
+      const output = template("var %%LHS%% = %%RHS%%")({
+        LHS: t.identifier("x"),
+        RHS: t.numericLiteral(7),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`"var x = 7;"`);
+    });
+
+    it("works in const declaration", () => {
+      const output = template("const %%LHS%% = %%RHS%%")({
+        LHS: t.identifier("x"),
+        RHS: t.numericLiteral(7),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`"const x = 7;"`);
+    });
+
+    it("works in const declaration inside for-of without init", () => {
+      const output = template("for (const %%LHS%% of %%RHS%%){}")({
+        LHS: t.objectPattern([
+          t.objectProperty(t.identifier("x"), t.identifier("x")),
+        ]),
+        RHS: t.identifier("y"),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`
+        "for (const {
+          x: x
+        } of y) {}"
+      `);
+    });
+
+    it("works in let declaration", () => {
+      const output = template("let %%LHS%% = %%RHS%%")({
+        LHS: t.identifier("x"),
+        RHS: t.numericLiteral(7),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`"let x = 7;"`);
+    });
+
+    it("should keep node props", () => {
+      const outputs = [
+        template({ plugins: ["typescript"] }).ast`
+          const ${t.identifier("greeting")}: string = 'Hello';
+        `,
+        template({ plugins: ["typescript"] }).ast`
+          var ${t.objectPattern([])}: string = x;
+        `,
+        template({ plugins: ["decorators-legacy"] }).ast`
+          class X {
+            f(@dec ${t.identifier("x")}) {}
+          }
+        `,
+        template({ plugins: ["typescript"] }).ast`
+          function f(${t.identifier("x")}?) {}
+        `,
+        template({ plugins: ["typescript"] }).ast`
+          function f(${Object.assign(t.identifier("x"), { optional: true })}: string) {}
+        `,
+        template({ plugins: ["decorators-legacy"] }).ast`
+          class X {
+            f(@dec ${Object.assign(t.identifier("x"), { optional: true })}) {}
+          }
+        `,
+        template({ plugins: ["typescript"] }).ast`
+          function f(${Object.assign(t.identifier("x"), { typeAnnotation: t.tsTypeAnnotation(t.tsStringKeyword()) })}: number) {}
+        `,
+      ];
+
+      expect(outputs.map(ast => generator(ast).code)).toMatchInlineSnapshot(`
+        Array [
+          "const greeting: string = 'Hello';",
+          "var {}: string = x;",
+          "class X {
+          f(@dec
+          x) {}
+        }",
+          "function f(x?) {}",
+          "function f(x?: string) {}",
+          "class X {
+          f(@dec
+          x?) {}
+        }",
+          "function f(x: number) {}",
+        ]
+      `);
+    });
+
+    it("should keep node props with syntacticPlaceholders", () => {
+      const outputs = [
+        template({ plugins: ["typescript"] })(`const %%x%%: string = 'Hello'`)({
+          x: t.identifier("x"),
+        }),
+        template({ plugins: ["typescript"] })(`
+          var %%x%%: string = x;
+        `)({
+          x: t.objectPattern([]),
+        }),
+      ];
+
+      expect(outputs.map(ast => generator(ast).code)).toMatchInlineSnapshot(`
+        Array [
+          "const x: string = 'Hello';",
+          "var {}: string = x;",
+        ]
+      `);
     });
   });
 });

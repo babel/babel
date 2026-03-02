@@ -1,4 +1,4 @@
-import * as t from "../../..";
+import * as t from "../../../lib/index.js";
 
 describe("builders", function () {
   describe("typescript", function () {
@@ -7,9 +7,10 @@ describe("builders", function () {
         const tsTypeParameter = t.tsTypeParameter(
           t.tsTypeReference(t.identifier("bar")),
           t.tsTypeReference(t.identifier("baz")),
-          "foo",
+          t.identifier("foo"),
         );
-        expect(tsTypeParameter).toMatchSnapshot();
+        expect(tsTypeParameter).toHaveProperty("type", "TSTypeParameter");
+        expect(tsTypeParameter).toHaveProperty("name.name", "foo");
       });
       it("throws when name is missing", function () {
         expect(() => {
@@ -17,7 +18,9 @@ describe("builders", function () {
             t.tsTypeReference(t.identifier("bar")),
             t.tsTypeReference(t.identifier("baz")),
           );
-        }).toThrow("Property name expected type of string but got null");
+        }).toThrow(
+          'Property name of TSTypeParameter expected node to be of a type ["Identifier"] but instead got undefined',
+        );
       });
     });
   });

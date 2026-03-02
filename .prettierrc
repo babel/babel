@@ -5,21 +5,23 @@
   "semi": true,
   "singleQuote": false,
   "bracketSpacing": true,
-  "jsxBracketSameLine": false,
+  "bracketSameLine": false,
   "tabWidth": 2,
   "printWidth": 80,
-  "overrides": [{
-    "files": [
-      "**/codemods/*/src/**/*.js",
-      "**/codemods/*/test/**/*.js",
-      "**/packages/*/src/**/*.js",
-      "**/packages/*/test/**/*.js",
-      "**/eslint/*/src/**/*.js",
-      "**/eslint/*/test/**/*.js"
-    ],
-    "options": {
-      "parser": "babel",
-      "trailingComma": "all"
+  "overrides": [
+    {
+      "files": [
+        "**/{codemods,eslint,packages}/*/{src,test}/**/*.{js,cjs,mjs,ts,cts,mts}"
+      ],
+      "options": {
+        "trailingComma": "all"
+      }
+    },
+    {
+      "files": ["**/{codemods,eslint,packages}/*/test/fixtures/**/*.{js,ts}"],
+      "options": {
+        "trailingComma": "es5"
+      }
     }
-  }]
+  ]
 }

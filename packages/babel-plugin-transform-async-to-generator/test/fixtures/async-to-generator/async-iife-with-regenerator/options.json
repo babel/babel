@@ -2,7 +2,6 @@
   "plugins": [
     "transform-arrow-functions",
     "transform-regenerator",
-    "transform-async-to-generator",
-    "external-helpers"
+    "transform-async-to-generator"
   ]
 }

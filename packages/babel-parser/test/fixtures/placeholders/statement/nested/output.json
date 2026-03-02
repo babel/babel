@@ -1,18 +1,18 @@
 {
   "type": "File",
-  "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
+  "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
   "program": {
     "type": "Program",
-    "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
+    "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "IfStatement",
-        "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
         "test": {
           "type": "NumericLiteral",
-          "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5}},
+          "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5}},
           "extra": {
             "rawValue": 0,
             "raw": "0"
@@ -21,10 +21,10 @@
         },
         "consequent": {
           "type": "Placeholder",
-          "start":7,"end":15,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":15}},
+          "start":7,"end":15,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":15,"index":15}},
           "name": {
             "type": "Identifier",
-            "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"FOO"},
+            "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"FOO"},
             "name": "FOO"
           },
           "expectedNode": "Statement"

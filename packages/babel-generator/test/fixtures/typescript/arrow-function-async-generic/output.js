@@ -1,1 +1,1 @@
-async <T>(a: T): T => a;
+async <T,>(a: T): T => a;

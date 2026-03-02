@@ -1,0 +1,22 @@
+{
+  "externalHelpers": false,
+  "presets": [
+    [
+      "env",
+      {
+        "corejs": "3.0",
+        "useBuiltIns": "entry"
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "transform-runtime",
+      {
+        "corejs": false,
+        "absoluteRuntime": true,
+        "version": "7.100.0"
+      }
+    ]
+  ]
+}

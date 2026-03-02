@@ -2,7 +2,7 @@
 
 > This plugin transforms ES2015 modules to AMD
 
-See our website [@babel/plugin-transform-modules-amd](https://babeljs.io/docs/en/next/babel-plugin-transform-modules-amd.html) for more information.
+See our website [@babel/plugin-transform-modules-amd](https://babeljs.io/docs/babel-plugin-transform-modules-amd) for more information.
 
 ## Install
 

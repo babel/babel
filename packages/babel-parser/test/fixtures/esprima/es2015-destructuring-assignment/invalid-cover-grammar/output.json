@@ -1,0 +1,172 @@
+{
+  "type": "File",
+  "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":45,"index":45}},
+  "errors": [
+    "SyntaxError: Invalid shorthand property initializer. (1:22)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":45,"index":45}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":45,"index":45}},
+        "expression": {
+          "type": "ArrayExpression",
+          "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":45,"index":45}},
+          "elements": [
+            {
+              "type": "ArrayExpression",
+              "start":1,"end":44,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":44,"index":44}},
+              "elements": [
+                {
+                  "type": "ArrayExpression",
+                  "start":2,"end":43,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":43,"index":43}},
+                  "elements": [
+                    {
+                      "type": "ArrayExpression",
+                      "start":3,"end":42,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":42,"index":42}},
+                      "elements": [
+                        {
+                          "type": "ArrayExpression",
+                          "start":4,"end":41,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":41,"index":41}},
+                          "elements": [
+                            {
+                              "type": "ArrayExpression",
+                              "start":5,"end":40,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":40,"index":40}},
+                              "elements": [
+                                {
+                                  "type": "ArrayExpression",
+                                  "start":6,"end":39,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":39,"index":39}},
+                                  "elements": [
+                                    {
+                                      "type": "ArrayExpression",
+                                      "start":7,"end":38,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":38,"index":38}},
+                                      "elements": [
+                                        {
+                                          "type": "ArrayExpression",
+                                          "start":8,"end":37,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":37,"index":37}},
+                                          "elements": [
+                                            {
+                                              "type": "ArrayExpression",
+                                              "start":9,"end":36,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":36,"index":36}},
+                                              "elements": [
+                                                {
+                                                  "type": "ArrayExpression",
+                                                  "start":10,"end":35,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":35,"index":35}},
+                                                  "elements": [
+                                                    {
+                                                      "type": "ArrayExpression",
+                                                      "start":11,"end":34,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":34,"index":34}},
+                                                      "elements": [
+                                                        {
+                                                          "type": "ArrayExpression",
+                                                          "start":12,"end":33,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":33,"index":33}},
+                                                          "elements": [
+                                                            {
+                                                              "type": "ArrayExpression",
+                                                              "start":13,"end":32,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":32,"index":32}},
+                                                              "elements": [
+                                                                {
+                                                                  "type": "ArrayExpression",
+                                                                  "start":14,"end":31,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":31,"index":31}},
+                                                                  "elements": [
+                                                                    {
+                                                                      "type": "ArrayExpression",
+                                                                      "start":15,"end":30,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":30,"index":30}},
+                                                                      "elements": [
+                                                                        {
+                                                                          "type": "ArrayExpression",
+                                                                          "start":16,"end":29,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":29,"index":29}},
+                                                                          "elements": [
+                                                                            {
+                                                                              "type": "ArrayExpression",
+                                                                              "start":17,"end":28,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":28,"index":28}},
+                                                                              "elements": [
+                                                                                {
+                                                                                  "type": "ArrayExpression",
+                                                                                  "start":18,"end":27,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":27,"index":27}},
+                                                                                  "elements": [
+                                                                                    {
+                                                                                      "type": "ArrayExpression",
+                                                                                      "start":19,"end":26,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":26,"index":26}},
+                                                                                      "elements": [
+                                                                                        {
+                                                                                          "type": "ObjectExpression",
+                                                                                          "start":20,"end":25,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":25,"index":25}},
+                                                                                          "properties": [
+                                                                                            {
+                                                                                              "type": "ObjectProperty",
+                                                                                              "start":21,"end":24,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":24,"index":24}},
+                                                                                              "method": false,
+                                                                                              "key": {
+                                                                                                "type": "Identifier",
+                                                                                                "start":21,"end":22,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":22,"index":22},"identifierName":"a"},
+                                                                                                "name": "a"
+                                                                                              },
+                                                                                              "computed": false,
+                                                                                              "shorthand": true,
+                                                                                              "value": {
+                                                                                                "type": "AssignmentPattern",
+                                                                                                "start":21,"end":24,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":24,"index":24}},
+                                                                                                "left": {
+                                                                                                  "type": "Identifier",
+                                                                                                  "start":21,"end":22,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":22,"index":22},"identifierName":"a"},
+                                                                                                  "name": "a"
+                                                                                                },
+                                                                                                "right": {
+                                                                                                  "type": "Identifier",
+                                                                                                  "start":23,"end":24,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":24,"index":24},"identifierName":"b"},
+                                                                                                  "name": "b"
+                                                                                                }
+                                                                                              }
+                                                                                            }
+                                                                                          ]
+                                                                                        }
+                                                                                      ]
+                                                                                    }
+                                                                                  ]
+                                                                                }
+                                                                              ]
+                                                                            }
+                                                                          ]
+                                                                        }
+                                                                      ]
+                                                                    }
+                                                                  ]
+                                                                }
+                                                              ]
+                                                            }
+                                                          ]
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":49}},
+  "errors": [
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (4:4)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (4:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":49}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":11,"end":49,"loc":{"start":{"line":2,"column":0,"index":11},"end":{"line":5,"column":1,"index":49}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":11,"end":49,"loc":{"start":{"line":2,"column":0,"index":11},"end":{"line":5,"column":1,"index":49}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":17,"end":49,"loc":{"start":{"line":2,"column":6,"index":17},"end":{"line":5,"column":1,"index":49}},
+            "body": [],
+            "directives": [
+              {
+                "type": "Directive",
+                "start":21,"end":34,"loc":{"start":{"line":3,"column":2,"index":21},"end":{"line":3,"column":15,"index":34}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":21,"end":33,"loc":{"start":{"line":3,"column":2,"index":21},"end":{"line":3,"column":14,"index":33}},
+                  "extra": {
+                    "rawValue": "use strict",
+                    "raw": "\"use strict\"",
+                    "expressionValue": "use strict"
+                  },
+                  "value": "use strict"
+                }
+              },
+              {
+                "type": "Directive",
+                "start":37,"end":42,"loc":{"start":{"line":4,"column":2,"index":37},"end":{"line":4,"column":7,"index":42}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":37,"end":41,"loc":{"start":{"line":4,"column":2,"index":37},"end":{"line":4,"column":6,"index":41}},
+                  "extra": {
+                    "rawValue": "\\8",
+                    "raw": "\"\\8\"",
+                    "expressionValue": "8"
+                  },
+                  "value": "\\8"
+                }
+              },
+              {
+                "type": "Directive",
+                "start":42,"end":47,"loc":{"start":{"line":4,"column":7,"index":42},"end":{"line":4,"column":12,"index":47}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":42,"end":46,"loc":{"start":{"line":4,"column":7,"index":42},"end":{"line":4,"column":11,"index":46}},
+                  "extra": {
+                    "rawValue": "\\9",
+                    "raw": "\"\\9\"",
+                    "expressionValue": "9"
+                  },
+                  "value": "\\9"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
+          "extra": {
+            "rawValue": "\\8",
+            "raw": "\"\\8\"",
+            "expressionValue": "8"
+          },
+          "value": "\\8"
+        }
+      },
+      {
+        "type": "Directive",
+        "start":5,"end":10,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":10,"index":10}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":5,"end":9,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":9,"index":9}},
+          "extra": {
+            "rawValue": "\\9",
+            "raw": "\"\\9\"",
+            "expressionValue": "9"
+          },
+          "value": "\\9"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "transform-destructuring",
+    "transform-regenerator",
+    "transform-async-generator-functions"
+  ],
+  "externalHelpers": false,
+  "SKIP_babel7plugins_babel8core": "The regenerator helper has 'throw Error' in one version and 'throw new Error' in the other."
+}

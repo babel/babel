@@ -1,0 +1,1 @@
+const s = await (typeof process === "object" && process.versions?.node ? Promise.all([import("fs"), import("module")]).then(([fs, module]) => fs.promises.readFile(module.createRequire(import.meta.url).resolve("./x.wasm"))).then(WebAssembly.compile) : WebAssembly.compileStreaming(fetch(import.meta.resolve?.("./x.wasm") ?? new URL("./x.wasm", import.meta.url))));

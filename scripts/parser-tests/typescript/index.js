@@ -1,40 +1,52 @@
-const path = require("path");
-const fs = require("fs").promises;
-const ts = require("../../../build/typescript");
-const TestRunner = require("../utils/parser-test-runner");
-const parsingErrorCodes = require("./error-codes");
+// @ts-check
+import path from "node:path";
+import fs from "node:fs";
+import { fileURLToPath } from "node:url";
+import TestRunner from "../utils/parser-test-runner.js";
+import ErrorCodes from "./error-codes.js";
 
-async function* loadTests(dir) {
-  const names = await fs.readdir(dir);
+/**
+ * Get the encoding of a file based on its BOM.
+ * @param {string} path
+ * @returns {"utf-8" | "utf-16le" | "utf-16be"}
+ */
+const getEncoding = path =>
+  ({ fffe: "utf-16le", feff: "utf-16be" })[
+    fs.readFileSync(path).subarray(0, 2).toString("hex")
+  ] || "utf-8";
 
-  for (const name of names) {
-    const contents = await fs.readFile(path.join(dir, name), "utf8");
-    yield { name, contents };
+const ErrorCodeRegExp = new RegExp(ErrorCodes.join("|"));
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+
+function* loadTests(dir) {
+  const names = fs.readdirSync(dir).map(name => [name, path.join(dir, name)]);
+
+  for (const [name, filename] of names) {
+    const encoding = getEncoding(filename);
+    if (encoding === "utf-16be" || encoding === "utf-16le") continue;
+    yield {
+      name,
+      contents: fs.readFileSync(filename, encoding),
+    };
   }
 }
 
-const plugins = [
-  "typescript",
-  "classProperties",
-  "decorators-legacy",
-  "bigInt",
-  "dynamicImport",
-];
-
-const TSTestsPath = path.join(__dirname, "../../../build/typescript/tests");
+const TSTestsPath = path.join(dirname, "../../../build/typescript/tests");
 
 // Check if the baseline errors contain the codes that should also be thrown from babel-parser
-async function baselineContainsParserErrorCodes(testName) {
+function baselineContainsParserErrorCodes(testName) {
   try {
-    const baselineErrors = await fs.readFile(
-      path.join(
-        TSTestsPath,
-        "baselines/reference",
-        testName.replace(/\.tsx?$/, ".errors.txt")
-      ),
-      "utf8"
+    return ErrorCodeRegExp.test(
+      fs.readFileSync(
+        path.join(
+          TSTestsPath,
+          "baselines/reference",
+          testName.replace(/\.tsx?$/, ".errors.txt")
+        ),
+        "utf8"
+      )
     );
-    return parsingErrorCodes.some(code => baselineErrors.includes(code));
   } catch (e) {
     if (e.code !== "ENOENT") {
       throw e;
@@ -43,37 +55,106 @@ async function baselineContainsParserErrorCodes(testName) {
   }
 }
 
+const IgnoreRegExp = /@noTypesAndSymbols|ts-ignore|\n#!/;
+const AlwaysStrictRegExp = /^\/\/\s*@alwaysStrict:\s*true/m;
+
 const runner = new TestRunner({
   testDir: path.join(TSTestsPath, "./cases/compiler"),
-  allowlist: path.join(__dirname, "allowlist.txt"),
+  allowlist: path.join(dirname, "allowlist.txt"),
   logInterval: 50,
   shouldUpdate: process.argv.includes("--update-allowlist"),
 
-  async *getTests() {
-    for await (const test of loadTests(this.testDir)) {
-      const isTSX = test.name.slice(-4) === ".tsx";
+  *getTests() {
+    for (const test of loadTests(this.testDir)) {
+      if (IgnoreRegExp.test(test.contents)) {
+        yield { id: test.name, expectedError: false, contents: "" };
+        continue;
+      }
 
-      const ast = ts.createSourceFile(
-        test.name,
-        test.contents,
-        ts.ScriptTarget.Latest,
-        false,
-        isTSX ? ts.ScriptKind.TSX : ts.ScriptKind.TS
-      );
+      const strictMode = AlwaysStrictRegExp.test(test.contents) || void 0;
+      const files = toFiles(strictMode, test.contents, test.name);
+      const expectedError =
+        files.length > 0 && baselineContainsParserErrorCodes(test.name);
 
-      yield {
-        contents: test.contents,
-        fileName: test.name,
-        id: test.name,
-        expectedError:
-          ast.parseDiagnostics.length > 0 ||
-          (await baselineContainsParserErrorCodes(test.name)),
-        sourceType: "module",
-        plugins: isTSX ? plugins.concat("jsx") : plugins,
-      };
+      yield { id: test.name, expectedError, contents: files };
     }
   },
 });
+
+function toFiles(strictMode, contents, name) {
+  return splitTwoslashCodeInfoFiles(contents, "default", `${name}/`)
+    .map(([filename, lines]) => [
+      filename.replace(/\/default$/, ""),
+      lines.join("\n"),
+    ])
+    .filter(
+      ([sourceFilename, contents]) =>
+        !/\.(?:css|js|json|md)$/.test(sourceFilename) &&
+        contents.split("\n").some(line => !/^\s*$|^\/\/[^\n]*$/.test(line))
+    )
+    .map(([sourceFilename, contents]) => ({
+      contents,
+      sourceFilename,
+      sourceType: "unambiguous",
+      strictMode,
+      plugins: [
+        ["typescript", { dts: sourceFilename.endsWith(".d.ts") }],
+        "decorators-legacy", // For TS parameter decorator
+        "decoratorAutoAccessors",
+        /\.[tj]sx$/.test(sourceFilename) && "jsx",
+      ].filter(plugin => !!plugin),
+    }));
+}
+
+const BracketedFileRegExp = /\/\/\/\/\s*\[([^\]]+)\][^\n]*(?:\n|$)/;
+const AtFileRegExp = /(?:^|\n)\/\/\s*@filename:\s*(\S+)\s*(?:\n|$)/i;
+
+// Modified from: https://github.com/microsoft/TypeScript-Website/blob/v2/packages/ts-twoslasher/src/index.ts
+/**
+ * Split a code string into multiple files based on twoslash `//` comments.
+ * @param {string} code
+ * @param {string} defaultFileName
+ * @param {string} root
+ * @returns {Array<[string, string[]]>}
+ */
+function splitTwoslashCodeInfoFiles(code, defaultFileName, root = "") {
+  const lines = code.split(/\r\n?|\n/);
+
+  let nameForFile = code.includes(`@filename: ${defaultFileName}`)
+    ? "global.ts"
+    : defaultFileName;
+  let currentFileContent = [];
+  /**
+   * @type {Array<[string, string[]]>}
+   */
+  const fileMap = [];
+
+  for (const line of lines) {
+    const newFileName = BracketedFileRegExp.test(line)
+      ? // @ts-expect-error checked above
+        line.match(BracketedFileRegExp)[1]
+      : (line.match(AtFileRegExp)?.[1] ?? false);
+    if (newFileName) {
+      fileMap.push([root + nameForFile, currentFileContent]);
+      nameForFile = newFileName;
+      currentFileContent = [];
+    } else {
+      currentFileContent.push(line);
+    }
+  }
+  fileMap.push([root + nameForFile, currentFileContent]);
+
+  // Basically, strip these:
+  // ["index.ts", []]
+  // ["index.ts", [""]]
+  const nameContent = fileMap.filter(
+    n =>
+      n[1].length > 2 ||
+      (n[1].length === 1 && n[1][0] !== "") ||
+      (n[1].length === 2 && n[1][0] !== "content not parsed" && n[1][0] !== "")
+  );
+  return nameContent;
+}
 
 runner.run().catch(err => {
   console.error(err);

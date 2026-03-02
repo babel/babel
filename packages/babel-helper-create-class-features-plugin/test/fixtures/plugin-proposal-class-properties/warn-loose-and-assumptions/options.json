@@ -1,0 +1,9 @@
+{
+  "validateLogs": true,
+  "plugins": [
+    ["transform-class-properties", { "loose": true }]
+  ],
+  "assumptions": {
+    "setPublicClassFields": true
+  }
+}

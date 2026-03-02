@@ -1,0 +1,4 @@
+{
+  "args": ["--extensions", ".bar", "foo"],
+  "stdout": "[ 1, 4, 9 ]"
+}

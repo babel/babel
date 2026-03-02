@@ -1,3 +1,0 @@
-{
-  "args": ["--whitelist", "nenexistent", "--output-type", "var"]
-}

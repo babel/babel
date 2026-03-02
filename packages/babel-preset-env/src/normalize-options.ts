@@ -1,0 +1,261 @@
+import semver, { type SemVer } from "semver";
+import corejs3Polyfills from "core-js-compat/data.json" with { type: "json" };
+import {
+  plugins as pluginsList,
+  pluginsBugfixes as bugfixPluginsList,
+} from "./plugins-compat-data.ts";
+import moduleTransformations from "./module-transformations.ts";
+import {
+  TopLevelOptions,
+  ModulesOption,
+  UseBuiltInsOption,
+} from "./options.ts";
+import { OptionValidator } from "@babel/helper-validator-option";
+
+import type {
+  BuiltInsOption,
+  CorejsOption,
+  ModuleOption,
+  Options,
+  PluginListOption,
+} from "./types.ts";
+
+const v = new OptionValidator(PACKAGE_JSON.name);
+
+const allPluginsList = [
+  ...Object.keys(pluginsList),
+  ...Object.keys(bugfixPluginsList),
+];
+
+// NOTE: Since module plugins are handled separately compared to other plugins (via the "modules" option) it
+// should only be possible to exclude and not include module plugins, otherwise it's possible that preset-env
+// will add a module plugin twice.
+const modulePlugins = [
+  "transform-dynamic-import",
+  ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
+];
+
+const getValidIncludesAndExcludes = (
+  type: "include" | "exclude",
+  corejs: number | false,
+) => {
+  const set = new Set(allPluginsList);
+  if (type === "exclude") modulePlugins.map(set.add, set);
+  if (corejs) {
+    Object.keys(corejs3Polyfills).map(set.add, set);
+  }
+
+  return Array.from(set);
+};
+
+export const normalizePluginName = (plugin: string) =>
+  plugin.replace(/^(?:@babel\/|babel-)(?:plugin-)?/, "");
+
+const expandIncludesAndExcludes = (
+  filterList: PluginListOption = [],
+  type: "include" | "exclude",
+  corejs: number | false,
+) => {
+  if (filterList.length === 0) return [];
+
+  const filterableItems = getValidIncludesAndExcludes(type, corejs);
+
+  const invalidFilters: PluginListOption = [];
+  const selectedPlugins = filterList.flatMap(filter => {
+    let re: RegExp;
+    if (typeof filter === "string") {
+      try {
+        re = new RegExp(`^${normalizePluginName(filter)}$`);
+      } catch (_) {
+        invalidFilters.push(filter);
+        return [];
+      }
+    } else {
+      re = filter;
+    }
+    const items = filterableItems.filter(item => {
+      return re.test(item);
+    });
+    if (items.length === 0) invalidFilters.push(filter);
+    return items;
+  });
+
+  v.invariant(
+    invalidFilters.length === 0,
+    `The plugins/built-ins '${invalidFilters.join(
+      ", ",
+    )}' passed to the '${type}' option are not
+    valid. Please check data/[plugin-features|built-in-features].js in babel-preset-env`,
+  );
+
+  return selectedPlugins;
+};
+
+export const checkDuplicateIncludeExcludes = (
+  include: string[] = [],
+  exclude: string[] = [],
+) => {
+  const duplicates = include.filter(opt => exclude.includes(opt));
+
+  v.invariant(
+    duplicates.length === 0,
+    `The plugins/built-ins '${duplicates.join(
+      ", ",
+    )}' were found in both the "include" and
+    "exclude" options.`,
+  );
+};
+
+const normalizeTargets = (
+  targets: string | string[] | Options["targets"],
+): Options["targets"] => {
+  // TODO: Allow to use only query or strings as a targets from next breaking change.
+  if (typeof targets === "string" || Array.isArray(targets)) {
+    return { browsers: targets };
+  }
+  return { ...targets };
+};
+
+export const validateModulesOption = (
+  modulesOpt: ModuleOption = ModulesOption.auto,
+) => {
+  v.invariant(
+    // @ts-expect-error we have provided fallback for undefined keys
+    ModulesOption[modulesOpt.toString()] || modulesOpt === ModulesOption.false,
+    `The 'modules' option must be one of \n` +
+      ` - 'false' to indicate no module processing\n` +
+      ` - a specific module type: 'commonjs', 'amd', 'umd', 'systemjs'` +
+      ` - 'auto' (default) which will automatically select 'false' if the current\n` +
+      `   process is known to support ES module syntax, or "commonjs" otherwise\n`,
+  );
+
+  return modulesOpt;
+};
+
+export const validateUseBuiltInsOption = (
+  builtInsOpt: BuiltInsOption = false,
+) => {
+  v.invariant(
+    // @ts-expect-error we have provided fallback for undefined keys
+    UseBuiltInsOption[builtInsOpt.toString()] ||
+      builtInsOpt === UseBuiltInsOption.false,
+    `The 'useBuiltIns' option must be either
+    'false' (default) to indicate no polyfill,
+    '"entry"' to indicate replacing the entry polyfill, or
+    '"usage"' to import only used polyfills per file`,
+  );
+
+  return builtInsOpt;
+};
+
+export type NormalizedCorejsOption = {
+  proposals: boolean;
+  version: SemVer | null | false;
+};
+
+export function normalizeCoreJSOption(
+  corejs: CorejsOption | undefined | null,
+  useBuiltIns: BuiltInsOption,
+): NormalizedCorejsOption {
+  let proposals = false;
+  let rawVersion: false | string | number | undefined | null;
+
+  if (useBuiltIns && corejs === undefined) {
+    throw new Error(
+      "When using the `useBuiltIns` option you must specify" +
+        ' the code-js version you are using, such as `"corejs": "3.32.0"`.',
+    );
+  } else if (typeof corejs === "object" && corejs !== null) {
+    rawVersion = corejs.version;
+    proposals = Boolean(corejs.proposals);
+  } else {
+    rawVersion = corejs as false | string | number | undefined | null;
+  }
+
+  const version = rawVersion ? semver.coerce(String(rawVersion)) : false;
+
+  if (version) {
+    if (useBuiltIns) {
+      if (version.major !== 3) {
+        throw new RangeError(
+          "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
+            "only core-js@3 is supported.",
+        );
+      }
+
+      if (typeof rawVersion !== "string" || !String(rawVersion).includes(".")) {
+        throw new Error(
+          'Invalid Option: The version passed to `corejs` is invalid. Please use string and specify the minor version, such as `"3.33"`.',
+        );
+      }
+    } else {
+      console.warn(
+        "\nWARNING (@babel/preset-env): The `corejs` option only has an effect when the `useBuiltIns` option is not `false`\n",
+      );
+    }
+  }
+
+  return { version, proposals };
+}
+
+export default function normalizeOptions(opts: Options) {
+  v.invariant(
+    !Object.hasOwn(opts, "bugfixes"),
+    "The 'bugfixes' option has been removed, and now bugfix plugins are" +
+      " always enabled. Please remove it from your config.",
+  );
+
+  v.validateTopLevelOptions(opts, TopLevelOptions);
+
+  const useBuiltIns = validateUseBuiltInsOption(opts.useBuiltIns);
+
+  const corejs = normalizeCoreJSOption(opts.corejs, useBuiltIns);
+
+  const include = expandIncludesAndExcludes(
+    opts.include,
+    TopLevelOptions.include,
+    !!corejs.version && corejs.version.major,
+  );
+
+  const exclude = expandIncludesAndExcludes(
+    opts.exclude,
+    TopLevelOptions.exclude,
+    !!corejs.version && corejs.version.major,
+  );
+
+  checkDuplicateIncludeExcludes(include, exclude);
+
+  return {
+    configPath: v.validateStringOption(
+      TopLevelOptions.configPath,
+      opts.configPath,
+      process.cwd(),
+    ),
+    corejs,
+    debug: v.validateBooleanOption(TopLevelOptions.debug, opts.debug, false),
+    include,
+    exclude,
+    forceAllTransforms: v.validateBooleanOption(
+      TopLevelOptions.forceAllTransforms,
+      opts.forceAllTransforms,
+      false,
+    ),
+    ignoreBrowserslistConfig: v.validateBooleanOption(
+      TopLevelOptions.ignoreBrowserslistConfig,
+      opts.ignoreBrowserslistConfig,
+      false,
+    ),
+    modules: validateModulesOption(opts.modules),
+    shippedProposals: v.validateBooleanOption(
+      TopLevelOptions.shippedProposals,
+      opts.shippedProposals,
+      false,
+    ),
+    targets: normalizeTargets(opts.targets),
+    useBuiltIns: useBuiltIns,
+    browserslistEnv: v.validateStringOption(
+      TopLevelOptions.browserslistEnv,
+      opts.browserslistEnv,
+    ),
+  };
+}

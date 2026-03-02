@@ -1,4 +1,3 @@
 {
-  "presets": [["react", { "development": true }]],
-  "os": ["linux", "darwin"]
+  "presets": [["react", { "development": true, "runtime": "classic" }]]
 }

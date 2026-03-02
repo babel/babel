@@ -1,0 +1,109 @@
+{
+  "type": "File",
+  "start":0,"end":139,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":45}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":139,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":45}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":58,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":58}},
+        "importKind": "value",
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":9,"end":21,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":21}},
+            "imported": {
+              "type": "Literal",
+              "start":9,"end":14,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":14}},
+              "value": "foo",
+              "raw": "\"foo\""
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start":18,"end":21,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":21},"identifierName":"bar"},
+              "name": "bar"
+            }
+          },
+          {
+            "type": "ImportSpecifier",
+            "start":23,"end":39,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":39}},
+            "imported": {
+              "type": "Literal",
+              "start":23,"end":32,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":32}},
+              "value": "default",
+              "raw": "\"default\""
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start":36,"end":39,"loc":{"start":{"line":1,"column":36},"end":{"line":1,"column":39},"identifierName":"qux"},
+              "name": "qux"
+            }
+          }
+        ],
+        "source": {
+          "type": "Literal",
+          "start":47,"end":57,"loc":{"start":{"line":1,"column":47},"end":{"line":1,"column":57}},
+          "value": "module-a",
+          "raw": "\"module-a\""
+        },
+        "attributes": []
+      },
+      {
+        "type": "ExportAllDeclaration",
+        "start":59,"end":93,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":34}},
+        "exportKind": "value",
+        "source": {
+          "type": "Literal",
+          "start":82,"end":92,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":33}},
+          "value": "module-b",
+          "raw": "\"module-b\""
+        },
+        "attributes": [],
+        "exported": {
+          "type": "Literal",
+          "start":71,"end":76,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":17}},
+          "value": "foo",
+          "raw": "\"foo\""
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":94,"end":139,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":45}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":103,"end":120,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":26}},
+            "local": {
+              "type": "Identifier",
+              "start":103,"end":110,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":16},"identifierName":"default"},
+              "name": "default"
+            },
+            "exported": {
+              "type": "Literal",
+              "start":114,"end":120,"loc":{"start":{"line":3,"column":20},"end":{"line":3,"column":26}},
+              "value": "quux",
+              "raw": "\"quux\""
+            }
+          }
+        ],
+        "source": {
+          "type": "Literal",
+          "start":128,"end":138,"loc":{"start":{"line":3,"column":34},"end":{"line":3,"column":44}},
+          "value": "module-b",
+          "raw": "\"module-b\""
+        },
+        "declaration": null,
+        "attributes": []
+      }
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

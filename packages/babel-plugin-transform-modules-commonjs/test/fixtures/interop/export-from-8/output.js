@@ -15,58 +15,16 @@ Object.defineProperty(exports, "foo1", {
     return _foo.foo1;
   }
 });
-Object.defineProperty(exports, "foo2", {
-  enumerable: true,
-  get: function () {
-    return _foo.foo2;
-  }
-});
-Object.defineProperty(exports, "foo3", {
-  enumerable: true,
-  get: function () {
-    return _foo.foo3;
-  }
-});
-Object.defineProperty(exports, "foo4", {
-  enumerable: true,
-  get: function () {
-    return _foo.foo4;
-  }
-});
-Object.defineProperty(exports, "foo5", {
-  enumerable: true,
-  get: function () {
-    return _foo.foo5;
-  }
-});
-Object.defineProperty(exports, "foo6", {
-  enumerable: true,
-  get: function () {
-    return _foo.foo6;
-  }
-});
-Object.defineProperty(exports, "foo7", {
-  enumerable: true,
-  get: function () {
-    return _foo.foo7;
-  }
-});
-Object.defineProperty(exports, "foo8", {
-  enumerable: true,
-  get: function () {
-    return _foo.foo8;
-  }
-});
-Object.defineProperty(exports, "foo9", {
-  enumerable: true,
-  get: function () {
-    return _foo.foo9;
-  }
-});
 Object.defineProperty(exports, "foo10", {
   enumerable: true,
   get: function () {
     return _foo.foo10;
+  }
+});
+Object.defineProperty(exports, "foo100", {
+  enumerable: true,
+  get: function () {
+    return _foo.foo100;
   }
 });
 Object.defineProperty(exports, "foo11", {
@@ -121,6 +79,12 @@ Object.defineProperty(exports, "foo19", {
   enumerable: true,
   get: function () {
     return _foo.foo19;
+  }
+});
+Object.defineProperty(exports, "foo2", {
+  enumerable: true,
+  get: function () {
+    return _foo.foo2;
   }
 });
 Object.defineProperty(exports, "foo20", {
@@ -183,6 +147,12 @@ Object.defineProperty(exports, "foo29", {
     return _foo.foo29;
   }
 });
+Object.defineProperty(exports, "foo3", {
+  enumerable: true,
+  get: function () {
+    return _foo.foo3;
+  }
+});
 Object.defineProperty(exports, "foo30", {
   enumerable: true,
   get: function () {
@@ -241,6 +211,12 @@ Object.defineProperty(exports, "foo39", {
   enumerable: true,
   get: function () {
     return _foo.foo39;
+  }
+});
+Object.defineProperty(exports, "foo4", {
+  enumerable: true,
+  get: function () {
+    return _foo.foo4;
   }
 });
 Object.defineProperty(exports, "foo40", {
@@ -303,6 +279,12 @@ Object.defineProperty(exports, "foo49", {
     return _foo.foo49;
   }
 });
+Object.defineProperty(exports, "foo5", {
+  enumerable: true,
+  get: function () {
+    return _foo.foo5;
+  }
+});
 Object.defineProperty(exports, "foo50", {
   enumerable: true,
   get: function () {
@@ -361,6 +343,12 @@ Object.defineProperty(exports, "foo59", {
   enumerable: true,
   get: function () {
     return _foo.foo59;
+  }
+});
+Object.defineProperty(exports, "foo6", {
+  enumerable: true,
+  get: function () {
+    return _foo.foo6;
   }
 });
 Object.defineProperty(exports, "foo60", {
@@ -423,6 +411,12 @@ Object.defineProperty(exports, "foo69", {
     return _foo.foo69;
   }
 });
+Object.defineProperty(exports, "foo7", {
+  enumerable: true,
+  get: function () {
+    return _foo.foo7;
+  }
+});
 Object.defineProperty(exports, "foo70", {
   enumerable: true,
   get: function () {
@@ -481,6 +475,12 @@ Object.defineProperty(exports, "foo79", {
   enumerable: true,
   get: function () {
     return _foo.foo79;
+  }
+});
+Object.defineProperty(exports, "foo8", {
+  enumerable: true,
+  get: function () {
+    return _foo.foo8;
   }
 });
 Object.defineProperty(exports, "foo80", {
@@ -543,6 +543,12 @@ Object.defineProperty(exports, "foo89", {
     return _foo.foo89;
   }
 });
+Object.defineProperty(exports, "foo9", {
+  enumerable: true,
+  get: function () {
+    return _foo.foo9;
+  }
+});
 Object.defineProperty(exports, "foo90", {
   enumerable: true,
   get: function () {
@@ -603,11 +609,4 @@ Object.defineProperty(exports, "foo99", {
     return _foo.foo99;
   }
 });
-Object.defineProperty(exports, "foo100", {
-  enumerable: true,
-  get: function () {
-    return _foo.foo100;
-  }
-});
-
 var _foo = require("foo");

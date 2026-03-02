@@ -4,6 +4,5 @@ function isBetween(x, a, b) {
     a = _ref[0];
     b = _ref[1];
   }
-
   return x > a && x < b;
 }

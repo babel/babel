@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Options",
+  "description": "JSON schema for Babel Fixture Test Runner",
+  "allOf": [
+    { "$ref": "#/definitions/TaskOption" },
+    {
+      "$ref": "https://json.schemastore.org/babelrc",
+      "$comment": "Todo: switch to our inhouse schema"
+    }
+  ],
+  "definitions": {
+    "OS": {
+      "type": "string",
+      "description": "The possible values of `process.platform`. See https://nodejs.org/api/process.html#process_process_platform",
+      "enum": ["aix", "darwin", "freebsd", "linux", "openbsd", "sunos", "win32"]
+    },
+    "TaskOption": {
+      "type": "object",
+      "properties": {
+        "BABEL_8_BREAKING": {
+          "description": "Whether this test should run when BABEL_8_BREAKING is enabled",
+          "type": "boolean"
+        },
+        "ignoreOutput": {
+          "description": "Whether the test should generate and compare with output.js",
+          "type": "boolean"
+        },
+        "minNodeVersion": {
+          "description": "The minimum Node.js version the exec.js test should run on",
+          "type": "string",
+          "pattern": "^\\d+(\\.\\d+){0,2}$"
+        },
+        "minNodeVersionTransform": {
+          "description": "The minimum Node.js version the input.js transform test should run on",
+          "type": "string",
+          "pattern": "^\\d+(\\.\\d+){0,2}$"
+        },
+        "os": {
+          "description": "The OS this test should run on",
+          "anyOf": [
+            { "type": "array", "items": { "$ref": "#/definitions/OS" } },
+            {
+              "$ref": "#/definitions/OS"
+            }
+          ]
+        },
+        "throws": {
+          "description": "Expected thrown error message",
+          "type": "string",
+          "default": ""
+        },
+        "validateLogs": {
+          "description": "Whether this test should validate the stdout and stderr",
+          "type": "boolean",
+          "default": false
+        },
+        "SKIP_babel7plugins_babel8core": {
+          "description": "The reason for skipping when testing Babel 7 plugins with Babel 8 core, if any",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

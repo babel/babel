@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-arrow-functions"],
+  "throws": "When using '@babel/plugin-transform-arrow-functions', it's not possible to compile `super.prop` in an arrow function without compiling classes.\nPlease add '@babel/plugin-transform-classes' to your Babel configuration."
+}

@@ -1,0 +1,14 @@
+{
+  "sourceType": "script",
+  "overrides": [
+    {
+      "test": "src/index.js",
+      "sourceType": "module"
+    }
+  ],
+  "env": {
+    "test": {
+      "only": ["./src/unicorn.js"]
+    }
+  }
+}

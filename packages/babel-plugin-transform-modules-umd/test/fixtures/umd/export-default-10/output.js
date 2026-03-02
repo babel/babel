@@ -17,10 +17,7 @@
     value: true
   });
   _exports.default = void 0;
-
-  var _default = function () {
+  var _default = _exports.default = function () {
     return "foo";
   }();
-
-  _exports.default = _default;
 });

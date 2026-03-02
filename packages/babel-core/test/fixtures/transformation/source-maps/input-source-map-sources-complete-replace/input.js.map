@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "sources": ["input.tsx"],
+  "names": [],
+  "mappings": "AAAA,GAAG,CAAC,CAAC,CAAC,CAAC;AACP,SAAS,GAAG,CAAC,GAAW;IACpB,MAAM,IAAI,KAAK,CAAC,cAAc,CAAC,CAAC;AACpC,CAAC",
+  "sourcesContent": [
+    "foo(1);\nfunction foo(bar: number): never {\n    throw new Error('Intentional.');\n}"
+  ]
+}

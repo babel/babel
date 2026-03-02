@@ -1,9 +1,5 @@
+var _Loader, _Loader2;
 import React from 'react';
 import Loader from 'loader';
-
-var _ref = <Loader className="full-height" />;
-
-var _ref2 = <Loader className="p-y-5" />;
-
-const errorComesHere = () => _ref,
-      thisWorksFine = () => _ref2;
+const errorComesHere = () => _Loader || (_Loader = <Loader className="full-height" />),
+  thisWorksFine = () => _Loader2 || (_Loader2 = <Loader className="p-y-5" />);

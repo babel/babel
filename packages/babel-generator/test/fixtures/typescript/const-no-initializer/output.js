@@ -1,1 +1,1 @@
-const x: number;
+declare const x: number;

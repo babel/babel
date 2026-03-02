@@ -1,0 +1,234 @@
+import * as helpers from "@babel/helpers";
+import { NodePath } from "@babel/traverse";
+import type { HubInterface, Scope } from "@babel/traverse";
+import { codeFrameColumns } from "@babel/code-frame";
+import { cloneNode, interpreterDirective, traverseFast } from "@babel/types";
+import type * as t from "@babel/types";
+import semver from "semver";
+
+import type { NormalizedFile } from "../normalize-file.ts";
+
+import type { ResolvedOptions } from "../../config/validation/options.ts";
+import type { SourceMapConverter } from "convert-source-map";
+
+export default class File {
+  _map = new Map<unknown, unknown>();
+  opts: ResolvedOptions;
+  declarations: Record<string, t.Identifier> = {};
+  path: NodePath<t.Program>;
+  ast: t.File;
+  scope: Scope;
+  metadata: Record<string, any> = {};
+  code: string = "";
+  inputMap: SourceMapConverter | null;
+
+  hub: HubInterface & { file: File } = {
+    // keep it for the usage in babel-core, ex: path.hub.file.opts.filename
+    file: this,
+    getCode: () => this.code,
+    getScope: () => this.scope,
+    addHelper: this.addHelper.bind(this),
+    buildError: this.buildCodeFrameError.bind(
+      this,
+    ) as HubInterface["buildError"],
+  };
+
+  constructor(
+    options: ResolvedOptions,
+    { code, ast, inputMap }: NormalizedFile,
+  ) {
+    this.opts = options;
+    this.code = code;
+    this.ast = ast;
+    this.inputMap = inputMap;
+
+    this.path = NodePath.get({
+      hub: this.hub,
+      parentPath: null,
+      parent: this.ast,
+      container: this.ast,
+      key: "program",
+    }).setContext() as NodePath<t.Program>;
+    this.scope = this.path.scope;
+  }
+
+  /**
+   * Provide backward-compatible access to the interpreter directive handling
+   * in Babel 6.x. If you are writing a plugin for Babel 7.x or higher, it would be
+   * best to use 'program.interpreter' directly.
+   */
+  get shebang(): string {
+    const { interpreter } = this.path.node;
+    return interpreter ? interpreter.value : "";
+  }
+  set shebang(value: string) {
+    if (value) {
+      this.path.get("interpreter").replaceWith(interpreterDirective(value));
+    } else {
+      this.path.get("interpreter").remove();
+    }
+  }
+
+  set(key: unknown, val: unknown) {
+    this._map.set(key, val);
+  }
+
+  get(key: unknown): any {
+    return this._map.get(key);
+  }
+
+  has(key: unknown): boolean {
+    return this._map.has(key);
+  }
+
+  /**
+   * Check if a given helper is available in @babel/core's helper list.
+   *
+   * This _also_ allows you to pass a Babel version specifically. If the
+   * helper exists, but was not available for the full given range, it will be
+   * considered unavailable.
+   */
+  availableHelper(name: string, versionRange?: string | null): boolean {
+    if (helpers.isInternal(name)) return false;
+
+    let minVersion;
+    try {
+      minVersion = helpers.minVersion(name);
+    } catch (err) {
+      if (err.code !== "BABEL_HELPER_UNKNOWN") throw err;
+
+      return false;
+    }
+
+    if (typeof versionRange !== "string") return true;
+
+    // semver.intersects() has some surprising behavior with comparing ranges
+    // with pre-release versions. We add '^' to ensure that we are always
+    // comparing ranges with ranges, which sidesteps this logic.
+    // For example:
+    //
+    //   semver.intersects(`<7.0.1`, "7.0.0-beta.0") // false - surprising
+    //   semver.intersects(`<7.0.1`, "^7.0.0-beta.0") // true - expected
+    //
+    // This is because the first falls back to
+    //
+    //   semver.satisfies("7.0.0-beta.0", `<7.0.1`) // false - surprising
+    //
+    // and this fails because a prerelease version can only satisfy a range
+    // if it is a prerelease within the same major/minor/patch range.
+    //
+    // Note: If this is found to have issues, please also revisit the logic in
+    // transform-runtime's definitions.js file.
+    if (semver.valid(versionRange)) versionRange = `^${versionRange}`;
+
+    return (
+      !semver.intersects(`<${minVersion}`, versionRange) &&
+      !semver.intersects(`>=9.0.0`, versionRange)
+    );
+  }
+
+  addHelper(name: string): t.Identifier {
+    if (helpers.isInternal(name)) {
+      throw new Error("Cannot use internal helper " + name);
+    }
+    return this._addHelper(name);
+  }
+
+  _addHelper(name: string): t.Identifier {
+    const declar = this.declarations[name];
+    if (declar) return cloneNode(declar);
+
+    const generator = this.get("helperGenerator");
+    if (generator) {
+      const res = generator(name);
+      if (res) return res;
+    }
+
+    // make sure that the helper exists
+    helpers.minVersion(name);
+
+    const uid = (this.declarations[name] =
+      this.scope.generateUidIdentifier(name));
+
+    const dependencies: Record<string, t.Identifier> = {};
+    for (const dep of helpers.getDependencies(name)) {
+      dependencies[dep] = this._addHelper(dep);
+    }
+
+    const { nodes, globals } = helpers.get(
+      name,
+      dep => dependencies[dep],
+      uid.name,
+      Object.keys(this.scope.getAllBindings()),
+    );
+
+    globals.forEach(name => {
+      if (this.path.scope.hasBinding(name, true /* noGlobals */)) {
+        this.path.scope.rename(name);
+      }
+    });
+
+    nodes.forEach(node => {
+      // @ts-expect-error Fixme: document _compact node property
+      node._compact = true;
+    });
+
+    const added = this.path.unshiftContainer("body", nodes);
+    // TODO: NodePath#unshiftContainer should automatically register new
+    // bindings.
+    for (const path of added) {
+      if (path.isVariableDeclaration()) this.scope.registerDeclaration(path);
+    }
+
+    return uid;
+  }
+
+  buildCodeFrameError(
+    node: t.Node | undefined | null,
+    msg: string,
+    _Error: typeof Error = SyntaxError,
+  ): Error {
+    let loc = node?.loc;
+
+    if (!loc && node) {
+      traverseFast(node, function (node) {
+        if (node.loc) {
+          loc = node.loc;
+          return traverseFast.stop;
+        }
+      });
+
+      let txt =
+        "This is an error on an internal node. Probably an internal error.";
+      if (loc) txt += " Location has been estimated.";
+
+      msg += ` (${txt})`;
+    }
+
+    if (loc) {
+      const { highlightCode = true } = this.opts;
+
+      msg +=
+        "\n" +
+        codeFrameColumns(
+          this.code,
+          {
+            start: {
+              line: loc.start.line,
+              column: loc.start.column + 1,
+            },
+            end:
+              loc.end && loc.start.line === loc.end.line
+                ? {
+                    line: loc.end.line,
+                    column: loc.end.column + 1,
+                  }
+                : undefined,
+          },
+          { highlightCode },
+        );
+    }
+
+    return new _Error(msg);
+  }
+}

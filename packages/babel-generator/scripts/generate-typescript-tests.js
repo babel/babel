@@ -1,14 +1,8 @@
 /*
 Copies tests from the @babel/parser's TypeScript test suite to @babel/generator.
 */
-const {
-  copySync,
-  emptyDirSync,
-  existsSync,
-  readdirSync,
-  readFileSync,
-} = require("fs-extra");
-const { join } = require("path");
+const fs = require("node:fs");
+const { join } = require("node:path");
 
 const testsFrom = join(
   __dirname,
@@ -16,15 +10,16 @@ const testsFrom = join(
 );
 const testsTo = join(__dirname, "../test/fixtures/typescript");
 
-emptyDirSync(testsTo);
+fs.rmdirSync(testsTo, { recursive: true });
+fs.mkdirSync(testsTo);
 
-copySync(join(testsFrom, "options.json"), join(testsTo, "options.json"));
+fs.copyFileSync(join(testsFrom, "options.json"), join(testsTo, "options.json"));
 
-for (const groupName of readdirSync(testsFrom)) {
+for (const groupName of fs.readdirSync(testsFrom)) {
   if (groupName === "options.json") continue;
 
   const groupFromDir = join(testsFrom, groupName);
-  const testNames = readdirSync(groupFromDir);
+  const testNames = fs.readdirSync(groupFromDir);
   const groupHasOptions = testNames.includes("options.json");
 
   for (const testName of testNames) {
@@ -37,10 +32,14 @@ for (const groupName of readdirSync(testsFrom)) {
 
     let optionsJsonFrom;
     const ownOptions = join(testFromDir, "options.json");
-    if (existsSync(ownOptions)) {
-      const options = JSON.parse(readFileSync(ownOptions));
+    if (fs.existsSync(ownOptions)) {
+      const options = JSON.parse(fs.readFileSync(ownOptions));
       // Don't include a test that doesn't parse or does not provide babel AST
-      if (options.throws || options.plugins.indexOf("estree") >= 0) {
+      if (
+        options.throws ||
+        !options.plugins ||
+        options.plugins.includes("estree")
+      ) {
         continue;
       }
       optionsJsonFrom = ownOptions;
@@ -49,10 +48,31 @@ for (const groupName of readdirSync(testsFrom)) {
       optionsJsonFrom = join(groupFromDir, "options.json");
     }
 
-    emptyDirSync(testToDir);
+    fs.rmdirSync(testToDir, { recursive: true });
+    fs.mkdirSync(testToDir);
     if (optionsJsonFrom) {
-      copySync(optionsJsonFrom, join(testToDir, "options.json"));
+      fs.copyFileSync(optionsJsonFrom, join(testToDir, "options.json"));
     }
-    copySync(join(testFromDir, "actual.js"), join(testToDir, "actual.js"));
+    if (fs.existsSync(join(testFromDir, "input.js"))) {
+      fs.copyFileSync(
+        join(testFromDir, "input.js"),
+        join(testToDir, "input.js")
+      );
+    } else if (fs.existsSync(join(testFromDir, "input.tsx"))) {
+      fs.copyFileSync(
+        join(testFromDir, "input.tsx"),
+        join(testToDir, "input.tsx")
+      );
+    } else if (fs.existsSync(join(testFromDir, "input.jsx"))) {
+      fs.copyFileSync(
+        join(testFromDir, "input.jsx"),
+        join(testToDir, "input.jsx")
+      );
+    } else if (fs.existsSync(join(testFromDir, "input.ts"))) {
+      fs.copyFileSync(
+        join(testFromDir, "input.ts"),
+        join(testToDir, "input.ts")
+      );
+    }
   }
 }

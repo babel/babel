@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":60}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":60}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":60}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":11,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":11,"index":11},"identifierName":"Hotel"},
+          "name": "Hotel"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":12,"end":60,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":5,"column":1,"index":60}},
+          "body": [
+            {
+              "type": "ClassPrivateMethod",
+              "start":16,"end":58,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":4,"column":3,"index":58}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":22,"end":27,"loc":{"start":{"line":2,"column":8,"index":22},"end":{"line":2,"column":13,"index":27}},
+                "id": {
+                  "type": "Identifier",
+                  "start":23,"end":27,"loc":{"start":{"line":2,"column":9,"index":23},"end":{"line":2,"column":13,"index":27},"identifierName":"evil"},
+                  "name": "evil"
+                }
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": true,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":30,"end":58,"loc":{"start":{"line":2,"column":16,"index":30},"end":{"line":4,"column":3,"index":58}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":36,"end":54,"loc":{"start":{"line":3,"column":4,"index":36},"end":{"line":3,"column":22,"index":54}},
+                    "expression": {
+                      "type": "AwaitExpression",
+                      "start":36,"end":53,"loc":{"start":{"line":3,"column":4,"index":36},"end":{"line":3,"column":21,"index":53}},
+                      "argument": {
+                        "type": "CallExpression",
+                        "start":42,"end":53,"loc":{"start":{"line":3,"column":10,"index":42},"end":{"line":3,"column":21,"index":53}},
+                        "callee": {
+                          "type": "Identifier",
+                          "start":42,"end":51,"loc":{"start":{"line":3,"column":10,"index":42},"end":{"line":3,"column":19,"index":51},"identifierName":"notReally"},
+                          "name": "notReally"
+                        },
+                        "arguments": []
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

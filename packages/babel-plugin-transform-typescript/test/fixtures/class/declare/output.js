@@ -1,1 +1,4 @@
-class A {}
+class A {
+  @foo
+  y;
+}

@@ -1,0 +1,9 @@
+{
+  "overrides": [
+    {
+      "include": "*.vue",
+      "sourceType": "module",
+      "presets": [["react"], ["typescript", { "ignoreExtensions": true }]]
+    }
+  ]
+}

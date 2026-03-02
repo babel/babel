@@ -1,4 +1,4 @@
-/*#__PURE__*/
-React.createElement(Foo, {
+var _reactJsxRuntime = require("react/jsx-runtime");
+/*#__PURE__*/_reactJsxRuntime.jsx(Foo, {
   bar: "baz"
 });

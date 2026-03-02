@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":6,"index":36}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":6,"index":36}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+        "kind": "namespace",
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"M"},
+          "name": "M"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":12,"end":15,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":15,"index":15}},
+          "body": []
+        }
+      },
+      {
+        "type": "TSImportEqualsDeclaration",
+        "start":16,"end":29,"loc":{"start":{"line":2,"column":0,"index":16},"end":{"line":2,"column":13,"index":29}},
+        "importKind": "value",
+        "id": {
+          "type": "Identifier",
+          "start":23,"end":24,"loc":{"start":{"line":2,"column":7,"index":23},"end":{"line":2,"column":8,"index":24},"identifierName":"a"},
+          "name": "a"
+        },
+        "moduleReference": {
+          "type": "Identifier",
+          "start":27,"end":28,"loc":{"start":{"line":2,"column":11,"index":27},"end":{"line":2,"column":12,"index":28},"identifierName":"M"},
+          "name": "M"
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":30,"end":36,"loc":{"start":{"line":3,"column":0,"index":30},"end":{"line":3,"column":6,"index":36}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":34,"end":35,"loc":{"start":{"line":3,"column":4,"index":34},"end":{"line":3,"column":5,"index":35}},
+            "id": {
+              "type": "Identifier",
+              "start":34,"end":35,"loc":{"start":{"line":3,"column":4,"index":34},"end":{"line":3,"column":5,"index":35},"identifierName":"a"},
+              "name": "a"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

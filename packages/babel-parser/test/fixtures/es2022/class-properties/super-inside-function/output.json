@@ -1,0 +1,85 @@
+{
+  "type": "File",
+  "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":54}},
+  "errors": [
+    "SyntaxError: 'super' is only allowed in object methods and classes. (3:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":54}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":54,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":54}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":54,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":5,"column":1,"index":54}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":12,"end":52,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":4,"column":3,"index":52}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":12,"end":15,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":5,"index":15},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "value": {
+                "type": "FunctionExpression",
+                "start":18,"end":52,"loc":{"start":{"line":2,"column":8,"index":18},"end":{"line":4,"column":3,"index":52}},
+                "id": {
+                  "type": "Identifier",
+                  "start":27,"end":29,"loc":{"start":{"line":2,"column":17,"index":27},"end":{"line":2,"column":19,"index":29},"identifierName":"fn"},
+                  "name": "fn"
+                },
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":32,"end":52,"loc":{"start":{"line":2,"column":22,"index":32},"end":{"line":4,"column":3,"index":52}},
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "start":38,"end":48,"loc":{"start":{"line":3,"column":4,"index":38},"end":{"line":3,"column":14,"index":48}},
+                      "expression": {
+                        "type": "CallExpression",
+                        "start":38,"end":47,"loc":{"start":{"line":3,"column":4,"index":38},"end":{"line":3,"column":13,"index":47}},
+                        "callee": {
+                          "type": "MemberExpression",
+                          "start":38,"end":45,"loc":{"start":{"line":3,"column":4,"index":38},"end":{"line":3,"column":11,"index":45}},
+                          "object": {
+                            "type": "Super",
+                            "start":38,"end":43,"loc":{"start":{"line":3,"column":4,"index":38},"end":{"line":3,"column":9,"index":43}}
+                          },
+                          "computed": false,
+                          "property": {
+                            "type": "Identifier",
+                            "start":44,"end":45,"loc":{"start":{"line":3,"column":10,"index":44},"end":{"line":3,"column":11,"index":45},"identifierName":"x"},
+                            "name": "x"
+                          }
+                        },
+                        "arguments": []
+                      }
+                    }
+                  ],
+                  "directives": []
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

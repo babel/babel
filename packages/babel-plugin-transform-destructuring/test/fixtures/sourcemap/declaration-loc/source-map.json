@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "names": [
+    "fn",
+    "arg",
+    "_arg",
+    "babelHelpers",
+    "slicedToArray",
+    "x",
+    "y"
+  ],
+  "sources": [
+    "sourcemap/declaration-loc/input.js"
+  ],
+  "sourcesContent": [
+    "const fn = (arg) => {\n  var [x, y] = arg;\n}"
+  ],
+  "mappings": "AAAA,MAAMA,EAAE,GAAIC,GAAG,IAAK;EAClB,IAAAC,IAAA,GAAAC,YAAA,CAAAC,aAAA,CAAaH,GAAG;IAAXI,CAAC,GAAAH,IAAA;IAAEI,CAAC,GAAAJ,IAAA;AACX,CAAC",
+  "ignoreList": []
+}

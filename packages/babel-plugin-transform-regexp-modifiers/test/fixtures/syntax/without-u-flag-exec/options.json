@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-regexp-modifiers"],
+  "minNodeVersion": "8.0.0"
+}

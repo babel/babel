@@ -1,3 +1,1 @@
-var test = function test() {
-  return "";
-};
+const test = () => "";

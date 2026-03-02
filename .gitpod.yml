@@ -24,7 +24,7 @@ tasks:
 github:
   # https://www.gitpod.io/docs/prebuilds/#configure-prebuilds
   prebuilds:
-    master: true
+    master: true # enable for the default branch (even if it's not named "master")
     branches: true
     pullRequests: true
     pullRequestsFromForks: true
@@ -37,4 +37,3 @@ vscode:
   extensions:
     - dbaeumer.vscode-eslint@2.1.5:9Wg0Glx/TwD8ElFBg+FKcQ==
     - esbenp.prettier-vscode@5.0.0:qca7d0cHbKkrkb5rvNlpcg==
-    - flowtype.flow-for-vscode@1.5.0:AwOT6wgHTF43loZQCAUMLA==

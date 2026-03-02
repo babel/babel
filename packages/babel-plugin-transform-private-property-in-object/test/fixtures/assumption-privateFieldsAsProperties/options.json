@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "transform-private-property-in-object",
+    "transform-private-methods",
+    "transform-class-properties"
+  ],
+  "assumptions": {
+    "privateFieldsAsProperties": true
+  }
+}

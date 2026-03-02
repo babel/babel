@@ -1,12 +1,9 @@
-var _privateMethod = new WeakSet();
-
+var _X_brand = /*#__PURE__*/new WeakSet();
 class X {
   constructor() {
-    _privateMethod.add(this);
+    babelHelpers.classPrivateMethodInitSpec(this, _X_brand);
   }
-
 }
-
-var _privateMethod2 = function _privateMethod2() {
+function _privateMethod() {
   return 42;
-};
+}

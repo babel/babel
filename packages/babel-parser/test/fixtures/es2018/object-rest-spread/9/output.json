@@ -1,0 +1,73 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+  "errors": [
+    "SyntaxError: Rest element must be last element. (1:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":27,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":27,"index":27}},
+            "id": {
+              "type": "ObjectPattern",
+              "start":4,"end":21,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":21,"index":21}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7}},
+                  "key": {
+                    "type": "Identifier",
+                    "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"x"},
+                    "name": "x"
+                  },
+                  "computed": false,
+                  "method": false,
+                  "shorthand": true,
+                  "value": {
+                    "type": "Identifier",
+                    "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"x"},
+                    "name": "x"
+                  }
+                },
+                {
+                  "type": "RestElement",
+                  "start":9,"end":13,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":13,"index":13}},
+                  "argument": {
+                    "type": "Identifier",
+                    "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"y"},
+                    "name": "y"
+                  }
+                },
+                {
+                  "type": "RestElement",
+                  "start":15,"end":19,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":19,"index":19}},
+                  "argument": {
+                    "type": "Identifier",
+                    "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"z"},
+                    "name": "z"
+                  }
+                }
+              ]
+            },
+            "init": {
+              "type": "Identifier",
+              "start":24,"end":27,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":27,"index":27},"identifierName":"obj"},
+              "name": "obj"
+            }
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

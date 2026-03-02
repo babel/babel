@@ -1,0 +1,3 @@
+{
+  "throws": "This control flow escape from do expression is not supported."
+}

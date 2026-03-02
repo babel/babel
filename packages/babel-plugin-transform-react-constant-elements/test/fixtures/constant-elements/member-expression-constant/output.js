@@ -1,7 +1,5 @@
 function render() {
+  var _this$component;
   this.component = "div";
-
-  var _ref = <this.component />;
-
-  return () => _ref;
+  return () => _this$component || (_this$component = <this.component />);
 }

@@ -2,7 +2,7 @@
 
 > Apply ES2015 function.name semantics to all functions
 
-See our website [@babel/plugin-transform-function-name](https://babeljs.io/docs/en/next/babel-plugin-transform-function-name.html) for more information.
+See our website [@babel/plugin-transform-function-name](https://babeljs.io/docs/babel-plugin-transform-function-name) for more information.
 
 ## Install
 

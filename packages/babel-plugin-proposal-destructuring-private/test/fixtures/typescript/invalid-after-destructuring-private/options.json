@@ -1,0 +1,6 @@
+{
+  "plugins": ["proposal-destructuring-private", "transform-typescript"],
+  "throws": [
+    "TypeScript features must first be transformed by @babel/plugin-transform-typescript."
+  ]
+}

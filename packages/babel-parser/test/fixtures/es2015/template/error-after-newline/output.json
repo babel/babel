@@ -1,0 +1,36 @@
+{
+  "type": "File",
+  "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":14}},
+  "errors": [
+    "SyntaxError: Invalid escape sequence in template. (2:1)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":14}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":14}},
+        "expression": {
+          "type": "TemplateLiteral",
+          "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":13}},
+          "expressions": [],
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "start":1,"end":12,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":3,"column":0,"index":12}},
+              "value": {
+                "raw": "\n\\u{12_34}\n",
+                "cooked": null
+              },
+              "tail": true
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "version": "legacy" }],
+    ["transform-class-properties", { "loose": true }],
+    "transform-classes"
+  ],
+  "SKIP_babel7plugins_babel8core": "The output differs due to Symbol.search being considered pure in @babel/traverse 8"
+}

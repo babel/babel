@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "throws": "`import lib = require(...);` is only supported when compiling modules to CommonJS.\nPlease consider using `import lib from '...';` alongside Typescript's --allowSyntheticDefaultImports option, or add @babel/plugin-transform-modules-commonjs to your Babel config."
+}

@@ -1,0 +1,6 @@
+{
+  "plugins": ["transform-spread"],
+  "assumptions": {
+    "arrayLikeIsIterable": true
+  }
+}

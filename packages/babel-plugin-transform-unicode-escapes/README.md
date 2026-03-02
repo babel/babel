@@ -2,7 +2,7 @@
 
 > Compile ES2015 Unicode escapes to ES5
 
-See our website [@babel/plugin-transform-unicode-escapes](https://babeljs.io/docs/en/next/babel-plugin-transform-unicode-escapes.html) for more information.
+See our website [@babel/plugin-transform-unicode-escapes](https://babeljs.io/docs/babel-plugin-transform-unicode-escapes) for more information.
 
 ## Install
 

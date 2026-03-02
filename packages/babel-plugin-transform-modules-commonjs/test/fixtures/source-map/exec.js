@@ -21,13 +21,13 @@ var tests = [
   'export {default as foo} from "foo";',
 ];
 
-tests.forEach(function (code) {
-  var res = transform(code, {
+return Promise.all(tests.map(code =>
+  transformAsync(code, {
     configFile: false,
     sourceMap: true,
     plugins: opts.plugins
-  });
-
-  // Should create mapping
-  expect(res.map.mappings).not.toBe('');
-});
+  }).then(res => {
+    // Should create mapping
+    expect(res.map.mappings).not.toBe('');
+  })
+));

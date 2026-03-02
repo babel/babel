@@ -1,0 +1,3 @@
+{
+  "plugins": [["syntax-typescript", { "dts": true }]]
+}

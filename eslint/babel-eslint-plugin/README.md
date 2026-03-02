@@ -1,49 +1,19 @@
 # @babel/eslint-plugin
 
-## This project is still experimental and will be released with Babel v8. You can track our progress [here](https://github.com/babel/babel/issues/10752)! Please use [eslint-plugin-babel](https://github.com/babel/eslint-plugin-babel) in the meantime.
+> Companion rules for `@babel/eslint-parser`.
 
-Companion rules for `@babel/eslint-parser`. `@babel/eslint-parser` does a great job at adapting `eslint`
-for use with Babel, but it can't change the built-in rules to support experimental features.
-`@babel/eslint-plugin` re-implements problematic rules so they do not give false positives or negatives.
+See our website [@babel/eslint-plugin](https://babeljs.io/docs/babel-eslint-plugin) for more information.
 
-> Requires Node 10.9 or greater
+## Install
 
-### Install
+Using npm:
 
 ```sh
-npm install @babel/eslint-plugin --save-dev
+npm install --save-dev @babel/eslint-plugin
 ```
 
-Load the plugin in your `.eslintrc.json` file:
+or using yarn:
 
-```json
-{
-  "plugins": ["@babel/eslint-plugin"]
-}
+```sh
+yarn add @babel/eslint-plugin --dev
 ```
-
-Finally enable all the rules you would like to use (remember to disable the
-original ones as well!).
-
-```json
-{
-  "rules": {
-    "babel/new-cap": "error",
-    "babel/no-invalid-this": "error",
-    "babel/no-unused-expressions": "error",
-    "babel/object-curly-spacing": "error",
-    "babel/semi": "error",
-  }
-}
-```
-### Rules
-
-Each rule corresponds to a core `eslint` rule and has the same options.
-
-🛠: means it's autofixable with `--fix`.
-
-- `babel/new-cap`: handles decorators (`@Decorator`)
-- `babel/no-invalid-this`: handles class fields and private class methods (`class A { a = this.b; }`)
-- `babel/no-unused-expressions`: handles `do` expressions
-- `babel/object-curly-spacing`: handles `export * as x from "mod";` (🛠)
-- `babel/semi`: Handles class properties (🛠)

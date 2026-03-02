@@ -2,7 +2,7 @@
 
 > Transform TypeScript into ES.next
 
-See our website [@babel/plugin-transform-typescript](https://babeljs.io/docs/en/next/babel-plugin-transform-typescript.html) for more information.
+See our website [@babel/plugin-transform-typescript](https://babeljs.io/docs/babel-plugin-transform-typescript) for more information.
 
 ## Install
 

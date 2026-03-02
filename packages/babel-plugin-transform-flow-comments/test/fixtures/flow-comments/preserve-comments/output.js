@@ -1,3 +1,2 @@
 /**/
-
 /*:: type Foo = number;*/

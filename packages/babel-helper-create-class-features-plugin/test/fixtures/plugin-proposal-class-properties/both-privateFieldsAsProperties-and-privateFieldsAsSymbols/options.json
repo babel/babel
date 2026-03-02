@@ -1,0 +1,8 @@
+{
+  "plugins": ["transform-class-properties"],
+  "assumptions": {
+    "privateFieldsAsProperties": true,
+    "privateFieldsAsSymbols": true
+  },
+  "throws": "Cannot enable both the \"privateFieldsAsProperties\" and \"privateFieldsAsSymbols\" assumptions as the same time."
+}

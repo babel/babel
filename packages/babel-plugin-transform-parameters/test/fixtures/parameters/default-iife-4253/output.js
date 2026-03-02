@@ -6,8 +6,6 @@ var Ref = /*#__PURE__*/function () {
     babelHelpers.classCallCheck(this, Ref);
     this.id = id;
   }
-
-  return Ref;
+  return babelHelpers.createClass(Ref);
 }();
-
 Ref.nextID = 0;

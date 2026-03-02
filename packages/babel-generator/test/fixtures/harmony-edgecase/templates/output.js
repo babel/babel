@@ -6,7 +6,7 @@ var tagged = tagged`hello`;
 var tagged = member.call`hello`;
 var tagged = new call`hello`();
 var tagged = new (call`hello`())();
-var tageed = member[call`hello`];
+var tagged = member[call`hello`];
 var middles = `
 Is the order a rabbit?
 `;

@@ -1,1 +1,1 @@
-export namespace N {}
+export namespace N { var x }

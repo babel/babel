@@ -1,0 +1,105 @@
+{
+  "type": "File",
+  "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":58}},
+  "errors": [
+    "SyntaxError: Private name #priv is not defined. (4:19)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":58}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":58}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":58,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":6,"column":1,"index":58}},
+          "body": [
+            {
+              "type": "ClassPrivateProperty",
+              "start":12,"end":15,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":5,"index":15}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":12,"end":14,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":4,"index":14}},
+                "id": {
+                  "type": "Identifier",
+                  "start":13,"end":14,"loc":{"start":{"line":2,"column":3,"index":13},"end":{"line":2,"column":4,"index":14},"identifierName":"x"},
+                  "name": "x"
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassMethod",
+              "start":18,"end":56,"loc":{"start":{"line":3,"column":2,"index":18},"end":{"line":5,"column":3,"index":56}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":18,"end":22,"loc":{"start":{"line":3,"column":2,"index":18},"end":{"line":3,"column":6,"index":22},"identifierName":"meth"},
+                "name": "meth"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":25,"end":56,"loc":{"start":{"line":3,"column":9,"index":25},"end":{"line":5,"column":3,"index":56}},
+                "body": [
+                  {
+                    "type": "VariableDeclaration",
+                    "start":31,"end":52,"loc":{"start":{"line":4,"column":4,"index":31},"end":{"line":4,"column":25,"index":52}},
+                    "declarations": [
+                      {
+                        "type": "VariableDeclarator",
+                        "start":35,"end":51,"loc":{"start":{"line":4,"column":8,"index":35},"end":{"line":4,"column":24,"index":51}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":35,"end":39,"loc":{"start":{"line":4,"column":8,"index":35},"end":{"line":4,"column":12,"index":39},"identifierName":"prop"},
+                          "name": "prop"
+                        },
+                        "init": {
+                          "type": "MemberExpression",
+                          "start":42,"end":51,"loc":{"start":{"line":4,"column":15,"index":42},"end":{"line":4,"column":24,"index":51}},
+                          "object": {
+                            "type": "Identifier",
+                            "start":42,"end":45,"loc":{"start":{"line":4,"column":15,"index":42},"end":{"line":4,"column":18,"index":45},"identifierName":"foo"},
+                            "name": "foo"
+                          },
+                          "computed": false,
+                          "property": {
+                            "type": "PrivateName",
+                            "start":46,"end":51,"loc":{"start":{"line":4,"column":19,"index":46},"end":{"line":4,"column":24,"index":51}},
+                            "id": {
+                              "type": "Identifier",
+                              "start":47,"end":51,"loc":{"start":{"line":4,"column":20,"index":47},"end":{"line":4,"column":24,"index":51},"identifierName":"priv"},
+                              "name": "priv"
+                            }
+                          }
+                        }
+                      }
+                    ],
+                    "kind": "var"
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

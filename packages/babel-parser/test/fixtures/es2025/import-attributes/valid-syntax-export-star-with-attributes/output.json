@@ -1,0 +1,49 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportAllDeclaration",
+        "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+        "source": {
+          "type": "StringLiteral",
+          "start":14,"end":24,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":24,"index":24}},
+          "extra": {
+            "rawValue": "foo.json",
+            "raw": "\"foo.json\""
+          },
+          "value": "foo.json"
+        },
+        "attributes": [
+          {
+            "type": "ImportAttribute",
+            "start":32,"end":44,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":44,"index":44}},
+            "key": {
+              "type": "Identifier",
+              "start":32,"end":36,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":36,"index":36},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":38,"end":44,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":1,"column":44,"index":44}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

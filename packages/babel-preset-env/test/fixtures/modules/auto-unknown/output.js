@@ -1,7 +1,4 @@
 "use strict";
 
-var _mod = _interopRequireDefault(require("mod"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
+var _mod = babelHelpers.interopRequireDefault(require("mod"));
 console.log(_mod["default"]);

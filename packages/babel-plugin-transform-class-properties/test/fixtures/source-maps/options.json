@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-class-properties", "transform-private-methods"],
+  "sourceMaps": true
+}

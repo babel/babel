@@ -1,8 +1,7 @@
 {
   "plugins": [
-    "proposal-class-properties",
+    "transform-class-properties",
     "transform-parameters",
-    "transform-destructuring",
-    ["external-helpers", { "helperVersion": "7.100.0" }]
+    "transform-destructuring"
   ]
 }

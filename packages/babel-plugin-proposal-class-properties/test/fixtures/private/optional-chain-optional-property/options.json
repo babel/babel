@@ -1,4 +1,0 @@
-{
-  "plugins": ["proposal-class-properties"],
-  "minNodeVersion": "14.0.0"
-}

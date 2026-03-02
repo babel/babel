@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    ["transform-classes", { "loose": true }],
-    "transform-block-scoping"
-  ]
-}

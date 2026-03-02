@@ -2,7 +2,7 @@
 
 > Babel preset for all React plugins.
 
-See our website [@babel/preset-react](https://babeljs.io/docs/en/next/babel-preset-react.html) for more information or the [issues](https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20react%22+is%3Aopen) associated with this package.
+See our website [@babel/preset-react](https://babeljs.io/docs/babel-preset-react) for more information or the [issues](https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22area%3A%20react%22+is%3Aopen) associated with this package.
 
 ## Install
 

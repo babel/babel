@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "discardBinding"
+  ],
+  "throws": "The 'discardBinding' plugin requires a 'syntaxType' option. Currently the only supported value is 'void'."
+}

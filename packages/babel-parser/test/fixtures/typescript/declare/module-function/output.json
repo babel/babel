@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":42}},
+  "errors": [
+    "SyntaxError: An implementation cannot be declared in ambient contexts. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":42}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":42}},
+        "kind": "module",
+        "id": {
+          "type": "StringLiteral",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18}},
+          "extra": {
+            "rawValue": "m",
+            "raw": "\"m\""
+          },
+          "value": "m"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":19,"end":42,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":3,"column":1,"index":42}},
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "start":23,"end":40,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":19,"index":40}},
+              "id": {
+                "type": "Identifier",
+                "start":32,"end":35,"loc":{"start":{"line":2,"column":11,"index":32},"end":{"line":2,"column":14,"index":35},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":38,"end":40,"loc":{"start":{"line":2,"column":17,"index":38},"end":{"line":2,"column":19,"index":40}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

@@ -5,10 +5,13 @@
     [
       "env",
       {
+        "targets": {
+          "browsers": "ie 6"
+        },
         "debug": true,
         "shippedProposals": true,
         "useBuiltIns": "entry",
-        "corejs": 3
+        "corejs": "3.0"
       }
     ]
   ]

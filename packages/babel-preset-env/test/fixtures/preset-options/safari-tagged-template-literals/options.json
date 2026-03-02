@@ -1,12 +1,11 @@
 {
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "targets": {
           "browsers": "safari 9"
-        },
-        "shippedProposals": true
+        }
       }
     ]
   ]

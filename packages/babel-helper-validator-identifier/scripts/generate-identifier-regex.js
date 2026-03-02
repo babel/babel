@@ -1,22 +1,25 @@
-"use strict";
-
 // Always use the latest available version of Unicode!
 // https://tc39.github.io/ecma262/#sec-conformance
-const version = "13.0.0";
+import packageJson from "../package.json" with { type: "json" };
 
-const start = require("unicode-" +
-  version +
-  "/Binary_Property/ID_Start/code-points.js").filter(function (ch) {
+const unicodePackageNamePrefix = "@unicode/unicode-";
+const unicodePackageName = Object.keys(packageJson.devDependencies).find(name =>
+  name.startsWith(unicodePackageNamePrefix)
+);
+
+const start = (
+  await import(`${unicodePackageName}/Binary_Property/ID_Start/code-points.js`)
+).default.filter(function (ch) {
   return ch > 0x7f;
 });
 let last = -1;
-const cont = [0x200c, 0x200d].concat(
-  require("unicode-" +
-    version +
-    "/Binary_Property/ID_Continue/code-points.js").filter(function (ch) {
-    return ch > 0x7f && search(start, ch, last + 1) == -1;
-  })
-);
+const cont = (
+  await import(
+    `${unicodePackageName}/Binary_Property/ID_Continue/code-points.js`
+  )
+).default.filter(function (ch) {
+  return ch > 0x7f && search(start, ch, last + 1) === -1;
+});
 
 function search(arr, ch, starting) {
   for (let i = starting; arr[i] <= ch && i < arr.length; last = i++) {
@@ -42,13 +45,13 @@ function generate(chars) {
   for (let i = 0, at = 0x10000; i < chars.length; i++) {
     const from = chars[i];
     let to = from;
-    while (i < chars.length - 1 && chars[i + 1] == to + 1) {
+    while (i < chars.length - 1 && chars[i + 1] === to + 1) {
       i++;
       to++;
     }
     if (to <= 0xffff) {
-      if (from == to) re += esc(from);
-      else if (from + 1 == to) re += esc(from) + esc(to);
+      if (from === to) re += esc(from);
+      else if (from + 1 === to) re += esc(from) + esc(to);
       else re += esc(from) + "-" + esc(to);
     } else {
       astral.push(from - at, to - from);
@@ -62,9 +65,11 @@ const startData = generate(start);
 const contData = generate(cont);
 
 console.log("/* prettier-ignore */");
-console.log('let nonASCIIidentifierStartChars = "' + startData.nonASCII + '";');
+console.log(
+  'const nonASCIIidentifierStartChars = "' + startData.nonASCII + '";'
+);
 console.log("/* prettier-ignore */");
-console.log('let nonASCIIidentifierChars = "' + contData.nonASCII + '";');
+console.log('const nonASCIIidentifierChars = "' + contData.nonASCII + '";');
 console.log("/* prettier-ignore */");
 console.log(
   "const astralIdentifierStartCodes = " + JSON.stringify(startData.astral) + ";"

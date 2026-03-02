@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+  "errors": [
+    "SyntaxError: 'let' is disallowed as a lexically bound name. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":19,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":19,"index":19}},
+            "id": {
+              "type": "ArrayPattern",
+              "start":4,"end":14,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":14,"index":14}},
+              "elements": [
+                {
+                  "type": "AssignmentPattern",
+                  "start":5,"end":13,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":13,"index":13}},
+                  "left": {
+                    "type": "Identifier",
+                    "start":5,"end":8,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":8,"index":8},"identifierName":"let"},
+                    "name": "let"
+                  },
+                  "right": {
+                    "type": "NumericLiteral",
+                    "start":11,"end":13,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":13,"index":13}},
+                    "extra": {
+                      "rawValue": 10,
+                      "raw": "10"
+                    },
+                    "value": 10
+                  }
+                }
+              ]
+            },
+            "init": {
+              "type": "ArrayExpression",
+              "start":17,"end":19,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":19,"index":19}},
+              "elements": []
+            }
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

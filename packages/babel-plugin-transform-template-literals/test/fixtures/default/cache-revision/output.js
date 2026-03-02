@@ -1,35 +1,11 @@
-function _templateObject2() {
-  const data = _taggedTemplateLiteral(["some template"]);
-
-  _templateObject2 = function () {
-    return data;
-  };
-
-  return data;
-}
-
-function _templateObject() {
-  const data = _taggedTemplateLiteral(["some template"]);
-
-  _templateObject = function () {
-    return data;
-  };
-
-  return data;
-}
-
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
+var _templateObject, _templateObject2;
 var tag = v => v;
-
 function foo() {
-  return tag(_templateObject());
+  return tag(_templateObject || (_templateObject = babelHelpers.taggedTemplateLiteral(["some template"])));
 }
-
 function bar() {
-  return tag(_templateObject2());
+  return tag(_templateObject2 || (_templateObject2 = babelHelpers.taggedTemplateLiteral(["some template"])));
 }
-
 expect(foo()).toBe(foo());
 expect(foo()).toEqual(["some template"]);
 expect(bar()).toBe(bar());

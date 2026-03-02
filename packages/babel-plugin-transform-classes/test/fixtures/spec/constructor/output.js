@@ -1,30 +1,23 @@
-var Test = function Test() {
+var Test = /*#__PURE__*/babelHelpers.createClass(function Test() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Test);
   this.state = "test";
-};
-
+});
 var Foo = /*#__PURE__*/function (_Bar) {
   "use strict";
 
-  babelHelpers.inherits(Foo, _Bar);
-
-  var _super = babelHelpers.createSuper(Foo);
-
   function Foo() {
     var _this;
-
     babelHelpers.classCallCheck(this, Foo);
-    _this = _super.call(this);
+    _this = babelHelpers.callSuper(this, Foo);
     _this.state = "test";
     return _this;
   }
-
-  return Foo;
+  babelHelpers.inherits(Foo, _Bar);
+  return babelHelpers.createClass(Foo);
 }(Bar);
-
-var ConstructorScoping = function ConstructorScoping() {
+var ConstructorScoping = /*#__PURE__*/babelHelpers.createClass(function ConstructorScoping() {
   "use strict";
 
   babelHelpers.classCallCheck(this, ConstructorScoping);
@@ -32,4 +25,4 @@ var ConstructorScoping = function ConstructorScoping() {
   {
     var _bar;
   }
-};
+});

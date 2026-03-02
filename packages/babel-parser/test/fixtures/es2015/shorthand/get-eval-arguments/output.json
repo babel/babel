@@ -1,0 +1,90 @@
+{
+  "type": "File",
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":34,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":34,"index":34}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":9,"end":33,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":33,"index":33}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":11,"end":14,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":14,"index":14}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":11,"end":14,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":14,"index":14},"identifierName":"get"},
+                    "name": "get"
+                  },
+                  "computed": false,
+                  "shorthand": true,
+                  "value": {
+                    "type": "Identifier",
+                    "start":11,"end":14,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":14,"index":14},"identifierName":"get"},
+                    "name": "get"
+                  }
+                },
+                {
+                  "type": "ObjectProperty",
+                  "start":16,"end":20,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":20,"index":20}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":16,"end":20,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":20,"index":20},"identifierName":"eval"},
+                    "name": "eval"
+                  },
+                  "computed": false,
+                  "shorthand": true,
+                  "value": {
+                    "type": "Identifier",
+                    "start":16,"end":20,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":20,"index":20},"identifierName":"eval"},
+                    "name": "eval"
+                  }
+                },
+                {
+                  "type": "ObjectProperty",
+                  "start":22,"end":31,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":31,"index":31}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":22,"end":31,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":31,"index":31},"identifierName":"arguments"},
+                    "name": "arguments"
+                  },
+                  "computed": false,
+                  "shorthand": true,
+                  "value": {
+                    "type": "Identifier",
+                    "start":22,"end":31,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":31,"index":31},"identifierName":"arguments"},
+                    "name": "arguments"
+                  }
+                }
+              ],
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 8
+              }
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

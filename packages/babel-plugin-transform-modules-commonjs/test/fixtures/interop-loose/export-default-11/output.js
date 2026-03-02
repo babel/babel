@@ -1,11 +1,7 @@
 "use strict";
 
 exports.__esModule = true;
-exports.Cachier = Cachier;
+exports.Cacher = Cacher;
 exports.default = void 0;
-
-var _default = new Cachier();
-
-exports.default = _default;
-
-function Cachier(databaseName) {}
+var _default = exports.default = new Cacher();
+function Cacher(databaseName) {}

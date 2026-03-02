@@ -1,0 +1,16 @@
+{
+  "version": 3,
+  "names": [
+    "m",
+    "foo",
+    "bar"
+  ],
+  "sources": [
+    "fixtures/sourcemaps/ModuleExpression/input.js"
+  ],
+  "sourcesContent": [
+    "const m = module { export const foo = \"foo\" };\nmodule {\n  foo;\n  bar;\n};\nfoo(module {});"
+  ],
+  "mappings": "AAAA,MAAMA,CAAC,GAAG;EAAS,OAAO,MAAMC,GAAG,GAAG,KAAK;AAAC,CAAC;AAC7C;EACEA,GAAG;EACHC,GAAG;AACL,CAAC;AACDD,GAAG,CAAC,QAAQ,CAAC,CAAC",
+  "ignoreList": []
+}

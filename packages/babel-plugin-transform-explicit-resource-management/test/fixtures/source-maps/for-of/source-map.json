@@ -1,0 +1,24 @@
+{
+  "version": 3,
+  "names": [
+    "_x",
+    "it",
+    "_usingCtx",
+    "babelHelpers",
+    "usingCtx",
+    "x",
+    "u",
+    "doSomethingWith",
+    "_",
+    "e",
+    "d"
+  ],
+  "sources": [
+    "source-maps/for-of/input.js"
+  ],
+  "sourcesContent": [
+    "for (using x of it) {\n  doSomethingWith(x);\n}"
+  ],
+  "mappings": "AAAA,KAAK,MAAMA,EAAC,IAAIC,EAAE,EAAE;EAAA,IAAAC,SAAA,GAAAC,YAAA,CAAAC,QAAA;EAAA,MAATC,CAAC,GAAAH,SAAA,CAAAI,CAAA,CAAAN,EAAA;EACVO,eAAe,CAACF,CAAC,CAAC;AAAC,SAAAG,CAAA;EAAAN,SAAA,CAAAO,CAAA,GAAAD,CAAA;AAAA;EAAAN,SAAA,CAAAQ,CAAA;AAAA",
+  "ignoreList": []
+}

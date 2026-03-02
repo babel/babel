@@ -1,4 +1,4 @@
-import last from "lodash/last"
+import last from "lo-dash/last"
 
 export default class Container {
   last(key) {

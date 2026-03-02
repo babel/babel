@@ -5,9 +5,7 @@ define(["exports"], function (_exports) {
     value: true
   });
   _exports.bug = bug;
-
   function bug() {}
-
   {
     let bug = 2;
   }

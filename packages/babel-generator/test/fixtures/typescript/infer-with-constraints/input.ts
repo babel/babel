@@ -1,0 +1,5 @@
+type X3<T> = T extends [infer U extends number] ? MustBeNumber<U> : never;
+type X4<T> = T extends [infer U extends number, infer U extends number] ? MustBeNumber<U> : never;
+type X5<T> = T extends [infer U extends number, infer U] ? MustBeNumber<U> : never;
+type X6<T> = T extends [infer U, infer U extends number] ? MustBeNumber<U> : never;
+type X7<T> = T extends [infer U extends string, infer U extends number] ? U : never;

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #==============================================================================#
 #                                  SETUP                                       #
@@ -21,13 +21,38 @@ cd tmp/create-react-app || exit
 #                                   TEST                                       #
 #==============================================================================#
 
+# !!! WARNING !!!
+# create-react-app uses the useBuiltIns: true option of @babel/preset-react,
+# removed in Babel 8.0.0. And it does not specify runtime option. The test will break on
+# runtime: "automatic", default of Babel 8.
+# This change replaces useBuiltIns: true with runtime: "classic"
+sed -i 's/useBuiltIns: true/runtime: "classic"/' packages/babel-preset-react-app/create.js
+
+bump_deps="$PWD/../../utils/bump-babel-dependencies.js"
+node "$bump_deps" resolutions
+for d in ./packages/*/
+do
+  (cd "$d"; node "$bump_deps" resolutions)
+done
+
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
-yarn install
-node "$PWD"/../../utils/bump-babel-dependencies.js
-yarn lerna exec -- node "$PWD"/../../utils/bump-babel-dependencies.js
-yarn install
+
+# Remove this when CRA updates jest-worker in their lockfile
+node -e "
+  var pkg = require('./package.json');
+
+  pkg.resolutions = {
+    'jest-worker': '27.4.5'
+  };
+
+  fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
+"
+npm install --ignore-scripts
+npx npm-force-resolutions
+
+npm install
 
 # Test
-CI=true yarn test
+CI=true npm run test
 
 cleanup

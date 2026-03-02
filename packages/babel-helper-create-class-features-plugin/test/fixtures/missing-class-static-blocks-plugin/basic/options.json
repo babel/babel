@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-class-properties"],
+  "throws": "Static class blocks are not enabled. Please add `@babel/plugin-transform-class-static-block` to your configuration."
+}

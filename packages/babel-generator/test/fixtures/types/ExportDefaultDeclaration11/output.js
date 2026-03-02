@@ -1,1 +1,1 @@
-export default (async () => await foo());
+export default async () => await foo();

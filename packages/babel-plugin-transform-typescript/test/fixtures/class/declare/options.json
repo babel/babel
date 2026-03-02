@@ -1,3 +1,6 @@
 {
-  "plugins": [["transform-typescript", { "allowDeclareFields": true }]]
+  "plugins": [
+    "transform-typescript",
+    ["syntax-decorators", { "version": "legacy" }]
+  ]
 }

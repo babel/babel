@@ -1,0 +1,55 @@
+{
+  "type": "File",
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+  "errors": [
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (1:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "test": {
+          "type": "NumericLiteral",
+          "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5}},
+          "extra": {
+            "rawValue": 1,
+            "raw": "1"
+          },
+          "value": 1
+        },
+        "consequent": {
+          "type": "VariableDeclaration",
+          "start":7,"end":18,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":18,"index":18}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":11,"end":17,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":17,"index":17}},
+              "id": {
+                "type": "Identifier",
+                "start":11,"end":12,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":12,"index":12},"identifierName":"x"},
+                "name": "x"
+              },
+              "init": {
+                "type": "NumericLiteral",
+                "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17}},
+                "extra": {
+                  "rawValue": 10,
+                  "raw": "10"
+                },
+                "value": 10
+              }
+            }
+          ],
+          "kind": "let"
+        },
+        "alternate": null
+      }
+    ],
+    "directives": []
+  }
+}

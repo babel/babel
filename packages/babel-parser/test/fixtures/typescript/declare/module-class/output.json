@@ -1,0 +1,76 @@
+{
+  "type": "File",
+  "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":59}},
+  "errors": [
+    "SyntaxError: Initializers are not allowed in ambient contexts. (3:10)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":59}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":59}},
+        "kind": "module",
+        "id": {
+          "type": "StringLiteral",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18}},
+          "extra": {
+            "rawValue": "m",
+            "raw": "\"m\""
+          },
+          "value": "m"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":19,"end":59,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":5,"column":1,"index":59}},
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start":23,"end":57,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":4,"column":3,"index":57}},
+              "id": {
+                "type": "Identifier",
+                "start":29,"end":30,"loc":{"start":{"line":2,"column":8,"index":29},"end":{"line":2,"column":9,"index":30},"identifierName":"C"},
+                "name": "C"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start":31,"end":57,"loc":{"start":{"line":2,"column":10,"index":31},"end":{"line":4,"column":3,"index":57}},
+                "body": [
+                  {
+                    "type": "ClassProperty",
+                    "start":37,"end":53,"loc":{"start":{"line":3,"column":4,"index":37},"end":{"line":3,"column":20,"index":53}},
+                    "static": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":37,"end":42,"loc":{"start":{"line":3,"column":4,"index":37},"end":{"line":3,"column":9,"index":42},"identifierName":"field"},
+                      "name": "field"
+                    },
+                    "computed": false,
+                    "value": {
+                      "type": "StringLiteral",
+                      "start":45,"end":52,"loc":{"start":{"line":3,"column":12,"index":45},"end":{"line":3,"column":19,"index":52}},
+                      "extra": {
+                        "rawValue": "field",
+                        "raw": "\"field\""
+                      },
+                      "value": "field"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

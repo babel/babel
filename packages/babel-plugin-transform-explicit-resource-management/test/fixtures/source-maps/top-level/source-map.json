@@ -1,0 +1,23 @@
+{
+  "version": 3,
+  "names": [
+    "before",
+    "x",
+    "_usingCtx",
+    "u",
+    "fn",
+    "doSomethingWith",
+    "after",
+    "_",
+    "e",
+    "d"
+  ],
+  "sources": [
+    "source-maps/top-level/input.mjs"
+  ],
+  "sourcesContent": [
+    "before;\nusing x = fn();\ndoSomethingWith(x);\nafter;"
+  ],
+  "mappings": ";;EAAAA,MAAM;EACN,IAAMC,CAAC,GAAAC,SAAA,CAAAC,CAAA,CAAGC,EAAE,CAAC,CAAC;EACdC,eAAe,CAACJ,CAAC,CAAC;EAClBK,KAAK;AAAC,SAAAC,CAAA;EAAAL,SAAA,CAAAM,CAAA,GAAAD,CAAA;AAAA;EAAAL,SAAA,CAAAO,CAAA;AAAA",
+  "ignoreList": []
+}

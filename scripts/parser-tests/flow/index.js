@@ -1,33 +1,25 @@
-const fs = require("fs").promises;
-const path = require("path");
-const merge = require("mergeiterator");
-const TestRunner = require("../utils/parser-test-runner");
+// @ts-check
+
+import fs from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import merge from "mergeiterator";
+import TestRunner from "../utils/parser-test-runner.js";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const flowOptionsMapping = {
-  esproposal_class_instance_fields: "classProperties",
-  esproposal_class_static_fields: "classProperties",
-  esproposal_export_star_as: "exportNamespaceFrom",
   esproposal_decorators: "decorators-legacy",
-  esproposal_nullish_coalescing: "nullishCoalescingOperator",
-  esproposal_optional_chaining: "optionalChaining",
   types: "flowComments",
   intern_comments: false,
+  // We don't support these
+  components: false,
 };
 
 function getPlugins(test) {
   const flowOptions = { all: true };
 
-  const plugins = [
-    "dynamicImport",
-    ["flow", flowOptions],
-    "flowComments",
-    "jsx",
-    "classProperties",
-    "classPrivateProperties",
-    "classPrivateMethods",
-    "bigInt",
-    "numericSeparator",
-  ];
+  const plugins = [["flow", flowOptions], "flowComments", "jsx"];
 
   if (!test.options) return plugins;
 
@@ -73,8 +65,8 @@ async function* loadTests(root) {
 
       const [contents, tree, options] = await Promise.all([
         fs.readFile(noExt + ".js", "utf8"),
-        fs.readFile(noExt + ".tree.json", "utf8").catch(() => null),
-        fs.readFile(noExt + ".options.json", "utf8").catch(() => null),
+        fs.readFile(noExt + ".tree.json", "utf8").catch(() => "{}"),
+        fs.readFile(noExt + ".options.json", "utf8").catch(() => "{}"),
       ]);
 
       yield {
@@ -88,8 +80,8 @@ async function* loadTests(root) {
 }
 
 const runner = new TestRunner({
-  testDir: path.join(__dirname, "../../../build/flow/src/parser/test/flow"),
-  allowlist: path.join(__dirname, "allowlist.txt"),
+  testDir: path.join(dirname, "../../../build/flow/src/parser/test/flow"),
+  allowlist: path.join(dirname, "allowlist.txt"),
   shouldUpdate: process.argv.includes("--update-allowlist"),
 
   async *getTests() {

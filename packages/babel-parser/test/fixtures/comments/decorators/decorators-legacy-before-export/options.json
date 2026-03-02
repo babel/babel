@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "plugins": ["decorators-legacy"]
+}

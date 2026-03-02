@@ -1,5 +1,0 @@
-{
-  "plugins": [
-    ["proposal-object-rest-spread", { "loose": true }]
-  ]
-}

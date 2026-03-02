@@ -2,7 +2,7 @@
 
 > Strip flow type annotations from your output code.
 
-See our website [@babel/plugin-transform-flow-strip-types](https://babeljs.io/docs/en/next/babel-plugin-transform-flow-strip-types.html) for more information.
+See our website [@babel/plugin-transform-flow-strip-types](https://babeljs.io/docs/babel-plugin-transform-flow-strip-types) for more information.
 
 ## Install
 

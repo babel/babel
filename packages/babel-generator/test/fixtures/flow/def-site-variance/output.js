@@ -1,7 +1,5 @@
 class C1<+T, -U> {}
-
 function f<+T, -U>() {}
-
 type T<+T, -U> = {};
 type T2 = {
   +p: T
@@ -39,11 +37,9 @@ declare class I {
 declare class I {
   -[k: K]: V
 }
-
 class C2 {
   +p: T = e;
 }
-
 class C3 {
   -p: T = e;
 }

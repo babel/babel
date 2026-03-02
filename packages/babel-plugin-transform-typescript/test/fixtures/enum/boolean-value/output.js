@@ -1,6 +1,5 @@
 // Not type-correct code
-var E;
-
-(function (E) {
+var E = /*#__PURE__*/function (E) {
   E[E["A"] = true] = "A";
-})(E || (E = {}));
+  return E;
+}(E || {});

@@ -1,0 +1,77 @@
+{
+  "type": "File",
+  "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":62,"index":62}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":62,"index":62}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":62,"index":62}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":22,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":22,"index":22}},
+            "local": {
+              "type": "StringLiteral",
+              "start":9,"end":22,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":22,"index":22}},
+              "extra": {
+                "rawValue": "學而時習之，不亦說乎？",
+                "raw": "\"學而時習之，不亦說乎？\""
+              },
+              "value": "學而時習之，不亦說乎？"
+            },
+            "exported": {
+              "type": "StringLiteral",
+              "start":9,"end":22,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":22,"index":22}},
+              "extra": {
+                "rawValue": "學而時習之，不亦說乎？",
+                "raw": "\"學而時習之，不亦說乎？\""
+              },
+              "value": "學而時習之，不亦說乎？"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start":24,"end":42,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":42,"index":42}},
+            "local": {
+              "type": "StringLiteral",
+              "start":24,"end":33,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":33,"index":33}},
+              "extra": {
+                "rawValue": "吾道一以貫之。",
+                "raw": "\"吾道一以貫之。\""
+              },
+              "value": "吾道一以貫之。"
+            },
+            "exported": {
+              "type": "StringLiteral",
+              "start":37,"end":42,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":42,"index":42}},
+              "extra": {
+                "rawValue": "忠恕。",
+                "raw": "\"忠恕。\""
+              },
+              "value": "忠恕。"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":50,"end":61,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":61,"index":61}},
+          "extra": {
+            "rawValue": "Confucius",
+            "raw": "\"Confucius\""
+          },
+          "value": "Confucius"
+        },
+        "declaration": null,
+        "attributes": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

@@ -1,0 +1,3 @@
+var test = (/* placeholder */) => {
+  /* Unused */
+}

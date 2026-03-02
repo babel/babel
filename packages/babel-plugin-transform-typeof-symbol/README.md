@@ -2,7 +2,7 @@
 
 > This transformer wraps all typeof expressions with a method that replicates native behaviour. (ie. returning “symbol” for symbols)
 
-See our website [@babel/plugin-transform-typeof-symbol](https://babeljs.io/docs/en/next/babel-plugin-transform-typeof-symbol.html) for more information.
+See our website [@babel/plugin-transform-typeof-symbol](https://babeljs.io/docs/babel-plugin-transform-typeof-symbol) for more information.
 
 ## Install
 

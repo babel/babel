@@ -1,0 +1,94 @@
+{
+  "type": "File",
+  "start":0,"end":88,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":88}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":88,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":88}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":88,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":88}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":88,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":4,"column":1,"index":88}},
+          "body": [
+            {
+              "type": "ForOfStatement",
+              "start":23,"end":50,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":29,"index":50}},
+              "await": false,
+              "left": {
+                "type": "VariableDeclaration",
+                "start":28,"end":42,"loc":{"start":{"line":2,"column":7,"index":28},"end":{"line":2,"column":21,"index":42}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":40,"end":42,"loc":{"start":{"line":2,"column":19,"index":40},"end":{"line":2,"column":21,"index":42}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":40,"end":42,"loc":{"start":{"line":2,"column":19,"index":40},"end":{"line":2,"column":21,"index":42},"identifierName":"of"},
+                      "name": "of"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "await using"
+              },
+              "right": {
+                "type": "Identifier",
+                "start":46,"end":48,"loc":{"start":{"line":2,"column":25,"index":46},"end":{"line":2,"column":27,"index":48},"identifierName":"of"},
+                "name": "of"
+              },
+              "body": {
+                "type": "EmptyStatement",
+                "start":49,"end":50,"loc":{"start":{"line":2,"column":28,"index":49},"end":{"line":2,"column":29,"index":50}}
+              }
+            },
+            {
+              "type": "ForOfStatement",
+              "start":53,"end":86,"loc":{"start":{"line":3,"column":2,"index":53},"end":{"line":3,"column":35,"index":86}},
+              "await": true,
+              "left": {
+                "type": "VariableDeclaration",
+                "start":64,"end":78,"loc":{"start":{"line":3,"column":13,"index":64},"end":{"line":3,"column":27,"index":78}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":76,"end":78,"loc":{"start":{"line":3,"column":25,"index":76},"end":{"line":3,"column":27,"index":78}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":76,"end":78,"loc":{"start":{"line":3,"column":25,"index":76},"end":{"line":3,"column":27,"index":78},"identifierName":"of"},
+                      "name": "of"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "await using"
+              },
+              "right": {
+                "type": "Identifier",
+                "start":82,"end":84,"loc":{"start":{"line":3,"column":31,"index":82},"end":{"line":3,"column":33,"index":84},"identifierName":"of"},
+                "name": "of"
+              },
+              "body": {
+                "type": "EmptyStatement",
+                "start":85,"end":86,"loc":{"start":{"line":3,"column":34,"index":85},"end":{"line":3,"column":35,"index":86}}
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

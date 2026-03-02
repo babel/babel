@@ -1,0 +1,498 @@
+{
+  "type": "File",
+  "start":0,"end":334,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":1,"index":334}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":334,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":1,"index":334}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":334,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":1,"index":334}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":334,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":11,"column":1,"index":334}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":12,"end":46,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":36,"index":46}},
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":19,"end":29,"loc":{"start":{"line":2,"column":9,"index":19},"end":{"line":2,"column":19,"index":29},"identifierName":"decFactory"},
+                "name": "decFactory"
+              },
+              "computed": false,
+              "value": {
+                "type": "ArrowFunctionExpression",
+                "start":32,"end":46,"loc":{"start":{"line":2,"column":22,"index":32},"end":{"line":2,"column":36,"index":46}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "ArrowFunctionExpression",
+                  "start":38,"end":46,"loc":{"start":{"line":2,"column":28,"index":38},"end":{"line":2,"column":36,"index":46}},
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":44,"end":46,"loc":{"start":{"line":2,"column":34,"index":44},"end":{"line":2,"column":36,"index":46}},
+                    "body": [],
+                    "directives": []
+                  }
+                }
+              }
+            },
+            {
+              "type": "ClassPrivateProperty",
+              "start":49,"end":84,"loc":{"start":{"line":3,"column":2,"index":49},"end":{"line":3,"column":37,"index":84}},
+              "static": true,
+              "key": {
+                "type": "PrivateName",
+                "start":56,"end":67,"loc":{"start":{"line":3,"column":9,"index":56},"end":{"line":3,"column":20,"index":67}},
+                "id": {
+                  "type": "Identifier",
+                  "start":57,"end":67,"loc":{"start":{"line":3,"column":10,"index":57},"end":{"line":3,"column":20,"index":67},"identifierName":"decFactory"},
+                  "name": "decFactory"
+                }
+              },
+              "value": {
+                "type": "ArrowFunctionExpression",
+                "start":70,"end":84,"loc":{"start":{"line":3,"column":23,"index":70},"end":{"line":3,"column":37,"index":84}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "ArrowFunctionExpression",
+                  "start":76,"end":84,"loc":{"start":{"line":3,"column":29,"index":76},"end":{"line":3,"column":37,"index":84}},
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":82,"end":84,"loc":{"start":{"line":3,"column":35,"index":82},"end":{"line":3,"column":37,"index":84}},
+                    "body": [],
+                    "directives": []
+                  }
+                }
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":87,"end":115,"loc":{"start":{"line":4,"column":2,"index":87},"end":{"line":4,"column":30,"index":115}},
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":94,"end":97,"loc":{"start":{"line":4,"column":9,"index":94},"end":{"line":4,"column":12,"index":97},"identifierName":"dec"},
+                "name": "dec"
+              },
+              "computed": false,
+              "value": {
+                "type": "CallExpression",
+                "start":100,"end":114,"loc":{"start":{"line":4,"column":15,"index":100},"end":{"line":4,"column":29,"index":114}},
+                "callee": {
+                  "type": "MemberExpression",
+                  "start":100,"end":112,"loc":{"start":{"line":4,"column":15,"index":100},"end":{"line":4,"column":27,"index":112}},
+                  "object": {
+                    "type": "Identifier",
+                    "start":100,"end":101,"loc":{"start":{"line":4,"column":15,"index":100},"end":{"line":4,"column":16,"index":101},"identifierName":"C"},
+                    "name": "C"
+                  },
+                  "computed": false,
+                  "property": {
+                    "type": "Identifier",
+                    "start":102,"end":112,"loc":{"start":{"line":4,"column":17,"index":102},"end":{"line":4,"column":27,"index":112},"identifierName":"decFactory"},
+                    "name": "decFactory"
+                  }
+                },
+                "arguments": []
+              }
+            },
+            {
+              "type": "ClassPrivateProperty",
+              "start":118,"end":148,"loc":{"start":{"line":5,"column":2,"index":118},"end":{"line":5,"column":32,"index":148}},
+              "static": true,
+              "key": {
+                "type": "PrivateName",
+                "start":125,"end":129,"loc":{"start":{"line":5,"column":9,"index":125},"end":{"line":5,"column":13,"index":129}},
+                "id": {
+                  "type": "Identifier",
+                  "start":126,"end":129,"loc":{"start":{"line":5,"column":10,"index":126},"end":{"line":5,"column":13,"index":129},"identifierName":"dec"},
+                  "name": "dec"
+                }
+              },
+              "value": {
+                "type": "CallExpression",
+                "start":132,"end":147,"loc":{"start":{"line":5,"column":16,"index":132},"end":{"line":5,"column":31,"index":147}},
+                "callee": {
+                  "type": "MemberExpression",
+                  "start":132,"end":145,"loc":{"start":{"line":5,"column":16,"index":132},"end":{"line":5,"column":29,"index":145}},
+                  "object": {
+                    "type": "Identifier",
+                    "start":132,"end":133,"loc":{"start":{"line":5,"column":16,"index":132},"end":{"line":5,"column":17,"index":133},"identifierName":"C"},
+                    "name": "C"
+                  },
+                  "computed": false,
+                  "property": {
+                    "type": "PrivateName",
+                    "start":134,"end":145,"loc":{"start":{"line":5,"column":18,"index":134},"end":{"line":5,"column":29,"index":145}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":135,"end":145,"loc":{"start":{"line":5,"column":19,"index":135},"end":{"line":5,"column":29,"index":145},"identifierName":"decFactory"},
+                      "name": "decFactory"
+                    }
+                  }
+                },
+                "arguments": []
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":151,"end":167,"loc":{"start":{"line":6,"column":2,"index":151},"end":{"line":6,"column":18,"index":167}},
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":158,"end":162,"loc":{"start":{"line":6,"column":9,"index":158},"end":{"line":6,"column":13,"index":162},"identifierName":"self"},
+                "name": "self"
+              },
+              "computed": false,
+              "value": {
+                "type": "Identifier",
+                "start":165,"end":166,"loc":{"start":{"line":6,"column":16,"index":165},"end":{"line":6,"column":17,"index":166},"identifierName":"C"},
+                "name": "C"
+              }
+            },
+            {
+              "type": "ClassPrivateProperty",
+              "start":170,"end":187,"loc":{"start":{"line":7,"column":2,"index":170},"end":{"line":7,"column":19,"index":187}},
+              "static": true,
+              "key": {
+                "type": "PrivateName",
+                "start":177,"end":182,"loc":{"start":{"line":7,"column":9,"index":177},"end":{"line":7,"column":14,"index":182}},
+                "id": {
+                  "type": "Identifier",
+                  "start":178,"end":182,"loc":{"start":{"line":7,"column":10,"index":178},"end":{"line":7,"column":14,"index":182},"identifierName":"self"},
+                  "name": "self"
+                }
+              },
+              "value": {
+                "type": "Identifier",
+                "start":185,"end":186,"loc":{"start":{"line":7,"column":17,"index":185},"end":{"line":7,"column":18,"index":186},"identifierName":"C"},
+                "name": "C"
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":190,"end":332,"loc":{"start":{"line":8,"column":2,"index":190},"end":{"line":10,"column":8,"index":332}},
+              "decorators": [
+                {
+                  "type": "Decorator",
+                  "start":190,"end":197,"loc":{"start":{"line":8,"column":2,"index":190},"end":{"line":8,"column":9,"index":197}},
+                  "expression": {
+                    "type": "MemberExpression",
+                    "start":191,"end":197,"loc":{"start":{"line":8,"column":3,"index":191},"end":{"line":8,"column":9,"index":197}},
+                    "object": {
+                      "type": "Identifier",
+                      "start":191,"end":192,"loc":{"start":{"line":8,"column":3,"index":191},"end":{"line":8,"column":4,"index":192},"identifierName":"C"},
+                      "name": "C"
+                    },
+                    "property": {
+                      "type": "PrivateName",
+                      "start":193,"end":197,"loc":{"start":{"line":8,"column":5,"index":193},"end":{"line":8,"column":9,"index":197}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":194,"end":197,"loc":{"start":{"line":8,"column":6,"index":194},"end":{"line":8,"column":9,"index":197},"identifierName":"dec"},
+                        "name": "dec"
+                      }
+                    },
+                    "computed": false
+                  }
+                },
+                {
+                  "type": "Decorator",
+                  "start":198,"end":210,"loc":{"start":{"line":8,"column":10,"index":198},"end":{"line":8,"column":22,"index":210}},
+                  "expression": {
+                    "type": "MemberExpression",
+                    "start":199,"end":210,"loc":{"start":{"line":8,"column":11,"index":199},"end":{"line":8,"column":22,"index":210}},
+                    "object": {
+                      "type": "MemberExpression",
+                      "start":199,"end":205,"loc":{"start":{"line":8,"column":11,"index":199},"end":{"line":8,"column":17,"index":205}},
+                      "object": {
+                        "type": "Identifier",
+                        "start":199,"end":200,"loc":{"start":{"line":8,"column":11,"index":199},"end":{"line":8,"column":12,"index":200},"identifierName":"C"},
+                        "name": "C"
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start":201,"end":205,"loc":{"start":{"line":8,"column":13,"index":201},"end":{"line":8,"column":17,"index":205},"identifierName":"self"},
+                        "name": "self"
+                      },
+                      "computed": false
+                    },
+                    "property": {
+                      "type": "PrivateName",
+                      "start":206,"end":210,"loc":{"start":{"line":8,"column":18,"index":206},"end":{"line":8,"column":22,"index":210}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":207,"end":210,"loc":{"start":{"line":8,"column":19,"index":207},"end":{"line":8,"column":22,"index":210},"identifierName":"dec"},
+                        "name": "dec"
+                      }
+                    },
+                    "computed": false
+                  }
+                },
+                {
+                  "type": "Decorator",
+                  "start":211,"end":223,"loc":{"start":{"line":8,"column":23,"index":211},"end":{"line":8,"column":35,"index":223}},
+                  "expression": {
+                    "type": "MemberExpression",
+                    "start":212,"end":223,"loc":{"start":{"line":8,"column":24,"index":212},"end":{"line":8,"column":35,"index":223}},
+                    "object": {
+                      "type": "MemberExpression",
+                      "start":212,"end":219,"loc":{"start":{"line":8,"column":24,"index":212},"end":{"line":8,"column":31,"index":219}},
+                      "object": {
+                        "type": "Identifier",
+                        "start":212,"end":213,"loc":{"start":{"line":8,"column":24,"index":212},"end":{"line":8,"column":25,"index":213},"identifierName":"C"},
+                        "name": "C"
+                      },
+                      "property": {
+                        "type": "PrivateName",
+                        "start":214,"end":219,"loc":{"start":{"line":8,"column":26,"index":214},"end":{"line":8,"column":31,"index":219}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":215,"end":219,"loc":{"start":{"line":8,"column":27,"index":215},"end":{"line":8,"column":31,"index":219},"identifierName":"self"},
+                          "name": "self"
+                        }
+                      },
+                      "computed": false
+                    },
+                    "property": {
+                      "type": "Identifier",
+                      "start":220,"end":223,"loc":{"start":{"line":8,"column":32,"index":220},"end":{"line":8,"column":35,"index":223},"identifierName":"dec"},
+                      "name": "dec"
+                    },
+                    "computed": false
+                  }
+                },
+                {
+                  "type": "Decorator",
+                  "start":224,"end":237,"loc":{"start":{"line":8,"column":36,"index":224},"end":{"line":8,"column":49,"index":237}},
+                  "expression": {
+                    "type": "MemberExpression",
+                    "start":225,"end":237,"loc":{"start":{"line":8,"column":37,"index":225},"end":{"line":8,"column":49,"index":237}},
+                    "object": {
+                      "type": "MemberExpression",
+                      "start":225,"end":232,"loc":{"start":{"line":8,"column":37,"index":225},"end":{"line":8,"column":44,"index":232}},
+                      "object": {
+                        "type": "Identifier",
+                        "start":225,"end":226,"loc":{"start":{"line":8,"column":37,"index":225},"end":{"line":8,"column":38,"index":226},"identifierName":"C"},
+                        "name": "C"
+                      },
+                      "property": {
+                        "type": "PrivateName",
+                        "start":227,"end":232,"loc":{"start":{"line":8,"column":39,"index":227},"end":{"line":8,"column":44,"index":232}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":228,"end":232,"loc":{"start":{"line":8,"column":40,"index":228},"end":{"line":8,"column":44,"index":232},"identifierName":"self"},
+                          "name": "self"
+                        }
+                      },
+                      "computed": false
+                    },
+                    "property": {
+                      "type": "PrivateName",
+                      "start":233,"end":237,"loc":{"start":{"line":8,"column":45,"index":233},"end":{"line":8,"column":49,"index":237}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":234,"end":237,"loc":{"start":{"line":8,"column":46,"index":234},"end":{"line":8,"column":49,"index":237},"identifierName":"dec"},
+                        "name": "dec"
+                      }
+                    },
+                    "computed": false
+                  }
+                },
+                {
+                  "type": "Decorator",
+                  "start":240,"end":256,"loc":{"start":{"line":9,"column":2,"index":240},"end":{"line":9,"column":18,"index":256}},
+                  "expression": {
+                    "type": "CallExpression",
+                    "start":241,"end":256,"loc":{"start":{"line":9,"column":3,"index":241},"end":{"line":9,"column":18,"index":256}},
+                    "callee": {
+                      "type": "MemberExpression",
+                      "start":241,"end":254,"loc":{"start":{"line":9,"column":3,"index":241},"end":{"line":9,"column":16,"index":254}},
+                      "object": {
+                        "type": "Identifier",
+                        "start":241,"end":242,"loc":{"start":{"line":9,"column":3,"index":241},"end":{"line":9,"column":4,"index":242},"identifierName":"C"},
+                        "name": "C"
+                      },
+                      "property": {
+                        "type": "PrivateName",
+                        "start":243,"end":254,"loc":{"start":{"line":9,"column":5,"index":243},"end":{"line":9,"column":16,"index":254}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":244,"end":254,"loc":{"start":{"line":9,"column":6,"index":244},"end":{"line":9,"column":16,"index":254},"identifierName":"decFactory"},
+                          "name": "decFactory"
+                        }
+                      },
+                      "computed": false
+                    },
+                    "arguments": []
+                  }
+                },
+                {
+                  "type": "Decorator",
+                  "start":257,"end":278,"loc":{"start":{"line":9,"column":19,"index":257},"end":{"line":9,"column":40,"index":278}},
+                  "expression": {
+                    "type": "CallExpression",
+                    "start":258,"end":278,"loc":{"start":{"line":9,"column":20,"index":258},"end":{"line":9,"column":40,"index":278}},
+                    "callee": {
+                      "type": "MemberExpression",
+                      "start":258,"end":276,"loc":{"start":{"line":9,"column":20,"index":258},"end":{"line":9,"column":38,"index":276}},
+                      "object": {
+                        "type": "MemberExpression",
+                        "start":258,"end":264,"loc":{"start":{"line":9,"column":20,"index":258},"end":{"line":9,"column":26,"index":264}},
+                        "object": {
+                          "type": "Identifier",
+                          "start":258,"end":259,"loc":{"start":{"line":9,"column":20,"index":258},"end":{"line":9,"column":21,"index":259},"identifierName":"C"},
+                          "name": "C"
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "start":260,"end":264,"loc":{"start":{"line":9,"column":22,"index":260},"end":{"line":9,"column":26,"index":264},"identifierName":"self"},
+                          "name": "self"
+                        },
+                        "computed": false
+                      },
+                      "property": {
+                        "type": "PrivateName",
+                        "start":265,"end":276,"loc":{"start":{"line":9,"column":27,"index":265},"end":{"line":9,"column":38,"index":276}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":266,"end":276,"loc":{"start":{"line":9,"column":28,"index":266},"end":{"line":9,"column":38,"index":276},"identifierName":"decFactory"},
+                          "name": "decFactory"
+                        }
+                      },
+                      "computed": false
+                    },
+                    "arguments": []
+                  }
+                },
+                {
+                  "type": "Decorator",
+                  "start":279,"end":300,"loc":{"start":{"line":9,"column":41,"index":279},"end":{"line":9,"column":62,"index":300}},
+                  "expression": {
+                    "type": "CallExpression",
+                    "start":280,"end":300,"loc":{"start":{"line":9,"column":42,"index":280},"end":{"line":9,"column":62,"index":300}},
+                    "callee": {
+                      "type": "MemberExpression",
+                      "start":280,"end":298,"loc":{"start":{"line":9,"column":42,"index":280},"end":{"line":9,"column":60,"index":298}},
+                      "object": {
+                        "type": "MemberExpression",
+                        "start":280,"end":287,"loc":{"start":{"line":9,"column":42,"index":280},"end":{"line":9,"column":49,"index":287}},
+                        "object": {
+                          "type": "Identifier",
+                          "start":280,"end":281,"loc":{"start":{"line":9,"column":42,"index":280},"end":{"line":9,"column":43,"index":281},"identifierName":"C"},
+                          "name": "C"
+                        },
+                        "property": {
+                          "type": "PrivateName",
+                          "start":282,"end":287,"loc":{"start":{"line":9,"column":44,"index":282},"end":{"line":9,"column":49,"index":287}},
+                          "id": {
+                            "type": "Identifier",
+                            "start":283,"end":287,"loc":{"start":{"line":9,"column":45,"index":283},"end":{"line":9,"column":49,"index":287},"identifierName":"self"},
+                            "name": "self"
+                          }
+                        },
+                        "computed": false
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start":288,"end":298,"loc":{"start":{"line":9,"column":50,"index":288},"end":{"line":9,"column":60,"index":298},"identifierName":"decFactory"},
+                        "name": "decFactory"
+                      },
+                      "computed": false
+                    },
+                    "arguments": []
+                  }
+                },
+                {
+                  "type": "Decorator",
+                  "start":301,"end":323,"loc":{"start":{"line":9,"column":63,"index":301},"end":{"line":9,"column":85,"index":323}},
+                  "expression": {
+                    "type": "CallExpression",
+                    "start":302,"end":323,"loc":{"start":{"line":9,"column":64,"index":302},"end":{"line":9,"column":85,"index":323}},
+                    "callee": {
+                      "type": "MemberExpression",
+                      "start":302,"end":321,"loc":{"start":{"line":9,"column":64,"index":302},"end":{"line":9,"column":83,"index":321}},
+                      "object": {
+                        "type": "MemberExpression",
+                        "start":302,"end":309,"loc":{"start":{"line":9,"column":64,"index":302},"end":{"line":9,"column":71,"index":309}},
+                        "object": {
+                          "type": "Identifier",
+                          "start":302,"end":303,"loc":{"start":{"line":9,"column":64,"index":302},"end":{"line":9,"column":65,"index":303},"identifierName":"C"},
+                          "name": "C"
+                        },
+                        "property": {
+                          "type": "PrivateName",
+                          "start":304,"end":309,"loc":{"start":{"line":9,"column":66,"index":304},"end":{"line":9,"column":71,"index":309}},
+                          "id": {
+                            "type": "Identifier",
+                            "start":305,"end":309,"loc":{"start":{"line":9,"column":67,"index":305},"end":{"line":9,"column":71,"index":309},"identifierName":"self"},
+                            "name": "self"
+                          }
+                        },
+                        "computed": false
+                      },
+                      "property": {
+                        "type": "PrivateName",
+                        "start":310,"end":321,"loc":{"start":{"line":9,"column":72,"index":310},"end":{"line":9,"column":83,"index":321}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":311,"end":321,"loc":{"start":{"line":9,"column":73,"index":311},"end":{"line":9,"column":83,"index":321},"identifierName":"decFactory"},
+                          "name": "decFactory"
+                        }
+                      },
+                      "computed": false
+                    },
+                    "arguments": []
+                  }
+                }
+              ],
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":326,"end":327,"loc":{"start":{"line":10,"column":2,"index":326},"end":{"line":10,"column":3,"index":327},"identifierName":"m"},
+                "name": "m"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":330,"end":332,"loc":{"start":{"line":10,"column":6,"index":330},"end":{"line":10,"column":8,"index":332}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

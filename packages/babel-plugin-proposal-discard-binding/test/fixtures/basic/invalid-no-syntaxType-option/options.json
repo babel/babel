@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-discard-binding"],
+  "throws": "@babel/plugin-proposal-discard-binding: '.syntaxType' option required, representing the discard binding. Currently, the only supported value is 'void'."
+}

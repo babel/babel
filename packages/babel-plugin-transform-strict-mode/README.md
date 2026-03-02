@@ -2,7 +2,7 @@
 
 > This plugin places a 'use strict'; directive at the top of all files to enable strict mode
 
-See our website [@babel/plugin-transform-strict-mode](https://babeljs.io/docs/en/next/babel-plugin-transform-strict-mode.html) for more information.
+See our website [@babel/plugin-transform-strict-mode](https://babeljs.io/docs/babel-plugin-transform-strict-mode) for more information.
 
 ## Install
 

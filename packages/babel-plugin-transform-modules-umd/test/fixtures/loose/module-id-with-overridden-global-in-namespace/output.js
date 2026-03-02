@@ -16,6 +16,5 @@
 
   _exports.__esModule = true;
   _exports.default = void 0;
-  var _default = 42;
-  _exports.default = _default;
+  var _default = _exports.default = 42;
 });

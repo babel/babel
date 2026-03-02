@@ -1,14 +1,14 @@
 {
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "modules": false,
         "useBuiltIns": "entry",
         "targets": {
           "samsung": "8.2"
         },
-        "corejs": 3
+        "corejs": "3.0"
       }
     ]
   ]

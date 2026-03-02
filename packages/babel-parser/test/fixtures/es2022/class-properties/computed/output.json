@@ -1,0 +1,107 @@
+{
+  "type": "File",
+  "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":61}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":61}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":27}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":27,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":4,"column":1,"index":27}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":14,"end":17,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":5,"index":17}},
+              "static": false,
+              "computed": true,
+              "key": {
+                "type": "Identifier",
+                "start":15,"end":16,"loc":{"start":{"line":2,"column":3,"index":15},"end":{"line":2,"column":4,"index":16},"identifierName":"x"},
+                "name": "x"
+              },
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":20,"end":25,"loc":{"start":{"line":3,"column":2,"index":20},"end":{"line":3,"column":7,"index":25}},
+              "static": false,
+              "computed": true,
+              "key": {
+                "type": "StringLiteral",
+                "start":21,"end":24,"loc":{"start":{"line":3,"column":3,"index":21},"end":{"line":3,"column":6,"index":24}},
+                "extra": {
+                  "rawValue": "y",
+                  "raw": "'y'"
+                },
+                "value": "y"
+              },
+              "value": null
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":29,"end":61,"loc":{"start":{"line":6,"column":0,"index":29},"end":{"line":9,"column":1,"index":61}},
+        "id": {
+          "type": "Identifier",
+          "start":35,"end":39,"loc":{"start":{"line":6,"column":6,"index":35},"end":{"line":6,"column":10,"index":39},"identifierName":"Foo2"},
+          "name": "Foo2"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":40,"end":61,"loc":{"start":{"line":6,"column":11,"index":40},"end":{"line":9,"column":1,"index":61}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":44,"end":47,"loc":{"start":{"line":7,"column":2,"index":44},"end":{"line":7,"column":5,"index":47}},
+              "static": false,
+              "computed": true,
+              "key": {
+                "type": "Identifier",
+                "start":45,"end":46,"loc":{"start":{"line":7,"column":3,"index":45},"end":{"line":7,"column":4,"index":46},"identifierName":"p"},
+                "name": "p"
+              },
+              "value": null
+            },
+            {
+              "type": "ClassMethod",
+              "start":50,"end":59,"loc":{"start":{"line":8,"column":2,"index":50},"end":{"line":8,"column":11,"index":59}},
+              "static": false,
+              "computed": true,
+              "key": {
+                "type": "Identifier",
+                "start":51,"end":52,"loc":{"start":{"line":8,"column":3,"index":51},"end":{"line":8,"column":4,"index":52},"identifierName":"m"},
+                "name": "m"
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":57,"end":59,"loc":{"start":{"line":8,"column":9,"index":57},"end":{"line":8,"column":11,"index":59}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

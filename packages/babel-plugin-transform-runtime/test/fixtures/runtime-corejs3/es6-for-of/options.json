@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "transform-for-of",
-    ["transform-runtime", { "corejs": 3, "version": "7.100.0" }]
-  ]
-}

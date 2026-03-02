@@ -1,5 +1,7 @@
-import traverse from "../lib";
 import { parse } from "@babel/parser";
+
+import _traverse from "../lib/index.js";
+const traverse = _traverse.default || _traverse;
 
 function getPath(code, options = { sourceType: "script" }) {
   const ast = parse(code, options);
@@ -98,6 +100,133 @@ describe("path/introspection", function () {
         param = program.get("body.0.params.0");
         expect(param.isInStrictMode()).toBeTruthy();
       });
+    });
+  });
+
+  describe("referencesImport", function () {
+    it("accepts a default import", function () {
+      const program = getPath(`import dep from "source"; dep;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "default")).toBe(true);
+    });
+    it("rejects a default import from the wrong module", function () {
+      const program = getPath(`import dep from "wrong-source"; dep;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "default")).toBe(false);
+    });
+    it("rejects a named instead of default import", function () {
+      const program = getPath(`import { dep } from "source"; dep;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "default")).toBe(false);
+    });
+
+    it("accepts a named import", function () {
+      const program = getPath(`import { dep } from "source"; dep;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "dep")).toBe(true);
+    });
+    it("accepts an aliased named import", function () {
+      const program = getPath(`import { dep as alias } from "source"; alias;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "dep")).toBe(true);
+    });
+    it("accepts a named import via a namespace import member expression", function () {
+      const program = getPath(`import * as ns from "source"; ns.dep;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "dep")).toBe(true);
+    });
+    it("accepts a named import via a namespace import optional member expression", function () {
+      const program = getPath(`import * as ns from "source"; ns?.dep;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "dep")).toBe(true);
+    });
+    it("accepts a named import via a namespace import computed member expression", function () {
+      const program = getPath(`import * as ns from "source"; ns["😅"];`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "😅")).toBe(true);
+    });
+    it("accepts a named import via a namespace import jsx member expression", function () {
+      const program = getPath(`import * as ns from "source"; <ns.dep />;`, {
+        sourceType: "module",
+        plugins: ["jsx"],
+      });
+      const reference = program.get("body.1.expression.openingElement.name");
+      expect(reference.referencesImport("source", "dep")).toBe(true);
+    });
+    it("rejects a named import from the wrong module", function () {
+      const program = getPath(`import { dep } from "wrong-source"; dep;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "dep")).toBe(false);
+    });
+    it("rejects a default instead of named import", function () {
+      const program = getPath(`import dep from "source"; dep;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "dep")).toBe(false);
+    });
+    it('rejects the "export called *" trick', function () {
+      const program = getPath(`import * as ns from "source"; ns["*"].nested;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "nested")).toBe(false);
+    });
+
+    it("accepts a namespace import", function () {
+      const program = getPath(`import * as dep from "source"; dep;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "*")).toBe(true);
+    });
+    it("rejects a namespace import from the wrong module", function () {
+      const program = getPath(`import * as dep from "wrong-source"; dep;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "*")).toBe(false);
+    });
+    it("rejects a default instead of a namespace import", () => {
+      const program = getPath(`import dep from "source"; dep;`, {
+        sourceType: "module",
+      });
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("source", "*")).toBe(false);
+    });
+  });
+
+  describe("_guessExecutionStatusRelativeTo", function () {
+    it("works with paths in function expressions", () => {
+      const program = getPath(`
+        a;
+        f(() => b);
+        c;
+      `);
+      const a = program.get("body.0.expression");
+      const b = program.get("body.1.expression.arguments.0.body");
+      const c = program.get("body.2.expression");
+
+      expect(a._guessExecutionStatusRelativeTo(b)).toBe("before");
+      expect(c._guessExecutionStatusRelativeTo(b)).toBe("unknown");
     });
   });
 });

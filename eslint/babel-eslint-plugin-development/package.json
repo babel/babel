@@ -1,24 +1,24 @@
 {
   "name": "@babel/eslint-plugin-development",
-  "version": "1.0.1",
+  "version": "8.0.0-rc.2",
   "description": "ESLint rules that enforce best practices in the development of Babel plugins.",
-  "private": true,
   "keywords": [
     "eslint",
     "eslintplugin",
     "eslint-plugin"
   ],
-  "author": {
-    "name": "Nicolò Ribaudo",
-    "email": "nicolo.ribaudo@gmail.com",
-    "url": "https://github.com/nicolo-ribaudo"
-  },
-  "main": "lib/index.js",
-  "devDependencies": {
-    "eslint": "^5.9.0"
+  "author": "The Babel Team (https://babel.dev/team)",
+  "main": "./lib/index.cjs",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./lib/index.cjs",
+      "types": "./types.d.cts"
+    },
+    "./package.json": "./package.json"
   },
   "engines": {
-    "node": ">=10.9"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "publishConfig": {
     "access": "public"
@@ -32,5 +32,8 @@
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin-development"
+  "homepage": "https://babel.dev/",
+  "devDependencies": {
+    "eslint": "^10.0.0"
+  }
 }

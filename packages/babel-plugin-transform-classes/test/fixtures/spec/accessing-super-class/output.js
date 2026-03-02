@@ -1,48 +1,32 @@
 var Test = /*#__PURE__*/function (_Foo) {
   "use strict";
 
-  babelHelpers.inherits(Test, _Foo);
-
-  var _super = babelHelpers.createSuper(Test);
-
   function Test() {
-    var _babelHelpers$get;
-
-    var _thisSuper, _thisSuper2, _thisSuper3, _this;
-
+    var _this;
     babelHelpers.classCallCheck(this, Test);
     woops.super.test();
-    _this = _super.call(this);
-    babelHelpers.get((_thisSuper = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper).call(_thisSuper);
-    _this = _super.apply(this, arguments);
-    _this = _super.call.apply(_super, [this, "test"].concat(Array.prototype.slice.call(arguments)));
-    babelHelpers.get((_thisSuper2 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper2).apply(_thisSuper2, arguments);
-
-    (_babelHelpers$get = babelHelpers.get((_thisSuper3 = babelHelpers.assertThisInitialized(_this), babelHelpers.getPrototypeOf(Test.prototype)), "test", _thisSuper3)).call.apply(_babelHelpers$get, [_thisSuper3, "test"].concat(Array.prototype.slice.call(arguments)));
-
+    _this = babelHelpers.callSuper(this, Test);
+    babelHelpers.superPropGet((_this, Test), "test", _this, 3)([]);
+    _this = babelHelpers.callSuper(this, Test, arguments);
+    _this = babelHelpers.callSuper(this, Test, ["test"].concat(Array.prototype.slice.call(arguments)));
+    babelHelpers.superPropGet((_this, Test), "test", _this, 3)(arguments);
+    babelHelpers.superPropGet((_this, Test), "test", _this, 3)(["test"].concat(Array.prototype.slice.call(arguments)));
     return _this;
   }
-
-  babelHelpers.createClass(Test, [{
+  babelHelpers.inherits(Test, _Foo);
+  return babelHelpers.createClass(Test, [{
     key: "test",
     value: function test() {
-      var _babelHelpers$get2;
-
-      babelHelpers.get(babelHelpers.getPrototypeOf(Test.prototype), "test", this).call(this);
-      babelHelpers.get(babelHelpers.getPrototypeOf(Test.prototype), "test", this).apply(this, arguments);
-
-      (_babelHelpers$get2 = babelHelpers.get(babelHelpers.getPrototypeOf(Test.prototype), "test", this)).call.apply(_babelHelpers$get2, [this, "test"].concat(Array.prototype.slice.call(arguments)));
+      babelHelpers.superPropGet(Test, "test", this, 3)([]);
+      babelHelpers.superPropGet(Test, "test", this, 3)(arguments);
+      babelHelpers.superPropGet(Test, "test", this, 3)(["test"].concat(Array.prototype.slice.call(arguments)));
     }
   }], [{
     key: "foo",
     value: function foo() {
-      var _babelHelpers$get3;
-
-      babelHelpers.get(babelHelpers.getPrototypeOf(Test), "foo", this).call(this);
-      babelHelpers.get(babelHelpers.getPrototypeOf(Test), "foo", this).apply(this, arguments);
-
-      (_babelHelpers$get3 = babelHelpers.get(babelHelpers.getPrototypeOf(Test), "foo", this)).call.apply(_babelHelpers$get3, [this, "test"].concat(Array.prototype.slice.call(arguments)));
+      babelHelpers.superPropGet(Test, "foo", this, 2)([]);
+      babelHelpers.superPropGet(Test, "foo", this, 2)(arguments);
+      babelHelpers.superPropGet(Test, "foo", this, 2)(["test"].concat(Array.prototype.slice.call(arguments)));
     }
   }]);
-  return Test;
 }(Foo);

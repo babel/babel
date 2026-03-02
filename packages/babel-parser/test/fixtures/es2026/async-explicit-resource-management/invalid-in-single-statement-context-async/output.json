@@ -1,0 +1,235 @@
+{
+  "type": "File",
+  "start":0,"end":216,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":216}},
+  "errors": [
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (2:12)",
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (3:11)",
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (4:5)",
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (5:9)",
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (6:11)",
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (7:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":216,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":216}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":216,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":216}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":216,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":8,"column":1,"index":216}},
+          "body": [
+            {
+              "type": "WhileStatement",
+              "start":23,"end":53,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":32,"index":53}},
+              "test": {
+                "type": "NumericLiteral",
+                "start":30,"end":31,"loc":{"start":{"line":2,"column":9,"index":30},"end":{"line":2,"column":10,"index":31}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              },
+              "body": {
+                "type": "VariableDeclaration",
+                "start":33,"end":53,"loc":{"start":{"line":2,"column":12,"index":33},"end":{"line":2,"column":32,"index":53}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":45,"end":52,"loc":{"start":{"line":2,"column":24,"index":45},"end":{"line":2,"column":31,"index":52}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":45,"end":46,"loc":{"start":{"line":2,"column":24,"index":45},"end":{"line":2,"column":25,"index":46},"identifierName":"a"},
+                      "name": "a"
+                    },
+                    "init": {
+                      "type": "Identifier",
+                      "start":49,"end":52,"loc":{"start":{"line":2,"column":28,"index":49},"end":{"line":2,"column":31,"index":52},"identifierName":"foo"},
+                      "name": "foo"
+                    }
+                  }
+                ],
+                "kind": "await using"
+              }
+            },
+            {
+              "type": "ForStatement",
+              "start":56,"end":85,"loc":{"start":{"line":3,"column":2,"index":56},"end":{"line":3,"column":31,"index":85}},
+              "init": null,
+              "test": null,
+              "update": null,
+              "body": {
+                "type": "VariableDeclaration",
+                "start":65,"end":85,"loc":{"start":{"line":3,"column":11,"index":65},"end":{"line":3,"column":31,"index":85}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":77,"end":84,"loc":{"start":{"line":3,"column":23,"index":77},"end":{"line":3,"column":30,"index":84}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":77,"end":78,"loc":{"start":{"line":3,"column":23,"index":77},"end":{"line":3,"column":24,"index":78},"identifierName":"b"},
+                      "name": "b"
+                    },
+                    "init": {
+                      "type": "Identifier",
+                      "start":81,"end":84,"loc":{"start":{"line":3,"column":27,"index":81},"end":{"line":3,"column":30,"index":84},"identifierName":"foo"},
+                      "name": "foo"
+                    }
+                  }
+                ],
+                "kind": "await using"
+              }
+            },
+            {
+              "type": "DoWhileStatement",
+              "start":88,"end":122,"loc":{"start":{"line":4,"column":2,"index":88},"end":{"line":4,"column":36,"index":122}},
+              "body": {
+                "type": "VariableDeclaration",
+                "start":91,"end":111,"loc":{"start":{"line":4,"column":5,"index":91},"end":{"line":4,"column":25,"index":111}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":103,"end":110,"loc":{"start":{"line":4,"column":17,"index":103},"end":{"line":4,"column":24,"index":110}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":103,"end":104,"loc":{"start":{"line":4,"column":17,"index":103},"end":{"line":4,"column":18,"index":104},"identifierName":"c"},
+                      "name": "c"
+                    },
+                    "init": {
+                      "type": "Identifier",
+                      "start":107,"end":110,"loc":{"start":{"line":4,"column":21,"index":107},"end":{"line":4,"column":24,"index":110},"identifierName":"foo"},
+                      "name": "foo"
+                    }
+                  }
+                ],
+                "kind": "await using"
+              },
+              "test": {
+                "type": "NumericLiteral",
+                "start":119,"end":120,"loc":{"start":{"line":4,"column":33,"index":119},"end":{"line":4,"column":34,"index":120}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "IfStatement",
+              "start":125,"end":152,"loc":{"start":{"line":5,"column":2,"index":125},"end":{"line":5,"column":29,"index":152}},
+              "test": {
+                "type": "NumericLiteral",
+                "start":129,"end":130,"loc":{"start":{"line":5,"column":6,"index":129},"end":{"line":5,"column":7,"index":130}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              },
+              "consequent": {
+                "type": "VariableDeclaration",
+                "start":132,"end":152,"loc":{"start":{"line":5,"column":9,"index":132},"end":{"line":5,"column":29,"index":152}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":144,"end":151,"loc":{"start":{"line":5,"column":21,"index":144},"end":{"line":5,"column":28,"index":151}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":144,"end":145,"loc":{"start":{"line":5,"column":21,"index":144},"end":{"line":5,"column":22,"index":145},"identifierName":"d"},
+                      "name": "d"
+                    },
+                    "init": {
+                      "type": "Identifier",
+                      "start":148,"end":151,"loc":{"start":{"line":5,"column":25,"index":148},"end":{"line":5,"column":28,"index":151},"identifierName":"foo"},
+                      "name": "foo"
+                    }
+                  }
+                ],
+                "kind": "await using"
+              },
+              "alternate": null
+            },
+            {
+              "type": "WithStatement",
+              "start":155,"end":184,"loc":{"start":{"line":6,"column":2,"index":155},"end":{"line":6,"column":31,"index":184}},
+              "object": {
+                "type": "NumericLiteral",
+                "start":161,"end":162,"loc":{"start":{"line":6,"column":8,"index":161},"end":{"line":6,"column":9,"index":162}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              },
+              "body": {
+                "type": "VariableDeclaration",
+                "start":164,"end":184,"loc":{"start":{"line":6,"column":11,"index":164},"end":{"line":6,"column":31,"index":184}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":176,"end":183,"loc":{"start":{"line":6,"column":23,"index":176},"end":{"line":6,"column":30,"index":183}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":176,"end":177,"loc":{"start":{"line":6,"column":23,"index":176},"end":{"line":6,"column":24,"index":177},"identifierName":"e"},
+                      "name": "e"
+                    },
+                    "init": {
+                      "type": "Identifier",
+                      "start":180,"end":183,"loc":{"start":{"line":6,"column":27,"index":180},"end":{"line":6,"column":30,"index":183},"identifierName":"foo"},
+                      "name": "foo"
+                    }
+                  }
+                ],
+                "kind": "await using"
+              }
+            },
+            {
+              "type": "LabeledStatement",
+              "start":187,"end":214,"loc":{"start":{"line":7,"column":2,"index":187},"end":{"line":7,"column":29,"index":214}},
+              "body": {
+                "type": "VariableDeclaration",
+                "start":194,"end":214,"loc":{"start":{"line":7,"column":9,"index":194},"end":{"line":7,"column":29,"index":214}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":206,"end":213,"loc":{"start":{"line":7,"column":21,"index":206},"end":{"line":7,"column":28,"index":213}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":206,"end":207,"loc":{"start":{"line":7,"column":21,"index":206},"end":{"line":7,"column":22,"index":207},"identifierName":"f"},
+                      "name": "f"
+                    },
+                    "init": {
+                      "type": "Identifier",
+                      "start":210,"end":213,"loc":{"start":{"line":7,"column":25,"index":210},"end":{"line":7,"column":28,"index":213},"identifierName":"foo"},
+                      "name": "foo"
+                    }
+                  }
+                ],
+                "kind": "await using"
+              },
+              "label": {
+                "type": "Identifier",
+                "start":187,"end":192,"loc":{"start":{"line":7,"column":2,"index":187},"end":{"line":7,"column":7,"index":192},"identifierName":"label"},
+                "name": "label"
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

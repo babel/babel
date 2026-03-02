@@ -21,7 +21,7 @@ Object.defineProperty(Obj.prototype, 'test', {
 const obj = new Obj();
 expect(() => {
   obj.set();
-}).toThrow();
+}).toThrow(TypeError);
 expect(called).toBe(false);
 expect(Base.prototype.test).toBe(1);
 expect(Obj.prototype.test).toBe(2);

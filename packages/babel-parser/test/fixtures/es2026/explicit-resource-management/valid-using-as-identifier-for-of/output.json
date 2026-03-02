@@ -1,0 +1,144 @@
+{
+  "type": "File",
+  "start":0,"end":91,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":24,"index":91}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":91,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":24,"index":91}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "await": false,
+        "left": {
+          "type": "Identifier",
+          "start":5,"end":10,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":10,"index":10},"identifierName":"using"},
+          "name": "using"
+        },
+        "right": {
+          "type": "Identifier",
+          "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16},"identifierName":"of"},
+          "name": "of"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18}}
+        }
+      },
+      {
+        "type": "ForOfStatement",
+        "start":19,"end":41,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":22,"index":41}},
+        "await": false,
+        "left": {
+          "type": "MemberExpression",
+          "start":24,"end":33,"loc":{"start":{"line":2,"column":5,"index":24},"end":{"line":2,"column":14,"index":33}},
+          "object": {
+            "type": "Identifier",
+            "start":24,"end":29,"loc":{"start":{"line":2,"column":5,"index":24},"end":{"line":2,"column":10,"index":29},"identifierName":"using"},
+            "name": "using"
+          },
+          "computed": false,
+          "property": {
+            "type": "Identifier",
+            "start":30,"end":33,"loc":{"start":{"line":2,"column":11,"index":30},"end":{"line":2,"column":14,"index":33},"identifierName":"foo"},
+            "name": "foo"
+          }
+        },
+        "right": {
+          "type": "Identifier",
+          "start":37,"end":39,"loc":{"start":{"line":2,"column":18,"index":37},"end":{"line":2,"column":20,"index":39},"identifierName":"of"},
+          "name": "of"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":40,"end":41,"loc":{"start":{"line":2,"column":21,"index":40},"end":{"line":2,"column":22,"index":41}}
+        }
+      },
+      {
+        "type": "ForOfStatement",
+        "start":42,"end":66,"loc":{"start":{"line":3,"column":0,"index":42},"end":{"line":3,"column":24,"index":66}},
+        "await": false,
+        "left": {
+          "type": "MemberExpression",
+          "start":47,"end":58,"loc":{"start":{"line":3,"column":5,"index":47},"end":{"line":3,"column":16,"index":58}},
+          "object": {
+            "type": "CallExpression",
+            "start":47,"end":54,"loc":{"start":{"line":3,"column":5,"index":47},"end":{"line":3,"column":12,"index":54}},
+            "callee": {
+              "type": "Identifier",
+              "start":47,"end":52,"loc":{"start":{"line":3,"column":5,"index":47},"end":{"line":3,"column":10,"index":52},"identifierName":"using"},
+              "name": "using"
+            },
+            "arguments": []
+          },
+          "computed": false,
+          "property": {
+            "type": "Identifier",
+            "start":55,"end":58,"loc":{"start":{"line":3,"column":13,"index":55},"end":{"line":3,"column":16,"index":58},"identifierName":"foo"},
+            "name": "foo"
+          }
+        },
+        "right": {
+          "type": "Identifier",
+          "start":62,"end":64,"loc":{"start":{"line":3,"column":20,"index":62},"end":{"line":3,"column":22,"index":64},"identifierName":"of"},
+          "name": "of"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":65,"end":66,"loc":{"start":{"line":3,"column":23,"index":65},"end":{"line":3,"column":24,"index":66}}
+        }
+      },
+      {
+        "type": "ForOfStatement",
+        "start":67,"end":91,"loc":{"start":{"line":4,"column":0,"index":67},"end":{"line":4,"column":24,"index":91}},
+        "await": false,
+        "left": {
+          "type": "MemberExpression",
+          "start":72,"end":83,"loc":{"start":{"line":4,"column":5,"index":72},"end":{"line":4,"column":16,"index":83}},
+          "object": {
+            "type": "TaggedTemplateExpression",
+            "start":72,"end":79,"loc":{"start":{"line":4,"column":5,"index":72},"end":{"line":4,"column":12,"index":79}},
+            "tag": {
+              "type": "Identifier",
+              "start":72,"end":77,"loc":{"start":{"line":4,"column":5,"index":72},"end":{"line":4,"column":10,"index":77},"identifierName":"using"},
+              "name": "using"
+            },
+            "quasi": {
+              "type": "TemplateLiteral",
+              "start":77,"end":79,"loc":{"start":{"line":4,"column":10,"index":77},"end":{"line":4,"column":12,"index":79}},
+              "expressions": [],
+              "quasis": [
+                {
+                  "type": "TemplateElement",
+                  "start":78,"end":78,"loc":{"start":{"line":4,"column":11,"index":78},"end":{"line":4,"column":11,"index":78}},
+                  "value": {
+                    "raw": "",
+                    "cooked": ""
+                  },
+                  "tail": true
+                }
+              ]
+            }
+          },
+          "computed": false,
+          "property": {
+            "type": "Identifier",
+            "start":80,"end":83,"loc":{"start":{"line":4,"column":13,"index":80},"end":{"line":4,"column":16,"index":83},"identifierName":"foo"},
+            "name": "foo"
+          }
+        },
+        "right": {
+          "type": "Identifier",
+          "start":87,"end":89,"loc":{"start":{"line":4,"column":20,"index":87},"end":{"line":4,"column":22,"index":89},"identifierName":"of"},
+          "name": "of"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":90,"end":91,"loc":{"start":{"line":4,"column":23,"index":90},"end":{"line":4,"column":24,"index":91}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

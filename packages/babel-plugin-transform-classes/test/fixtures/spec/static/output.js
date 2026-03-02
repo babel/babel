@@ -4,8 +4,7 @@ var A = /*#__PURE__*/function () {
   function A() {
     babelHelpers.classCallCheck(this, A);
   }
-
-  babelHelpers.createClass(A, null, [{
+  return babelHelpers.createClass(A, null, [{
     key: "a",
     value: function a() {}
   }, {
@@ -13,5 +12,4 @@ var A = /*#__PURE__*/function () {
     get: function get() {},
     set: function set(b) {}
   }]);
-  return A;
 }();

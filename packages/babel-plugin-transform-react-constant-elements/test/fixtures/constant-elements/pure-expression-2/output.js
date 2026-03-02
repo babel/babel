@@ -1,7 +1,6 @@
 function render(offset) {
-  var _ref = <div tabIndex={offset + 1} />;
-
+  var _div;
   return function () {
-    return _ref;
+    return _div || (_div = <div tabIndex={offset + 1} />);
   };
 }

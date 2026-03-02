@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":30,"index":30}},
+  "errors": [
+    "SyntaxError: Invalid parenthesized assignment pattern. (1:18)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":30,"index":30}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":30,"index":30}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":29,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":29,"index":29}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start":10,"end":29,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":29,"index":29}},
+              "id": null,
+              "generator": false,
+              "async": true,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":18,"end":21,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":21,"index":21},"identifierName":"foo"},
+                  "name": "foo",
+                  "extra": {
+                    "parenthesized": true,
+                    "parenStart": 17
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":27,"end":29,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":29,"index":29}},
+                "body": [],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

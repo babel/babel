@@ -1,0 +1,3 @@
+{
+  "plugins": ["estree", "decorators-legacy"]
+}

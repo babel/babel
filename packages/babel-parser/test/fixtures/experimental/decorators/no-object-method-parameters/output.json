@@ -1,0 +1,77 @@
+{
+  "type": "File",
+  "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":34}},
+  "errors": [
+    "SyntaxError: Decorators cannot be used to decorate parameters. (2:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":34}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":34}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":33,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":3,"column":1,"index":33}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"obj"},
+              "name": "obj"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":10,"end":33,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":1,"index":33}},
+              "properties": [
+                {
+                  "type": "ObjectMethod",
+                  "start":14,"end":31,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":19,"index":31}},
+                  "method": true,
+                  "key": {
+                    "type": "Identifier",
+                    "start":14,"end":20,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":8,"index":20},"identifierName":"method"},
+                    "name": "method"
+                  },
+                  "computed": false,
+                  "kind": "method",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "start":21,"end":27,"loc":{"start":{"line":2,"column":9,"index":21},"end":{"line":2,"column":15,"index":27},"identifierName":"x"},
+                      "name": "x",
+                      "decorators": [
+                        {
+                          "type": "Decorator",
+                          "start":21,"end":25,"loc":{"start":{"line":2,"column":9,"index":21},"end":{"line":2,"column":13,"index":25}},
+                          "expression": {
+                            "type": "Identifier",
+                            "start":22,"end":25,"loc":{"start":{"line":2,"column":10,"index":22},"end":{"line":2,"column":13,"index":25},"identifierName":"foo"},
+                            "name": "foo"
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":29,"end":31,"loc":{"start":{"line":2,"column":17,"index":29},"end":{"line":2,"column":19,"index":31}},
+                    "body": [],
+                    "directives": []
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

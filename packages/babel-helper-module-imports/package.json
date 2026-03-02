@@ -1,9 +1,9 @@
 {
   "name": "@babel/helper-module-imports",
-  "version": "7.10.1",
+  "version": "8.0.0-rc.2",
   "description": "Babel helper functions for inserting module loads",
-  "author": "Logan Smyth <loganfsmyth@gmail.com>",
-  "homepage": "https://babeljs.io/",
+  "author": "The Babel Team (https://babel.dev/team)",
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-module-imports",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -13,11 +13,23 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-module-imports"
   },
-  "main": "lib/index.js",
+  "main": "./lib/index.js",
   "dependencies": {
-    "@babel/types": "^7.10.1"
+    "@babel/traverse": "workspace:^",
+    "@babel/types": "workspace:^"
   },
   "devDependencies": {
-    "@babel/core": "^7.10.1"
-  }
+    "@babel/core": "workspace:^"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "type": "module"
 }

@@ -2,7 +2,7 @@
 
 > Explode async and generator functions into a state machine.
 
-See our website [@babel/plugin-transform-regenerator](https://babeljs.io/docs/en/next/babel-plugin-transform-regenerator.html) for more information.
+See our website [@babel/plugin-transform-regenerator](https://babeljs.io/docs/babel-plugin-transform-regenerator) for more information.
 
 ## Install
 

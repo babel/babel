@@ -1,6 +1,10 @@
-import "core-js/modules/es.array.iterator";
-import "core-js/modules/es.object.to-string";
-import "core-js/modules/es.typed-array.int8-array";
-import "core-js/modules/es.typed-array.includes";
-import "core-js/modules/es.typed-array.to-locale-string";
+import "core-js/modules/es.array.iterator.js";
+import "core-js/modules/es.array-buffer.constructor.js";
+import "core-js/modules/es.object.to-string.js";
+import "core-js/modules/es.typed-array.int8-array.js";
+import "core-js/modules/es.typed-array.fill.js";
+import "core-js/modules/es.typed-array.includes.js";
+import "core-js/modules/es.typed-array.set.js";
+import "core-js/modules/es.typed-array.sort.js";
+import "core-js/modules/es.typed-array.to-locale-string.js";
 new Int8Array(1);

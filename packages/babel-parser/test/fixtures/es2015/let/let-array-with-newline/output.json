@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":14,"index":29}},
+  "errors": [
+    "SyntaxError: Lexical declaration cannot appear in a single-statement context. (1:3)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":14,"index":29}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DoWhileStatement",
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":14,"index":29}},
+        "body": {
+          "type": "VariableDeclaration",
+          "start":3,"end":14,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":2,"column":7,"index":14}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":7,"end":14,"loc":{"start":{"line":2,"column":0,"index":7},"end":{"line":2,"column":7,"index":14}},
+              "id": {
+                "type": "ArrayPattern",
+                "start":7,"end":10,"loc":{"start":{"line":2,"column":0,"index":7},"end":{"line":2,"column":3,"index":10}},
+                "elements": [
+                  {
+                    "type": "Identifier",
+                    "start":8,"end":9,"loc":{"start":{"line":2,"column":1,"index":8},"end":{"line":2,"column":2,"index":9},"identifierName":"x"},
+                    "name": "x"
+                  }
+                ]
+              },
+              "init": {
+                "type": "NumericLiteral",
+                "start":13,"end":14,"loc":{"start":{"line":2,"column":6,"index":13},"end":{"line":2,"column":7,"index":14}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            }
+          ],
+          "kind": "let"
+        },
+        "test": {
+          "type": "BooleanLiteral",
+          "start":22,"end":27,"loc":{"start":{"line":3,"column":7,"index":22},"end":{"line":3,"column":12,"index":27}},
+          "value": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

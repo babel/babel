@@ -1,9 +1,6 @@
 "use strict";
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
-
 let Base = function Base() {};
-
 Object.defineProperty(Base.prototype, 0, {
   value: 0,
   writable: true,
@@ -19,33 +16,23 @@ const proper = {
   get prop() {
     return i++;
   }
-
 };
-
 let Obj = /*#__PURE__*/function (_Base) {
-  _inheritsLoose(Obj, _Base);
-
   function Obj() {
     return _Base.apply(this, arguments) || this;
   }
-
+  babelHelpers.inheritsLoose(Obj, _Base);
   var _proto = Obj.prototype;
-
   _proto.assign = function assign() {
     var _proper$prop;
-
     this[_proper$prop = proper.prop] = _Base.prototype[_proper$prop] + 1;
   };
-
   _proto.assign2 = function assign2() {
     var _i;
-
     this[_i = i] = _Base.prototype[_i] + 1;
   };
-
   return Obj;
 }(Base);
-
 const obj = new Obj();
 obj.assign();
 expect(i).toBe(1);

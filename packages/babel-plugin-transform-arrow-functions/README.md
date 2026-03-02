@@ -2,7 +2,7 @@
 
 > Compile ES2015 arrow functions to ES5
 
-See our website [@babel/plugin-transform-arrow-functions](https://babeljs.io/docs/en/next/babel-plugin-transform-arrow-functions.html) for more information.
+See our website [@babel/plugin-transform-arrow-functions](https://babeljs.io/docs/babel-plugin-transform-arrow-functions) for more information.
 
 ## Install
 

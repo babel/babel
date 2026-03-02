@@ -1,0 +1,110 @@
+{
+  "type": "File",
+  "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":45,"index":59}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'implements'. (2:11)",
+    "SyntaxError: Unexpected reserved word 'interface'. (2:23)",
+    "SyntaxError: Unexpected reserved word 'package'. (2:34)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":45,"index":59}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":14,"end":59,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":45,"index":59}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":18,"end":58,"loc":{"start":{"line":2,"column":4,"index":18},"end":{"line":2,"column":44,"index":58}},
+            "id": {
+              "type": "Identifier",
+              "start":18,"end":19,"loc":{"start":{"line":2,"column":4,"index":18},"end":{"line":2,"column":5,"index":19},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":23,"end":57,"loc":{"start":{"line":2,"column":9,"index":23},"end":{"line":2,"column":43,"index":57}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":25,"end":35,"loc":{"start":{"line":2,"column":11,"index":25},"end":{"line":2,"column":21,"index":35}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":25,"end":35,"loc":{"start":{"line":2,"column":11,"index":25},"end":{"line":2,"column":21,"index":35},"identifierName":"implements"},
+                    "name": "implements"
+                  },
+                  "computed": false,
+                  "shorthand": true,
+                  "value": {
+                    "type": "Identifier",
+                    "start":25,"end":35,"loc":{"start":{"line":2,"column":11,"index":25},"end":{"line":2,"column":21,"index":35},"identifierName":"implements"},
+                    "name": "implements"
+                  }
+                },
+                {
+                  "type": "ObjectProperty",
+                  "start":37,"end":46,"loc":{"start":{"line":2,"column":23,"index":37},"end":{"line":2,"column":32,"index":46}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":37,"end":46,"loc":{"start":{"line":2,"column":23,"index":37},"end":{"line":2,"column":32,"index":46},"identifierName":"interface"},
+                    "name": "interface"
+                  },
+                  "computed": false,
+                  "shorthand": true,
+                  "value": {
+                    "type": "Identifier",
+                    "start":37,"end":46,"loc":{"start":{"line":2,"column":23,"index":37},"end":{"line":2,"column":32,"index":46},"identifierName":"interface"},
+                    "name": "interface"
+                  }
+                },
+                {
+                  "type": "ObjectProperty",
+                  "start":48,"end":55,"loc":{"start":{"line":2,"column":34,"index":48},"end":{"line":2,"column":41,"index":55}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":48,"end":55,"loc":{"start":{"line":2,"column":34,"index":48},"end":{"line":2,"column":41,"index":55},"identifierName":"package"},
+                    "name": "package"
+                  },
+                  "computed": false,
+                  "shorthand": true,
+                  "value": {
+                    "type": "Identifier",
+                    "start":48,"end":55,"loc":{"start":{"line":2,"column":34,"index":48},"end":{"line":2,"column":41,"index":55},"identifierName":"package"},
+                    "name": "package"
+                  }
+                }
+              ],
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 22
+              }
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}

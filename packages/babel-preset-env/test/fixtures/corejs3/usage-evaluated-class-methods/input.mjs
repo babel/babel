@@ -3,7 +3,7 @@ var arrayInstance = [];
 var assignStr = "assign";
 var entriesStr = "entries";
 var valuesStr = "values";
-var inclidesStr = "includes";
+var includesStr = "includes";
 var findStr = "find";
 
 // Allow static methods be assigned to variables only directly in the module.

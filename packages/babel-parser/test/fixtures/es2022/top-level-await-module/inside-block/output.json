@@ -1,0 +1,50 @@
+{
+  "type": "File",
+  "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":24}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":24}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":24}},
+        "test": {
+          "type": "BooleanLiteral",
+          "start":4,"end":8,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":8,"index":8}},
+          "value": true
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "start":10,"end":24,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":1,"index":24}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":14,"end":22,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":10,"index":22}},
+              "expression": {
+                "type": "AwaitExpression",
+                "start":14,"end":21,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":9,"index":21}},
+                "argument": {
+                  "type": "NumericLiteral",
+                  "start":20,"end":21,"loc":{"start":{"line":2,"column":8,"index":20},"end":{"line":2,"column":9,"index":21}},
+                  "extra": {
+                    "rawValue": 0,
+                    "raw": "0"
+                  },
+                  "value": 0
+                }
+              }
+            }
+          ],
+          "directives": []
+        },
+        "alternate": null
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": true
+    }
+  }
+}

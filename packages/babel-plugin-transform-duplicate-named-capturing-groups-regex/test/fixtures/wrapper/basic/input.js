@@ -1,0 +1,1 @@
+"foo".match(/(?<double>.)\k<double>/);

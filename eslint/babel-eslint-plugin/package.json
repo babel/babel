@@ -1,8 +1,20 @@
 {
   "name": "@babel/eslint-plugin",
-  "version": "0.0.0",
+  "version": "8.0.0-rc.2",
   "description": "Companion rules for @babel/eslint-parser",
-  "main": "lib/index.js",
+  "main": "./lib/index.cjs",
+  "type": "module",
+  "types": "./types.d.cts",
+  "exports": {
+    ".": {
+      "default": "./lib/index.cjs",
+      "types": "./types.d.cts"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
@@ -15,27 +27,20 @@
     "eslint-plugin",
     "babel-eslint"
   ],
-  "author": "Jason Quense @monasticpanic",
+  "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
-  "private": true,
   "engines": {
-    "node": ">=10.9"
+    "node": "^20.19.0 || >=22.12.0"
   },
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
-  "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin",
+  "homepage": "https://babel.dev/",
   "peerDependencies": {
-    "@babel/eslint-parser": "0.0.0",
-    "eslint": ">=6.0.0"
-  },
-  "dependencies": {
-    "eslint-rule-composer": "^0.3.0"
+    "@babel/eslint-parser": "^7.11.0",
+    "eslint": "^9.0.0"
   },
   "devDependencies": {
-    "@babel/eslint-shared-fixtures": "*",
-    "@babel/eslint-parser": "*",
-    "eslint": "^6.0.0",
-    "lodash.clonedeep": "^4.5.0"
+    "eslint": "^10.0.0"
   }
 }

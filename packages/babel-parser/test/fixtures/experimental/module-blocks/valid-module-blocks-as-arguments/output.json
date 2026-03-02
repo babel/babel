@@ -1,0 +1,91 @@
+{
+  "type": "File",
+  "start":0,"end":68,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":3,"index":68}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":68,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":3,"index":68}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":68,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":3,"index":68}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":67,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":3,"column":2,"index":67}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":12,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":12,"index":12},"identifierName":"worker"},
+              "name": "worker"
+            },
+            "init": {
+              "type": "NewExpression",
+              "start":15,"end":67,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":3,"column":2,"index":67}},
+              "callee": {
+                "type": "Identifier",
+                "start":19,"end":25,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":25,"index":25},"identifierName":"Worker"},
+                "name": "Worker"
+              },
+              "arguments": [
+                {
+                  "type": "ModuleExpression",
+                  "start":26,"end":66,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":3,"column":1,"index":66}},
+                  "body": {
+                    "type": "Program",
+                    "start":34,"end":65,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":3,"column":0,"index":65}},
+                    "sourceType": "module",
+                    "interpreter": null,
+                    "body": [
+                      {
+                        "type": "ExportNamedDeclaration",
+                        "start":39,"end":64,"loc":{"start":{"line":2,"column":4,"index":39},"end":{"line":2,"column":29,"index":64}},
+                        "specifiers": [],
+                        "source": null,
+                        "attributes": [],
+                        "declaration": {
+                          "type": "VariableDeclaration",
+                          "start":46,"end":64,"loc":{"start":{"line":2,"column":11,"index":46},"end":{"line":2,"column":29,"index":64}},
+                          "declarations": [
+                            {
+                              "type": "VariableDeclarator",
+                              "start":52,"end":63,"loc":{"start":{"line":2,"column":17,"index":52},"end":{"line":2,"column":28,"index":63}},
+                              "id": {
+                                "type": "Identifier",
+                                "start":52,"end":55,"loc":{"start":{"line":2,"column":17,"index":52},"end":{"line":2,"column":20,"index":55},"identifierName":"foo"},
+                                "name": "foo"
+                              },
+                              "init": {
+                                "type": "StringLiteral",
+                                "start":58,"end":63,"loc":{"start":{"line":2,"column":23,"index":58},"end":{"line":2,"column":28,"index":63}},
+                                "extra": {
+                                  "rawValue": "foo",
+                                  "raw": "\"foo\""
+                                },
+                                "value": "foo"
+                              }
+                            }
+                          ],
+                          "kind": "const"
+                        }
+                      }
+                    ],
+                    "directives": [],
+                    "extra": {
+                      "topLevelAwait": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

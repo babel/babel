@@ -1,10 +1,27 @@
-"use strict";
+// @ts-check
 
-const fs = require("fs").promises;
-const chalk = require("chalk");
-const { parse: parser } = require("../../../packages/babel-parser");
+import fs from "node:fs/promises";
+import { styleText } from "node:util";
+import { parse as parser } from "../../../packages/babel-parser/lib/index.js";
 
-const dot = chalk.gray(".");
+const dot = styleText("gray", ".");
+
+/**
+ * @typedef {Object} Summary
+ * @property {boolean} passed
+ * @property {Object} allowed
+ * @property {Array} allowed.success
+ * @property {Array} allowed.failure
+ * @property {Array} allowed.falsePositive
+ * @property {Array} allowed.falseNegative
+ * @property {Object} disallowed
+ * @property {Array} disallowed.success
+ * @property {Array} disallowed.failure
+ * @property {Array} disallowed.falsePositive
+ * @property {Array} disallowed.falseNegative
+ * @property {Array} unrecognized
+ * @property {number} count
+ */
 
 class TestRunner {
   constructor({
@@ -52,6 +69,7 @@ class TestRunner {
       test.actualError = false;
     } catch (err) {
       test.actualError = true;
+      test.actualErrorObject = err;
     }
 
     test.result = test.expectedError !== test.actualError ? "fail" : "pass";
@@ -60,10 +78,11 @@ class TestRunner {
   }
 
   parse(test, parser) {
-    parser(test.contents, {
-      sourceType: test.sourceType,
-      plugins: test.plugins,
-    });
+    const tests = typeof test.contents === "string" ? [test] : test.contents;
+
+    for (const { contents, ...options } of tests) {
+      parser(contents, options);
+    }
   }
 
   async getAllowlist() {
@@ -78,31 +97,87 @@ class TestRunner {
     return table;
   }
 
+  /**
+   * Update the allowlist based on the test results.
+   * @param {Summary} summary
+   */
   async updateAllowlist(summary) {
     const contents = await fs.readFile(this.allowlist, "utf-8");
 
-    const toRemove = summary.disallowed.success
-      .concat(summary.disallowed.failure)
-      .map(test => test.id)
-      .concat(summary.unrecognized);
+    const toRemove = new Set(
+      summary.disallowed.success
+        .concat(summary.disallowed.failure)
+        .map(test => test.id)
+        .concat(summary.unrecognized)
+    );
 
-    const updated = summary.disallowed.falsePositive
-      .concat(summary.disallowed.falseNegative)
-      .map(test => test.id);
+    const allowedFalsePositiveIds = new Set(
+      summary.allowed.falsePositive.map(test => test.id)
+    );
+
+    let invalidWithoutError = [];
+    let validWithError = [];
 
     for (const line of contents.split("\n")) {
       const testId = line.replace(/#.*$/, "").trim();
-      if (!toRemove.includes(testId) && line) {
-        updated.push(line);
+      if (testId && !toRemove.has(testId)) {
+        if (allowedFalsePositiveIds.has(testId)) {
+          invalidWithoutError.push(line);
+        } else {
+          validWithError.push(line);
+        }
       }
     }
 
-    updated.sort();
+    invalidWithoutError = invalidWithoutError.concat(
+      summary.disallowed.falsePositive.map(test => test.id)
+    );
+    validWithError = validWithError.concat(
+      summary.disallowed.falseNegative.map(test => test.id)
+    );
 
-    await fs.writeFile(this.allowlist, updated.join("\n") + "\n", "utf8");
+    invalidWithoutError.sort();
+    validWithError.sort();
+
+    const errorsMap = new Map();
+    summary.allowed.falseNegative
+      .concat(summary.disallowed.falseNegative)
+      .forEach(test => {
+        errorsMap.set(test.id, test.actualErrorObject);
+      });
+
+    const updated = [
+      `# ${invalidWithoutError.length} invalid programs did not produce a parsing error\n`,
+      "\n",
+      invalidWithoutError.join("\n"),
+      "\n",
+      "\n",
+      "\n",
+      `# ${validWithError.length} valid programs produced a parsing error\n`,
+      "\n",
+      ...validWithError
+        // .map(
+        //   v =>
+        //     `${v}\n# ${JSON.stringify(errorsMap.get(v), null, 2)
+        //       .trimEnd()
+        //       .replace(/\n/g, "\n#")}\n`
+        // )
+        .join("\n"),
+    ];
+
+    await fs.writeFile(this.allowlist, updated.join("") + "\n", "utf8");
   }
 
+  /**
+   * Interpret the results of the tests.
+   * @param {*} results
+   * @param {*} allowlist
+   * @returns {Summary}
+   */
   interpret(results, allowlist) {
+    /**
+     * @type {Summary}
+     */
     const summary = {
       passed: true,
       allowed: {
@@ -117,7 +192,7 @@ class TestRunner {
         falsePositive: [],
         falseNegative: [],
       },
-      unrecognized: null,
+      unrecognized: [],
       count: results.length,
     };
 
@@ -144,7 +219,7 @@ class TestRunner {
         }
       }
 
-      summary.passed &= isAllowed;
+      summary.passed &&= isAllowed;
       summary[isAllowed ? "allowed" : "disallowed"][classification].push(
         result
       );
@@ -209,16 +284,21 @@ class TestRunner {
 
       badnews.push(desc);
       badnewsDetails.push(desc + ":");
-      badnewsDetails.push(...tests.map(test => `  ${test.id || test}`));
+      badnewsDetails.push(
+        ...tests.map(
+          test =>
+            `  ${test.id || test} ${test.expectedError} ${test.actualError}`
+        )
+      );
     });
 
     console.log(`Testing complete (${summary.count} tests).`);
     console.log("Summary:");
-    console.log(chalk.green(goodnews.join("\n").replace(/^/gm, " ✔ ")));
+    console.log(styleText("green", goodnews.join("\n").replace(/^/gm, " ✔ ")));
 
     if (!summary.passed) {
       console.log("");
-      console.log(chalk.red(badnews.join("\n").replace(/^/gm, " ✘ ")));
+      console.log(styleText("red", badnews.join("\n").replace(/^/gm, " ✘ ")));
       console.log("");
       console.log("Details:");
       console.log(badnewsDetails.join("\n").replace(/^/gm, "   "));
@@ -234,4 +314,4 @@ class TestRunner {
   }
 }
 
-module.exports = exports = TestRunner;
+export default TestRunner;

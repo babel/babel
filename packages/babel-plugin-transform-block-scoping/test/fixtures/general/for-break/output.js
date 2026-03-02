@@ -2,11 +2,8 @@ var _loop = function (i) {
   fns.push(function () {
     return i;
   });
-  return "break";
+  return 1; // break
 };
-
 for (var i in nums) {
-  var _ret = _loop(i);
-
-  if (_ret === "break") break;
+  if (_loop(i)) break;
 }

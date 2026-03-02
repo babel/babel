@@ -1,1 +1,2 @@
 ; // Otherwise-empty file
+export {};

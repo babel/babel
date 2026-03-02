@@ -2,7 +2,7 @@
 
 > Compile exponentiation operator to ES5
 
-See our website [@babel/plugin-transform-exponentiation-operator](https://babeljs.io/docs/en/next/babel-plugin-transform-exponentiation-operator.html) for more information.
+See our website [@babel/plugin-transform-exponentiation-operator](https://babeljs.io/docs/babel-plugin-transform-exponentiation-operator) for more information.
 
 ## Install
 

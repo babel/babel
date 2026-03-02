@@ -1,14 +1,14 @@
 {
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "targets": {
           "chrome": 63
         },
         "modules": false,
         "useBuiltIns": "entry",
-        "corejs": 3,
+        "corejs": "3.0",
         "exclude": [
           "es.string.pad-start",
           "es.string.pad-end",

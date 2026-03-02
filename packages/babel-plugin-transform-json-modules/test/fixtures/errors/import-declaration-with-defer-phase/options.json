@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "plugins": ["transform-json-modules", "syntax-import-defer"],
+  "throws": "JSON modules do not support phase modifiers."
+}

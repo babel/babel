@@ -1,0 +1,1 @@
+const x = await (typeof process === "object" && process.versions?.node ? import("module").then(module => module.createRequire(import.meta.url)("./x.json")) : fetch(import.meta.resolve("./x.json")).then(r => r.json()));

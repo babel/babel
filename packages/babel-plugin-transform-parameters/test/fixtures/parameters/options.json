@@ -1,9 +1,6 @@
 {
   "plugins": [
-    "proposal-class-properties",
-     ["external-helpers", { "helperVersion": "7.100.0" }],
-    "syntax-typescript",
-    "syntax-flow",
+    "transform-class-properties",
     "transform-parameters",
     "transform-block-scoping",
     "transform-spread",

@@ -1,0 +1,1 @@
+{"version":3,"file":"script3.js","names":["arr","map","x","MULTIPLIER"],"sources":["script.js","script2.js"],"sourcesContent":["(() => 42)\n\n// some comments","arr.map(x => x * MULTIPLIER);"],"mappings":";;AAAA,CAAC;EAAA,OAAM,EAAE;AAAA;;AAET;;;;ACFAA,GAAG,CAACC,GAAG,CAAC,UAAAC,CAAC;EAAA,OAAIA,CAAC,GAAGC,UAAU;AAAA,EAAC","ignoreList":[]}

@@ -1,0 +1,4 @@
+{
+  "allowAwaitOutsideFunction": false,
+  "throws": "The `allowAwaitOutsideFunction` option cannot be used with `sourceType: 'commonjs'`."
+}

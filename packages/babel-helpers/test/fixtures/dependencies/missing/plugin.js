@@ -1,14 +1,14 @@
-const defineHelper = require("../../../helpers/define-helper").default;
+import defineHelper from "../../../helpers/define-helper.js";
 
-const main = defineHelper(__dirname, "main", `
-  import dep from "(!!!)%-..a,4892 missing";
+export default function(babel) {
+  const main = defineHelper(babel, import.meta.url, "main", `
+    import dep from "(!!!)%-..a,4892 missing";
 
-  export default function helper() {
-    return dep();
-  }
-`);
+    export default function helper() {
+      return dep();
+    }
+  `);
 
-module.exports = function() {
   return {
     visitor: {
       Identifier(path) {

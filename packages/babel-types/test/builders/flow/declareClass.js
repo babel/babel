@@ -1,11 +1,10 @@
-import * as t from "../../..";
+import * as t from "../../../lib/index.js";
 
 describe("builders", function () {
   describe("flow", function () {
     describe("declareClass", function () {
       it("accept TypeParameterDeclaration as typeParameters", function () {
-        const typeParameter = t.typeParameter(null, null, null);
-        typeParameter.name = "T";
+        const typeParameter = t.typeParameter("T", null, null);
         const declaredClass = t.declareClass(
           t.identifier("A"),
           t.typeParameterDeclaration([typeParameter]),

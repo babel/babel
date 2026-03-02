@@ -1,4 +1,2 @@
 import React from 'react';
-
-/*#__PURE__*/
-React.createRef();
+/*#__PURE__*/React.createRef();

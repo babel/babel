@@ -1,0 +1,15 @@
+{
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  },
+  "presets": [
+    [
+      "env",
+      {
+        "targets": ["chrome 22", "last 12 years"],
+        "modules": "systemjs"
+      }
+    ]
+  ],
+  "externalHelpers": false
+}

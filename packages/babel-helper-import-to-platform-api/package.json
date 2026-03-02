@@ -1,0 +1,40 @@
+{
+  "name": "@babel/helper-import-to-platform-api",
+  "version": "8.0.0-rc.2",
+  "description": "Helper function to transform import statements to platform-specific APIs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-helper-import-to-platform-api"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-helper-import-to-platform-api",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "dependencies": {
+    "@babel/helper-compilation-targets": "workspace:^",
+    "@babel/helper-module-imports": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "workspace:^"
+  },
+  "TODO": "The @babel/traverse dependency is only needed for the NodePath TS type. We can consider exporting it from @babel/core.",
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/traverse": "workspace:^"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "type": "module"
+}

@@ -1,0 +1,5 @@
+{
+  "plugins": ["transform-class-properties"],
+  "externalHelpers": false,
+  "SKIP_babel7plugins_babel8core": "The _toPropertyKey helper is different"
+}

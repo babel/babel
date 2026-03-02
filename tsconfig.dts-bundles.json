@@ -1,0 +1,15 @@
+{
+  "extends": ["./tsconfig.base.json"],
+  "compilerOptions": {
+    "skipLibCheck": false,
+    "paths": {
+      "@babel/core": ["./packages/babel-core/lib/index.d.ts"]
+    }
+  },
+  "include": [
+    "./lib/libdom-minimal.d.ts",
+    "packages/*/lib/*.d.ts",
+    "eslint/*/lib/*.d.ts",
+    "codemods/*/lib/*.d.ts"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-explicit-resource-management",
+    "transform-async-to-generator"
+  ]
+}

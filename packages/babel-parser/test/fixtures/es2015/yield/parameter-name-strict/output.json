@@ -1,21 +1,21 @@
 {
   "type": "File",
-  "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":21}},
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":21,"index":35}},
   "errors": [
-    "SyntaxError: Unexpected reserved word 'yield' (2:12)"
+    "SyntaxError: Unexpected reserved word 'yield'. (2:12)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":35,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":21}},
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":21,"index":35}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "FunctionDeclaration",
-        "start":14,"end":35,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":21}},
+        "start":14,"end":35,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":21,"index":35}},
         "id": {
           "type": "Identifier",
-          "start":23,"end":25,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":11},"identifierName":"fn"},
+          "start":23,"end":25,"loc":{"start":{"line":2,"column":9,"index":23},"end":{"line":2,"column":11,"index":25},"identifierName":"fn"},
           "name": "fn"
         },
         "generator": false,
@@ -23,13 +23,13 @@
         "params": [
           {
             "type": "Identifier",
-            "start":26,"end":31,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":17},"identifierName":"yield"},
+            "start":26,"end":31,"loc":{"start":{"line":2,"column":12,"index":26},"end":{"line":2,"column":17,"index":31},"identifierName":"yield"},
             "name": "yield"
           }
         ],
         "body": {
           "type": "BlockStatement",
-          "start":33,"end":35,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":21}},
+          "start":33,"end":35,"loc":{"start":{"line":2,"column":19,"index":33},"end":{"line":2,"column":21,"index":35}},
           "body": [],
           "directives": []
         }
@@ -38,15 +38,16 @@
     "directives": [
       {
         "type": "Directive",
-        "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
         "value": {
           "type": "DirectiveLiteral",
-          "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
-          "value": "use strict",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
           "extra": {
+            "rawValue": "use strict",
             "raw": "\"use strict\"",
-            "rawValue": "use strict"
-          }
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
         }
       }
     ]

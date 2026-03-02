@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^10",
+    "react": "^17",
+    "react-dom": "^17"
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-do-expressions": "latest",
+    "@babel/plugin-transform-runtime": "latest",
+    "@babel/preset-env": "latest",
+    "@babel/preset-react": "latest",
+    "@babel/runtime": "latest"
+  }
+}

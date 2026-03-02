@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":26}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":26}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":26}},
+        "body": [
+          {
+            "type": "ForOfStatement",
+            "start":4,"end":24,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":22,"index":24}},
+            "await": false,
+            "left": {
+              "type": "Identifier",
+              "start":9,"end":14,"loc":{"start":{"line":2,"column":7,"index":9},"end":{"line":2,"column":12,"index":14},"identifierName":"await"},
+              "name": "await"
+            },
+            "right": {
+              "type": "ArrayExpression",
+              "start":18,"end":22,"loc":{"start":{"line":2,"column":16,"index":18},"end":{"line":2,"column":20,"index":22}},
+              "elements": [
+                {
+                  "type": "Identifier",
+                  "start":19,"end":21,"loc":{"start":{"line":2,"column":17,"index":19},"end":{"line":2,"column":19,"index":21},"identifierName":"of"},
+                  "name": "of"
+                }
+              ]
+            },
+            "body": {
+              "type": "EmptyStatement",
+              "start":23,"end":24,"loc":{"start":{"line":2,"column":21,"index":23},"end":{"line":2,"column":22,"index":24}}
+            }
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

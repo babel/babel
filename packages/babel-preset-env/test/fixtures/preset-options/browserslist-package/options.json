@@ -1,7 +1,7 @@
 {
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "configPath": "packages/babel-preset-env/test/fixtures/preset-options/browserslist-package",
         "modules": false

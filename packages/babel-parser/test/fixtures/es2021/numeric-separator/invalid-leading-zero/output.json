@@ -1,0 +1,29 @@
+{
+  "type": "File",
+  "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3}},
+  "errors": [
+    "SyntaxError: Numeric separator can not be used after leading 0. (1:1)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3}},
+          "extra": {
+            "rawValue": 8,
+            "raw": "0_8"
+          },
+          "value": 8
+        }
+      }
+    ],
+    "directives": []
+  }
+}

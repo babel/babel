@@ -1,14 +1,14 @@
 {
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "targets": {
           "browsers": "chromeandroid 59"
         },
         "modules": false,
         "useBuiltIns": "entry",
-        "corejs": 3
+        "corejs": "3.0"
       }
     ]
   ]

@@ -1,0 +1,178 @@
+{
+  "type": "File",
+  "start":0,"end":119,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":119}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'await'. (2:8)",
+    "SyntaxError: Unexpected reserved word 'await'. (5:8)",
+    "SyntaxError: Unexpected reserved word 'await'. (8:17)",
+    "SyntaxError: Unexpected reserved word 'await'. (11:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":119,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":12,"column":1,"index":119}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":24}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":4,"end":22,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":20,"index":22}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":10,"end":21,"loc":{"start":{"line":2,"column":8,"index":10},"end":{"line":2,"column":19,"index":21}},
+                "id": {
+                  "type": "Identifier",
+                  "start":10,"end":15,"loc":{"start":{"line":2,"column":8,"index":10},"end":{"line":2,"column":13,"index":15},"identifierName":"await"},
+                  "name": "await"
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":18,"end":21,"loc":{"start":{"line":2,"column":16,"index":18},"end":{"line":2,"column":19,"index":21}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":18,"end":19,"loc":{"start":{"line":2,"column":16,"index":18},"end":{"line":2,"column":17,"index":19},"identifierName":"h"},
+                    "name": "h"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "kind": "using"
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":25,"end":54,"loc":{"start":{"line":4,"column":0,"index":25},"end":{"line":6,"column":1,"index":54}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":29,"end":52,"loc":{"start":{"line":5,"column":2,"index":29},"end":{"line":5,"column":25,"index":52}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":35,"end":51,"loc":{"start":{"line":5,"column":8,"index":35},"end":{"line":5,"column":24,"index":51}},
+                "id": {
+                  "type": "Identifier",
+                  "start":35,"end":45,"loc":{"start":{"line":5,"column":8,"index":35},"end":{"line":5,"column":18,"index":45},"identifierName":"await"},
+                  "name": "await"
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":48,"end":51,"loc":{"start":{"line":5,"column":21,"index":48},"end":{"line":5,"column":24,"index":51}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":48,"end":49,"loc":{"start":{"line":5,"column":21,"index":48},"end":{"line":5,"column":22,"index":49},"identifierName":"h"},
+                    "name": "h"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "kind": "using"
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":55,"end":88,"loc":{"start":{"line":7,"column":0,"index":55},"end":{"line":9,"column":1,"index":88}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":59,"end":86,"loc":{"start":{"line":8,"column":2,"index":59},"end":{"line":8,"column":29,"index":86}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":65,"end":72,"loc":{"start":{"line":8,"column":8,"index":65},"end":{"line":8,"column":15,"index":72}},
+                "id": {
+                  "type": "Identifier",
+                  "start":65,"end":66,"loc":{"start":{"line":8,"column":8,"index":65},"end":{"line":8,"column":9,"index":66},"identifierName":"x"},
+                  "name": "x"
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":69,"end":72,"loc":{"start":{"line":8,"column":12,"index":69},"end":{"line":8,"column":15,"index":72}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":69,"end":70,"loc":{"start":{"line":8,"column":12,"index":69},"end":{"line":8,"column":13,"index":70},"identifierName":"h"},
+                    "name": "h"
+                  },
+                  "arguments": []
+                }
+              },
+              {
+                "type": "VariableDeclarator",
+                "start":74,"end":85,"loc":{"start":{"line":8,"column":17,"index":74},"end":{"line":8,"column":28,"index":85}},
+                "id": {
+                  "type": "Identifier",
+                  "start":74,"end":79,"loc":{"start":{"line":8,"column":17,"index":74},"end":{"line":8,"column":22,"index":79},"identifierName":"await"},
+                  "name": "await"
+                },
+                "init": {
+                  "type": "CallExpression",
+                  "start":82,"end":85,"loc":{"start":{"line":8,"column":25,"index":82},"end":{"line":8,"column":28,"index":85}},
+                  "callee": {
+                    "type": "Identifier",
+                    "start":82,"end":83,"loc":{"start":{"line":8,"column":25,"index":82},"end":{"line":8,"column":26,"index":83},"identifierName":"h"},
+                    "name": "h"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "kind": "using"
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":89,"end":119,"loc":{"start":{"line":10,"column":0,"index":89},"end":{"line":12,"column":1,"index":119}},
+        "body": [
+          {
+            "type": "ForOfStatement",
+            "start":93,"end":117,"loc":{"start":{"line":11,"column":2,"index":93},"end":{"line":11,"column":26,"index":117}},
+            "await": false,
+            "left": {
+              "type": "VariableDeclaration",
+              "start":98,"end":109,"loc":{"start":{"line":11,"column":7,"index":98},"end":{"line":11,"column":18,"index":109}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":104,"end":109,"loc":{"start":{"line":11,"column":13,"index":104},"end":{"line":11,"column":18,"index":109}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":104,"end":109,"loc":{"start":{"line":11,"column":13,"index":104},"end":{"line":11,"column":18,"index":109},"identifierName":"await"},
+                    "name": "await"
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "using"
+            },
+            "right": {
+              "type": "ArrayExpression",
+              "start":113,"end":115,"loc":{"start":{"line":11,"column":22,"index":113},"end":{"line":11,"column":24,"index":115}},
+              "elements": []
+            },
+            "body": {
+              "type": "EmptyStatement",
+              "start":116,"end":117,"loc":{"start":{"line":11,"column":25,"index":116},"end":{"line":11,"column":26,"index":117}}
+            }
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "type": "File",
+  "start":0,"end":83,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":83}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":83,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":83}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":83,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":83}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":82,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":5,"column":1,"index":82}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "DoExpression",
+              "start":8,"end":82,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":5,"column":1,"index":82}},
+              "async": true,
+              "body": {
+                "type": "BlockStatement",
+                "start":17,"end":82,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":5,"column":1,"index":82}},
+                "body": [
+                  {
+                    "type": "IfStatement",
+                    "start":21,"end":80,"loc":{"start":{"line":2,"column":2,"index":21},"end":{"line":4,"column":14,"index":80}},
+                    "test": {
+                      "type": "CallExpression",
+                      "start":25,"end":30,"loc":{"start":{"line":2,"column":6,"index":25},"end":{"line":2,"column":11,"index":30}},
+                      "callee": {
+                        "type": "Identifier",
+                        "start":25,"end":28,"loc":{"start":{"line":2,"column":6,"index":25},"end":{"line":2,"column":9,"index":28},"identifierName":"foo"},
+                        "name": "foo"
+                      },
+                      "arguments": []
+                    },
+                    "consequent": {
+                      "type": "BlockStatement",
+                      "start":32,"end":39,"loc":{"start":{"line":2,"column":13,"index":32},"end":{"line":2,"column":20,"index":39}},
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start":34,"end":37,"loc":{"start":{"line":2,"column":15,"index":34},"end":{"line":2,"column":18,"index":37}},
+                          "expression": {
+                            "type": "CallExpression",
+                            "start":34,"end":37,"loc":{"start":{"line":2,"column":15,"index":34},"end":{"line":2,"column":18,"index":37}},
+                            "callee": {
+                              "type": "Identifier",
+                              "start":34,"end":35,"loc":{"start":{"line":2,"column":15,"index":34},"end":{"line":2,"column":16,"index":35},"identifierName":"f"},
+                              "name": "f"
+                            },
+                            "arguments": []
+                          }
+                        }
+                      ],
+                      "directives": []
+                    },
+                    "alternate": {
+                      "type": "IfStatement",
+                      "start":47,"end":80,"loc":{"start":{"line":3,"column":7,"index":47},"end":{"line":4,"column":14,"index":80}},
+                      "test": {
+                        "type": "CallExpression",
+                        "start":51,"end":56,"loc":{"start":{"line":3,"column":11,"index":51},"end":{"line":3,"column":16,"index":56}},
+                        "callee": {
+                          "type": "Identifier",
+                          "start":51,"end":54,"loc":{"start":{"line":3,"column":11,"index":51},"end":{"line":3,"column":14,"index":54},"identifierName":"bar"},
+                          "name": "bar"
+                        },
+                        "arguments": []
+                      },
+                      "consequent": {
+                        "type": "BlockStatement",
+                        "start":58,"end":65,"loc":{"start":{"line":3,"column":18,"index":58},"end":{"line":3,"column":25,"index":65}},
+                        "body": [
+                          {
+                            "type": "ExpressionStatement",
+                            "start":60,"end":63,"loc":{"start":{"line":3,"column":20,"index":60},"end":{"line":3,"column":23,"index":63}},
+                            "expression": {
+                              "type": "CallExpression",
+                              "start":60,"end":63,"loc":{"start":{"line":3,"column":20,"index":60},"end":{"line":3,"column":23,"index":63}},
+                              "callee": {
+                                "type": "Identifier",
+                                "start":60,"end":61,"loc":{"start":{"line":3,"column":20,"index":60},"end":{"line":3,"column":21,"index":61},"identifierName":"g"},
+                                "name": "g"
+                              },
+                              "arguments": []
+                            }
+                          }
+                        ],
+                        "directives": []
+                      },
+                      "alternate": {
+                        "type": "BlockStatement",
+                        "start":73,"end":80,"loc":{"start":{"line":4,"column":7,"index":73},"end":{"line":4,"column":14,"index":80}},
+                        "body": [
+                          {
+                            "type": "ExpressionStatement",
+                            "start":75,"end":78,"loc":{"start":{"line":4,"column":9,"index":75},"end":{"line":4,"column":12,"index":78}},
+                            "expression": {
+                              "type": "CallExpression",
+                              "start":75,"end":78,"loc":{"start":{"line":4,"column":9,"index":75},"end":{"line":4,"column":12,"index":78}},
+                              "callee": {
+                                "type": "Identifier",
+                                "start":75,"end":76,"loc":{"start":{"line":4,"column":9,"index":75},"end":{"line":4,"column":10,"index":76},"identifierName":"h"},
+                                "name": "h"
+                              },
+                              "arguments": []
+                            }
+                          }
+                        ],
+                        "directives": []
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

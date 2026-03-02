@@ -1,111 +1,115 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
-const testCacheFilename = path.join(__dirname, ".babel");
-const oldBabelDisableCacheValue = process.env.BABEL_DISABLE_CACHE;
-
-process.env.BABEL_CACHE_PATH = testCacheFilename;
-delete process.env.BABEL_DISABLE_CACHE;
-
-function writeCache(data, mode = 0o666) {
-  if (typeof data === "object") {
-    data = JSON.stringify(data);
-  }
-
-  fs.writeFileSync(testCacheFilename, data, { mode });
-}
-
-function cleanCache() {
-  try {
-    fs.unlinkSync(testCacheFilename);
-  } catch (e) {
-    // It is convenient to always try to clear
-  }
-}
-
-function resetCache() {
-  process.env.BABEL_CACHE_PATH = null;
-  process.env.BABEL_DISABLE_CACHE = oldBabelDisableCacheValue;
-}
+import { commonJS } from "$repo-utils";
+const { __filename, __dirname } = commonJS(import.meta.url);
 
 describe("@babel/register - caching", () => {
-  describe("cache", () => {
-    let load, get, save;
+  let Cache;
+  beforeAll(async () => {
+    Cache = (await import("../lib/worker/cache.mjs")).default;
 
-    beforeEach(() => {
-      // Since lib/cache is a singleton we need to fully reload it
-      jest.resetModules();
-      const cache = require("../lib/cache");
-
-      load = cache.load;
-      get = cache.get;
-      save = cache.save;
+    jest.useFakeTimers({
+      doNotFake: ["nextTick", "setImmediate", "queueMicrotask", "setTimeout"],
     });
+  });
 
-    afterEach(cleanCache);
-    afterAll(resetCache);
+  afterAll(() => {
+    jest.useRealTimers();
+  });
 
-    it("should load and get cached data", () => {
-      writeCache({ foo: "bar" });
+  const defaultCachePath = path.join(
+    __dirname,
+    "../../../node_modules/.cache/@babel/register",
+  );
+  let consoleWarnSpy;
 
-      load();
+  beforeEach(() => {
+    fs.rmSync(defaultCachePath, { recursive: true, force: true });
 
-      expect(get()).toEqual({ foo: "bar" });
-    });
+    consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
+  });
 
-    it("should load and get an object with no cached data", () => {
-      load();
+  afterEach(() => {
+    fs.rmSync(defaultCachePath, { recursive: true, force: true });
 
-      expect(get()).toEqual({});
-    });
+    delete process.env.BABEL_CACHE_PATH;
 
-    it("should load and get an object with invalid cached data", () => {
-      writeCache("foobar");
+    consoleWarnSpy.mockRestore();
+  });
 
-      load();
+  it("basic", async () => {
+    const key = Date.now() + "";
 
-      expect(get()).toEqual({});
-    });
+    const cache1 = new Cache();
+    await cache1.enable();
+    expect(cache1.enabled).toBe(true);
+    await cache1.set(key, "test");
+    expect(await cache1.get(key)).toEqual("test");
+    await cache1.disable();
 
-    it("should create the cache on save", () => {
-      save();
+    const cache2 = new Cache();
+    await cache2.enable();
+    expect(cache2.enabled).toBe(true);
+    expect(await cache2.get(key)).toEqual("test");
+    await cache2.disable();
+  });
 
-      expect(fs.existsSync(testCacheFilename)).toBe(true);
-      expect(get()).toEqual({});
-    });
+  it("should disable when CACHE_PATH is a file", async () => {
+    process.env.BABEL_CACHE_PATH = __filename;
 
-    it("should create the cache after load", cb => {
-      load();
+    const cache = new Cache();
+    await cache.enable();
 
-      process.nextTick(() => {
-        expect(fs.existsSync(testCacheFilename)).toBe(true);
-        expect(get()).toEqual({});
-        cb();
-      });
-    });
+    expect(cache.enabled).toBe(false);
+    expect(consoleWarnSpy.mock.calls[0][0]).toContain(
+      "is a file, not a directory.",
+    );
+  });
 
-    // Only write mode is effective on Windows
-    if (process.platform !== "win32") {
-      it("should be disabled when CACHE_PATH is not allowed to read", () => {
-        writeCache({ foo: "bar" }, 0o266);
+  it("should clean after 30 days", async () => {
+    const cache1 = new Cache();
+    await cache1.enable();
 
-        load();
+    const key = Date.now() + "";
+    await cache1.set(key, "test");
+    expect(await cache1.get(key)).toEqual("test");
+    await cache1.disable();
 
-        expect(get()).toEqual({});
-      });
+    jest.setSystemTime(Date.now() + 1000 * 60 * 60 * 24 * 30 + 1);
+
+    const cache2 = new Cache();
+
+    await cache2.enable();
+
+    jest.setSystemTime();
+
+    expect(await cache2.get(key)).toEqual(undefined);
+
+    await cache2.disable();
+  });
+
+  it("should batch write cache", async () => {
+    const cache = new Cache();
+    await cache.enable();
+    await cache.set("a", "a".repeat(1024 * 512));
+    await cache.set("b", "b".repeat(1024 * 512));
+    await cache.set("c", "c".repeat(1024));
+    await cache.set("d", "d".repeat(1024));
+    await cache.set("e", "e".repeat(1024 * 512));
+    await cache.set("f", "f".repeat(1024 * 1024 * 5));
+    await cache.disable();
+
+    cache.index.clear();
+    cache.cache.clear();
+
+    await cache.enable();
+    await cache.disable();
+
+    const caches = new Set();
+    for (const hash of cache.index.values()) {
+      caches.add(hash);
     }
-
-    it("should be disabled when CACHE_PATH is not allowed to write", cb => {
-      writeCache({ foo: "bar" }, 0o466);
-
-      load();
-
-      expect(get()).toEqual({ foo: "bar" });
-      process.nextTick(() => {
-        load();
-        expect(get()).toEqual({});
-        cb();
-      });
-    });
+    expect(caches.size).toBe(3);
   });
 });

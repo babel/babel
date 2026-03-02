@@ -1,0 +1,83 @@
+{
+  "type": "File",
+  "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":32,"index":70}},
+  "errors": [
+    "SyntaxError: Identifier 'Context' has already been declared. (2:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":32,"index":70}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+        "importKind": "type",
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":14,"end":21,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":21,"index":21}},
+            "imported": {
+              "type": "Identifier",
+              "start":14,"end":21,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":21,"index":21},"identifierName":"Context"},
+              "name": "Context"
+            },
+            "importKind": "value",
+            "local": {
+              "type": "Identifier",
+              "start":14,"end":21,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":21,"index":21},"identifierName":"Context"},
+              "name": "Context"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":29,"end":36,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":36,"index":36}},
+          "extra": {
+            "rawValue": "react",
+            "raw": "'react'"
+          },
+          "value": "react"
+        },
+        "attributes": []
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":38,"end":70,"loc":{"start":{"line":2,"column":0,"index":38},"end":{"line":2,"column":32,"index":70}},
+        "importKind": "value",
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":47,"end":54,"loc":{"start":{"line":2,"column":9,"index":47},"end":{"line":2,"column":16,"index":54}},
+            "imported": {
+              "type": "Identifier",
+              "start":47,"end":54,"loc":{"start":{"line":2,"column":9,"index":47},"end":{"line":2,"column":16,"index":54},"identifierName":"Context"},
+              "name": "Context"
+            },
+            "importKind": "value",
+            "local": {
+              "type": "Identifier",
+              "start":47,"end":54,"loc":{"start":{"line":2,"column":9,"index":47},"end":{"line":2,"column":16,"index":54},"identifierName":"Context"},
+              "name": "Context"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":62,"end":69,"loc":{"start":{"line":2,"column":24,"index":62},"end":{"line":2,"column":31,"index":69}},
+          "extra": {
+            "rawValue": "react",
+            "raw": "'react'"
+          },
+          "value": "react"
+        },
+        "attributes": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

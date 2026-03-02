@@ -1,0 +1,12 @@
+{
+  "assumptions": {
+    "ignoreFunctionLength": true
+  },
+  "plugins": [
+    "proposal-destructuring-private",
+    "transform-class-static-block",
+    "transform-class-properties",
+    "transform-private-methods",
+    ["transform-object-rest-spread", { "useBuiltIns": true }]
+  ]
+}

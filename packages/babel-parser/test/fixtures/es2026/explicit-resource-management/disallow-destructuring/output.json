@@ -1,0 +1,107 @@
+{
+  "type": "File",
+  "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":16,"index":70}},
+  "errors": [
+    "SyntaxError: Using declaration cannot have destructuring patterns. (1:16)",
+    "SyntaxError: Using declaration cannot have destructuring patterns. (2:16)",
+    "SyntaxError: Using declaration cannot have destructuring patterns. (3:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":70,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":16,"index":70}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":14,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":14,"index":14}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "NullLiteral",
+              "start":10,"end":14,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":14,"index":14}}
+            }
+          },
+          {
+            "type": "VariableDeclarator",
+            "start":16,"end":25,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":25,"index":25}},
+            "id": {
+              "type": "ObjectPattern",
+              "start":16,"end":18,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":18,"index":18}},
+              "properties": []
+            },
+            "init": {
+              "type": "NullLiteral",
+              "start":21,"end":25,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":25,"index":25}}
+            }
+          }
+        ],
+        "kind": "using"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":27,"end":53,"loc":{"start":{"line":2,"column":0,"index":27},"end":{"line":2,"column":26,"index":53}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":33,"end":41,"loc":{"start":{"line":2,"column":6,"index":33},"end":{"line":2,"column":14,"index":41}},
+            "id": {
+              "type": "Identifier",
+              "start":33,"end":34,"loc":{"start":{"line":2,"column":6,"index":33},"end":{"line":2,"column":7,"index":34},"identifierName":"y"},
+              "name": "y"
+            },
+            "init": {
+              "type": "NullLiteral",
+              "start":37,"end":41,"loc":{"start":{"line":2,"column":10,"index":37},"end":{"line":2,"column":14,"index":41}}
+            }
+          },
+          {
+            "type": "VariableDeclarator",
+            "start":43,"end":52,"loc":{"start":{"line":2,"column":16,"index":43},"end":{"line":2,"column":25,"index":52}},
+            "id": {
+              "type": "ArrayPattern",
+              "start":43,"end":45,"loc":{"start":{"line":2,"column":16,"index":43},"end":{"line":2,"column":18,"index":45}},
+              "elements": []
+            },
+            "init": {
+              "type": "NullLiteral",
+              "start":48,"end":52,"loc":{"start":{"line":2,"column":21,"index":48},"end":{"line":2,"column":25,"index":52}}
+            }
+          }
+        ],
+        "kind": "using"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":54,"end":70,"loc":{"start":{"line":3,"column":0,"index":54},"end":{"line":3,"column":16,"index":70}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":60,"end":69,"loc":{"start":{"line":3,"column":6,"index":60},"end":{"line":3,"column":15,"index":69}},
+            "id": {
+              "type": "ObjectPattern",
+              "start":60,"end":62,"loc":{"start":{"line":3,"column":6,"index":60},"end":{"line":3,"column":8,"index":62}},
+              "properties": []
+            },
+            "init": {
+              "type": "NullLiteral",
+              "start":65,"end":69,"loc":{"start":{"line":3,"column":11,"index":65},"end":{"line":3,"column":15,"index":69}}
+            }
+          }
+        ],
+        "kind": "using"
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

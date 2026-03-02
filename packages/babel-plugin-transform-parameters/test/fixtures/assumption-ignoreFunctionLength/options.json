@@ -1,0 +1,15 @@
+{
+  "plugins": [
+    "transform-class-properties",
+    "syntax-flow",
+    "transform-parameters",
+    "transform-block-scoping",
+    "transform-spread",
+    "transform-classes",
+    "transform-destructuring",
+    "transform-arrow-functions"
+  ],
+  "assumptions": {
+    "ignoreFunctionLength": true
+  }
+}

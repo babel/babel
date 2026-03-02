@@ -1,9 +1,7 @@
 function render() {
+  var _foo;
   var text = getText();
-
-  var _ref = <foo>{text}</foo>;
-
   return function () {
-    return _ref;
+    return _foo || (_foo = <foo>{text}</foo>);
   };
 }

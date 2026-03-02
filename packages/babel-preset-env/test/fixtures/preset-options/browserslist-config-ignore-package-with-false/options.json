@@ -1,7 +1,7 @@
 {
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "configPath": "../fixtures/preset-options/browserslist-config-ignore-with-false",
         "modules": false,

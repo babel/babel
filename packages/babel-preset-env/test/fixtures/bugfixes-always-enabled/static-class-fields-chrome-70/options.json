@@ -1,0 +1,4 @@
+{
+  "targets": { "chrome": 70 },
+  "presets": ["env"]
+}

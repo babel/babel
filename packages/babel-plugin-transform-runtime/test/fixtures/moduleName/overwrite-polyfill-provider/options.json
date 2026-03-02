@@ -1,0 +1,8 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "transform-classes",
+    ["transform-runtime", { "moduleName": "lol" }],
+    ["babel-plugin-polyfill-corejs3", { "method": "usage-pure" }]
+  ]
+}

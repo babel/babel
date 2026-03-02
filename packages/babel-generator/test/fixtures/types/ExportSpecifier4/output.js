@@ -1,1 +1,1 @@
-export * as foo, { bar } from "foo";
+export * as default from "foo";

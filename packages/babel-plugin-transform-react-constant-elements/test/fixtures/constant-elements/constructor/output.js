@@ -1,7 +1,5 @@
+var _Foo;
 var Foo = require("Foo");
-
-var _ref = <Foo />;
-
 function render() {
-  return _ref;
+  return _Foo || (_Foo = <Foo />);
 }

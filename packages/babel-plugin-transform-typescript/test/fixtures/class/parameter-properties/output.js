@@ -4,5 +4,4 @@ class C {
     this.y = y;
     this.z = z;
   }
-
 }

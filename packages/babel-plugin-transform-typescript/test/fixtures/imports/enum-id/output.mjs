@@ -1,7 +1,6 @@
-var Enum;
-
-(function (Enum) {
+var Enum = /*#__PURE__*/function (Enum) {
   Enum[Enum["A"] = 0] = "A";
-})(Enum || (Enum = {}));
-
+  return Enum;
+}(Enum || {});
 ;
+export {};

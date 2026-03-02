@@ -1,0 +1,213 @@
+{
+  "type": "File",
+  "start":0,"end":186,"loc":{"start":{"line":1,"column":0},"end":{"line":13,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":186,"loc":{"start":{"line":1,"column":0},"end":{"line":13,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":54,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "exportKind": "type",
+        "specifiers": [],
+        "source": null,
+        "attributes": [],
+        "declaration": {
+          "type": "TSEnumDeclaration",
+          "start":7,"end":54,"loc":{"start":{"line":1,"column":7},"end":{"line":4,"column":1}},
+          "const": true,
+          "id": {
+            "type": "Identifier",
+            "start":26,"end":29,"loc":{"start":{"line":1,"column":26},"end":{"line":1,"column":29},"identifierName":"Foo"},
+            "name": "Foo",
+            "decorators": [],
+            "optional": false
+          },
+          "body": {
+            "type": "TSEnumBody",
+            "start":30,"end":54,"loc":{"start":{"line":1,"column":30},"end":{"line":4,"column":1}},
+            "members": [
+              {
+                "type": "TSEnumMember",
+                "start":36,"end":43,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":11}},
+                "id": {
+                  "type": "Identifier",
+                  "start":36,"end":39,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":7},"identifierName":"foo"},
+                  "name": "foo",
+                  "decorators": [],
+                  "optional": false
+                },
+                "initializer": {
+                  "type": "Literal",
+                  "start":42,"end":43,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":11}},
+                  "value": 1,
+                  "raw": "1"
+                },
+                "computed": false
+              },
+              {
+                "type": "TSEnumMember",
+                "start":49,"end":52,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":7}},
+                "id": {
+                  "type": "Identifier",
+                  "start":49,"end":52,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":7},"identifierName":"bar"},
+                  "name": "bar",
+                  "decorators": [],
+                  "optional": false
+                },
+                "computed": false
+              }
+            ]
+          },
+          "declare": true
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":56,"end":186,"loc":{"start":{"line":6,"column":0},"end":{"line":13,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":62,"end":72,"loc":{"start":{"line":6,"column":6},"end":{"line":6,"column":16},"identifierName":"AssertsFoo"},
+          "name": "AssertsFoo",
+          "decorators": [],
+          "optional": false
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":73,"end":186,"loc":{"start":{"line":6,"column":17},"end":{"line":13,"column":1}},
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "start":77,"end":126,"loc":{"start":{"line":7,"column":2},"end":{"line":9,"column":3}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":77,"end":82,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":7},"identifierName":"isBar"},
+                "name": "isBar",
+                "decorators": [],
+                "optional": false
+              },
+              "computed": false,
+              "kind": "method",
+              "value": {
+                "type": "FunctionExpression",
+                "start":82,"end":126,"loc":{"start":{"line":7,"column":7},"end":{"line":9,"column":3}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "expression": false,
+                "params": [],
+                "returnType": {
+                  "type": "TSTypeAnnotation",
+                  "start":84,"end":108,"loc":{"start":{"line":7,"column":9},"end":{"line":7,"column":33}},
+                  "typeAnnotation": {
+                    "type": "TSTypePredicate",
+                    "start":86,"end":108,"loc":{"start":{"line":7,"column":11},"end":{"line":7,"column":33}},
+                    "parameterName": {
+                      "type": "TSThisType",
+                      "start":94,"end":98,"loc":{"start":{"line":7,"column":19},"end":{"line":7,"column":23}}
+                    },
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":102,"end":108,"loc":{"start":{"line":7,"column":27},"end":{"line":7,"column":33}},
+                      "typeAnnotation": {
+                        "type": "TSStringKeyword",
+                        "start":102,"end":108,"loc":{"start":{"line":7,"column":27},"end":{"line":7,"column":33}}
+                      }
+                    },
+                    "asserts": true
+                  }
+                },
+                "body": {
+                  "type": "BlockStatement",
+                  "start":109,"end":126,"loc":{"start":{"line":7,"column":34},"end":{"line":9,"column":3}},
+                  "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "start":115,"end":122,"loc":{"start":{"line":8,"column":4},"end":{"line":8,"column":11}},
+                      "argument": null
+                    }
+                  ]
+                },
+                "declare": false
+              },
+              "decorators": [],
+              "override": false,
+              "optional": false
+            },
+            {
+              "type": "PropertyDefinition",
+              "start":129,"end":184,"loc":{"start":{"line":10,"column":2},"end":{"line":12,"column":3}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":129,"end":134,"loc":{"start":{"line":10,"column":2},"end":{"line":10,"column":7},"identifierName":"isBaz"},
+                "name": "isBaz",
+                "decorators": [],
+                "optional": false
+              },
+              "computed": false,
+              "value": {
+                "type": "ArrowFunctionExpression",
+                "start":137,"end":184,"loc":{"start":{"line":10,"column":10},"end":{"line":12,"column":3}},
+                "returnType": {
+                  "type": "TSTypeAnnotation",
+                  "start":139,"end":163,"loc":{"start":{"line":10,"column":12},"end":{"line":10,"column":36}},
+                  "typeAnnotation": {
+                    "type": "TSTypePredicate",
+                    "start":141,"end":163,"loc":{"start":{"line":10,"column":14},"end":{"line":10,"column":36}},
+                    "parameterName": {
+                      "type": "TSThisType",
+                      "start":149,"end":153,"loc":{"start":{"line":10,"column":22},"end":{"line":10,"column":26}}
+                    },
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":157,"end":163,"loc":{"start":{"line":10,"column":30},"end":{"line":10,"column":36}},
+                      "typeAnnotation": {
+                        "type": "TSStringKeyword",
+                        "start":157,"end":163,"loc":{"start":{"line":10,"column":30},"end":{"line":10,"column":36}}
+                      }
+                    },
+                    "asserts": true
+                  }
+                },
+                "id": null,
+                "generator": false,
+                "async": false,
+                "expression": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":167,"end":184,"loc":{"start":{"line":10,"column":40},"end":{"line":12,"column":3}},
+                  "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "start":173,"end":180,"loc":{"start":{"line":11,"column":4},"end":{"line":11,"column":11}},
+                      "argument": null
+                    }
+                  ]
+                }
+              },
+              "declare": false,
+              "definite": false,
+              "readonly": false,
+              "decorators": [],
+              "override": false,
+              "optional": false
+            }
+          ]
+        },
+        "abstract": false,
+        "declare": false,
+        "decorators": [],
+        "implements": []
+      }
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

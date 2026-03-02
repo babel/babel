@@ -1,23 +1,23 @@
-const defineHelper = require("../../../helpers/define-helper").default;
+import defineHelper from "../../../helpers/define-helper.js";
 
-const dependencyDeep = defineHelper(__dirname, "dependencyDeep", `
-  export default function fn() {}
-`)
+export default function(babel) {
+  const dependencyDeep = defineHelper(babel, import.meta.url, "dependencyDeep", `
+    export default function fn() {}
+  `)
 
-const dependency = defineHelper(__dirname, "dependency", `
-  import f from "${dependencyDeep}";
-  export default function fn() { return f; }
-`);
+  const dependency = defineHelper(babel, import.meta.url, "dependency", `
+    import f from "${dependencyDeep}";
+    export default function fn() { return f; }
+  `);
 
-const main = defineHelper(__dirname, "main", `
-  import dep from "${dependency}";
+  const main = defineHelper(babel, import.meta.url, "main", `
+    import dep from "${dependency}";
 
-  export default function helper() {
-    return dep();
-  }
-`);
+    export default function helper() {
+      return dep();
+    }
+  `);
 
-module.exports = function() {
   return {
     visitor: {
       Identifier(path) {

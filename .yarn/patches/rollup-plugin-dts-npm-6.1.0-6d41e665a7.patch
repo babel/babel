@@ -1,0 +1,24 @@
+diff --git a/dist/rollup-plugin-dts.mjs b/dist/rollup-plugin-dts.mjs
+index 4a9412285c48c37d03340a086c771f8e61fd82ac..9e7c42c4ca12ddbee7e1bdbfe19e30b1d5555bc0 100644
+--- a/dist/rollup-plugin-dts.mjs
++++ b/dist/rollup-plugin-dts.mjs
+@@ -309,6 +309,19 @@ class NamespaceFixer {
+             }
+             const exports = [];
+             for (const prop of obj.properties) {
++                // Rollup generates an object of getters for re-exports sometimes
++                if (
++                    ts.isGetAccessor(prop) &&
++                    ts.isIdentifier(prop.name) &&
++                    ts.isReturnStatement(prop.body.statements[0]) &&
++                    ts.isIdentifier(prop.body.statements[0].expression)
++                ) {
++                    exports.push({
++                        exportedName: prop.name.text,
++                        localName: prop.body.statements[0].expression.getText()
++                    });
++                    continue;
++                }
+                 if (!ts.isPropertyAssignment(prop) ||
+                     !(ts.isIdentifier(prop.name) || ts.isStringLiteral(prop.name)) ||
+                     (prop.name.text !== "__proto__" && !ts.isIdentifier(prop.initializer))) {

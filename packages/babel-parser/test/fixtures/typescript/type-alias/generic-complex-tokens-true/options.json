@@ -1,5 +1,7 @@
 {
   "sourceType": "module",
-  "plugins": ["typescript"],
+  "plugins": [
+    "typescript"
+  ],
   "tokens": true
 }

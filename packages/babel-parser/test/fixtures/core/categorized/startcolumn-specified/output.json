@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":3,"end":19,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":2,"column":7,"index":19}},
+  "program": {
+    "type": "Program",
+    "start":3,"end":19,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":2,"column":7,"index":19}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":3,"end":11,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":11,"index":11}},
+        "expression": {
+          "type": "CallExpression",
+          "start":3,"end":10,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":10,"index":10}},
+          "callee": {
+            "type": "Identifier",
+            "start":3,"end":7,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":7,"index":7},"identifierName":"call"},
+            "name": "call"
+          },
+          "arguments": [
+            {
+              "type": "NumericLiteral",
+              "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":12,"end":19,"loc":{"start":{"line":2,"column":0,"index":12},"end":{"line":2,"column":7,"index":19}},
+        "expression": {
+          "type": "CallExpression",
+          "start":12,"end":18,"loc":{"start":{"line":2,"column":0,"index":12},"end":{"line":2,"column":6,"index":18}},
+          "callee": {
+            "type": "Identifier",
+            "start":12,"end":15,"loc":{"start":{"line":2,"column":0,"index":12},"end":{"line":2,"column":3,"index":15},"identifierName":"run"},
+            "name": "run"
+          },
+          "arguments": [
+            {
+              "type": "NumericLiteral",
+              "start":16,"end":17,"loc":{"start":{"line":2,"column":4,"index":16},"end":{"line":2,"column":5,"index":17}},
+              "extra": {
+                "rawValue": 2,
+                "raw": "2"
+              },
+              "value": 2
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

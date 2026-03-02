@@ -1,14 +1,17 @@
-import { transform } from "../lib/index";
-import Plugin from "../lib/config/plugin";
+import { transformSync } from "../lib/index.js";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+
+const cwd = path.dirname(fileURLToPath(import.meta.url));
 
 describe("traversal path", function () {
   it("replaceWithSourceString", function () {
     const expectCode = "function foo() {}";
 
-    const actualCode = transform(expectCode, {
-      cwd: __dirname,
+    const actualCode = transformSync(expectCode, {
+      cwd,
       plugins: [
-        new Plugin({
+        () => ({
           visitor: {
             FunctionDeclaration: function (path) {
               path.replaceWithSourceString("console.whatever()");
@@ -24,10 +27,10 @@ describe("traversal path", function () {
   it("replaceWith (arrow expression body to block statement body)", function () {
     const expectCode = "var fn = () => true;";
 
-    const actualCode = transform(expectCode, {
-      cwd: __dirname,
+    const actualCode = transformSync(expectCode, {
+      cwd,
       plugins: [
-        new Plugin({
+        () => ({
           visitor: {
             ArrowFunctionExpression: function (path) {
               path.get("body").replaceWith({
@@ -54,10 +57,10 @@ describe("traversal path", function () {
   it("replaceWith (arrow block statement body to expression body)", function () {
     const expectCode = "var fn = () => { return true; }";
 
-    const actualCode = transform(expectCode, {
-      cwd: __dirname,
+    const actualCode = transformSync(expectCode, {
+      cwd,
       plugins: [
-        new Plugin({
+        () => ({
           visitor: {
             ArrowFunctionExpression: function (path) {
               path.get("body").replaceWith({
@@ -76,10 +79,10 @@ describe("traversal path", function () {
   it("replaceWith (for-in left expression to variable declaration)", function () {
     const expectCode = "for (KEY in right);";
 
-    const actualCode = transform(expectCode, {
-      cwd: __dirname,
+    const actualCode = transformSync(expectCode, {
+      cwd,
       plugins: [
-        new Plugin({
+        () => ({
           visitor: {
             ForInStatement: function (path) {
               path.get("left").replaceWith({
@@ -107,10 +110,10 @@ describe("traversal path", function () {
   it("replaceWith (for-in left variable declaration to expression)", function () {
     const expectCode = "for (var KEY in right);";
 
-    const actualCode = transform(expectCode, {
-      cwd: __dirname,
+    const actualCode = transformSync(expectCode, {
+      cwd,
       plugins: [
-        new Plugin({
+        () => ({
           visitor: {
             ForInStatement: function (path) {
               path.get("left").replaceWith({
@@ -129,10 +132,10 @@ describe("traversal path", function () {
   it("replaceWith (for-loop left expression to variable declaration)", function () {
     const expectCode = "for (KEY;;);";
 
-    const actualCode = transform(expectCode, {
-      cwd: __dirname,
+    const actualCode = transformSync(expectCode, {
+      cwd,
       plugins: [
-        new Plugin({
+        () => ({
           visitor: {
             ForStatement: function (path) {
               path.get("init").replaceWith({
@@ -160,10 +163,10 @@ describe("traversal path", function () {
   it("replaceWith (for-loop left variable declaration to expression)", function () {
     const expectCode = "for (var KEY;;);";
 
-    const actualCode = transform(expectCode, {
-      cwd: __dirname,
+    const actualCode = transformSync(expectCode, {
+      cwd,
       plugins: [
-        new Plugin({
+        () => ({
           visitor: {
             ForStatement: function (path) {
               path.get("init").replaceWith({

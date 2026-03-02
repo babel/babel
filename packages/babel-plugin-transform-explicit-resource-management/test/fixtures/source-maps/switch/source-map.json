@@ -1,0 +1,25 @@
+{
+  "version": 3,
+  "names": [
+    "f",
+    "v",
+    "_usingCtx",
+    "babelHelpers",
+    "usingCtx",
+    "x",
+    "u",
+    "_",
+    "e",
+    "d",
+    "_usingCtx2",
+    "y"
+  ],
+  "sources": [
+    "source-maps/switch/input.js"
+  ],
+  "sourcesContent": [
+    "function f() {\n  switch (v) {\n    case 0:\n      {\n        using x = 0;\n      }\n      break;\n    default:\n      {\n        using y = 1;\n      }\n      break;\n  };\n}"
+  ],
+  "mappings": "AAAA,SAASA,CAACA,CAAA,EAAG;EACX,QAAQC,CAAC;IACP,KAAK,CAAC;MACJ;QAAA,IAAAC,SAAA,GAAAC,YAAA,CAAAC,QAAA;QACE,MAAMC,CAAC,GAAAH,SAAA,CAAAI,CAAA,CAAG,CAAC;MAAC,SAAAC,CAAA;QAAAL,SAAA,CAAAM,CAAA,GAAAD,CAAA;MAAA;QAAAL,SAAA,CAAAO,CAAA;MAAA;MAEd;IACF;MACE;QAAA,IAAAC,UAAA,GAAAP,YAAA,CAAAC,QAAA;QACE,MAAMO,CAAC,GAAAD,UAAA,CAAAJ,CAAA,CAAG,CAAC;MAAC,SAAAC,CAAA;QAAAG,UAAA,CAAAF,CAAA,GAAAD,CAAA;MAAA;QAAAG,UAAA,CAAAD,CAAA;MAAA;MAEd;EACJ;EAAC;AACH",
+  "ignoreList": []
+}

@@ -1,0 +1,84 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":46,"index":46}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":46,"index":46}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":46,"index":46}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":46,"index":46}},
+          "callee": {
+            "type": "Import",
+            "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}}
+          },
+          "arguments": [
+            {
+              "type": "StringLiteral",
+              "start":7,"end":17,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":17,"index":17}},
+              "extra": {
+                "rawValue": "foo.json",
+                "raw": "\"foo.json\""
+              },
+              "value": "foo.json"
+            },
+            {
+              "type": "ObjectExpression",
+              "start":19,"end":45,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":45,"index":45}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":21,"end":43,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":43,"index":43}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":21,"end":25,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":25,"index":25},"identifierName":"with"},
+                    "name": "with"
+                  },
+                  "computed": false,
+                  "shorthand": false,
+                  "value": {
+                    "type": "ObjectExpression",
+                    "start":27,"end":43,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":43,"index":43}},
+                    "properties": [
+                      {
+                        "type": "ObjectProperty",
+                        "start":29,"end":41,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":41,"index":41}},
+                        "method": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start":29,"end":33,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":33,"index":33},"identifierName":"type"},
+                          "name": "type"
+                        },
+                        "computed": false,
+                        "shorthand": false,
+                        "value": {
+                          "type": "StringLiteral",
+                          "start":35,"end":41,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":41,"index":41}},
+                          "extra": {
+                            "rawValue": "json",
+                            "raw": "\"json\""
+                          },
+                          "value": "json"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

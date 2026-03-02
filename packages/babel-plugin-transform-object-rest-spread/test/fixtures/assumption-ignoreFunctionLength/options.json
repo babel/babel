@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    "transform-object-rest-spread"
+  ],
+  "assumptions": {
+    "ignoreFunctionLength": true
+  },
+  "targets": {
+    "browsers": "ie 6"
+  }
+}

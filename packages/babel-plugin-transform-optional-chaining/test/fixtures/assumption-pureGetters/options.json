@@ -1,0 +1,6 @@
+{
+  "plugins": ["transform-optional-chaining"],
+  "assumptions": {
+    "pureGetters": true
+  }
+}

@@ -3,7 +3,6 @@ var test = {
    * Test 2
    */
   a: "1",
-
   /*
    * Test 1
    */

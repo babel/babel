@@ -1,17 +1,12 @@
-var _ref = <div>child</div>;
-
+var _div, _div2;
 const AppItem = () => {
-  return _ref;
+  return _div || (_div = <div>child</div>);
 };
-
-var _ref2 = <div>
-        <p>Parent</p>
-        <AppItem />
-      </div>;
-
 export default class App extends React.Component {
   render() {
-    return _ref2;
+    return _div2 || (_div2 = <div>
+        <p>Parent</p>
+        <AppItem />
+      </div>);
   }
-
 }

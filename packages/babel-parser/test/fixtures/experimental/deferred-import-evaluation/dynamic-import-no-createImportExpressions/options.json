@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "deferredImportEvaluation"
+  ],
+  "createImportExpressions": false
+}

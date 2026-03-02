@@ -1,0 +1,1 @@
+error: option '-l, --allowlist <allowlist>' argument missing

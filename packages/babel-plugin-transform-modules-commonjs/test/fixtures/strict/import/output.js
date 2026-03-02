@@ -1,9 +1,10 @@
 "use strict";
 
-var foo4 = babelHelpers.interopRequireWildcard(require("foo"));
-foo4.default;
-foo4.default;
-foo4.foo3;
-(0, foo4.foo3)();
-(0, foo4.foo3)``;
-(0, foo4.foo3)?.();
+var _foo = babelHelpers.interopRequireWildcard(require("foo"));
+var foo4 = _foo;
+_foo.default;
+_foo.default;
+_foo.foo3;
+(0, _foo.foo3)();
+(0, _foo.foo3)``;
+(0, _foo.foo3)?.();

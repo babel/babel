@@ -1,4 +1,3 @@
-/*#__PURE__*/
-React.createElement(Foo, {
+/*#__PURE__*/React.createElement(Foo, {
   ref: "bar"
 });

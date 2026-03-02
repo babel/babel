@@ -1,0 +1,24 @@
+import type { Options } from "./types";
+
+export default function normalizeESLintConfig(options: any) {
+  const {
+    babelOptions = {},
+    // ESLint sets ecmaVersion: undefined when ecmaVersion is not set in the config.
+    ecmaVersion = "latest",
+    sourceType = "module",
+    requireConfigFile = true,
+    ...otherOptions
+  } = options;
+
+  return {
+    babelOptions: {
+      cwd: process.cwd(),
+      ...babelOptions,
+      browserslistConfigFile: false,
+    },
+    ecmaVersion: ecmaVersion === "latest" ? 1e8 : ecmaVersion,
+    sourceType,
+    requireConfigFile,
+    ...otherOptions,
+  } as Options;
+}

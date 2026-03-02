@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`builders typescript tsLiteralType accept unary expression 1`] = `
+Object {
+  "literal": Object {
+    "argument": Object {
+      "type": "NumericLiteral",
+      "value": 1,
+    },
+    "operator": "-",
+    "prefix": true,
+    "type": "UnaryExpression",
+  },
+  "type": "TSLiteralType",
+}
+`;

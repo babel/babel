@@ -1,0 +1,19 @@
+{
+  "version": 3,
+  "names": [
+    "fn",
+    "_arguments",
+    "arguments",
+    "inner",
+    "console",
+    "log"
+  ],
+  "sources": [
+    "conversion/arguments-source-maps/input.js"
+  ],
+  "sourcesContent": [
+    "function fn() {\n  var inner = () => {\n    console.log(arguments);\n  };\n}"
+  ],
+  "mappings": "AAAA,SAASA,EAAEA,CAAA,EAAG;EAAA,IAAAC,UAAA,GAAAC,SAAA;EACZ,IAAIC,KAAK,GAAG,SAAAA,CAAA,EAAM;IAChBC,OAAO,CAACC,GAAG,CAACH,UAAS,CAAC;EACxB,CAAC;AACH",
+  "ignoreList": []
+}

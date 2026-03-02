@@ -1,0 +1,3 @@
+{
+  "plugins": ["bugfix-safari-class-field-initializer-scope"]
+}

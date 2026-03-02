@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":22,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":22,"index":22}},
+            "id": {
+              "type": "ArrayPattern",
+              "start":4,"end":18,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":18,"index":18}},
+              "elements": [
+                {
+                  "type": "Identifier",
+                  "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"a"},
+                  "name": "a"
+                },
+                {
+                  "type": "RestElement",
+                  "start":8,"end":17,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":17,"index":17}},
+                  "argument": {
+                    "type": "ArrayPattern",
+                    "start":11,"end":17,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":17,"index":17}},
+                    "elements": [
+                      {
+                        "type": "Identifier",
+                        "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"b"},
+                        "name": "b"
+                      },
+                      {
+                        "type": "Identifier",
+                        "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"c"},
+                        "name": "c"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "init": {
+              "type": "Identifier",
+              "start":21,"end":22,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":22,"index":22},"identifierName":"d"},
+              "name": "d"
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

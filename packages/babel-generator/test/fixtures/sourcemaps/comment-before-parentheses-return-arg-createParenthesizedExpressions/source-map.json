@@ -1,0 +1,23 @@
+{
+  "version": 3,
+  "names": [
+    "assertElement",
+    "assertFn",
+    "shouldBeElement",
+    "opt_message",
+    "assertType_",
+    "isElement",
+    "slot",
+    "e",
+    "target",
+    "el"
+  ],
+  "sources": [
+    "fixtures/sourcemaps/comment-before-parentheses-return-arg-createParenthesizedExpressions/input.js"
+  ],
+  "sourcesContent": [
+    "function assertElement(assertFn, shouldBeElement, opt_message) {\n  return /** @type {!Ele\tment} */ (\n\t  assertType_(\n\t    assertFn,\n\t\t  shouldBeElement,\n\t\t  isElement(shouldBeElement),\n\t\t  'Element expected',\n\t\t  opt_message\n\t  )\n\t);\n}\n\nconst slot = /** @type {!HTMLSlotElement} */ (e.target);\n\nassertElement(\n  /** @type {Element} */ (el),\n);"
+  ],
+  "mappings": "AAAA,SAASA,aAAaA,CAACC,QAAQ,EAAEC,eAAe,EAAEC,WAAW,EAAE;EAC7D,OAAO,wBAAyB;EAC/BC,WAAW;IACTH,QAAQ;IACTC,eAAe;IACfG,SAAS,CAACH,eAAe,CAAC;IAC1B,kBAAkB;IAClBC;EACD;EACF,CAAC;AACF;;AAEA,MAAMG,IAAI,GAAG,+BAAgC,CAACC,CAAC,CAACC,MAAM,CAAC;;AAEvDR,aAAa;EACX,sBAAuB,CAACS,EAAE;AAC5B,CAAC",
+  "ignoreList": []
+}

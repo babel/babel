@@ -1,0 +1,17 @@
+{
+  "version": 3,
+  "names": [
+    "React",
+    "App",
+    "createElement",
+    "className"
+  ],
+  "sources": [
+    "sourcemaps/JSXText/input.js"
+  ],
+  "sourcesContent": [
+    "import React from 'react';\n\nexport default function App() {\n  return (\n    <div className=\"App\">\n      <h1>Welcome to my application!</h1>\n      This is my app!\n      <strong>MINE.</strong>\n    </div>\n  )\n}"
+  ],
+  "mappings": "AAAA,OAAOA,KAAK,MAAM,OAAO;AAEzB,eAAe,SAASC,GAAGA,CAAA,EAAG;EAC5B,oBACED,KAAA,CAAAE,aAAA;IAAKC,SAAS,EAAC;EAAK,gBAClBH,KAAA,CAAAE,aAAA,aAAI,4BAA8B,CAAC,mBAEnC,eAAAF,KAAA,CAAAE,aAAA,iBAAQ,OAAa,CAClB,CAAC;AAEV",
+  "ignoreList": []
+}

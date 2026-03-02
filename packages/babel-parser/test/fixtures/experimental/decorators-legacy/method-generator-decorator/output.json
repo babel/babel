@@ -1,0 +1,62 @@
+{
+  "type": "File",
+  "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":45}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":45}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":45}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":10,"end":45,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":4,"column":1,"index":45}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":14,"end":43,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":3,"column":23,"index":43}},
+              "decorators": [
+                {
+                  "type": "Decorator",
+                  "start":14,"end":19,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":7,"index":19}},
+                  "expression": {
+                    "type": "Identifier",
+                    "start":15,"end":19,"loc":{"start":{"line":2,"column":3,"index":15},"end":{"line":2,"column":7,"index":19},"identifierName":"deco"},
+                    "name": "deco"
+                  }
+                }
+              ],
+              "static": false,
+              "kind": "method",
+              "key": {
+                "type": "Identifier",
+                "start":23,"end":38,"loc":{"start":{"line":3,"column":3,"index":23},"end":{"line":3,"column":18,"index":38},"identifierName":"generatorMethod"},
+                "name": "generatorMethod"
+              },
+              "computed": false,
+              "id": null,
+              "generator": true,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":41,"end":43,"loc":{"start":{"line":3,"column":21,"index":41},"end":{"line":3,"column":23,"index":43}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

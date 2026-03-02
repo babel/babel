@@ -1,0 +1,94 @@
+{
+  "type": "File",
+  "start":0,"end":65,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":15,"index":65}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":65,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":15,"index":65}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":49}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":48,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":3,"column":1,"index":48}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"m"},
+              "name": "m"
+            },
+            "init": {
+              "type": "ModuleExpression",
+              "start":10,"end":48,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":1,"index":48}},
+              "body": {
+                "type": "Program",
+                "start":18,"end":47,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":3,"column":0,"index":47}},
+                "sourceType": "module",
+                "interpreter": null,
+                "body": [
+                  {
+                    "type": "ExportNamedDeclaration",
+                    "start":21,"end":46,"loc":{"start":{"line":2,"column":2,"index":21},"end":{"line":2,"column":27,"index":46}},
+                    "specifiers": [],
+                    "source": null,
+                    "attributes": [],
+                    "declaration": {
+                      "type": "VariableDeclaration",
+                      "start":28,"end":46,"loc":{"start":{"line":2,"column":9,"index":28},"end":{"line":2,"column":27,"index":46}},
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
+                          "start":34,"end":45,"loc":{"start":{"line":2,"column":15,"index":34},"end":{"line":2,"column":26,"index":45}},
+                          "id": {
+                            "type": "Identifier",
+                            "start":34,"end":37,"loc":{"start":{"line":2,"column":15,"index":34},"end":{"line":2,"column":18,"index":37},"identifierName":"foo"},
+                            "name": "foo"
+                          },
+                          "init": {
+                            "type": "StringLiteral",
+                            "start":40,"end":45,"loc":{"start":{"line":2,"column":21,"index":40},"end":{"line":2,"column":26,"index":45}},
+                            "extra": {
+                              "rawValue": "foo",
+                              "raw": "\"foo\""
+                            },
+                            "value": "foo"
+                          }
+                        }
+                      ],
+                      "kind": "const"
+                    }
+                  }
+                ],
+                "directives": [],
+                "extra": {
+                  "topLevelAwait": false
+                }
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":50,"end":65,"loc":{"start":{"line":4,"column":0,"index":50},"end":{"line":4,"column":15,"index":65}},
+        "expression": {
+          "type": "ImportExpression",
+          "start":50,"end":64,"loc":{"start":{"line":4,"column":0,"index":50},"end":{"line":4,"column":14,"index":64}},
+          "source": {
+            "type": "Identifier",
+            "start":57,"end":63,"loc":{"start":{"line":4,"column":7,"index":57},"end":{"line":4,"column":13,"index":63},"identifierName":"module"},
+            "name": "module"
+          },
+          "options": null
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

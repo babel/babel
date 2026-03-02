@@ -1,4 +1,0 @@
-{
-  "throws": "Unexpected token (2:4)",
-  "plugins": ["classProperties"]
-}

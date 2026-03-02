@@ -1,0 +1,89 @@
+{
+  "type": "File",
+  "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":57}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":57}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":57}},
+        "decorators": [
+          {
+            "type": "Decorator",
+            "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":40}},
+            "expression": {
+              "type": "CallExpression",
+              "start":1,"end":40,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":3,"column":2,"index":40}},
+              "callee": {
+                "type": "Identifier",
+                "start":1,"end":6,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":6,"index":6},"identifierName":"outer"},
+                "name": "outer"
+              },
+              "arguments": [
+                {
+                  "type": "ObjectExpression",
+                  "start":7,"end":39,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":3,"column":1,"index":39}},
+                  "properties": [
+                    {
+                      "type": "ObjectProperty",
+                      "start":11,"end":37,"loc":{"start":{"line":2,"column":2,"index":11},"end":{"line":2,"column":28,"index":37}},
+                      "method": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start":11,"end":16,"loc":{"start":{"line":2,"column":2,"index":11},"end":{"line":2,"column":7,"index":16},"identifierName":"store"},
+                        "name": "store"
+                      },
+                      "computed": false,
+                      "shorthand": false,
+                      "value": {
+                        "type": "ClassExpression",
+                        "start":18,"end":37,"loc":{"start":{"line":2,"column":9,"index":18},"end":{"line":2,"column":28,"index":37}},
+                        "decorators": [
+                          {
+                            "type": "Decorator",
+                            "start":18,"end":24,"loc":{"start":{"line":2,"column":9,"index":18},"end":{"line":2,"column":15,"index":24}},
+                            "expression": {
+                              "type": "Identifier",
+                              "start":19,"end":24,"loc":{"start":{"line":2,"column":10,"index":19},"end":{"line":2,"column":15,"index":24},"identifierName":"inner"},
+                              "name": "inner"
+                            }
+                          }
+                        ],
+                        "id": {
+                          "type": "Identifier",
+                          "start":31,"end":34,"loc":{"start":{"line":2,"column":22,"index":31},"end":{"line":2,"column":25,"index":34},"identifierName":"Foo"},
+                          "name": "Foo"
+                        },
+                        "superClass": null,
+                        "body": {
+                          "type": "ClassBody",
+                          "start":35,"end":37,"loc":{"start":{"line":2,"column":26,"index":35},"end":{"line":2,"column":28,"index":37}},
+                          "body": []
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "id": {
+          "type": "Identifier",
+          "start":47,"end":50,"loc":{"start":{"line":4,"column":6,"index":47},"end":{"line":4,"column":9,"index":50},"identifierName":"Bar"},
+          "name": "Bar"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":51,"end":57,"loc":{"start":{"line":4,"column":10,"index":51},"end":{"line":6,"column":1,"index":57}},
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

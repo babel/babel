@@ -1,0 +1,5 @@
+{
+  "startIndex": 3,
+  "startLine": 2,
+  "throws": "With a `startLine > 1` you must also specify `startIndex` and `startColumn`."
+}

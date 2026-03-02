@@ -1,5 +1,10 @@
-import path from "path";
-import { runFixtureTests } from "./helpers/runFixtureTests";
-import { parse } from "../lib";
+import path from "node:path";
+import runFixtureTests from "./helpers/run-fixture-tests.js";
+import { parse } from "../lib/index.js";
+import { fileURLToPath } from "node:url";
 
-runFixtureTests(path.join(__dirname, "fixtures"), parse);
+const fixtures = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "fixtures",
+);
+runFixtureTests(fixtures, parse);

@@ -31,42 +31,28 @@ class Foo {
   static #foo3;
   static #foo4 = Foo.#foo;
 }
-
 class A1 {
   static a;
   static;
 }
-
 class A2 {
   get;
-
   *a() {}
-
 }
-
 class A3 {
   static *a() {}
-
 }
-
 class A4 {
   async;
-
   a() {}
-
 }
-
 class A5 {
   static async;
   a;
 }
-
 class A6 {
   get ['a']() {}
-
 }
-
 class A7 {
   static get static() {}
-
 }

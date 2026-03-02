@@ -1,0 +1,7 @@
+{
+  "assumptions": {
+    "iterableIsArray": true
+  },
+  "targets": "node 4.0",
+  "presets": ["env"]
+}

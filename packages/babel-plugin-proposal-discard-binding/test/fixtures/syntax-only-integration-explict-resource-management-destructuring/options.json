@@ -1,0 +1,10 @@
+{
+  "parserOpts": {
+    "plugins": [
+      ["discardBinding", { "syntaxType": "void" }],
+      "explicitResourceManagement"
+    ]
+  },
+  "plugins": ["transform-destructuring"],
+  "sourceType": "module"
+}

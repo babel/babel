@@ -5,16 +5,18 @@ function f() {
     return a;
   }(a);
 }
-
-async function g() {
-  let a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-  return async function (a) {
-    var a = await a;
-    return a;
-  }(a);
+function g() {
+  try {
+    let a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+    return async function (a) {
+      var a = await a;
+      return a;
+    }(a);
+  } catch (e) {
+    return Promise.reject(e);
+  }
 }
-
-async function h() {
+function h() {
   let a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
   return async function* (a) {
     var a = await (yield a);

@@ -1,0 +1,15 @@
+{
+  "version": 3,
+  "names": [
+    "t",
+    "x"
+  ],
+  "sources": [
+    "source-maps/arrow-function/input.js"
+  ],
+  "sourcesContent": [
+    "var t = x => x * x;"
+  ],
+  "mappings": "AAAA,IAAIA,CAAC,GAAG,SAAJA,CAACA,CAAGC,CAAC;EAAA,OAAIA,CAAC,GAAGA,CAAC;AAAA",
+  "ignoreList": []
+}

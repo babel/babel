@@ -1,0 +1,62 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+          "left": {
+            "type": "Identifier",
+            "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5},"identifierName":"value"},
+            "name": "value"
+          },
+          "operator": "|>",
+          "right": {
+            "type": "DoExpression",
+            "start":9,"end":39,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":39,"index":39}},
+            "async": false,
+            "body": {
+              "type": "BlockStatement",
+              "start":12,"end":39,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":39,"index":39}},
+              "body": [
+                {
+                  "type": "ForOfStatement",
+                  "start":14,"end":37,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":37,"index":37}},
+                  "await": false,
+                  "left": {
+                    "type": "Identifier",
+                    "start":19,"end":20,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":20,"index":20},"identifierName":"e"},
+                    "name": "e"
+                  },
+                  "right": {
+                    "type": "Identifier",
+                    "start":24,"end":32,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":32,"index":32},"identifierName":"sequence"},
+                    "name": "sequence"
+                  },
+                  "body": {
+                    "type": "ExpressionStatement",
+                    "start":34,"end":37,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":37,"index":37}},
+                    "expression": {
+                      "type": "TopicReference",
+                      "start":34,"end":36,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":36,"index":36}}
+                    }
+                  }
+                }
+              ],
+              "directives": []
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -2,11 +2,11 @@
   "validateLogs": true,
   "presets": [
     [
-      "../../../../lib",
+      "env",
       {
         "modules": false,
         "useBuiltIns": "entry",
-        "corejs": 3
+        "corejs": "3.0"
       }
     ]
   ]

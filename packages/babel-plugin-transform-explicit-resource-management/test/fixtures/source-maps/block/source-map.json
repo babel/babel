@@ -1,0 +1,23 @@
+{
+  "version": 3,
+  "names": [
+    "_usingCtx",
+    "babelHelpers",
+    "usingCtx",
+    "x",
+    "u",
+    "fn",
+    "doSomethingWith",
+    "_",
+    "e",
+    "d"
+  ],
+  "sources": [
+    "source-maps/block/input.js"
+  ],
+  "sourcesContent": [
+    "{\n  using x = fn();\n  doSomethingWith(x);\n}"
+  ],
+  "mappings": "AAAA;EAAA,IAAAA,SAAA,GAAAC,YAAA,CAAAC,QAAA;EACE,MAAMC,CAAC,GAAAH,SAAA,CAAAI,CAAA,CAAGC,EAAE,CAAC,CAAC;EACdC,eAAe,CAACH,CAAC,CAAC;AAAC,SAAAI,CAAA;EAAAP,SAAA,CAAAQ,CAAA,GAAAD,CAAA;AAAA;EAAAP,SAAA,CAAAS,CAAA;AAAA",
+  "ignoreList": []
+}

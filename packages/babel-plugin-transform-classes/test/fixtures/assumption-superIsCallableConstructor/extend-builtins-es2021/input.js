@@ -1,0 +1,1 @@
+class MergedError extends AggregateError {}

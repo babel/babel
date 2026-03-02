@@ -1,0 +1,108 @@
+{
+  "type": "File",
+  "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":51}},
+  "errors": [
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (2:4)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (2:9)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (4:4)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (4:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":51}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":51}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":51}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start":6,"end":51,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":5,"column":1,"index":51}},
+            "body": [],
+            "directives": [
+              {
+                "type": "Directive",
+                "start":10,"end":15,"loc":{"start":{"line":2,"column":2,"index":10},"end":{"line":2,"column":7,"index":15}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":10,"end":14,"loc":{"start":{"line":2,"column":2,"index":10},"end":{"line":2,"column":6,"index":14}},
+                  "extra": {
+                    "rawValue": "\\8",
+                    "raw": "\"\\8\"",
+                    "expressionValue": "8"
+                  },
+                  "value": "\\8"
+                }
+              },
+              {
+                "type": "Directive",
+                "start":15,"end":20,"loc":{"start":{"line":2,"column":7,"index":15},"end":{"line":2,"column":12,"index":20}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":15,"end":19,"loc":{"start":{"line":2,"column":7,"index":15},"end":{"line":2,"column":11,"index":19}},
+                  "extra": {
+                    "rawValue": "\\9",
+                    "raw": "\"\\9\"",
+                    "expressionValue": "9"
+                  },
+                  "value": "\\9"
+                }
+              },
+              {
+                "type": "Directive",
+                "start":23,"end":36,"loc":{"start":{"line":3,"column":2,"index":23},"end":{"line":3,"column":15,"index":36}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":23,"end":35,"loc":{"start":{"line":3,"column":2,"index":23},"end":{"line":3,"column":14,"index":35}},
+                  "extra": {
+                    "rawValue": "use strict",
+                    "raw": "\"use strict\"",
+                    "expressionValue": "use strict"
+                  },
+                  "value": "use strict"
+                }
+              },
+              {
+                "type": "Directive",
+                "start":39,"end":44,"loc":{"start":{"line":4,"column":2,"index":39},"end":{"line":4,"column":7,"index":44}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":39,"end":43,"loc":{"start":{"line":4,"column":2,"index":39},"end":{"line":4,"column":6,"index":43}},
+                  "extra": {
+                    "rawValue": "\\8",
+                    "raw": "\"\\8\"",
+                    "expressionValue": "8"
+                  },
+                  "value": "\\8"
+                }
+              },
+              {
+                "type": "Directive",
+                "start":44,"end":49,"loc":{"start":{"line":4,"column":7,"index":44},"end":{"line":4,"column":12,"index":49}},
+                "value": {
+                  "type": "DirectiveLiteral",
+                  "start":44,"end":48,"loc":{"start":{"line":4,"column":7,"index":44},"end":{"line":4,"column":11,"index":48}},
+                  "extra": {
+                    "rawValue": "\\9",
+                    "raw": "\"\\9\"",
+                    "expressionValue": "9"
+                  },
+                  "value": "\\9"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

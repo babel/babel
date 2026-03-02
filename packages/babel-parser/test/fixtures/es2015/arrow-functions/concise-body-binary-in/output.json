@@ -1,0 +1,88 @@
+{
+  "type": "File",
+  "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":40}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":40}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":40,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":40}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":40,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":3,"column":2,"index":40}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"t"},
+              "name": "t"
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start":10,"end":40,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":3,"column":2,"index":40}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "ObjectExpression",
+                "start":17,"end":39,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":3,"column":1,"index":39}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":21,"end":37,"loc":{"start":{"line":2,"column":2,"index":21},"end":{"line":2,"column":18,"index":37}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":21,"end":22,"loc":{"start":{"line":2,"column":2,"index":21},"end":{"line":2,"column":3,"index":22},"identifierName":"v"},
+                      "name": "v"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "ArrowFunctionExpression",
+                      "start":24,"end":37,"loc":{"start":{"line":2,"column":5,"index":24},"end":{"line":2,"column":18,"index":37}},
+                      "id": null,
+                      "generator": false,
+                      "async": false,
+                      "params": [
+                        {
+                          "type": "Identifier",
+                          "start":25,"end":26,"loc":{"start":{"line":2,"column":6,"index":25},"end":{"line":2,"column":7,"index":26},"identifierName":"v"},
+                          "name": "v"
+                        }
+                      ],
+                      "body": {
+                        "type": "BinaryExpression",
+                        "start":31,"end":37,"loc":{"start":{"line":2,"column":12,"index":31},"end":{"line":2,"column":18,"index":37}},
+                        "left": {
+                          "type": "Identifier",
+                          "start":31,"end":32,"loc":{"start":{"line":2,"column":12,"index":31},"end":{"line":2,"column":13,"index":32},"identifierName":"v"},
+                          "name": "v"
+                        },
+                        "operator": "in",
+                        "right": {
+                          "type": "Identifier",
+                          "start":36,"end":37,"loc":{"start":{"line":2,"column":17,"index":36},"end":{"line":2,"column":18,"index":37},"identifierName":"z"},
+                          "name": "z"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 16
+                }
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

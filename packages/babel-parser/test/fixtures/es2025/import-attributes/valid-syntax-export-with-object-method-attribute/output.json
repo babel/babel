@@ -1,0 +1,84 @@
+{
+  "type": "File",
+  "start":0,"end":81,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":81,"index":81}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":81,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":81,"index":81}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":81,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":81,"index":81}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":16,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":16,"index":16}},
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":16,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":16,"index":16},"identifierName":"default"},
+              "name": "default"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":9,"end":16,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":16,"index":16},"identifierName":"default"},
+              "name": "default"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":24,"end":34,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":34,"index":34}},
+          "extra": {
+            "rawValue": "foo.json",
+            "raw": "\"foo.json\""
+          },
+          "value": "foo.json"
+        },
+        "declaration": null,
+        "attributes": [
+          {
+            "type": "ImportAttribute",
+            "start":42,"end":54,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":54,"index":54}},
+            "key": {
+              "type": "Identifier",
+              "start":42,"end":46,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":46,"index":46},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":48,"end":54,"loc":{"start":{"line":1,"column":48,"index":48},"end":{"line":1,"column":54,"index":54}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          },
+          {
+            "type": "ImportAttribute",
+            "start":56,"end":78,"loc":{"start":{"line":1,"column":56,"index":56},"end":{"line":1,"column":78,"index":78}},
+            "key": {
+              "type": "Identifier",
+              "start":56,"end":70,"loc":{"start":{"line":1,"column":56,"index":56},"end":{"line":1,"column":70,"index":70},"identifierName":"hasOwnProperty"},
+              "name": "hasOwnProperty"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":72,"end":78,"loc":{"start":{"line":1,"column":72,"index":72},"end":{"line":1,"column":78,"index":78}},
+              "extra": {
+                "rawValue": "true",
+                "raw": "\"true\""
+              },
+              "value": "true"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

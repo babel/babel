@@ -1,0 +1,110 @@
+{
+  "type": "File",
+  "start":0,"end":104,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":59,"index":104}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":104,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":59,"index":104}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":44,"index":44}},
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10}},
+            "local": {
+              "type": "Identifier",
+              "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":16,"end":21,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":21,"index":21}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        },
+        "attributes": [
+          {
+            "type": "ImportAttribute",
+            "start":29,"end":41,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":41,"index":41}},
+            "key": {
+              "type": "Identifier",
+              "start":29,"end":33,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":33,"index":33},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":35,"end":41,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":41,"index":41}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":45,"end":104,"loc":{"start":{"line":2,"column":0,"index":45},"end":{"line":2,"column":59,"index":104}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":54,"end":68,"loc":{"start":{"line":2,"column":9,"index":54},"end":{"line":2,"column":23,"index":68}},
+            "local": {
+              "type": "Identifier",
+              "start":54,"end":61,"loc":{"start":{"line":2,"column":9,"index":54},"end":{"line":2,"column":16,"index":61},"identifierName":"default"},
+              "name": "default"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":65,"end":68,"loc":{"start":{"line":2,"column":20,"index":65},"end":{"line":2,"column":23,"index":68},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":76,"end":81,"loc":{"start":{"line":2,"column":31,"index":76},"end":{"line":2,"column":36,"index":81}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        },
+        "declaration": null,
+        "attributes": [
+          {
+            "type": "ImportAttribute",
+            "start":89,"end":101,"loc":{"start":{"line":2,"column":44,"index":89},"end":{"line":2,"column":56,"index":101}},
+            "key": {
+              "type": "Identifier",
+              "start":89,"end":93,"loc":{"start":{"line":2,"column":44,"index":89},"end":{"line":2,"column":48,"index":93},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":95,"end":101,"loc":{"start":{"line":2,"column":50,"index":95},"end":{"line":2,"column":56,"index":101}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

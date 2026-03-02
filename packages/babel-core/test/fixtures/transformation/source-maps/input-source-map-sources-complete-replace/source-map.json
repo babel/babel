@@ -1,0 +1,16 @@
+{
+  "version": 3,
+  "names": [],
+  "sources": [
+    "input.tsx",
+    "source-maps/input-source-map-sources-complete-replace/input.js",
+    "test.js"
+  ],
+  "sourcesContent": [
+    "foo(1);\nfunction foo(bar: number): never {\n    throw new Error('Intentional.');\n}",
+    "foo(1);\nfunction foo(bar) {\n    throw new Error('Intentional.');\n}\n//# sourceMappingURL=input.js.map",
+    "<bar />"
+  ],
+  "mappings": "AAAA,KAAI",
+  "ignoreList": []
+}

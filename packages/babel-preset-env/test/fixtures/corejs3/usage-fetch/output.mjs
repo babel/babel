@@ -1,3 +1,1 @@
-import "core-js/modules/es.object.to-string";
-import "core-js/modules/es.promise";
-var foo = fetch('foo');
+const foo = fetch('foo');

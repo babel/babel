@@ -1,0 +1,30 @@
+{
+  "name": "@babel/benchmark",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "$repo-utils": "link:../scripts/repo-utils",
+    "@babel-baseline/cli": "npm:@babel/cli@7.27.1",
+    "@babel-baseline/core": "npm:@babel/core@7.24.4",
+    "@babel-baseline/generator": "npm:@babel/generator@7.24.4",
+    "@babel-baseline/helper-compilation-targets": "npm:@babel/helper-compilation-targets@7.23.6",
+    "@babel-baseline/helper-validator-identifier": "npm:@babel/helper-validator-identifier@7.22.20",
+    "@babel-baseline/parser": "npm:@babel/parser@7.24.4",
+    "@babel-baseline/traverse": "npm:@babel/traverse@7.24.1",
+    "@babel-baseline/types": "npm:@babel/types@7.24.0",
+    "@babel/cli": "workspace:^",
+    "@babel/core": "workspace:^",
+    "@babel/generator": "workspace:^",
+    "@babel/helper-compilation-targets": "workspace:^",
+    "@babel/helper-validator-identifier": "workspace:^",
+    "@babel/parser": "workspace:^",
+    "@babel/plugin-transform-modules-commonjs": "workspace:^",
+    "@babel/preset-env": "workspace:^",
+    "@babel/preset-flow": "workspace:^",
+    "@babel/preset-typescript": "workspace:^",
+    "@babel/traverse": "workspace:^",
+    "@babel/types": "workspace:^",
+    "benchmark": "^2.1.4"
+  },
+  "version": "8.0.0-rc.2"
+}

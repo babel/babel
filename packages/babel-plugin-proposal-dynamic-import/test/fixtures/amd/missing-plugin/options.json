@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "transform-modules-amd",
-    "external-helpers"
-  ]
-}

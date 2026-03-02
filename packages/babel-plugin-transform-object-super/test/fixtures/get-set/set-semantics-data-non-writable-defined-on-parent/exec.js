@@ -18,6 +18,6 @@ Object.setPrototypeOf(obj, Base);
 
 expect(() => {
   obj.set();
-}).toThrow();
+}).toThrow(TypeError);
 expect(Base.test).toBe(1);
 expect(obj.test).toBe(2);

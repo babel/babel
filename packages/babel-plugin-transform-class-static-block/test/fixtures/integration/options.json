@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "transform-class-static-block",
+    "transform-private-property-in-object",
+    "transform-private-methods",
+    "transform-class-properties"
+  ]
+}

@@ -1,0 +1,3 @@
+{
+  "plugins": ["module:./plugin.mjs"]
+}

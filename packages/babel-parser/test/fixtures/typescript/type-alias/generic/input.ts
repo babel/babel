@@ -1,1 +1,1 @@
-type T<U> = U;
+type T<U>=U;

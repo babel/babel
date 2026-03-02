@@ -2,11 +2,8 @@ var _loop = function (i) {
   fns.push(function () {
     return i;
   });
-  return "continue";
+  return 1; // continue
 };
-
 for (var i in nums) {
-  var _ret = _loop(i);
-
-  if (_ret === "continue") continue;
+  if (_loop(i)) continue;
 }

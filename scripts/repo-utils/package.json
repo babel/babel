@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "main": "index.cjs",
+  "exports": {
+    ".": "./index.cjs",
+    "./babel-top-level": "./babel.js"
+  }
+}

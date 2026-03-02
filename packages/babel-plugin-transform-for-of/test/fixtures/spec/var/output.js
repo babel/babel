@@ -1,6 +1,5 @@
 var _iterator = babelHelpers.createForOfIteratorHelper(arr),
-    _step;
-
+  _step;
 try {
   for (_iterator.s(); !(_step = _iterator.n()).done;) {
     var i = _step.value;

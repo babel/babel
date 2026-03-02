@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+  "errors": [
+    "SyntaxError: Binding 'arguments' in strict mode. (1:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":27,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":27,"index":27}},
+            "id": {
+              "type": "ObjectPattern",
+              "start":6,"end":19,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":19,"index":19}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":8,"end":17,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":17,"index":17}},
+                  "key": {
+                    "type": "Identifier",
+                    "start":8,"end":17,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":17,"index":17},"identifierName":"arguments"},
+                    "name": "arguments"
+                  },
+                  "computed": false,
+                  "method": false,
+                  "shorthand": true,
+                  "value": {
+                    "type": "Identifier",
+                    "start":8,"end":17,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":17,"index":17},"identifierName":"arguments"},
+                    "name": "arguments"
+                  }
+                }
+              ]
+            },
+            "init": {
+              "type": "CallExpression",
+              "start":22,"end":27,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":27,"index":27}},
+              "callee": {
+                "type": "Identifier",
+                "start":22,"end":25,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":25,"index":25},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "arguments": []
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

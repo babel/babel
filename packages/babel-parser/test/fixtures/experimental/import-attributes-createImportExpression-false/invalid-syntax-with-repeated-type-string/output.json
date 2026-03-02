@@ -1,0 +1,108 @@
+{
+  "type": "File",
+  "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":79,"index":79}},
+  "errors": [
+    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes. (1:50)",
+    "SyntaxError: Duplicate key \"type\" is not allowed in module attributes. (1:64)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":79,"index":79}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":79,"index":79}},
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10}},
+            "local": {
+              "type": "Identifier",
+              "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10},"identifierName":"foo"},
+              "name": "foo"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":16,"end":26,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":26,"index":26}},
+          "extra": {
+            "rawValue": "foo.json",
+            "raw": "\"foo.json\""
+          },
+          "value": "foo.json"
+        },
+        "attributes": [
+          {
+            "type": "ImportAttribute",
+            "start":34,"end":48,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":48,"index":48}},
+            "key": {
+              "type": "StringLiteral",
+              "start":34,"end":40,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":40,"index":40}},
+              "extra": {
+                "rawValue": "type",
+                "raw": "\"type\""
+              },
+              "value": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":42,"end":48,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":48,"index":48}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          },
+          {
+            "type": "ImportAttribute",
+            "start":50,"end":62,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":62,"index":62}},
+            "key": {
+              "type": "Identifier",
+              "start":50,"end":54,"loc":{"start":{"line":1,"column":50,"index":50},"end":{"line":1,"column":54,"index":54},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":56,"end":62,"loc":{"start":{"line":1,"column":56,"index":56},"end":{"line":1,"column":62,"index":62}},
+              "extra": {
+                "rawValue": "html",
+                "raw": "\"html\""
+              },
+              "value": "html"
+            }
+          },
+          {
+            "type": "ImportAttribute",
+            "start":64,"end":76,"loc":{"start":{"line":1,"column":64,"index":64},"end":{"line":1,"column":76,"index":76}},
+            "key": {
+              "type": "StringLiteral",
+              "start":64,"end":70,"loc":{"start":{"line":1,"column":64,"index":64},"end":{"line":1,"column":70,"index":70}},
+              "extra": {
+                "rawValue": "type",
+                "raw": "\"type\""
+              },
+              "value": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":72,"end":76,"loc":{"start":{"line":1,"column":72,"index":72},"end":{"line":1,"column":76,"index":76}},
+              "extra": {
+                "rawValue": "js",
+                "raw": "\"js\""
+              },
+              "value": "js"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

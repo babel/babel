@@ -4,12 +4,22 @@ let foo3 = "foo";
 var foo4 = "bar";
 const foo5 = "foo";
 let foo6,
-    bar1 = "bar";
+  bar1 = "bar";
 var foo7,
-    bar2 = "bar";
+  bar2 = "bar";
 let foo8 = "foo",
-    bar3 = "bar";
+  bar3 = "bar";
 var foo9 = "foo",
-    bar4 = "bar";
+  bar4 = "bar";
 const foo10 = "foo",
-      bar5 = "bar";
+  bar5 = "bar";
+var a = {
+    a: 1,
+    b: 2,
+    c: 3
+  },
+  b = {
+    a: 1,
+    b: 2,
+    c: 3
+  };

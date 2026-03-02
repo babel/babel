@@ -1,0 +1,4 @@
+{
+  "args": ["payload.js"],
+  "stdout": "ipc disabled"
+}

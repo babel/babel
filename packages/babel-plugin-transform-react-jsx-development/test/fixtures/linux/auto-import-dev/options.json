@@ -1,5 +1,0 @@
-{
-  "plugins": ["transform-react-jsx-development"],
-  "sourceType": "module",
-  "os": ["linux", "darwin"]
-}

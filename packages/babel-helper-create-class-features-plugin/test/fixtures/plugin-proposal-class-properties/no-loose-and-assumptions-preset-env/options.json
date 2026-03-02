@@ -1,0 +1,8 @@
+{
+  "validateLogs": true,
+  "presets": [["env", { "shippedProposals": true }]],
+  "assumptions": {
+    "setPublicClassFields": true
+  },
+  "targets": "chrome 70"
+}

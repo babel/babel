@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":24,"index":24}},
+  "errors": [
+    "SyntaxError: 'await' is only allowed within async functions and at the top levels of modules. (1:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":24,"index":24}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":24,"index":24}},
+        "expression": {
+          "type": "AwaitExpression",
+          "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+          "argument": {
+            "type": "CallExpression",
+            "start":6,"end":23,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":23,"index":23}},
+            "callee": {
+              "type": "MemberExpression",
+              "start":6,"end":21,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":21,"index":21}},
+              "object": {
+                "type": "Identifier",
+                "start":6,"end":13,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":13,"index":13},"identifierName":"Promise"},
+                "name": "Promise"
+              },
+              "computed": false,
+              "property": {
+                "type": "Identifier",
+                "start":14,"end":21,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":21,"index":21},"identifierName":"resolve"},
+                "name": "resolve"
+              }
+            },
+            "arguments": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

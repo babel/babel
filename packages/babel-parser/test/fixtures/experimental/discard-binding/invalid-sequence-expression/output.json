@@ -1,0 +1,96 @@
+{
+  "type": "File",
+  "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":17,"index":41}},
+  "errors": [
+    "SyntaxError: 'void' must be followed by an expression when not used in a binding position. (1:1)",
+    "SyntaxError: 'void' must be followed by an expression when not used in a binding position. (3:4)",
+    "SyntaxError: 'void' must be followed by an expression when not used in a binding position. (5:1)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":41,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":17,"index":41}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+        "expression": {
+          "type": "SequenceExpression",
+          "start":1,"end":8,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":8,"index":8}},
+          "expressions": [
+            {
+              "type": "VoidPattern",
+              "start":1,"end":5,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":5,"index":5}}
+            },
+            {
+              "type": "Identifier",
+              "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8},"identifierName":"x"},
+              "name": "x"
+            }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":12,"end":22,"loc":{"start":{"line":3,"column":0,"index":12},"end":{"line":3,"column":10,"index":22}},
+        "expression": {
+          "type": "SequenceExpression",
+          "start":13,"end":20,"loc":{"start":{"line":3,"column":1,"index":13},"end":{"line":3,"column":8,"index":20}},
+          "expressions": [
+            {
+              "type": "Identifier",
+              "start":13,"end":14,"loc":{"start":{"line":3,"column":1,"index":13},"end":{"line":3,"column":2,"index":14},"identifierName":"x"},
+              "name": "x"
+            },
+            {
+              "type": "VoidPattern",
+              "start":16,"end":20,"loc":{"start":{"line":3,"column":4,"index":16},"end":{"line":3,"column":8,"index":20}}
+            }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 12
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":24,"end":41,"loc":{"start":{"line":5,"column":0,"index":24},"end":{"line":5,"column":17,"index":41}},
+        "expression": {
+          "type": "SequenceExpression",
+          "start":25,"end":39,"loc":{"start":{"line":5,"column":1,"index":25},"end":{"line":5,"column":15,"index":39}},
+          "expressions": [
+            {
+              "type": "VoidPattern",
+              "start":25,"end":29,"loc":{"start":{"line":5,"column":1,"index":25},"end":{"line":5,"column":5,"index":29}}
+            },
+            {
+              "type": "ArrowFunctionExpression",
+              "start":31,"end":39,"loc":{"start":{"line":5,"column":7,"index":31},"end":{"line":5,"column":15,"index":39}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":37,"end":39,"loc":{"start":{"line":5,"column":13,"index":37},"end":{"line":5,"column":15,"index":39}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 24
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

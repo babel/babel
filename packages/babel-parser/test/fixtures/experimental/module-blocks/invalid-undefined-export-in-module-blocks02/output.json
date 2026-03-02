@@ -1,0 +1,79 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":37}},
+  "errors": [
+    "SyntaxError: Export 'foo' is not defined. (3:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":37}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":9,"end":37,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":4,"column":1,"index":37}},
+        "expression": {
+          "type": "ModuleExpression",
+          "start":9,"end":37,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":4,"column":1,"index":37}},
+          "body": {
+            "type": "Program",
+            "start":17,"end":36,"loc":{"start":{"line":2,"column":8,"index":17},"end":{"line":4,"column":0,"index":36}},
+            "sourceType": "module",
+            "interpreter": null,
+            "body": [
+              {
+                "type": "ExportNamedDeclaration",
+                "start":20,"end":35,"loc":{"start":{"line":3,"column":2,"index":20},"end":{"line":3,"column":17,"index":35}},
+                "specifiers": [
+                  {
+                    "type": "ExportSpecifier",
+                    "start":29,"end":32,"loc":{"start":{"line":3,"column":11,"index":29},"end":{"line":3,"column":14,"index":32}},
+                    "local": {
+                      "type": "Identifier",
+                      "start":29,"end":32,"loc":{"start":{"line":3,"column":11,"index":29},"end":{"line":3,"column":14,"index":32},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "exported": {
+                      "type": "Identifier",
+                      "start":29,"end":32,"loc":{"start":{"line":3,"column":11,"index":29},"end":{"line":3,"column":14,"index":32},"identifierName":"foo"},
+                      "name": "foo"
+                    }
+                  }
+                ],
+                "source": null,
+                "declaration": null,
+                "attributes": []
+              }
+            ],
+            "directives": [],
+            "extra": {
+              "topLevelAwait": false
+            }
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

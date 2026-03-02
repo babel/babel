@@ -1,17 +1,13 @@
 function render(text) {
-  var _ref = <foo>{text}</foo>;
-
+  var _foo;
   return function () {
-    return _ref;
+    return _foo || (_foo = <foo>{text}</foo>);
   };
 }
-
 var Foo2 = require("Foo");
-
 function createComponent(text) {
-  var _ref2 = <Foo2>{text}</Foo2>;
-
+  var _Foo;
   return function render() {
-    return _ref2;
+    return _Foo || (_Foo = <Foo2>{text}</Foo2>);
   };
 }

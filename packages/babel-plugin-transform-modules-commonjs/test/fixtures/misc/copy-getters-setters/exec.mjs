@@ -1,3 +1,4 @@
+// No exception should be thrown
 import Foo, { baz } from "./moduleWithGetter";
 
-// No exception should be thrown
+expect(baz).toBe(123);

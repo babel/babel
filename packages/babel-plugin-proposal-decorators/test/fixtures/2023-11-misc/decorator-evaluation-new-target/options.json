@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "version": "2023-11" }],
+    "transform-class-static-block"
+  ],
+  "minNodeVersion": "16.9.0"
+}

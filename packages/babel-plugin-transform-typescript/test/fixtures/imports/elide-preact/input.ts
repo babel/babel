@@ -1,2 +1,2 @@
-import { FooBar, h } from "preact";
+import { FooBar, h, Fragment } from "preact";
 const x: FooBar = 0;

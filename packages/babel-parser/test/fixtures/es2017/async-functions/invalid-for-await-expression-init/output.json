@@ -1,0 +1,49 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+  "errors": [
+    "SyntaxError: 'await' is only allowed within async functions and at the top levels of modules. (1:5)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForStatement",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+        "init": {
+          "type": "AwaitExpression",
+          "start":5,"end":22,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":22,"index":22}},
+          "argument": {
+            "type": "MemberExpression",
+            "start":11,"end":22,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":22,"index":22}},
+            "object": {
+              "type": "Identifier",
+              "start":11,"end":18,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":18,"index":18},"identifierName":"of"},
+              "name": "of"
+            },
+            "computed": true,
+            "property": {
+              "type": "NumericLiteral",
+              "start":20,"end":21,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":21,"index":21}},
+              "extra": {
+                "rawValue": 0,
+                "raw": "0"
+              },
+              "value": 0
+            }
+          }
+        },
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start":25,"end":26,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":26,"index":26}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

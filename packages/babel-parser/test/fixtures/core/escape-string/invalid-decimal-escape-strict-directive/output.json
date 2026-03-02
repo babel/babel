@@ -1,0 +1,123 @@
+{
+  "type": "File",
+  "start":0,"end":87,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":22,"index":87}},
+  "errors": [
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (1:2)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (1:10)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (1:18)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (3:2)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (4:2)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (8:2)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (9:2)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (11:2)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (11:10)",
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (11:18)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":87,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":22,"index":87}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":21,"index":21}},
+          "extra": {
+            "rawValue": "\\01 foo \\02 bar \\03",
+            "raw": "\"\\01 foo \\02 bar \\03\"",
+            "expressionValue": "\u0001 foo \u0002 bar \u0003"
+          },
+          "value": "\\01 foo \\02 bar \\03"
+        }
+      },
+      {
+        "type": "Directive",
+        "start":24,"end":29,"loc":{"start":{"line":3,"column":0,"index":24},"end":{"line":3,"column":5,"index":29}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":24,"end":28,"loc":{"start":{"line":3,"column":0,"index":24},"end":{"line":3,"column":4,"index":28}},
+          "extra": {
+            "rawValue": "\\4",
+            "raw": "\"\\4\"",
+            "expressionValue": "\u0004"
+          },
+          "value": "\\4"
+        }
+      },
+      {
+        "type": "Directive",
+        "start":30,"end":35,"loc":{"start":{"line":4,"column":0,"index":30},"end":{"line":4,"column":5,"index":35}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":30,"end":34,"loc":{"start":{"line":4,"column":0,"index":30},"end":{"line":4,"column":4,"index":34}},
+          "extra": {
+            "rawValue": "\\5",
+            "raw": "\"\\5\"",
+            "expressionValue": "\u0005"
+          },
+          "value": "\\5"
+        }
+      },
+      {
+        "type": "Directive",
+        "start":37,"end":50,"loc":{"start":{"line":6,"column":0,"index":37},"end":{"line":6,"column":13,"index":50}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":37,"end":49,"loc":{"start":{"line":6,"column":0,"index":37},"end":{"line":6,"column":12,"index":49}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      },
+      {
+        "type": "Directive",
+        "start":52,"end":57,"loc":{"start":{"line":8,"column":0,"index":52},"end":{"line":8,"column":5,"index":57}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":52,"end":56,"loc":{"start":{"line":8,"column":0,"index":52},"end":{"line":8,"column":4,"index":56}},
+          "extra": {
+            "rawValue": "\\4",
+            "raw": "\"\\4\"",
+            "expressionValue": "\u0004"
+          },
+          "value": "\\4"
+        }
+      },
+      {
+        "type": "Directive",
+        "start":58,"end":63,"loc":{"start":{"line":9,"column":0,"index":58},"end":{"line":9,"column":5,"index":63}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":58,"end":62,"loc":{"start":{"line":9,"column":0,"index":58},"end":{"line":9,"column":4,"index":62}},
+          "extra": {
+            "rawValue": "\\5",
+            "raw": "\"\\5\"",
+            "expressionValue": "\u0005"
+          },
+          "value": "\\5"
+        }
+      },
+      {
+        "type": "Directive",
+        "start":65,"end":87,"loc":{"start":{"line":11,"column":0,"index":65},"end":{"line":11,"column":22,"index":87}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":65,"end":86,"loc":{"start":{"line":11,"column":0,"index":65},"end":{"line":11,"column":21,"index":86}},
+          "extra": {
+            "rawValue": "\\04 foo \\05 bar \\06",
+            "raw": "\"\\04 foo \\05 bar \\06\"",
+            "expressionValue": "\u0004 foo \u0005 bar \u0006"
+          },
+          "value": "\\04 foo \\05 bar \\06"
+        }
+      }
+    ]
+  }
+}

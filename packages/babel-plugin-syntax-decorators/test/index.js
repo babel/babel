@@ -1,69 +1,46 @@
-import { parse } from "@babel/core";
-import syntaxDecorators from "../lib";
+import { parseSync } from "@babel/core";
+import syntaxDecorators from "../lib/index.js";
 
 function makeParser(code, options) {
   return () =>
-    parse(code, {
+    parseSync(code, {
       babelrc: false,
       configFile: false,
       plugins: [[syntaxDecorators, options]],
     });
 }
 
-describe("'legacy' option", function () {
-  test("must be boolean", function () {
-    expect(makeParser("", { legacy: "legacy" })).toThrow();
+describe("'version' option", function () {
+  test("is incompatible with the 'legacy' option", function () {
+    expect(makeParser("", { version: "legacy", legacy: true })).toThrow(
+      /The \.legacy option has been removed in Babel 8. Use .version: "legacy" instead./,
+    );
   });
 
-  test("'legacy': false", function () {
-    expect(makeParser("({ @dec fn() {} })", { legacy: false })).toThrow();
-  });
-
-  test("'legacy': true", function () {
-    expect(makeParser("({ @dec fn() {} })", { legacy: true })).not.toThrow();
-  });
-
-  test("defaults to 'false'", function () {
-    expect(makeParser("({ @dec fn() {} })", {})).toThrow();
-  });
-});
-
-describe("'decoratorsBeforeExport' option", function () {
-  test("must be boolean", function () {
-    expect(makeParser("", { decoratorsBeforeExport: "before" })).toThrow();
-  });
-
-  test("is required", function () {
-    expect(makeParser("", { legacy: false })).toThrow(/decoratorsBeforeExport/);
-  });
-
-  test("is incompatible with legacy", function () {
+  test("throws on invalid values", function () {
+    expect(makeParser("", { version: "2015-02" })).toThrow();
     expect(
-      makeParser("", { decoratorsBeforeExport: false, legacy: true }),
+      makeParser("", { version: "2015-02", decoratorsBeforeExport: true }),
     ).toThrow();
   });
 
-  const BEFORE = "@dec export class Foo {}";
-  const AFTER = "export @dec class Foo {}";
+  test("'2023-11' disallows @(...)()", function () {
+    expect(makeParser("@(foo)() class A {}", { version: "2023-11" })).toThrow();
+    expect(
+      makeParser("@(foo()) class A {}", { version: "2023-11" }),
+    ).not.toThrow();
+  });
 
-  // These are skipped
-  run(BEFORE, true, false);
-  run(AFTER, true, true);
-  run(BEFORE, false, true);
-  run(AFTER, false, false);
+  test("'2023-11' allows decorators both before and after export", function () {
+    expect(
+      makeParser("@dec export class A {}", { version: "2023-11" }),
+    ).not.toThrow();
+    expect(
+      makeParser("export @dec class A {}", { version: "2023-11" }),
+    ).not.toThrow();
+  });
 
-  function run(code, before, throws) {
-    const name =
-      (before === undefined ? "default" : before) +
-      " - decorators " +
-      (code === BEFORE ? "before" : "after") +
-      "export";
-
-    test(name, function () {
-      const expectTheParser = expect(
-        makeParser(code, { decoratorsBeforeExport: before }),
-      );
-      throws ? expectTheParser.toThrow() : expectTheParser.not.toThrow();
-    });
-  }
+  it("is required", function () {
+    expect(makeParser("", {})).toThrow();
+  });
 });

@@ -1,0 +1,388 @@
+{
+  "type": "File",
+  "start":0,"end":507,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":18,"column":1,"index":507}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":507,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":18,"column":1,"index":507}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":104,"end":120,"loc":{"start":{"line":3,"column":0,"index":104},"end":{"line":3,"column":16,"index":120}},
+        "id": {
+          "type": "Identifier",
+          "start":109,"end":110,"loc":{"start":{"line":3,"column":5,"index":109},"end":{"line":3,"column":6,"index":110},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeAnnotation": {
+          "type": "TSNumberKeyword",
+          "start":113,"end":119,"loc":{"start":{"line":3,"column":9,"index":113},"end":{"line":3,"column":15,"index":119}}
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " packages\\babel-traverse\\test\\fixtures\\regression\\duplicate-variable-in-different-module-ts\\input.ts",
+            "start":0,"end":102,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":102,"index":102}}
+          }
+        ]
+      },
+      {
+        "type": "TSModuleDeclaration",
+        "start":121,"end":335,"loc":{"start":{"line":4,"column":0,"index":121},"end":{"line":11,"column":1,"index":335}},
+        "kind": "module",
+        "id": {
+          "type": "StringLiteral",
+          "start":136,"end":142,"loc":{"start":{"line":4,"column":15,"index":136},"end":{"line":4,"column":21,"index":142}},
+          "extra": {
+            "rawValue": "test",
+            "raw": "'test'"
+          },
+          "value": "test"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":143,"end":335,"loc":{"start":{"line":4,"column":22,"index":143},"end":{"line":11,"column":1,"index":335}},
+          "body": [
+            {
+              "type": "ImportDeclaration",
+              "start":147,"end":194,"loc":{"start":{"line":5,"column":2,"index":147},"end":{"line":5,"column":49,"index":194}},
+              "importKind": "type",
+              "specifiers": [
+                {
+                  "type": "ImportSpecifier",
+                  "start":161,"end":172,"loc":{"start":{"line":5,"column":16,"index":161},"end":{"line":5,"column":27,"index":172}},
+                  "imported": {
+                    "type": "Identifier",
+                    "start":161,"end":172,"loc":{"start":{"line":5,"column":16,"index":161},"end":{"line":5,"column":27,"index":172},"identifierName":"JSONSchema7"},
+                    "name": "JSONSchema7"
+                  },
+                  "importKind": "value",
+                  "local": {
+                    "type": "Identifier",
+                    "start":161,"end":172,"loc":{"start":{"line":5,"column":16,"index":161},"end":{"line":5,"column":27,"index":172},"identifierName":"JSONSchema7"},
+                    "name": "JSONSchema7"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":180,"end":193,"loc":{"start":{"line":5,"column":35,"index":180},"end":{"line":5,"column":48,"index":193}},
+                "extra": {
+                  "rawValue": "json-schema",
+                  "raw": "'json-schema'"
+                },
+                "value": "json-schema"
+              },
+              "attributes": []
+            },
+            {
+              "type": "ImportDeclaration",
+              "start":197,"end":223,"loc":{"start":{"line":6,"column":2,"index":197},"end":{"line":6,"column":28,"index":223}},
+              "importKind": "value",
+              "specifiers": [
+                {
+                  "type": "ImportSpecifier",
+                  "start":206,"end":209,"loc":{"start":{"line":6,"column":11,"index":206},"end":{"line":6,"column":14,"index":209}},
+                  "imported": {
+                    "type": "Identifier",
+                    "start":206,"end":209,"loc":{"start":{"line":6,"column":11,"index":206},"end":{"line":6,"column":14,"index":209},"identifierName":"bar"},
+                    "name": "bar"
+                  },
+                  "importKind": "value",
+                  "local": {
+                    "type": "Identifier",
+                    "start":206,"end":209,"loc":{"start":{"line":6,"column":11,"index":206},"end":{"line":6,"column":14,"index":209},"identifierName":"bar"},
+                    "name": "bar"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":217,"end":222,"loc":{"start":{"line":6,"column":22,"index":217},"end":{"line":6,"column":27,"index":222}},
+                "extra": {
+                  "rawValue": "baz",
+                  "raw": "\"baz\""
+                },
+                "value": "baz"
+              },
+              "attributes": []
+            },
+            {
+              "type": "ExportNamedDeclaration",
+              "start":226,"end":255,"loc":{"start":{"line":7,"column":2,"index":226},"end":{"line":7,"column":31,"index":255}},
+              "exportKind": "value",
+              "specifiers": [
+                {
+                  "type": "ExportSpecifier",
+                  "start":235,"end":241,"loc":{"start":{"line":7,"column":11,"index":235},"end":{"line":7,"column":17,"index":241}},
+                  "local": {
+                    "type": "Identifier",
+                    "start":235,"end":241,"loc":{"start":{"line":7,"column":11,"index":235},"end":{"line":7,"column":17,"index":241},"identifierName":"fooBar"},
+                    "name": "fooBar"
+                  },
+                  "exportKind": "value",
+                  "exported": {
+                    "type": "Identifier",
+                    "start":235,"end":241,"loc":{"start":{"line":7,"column":11,"index":235},"end":{"line":7,"column":17,"index":241},"identifierName":"fooBar"},
+                    "name": "fooBar"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":249,"end":254,"loc":{"start":{"line":7,"column":25,"index":249},"end":{"line":7,"column":30,"index":254}},
+                "extra": {
+                  "rawValue": "baz",
+                  "raw": "\"baz\""
+                },
+                "value": "baz"
+              },
+              "declaration": null,
+              "attributes": []
+            },
+            {
+              "type": "VariableDeclaration",
+              "start":258,"end":279,"loc":{"start":{"line":8,"column":2,"index":258},"end":{"line":8,"column":23,"index":279}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":262,"end":278,"loc":{"start":{"line":8,"column":6,"index":262},"end":{"line":8,"column":22,"index":278}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":262,"end":278,"loc":{"start":{"line":8,"column":6,"index":262},"end":{"line":8,"column":22,"index":278},"identifierName":"foo"},
+                    "name": "foo",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":265,"end":278,"loc":{"start":{"line":8,"column":9,"index":265},"end":{"line":8,"column":22,"index":278}},
+                      "typeAnnotation": {
+                        "type": "TSTypeReference",
+                        "start":267,"end":278,"loc":{"start":{"line":8,"column":11,"index":267},"end":{"line":8,"column":22,"index":278}},
+                        "typeName": {
+                          "type": "Identifier",
+                          "start":267,"end":278,"loc":{"start":{"line":8,"column":11,"index":267},"end":{"line":8,"column":22,"index":278},"identifierName":"JSONSchema7"},
+                          "name": "JSONSchema7"
+                        }
+                      }
+                    }
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "let",
+              "trailingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " can reference type outsider module",
+                  "start":282,"end":319,"loc":{"start":{"line":9,"column":2,"index":282},"end":{"line":9,"column":39,"index":319}}
+                }
+              ]
+            },
+            {
+              "type": "VariableDeclaration",
+              "start":322,"end":333,"loc":{"start":{"line":10,"column":2,"index":322},"end":{"line":10,"column":13,"index":333}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":326,"end":332,"loc":{"start":{"line":10,"column":6,"index":326},"end":{"line":10,"column":12,"index":332}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":326,"end":332,"loc":{"start":{"line":10,"column":6,"index":326},"end":{"line":10,"column":12,"index":332},"identifierName":"baz"},
+                    "name": "baz",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":329,"end":332,"loc":{"start":{"line":10,"column":9,"index":329},"end":{"line":10,"column":12,"index":332}},
+                      "typeAnnotation": {
+                        "type": "TSTypeReference",
+                        "start":331,"end":332,"loc":{"start":{"line":10,"column":11,"index":331},"end":{"line":10,"column":12,"index":332}},
+                        "typeName": {
+                          "type": "Identifier",
+                          "start":331,"end":332,"loc":{"start":{"line":10,"column":11,"index":331},"end":{"line":10,"column":12,"index":332},"identifierName":"T"},
+                          "name": "T"
+                        }
+                      }
+                    }
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "let",
+              "leadingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " can reference type outsider module",
+                  "start":282,"end":319,"loc":{"start":{"line":9,"column":2,"index":282},"end":{"line":9,"column":39,"index":319}}
+                }
+              ]
+            }
+          ]
+        },
+        "declare": true
+      },
+      {
+        "type": "TSModuleDeclaration",
+        "start":337,"end":507,"loc":{"start":{"line":13,"column":0,"index":337},"end":{"line":18,"column":1,"index":507}},
+        "kind": "module",
+        "id": {
+          "type": "StringLiteral",
+          "start":352,"end":368,"loc":{"start":{"line":13,"column":15,"index":352},"end":{"line":13,"column":31,"index":368}},
+          "extra": {
+            "rawValue": "test/submodule",
+            "raw": "'test/submodule'"
+          },
+          "value": "test/submodule"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":369,"end":507,"loc":{"start":{"line":13,"column":32,"index":369},"end":{"line":18,"column":1,"index":507}},
+          "body": [
+            {
+              "type": "ImportDeclaration",
+              "start":373,"end":420,"loc":{"start":{"line":14,"column":2,"index":373},"end":{"line":14,"column":49,"index":420}},
+              "importKind": "type",
+              "specifiers": [
+                {
+                  "type": "ImportSpecifier",
+                  "start":387,"end":398,"loc":{"start":{"line":14,"column":16,"index":387},"end":{"line":14,"column":27,"index":398}},
+                  "imported": {
+                    "type": "Identifier",
+                    "start":387,"end":398,"loc":{"start":{"line":14,"column":16,"index":387},"end":{"line":14,"column":27,"index":398},"identifierName":"JSONSchema7"},
+                    "name": "JSONSchema7"
+                  },
+                  "importKind": "value",
+                  "local": {
+                    "type": "Identifier",
+                    "start":387,"end":398,"loc":{"start":{"line":14,"column":16,"index":387},"end":{"line":14,"column":27,"index":398},"identifierName":"JSONSchema7"},
+                    "name": "JSONSchema7"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":406,"end":419,"loc":{"start":{"line":14,"column":35,"index":406},"end":{"line":14,"column":48,"index":419}},
+                "extra": {
+                  "rawValue": "json-schema",
+                  "raw": "'json-schema'"
+                },
+                "value": "json-schema"
+              },
+              "attributes": []
+            },
+            {
+              "type": "ImportDeclaration",
+              "start":423,"end":449,"loc":{"start":{"line":15,"column":2,"index":423},"end":{"line":15,"column":28,"index":449}},
+              "importKind": "value",
+              "specifiers": [
+                {
+                  "type": "ImportSpecifier",
+                  "start":432,"end":435,"loc":{"start":{"line":15,"column":11,"index":432},"end":{"line":15,"column":14,"index":435}},
+                  "imported": {
+                    "type": "Identifier",
+                    "start":432,"end":435,"loc":{"start":{"line":15,"column":11,"index":432},"end":{"line":15,"column":14,"index":435},"identifierName":"bar"},
+                    "name": "bar"
+                  },
+                  "importKind": "value",
+                  "local": {
+                    "type": "Identifier",
+                    "start":432,"end":435,"loc":{"start":{"line":15,"column":11,"index":432},"end":{"line":15,"column":14,"index":435},"identifierName":"bar"},
+                    "name": "bar"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":443,"end":448,"loc":{"start":{"line":15,"column":22,"index":443},"end":{"line":15,"column":27,"index":448}},
+                "extra": {
+                  "rawValue": "baz",
+                  "raw": "\"baz\""
+                },
+                "value": "baz"
+              },
+              "attributes": []
+            },
+            {
+              "type": "ExportNamedDeclaration",
+              "start":452,"end":481,"loc":{"start":{"line":16,"column":2,"index":452},"end":{"line":16,"column":31,"index":481}},
+              "exportKind": "value",
+              "specifiers": [
+                {
+                  "type": "ExportSpecifier",
+                  "start":461,"end":467,"loc":{"start":{"line":16,"column":11,"index":461},"end":{"line":16,"column":17,"index":467}},
+                  "local": {
+                    "type": "Identifier",
+                    "start":461,"end":467,"loc":{"start":{"line":16,"column":11,"index":461},"end":{"line":16,"column":17,"index":467},"identifierName":"fooBar"},
+                    "name": "fooBar"
+                  },
+                  "exportKind": "value",
+                  "exported": {
+                    "type": "Identifier",
+                    "start":461,"end":467,"loc":{"start":{"line":16,"column":11,"index":461},"end":{"line":16,"column":17,"index":467},"identifierName":"fooBar"},
+                    "name": "fooBar"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":475,"end":480,"loc":{"start":{"line":16,"column":25,"index":475},"end":{"line":16,"column":30,"index":480}},
+                "extra": {
+                  "rawValue": "baz",
+                  "raw": "\"baz\""
+                },
+                "value": "baz"
+              },
+              "declaration": null,
+              "attributes": []
+            },
+            {
+              "type": "VariableDeclaration",
+              "start":484,"end":505,"loc":{"start":{"line":17,"column":2,"index":484},"end":{"line":17,"column":23,"index":505}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":488,"end":504,"loc":{"start":{"line":17,"column":6,"index":488},"end":{"line":17,"column":22,"index":504}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":488,"end":504,"loc":{"start":{"line":17,"column":6,"index":488},"end":{"line":17,"column":22,"index":504},"identifierName":"foo"},
+                    "name": "foo",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":491,"end":504,"loc":{"start":{"line":17,"column":9,"index":491},"end":{"line":17,"column":22,"index":504}},
+                      "typeAnnotation": {
+                        "type": "TSTypeReference",
+                        "start":493,"end":504,"loc":{"start":{"line":17,"column":11,"index":493},"end":{"line":17,"column":22,"index":504}},
+                        "typeName": {
+                          "type": "Identifier",
+                          "start":493,"end":504,"loc":{"start":{"line":17,"column":11,"index":493},"end":{"line":17,"column":22,"index":504},"identifierName":"JSONSchema7"},
+                          "name": "JSONSchema7"
+                        }
+                      }
+                    }
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "let"
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " packages\\babel-traverse\\test\\fixtures\\regression\\duplicate-variable-in-different-module-ts\\input.ts",
+      "start":0,"end":102,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":102,"index":102}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " can reference type outsider module",
+      "start":282,"end":319,"loc":{"start":{"line":9,"column":2,"index":282},"end":{"line":9,"column":39,"index":319}}
+    }
+  ]
+}

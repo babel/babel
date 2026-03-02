@@ -1,0 +1,99 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":2,"index":44}},
+  "errors": [
+    "SyntaxError: Invalid shorthand property initializer. (3:6)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":2,"index":44}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":2,"index":44}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":43,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":4,"column":1,"index":43}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"obj"},
+              "name": "obj"
+            },
+            "init": {
+              "type": "ObjectExpression",
+              "start":12,"end":43,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":4,"column":1,"index":43}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":16,"end":28,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":2,"column":14,"index":28}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":16,"end":19,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":2,"column":5,"index":19},"identifierName":"bar"},
+                    "name": "bar"
+                  },
+                  "computed": false,
+                  "shorthand": false,
+                  "value": {
+                    "type": "AssignmentExpression",
+                    "start":21,"end":28,"loc":{"start":{"line":2,"column":7,"index":21},"end":{"line":2,"column":14,"index":28}},
+                    "operator": "=",
+                    "left": {
+                      "type": "Identifier",
+                      "start":21,"end":22,"loc":{"start":{"line":2,"column":7,"index":21},"end":{"line":2,"column":8,"index":22},"identifierName":"x"},
+                      "name": "x"
+                    },
+                    "right": {
+                      "type": "NumericLiteral",
+                      "start":25,"end":28,"loc":{"start":{"line":2,"column":11,"index":25},"end":{"line":2,"column":14,"index":28}},
+                      "extra": {
+                        "rawValue": 123,
+                        "raw": "123"
+                      },
+                      "value": 123
+                    }
+                  }
+                },
+                {
+                  "type": "ObjectProperty",
+                  "start":32,"end":41,"loc":{"start":{"line":3,"column":2,"index":32},"end":{"line":3,"column":11,"index":41}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":32,"end":35,"loc":{"start":{"line":3,"column":2,"index":32},"end":{"line":3,"column":5,"index":35},"identifierName":"foo"},
+                    "name": "foo"
+                  },
+                  "computed": false,
+                  "shorthand": true,
+                  "value": {
+                    "type": "AssignmentPattern",
+                    "start":32,"end":41,"loc":{"start":{"line":3,"column":2,"index":32},"end":{"line":3,"column":11,"index":41}},
+                    "left": {
+                      "type": "Identifier",
+                      "start":32,"end":35,"loc":{"start":{"line":3,"column":2,"index":32},"end":{"line":3,"column":5,"index":35},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "right": {
+                      "type": "NumericLiteral",
+                      "start":38,"end":41,"loc":{"start":{"line":3,"column":8,"index":38},"end":{"line":3,"column":11,"index":41}},
+                      "extra": {
+                        "rawValue": 123,
+                        "raw": "123"
+                      },
+                      "value": 123
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

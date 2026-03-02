@@ -1,3 +1,2 @@
 f();
-
 function f() {}

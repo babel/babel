@@ -1,0 +1,68 @@
+{
+  "type": "File",
+  "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":58}},
+  "errors": [
+    "SyntaxError: 'return' outside of function. (3:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":2,"index":58}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":57}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":13,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":13,"index":13},"identifierName":"iter"},
+          "name": "iter"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":16,"end":57,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":5,"column":1,"index":57}},
+          "body": [
+            {
+              "type": "ReturnStatement",
+              "start":20,"end":55,"loc":{"start":{"line":2,"column":2,"index":20},"end":{"line":4,"column":3,"index":55}},
+              "argument": {
+                "type": "DoExpression",
+                "start":27,"end":55,"loc":{"start":{"line":2,"column":9,"index":27},"end":{"line":4,"column":3,"index":55}},
+                "async": true,
+                "body": {
+                  "type": "BlockStatement",
+                  "start":36,"end":55,"loc":{"start":{"line":2,"column":18,"index":36},"end":{"line":4,"column":3,"index":55}},
+                  "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "start":42,"end":51,"loc":{"start":{"line":3,"column":4,"index":42},"end":{"line":3,"column":13,"index":51}},
+                      "argument": {
+                        "type": "NumericLiteral",
+                        "start":49,"end":50,"loc":{"start":{"line":3,"column":11,"index":49},"end":{"line":3,"column":12,"index":50}},
+                        "extra": {
+                          "rawValue": 1,
+                          "raw": "1"
+                        },
+                        "value": 1
+                      }
+                    }
+                  ],
+                  "directives": []
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start":57,"end":58,"loc":{"start":{"line":5,"column":1,"index":57},"end":{"line":5,"column":2,"index":58}}
+      }
+    ],
+    "directives": []
+  }
+}
