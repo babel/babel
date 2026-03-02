@@ -57,9 +57,6 @@ export default class State {
 
   errors: ParseError[] = [];
 
-  // Used to signify the start of a potential arrow function
-  potentialArrowAt: number = -1;
-
   // Used to signify the start of an expression which looks like a
   // typed arrow function, but it isn't
   // e.g. a ? (b) : c => d
@@ -75,6 +72,13 @@ export default class State {
   noArrowParamsConversionAt: number[] = [];
 
   // Flags to track
+
+  /**
+   * Track whether the current start is the start of an AssignmentExpression production.
+   * The ArrowFunctionExpression and AsyncArrowFunctionExpression productions can only be
+   * parsed if this is true.
+   */
+  @bit accessor canStartArrow = false;
   @bit accessor inType = false;
   @bit accessor noAnonFunctionType = false;
   @bit accessor hasFlowComment = false;
@@ -171,7 +175,6 @@ export default class State {
     state.startLoc = this.startLoc;
     state.endLoc = this.endLoc;
     state.errors = this.errors.slice();
-    state.potentialArrowAt = this.potentialArrowAt;
     state.noArrowAt = this.noArrowAt.slice();
     state.noArrowParamsConversionAt = this.noArrowParamsConversionAt.slice();
     state.labels = this.labels.slice();
