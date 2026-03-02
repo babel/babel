@@ -18,7 +18,6 @@ export default declare(api => {
               (path.isFunctionDeclaration() &&
                 path.node.id?.name === helper.name)
             );
-            return false;
           });
 
           if (isUnderHelper) {
