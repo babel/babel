@@ -918,7 +918,7 @@ export default declare((api, opts: Options) => {
             ]);
           } else {
             exp = t.callExpression(t.cloneNode(helper), [
-              exp!,
+              exp,
               ...(hadProps ? [t.objectExpression([]), obj] : []),
             ]);
           }
@@ -950,7 +950,7 @@ export default declare((api, opts: Options) => {
             make();
             // ensure that exp is a call expression before pushing
             if (!t.isCallExpression(exp)) {
-              exp = t.callExpression(t.cloneNode(helper), [exp!]);
+              exp = t.callExpression(t.cloneNode(helper), [exp]);
             }
             (exp as t.CallExpression).arguments.push(prop.argument);
           } else {
