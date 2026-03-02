@@ -1,0 +1,17 @@
+FAIL packages/babel-plugin-transform-object-rest-spread/test/hasMoreThanOneBinding.skip-bundled.js
+  ● Test suite failed to run
+
+    Cannot find module 'C:\Users\Raza\babel\node_modules\@babel\parser\lib\index.js' imported from C:\Users\Raza\babel\packages\babel-plugin-transform-object-rest-spread\test\hasMoreThanOneBinding.skip-bundled.js
+
+
+FAIL packages/babel-plugin-transform-object-rest-spread/test/index.js
+  ● Test suite failed to run
+
+    Cannot find module 'C:\Users\Raza\babel\packages\babel-helper-plugin-test-runner\lib\index.js' imported from C:\Users\Raza\babel\packages\babel-helper-plugin-test-runner\esm.mjs
+
+
+Test Suites: 2 failed, 2 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        1.369 s
+Ran all test suites matching packages/babel-plugin-transform-object-rest-spread.
