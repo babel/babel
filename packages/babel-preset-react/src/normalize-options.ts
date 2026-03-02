@@ -44,6 +44,7 @@ export default function normalizeOptions(options: any = {}) {
   const developmentSourceSelf = v.validateBooleanOption(
     TopLevelOptions.developmentSourceSelf,
     options.developmentSourceSelf,
+    false,
   );
   let importSource = v.validateStringOption(
     TopLevelOptions.importSource,

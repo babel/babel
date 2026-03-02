@@ -61,7 +61,7 @@ describe("normalize options", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "development": undefined,
-          "developmentSourceSelf": undefined,
+          "developmentSourceSelf": false,
           "importSource": "react",
           "pragma": undefined,
           "pragmaFrag": undefined,
@@ -73,7 +73,7 @@ describe("normalize options", () => {
       expect(normalizeOptions({ runtime: "classic" })).toMatchInlineSnapshot(`
         Object {
           "development": undefined,
-          "developmentSourceSelf": undefined,
+          "developmentSourceSelf": false,
           "importSource": undefined,
           "pragma": "React.createElement",
           "pragmaFrag": "React.Fragment",
