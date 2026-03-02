@@ -1624,6 +1624,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-import-source": "workspace:^"
+    "@babel/plugin-transform-json-modules": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.22.0
   languageName: unknown

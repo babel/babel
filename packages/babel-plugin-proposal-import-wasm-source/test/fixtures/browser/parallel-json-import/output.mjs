@@ -1,0 +1,1 @@
+const [s1, s2, j1, j2] = await Promise.all([WebAssembly.compileStreaming(fetch(import.meta.resolve("./x1.wasm"))), WebAssembly.compileStreaming(fetch(import.meta.resolve("./x2.wasm"))), fetch(import.meta.resolve("./x1.wasm")).then(r => r.json()), fetch(import.meta.resolve("./x2.wasm")).then(r => r.json())]);

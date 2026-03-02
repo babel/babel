@@ -282,3 +282,46 @@ export function buildParallelStaticImports(
 
   return t.variableDeclaration("const", declarators);
 }
+
+const PREV_PARALLEL_IMPORTS = new WeakMap<
+  t.Program,
+  {
+    node: t.Statement;
+    data: { id: t.Identifier; fetch: t.Expression }[];
+    needsAwait: boolean;
+  }
+>();
+
+export function injectParallelStaticImports(
+  programPath: NodePath<t.Program>,
+  data: { id: t.Identifier; fetch: t.Expression }[],
+  needsAwait: boolean,
+): void {
+  if (data.length === 0) return;
+
+  const program = programPath.node;
+  const prev = PREV_PARALLEL_IMPORTS.get(program);
+  let replacementIndex = -1;
+
+  if (prev) {
+    replacementIndex = program.body.indexOf(prev.node);
+    if (replacementIndex === -1) {
+      PREV_PARALLEL_IMPORTS.delete(program);
+    } else {
+      data = prev.data.concat(data);
+      needsAwait ||= prev.needsAwait;
+    }
+  }
+
+  const varDecl = buildParallelStaticImports(data, needsAwait);
+
+  PREV_PARALLEL_IMPORTS.set(program, { node: varDecl, data, needsAwait });
+
+  if (replacementIndex === -1) {
+    programPath.unshiftContainer("body", varDecl);
+  } else {
+    (
+      programPath.get(`body.${replacementIndex}` as "body.0") as NodePath
+    ).replaceWith(varDecl);
+  }
+}
