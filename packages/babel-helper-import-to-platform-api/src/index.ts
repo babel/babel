@@ -1,4 +1,4 @@
-import { types as t, template, type File } from "@babel/core";
+import { type NodePath, types as t, template, type File } from "@babel/core";
 import type { Targets } from "@babel/helper-compilation-targets";
 import { addNamed } from "@babel/helper-module-imports";
 
@@ -268,7 +268,7 @@ export function importToPlatformApi(
   };
 }
 
-export function buildParallelStaticImports(
+function buildParallelStaticImports(
   data: { id: t.Identifier; fetch: t.Expression }[],
   needsAwait: boolean,
 ): t.VariableDeclaration | null {
@@ -300,4 +300,45 @@ export function buildParallelStaticImports(
   }
 
   return t.variableDeclaration("const", declarators);
+}
+
+const PREV_PARALLEL_IMPORTS = new WeakMap<
+  t.Program,
+  {
+    node: t.Statement;
+    data: { id: t.Identifier; fetch: t.Expression }[];
+    needsAwait: boolean;
+  }
+>();
+
+export function injectParallelStaticImports(
+  programPath: NodePath<t.Program>,
+  data: { id: t.Identifier; fetch: t.Expression }[],
+  needsAwait: boolean,
+): void {
+  if (data.length === 0) return;
+
+  const program = programPath.node;
+  const prev = PREV_PARALLEL_IMPORTS.get(program);
+  let replacementIndex = -1;
+
+  if (prev) {
+    replacementIndex = program.body.indexOf(prev.node);
+    if (replacementIndex === -1) {
+      PREV_PARALLEL_IMPORTS.delete(program);
+    } else {
+      data = prev.data.concat(data);
+      needsAwait ||= prev.needsAwait;
+    }
+  }
+
+  const varDecl = buildParallelStaticImports(data, needsAwait);
+
+  PREV_PARALLEL_IMPORTS.set(program, { node: varDecl, data, needsAwait });
+
+  if (replacementIndex === -1) {
+    programPath.unshiftContainer("body", varDecl);
+  } else {
+    programPath.get(`body.${replacementIndex}`).replaceWith(varDecl);
+  }
 }

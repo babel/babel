@@ -4,7 +4,7 @@ import syntaxImportSourcePhase from "@babel/plugin-syntax-import-source";
 
 import {
   importToPlatformApi,
-  buildParallelStaticImports,
+  injectParallelStaticImports,
   type Pieces,
   type Builders,
 } from "@babel/helper-import-to-platform-api";
@@ -79,8 +79,7 @@ export default declare(api => {
           decl.remove();
         }
 
-        const decl = buildParallelStaticImports(data, helper.needsAwait);
-        if (decl) path.unshiftContainer("body", decl);
+        injectParallelStaticImports(path, data, helper.needsAwait);
       },
 
       ImportExpression(path) {

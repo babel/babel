@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, File } from "@babel/core";
 import {
   importToPlatformApi,
-  buildParallelStaticImports,
+  injectParallelStaticImports,
   type Pieces,
   type Builders,
 } from "@babel/helper-import-to-platform-api";
@@ -115,10 +115,8 @@ export default declare((api, options: Options) => {
           data.push({ id, fetch });
           decl.remove();
         }
-        if (data.length === 0) return;
 
-        const decl = buildParallelStaticImports(data, helper.needsAwait);
-        if (decl) path.unshiftContainer("body", decl);
+        injectParallelStaticImports(path, data, helper.needsAwait);
       },
     },
   };

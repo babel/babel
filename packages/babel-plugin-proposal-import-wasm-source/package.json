@@ -41,7 +41,8 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/plugin-transform-json-modules": "workspace:^"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
