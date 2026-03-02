@@ -1,0 +1,104 @@
+{
+  "type": "File",
+  "start":0,"end":75,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":75,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":75,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":75,"loc":{"start":{"line":1,"column":8},"end":{"line":6,"column":1}},
+          "body": [
+            {
+              "type": "ClassPrivateProperty",
+              "start":12,"end":25,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":15}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":12,"end":16,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":6}},
+                "id": {
+                  "type": "Identifier",
+                  "start":13,"end":16,"loc":{"start":{"line":2,"column":3},"end":{"line":2,"column":6},"identifierName":"foo"},
+                  "name": "foo"
+                }
+              },
+              "value": {
+                "type": "Literal",
+                "start":19,"end":24,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":14}},
+                "value": "bar",
+                "raw": "\"bar\""
+              }
+            },
+            {
+              "type": "MethodDefinition",
+              "start":28,"end":73,"loc":{"start":{"line":3,"column":2},"end":{"line":5,"column":3}},
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start":35,"end":38,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":12},"identifierName":"isA"},
+                "name": "isA"
+              },
+              "computed": false,
+              "kind": "method",
+              "value": {
+                "type": "FunctionExpression",
+                "start":38,"end":73,"loc":{"start":{"line":3,"column":12},"end":{"line":5,"column":3}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "expression": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start":39,"end":42,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":16},"identifierName":"obj"},
+                    "name": "obj"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":44,"end":73,"loc":{"start":{"line":3,"column":18},"end":{"line":5,"column":3}},
+                  "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "start":50,"end":69,"loc":{"start":{"line":4,"column":4},"end":{"line":4,"column":23}},
+                      "argument": {
+                        "type": "BinaryExpression",
+                        "start":57,"end":68,"loc":{"start":{"line":4,"column":11},"end":{"line":4,"column":22}},
+                        "left": {
+                          "type": "PrivateName",
+                          "start":57,"end":61,"loc":{"start":{"line":4,"column":11},"end":{"line":4,"column":15}},
+                          "id": {
+                            "type": "Identifier",
+                            "start":58,"end":61,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":15},"identifierName":"foo"},
+                            "name": "foo"
+                          }
+                        },
+                        "operator": "in",
+                        "right": {
+                          "type": "Identifier",
+                          "start":65,"end":68,"loc":{"start":{"line":4,"column":19},"end":{"line":4,"column":22},"identifierName":"obj"},
+                          "name": "obj"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

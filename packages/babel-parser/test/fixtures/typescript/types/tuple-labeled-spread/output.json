@@ -1,0 +1,76 @@
+{
+  "type": "File",
+  "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":34}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":34}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":34,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":34}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":34,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":34}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":34,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":34},"identifierName":"x"},
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":5,"end":34,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":34}},
+                "typeAnnotation": {
+                  "type": "TSTupleType",
+                  "start":7,"end":34,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":34}},
+                  "elementTypes": [
+                    {
+                      "type": "TSNamedTupleMember",
+                      "start":8,"end":17,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":17}},
+                      "optional": false,
+                      "label": {
+                        "type": "Identifier",
+                        "start":8,"end":9,"loc":{"start":{"line":1,"column":8},"end":{"line":1,"column":9},"identifierName":"A"},
+                        "name": "A"
+                      },
+                      "elementType": {
+                        "type": "TSStringKeyword",
+                        "start":11,"end":17,"loc":{"start":{"line":1,"column":11},"end":{"line":1,"column":17}}
+                      }
+                    },
+                    {
+                      "type": "TSRestType",
+                      "start":19,"end":33,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":33}},
+                      "typeAnnotation": {
+                        "type": "TSNamedTupleMember",
+                        "start":22,"end":33,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":33}},
+                        "optional": false,
+                        "label": {
+                          "type": "Identifier",
+                          "start":22,"end":23,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":23},"identifierName":"B"},
+                          "name": "B"
+                        },
+                        "elementType": {
+                          "type": "TSArrayType",
+                          "start":25,"end":33,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":33}},
+                          "elementType": {
+                            "type": "TSNumberKeyword",
+                            "start":25,"end":31,"loc":{"start":{"line":1,"column":25},"end":{"line":1,"column":31}}
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

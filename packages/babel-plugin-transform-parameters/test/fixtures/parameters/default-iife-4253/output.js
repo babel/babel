@@ -7,7 +7,7 @@ var Ref = /*#__PURE__*/function () {
     this.id = id;
   }
 
-  return Ref;
+  return babelHelpers.createClass(Ref);
 }();
 
 Ref.nextID = 0;

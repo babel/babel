@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "modules": false,
+        "useBuiltIns": "entry",
+        "targets": {
+          "samsung": "8.2"
+        },
+        "corejs": 3
+      }
+    ]
+  ]
+}

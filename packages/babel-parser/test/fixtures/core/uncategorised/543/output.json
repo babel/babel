@@ -37,11 +37,12 @@
                     "value": {
                       "type": "DirectiveLiteral",
                       "start":25,"end":37,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":14}},
-                      "value": "use strict",
                       "extra": {
+                        "rawValue": "use strict",
                         "raw": "\"use strict\"",
-                        "rawValue": "use strict"
-                      }
+                        "expressionValue": "use strict"
+                      },
+                      "value": "use strict"
                     }
                   },
                   {
@@ -50,11 +51,12 @@
                     "value": {
                       "type": "DirectiveLiteral",
                       "start":41,"end":53,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":14}},
-                      "value": "use strict",
                       "extra": {
+                        "rawValue": "use strict",
                         "raw": "\"use strict\"",
-                        "rawValue": "use strict"
-                      }
+                        "expressionValue": "use strict"
+                      },
+                      "value": "use strict"
                     }
                   }
                 ]

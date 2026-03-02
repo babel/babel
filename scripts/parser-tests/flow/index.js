@@ -1,7 +1,10 @@
-const fs = require("fs").promises;
-const path = require("path");
-const merge = require("mergeiterator");
-const TestRunner = require("../utils/parser-test-runner");
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
+import merge from "mergeiterator";
+import TestRunner from "../utils/parser-test-runner.js";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const flowOptionsMapping = {
   esproposal_class_instance_fields: "classProperties",
@@ -88,8 +91,8 @@ async function* loadTests(root) {
 }
 
 const runner = new TestRunner({
-  testDir: path.join(__dirname, "../../../build/flow/src/parser/test/flow"),
-  allowlist: path.join(__dirname, "allowlist.txt"),
+  testDir: path.join(dirname, "../../../build/flow/src/parser/test/flow"),
+  allowlist: path.join(dirname, "allowlist.txt"),
   shouldUpdate: process.argv.includes("--update-allowlist"),
 
   async *getTests() {

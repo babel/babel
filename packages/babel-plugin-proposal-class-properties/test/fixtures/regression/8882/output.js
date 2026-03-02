@@ -5,11 +5,10 @@ for (let i = 0; i <= 10; ++i) {
 
   let _i;
 
-  classes.push((_temp = (_bar = new WeakMap(), _i = i, _class = class A {
+  classes.push((_temp = (_bar = /*#__PURE__*/new WeakMap(), _i = i, _class = class A {
     constructor() {
       babelHelpers.defineProperty(this, _i, `computed field ${i}`);
-
-      _bar.set(this, {
+      babelHelpers.classPrivateFieldInitSpec(this, _bar, {
         writable: true,
         value: `private field ${i}`
       });

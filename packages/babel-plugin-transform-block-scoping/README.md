@@ -2,7 +2,7 @@
 
 > Compile ES2015 block scoping (const and let) to ES5
 
-See our website [@babel/plugin-transform-block-scoping](https://babeljs.io/docs/en/next/babel-plugin-transform-block-scoping.html) for more information.
+See our website [@babel/plugin-transform-block-scoping](https://babeljs.io/docs/en/babel-plugin-transform-block-scoping) for more information.
 
 ## Install
 

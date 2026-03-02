@@ -12,7 +12,7 @@ function broken(x) {
         return _super.apply(this, arguments);
       }
 
-      return Foo;
+      return babelHelpers.createClass(Foo);
     }(Bar);
 
     for (var _len = arguments.length, foo = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {

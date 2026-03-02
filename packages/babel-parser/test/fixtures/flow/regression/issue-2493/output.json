@@ -80,12 +80,12 @@
                           "start":57,"end":64,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":9},"identifierName":"console"},
                           "name": "console"
                         },
+                        "computed": false,
                         "property": {
                           "type": "Identifier",
                           "start":65,"end":68,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":13},"identifierName":"log"},
                           "name": "log"
-                        },
-                        "computed": false
+                        }
                       },
                       "arguments": [
                         {

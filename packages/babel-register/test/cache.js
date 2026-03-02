@@ -1,7 +1,14 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+import { createRequire, Module } from "module";
 
-const testCacheFilename = path.join(__dirname, ".babel");
+const require = createRequire(import.meta.url);
+
+const testCacheFilename = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  ".cache.babel",
+);
 const oldBabelDisableCacheValue = process.env.BABEL_DISABLE_CACHE;
 
 process.env.BABEL_CACHE_PATH = testCacheFilename;
@@ -28,21 +35,44 @@ function resetCache() {
   process.env.BABEL_DISABLE_CACHE = oldBabelDisableCacheValue;
 }
 
+const OLD_JEST_MOCKS = !!jest.doMock;
+
 describe("@babel/register - caching", () => {
   describe("cache", () => {
-    let load, get, save;
+    let load, get, setDirty, save;
+    let consoleWarnSpy;
+
+    if (!OLD_JEST_MOCKS) {
+      let oldModuleCache;
+      beforeAll(() => {
+        oldModuleCache = Module._cache;
+      });
+      afterAll(() => {
+        Module._cache = oldModuleCache;
+      });
+    }
 
     beforeEach(() => {
       // Since lib/cache is a singleton we need to fully reload it
-      jest.resetModules();
-      const cache = require("../lib/cache");
+      if (OLD_JEST_MOCKS) {
+        jest.resetModules();
+      } else {
+        Module._cache = {};
+      }
+      const cache = require("../lib/cache.js");
 
       load = cache.load;
       get = cache.get;
+      setDirty = cache.setDirty;
       save = cache.save;
+
+      consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
     });
 
-    afterEach(cleanCache);
+    afterEach(() => {
+      cleanCache();
+      consoleWarnSpy.mockRestore();
+    });
     afterAll(resetCache);
 
     it("should load and get cached data", () => {
@@ -67,20 +97,30 @@ describe("@babel/register - caching", () => {
       expect(get()).toEqual({});
     });
 
-    it("should create the cache on save", () => {
+    it("should not create the cache if not dirty", () => {
+      save();
+
+      expect(fs.existsSync(testCacheFilename)).toBe(false);
+      expect(get()).toEqual({});
+    });
+
+    it("should create the cache on save if dirty", () => {
+      setDirty();
       save();
 
       expect(fs.existsSync(testCacheFilename)).toBe(true);
       expect(get()).toEqual({});
     });
 
-    it("should create the cache after load", cb => {
+    it("should create the cache after dirty", () => {
       load();
-
-      process.nextTick(() => {
-        expect(fs.existsSync(testCacheFilename)).toBe(true);
-        expect(get()).toEqual({});
-        cb();
+      setDirty();
+      return new Promise(resolve => {
+        process.nextTick(() => {
+          expect(fs.existsSync(testCacheFilename)).toBe(true);
+          expect(get()).toEqual({});
+          resolve();
+        });
       });
     });
 
@@ -88,23 +128,31 @@ describe("@babel/register - caching", () => {
     if (process.platform !== "win32") {
       it("should be disabled when CACHE_PATH is not allowed to read", () => {
         writeCache({ foo: "bar" }, 0o266);
-
         load();
 
         expect(get()).toEqual({});
+        expect(consoleWarnSpy.mock.calls[0][0]).toContain(
+          "Babel could not read cache file",
+        );
       });
     }
 
-    it("should be disabled when CACHE_PATH is not allowed to write", cb => {
+    it("should be disabled when CACHE_PATH is not allowed to write", () => {
       writeCache({ foo: "bar" }, 0o466);
 
       load();
+      setDirty();
 
       expect(get()).toEqual({ foo: "bar" });
-      process.nextTick(() => {
-        load();
-        expect(get()).toEqual({});
-        cb();
+      return new Promise(resolve => {
+        process.nextTick(() => {
+          load();
+          expect(get()).toEqual({});
+          expect(consoleWarnSpy.mock.calls[0][0]).toContain(
+            "Babel could not write cache to file",
+          );
+          resolve();
+        });
       });
     });
   });

@@ -1,8 +1,8 @@
-var _x = babelHelpers.classPrivateFieldLooseKey("x");
+var _x = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("x");
 
-var _y = babelHelpers.classPrivateFieldLooseKey("y");
+var _y = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("y");
 
-var Foo = function Foo() {
+var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Foo);
@@ -14,4 +14,4 @@ var Foo = function Foo() {
     writable: true,
     value: babelHelpers.classPrivateFieldLooseBase(this, _x)[_x]
   });
-};
+});

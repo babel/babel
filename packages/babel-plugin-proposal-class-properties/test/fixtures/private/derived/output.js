@@ -1,17 +1,16 @@
-var _prop = new WeakMap();
+var _prop = /*#__PURE__*/new WeakMap();
 
-var Foo = function Foo() {
+var Foo = /*#__PURE__*/babelHelpers.createClass(function Foo() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Foo);
-
-  _prop.set(this, {
+  babelHelpers.classPrivateFieldInitSpec(this, _prop, {
     writable: true,
     value: "foo"
   });
-};
+});
 
-var _prop2 = new WeakMap();
+var _prop2 = /*#__PURE__*/new WeakMap();
 
 var Bar = /*#__PURE__*/function (_Foo) {
   "use strict";
@@ -25,14 +24,12 @@ var Bar = /*#__PURE__*/function (_Foo) {
 
     babelHelpers.classCallCheck(this, Bar);
     _this = _super.call(this, ...args);
-
-    _prop2.set(babelHelpers.assertThisInitialized(_this), {
+    babelHelpers.classPrivateFieldInitSpec(babelHelpers.assertThisInitialized(_this), _prop2, {
       writable: true,
       value: "bar"
     });
-
     return _this;
   }
 
-  return Bar;
+  return babelHelpers.createClass(Bar);
 }(Foo);

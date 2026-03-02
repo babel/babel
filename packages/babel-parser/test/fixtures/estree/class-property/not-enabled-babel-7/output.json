@@ -1,0 +1,96 @@
+{
+  "type": "File",
+  "start":0,"end":91,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":91,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":91,"loc":{"start":{"line":1,"column":0},"end":{"line":6,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":91,"loc":{"start":{"line":1,"column":8},"end":{"line":6,"column":1}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":12,"end":24,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":14}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":12,"end":15,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":5},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "value": {
+                "type": "Literal",
+                "start":18,"end":23,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":13}},
+                "value": "bar",
+                "raw": "\"bar\""
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":27,"end":39,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":14}},
+              "static": false,
+              "computed": true,
+              "key": {
+                "type": "Identifier",
+                "start":28,"end":31,"loc":{"start":{"line":3,"column":3},"end":{"line":3,"column":6},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "value": {
+                "type": "Identifier",
+                "start":35,"end":38,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":13},"identifierName":"foo"},
+                "name": "foo"
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":42,"end":64,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":24}},
+              "static": true,
+              "key": {
+                "type": "Literal",
+                "start":49,"end":54,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":14}},
+                "value": "qux",
+                "raw": "\"qux\""
+              },
+              "computed": false,
+              "value": {
+                "type": "Literal",
+                "start":57,"end":63,"loc":{"start":{"line":4,"column":17},"end":{"line":4,"column":23}},
+                "value": "quux",
+                "raw": "\"quux\""
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":67,"end":89,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":24}},
+              "static": true,
+              "computed": true,
+              "key": {
+                "type": "Identifier",
+                "start":75,"end":79,"loc":{"start":{"line":5,"column":10},"end":{"line":5,"column":14},"identifierName":"quux"},
+                "name": "quux"
+              },
+              "value": {
+                "type": "Literal",
+                "start":83,"end":88,"loc":{"start":{"line":5,"column":18},"end":{"line":5,"column":23}},
+                "value": "qux",
+                "raw": "\"qux\""
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

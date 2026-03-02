@@ -1,0 +1,37 @@
+{
+  "type": "File",
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":29}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":29}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSImportEqualsDeclaration",
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":29}},
+        "importKind": "type",
+        "isExport": false,
+        "id": {
+          "type": "Identifier",
+          "start":12,"end":13,"loc":{"start":{"line":1,"column":12},"end":{"line":1,"column":13},"identifierName":"a"},
+          "name": "a"
+        },
+        "moduleReference": {
+          "type": "TSExternalModuleReference",
+          "start":16,"end":28,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":28}},
+          "expression": {
+            "type": "StringLiteral",
+            "start":24,"end":27,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":27}},
+            "extra": {
+              "rawValue": "a",
+              "raw": "\"a\""
+            },
+            "value": "a"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

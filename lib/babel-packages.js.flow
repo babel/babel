@@ -1,0 +1,222 @@
+declare module "@babel/template" {
+  declare type PublicOpts = {
+    placeholderWhitelist?: ?Set<string>,
+    placeholderPattern?: ?(RegExp | false),
+    preserveComments?: ?boolean,
+    syntacticPlaceholders?: ?boolean,
+  };
+
+  declare type PublicReplacements = { [string]: mixed } | Array<mixed>;
+
+  declare type TemplateBuilder<T> = {
+    ast: {
+      (tpl: string, opts: ?PublicOpts): T,
+      (tpl: Array<string>, ...args: Array<mixed>): T,
+    },
+    (opts: PublicOpts): TemplateBuilder<T>,
+    (tpl: string, opts: ?PublicOpts): (?PublicReplacements) => T,
+    (tpl: Array<string>, ...args: Array<mixed>): (?PublicReplacements) => T,
+  };
+
+  declare type Smart = TemplateBuilder<
+    Array<BabelNodeStatement> | BabelNodeStatement
+  >;
+  declare type Statement = TemplateBuilder<BabelNodeStatement>;
+  declare type Statements = TemplateBuilder<Array<BabelNodeStatement>>;
+  declare type Expression = TemplateBuilder<BabelNodeExpression>;
+  declare type Program = TemplateBuilder<BabelNodeProgram>;
+
+  declare export default Smart & {
+    smart: Smart,
+    statement: Statement,
+    statements: Statements,
+    expression: Expression,
+    program: Program,
+  };
+}
+
+declare module "@babel/helper-optimise-call-expression" {
+  declare export default function optimiseCallExpression(
+    callee: BabelNodeExpression,
+    thisNode: BabelNodeExpression,
+    args: $Readonly<Array<BabelNodeExpression | BabelNodeSpreadElement>>,
+    optional: boolean
+  ): BabelNodeCallExpression | BabelNodeOptionalCallExpression;
+}
+
+declare module "@babel/helper-get-function-arity" {
+  declare export default function helperGetFunctionArity(
+    node: BabelNodeFunction
+  ): number;
+}
+
+declare module "@babel/helper-annotate-as-pure" {
+  declare export default function annotateAsPure(
+    pathOrNode:
+      | BabelNode
+      | {
+          node: BabelNode,
+        }
+  ): void;
+}
+
+declare module "@babel/code-frame" {
+  declare type Location = {
+    column: number,
+    line: number,
+  };
+  declare type NodeLocation = {
+    end?: Location,
+    start: Location,
+  };
+  declare export interface Options {
+    /**
+     * Syntax highlight the code as JavaScript for terminals. default: false
+     */
+    highlightCode?: boolean;
+
+    /**
+     * The number of lines to show above the error. default: 2
+     */
+    linesAbove?: number;
+
+    /**
+     * The number of lines to show below the error. default: 3
+     */
+    linesBelow?: number;
+
+    /**
+     * Forcibly syntax highlight the code as JavaScript (for non-terminals);
+     * overrides highlightCode.
+     * default: false
+     */
+    forceColor?: boolean;
+
+    /**
+     * Pass in a string to be displayed inline (if possible) next to the
+     * highlighted location in the code. If it can't be positioned inline,
+     * it will be placed above the code frame.
+     * default: nothing
+     */
+    message?: string;
+  }
+  declare export function codeFrameColumns(
+    rawLines: string,
+    loc: NodeLocation,
+    opts?: Options
+  ): string;
+
+  /**
+   * Create a code frame, adding line numbers, code highlighting, and pointing to a given position.
+   */
+  declare export default function codeFrame(
+    rawLines: string,
+    lineNumber: number,
+    colNumber?: number | null,
+    opts?: Options
+  ): string;
+}
+
+declare module "@babel/helper-validator-identifier" {
+  declare function isReservedWord(word: string, inModule: boolean): boolean;
+  declare function isStrictReservedWord(
+    word: string,
+    inModule: boolean
+  ): boolean;
+  declare function isStrictBindOnlyReservedWord(word: string): boolean;
+  declare function isStrictBindReservedWord(
+    word: string,
+    inModule: boolean
+  ): boolean;
+  declare function isKeyword(word: string): boolean;
+  declare function isIdentifierStart(code: number): boolean;
+  declare function isIdentifierChar(code: number): boolean;
+  declare function isIdentifierName(name: string): boolean;
+}
+
+declare module "@babel/helper-validator-option" {
+  declare class OptionValidator {
+    descriptor: string;
+    constructor(descriptor: string): OptionValidator;
+    validateTopLevelOptions(options: Object, TopLevelOptionShape: Object): void;
+    validateBooleanOption<T>(
+      name: string,
+      value?: boolean,
+      defaultValue?: T
+    ): boolean | T;
+    validateStringOption<T>(
+      name: string,
+      value?: string,
+      defaultValue?: T
+    ): string | T;
+    invariant(condition: boolean, message: string): void;
+    formatMessage(message: string): string;
+  }
+  declare function findSuggestion(
+    str: string,
+    arr: $ReadonlyArray<string>
+  ): string;
+}
+
+declare module "@babel/helper-function-name" {
+  declare export default function helperFunctionNamefunction(
+    options: any,
+    localBinding?: boolean
+  ): any;
+}
+
+declare module "@babel/helper-split-export-declaration" {
+  declare export default function splitExportDeclaration(
+    exportDeclaration: any
+  ): any;
+}
+
+declare module "@babel/traverse" {
+  declare module.exports: any;
+}
+
+declare module "@babel/generator" {
+  declare module.exports: any;
+}
+
+declare module "@babel/highlight" {
+  import typeof { Chalk } from "chalk";
+  declare type Options = {
+    forceColor?: boolean,
+  };
+
+  /**
+   * Whether the code should be highlighted given the passed options.
+   */
+  declare function shouldHighlight(options: Options): boolean;
+
+  /**
+   * The Chalk instance that should be used given the passed options.
+   */
+  declare function getChalk(options: Options): Chalk;
+
+  /**
+   * Highlight `code`.
+   */
+  declare export default function highlight(
+    code: string,
+    options?: Options
+  ): string;
+  declare export { getChalk, shouldHighlight };
+}
+
+declare module "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining" {
+  declare module.exports: any;
+}
+
+declare module "@babel/helper-module-transforms" {
+  declare module.exports: any;
+}
+
+declare module "@babel/plugin-transform-classes" {
+  declare module.exports: any;
+}
+
+declare module "@babel/helper-compilation-targets" {
+  declare module.exports: any;
+}

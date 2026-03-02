@@ -1,4 +1,4 @@
-var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
+var _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
 
 class Base {
   static getThis() {
@@ -24,7 +24,7 @@ Object.defineProperty(Base, _foo, {
   value: 1
 });
 
-var _foo2 = babelHelpers.classPrivateFieldLooseKey("foo");
+var _foo2 = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
 
 class Sub1 extends Base {
   static update(val) {

@@ -81,3 +81,56 @@ function six(obj) {
 }
 
 six();
+
+var seven = function () {
+  var _arguments6 = 1;
+  return _arguments6;
+};
+
+seven();
+
+var eight = function () {
+  var _arguments7 = 1;
+  return function () {
+    return _arguments7;
+  };
+};
+
+eight();
+
+function nine() {
+  var _arguments8 = 1;
+
+  var foo = function () {
+    return _arguments8;
+  };
+}
+
+nine();
+
+var eleven = function () {
+  var arguments = 2;
+  return function () {
+    var _arguments9 = arguments;
+    return function () {
+      return _arguments9;
+    };
+  };
+};
+
+eleven()(1, 2, 3)();
+
+var twelve = function () {
+  var arguments = 2;
+  return class {
+    m() {
+      var _arguments10 = arguments;
+      return function () {
+        return _arguments10;
+      };
+    }
+
+  };
+};
+
+twelve();

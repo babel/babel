@@ -1317,6 +1317,7 @@
                     }
                   ]
                 },
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":980,"end":984,"loc":{"start":{"line":31,"column":39},"end":{"line":31,"column":43}}

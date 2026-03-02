@@ -1,0 +1,9 @@
+{
+  "plugins": ["proposal-object-rest-spread"],
+  "assumptions": {
+    "setSpreadProperties": true
+  },
+  "targets": {
+    "browsers": "ie 6"
+  }
+}

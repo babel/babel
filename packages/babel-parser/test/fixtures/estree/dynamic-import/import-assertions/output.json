@@ -1,0 +1,70 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":47}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":47}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":47,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":47}},
+        "expression": {
+          "type": "ImportExpression",
+          "start":0,"end":46,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":46}},
+          "source": {
+            "type": "Literal",
+            "start":7,"end":15,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":15}},
+            "value": "module",
+            "raw": "\"module\""
+          },
+          "attributes": {
+            "type": "ObjectExpression",
+            "start":17,"end":45,"loc":{"start":{"line":1,"column":17},"end":{"line":1,"column":45}},
+            "properties": [
+              {
+                "type": "Property",
+                "start":19,"end":43,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":43}},
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":19,"end":25,"loc":{"start":{"line":1,"column":19},"end":{"line":1,"column":25},"identifierName":"assert"},
+                  "name": "assert"
+                },
+                "computed": false,
+                "shorthand": false,
+                "value": {
+                  "type": "ObjectExpression",
+                  "start":27,"end":43,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":43}},
+                  "properties": [
+                    {
+                      "type": "Property",
+                      "start":29,"end":41,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":41}},
+                      "method": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start":29,"end":33,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":33},"identifierName":"type"},
+                        "name": "type"
+                      },
+                      "computed": false,
+                      "shorthand": false,
+                      "value": {
+                        "type": "Literal",
+                        "start":35,"end":41,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":41}},
+                        "value": "json",
+                        "raw": "\"json\""
+                      },
+                      "kind": "init"
+                    }
+                  ]
+                },
+                "kind": "init"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

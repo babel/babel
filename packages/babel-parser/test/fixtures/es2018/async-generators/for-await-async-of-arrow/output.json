@@ -1,0 +1,69 @@
+{
+  "type": "File",
+  "start":0,"end":57,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: Invalid left-hand side in for-of statement. (2:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":57,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":57,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":57,"loc":{"start":{"line":1,"column":19},"end":{"line":3,"column":1}},
+          "body": [
+            {
+              "type": "ForOfStatement",
+              "start":23,"end":55,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":34}},
+              "await": true,
+              "left": {
+                "type": "ArrowFunctionExpression",
+                "start":34,"end":48,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":27}},
+                "id": null,
+                "generator": false,
+                "async": true,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start":40,"end":42,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":21},"identifierName":"of"},
+                    "name": "of"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":46,"end":48,"loc":{"start":{"line":2,"column":25},"end":{"line":2,"column":27}},
+                  "body": [],
+                  "directives": []
+                }
+              },
+              "right": {
+                "type": "Identifier",
+                "start":52,"end":53,"loc":{"start":{"line":2,"column":31},"end":{"line":2,"column":32},"identifierName":"x"},
+                "name": "x"
+              },
+              "body": {
+                "type": "EmptyStatement",
+                "start":54,"end":55,"loc":{"start":{"line":2,"column":33},"end":{"line":2,"column":34}}
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

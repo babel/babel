@@ -3,8 +3,8 @@
   "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":22}},
   "errors": [
     "SyntaxError: `foo` has already been exported. Exported identifiers must be unique. (2:9)",
-    "SyntaxError: Export 'foo' is not defined (1:9)",
-    "SyntaxError: Export 'bar' is not defined (2:9)"
+    "SyntaxError: Export 'foo' is not defined. (1:9)",
+    "SyntaxError: Export 'bar' is not defined. (2:9)"
   ],
   "program": {
     "type": "Program",

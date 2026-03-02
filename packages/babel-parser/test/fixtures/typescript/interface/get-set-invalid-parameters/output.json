@@ -1,0 +1,70 @@
+{
+  "type": "File",
+  "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+  "errors": [
+    "SyntaxError: A 'get' accesor must not have any formal parameters. (3:5)",
+    "SyntaxError: A 'set' accesor must have exactly one formal parameter. (4:1)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":0,"end":56,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":13,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":13},"identifierName":"Foo"},
+          "name": "Foo"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":14,"end":56,"loc":{"start":{"line":1,"column":14},"end":{"line":4,"column":1}},
+          "body": [
+            {
+              "type": "TSMethodSignature",
+              "start":18,"end":41,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":25}},
+              "key": {
+                "type": "Identifier",
+                "start":22,"end":25,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":9},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "kind": "get",
+              "parameters": [
+                {
+                  "type": "Identifier",
+                  "start":26,"end":31,"loc":{"start":{"line":2,"column":10},"end":{"line":2,"column":15},"identifierName":"param"},
+                  "name": "param"
+                }
+              ],
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":32,"end":40,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":24}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":34,"end":40,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":24}}
+                }
+              }
+            },
+            {
+              "type": "TSMethodSignature",
+              "start":44,"end":54,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":12}},
+              "key": {
+                "type": "Identifier",
+                "start":48,"end":51,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":9},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "computed": false,
+              "kind": "set",
+              "parameters": []
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

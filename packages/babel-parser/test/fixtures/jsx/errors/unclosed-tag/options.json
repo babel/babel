@@ -1,3 +1,7 @@
 {
-  "throws": "Unterminated JSX contents (1:5)"
+  "plugins": [
+    "jsx",
+    "flow"
+  ],
+  "throws": "Unterminated JSX contents. (1:5)"
 }

@@ -1,0 +1,6 @@
+{
+  "plugins": ["proposal-private-methods", "proposal-class-properties"],
+  "assumptions": {
+    "privateFieldsAsProperties": true
+  }
+}

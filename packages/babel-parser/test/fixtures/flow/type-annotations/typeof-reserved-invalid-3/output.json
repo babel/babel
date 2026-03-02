@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":45,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":36}},
   "errors": [
-    "SyntaxError: Unexpected reserved type number (2:22)"
+    "SyntaxError: Unexpected reserved type number. (2:22)"
   ],
   "program": {
     "type": "Program",

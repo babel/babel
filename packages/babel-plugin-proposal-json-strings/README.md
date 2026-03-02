@@ -2,7 +2,7 @@
 
 > Escape U+2028 LINE SEPARATOR and U+2029 PARAGRAPH SEPARATOR in JS strings
 
-See our website [@babel/plugin-proposal-json-strings](https://babeljs.io/docs/en/next/babel-plugin-proposal-json-strings.html) for more information.
+See our website [@babel/plugin-proposal-json-strings](https://babeljs.io/docs/en/babel-plugin-proposal-json-strings) for more information.
 
 ## Install
 

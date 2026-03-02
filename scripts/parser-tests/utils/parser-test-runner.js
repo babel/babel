@@ -1,8 +1,6 @@
-"use strict";
-
-const fs = require("fs").promises;
-const chalk = require("chalk");
-const { parse: parser } = require("../../../packages/babel-parser");
+import fs from "fs/promises";
+import chalk from "chalk";
+import { parse as parser } from "../../../packages/babel-parser/lib/index.js";
 
 const dot = chalk.gray(".");
 
@@ -234,4 +232,4 @@ class TestRunner {
   }
 }
 
-module.exports = exports = TestRunner;
+export default TestRunner;

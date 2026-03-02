@@ -1,0 +1,109 @@
+{
+  "type": "File",
+  "start":0,"end":136,"loc":{"start":{"line":1,"column":0},"end":{"line":15,"column":17}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":136,"loc":{"start":{"line":1,"column":0},"end":{"line":15,"column":17}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSImportEqualsDeclaration",
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":17}},
+        "importKind": "type",
+        "isExport": false,
+        "id": {
+          "type": "Identifier",
+          "start":12,"end":13,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":1},"identifierName":"A"},
+          "name": "A"
+        },
+        "moduleReference": {
+          "type": "TSExternalModuleReference",
+          "start":16,"end":28,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":16}},
+          "expression": {
+            "type": "StringLiteral",
+            "start":24,"end":27,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":15}},
+            "extra": {
+              "rawValue": "A",
+              "raw": "\"A\""
+            },
+            "value": "A"
+          }
+        }
+      },
+      {
+        "type": "TSImportEqualsDeclaration",
+        "start":31,"end":60,"loc":{"start":{"line":4,"column":0},"end":{"line":6,"column":17}},
+        "importKind": "type",
+        "isExport": false,
+        "id": {
+          "type": "Identifier",
+          "start":43,"end":44,"loc":{"start":{"line":6,"column":0},"end":{"line":6,"column":1},"identifierName":"a"},
+          "name": "a"
+        },
+        "moduleReference": {
+          "type": "TSExternalModuleReference",
+          "start":47,"end":59,"loc":{"start":{"line":6,"column":4},"end":{"line":6,"column":16}},
+          "expression": {
+            "type": "StringLiteral",
+            "start":55,"end":58,"loc":{"start":{"line":6,"column":12},"end":{"line":6,"column":15}},
+            "extra": {
+              "rawValue": "a",
+              "raw": "\"a\""
+            },
+            "value": "a"
+          }
+        }
+      },
+      {
+        "type": "TSImportEqualsDeclaration",
+        "start":62,"end":98,"loc":{"start":{"line":8,"column":0},"end":{"line":10,"column":17}},
+        "importKind": "type",
+        "isExport": true,
+        "id": {
+          "type": "Identifier",
+          "start":81,"end":82,"loc":{"start":{"line":10,"column":0},"end":{"line":10,"column":1},"identifierName":"B"},
+          "name": "B"
+        },
+        "moduleReference": {
+          "type": "TSExternalModuleReference",
+          "start":85,"end":97,"loc":{"start":{"line":10,"column":4},"end":{"line":10,"column":16}},
+          "expression": {
+            "type": "StringLiteral",
+            "start":93,"end":96,"loc":{"start":{"line":10,"column":12},"end":{"line":10,"column":15}},
+            "extra": {
+              "rawValue": "B",
+              "raw": "\"B\""
+            },
+            "value": "B"
+          }
+        }
+      },
+      {
+        "type": "TSImportEqualsDeclaration",
+        "start":100,"end":136,"loc":{"start":{"line":12,"column":0},"end":{"line":15,"column":17}},
+        "importKind": "type",
+        "isExport": true,
+        "id": {
+          "type": "Identifier",
+          "start":119,"end":120,"loc":{"start":{"line":15,"column":0},"end":{"line":15,"column":1},"identifierName":"b"},
+          "name": "b"
+        },
+        "moduleReference": {
+          "type": "TSExternalModuleReference",
+          "start":123,"end":135,"loc":{"start":{"line":15,"column":4},"end":{"line":15,"column":16}},
+          "expression": {
+            "type": "StringLiteral",
+            "start":131,"end":134,"loc":{"start":{"line":15,"column":12},"end":{"line":15,"column":15}},
+            "extra": {
+              "rawValue": "b",
+              "raw": "\"b\""
+            },
+            "value": "b"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

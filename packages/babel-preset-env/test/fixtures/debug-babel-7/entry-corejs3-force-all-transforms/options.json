@@ -1,0 +1,19 @@
+{
+  "validateLogs": true,
+  "ignoreOutput": true,
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "modules": false,
+        "targets": {
+          "chrome": 55
+        },
+        "useBuiltIns": "entry",
+        "corejs": 3,
+        "forceAllTransforms": true
+      }
+    ]
+  ]
+}

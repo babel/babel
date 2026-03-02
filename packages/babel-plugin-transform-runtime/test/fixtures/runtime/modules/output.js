@@ -12,6 +12,7 @@ var _mod = require("mod");
 
 Object.keys(_mod).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
+  if (key in exports && exports[key] === _mod[key]) return;
   Object.defineProperty(exports, key, {
     enumerable: true,
     get: function () {

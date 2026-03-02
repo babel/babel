@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-numeric-separator"],
+  "minNodeVersion": "10.4.0"
+}

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":50,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
   "errors": [
-    "SyntaxError: super can only be used with function calls (i.e. super()) or in property accesses (i.e. super.prop or super[prop]) (3:15)"
+    "SyntaxError: 'super' can only be used with function calls (i.e. super()) or in property accesses (i.e. super.prop or super[prop]). (3:15)"
   ],
   "program": {
     "type": "Program",
@@ -52,12 +52,12 @@
                         "type": "Super",
                         "start":33,"end":38,"loc":{"start":{"line":3,"column":15},"end":{"line":3,"column":20}}
                       },
+                      "computed": false,
                       "property": {
                         "type": "Identifier",
                         "start":40,"end":41,"loc":{"start":{"line":3,"column":22},"end":{"line":3,"column":23},"identifierName":"b"},
                         "name": "b"
                       },
-                      "computed": false,
                       "optional": true
                     }
                   }

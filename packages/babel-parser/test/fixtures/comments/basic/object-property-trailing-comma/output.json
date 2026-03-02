@@ -92,18 +92,18 @@
                     },
                     "value": "3"
                   },
-                  "leadingComments": [
-                    {
-                      "type": "CommentLine",
-                      "value": " comment 2",
-                      "start":45,"end":57,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":22}}
-                    }
-                  ],
                   "trailingComments": [
                     {
                       "type": "CommentLine",
                       "value": " comment 3",
                       "start":68,"end":80,"loc":{"start":{"line":4,"column":10},"end":{"line":4,"column":22}}
+                    }
+                  ],
+                  "leadingComments": [
+                    {
+                      "type": "CommentLine",
+                      "value": " comment 2",
+                      "start":45,"end":57,"loc":{"start":{"line":3,"column":10},"end":{"line":3,"column":22}}
                     }
                   ]
                 }

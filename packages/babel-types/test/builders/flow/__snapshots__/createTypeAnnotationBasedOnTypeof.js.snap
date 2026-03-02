@@ -1,6 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`builders flow createTypeAnnotationBasedOnTypeof function 1`] = `
+exports[`builders flow createTypeAnnotationBasedOnTypeof bigint is valid 1`] = `
+Object {
+  "type": "AnyTypeAnnotation",
+}
+`;
+
+exports[`builders flow createTypeAnnotationBasedOnTypeof function is valid 1`] = `
 Object {
   "id": Object {
     "name": "Function",
@@ -11,13 +17,13 @@ Object {
 }
 `;
 
-exports[`builders flow createTypeAnnotationBasedOnTypeof number 1`] = `
+exports[`builders flow createTypeAnnotationBasedOnTypeof number is valid 1`] = `
 Object {
   "type": "NumberTypeAnnotation",
 }
 `;
 
-exports[`builders flow createTypeAnnotationBasedOnTypeof object 1`] = `
+exports[`builders flow createTypeAnnotationBasedOnTypeof object is valid 1`] = `
 Object {
   "id": Object {
     "name": "Object",
@@ -28,13 +34,13 @@ Object {
 }
 `;
 
-exports[`builders flow createTypeAnnotationBasedOnTypeof string 1`] = `
+exports[`builders flow createTypeAnnotationBasedOnTypeof string is valid 1`] = `
 Object {
   "type": "StringTypeAnnotation",
 }
 `;
 
-exports[`builders flow createTypeAnnotationBasedOnTypeof symbol 1`] = `
+exports[`builders flow createTypeAnnotationBasedOnTypeof symbol is valid 1`] = `
 Object {
   "id": Object {
     "name": "Symbol",
@@ -45,13 +51,13 @@ Object {
 }
 `;
 
-exports[`builders flow createTypeAnnotationBasedOnTypeof true 1`] = `
+exports[`builders flow createTypeAnnotationBasedOnTypeof true is valid 1`] = `
 Object {
   "type": "BooleanTypeAnnotation",
 }
 `;
 
-exports[`builders flow createTypeAnnotationBasedOnTypeof undefined 1`] = `
+exports[`builders flow createTypeAnnotationBasedOnTypeof undefined is valid 1`] = `
 Object {
   "type": "VoidTypeAnnotation",
 }

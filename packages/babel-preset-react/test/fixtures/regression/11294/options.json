@@ -1,4 +1,4 @@
 {
   "presets": [
-    ["react", { "pragma": "__jsx" }]]
+    ["react", { "pragma": "__jsx", "runtime": "classic" }]]
 }

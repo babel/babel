@@ -1,0 +1,13 @@
+{
+  "sourceType": "script",
+  "overrides": [
+    {
+      "test": "src/foo.js",
+      "sourceType": "module"
+    },
+    {
+      "test": "src/bar.js",
+      "sourceType": "script"
+    }
+  ]
+}

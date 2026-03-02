@@ -40,7 +40,7 @@
                 "start":21,"end":42,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":30}},
                 "typeAnnotation": {
                   "type": "TSTypePredicate",
-                  "start":31,"end":42,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":30}},
+                  "start":23,"end":42,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":30}},
                   "parameterName": {
                     "type": "TSThisType",
                     "start":31,"end":35,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":23}}
@@ -86,7 +86,7 @@
                   "start":58,"end":79,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":33}},
                   "typeAnnotation": {
                     "type": "TSTypePredicate",
-                    "start":68,"end":79,"loc":{"start":{"line":3,"column":22},"end":{"line":3,"column":33}},
+                    "start":60,"end":79,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":33}},
                     "parameterName": {
                       "type": "TSThisType",
                       "start":68,"end":72,"loc":{"start":{"line":3,"column":22},"end":{"line":3,"column":26}}

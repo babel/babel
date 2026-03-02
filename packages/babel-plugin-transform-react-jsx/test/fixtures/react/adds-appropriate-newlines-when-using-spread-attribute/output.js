@@ -1,4 +1,4 @@
 /*#__PURE__*/
-React.createElement(Component, babelHelpers.extends({}, props, {
+React.createElement(Component, { ...props,
   sound: "moo"
-}));
+});

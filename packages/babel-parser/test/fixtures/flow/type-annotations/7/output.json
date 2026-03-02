@@ -30,6 +30,7 @@
                 "start":23,"end":33,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":33}},
                 "params": [],
                 "rest": null,
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":29,"end":33,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":33}}

@@ -1,0 +1,80 @@
+{
+  "type": "File",
+  "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+  "errors": [
+    "SyntaxError: Constructors cannot have a `this` parameter; constructors don't bind `this` like other functions. (2:16)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareClass",
+        "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":14,"end":15,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":15},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":16,"end":55,"loc":{"start":{"line":1,"column":16},"end":{"line":3,"column":1}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":22,"end":52,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":34}},
+              "key": {
+                "type": "Identifier",
+                "start":22,"end":33,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":15},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":22,"end":52,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":34}},
+                "params": [],
+                "rest": null,
+                "typeParameters": null,
+                "this": {
+                  "type": "FunctionTypeParam",
+                  "start":34,"end":47,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":29}},
+                  "name": null,
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "NumberTypeAnnotation",
+                    "start":41,"end":47,"loc":{"start":{"line":2,"column":23},"end":{"line":2,"column":29}}
+                  }
+                },
+                "returnType": {
+                  "type": "GenericTypeAnnotation",
+                  "start":51,"end":52,"loc":{"start":{"line":2,"column":33},"end":{"line":2,"column":34}},
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start":51,"end":52,"loc":{"start":{"line":2,"column":33},"end":{"line":2,"column":34},"identifierName":"A"},
+                    "name": "A"
+                  }
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

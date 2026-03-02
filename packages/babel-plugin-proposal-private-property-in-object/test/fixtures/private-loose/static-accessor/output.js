@@ -1,4 +1,4 @@
-var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
+var _foo = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("foo");
 
 let Foo = /*#__PURE__*/function () {
   "use strict";
@@ -16,7 +16,7 @@ let Foo = /*#__PURE__*/function () {
   return Foo;
 }();
 
-var _get_foo = function () {};
+function _get_foo() {}
 
 Object.defineProperty(Foo, _foo, {
   get: _get_foo,

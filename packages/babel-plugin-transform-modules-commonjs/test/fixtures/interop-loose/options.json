@@ -1,7 +1,5 @@
 {
+  "externalHelpers": true,
   "sourceType": "module",
-  "plugins": [
-    "external-helpers",
-    ["transform-modules-commonjs", { "loose": true }]
-  ]
+  "plugins": [["transform-modules-commonjs", { "loose": true }]]
 }

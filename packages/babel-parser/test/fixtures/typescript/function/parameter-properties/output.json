@@ -1,0 +1,165 @@
+{
+  "type": "File",
+  "start":0,"end":158,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":4}},
+  "errors": [
+    "SyntaxError: A parameter property is only allowed in a constructor implementation. (2:2)",
+    "SyntaxError: A parameter property is only allowed in a constructor implementation. (3:2)",
+    "SyntaxError: A parameter property is only allowed in a constructor implementation. (4:2)",
+    "SyntaxError: A parameter property is only allowed in a constructor implementation. (5:2)",
+    "SyntaxError: A parameter property is only allowed in a constructor implementation. (6:2)",
+    "SyntaxError: A parameter property is only allowed in a constructor implementation. (7:2)",
+    "SyntaxError: A parameter property is only allowed in a constructor implementation. (8:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":158,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":4}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":158,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":4}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "TSParameterProperty",
+            "start":16,"end":26,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":12}},
+            "readonly": true,
+            "parameter": {
+              "type": "Identifier",
+              "start":25,"end":26,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":12},"identifierName":"r"},
+              "name": "r"
+            }
+          },
+          {
+            "type": "TSParameterProperty",
+            "start":30,"end":47,"loc":{"start":{"line":3,"column":2},"end":{"line":3,"column":19}},
+            "accessibility": "public",
+            "parameter": {
+              "type": "Identifier",
+              "start":37,"end":47,"loc":{"start":{"line":3,"column":9},"end":{"line":3,"column":19},"identifierName":"pu"},
+              "name": "pu",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":39,"end":47,"loc":{"start":{"line":3,"column":11},"end":{"line":3,"column":19}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":41,"end":47,"loc":{"start":{"line":3,"column":13},"end":{"line":3,"column":19}}
+                }
+              }
+            }
+          },
+          {
+            "type": "TSParameterProperty",
+            "start":51,"end":64,"loc":{"start":{"line":4,"column":2},"end":{"line":4,"column":15}},
+            "accessibility": "protected",
+            "parameter": {
+              "type": "Identifier",
+              "start":61,"end":64,"loc":{"start":{"line":4,"column":12},"end":{"line":4,"column":15},"identifierName":"po"},
+              "name": "po",
+              "optional": true
+            }
+          },
+          {
+            "type": "TSParameterProperty",
+            "start":68,"end":87,"loc":{"start":{"line":5,"column":2},"end":{"line":5,"column":21}},
+            "accessibility": "private",
+            "parameter": {
+              "type": "Identifier",
+              "start":76,"end":87,"loc":{"start":{"line":5,"column":10},"end":{"line":5,"column":21},"identifierName":"pi"},
+              "name": "pi",
+              "optional": true,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":79,"end":87,"loc":{"start":{"line":5,"column":13},"end":{"line":5,"column":21}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":81,"end":87,"loc":{"start":{"line":5,"column":15},"end":{"line":5,"column":21}}
+                }
+              }
+            }
+          },
+          {
+            "type": "TSParameterProperty",
+            "start":91,"end":110,"loc":{"start":{"line":6,"column":2},"end":{"line":6,"column":21}},
+            "accessibility": "public",
+            "readonly": true,
+            "parameter": {
+              "type": "Identifier",
+              "start":107,"end":110,"loc":{"start":{"line":6,"column":18},"end":{"line":6,"column":21},"identifierName":"pur"},
+              "name": "pur"
+            }
+          },
+          {
+            "type": "TSParameterProperty",
+            "start":114,"end":128,"loc":{"start":{"line":7,"column":2},"end":{"line":7,"column":16}},
+            "readonly": true,
+            "parameter": {
+              "type": "AssignmentPattern",
+              "start":123,"end":128,"loc":{"start":{"line":7,"column":11},"end":{"line":7,"column":16}},
+              "left": {
+                "type": "Identifier",
+                "start":123,"end":124,"loc":{"start":{"line":7,"column":11},"end":{"line":7,"column":12},"identifierName":"x"},
+                "name": "x"
+              },
+              "right": {
+                "type": "NumericLiteral",
+                "start":127,"end":128,"loc":{"start":{"line":7,"column":15},"end":{"line":7,"column":16}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            }
+          },
+          {
+            "type": "TSParameterProperty",
+            "start":132,"end":153,"loc":{"start":{"line":8,"column":2},"end":{"line":8,"column":23}},
+            "accessibility": "public",
+            "parameter": {
+              "type": "AssignmentPattern",
+              "start":139,"end":153,"loc":{"start":{"line":8,"column":9},"end":{"line":8,"column":23}},
+              "left": {
+                "type": "Identifier",
+                "start":139,"end":149,"loc":{"start":{"line":8,"column":9},"end":{"line":8,"column":19},"identifierName":"y"},
+                "name": "y",
+                "optional": true,
+                "typeAnnotation": {
+                  "type": "TSTypeAnnotation",
+                  "start":141,"end":149,"loc":{"start":{"line":8,"column":11},"end":{"line":8,"column":19}},
+                  "typeAnnotation": {
+                    "type": "TSNumberKeyword",
+                    "start":143,"end":149,"loc":{"start":{"line":8,"column":13},"end":{"line":8,"column":19}}
+                  }
+                }
+              },
+              "right": {
+                "type": "NumericLiteral",
+                "start":152,"end":153,"loc":{"start":{"line":8,"column":22},"end":{"line":8,"column":23}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":156,"end":158,"loc":{"start":{"line":9,"column":2},"end":{"line":9,"column":4}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

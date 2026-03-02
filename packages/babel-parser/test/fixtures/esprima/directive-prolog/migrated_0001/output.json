@@ -45,11 +45,12 @@
                   "value": {
                     "type": "DirectiveLiteral",
                     "start":15,"end":28,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":28}},
-                    "value": "use\\nstrict",
                     "extra": {
+                      "rawValue": "use\\nstrict",
                       "raw": "'use\\nstrict'",
-                      "rawValue": "use\\nstrict"
-                    }
+                      "expressionValue": "use\nstrict"
+                    },
+                    "value": "use\\nstrict"
                   }
                 }
               ]

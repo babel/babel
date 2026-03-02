@@ -16,8 +16,9 @@
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
+  _exports.foo7 = _exports.foo6 = _exports.foo5 = _exports.foo4 = _exports.foo3 = _exports.foo2 = _exports.foo = _exports.bar = void 0;
   _exports.foo8 = foo8;
-  _exports.foo9 = _exports.foo7 = _exports.foo6 = _exports.foo5 = _exports.foo4 = _exports.foo3 = _exports.bar = _exports.foo2 = _exports.foo = void 0;
+  _exports.foo9 = void 0;
   var foo = 1;
   _exports.foo = foo;
   var foo2 = 1,

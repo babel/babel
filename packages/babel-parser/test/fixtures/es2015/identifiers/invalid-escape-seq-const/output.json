@@ -2,9 +2,9 @@
   "type": "File",
   "start":0,"end":40,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":17}},
   "errors": [
-    "SyntaxError: Unexpected keyword 'const' (1:4)",
-    "SyntaxError: Escape sequence in keyword const (1:4)",
-    "SyntaxError: Escape sequence in keyword const (3:0)"
+    "SyntaxError: Unexpected keyword 'const'. (1:4)",
+    "SyntaxError: Escape sequence in keyword const. (1:4)",
+    "SyntaxError: Escape sequence in keyword const. (3:0)"
   ],
   "program": {
     "type": "Program",

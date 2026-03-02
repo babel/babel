@@ -1,0 +1,21 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "chrome": 63
+        },
+        "modules": false,
+        "useBuiltIns": "entry",
+        "corejs": 2,
+        "exclude": [
+          "es7.array.flat-map",
+          "web.timers",
+          "web.immediate",
+          "web.dom.iterable"
+        ]
+      }
+    ]
+  ]
+}

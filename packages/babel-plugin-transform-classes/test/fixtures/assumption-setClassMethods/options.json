@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    "transform-function-name",
+    "transform-classes",
+    ["transform-spread", { "loose": true }],
+    "transform-block-scoping"
+  ],
+  "assumptions": {
+    "setClassMethods": true
+  }
+}

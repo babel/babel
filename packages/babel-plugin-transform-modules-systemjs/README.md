@@ -2,7 +2,7 @@
 
 > This plugin transforms ES2015 modules to SystemJS
 
-See our website [@babel/plugin-transform-modules-systemjs](https://babeljs.io/docs/en/next/babel-plugin-transform-modules-systemjs.html) for more information.
+See our website [@babel/plugin-transform-modules-systemjs](https://babeljs.io/docs/en/babel-plugin-transform-modules-systemjs) for more information.
 
 ## Install
 

@@ -1,0 +1,26 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "safari": "15"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { safari }
+  syntax-private-property-in-object
+  syntax-class-properties
+  syntax-numeric-separator
+  syntax-nullish-coalescing-operator
+  syntax-optional-chaining
+  syntax-json-strings
+  syntax-optional-catch-binding
+  transform-parameters { safari }
+  syntax-async-generators
+  syntax-object-rest-spread
+  proposal-export-namespace-from { safari }
+  transform-modules-commonjs
+  proposal-dynamic-import
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

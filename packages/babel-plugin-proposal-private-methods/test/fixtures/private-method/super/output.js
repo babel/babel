@@ -5,13 +5,12 @@ class Base {
 
 }
 
-var _privateMethod = new WeakSet();
+var _privateMethod = /*#__PURE__*/new WeakSet();
 
 class Sub extends Base {
   constructor(...args) {
     super(...args);
-
-    _privateMethod.add(this);
+    babelHelpers.classPrivateMethodInitSpec(this, _privateMethod);
   }
 
   superMethod() {
@@ -24,6 +23,6 @@ class Sub extends Base {
 
 }
 
-var _privateMethod2 = function _privateMethod2() {
+function _privateMethod2() {
   return babelHelpers.get(babelHelpers.getPrototypeOf(Sub.prototype), "superMethod", this).call(this);
-};
+}

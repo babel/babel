@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":32,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":32}},
   "errors": [
-    "SyntaxError: Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25` (1:20)"
+    "SyntaxError: Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`. (1:20)"
   ],
   "program": {
     "type": "Program",

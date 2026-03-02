@@ -1,4 +1,4 @@
-const defineHelper = require("../../../helpers/define-helper").default;
+const defineHelper = require("../../../helpers/define-helper.cjs");
 
 const dependencyDeep = defineHelper(__dirname, "dependencyDeep", `
   export default function fn() {}

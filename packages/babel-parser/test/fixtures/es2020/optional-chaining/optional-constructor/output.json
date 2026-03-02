@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":10,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":10}},
   "errors": [
-    "SyntaxError: constructors in/after an Optional Chain are not allowed (1:7)"
+    "SyntaxError: Constructors in/after an Optional Chain are not allowed. (1:7)"
   ],
   "program": {
     "type": "Program",

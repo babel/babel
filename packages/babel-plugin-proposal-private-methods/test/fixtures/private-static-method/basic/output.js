@@ -21,6 +21,6 @@ class Cl {
 
 }
 
-var _privateStaticMethod = function _privateStaticMethod() {
+function _privateStaticMethod() {
   return 1017;
-};
+}

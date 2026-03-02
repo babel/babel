@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":13,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":13}},
   "errors": [
-    "SyntaxError: Binding member expression (1:4)"
+    "SyntaxError: Binding member expression. (1:4)"
   ],
   "program": {
     "type": "Program",
@@ -43,6 +43,7 @@
                       "start":4,"end":5,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":5},"identifierName":"b"},
                       "name": "b"
                     },
+                    "computed": true,
                     "property": {
                       "type": "NumericLiteral",
                       "start":6,"end":7,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":7}},
@@ -51,8 +52,7 @@
                         "raw": "0"
                       },
                       "value": 0
-                    },
-                    "computed": true
+                    }
                   }
                 }
               ]

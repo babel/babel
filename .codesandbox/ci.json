@@ -1,6 +1,6 @@
 {
-  "installCommand": "codesandbox",
-  "buildCommand": false,
+  "buildCommand": "codesandbox:build",
   "sandboxes": ["7s08o", "vhm64"],
-  "packages": ["packages/*"]
+  "packages": ["packages/*"],
+  "node": "14"
 }

@@ -2,7 +2,7 @@
 
 > Compile ES2015 object super to ES5
 
-See our website [@babel/plugin-transform-object-super](https://babeljs.io/docs/en/next/babel-plugin-transform-object-super.html) for more information.
+See our website [@babel/plugin-transform-object-super](https://babeljs.io/docs/en/babel-plugin-transform-object-super) for more information.
 
 ## Install
 

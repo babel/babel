@@ -1,3 +1,5 @@
+const _excluded = ["b"];
+
 const _foo = foo(),
       {
   s
@@ -15,10 +17,10 @@ const _bar = bar(),
 
 const {
   a
-} = foo((_ref) => {
+} = foo(_ref => {
   let {
     b
   } = _ref,
-      c = babelHelpers.objectWithoutProperties(_ref, ["b"]);
+      c = babelHelpers.objectWithoutProperties(_ref, _excluded);
   console.log(b, c);
 });

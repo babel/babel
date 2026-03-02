@@ -2,8 +2,7 @@
   "validateLogs": true,
   "presets": [
     ["env", {
-      "targets": { "node": 10 },
-      "shippedProposals": true
+      "targets": { "node": 10 }
     }]
   ]
 }

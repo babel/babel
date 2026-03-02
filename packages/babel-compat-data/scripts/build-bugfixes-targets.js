@@ -3,6 +3,7 @@
 // NOTE: This script must be run _after_ build-data.js
 
 const path = require("path");
+const { addElectronSupportFromChromium } = require("./chromium-to-electron");
 
 const {
   getLowestImplementedVersion,
@@ -38,11 +39,15 @@ for (const [plugin, { replaces, features }] of Object.entries(data)) {
       generatedTargets[plugin][env] = supportedWithBugfix;
     }
   }
+  addElectronSupportFromChromium(generatedTargets[plugin]);
 }
 
 for (const [replaced, features] of Object.entries(allReplacedFeatures)) {
   let replacedFeatures = pluginFeatures[replaced];
-  if (!Array.isArray(replacedFeatures)) {
+  if (
+    typeof replacedFeatures === "object" &&
+    !Array.isArray(replacedFeatures)
+  ) {
     replacedFeatures = replacedFeatures.features;
   }
 
@@ -57,6 +62,7 @@ for (const [replaced, features] of Object.entries(allReplacedFeatures)) {
       generatedTargets[replaced][env] = stillNotSupported;
     }
   }
+  addElectronSupportFromChromium(generatedTargets[replaced]);
 }
 
 for (const [filename, data] of [

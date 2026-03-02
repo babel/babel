@@ -1,0 +1,110 @@
+{
+  "type": "File",
+  "start":0,"end":69,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":50}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":69,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":50}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":18}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":17,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":17}},
+          "callee": {
+            "type": "Import",
+            "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6}}
+          },
+          "extra": {
+            "trailingComma": 15
+          },
+          "arguments": [
+            {
+              "type": "StringLiteral",
+              "start":7,"end":15,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":15}},
+              "extra": {
+                "rawValue": "foo.js",
+                "raw": "\"foo.js\""
+              },
+              "value": "foo.js"
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":19,"end":69,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":50}},
+        "expression": {
+          "type": "CallExpression",
+          "start":19,"end":68,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":49}},
+          "callee": {
+            "type": "Import",
+            "start":19,"end":25,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":6}}
+          },
+          "extra": {
+            "trailingComma": 66
+          },
+          "arguments": [
+            {
+              "type": "StringLiteral",
+              "start":26,"end":36,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":17}},
+              "extra": {
+                "rawValue": "foo.json",
+                "raw": "\"foo.json\""
+              },
+              "value": "foo.json"
+            },
+            {
+              "type": "ObjectExpression",
+              "start":38,"end":66,"loc":{"start":{"line":2,"column":19},"end":{"line":2,"column":47}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":40,"end":64,"loc":{"start":{"line":2,"column":21},"end":{"line":2,"column":45}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":40,"end":46,"loc":{"start":{"line":2,"column":21},"end":{"line":2,"column":27},"identifierName":"assert"},
+                    "name": "assert"
+                  },
+                  "computed": false,
+                  "shorthand": false,
+                  "value": {
+                    "type": "ObjectExpression",
+                    "start":48,"end":64,"loc":{"start":{"line":2,"column":29},"end":{"line":2,"column":45}},
+                    "properties": [
+                      {
+                        "type": "ObjectProperty",
+                        "start":50,"end":62,"loc":{"start":{"line":2,"column":31},"end":{"line":2,"column":43}},
+                        "method": false,
+                        "key": {
+                          "type": "Identifier",
+                          "start":50,"end":54,"loc":{"start":{"line":2,"column":31},"end":{"line":2,"column":35},"identifierName":"type"},
+                          "name": "type"
+                        },
+                        "computed": false,
+                        "shorthand": false,
+                        "value": {
+                          "type": "StringLiteral",
+                          "start":56,"end":62,"loc":{"start":{"line":2,"column":37},"end":{"line":2,"column":43}},
+                          "extra": {
+                            "rawValue": "json",
+                            "raw": "\"json\""
+                          },
+                          "value": "json"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

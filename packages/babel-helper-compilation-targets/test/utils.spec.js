@@ -1,4 +1,4 @@
-import { semverify } from "../lib/utils";
+import { semverify } from "../lib/utils.js";
 
 describe("utils", () => {
   describe("semverify", () => {

@@ -34,12 +34,12 @@
                       "start":26,"end":33,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":11},"identifierName":"console"},
                       "name": "console"
                     },
+                    "computed": false,
                     "property": {
                       "type": "Identifier",
                       "start":34,"end":37,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":15},"identifierName":"log"},
                       "name": "log"
-                    },
-                    "computed": false
+                    }
                   },
                   "arguments": [
                     {

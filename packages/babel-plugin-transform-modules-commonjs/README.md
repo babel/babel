@@ -2,7 +2,7 @@
 
 > This plugin transforms ES2015 modules to CommonJS
 
-See our website [@babel/plugin-transform-modules-commonjs](https://babeljs.io/docs/en/next/babel-plugin-transform-modules-commonjs.html) for more information.
+See our website [@babel/plugin-transform-modules-commonjs](https://babeljs.io/docs/en/babel-plugin-transform-modules-commonjs) for more information.
 
 ## Install
 

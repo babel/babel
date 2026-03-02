@@ -1,30 +1,36 @@
-const readdir = require("fs-readdir-recursive");
-const helper = require("@babel/helper-fixtures");
-const rimraf = require("rimraf");
-const { sync: makeDirSync } = require("make-dir");
-const child = require("child_process");
-const merge = require("lodash/merge");
-const path = require("path");
-const fs = require("fs");
+import readdir from "fs-readdir-recursive";
+import * as helper from "@babel/helper-fixtures";
+import rimraf from "rimraf";
+import child from "child_process";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+import { createRequire } from "module";
 
-const fixtureLoc = path.join(__dirname, "fixtures");
-const tmpLoc = path.join(__dirname, "tmp");
+import { chmod } from "../lib/babel/util.js";
+
+const require = createRequire(import.meta.url);
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const fixtureLoc = path.join(dirname, "fixtures");
+const tmpLoc = path.join(dirname, "tmp");
+const rootDir = path.resolve(dirname, "../../..");
 
 const fileFilter = function (x) {
   return x !== ".DS_Store";
 };
 
 const outputFileSync = function (filePath, data) {
-  makeDirSync(path.dirname(filePath));
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, data);
 };
 
-const presetLocs = [path.join(__dirname, "../../babel-preset-react")];
+const presetLocs = [path.join(rootDir, "./packages/babel-preset-react")];
 
 const pluginLocs = [
-  path.join(__dirname, "/../../babel-plugin-transform-arrow-functions"),
-  path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
-  path.join(__dirname, "/../../babel-plugin-transform-modules-commonjs"),
+  path.join(rootDir, "./packages/babel-plugin-transform-arrow-functions"),
+  path.join(rootDir, "./packages/babel-plugin-transform-strict-mode"),
+  path.join(rootDir, "./packages/babel-plugin-transform-modules-commonjs"),
 ].join(",");
 
 const readDir = function (loc, filter) {
@@ -39,24 +45,36 @@ const readDir = function (loc, filter) {
 
 const saveInFiles = function (files) {
   // Place an empty .babelrc in each test so tests won't unexpectedly get to repo-level config.
-  if (!fs.existsSync(".babelrc")) {
-    outputFileSync(".babelrc", "{}");
+  if (!fs.existsSync(path.join(tmpLoc, ".babelrc"))) {
+    outputFileSync(path.join(tmpLoc, ".babelrc"), "{}");
   }
 
   Object.keys(files).forEach(function (filename) {
     const content = files[filename];
-    outputFileSync(filename, content);
+    outputFileSync(path.join(tmpLoc, filename), content);
   });
 };
 
-const normalizeOutput = function (str, cwd) {
-  let prev;
-  do {
-    prev = str;
-    str = str.replace(cwd, "<CWD>");
-  } while (str !== prev);
+function escapeRegExp(string) {
+  return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
+}
 
-  return str.replace(/\(\d+ms\)/g, "(123ms)");
+const normalizeOutput = function (str, cwd) {
+  let result = str
+    .replace(/\(\d+ms\)/g, "(123ms)")
+    .replace(new RegExp(escapeRegExp(cwd), "g"), "<CWD>")
+    // (non-win32) /foo/babel/packages -> <CWD>/packages
+    // (win32) C:\foo\babel\packages -> <CWD>\packages
+    .replace(new RegExp(escapeRegExp(rootDir), "g"), "<ROOTDIR>");
+  if (process.platform === "win32") {
+    result = result
+      // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
+      .replace(
+        new RegExp(escapeRegExp(rootDir.replace(/\\/g, "\\\\")), "g"),
+        "<ROOTDIR>",
+      );
+  }
+  return result;
 };
 
 const assertTest = function (stdout, stderr, opts, cwd) {
@@ -105,7 +123,7 @@ const assertTest = function (stdout, stderr, opts, cwd) {
           const expected = opts.outFiles[filename];
           const actual = actualFiles[filename];
 
-          expect(actual).toBe(expected ?? "");
+          expect(actual).toBe(expected || "");
         }
       } catch (e) {
         e.message += "\n at " + filename;
@@ -120,7 +138,7 @@ const assertTest = function (stdout, stderr, opts, cwd) {
 };
 
 const buildTest = function (binName, testName, opts) {
-  const binLoc = path.join(__dirname, "../lib", binName);
+  const binLoc = path.join(dirname, "../lib", binName);
 
   return function (callback) {
     saveInFiles(opts.inFiles);
@@ -132,8 +150,9 @@ const buildTest = function (binName, testName, opts) {
     }
 
     args = args.concat(opts.args);
+    const env = { ...process.env, ...opts.env };
 
-    const spawn = child.spawn(process.execPath, args);
+    const spawn = child.spawn(process.execPath, args, { env, cwd: tmpLoc });
 
     let stderr = "";
     let stdout = "";
@@ -171,15 +190,11 @@ const buildTest = function (binName, testName, opts) {
 };
 
 fs.readdirSync(fixtureLoc).forEach(function (binName) {
-  if (binName.startsWith(".")) return;
+  if (binName.startsWith(".") || binName === "package.json") return;
 
   const suiteLoc = path.join(fixtureLoc, binName);
   describe("bin/" + binName, function () {
-    let cwd;
-
     beforeEach(() => {
-      cwd = process.cwd();
-
       if (fs.existsSync(tmpLoc)) {
         for (const child of fs.readdirSync(tmpLoc)) {
           rimraf.sync(path.join(tmpLoc, child));
@@ -187,12 +202,6 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
       } else {
         fs.mkdirSync(tmpLoc);
       }
-
-      process.chdir(tmpLoc);
-    });
-
-    afterEach(() => {
-      process.chdir(cwd);
     });
 
     fs.readdirSync(suiteLoc).forEach(function (testName) {
@@ -200,7 +209,7 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
 
       const testLoc = path.join(suiteLoc, testName);
 
-      const opts = {
+      let opts = {
         args: [],
       };
 
@@ -226,7 +235,7 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
 
           delete taskOpts.os;
         }
-        merge(opts, taskOpts);
+        opts = { args: [], ...taskOpts };
       }
 
       ["stdout", "stdin", "stderr"].forEach(function (key) {
@@ -253,8 +262,30 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
         // copy .babelignore file to tmp directory
         opts.inFiles[".babelignore"] = helper.readFile(babelIgnoreLoc);
       }
-
+      // eslint-disable-next-line jest/valid-title
       it(testName, buildTest(binName, testName, opts), 20000);
+    });
+  });
+});
+
+describe("util.js", () => {
+  describe("chmod", () => {
+    it("should warn the user if chmod fails", () => {
+      const spyConsoleWarn = jest
+        .spyOn(console, "warn")
+        .mockImplementation(() => {});
+
+      // The first argument should be a string.
+      // The real reason chmod will fail is due to wrong permissions,
+      // but this is enough to cause a failure.
+      chmod(100, "file.js");
+
+      expect(spyConsoleWarn).toHaveBeenCalledTimes(1);
+      expect(spyConsoleWarn).toHaveBeenCalledWith(
+        "Cannot change permissions of file.js",
+      );
+
+      spyConsoleWarn.mockRestore();
     });
   });
 });

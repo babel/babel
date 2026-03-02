@@ -18,13 +18,8 @@ function foo() {
             return "break";
           }();
 
-          switch (_ret) {
-            case "break":
-              break;
-
-            default:
-              if (typeof _ret === "object") return _ret.v;
-          }
+          if (_ret === "break") break;
+          if (typeof _ret === "object") return _ret.v;
         }
     }
   }

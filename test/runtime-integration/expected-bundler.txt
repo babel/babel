@@ -1,0 +1,20 @@
+================== import - auto ====================
+typeof inheritsLoose: function
+A.__proto__ === B true
+================= import - esm ======================
+typeof toArray: function
+arr: 1,2,3
+=============== import - corejs ====================
+typeof Set: function
+arr: 1,2,3
+================= require - auto ====================
+typeof objectWithoutProperties: function
+typeof objectWithoutProperties.default: function
+obj: { b: 2, [Symbol(Symbol.toStringTag)]: 5 }
+================= require - esm =====================
+typeof toPrimitive: object
+typeof toPrimitive.default: function
+Value: 2
+=============== require - corejs ====================
+typeof Set: function
+arr: 1,2,3

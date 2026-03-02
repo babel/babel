@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":43}},
   "errors": [
-    "SyntaxError: Duplicate constructor in the same class (1:25)"
+    "SyntaxError: Duplicate constructor in the same class. (1:25)"
   ],
   "program": {
     "type": "Program",

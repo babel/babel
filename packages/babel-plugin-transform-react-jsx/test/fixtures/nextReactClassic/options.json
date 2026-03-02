@@ -1,9 +1,0 @@
-{
-  "plugins": [
-    "external-helpers",
-    "syntax-jsx",
-    ["transform-react-jsx", { "runtime": "automatic" }],
-    "transform-react-display-name",
-    "transform-arrow-functions"
-  ]
-}

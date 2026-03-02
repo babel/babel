@@ -39,6 +39,7 @@
                   }
                 ],
                 "rest": null,
+                "this": null,
                 "returnType": {
                   "type": "NumberTypeAnnotation",
                   "start":27,"end":33,"loc":{"start":{"line":1,"column":27},"end":{"line":1,"column":33}}

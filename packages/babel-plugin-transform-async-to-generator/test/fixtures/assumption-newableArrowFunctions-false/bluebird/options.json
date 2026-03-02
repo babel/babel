@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    [
+      "transform-async-to-generator",
+      { "module": "bluebird", "method": "coroutine" }
+    ]
+  ],
+  "assumptions": {
+    "noNewArrows": true
+  }
+}

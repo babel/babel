@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":30}},
   "errors": [
-    "SyntaxError: Unexpected reserved type bool (2:23)"
+    "SyntaxError: Unexpected reserved type bool. (2:23)"
   ],
   "program": {
     "type": "Program",

@@ -1,0 +1,3 @@
+{
+  "plugins": ["bugfix-v8-spread-parameters-in-optional-chaining"]
+}

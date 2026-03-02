@@ -1,0 +1,113 @@
+{
+  "type": "File",
+  "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":55}},
+  "errors": [
+    "SyntaxError: Sequence expressions cannot be directly nested inside JSX. Did you mean to wrap it in parentheses (...)? (1:30)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":55}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":55}},
+        "expression": {
+          "type": "JSXElement",
+          "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":55}},
+          "openingElement": {
+            "type": "JSXOpeningElement",
+            "start":0,"end":55,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":55}},
+            "name": {
+              "type": "JSXIdentifier",
+              "start":1,"end":4,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":4}},
+              "name": "div"
+            },
+            "attributes": [
+              {
+                "type": "JSXAttribute",
+                "start":5,"end":52,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":52}},
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start":5,"end":8,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":8}},
+                  "name": "key"
+                },
+                "value": {
+                  "type": "JSXExpressionContainer",
+                  "start":9,"end":52,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":52}},
+                  "expression": {
+                    "type": "SequenceExpression",
+                    "start":10,"end":51,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":51}},
+                    "expressions": [
+                      {
+                        "type": "CallExpression",
+                        "start":10,"end":28,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":28}},
+                        "callee": {
+                          "type": "MemberExpression",
+                          "start":10,"end":21,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":21}},
+                          "object": {
+                            "type": "Identifier",
+                            "start":10,"end":17,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":17},"identifierName":"console"},
+                            "name": "console"
+                          },
+                          "computed": false,
+                          "property": {
+                            "type": "Identifier",
+                            "start":18,"end":21,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":21},"identifierName":"log"},
+                            "name": "log"
+                          }
+                        },
+                        "arguments": [
+                          {
+                            "type": "StringLiteral",
+                            "start":22,"end":27,"loc":{"start":{"line":1,"column":22},"end":{"line":1,"column":27}},
+                            "extra": {
+                              "rawValue": "foo",
+                              "raw": "'foo'"
+                            },
+                            "value": "foo"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "CallExpression",
+                        "start":30,"end":51,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":51}},
+                        "callee": {
+                          "type": "MemberExpression",
+                          "start":30,"end":44,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":44}},
+                          "object": {
+                            "type": "Identifier",
+                            "start":30,"end":34,"loc":{"start":{"line":1,"column":30},"end":{"line":1,"column":34},"identifierName":"JSON"},
+                            "name": "JSON"
+                          },
+                          "computed": false,
+                          "property": {
+                            "type": "Identifier",
+                            "start":35,"end":44,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":44},"identifierName":"stringify"},
+                            "name": "stringify"
+                          }
+                        },
+                        "arguments": [
+                          {
+                            "type": "Identifier",
+                            "start":45,"end":50,"loc":{"start":{"line":1,"column":45},"end":{"line":1,"column":50},"identifierName":"props"},
+                            "name": "props"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "selfClosing": true
+          },
+          "closingElement": null,
+          "children": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

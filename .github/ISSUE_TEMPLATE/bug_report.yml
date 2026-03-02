@@ -1,0 +1,109 @@
+name: "🐛 Bug Report"
+description: "If something isn't working as expected 🤔."
+title: "[Bug]: "
+labels: ["i: needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to file a bug report! Please fill out this form as completely as possible.
+
+  - type: checkboxes
+    id: input1
+    attributes:
+      label: "💻"
+      options:
+        - label: Would you like to work on a fix?
+
+  - type: dropdown
+    attributes:
+      label: How are you using Babel?
+      options:
+        - babel-loader (webpack)
+        - "@rollup/plugin-babel"
+        - "@babel/eslint-parser"
+        - "@babel/cli"
+        - "@babel/register or @babel/node"
+        - Programmatic API (`babel.transform`, `babel.parse`)
+        - Other (Next.js, Gatsby, vue-cli, ...)
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Input code
+      description: |
+        You must write here the minimal input code necessary to reproduce the bug.
+        Even better, you can share a link to the Babel [REPL](https://babel.dev/repl):
+        this will make it easier for us to reproduce the issue, and it may help fixing
+        the bug sooner.
+        If it's not possible to reproduce the bug with a single file, a GitHub Repository
+        is also ok.
+      placeholder: |
+        ```js
+        var your => (code) => here;
+        ```
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: Configuration file name
+      description: |
+        **NOTE**: If it's possible that Babel is not correctly loading your config, it's probably because you are using
+        `.babelrc`/`package.json` instead of `babel.config.json`.
+      multiple: true
+      options:
+        - babel.config.json
+        - babel.config.js
+        - babel.config.cjs
+        - babel.config.mjs
+        - .babelrc.json
+        - .babelrc.js
+        - .babelrc.cjs
+        - .babelrc.mjs
+        - .babelrc
+        - package.json
+
+  - type: textarea
+    attributes:
+      label: Configuration
+      description: |
+        **Tip:** You can also run Babel with the environment variable SHOW_CONFIG_FOR=your_file_path to print all configs associated with a path.
+        See https://babeljs.io/docs/en/configuration#print-effective-configs for more information
+      placeholder: |
+        ```json
+        {
+          "your": { "config": "here" }
+        }
+        ```
+
+  - type: textarea
+    attributes:
+      label: Current and expected behavior
+      description: A clear and concise description of what Babel is doing and what you would expect.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Environment
+      description: |
+        **Tip:** you can run `npx envinfo --preset babel` and paste the result below
+      placeholder: |
+        - Babel version(s): [e.g. v7.12.0]
+        - Node: [e.g. Node 15]
+        - npm/Yarn version: [e.g. npm 7/Yarn 2.3]
+        - OS: [e.g. macOS 10.15.4, Windows 10]
+        - Monorepo: [e.g. yes/no/Lerna]
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Possible solution
+      description: "If you have suggestions on a fix for the bug."
+
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: "Add any other context about the problem here. Or a screenshot if applicable."

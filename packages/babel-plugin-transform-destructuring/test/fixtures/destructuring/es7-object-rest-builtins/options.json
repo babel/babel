@@ -1,6 +1,5 @@
 {
   "plugins": [
-    ["external-helpers", { "helperVersion": "7.1.5" }],
     ["transform-destructuring", { "useBuiltIns": true }],
     "transform-spread",
     "transform-parameters",

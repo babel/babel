@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":38,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":38}},
   "errors": [
-    "SyntaxError: Decorators must be placed *before* the 'export' keyword. You can set the 'decoratorsBeforeExport' option to false to use the 'export @decorator class {}' syntax (1:15)"
+    "SyntaxError: Decorators must be placed *before* the 'export' keyword. You can set the 'decoratorsBeforeExport' option to false to use the 'export @decorator class {}' syntax. (1:15)"
   ],
   "program": {
     "type": "Program",

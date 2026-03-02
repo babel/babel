@@ -1,4 +1,4 @@
-var Foo = /*#__PURE__*/function () {
+var Foo = /*#__PURE__*/function (_bar, _ref) {
   "use strict";
 
   function Foo() {
@@ -7,16 +7,15 @@ var Foo = /*#__PURE__*/function () {
 
   babelHelpers.createClass(Foo, [{
     key: "foo",
-    value: function foo() {}
+    value: function foo() {
+      "second";
+    }
   }, {
-    key: "foo",
-    value: function foo() {}
-  }, {
-    key: bar,
+    key: _bar,
     value: function value() {}
   }, {
-    key: bar + "foo",
+    key: _ref,
     value: function value() {}
   }]);
   return Foo;
-}();
+}(bar, bar + "foo");

@@ -1,0 +1,12 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "useBuiltIns": "usage",
+        "corejs": 3,
+        "modules": false
+      }
+    ]
+  ]
+}

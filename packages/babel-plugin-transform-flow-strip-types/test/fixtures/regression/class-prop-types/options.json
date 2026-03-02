@@ -1,7 +1,0 @@
-{
-  "plugins": [
-    "transform-flow-strip-types",
-    "transform-classes",
-    "external-helpers"
-  ]
-}

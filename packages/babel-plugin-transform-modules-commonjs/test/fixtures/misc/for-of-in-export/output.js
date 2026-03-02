@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.bar = exports.foo = void 0;
+exports.foo = exports.bar = void 0;
 let foo;
 exports.bar = exports.foo = foo;
 
@@ -56,6 +56,11 @@ for (let _ref2 of []) {
   exports.bar = exports.foo = foo;
 
   let _foo8;
+}
+
+for (let _foo9 of []) {
+  exports.bar = exports.foo = foo = _foo9;
+  ;
 }
 
 {

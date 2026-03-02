@@ -58,6 +58,7 @@
               "start":46,"end":47,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":10},"identifierName":"f"},
               "name": "f"
             },
+            "exportKind": "value",
             "exported": {
               "type": "Identifier",
               "start":46,"end":47,"loc":{"start":{"line":4,"column":9},"end":{"line":4,"column":10},"identifierName":"f"},

@@ -1,6 +1,6 @@
-var _priv = babelHelpers.classPrivateFieldLooseKey("priv");
+var _priv = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("priv");
 
-var _method = babelHelpers.classPrivateFieldLooseKey("method");
+var _method = /*#__PURE__*/babelHelpers.classPrivateFieldLooseKey("method");
 
 class Cl {
   constructor() {
@@ -20,6 +20,6 @@ class Cl {
 
 }
 
-var _method2 = function _method2(x) {
+function _method2(x) {
   return x;
-};
+}

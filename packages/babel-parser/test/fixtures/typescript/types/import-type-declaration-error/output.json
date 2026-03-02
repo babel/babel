@@ -32,6 +32,7 @@
               "start":26,"end":29,"loc":{"start":{"line":1,"column":26},"end":{"line":1,"column":29},"identifierName":"Bar"},
               "name": "Bar"
             },
+            "importKind": "value",
             "local": {
               "type": "Identifier",
               "start":26,"end":29,"loc":{"start":{"line":1,"column":26},"end":{"line":1,"column":29},"identifierName":"Bar"},
@@ -46,6 +47,7 @@
               "start":31,"end":34,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":34},"identifierName":"Baz"},
               "name": "Baz"
             },
+            "importKind": "value",
             "local": {
               "type": "Identifier",
               "start":31,"end":34,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":34},"identifierName":"Baz"},

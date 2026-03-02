@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-modules-systemjs",
+    "proposal-class-properties"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":37}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":37}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start":0,"end":37,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":37}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5},"end":{"line":1,"column":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeAnnotation": {
+          "type": "TSTupleType",
+          "start":9,"end":36,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":36}},
+          "elementTypes": [
+            {
+              "type": "TSNamedTupleMember",
+              "start":10,"end":21,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":21}},
+              "optional": false,
+              "label": {
+                "type": "Identifier",
+                "start":10,"end":13,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":13},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "elementType": {
+                "type": "TSStringKeyword",
+                "start":15,"end":21,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":21}}
+              }
+            },
+            {
+              "type": "TSNamedTupleMember",
+              "start":23,"end":35,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":35}},
+              "optional": true,
+              "label": {
+                "type": "Identifier",
+                "start":23,"end":26,"loc":{"start":{"line":1,"column":23},"end":{"line":1,"column":26},"identifierName":"bar"},
+                "name": "bar"
+              },
+              "elementType": {
+                "type": "TSNumberKeyword",
+                "start":29,"end":35,"loc":{"start":{"line":1,"column":29},"end":{"line":1,"column":35}}
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

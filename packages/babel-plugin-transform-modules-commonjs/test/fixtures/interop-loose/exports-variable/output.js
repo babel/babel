@@ -1,8 +1,9 @@
 "use strict";
 
 exports.__esModule = true;
+exports.foo7 = exports.foo6 = exports.foo5 = exports.foo4 = exports.foo3 = exports.foo2 = exports.foo = exports.bar = void 0;
 exports.foo8 = foo8;
-exports.foo9 = exports.foo7 = exports.foo6 = exports.foo5 = exports.foo4 = exports.foo3 = exports.bar = exports.foo2 = exports.foo = void 0;
+exports.foo9 = void 0;
 var foo = 1;
 exports.foo = foo;
 var foo2 = 1,

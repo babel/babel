@@ -1,4 +1,4 @@
-var _createForOfIteratorHelper = require("@babel/runtime-corejs3/helpers/createForOfIteratorHelper");
+var _createForOfIteratorHelper = require("@babel/runtime-corejs3/helpers/createForOfIteratorHelper").default;
 
 var _iterator = _createForOfIteratorHelper(arr),
     _step;

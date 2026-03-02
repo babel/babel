@@ -1,4 +1,4 @@
 {
   "plugins": ["transform-async-to-generator"],
-  "presets": ["env"]
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }]]
 }

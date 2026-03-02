@@ -1,6 +1,6 @@
 class Foo {
   foo() {}
-  "foo"() {}
+  "foo"() { "second" }
   [bar]() {}
   [bar + "foo"]() {}
 }

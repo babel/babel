@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
   "errors": [
-    "SyntaxError: super can only be used with function calls (i.e. super()) or in property accesses (i.e. super.prop or super[prop]) (3:4)"
+    "SyntaxError: 'super' can only be used with function calls (i.e. super()) or in property accesses (i.e. super.prop or super[prop]). (3:4)"
   ],
   "program": {
     "type": "Program",

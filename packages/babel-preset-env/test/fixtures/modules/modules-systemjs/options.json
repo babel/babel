@@ -3,7 +3,8 @@
     [
       "../../../../lib",
       {
-        "modules": "systemjs"
+        "modules": "systemjs",
+        "targets": { "browsers": "ie 6" }
       }
     ]
   ]

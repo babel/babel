@@ -1,4 +1,5 @@
 {
+  "externalHelpers": false,
   "plugins": [
     ["transform-modules-commonjs", { "loose": true }],
     "transform-runtime",

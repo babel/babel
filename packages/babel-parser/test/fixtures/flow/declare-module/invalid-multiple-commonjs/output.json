@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":88,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":88}},
   "errors": [
-    "SyntaxError: Duplicate `declare module.exports` statement (1:55)"
+    "SyntaxError: Duplicate `declare module.exports` statement. (1:55)"
   ],
   "program": {
     "type": "Program",

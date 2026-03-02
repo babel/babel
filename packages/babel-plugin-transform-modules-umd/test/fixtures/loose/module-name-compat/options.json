@@ -1,5 +1,6 @@
 {
+  "BABEL_8_BREAKING": false,
   "sourceType": "module",
   "moduleIds": true,
-  "plugins": ["external-helpers", ["transform-modules-umd", { "loose": true }]]
+  "plugins": [["transform-modules-umd", { "loose": true }]]
 }

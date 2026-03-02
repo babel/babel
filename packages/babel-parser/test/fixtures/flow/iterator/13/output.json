@@ -44,6 +44,7 @@
                   "start":35,"end":47,"loc":{"start":{"line":1,"column":35},"end":{"line":1,"column":47}},
                   "params": [],
                   "rest": null,
+                  "this": null,
                   "returnType": {
                     "type": "StringTypeAnnotation",
                     "start":41,"end":47,"loc":{"start":{"line":1,"column":41},"end":{"line":1,"column":47}}

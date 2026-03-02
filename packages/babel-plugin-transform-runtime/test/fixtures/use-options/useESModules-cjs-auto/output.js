@@ -1,3 +1,5 @@
+var _createClass = require("@babel/runtime/helpers/createClass");
+
 var _classCallCheck = require("@babel/runtime/helpers/classCallCheck");
 
 var _inherits = require("@babel/runtime/helpers/inherits");
@@ -8,7 +10,7 @@ var _getPrototypeOf = require("@babel/runtime/helpers/getPrototypeOf");
 
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 let Foo = /*#__PURE__*/function (_Bar) {
   "use strict";
@@ -23,5 +25,5 @@ let Foo = /*#__PURE__*/function (_Bar) {
     return _super.apply(this, arguments);
   }
 
-  return Foo;
+  return _createClass(Foo);
 }(Bar);

@@ -1,4 +1,4 @@
-import * as t from "../lib";
+import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
 
 function parseCode(string) {
@@ -39,6 +39,14 @@ describe("misc helpers", function () {
       expect(t.matchesPattern(ast, "a.b.c", true)).toBeTruthy();
       expect(t.matchesPattern(ast, "b.c.d", true)).toBe(false);
       expect(t.matchesPattern(ast, "a.b.c.d.e", true)).toBe(false);
+    });
+
+    it("matches this expressions", function () {
+      const ast = parseCode("this.a.b.c.d").expression;
+      expect(t.matchesPattern(ast, "this.a.b.c.d")).toBeTruthy();
+      expect(t.matchesPattern(ast, "this.a.b.c")).toBe(false);
+      expect(t.matchesPattern(ast, "this.b.c.d")).toBe(false);
+      expect(t.matchesPattern(ast, "this.a.b.c.d.e")).toBe(false);
     });
   });
 });

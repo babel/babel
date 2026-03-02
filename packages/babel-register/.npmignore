@@ -1,3 +1,7 @@
 src
 test
 *.log
+
+experimental-worker.js
+lib/experimental-worker.js
+lib/is-in-register-worker.js

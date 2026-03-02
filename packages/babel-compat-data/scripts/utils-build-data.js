@@ -1,33 +1,12 @@
 "use strict";
 
 const fs = require("fs");
-const flatMap = require("lodash/flatMap");
-const mapValues = require("lodash/mapValues");
-const findLastIndex = require("lodash/findLastIndex");
-const electronToChromiumVersions = require("electron-to-chromium").versions;
+const { addElectronSupportFromChromium } = require("./chromium-to-electron");
 
 const envs = require("../build/compat-table/environments");
 const parseEnvsVersions = require("../build/compat-table/build-utils/parse-envs-versions");
 const interpolateAllResults = require("../build/compat-table/build-utils/interpolate-all-results");
 const compareVersions = require("../build/compat-table/build-utils/compare-versions");
-
-// Add Electron to the list of environments
-Object.keys(electronToChromiumVersions).forEach(electron => {
-  const chrome = electronToChromiumVersions[electron];
-
-  const electronId = `electron${electron.replace(".", "_")}`;
-  let chromeId = `chrome${chrome}`;
-
-  // This is missing
-  if (chromeId === "chrome82") chromeId = "chrome81";
-  if (!envs[chromeId]) {
-    throw new Error(
-      `Electron ${electron} inherits from Chrome ${chrome}, which is not defined.`
-    );
-  }
-
-  envs[electronId] = { equals: chromeId };
-});
 
 const envsVersions = parseEnvsVersions(envs);
 
@@ -51,11 +30,11 @@ exports.environments = [
   "ios",
   "phantom",
   "samsung",
-  "electron",
+  "rhino",
 ];
 
-const compatibilityTests = flatMap(compatSources, data =>
-  flatMap(data.tests, test => {
+const compatibilityTests = compatSources.flatMap(data =>
+  data.tests.flatMap(test => {
     if (!test.subtests) return test;
 
     return test.subtests.map(subtest =>
@@ -82,13 +61,19 @@ exports.getLowestImplementedVersion = (
   });
 
   const envTests = tests.map(({ res }) => {
-    const lastNotImplemented = findLastIndex(
-      envsVersions[env],
-      // Babel assumes strict mode
-      ({ id }) => !(res[id] === true || res[id] === "strict")
-    );
+    const versions = envsVersions[env];
+    let i = versions.length - 1;
 
-    return envsVersions[env][lastNotImplemented + 1];
+    // Find the last not-implemented version
+    for (; i >= 0; i--) {
+      const { id } = versions[i];
+      // Babel assumes strict mode
+      if (res[id] !== true && res[id] !== "strict") {
+        break;
+      }
+    }
+
+    return envsVersions[env][i + 1];
   });
 
   if (envTests.length === 0 || envTests.some(t => !t)) return null;
@@ -104,7 +89,10 @@ exports.getLowestImplementedVersion = (
 };
 
 exports.generateData = (environments, features) => {
-  return mapValues(features, options => {
+  const data = {};
+
+  // eslint-disable-next-line prefer-const
+  for (let [key, options] of Object.entries(features)) {
     if (!options.features) {
       options = {
         features: [options],
@@ -117,9 +105,12 @@ exports.generateData = (environments, features) => {
       const version = exports.getLowestImplementedVersion(options, env);
       if (version) plugin[env] = version;
     });
+    addElectronSupportFromChromium(plugin);
 
-    return plugin;
-  });
+    data[key] = plugin;
+  }
+
+  return data;
 };
 
 exports.writeFile = function (data, dataPath, name) {

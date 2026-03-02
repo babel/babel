@@ -38,6 +38,7 @@
                 }
               ],
               "rest": null,
+              "this": null,
               "returnType": {
                 "type": "BooleanTypeAnnotation",
                 "start":32,"end":39,"loc":{"start":{"line":1,"column":32},"end":{"line":1,"column":39}}

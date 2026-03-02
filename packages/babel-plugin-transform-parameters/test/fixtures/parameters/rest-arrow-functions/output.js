@@ -50,10 +50,10 @@ var innerclassproperties = function () {
     args[_key3] = arguments[_key3];
   }
 
-  return _temp = _class = function _class() {
+  return _temp = _class = /*#__PURE__*/babelHelpers.createClass(function _class() {
     "use strict";
 
     babelHelpers.classCallCheck(this, _class);
     this.args = args;
-  }, _class.args = args, _temp;
+  }), _class.args = args, _temp;
 };

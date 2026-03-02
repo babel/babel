@@ -1,3 +1,3 @@
 declare module 'foo' {
-  declare export opaque type MyType = string;
+  declare export opaque type MyType;
 }

@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":43}},
+  "errors": [
+    "SyntaxError: The `this` parameter must be the first function parameter. (1:26)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":43}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":43,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":43}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":12},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start":14,"end":24,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":24},"identifierName":"a"},
+            "name": "a",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start":16,"end":24,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":24}},
+              "typeAnnotation": {
+                "type": "StringTypeAnnotation",
+                "start":18,"end":24,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":24}}
+              }
+            }
+          },
+          {
+            "type": "Identifier",
+            "start":26,"end":39,"loc":{"start":{"line":1,"column":26},"end":{"line":1,"column":39},"identifierName":"this"},
+            "name": "this",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start":31,"end":39,"loc":{"start":{"line":1,"column":31},"end":{"line":1,"column":39}},
+              "typeAnnotation": {
+                "type": "NumberTypeAnnotation",
+                "start":33,"end":39,"loc":{"start":{"line":1,"column":33},"end":{"line":1,"column":39}}
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start":41,"end":43,"loc":{"start":{"line":1,"column":41},"end":{"line":1,"column":43}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

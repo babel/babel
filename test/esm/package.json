@@ -1,0 +1,11 @@
+{
+  "name": "@babel/test-esm",
+  "private": true,
+  "type": "module",
+  "exports": "./index.js",
+  "devDependencies": {
+    "@babel/runtime": "workspace:^",
+    "@babel/runtime-corejs3": "workspace:^",
+    "chalk": "^4.1.0"
+  }
+}

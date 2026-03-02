@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":29,"loc":{"start":{"line":1,"column":0},"end":{"line":3,"column":1}},
   "errors": [
-    "SyntaxError: setter must have exactly one formal parameter (2:2)"
+    "SyntaxError: A 'set' accesor must have exactly one formal parameter. (2:2)"
   ],
   "program": {
     "type": "Program",
@@ -42,6 +42,7 @@
                 "params": [],
                 "rest": null,
                 "typeParameters": null,
+                "this": null,
                 "returnType": {
                   "type": "VoidTypeAnnotation",
                   "start":22,"end":26,"loc":{"start":{"line":2,"column":11},"end":{"line":2,"column":15}}

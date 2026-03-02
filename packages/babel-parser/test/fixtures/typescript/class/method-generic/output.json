@@ -38,7 +38,11 @@
                   {
                     "type": "TSTypeParameter",
                     "start":16,"end":17,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7}},
-                    "name": "T"
+                    "name": {
+                      "type": "Identifier",
+                      "start":16,"end":17,"loc":{"start":{"line":2,"column":6},"end":{"line":2,"column":7},"identifierName":"T"},
+                      "name": "T"
+                    }
                   }
                 ]
               },
@@ -143,12 +147,12 @@
                   "start":54,"end":60,"loc":{"start":{"line":3,"column":5},"end":{"line":3,"column":11},"identifierName":"Symbol"},
                   "name": "Symbol"
                 },
+                "computed": false,
                 "property": {
                   "type": "Identifier",
                   "start":61,"end":69,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":20},"identifierName":"iterator"},
                   "name": "iterator"
-                },
-                "computed": false
+                }
               },
               "kind": "method",
               "typeParameters": {
@@ -158,7 +162,11 @@
                   {
                     "type": "TSTypeParameter",
                     "start":71,"end":72,"loc":{"start":{"line":3,"column":22},"end":{"line":3,"column":23}},
-                    "name": "T"
+                    "name": {
+                      "type": "Identifier",
+                      "start":71,"end":72,"loc":{"start":{"line":3,"column":22},"end":{"line":3,"column":23},"identifierName":"T"},
+                      "name": "T"
+                    }
                   }
                 ]
               },

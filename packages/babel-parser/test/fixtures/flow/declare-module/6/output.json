@@ -48,6 +48,7 @@
                         "params": [],
                         "rest": null,
                         "typeParameters": null,
+                        "this": null,
                         "returnType": {
                           "type": "NumberTypeAnnotation",
                           "start":52,"end":58,"loc":{"start":{"line":1,"column":52},"end":{"line":1,"column":58}}

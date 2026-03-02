@@ -1,4 +1,4 @@
 {
-  "presets": ["env"],
-  "plugins": ["transform-flow-comments", "external-helpers"]
+  "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
+  "plugins": ["transform-flow-comments"]
 }

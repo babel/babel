@@ -16,7 +16,7 @@
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _exports.f = _exports.e = _exports.c = _exports.a = _exports.test = void 0;
+  _exports.test = _exports.f = _exports.e = _exports.c = _exports.a = void 0;
   var test = 2;
   _exports.test = test;
   _exports.test = test = 5;

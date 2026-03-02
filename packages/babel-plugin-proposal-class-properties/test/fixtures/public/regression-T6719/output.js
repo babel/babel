@@ -13,7 +13,7 @@ function withContext(ComposedComponent) {
       return _super.apply(this, arguments);
     }
 
-    return WithContext;
+    return babelHelpers.createClass(WithContext);
   }(Component), babelHelpers.defineProperty(_class, "propTypes", {
     context: PropTypes.shape({
       addCss: PropTypes.func,

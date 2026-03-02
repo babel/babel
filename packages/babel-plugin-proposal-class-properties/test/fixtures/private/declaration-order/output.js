@@ -1,17 +1,15 @@
-var _x = new WeakMap();
+var _x = /*#__PURE__*/new WeakMap();
 
-var C = function C() {
+var C = /*#__PURE__*/babelHelpers.createClass(function C() {
   "use strict";
 
   babelHelpers.classCallCheck(this, C);
   babelHelpers.defineProperty(this, "y", babelHelpers.classPrivateFieldGet(this, _x));
-
-  _x.set(this, {
+  babelHelpers.classPrivateFieldInitSpec(this, _x, {
     writable: true,
     value: void 0
   });
-};
-
+});
 expect(() => {
   new C();
 }).toThrow();

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":22,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":22}},
   "errors": [
-    "SyntaxError: 'import' and 'export' may only appear at the top level (1:7)",
+    "SyntaxError: 'import' and 'export' may only appear at the top level. (1:7)",
     "SyntaxError: 'import' and 'export' may appear only with 'sourceType: \"module\"' (1:7)"
   ],
   "program": {

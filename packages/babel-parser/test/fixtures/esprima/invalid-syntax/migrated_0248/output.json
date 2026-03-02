@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":25,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":25}},
   "errors": [
-    "SyntaxError: Label '__proto__' is already declared (1:11)"
+    "SyntaxError: Label '__proto__' is already declared. (1:11)"
   ],
   "program": {
     "type": "Program",

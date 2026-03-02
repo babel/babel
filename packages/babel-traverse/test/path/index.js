@@ -1,4 +1,4 @@
-import { NodePath } from "../../lib";
+import { NodePath } from "../../lib/index.js";
 
 describe("NodePath", () => {
   describe("setData/getData", () => {
@@ -38,6 +38,14 @@ describe("NodePath", () => {
       const path = new NodePath({}, {});
 
       expect(path.getData("__proto__", "test")).toBe("test");
+    });
+
+    it("can use symbols as keys", () => {
+      const path = new NodePath({}, {});
+      const symbol = Symbol("foo");
+      path.setData(symbol, 42);
+
+      expect(path.getData(symbol)).toBe(42);
     });
   });
 });

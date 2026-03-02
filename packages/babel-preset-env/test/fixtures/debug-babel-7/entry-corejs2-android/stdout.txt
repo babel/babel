@@ -1,0 +1,179 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "android": "4"
+}
+
+Using modules transform: auto
+
+Using plugins:
+  proposal-class-static-block { android }
+  proposal-private-property-in-object { android }
+  proposal-class-properties { android }
+  proposal-private-methods { android }
+  proposal-numeric-separator { android }
+  proposal-logical-assignment-operators { android }
+  proposal-nullish-coalescing-operator { android }
+  proposal-optional-chaining { android }
+  proposal-json-strings { android }
+  proposal-optional-catch-binding { android }
+  transform-parameters { android }
+  proposal-async-generator-functions { android }
+  proposal-object-rest-spread { android }
+  transform-dotall-regex { android }
+  proposal-unicode-property-regex { android }
+  transform-named-capturing-groups-regex { android }
+  transform-async-to-generator { android }
+  transform-exponentiation-operator { android }
+  transform-template-literals { android }
+  transform-literals { android }
+  transform-function-name { android }
+  transform-arrow-functions { android }
+  transform-block-scoped-functions { android }
+  transform-classes { android }
+  transform-object-super { android }
+  transform-shorthand-properties { android }
+  transform-duplicate-keys { android }
+  transform-computed-properties { android }
+  transform-for-of { android }
+  transform-sticky-regex { android }
+  transform-unicode-escapes { android }
+  transform-unicode-regex { android }
+  transform-spread { android }
+  transform-destructuring { android }
+  transform-block-scoping { android }
+  transform-typeof-symbol { android }
+  transform-new-target { android }
+  transform-regenerator { android }
+  transform-reserved-words { android < 4.4 }
+  proposal-export-namespace-from { android < 72 }
+  transform-modules-commonjs
+  proposal-dynamic-import
+corejs2: `DEBUG` option
+
+Using targets: {
+  "android": "4"
+}
+
+Using polyfills with `entry-global` method:
+
+[<CWD>/packages/babel-preset-env/test/fixtures/debug-babel-7/entry-corejs2-android/input.mjs]
+The corejs2 polyfill entry has been replaced with the following polyfills:
+  es6.array.copy-within { "android":"4" }
+  es6.array.fill { "android":"4" }
+  es6.array.filter { "android":"4" }
+  es6.array.find { "android":"4" }
+  es6.array.find-index { "android":"4" }
+  es7.array.flat-map { "android":"4" }
+  es6.array.from { "android":"4" }
+  es7.array.includes { "android":"4" }
+  es6.array.iterator { "android":"4" }
+  es6.array.map { "android":"4" }
+  es6.array.of { "android":"4" }
+  es6.array.slice { "android":"4" }
+  es6.array.sort { "android":"4" }
+  es6.array.species { "android":"4" }
+  es6.date.to-primitive { "android":"4" }
+  es6.function.has-instance { "android":"4" }
+  es6.map { "android":"4" }
+  es6.math.acosh { "android":"4" }
+  es6.math.asinh { "android":"4" }
+  es6.math.atanh { "android":"4" }
+  es6.math.cbrt { "android":"4" }
+  es6.math.clz32 { "android":"4" }
+  es6.math.cosh { "android":"4" }
+  es6.math.expm1 { "android":"4" }
+  es6.math.fround { "android":"4" }
+  es6.math.hypot { "android":"4" }
+  es6.math.imul { "android":"4" }
+  es6.math.log1p { "android":"4" }
+  es6.math.log10 { "android":"4" }
+  es6.math.log2 { "android":"4" }
+  es6.math.sign { "android":"4" }
+  es6.math.sinh { "android":"4" }
+  es6.math.tanh { "android":"4" }
+  es6.math.trunc { "android":"4" }
+  es6.number.constructor { "android":"4" }
+  es6.number.epsilon { "android":"4" }
+  es6.number.is-finite { "android":"4" }
+  es6.number.is-integer { "android":"4" }
+  es6.number.is-nan { "android":"4" }
+  es6.number.is-safe-integer { "android":"4" }
+  es6.number.max-safe-integer { "android":"4" }
+  es6.number.min-safe-integer { "android":"4" }
+  es6.number.parse-float { "android":"4" }
+  es6.number.parse-int { "android":"4" }
+  es6.object.assign { "android":"4" }
+  es7.object.define-getter { "android":"4" }
+  es7.object.define-setter { "android":"4" }
+  es7.object.entries { "android":"4" }
+  es6.object.freeze { "android":"4" }
+  es6.object.get-own-property-descriptor { "android":"4" }
+  es7.object.get-own-property-descriptors { "android":"4" }
+  es6.object.get-own-property-names { "android":"4" }
+  es6.object.get-prototype-of { "android":"4" }
+  es7.object.lookup-getter { "android":"4" }
+  es7.object.lookup-setter { "android":"4" }
+  es6.object.prevent-extensions { "android":"4" }
+  es6.object.to-string { "android":"4" }
+  es6.object.is { "android":"4" }
+  es6.object.is-frozen { "android":"4" }
+  es6.object.is-sealed { "android":"4" }
+  es6.object.is-extensible { "android":"4" }
+  es6.object.keys { "android":"4" }
+  es6.object.seal { "android":"4" }
+  es6.object.set-prototype-of { "android":"4" }
+  es7.object.values { "android":"4" }
+  es6.promise { "android":"4" }
+  es7.promise.finally { "android":"4" }
+  es6.reflect.apply { "android":"4" }
+  es6.reflect.construct { "android":"4" }
+  es6.reflect.define-property { "android":"4" }
+  es6.reflect.delete-property { "android":"4" }
+  es6.reflect.get { "android":"4" }
+  es6.reflect.get-own-property-descriptor { "android":"4" }
+  es6.reflect.get-prototype-of { "android":"4" }
+  es6.reflect.has { "android":"4" }
+  es6.reflect.is-extensible { "android":"4" }
+  es6.reflect.own-keys { "android":"4" }
+  es6.reflect.prevent-extensions { "android":"4" }
+  es6.reflect.set { "android":"4" }
+  es6.reflect.set-prototype-of { "android":"4" }
+  es6.regexp.constructor { "android":"4" }
+  es6.regexp.flags { "android":"4" }
+  es6.regexp.match { "android":"4" }
+  es6.regexp.replace { "android":"4" }
+  es6.regexp.split { "android":"4" }
+  es6.regexp.search { "android":"4" }
+  es6.regexp.to-string { "android":"4" }
+  es6.set { "android":"4" }
+  es6.symbol { "android":"4" }
+  es7.symbol.async-iterator { "android":"4" }
+  es6.string.code-point-at { "android":"4" }
+  es6.string.ends-with { "android":"4" }
+  es6.string.from-code-point { "android":"4" }
+  es6.string.includes { "android":"4" }
+  es6.string.iterator { "android":"4" }
+  es7.string.pad-start { "android":"4" }
+  es7.string.pad-end { "android":"4" }
+  es6.string.raw { "android":"4" }
+  es6.string.repeat { "android":"4" }
+  es6.string.starts-with { "android":"4" }
+  es7.string.trim-left { "android":"4" }
+  es7.string.trim-right { "android":"4" }
+  es6.typed.array-buffer { "android":"4" }
+  es6.typed.int8-array { "android":"4" }
+  es6.typed.uint8-array { "android":"4" }
+  es6.typed.uint8-clamped-array { "android":"4" }
+  es6.typed.int16-array { "android":"4" }
+  es6.typed.uint16-array { "android":"4" }
+  es6.typed.int32-array { "android":"4" }
+  es6.typed.uint32-array { "android":"4" }
+  es6.typed.float32-array { "android":"4" }
+  es6.typed.float64-array { "android":"4" }
+  es6.weak-map { "android":"4" }
+  es6.weak-set { "android":"4" }
+  web.timers { "android":"4" }
+  web.immediate { "android":"4" }
+  web.dom.iterable { "android":"4" }

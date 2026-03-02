@@ -1,4 +1,4 @@
-import * as t from "../lib";
+import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
 
 describe("cloneNode", function () {
@@ -38,6 +38,14 @@ describe("cloneNode", function () {
     const program = "'use strict'; function lol() { wow();return 1; }";
     const node = parse(program);
     const cloned = t.cloneNode(node);
+    expect(node).not.toBe(cloned);
+    expect(t.isNodesEquivalent(node, cloned)).toBe(true);
+  });
+
+  it("should handle deep cloning without loc of fragments", function () {
+    const program = "foo();";
+    const node = parse(program);
+    const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ true);
     expect(node).not.toBe(cloned);
     expect(t.isNodesEquivalent(node, cloned)).toBe(true);
   });
@@ -112,6 +120,9 @@ describe("cloneNode", function () {
     node.declarations[0].id.loc = {};
 
     const cloned = t.cloneNode(node, /* deep */ true, /* withoutLoc */ false);
+    expect(cloned.declarations[0].id.leadingComments[0]).not.toBe(
+      node.declarations[0].id.leadingComments[0],
+    );
     expect(cloned.declarations[0].id.leadingComments[0].loc).toBe(
       node.declarations[0].id.leadingComments[0].loc,
     );

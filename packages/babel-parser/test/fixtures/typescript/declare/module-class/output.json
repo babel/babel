@@ -1,0 +1,68 @@
+{
+  "type": "File",
+  "start":0,"end":57,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+  "errors": [
+    "SyntaxError: Initializers are not allowed in ambient contexts. (3:10)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":57,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":57,"loc":{"start":{"line":1,"column":0},"end":{"line":5,"column":1}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15},"end":{"line":1,"column":16},"identifierName":"m"},
+          "name": "m"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":17,"end":57,"loc":{"start":{"line":1,"column":17},"end":{"line":5,"column":1}},
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start":21,"end":55,"loc":{"start":{"line":2,"column":2},"end":{"line":4,"column":3}},
+              "id": {
+                "type": "Identifier",
+                "start":27,"end":28,"loc":{"start":{"line":2,"column":8},"end":{"line":2,"column":9},"identifierName":"C"},
+                "name": "C"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start":29,"end":55,"loc":{"start":{"line":2,"column":10},"end":{"line":4,"column":3}},
+                "body": [
+                  {
+                    "type": "ClassProperty",
+                    "start":35,"end":51,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":20}},
+                    "static": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":35,"end":40,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":9},"identifierName":"field"},
+                      "name": "field"
+                    },
+                    "computed": false,
+                    "value": {
+                      "type": "StringLiteral",
+                      "start":43,"end":50,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":19}},
+                      "extra": {
+                        "rawValue": "field",
+                        "raw": "\"field\""
+                      },
+                      "value": "field"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": []
+  }
+}

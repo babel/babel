@@ -1,0 +1,44 @@
+name: "🚀 Feature Request"
+description: "I have a specific suggestion for Babel!"
+labels: ["i: needs triage", "i: enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to suggest a new feature! Please fill out this form as completely as possible.
+
+  - type: checkboxes
+    id: input1
+    attributes:
+      label: "💻"
+      description: |
+        Check this if you would like to implement a PR, we are more than happy to help you go through the process
+      options:
+        - label: Would you like to work on this feature?
+
+  - type: textarea
+    attributes:
+      label: What problem are you trying to solve?
+      description: |
+        A concise description of what the problem is.
+      placeholder: |
+        I have an issue when [...]
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Describe the solution you'd like
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Describe alternatives you've considered
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Documentation, Adoption, Migration Strategy
+      description: |
+        If you can, explain how users will be able to use this and how it might be documented. Maybe a mock-up?

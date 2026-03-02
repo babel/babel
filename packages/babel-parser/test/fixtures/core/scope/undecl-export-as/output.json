@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":52,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":21}},
   "errors": [
-    "SyntaxError: Export 'encrypt' is not defined (1:9)"
+    "SyntaxError: Export 'encrypt' is not defined. (1:9)"
   ],
   "program": {
     "type": "Program",

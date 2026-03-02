@@ -10,6 +10,7 @@
       {
         "type": "TSImportEqualsDeclaration",
         "start":0,"end":15,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":15}},
+        "importKind": "value",
         "isExport": false,
         "id": {
           "type": "Identifier",

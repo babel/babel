@@ -2,8 +2,12 @@ import { multiple as getFixtures } from "@babel/helper-fixtures";
 import { codeFrameColumns } from "@babel/code-frame";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const rootPath = path.join(__dirname, "../../../..");
+const rootPath = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../../../..",
+);
 
 const serialized = "$$ babel internal serialized type";
 
@@ -77,22 +81,31 @@ export function runFixtureTests(fixturesPath, parseFunction) {
   });
 }
 
-export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
+/**
+ * Run Fixture test without an exact AST match. If the output.json does not contain
+ * "errors", it asserts the actual output does not have "errors". If the output.json
+ * have "errors", it asserts the actual output have the same "errors".
+ *
+ * This routine is used to test parser options that have impact on the AST shape but
+ * does not change the syntax
+ * @param {*} fixturesPath The path to the fixture root
+ * @param {*} parseFunction The customized parseFunction, different global test options
+ * should be implemented here
+ */
+export function runFixtureTestsWithoutExactASTMatch(
+  fixturesPath,
+  parseFunction,
+) {
   const fixtures = getFixtures(fixturesPath);
 
   Object.keys(fixtures).forEach(function (name) {
     fixtures[name].forEach(function (testSuite) {
       testSuite.tests.forEach(function (task) {
-        if (!task.options.throws) return;
-
-        task.options.plugins = task.options.plugins || [];
-        task.options.plugins.push("estree");
-
         const testFn = task.disabled ? it.skip : it;
 
         testFn(name + "/" + testSuite.title + "/" + task.title, function () {
           try {
-            runTest(task, parseFunction);
+            runTest(task, parseFunction, true);
           } catch (err) {
             const fixturePath = `${path.relative(
               rootPath,
@@ -126,7 +139,19 @@ function save(test, ast) {
   );
 }
 
-function runTest(test, parseFunction) {
+/**
+ * run parser on given tests
+ *
+ * @param {Test} A {@link packages/babel-helper-fixtures/src/index.js Test} instance
+ generated from `getFixtures`
+ * @param {*} parseFunction A parser with the same interface of `@babel/parser#parse`
+ * @param {boolean} [compareErrorsOnly=false] Whether we should only compare the "errors"
+ * of generated ast against the expected AST. Used for `runFixtureTestsWithoutExactASTMatch` where an
+ * ESTree AST is generated but we want to make sure `@babel/parser` still throws expected
+ * recoverable errors on given code locations.
+ * @returns {void}
+ */
+function runTest(test, parseFunction, compareErrorsOnly = false) {
   const opts = test.options;
 
   if (opts.throws && test.expect.code) {
@@ -166,13 +191,20 @@ function runTest(test, parseFunction) {
   if (ast.comments && !ast.comments.length) delete ast.comments;
   if (ast.errors && !ast.errors.length) delete ast.errors;
 
-  if (!test.expect.code && !opts.throws && !process.env.CI) {
+  if (
+    !test.expect.code &&
+    !opts.throws &&
+    !process.env.CI &&
+    !compareErrorsOnly
+  ) {
     test.expect.loc += "on";
     return save(test, ast);
   }
 
+  const shouldOverWrite = process.env.OVERWRITE && !compareErrorsOnly;
+
   if (opts.throws) {
-    if (process.env.OVERWRITE) {
+    if (shouldOverWrite) {
       const fn = path.dirname(test.expect.loc) + "/options.json";
       test.options = test.options || {};
       delete test.options.throws;
@@ -186,14 +218,31 @@ function runTest(test, parseFunction) {
       return save(test, ast);
     }
 
-    throw new Error(
-      "Expected error message: " + opts.throws + ". But parsing succeeded.",
-    );
+    if (ast.errors && ast.errors.length) {
+      throw new Error(
+        `Expected non-recoverable error message: ${
+          opts.throws
+        }. But instead parsing recovered from errors: ${JSON.stringify(
+          ast.errors,
+          null,
+          2,
+        )}`,
+      );
+    } else {
+      throw new Error(
+        `Expected error message: ${opts.throws}. But parsing succeeded without errors.`,
+      );
+    }
+  } else if (compareErrorsOnly) {
+    const mis = misMatch(JSON.parse(test.expect.code).errors, ast.errors);
+    if (mis) {
+      throw new Error(mis);
+    }
   } else {
     const mis = misMatch(JSON.parse(test.expect.code), ast);
 
     if (mis) {
-      if (process.env.OVERWRITE) {
+      if (shouldOverWrite) {
         return save(test, ast);
       }
       throw new Error(mis);

@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":39,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":25}},
   "errors": [
-    "SyntaxError: Argument name clash (2:19)"
+    "SyntaxError: Argument name clash. (2:19)"
   ],
   "program": {
     "type": "Program",
@@ -78,11 +78,12 @@
         "value": {
           "type": "DirectiveLiteral",
           "start":0,"end":12,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":12}},
-          "value": "use strict",
           "extra": {
+            "rawValue": "use strict",
             "raw": "\"use strict\"",
-            "rawValue": "use strict"
-          }
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
         }
       }
     ]

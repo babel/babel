@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`builders typescript tsLiteralType accept unary expression 1`] = `
+Object {
+  "literal": Object {
+    "argument": Object {
+      "type": "NumericLiteral",
+      "value": 1,
+    },
+    "operator": "-",
+    "prefix": true,
+    "type": "UnaryExpression",
+  },
+  "type": "TSLiteralType",
+}
+`;
+
+exports[`builders typescript tsLiteralType accept unary expression 2`] = `
+Object {
+  "literal": Object {
+    "argument": Object {
+      "type": "BigIntLiteral",
+      "value": "123456789",
+    },
+    "operator": "-",
+    "prefix": true,
+    "type": "UnaryExpression",
+  },
+  "type": "TSLiteralType",
+}
+`;

@@ -1,11 +1,11 @@
-var _Array$from = require("../core-js/array/from");
+var _Symbol = require("@babel/runtime-corejs2/core-js/symbol");
 
-var _isIterable = require("../core-js/is-iterable");
+var _Symbol$iterator = require("@babel/runtime-corejs2/core-js/symbol/iterator");
 
-var _Symbol = require("../core-js/symbol");
+var _Array$from = require("@babel/runtime-corejs2/core-js/array/from");
 
 function _iterableToArray(iter) {
-  if (typeof _Symbol !== "undefined" && _isIterable(Object(iter))) return _Array$from(iter);
+  if (typeof _Symbol !== "undefined" && iter[_Symbol$iterator] != null || iter["@@iterator"] != null) return _Array$from(iter);
 }
 
-module.exports = _iterableToArray;
+module.exports = _iterableToArray, module.exports.__esModule = true, module.exports["default"] = module.exports;

@@ -1,0 +1,284 @@
+{
+  "type": "File",
+  "start":0,"end":244,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":37}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":244,"loc":{"start":{"line":1,"column":0},"end":{"line":9,"column":37}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TryStatement",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":20}},
+        "block": {
+          "type": "BlockStatement",
+          "start":4,"end":6,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":6}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":7,"end":20,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":20}},
+          "param": {
+            "type": "Identifier",
+            "start":14,"end":16,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":16},"identifierName":"ex"},
+            "name": "ex"
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":18,"end":20,"loc":{"start":{"line":1,"column":18},"end":{"line":1,"column":20}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "finalizer": null
+      },
+      {
+        "type": "TryStatement",
+        "start":21,"end":50,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":29}},
+        "block": {
+          "type": "BlockStatement",
+          "start":25,"end":27,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":6}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":28,"end":50,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":29}},
+          "param": {
+            "type": "Identifier",
+            "start":35,"end":46,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":25},"identifierName":"ex"},
+            "name": "ex",
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":37,"end":46,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":25}},
+              "typeAnnotation": {
+                "type": "TSUnknownKeyword",
+                "start":39,"end":46,"loc":{"start":{"line":2,"column":18},"end":{"line":2,"column":25}}
+              }
+            }
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":48,"end":50,"loc":{"start":{"line":2,"column":27},"end":{"line":2,"column":29}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "finalizer": null
+      },
+      {
+        "type": "TryStatement",
+        "start":51,"end":76,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":25}},
+        "block": {
+          "type": "BlockStatement",
+          "start":55,"end":57,"loc":{"start":{"line":3,"column":4},"end":{"line":3,"column":6}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":58,"end":76,"loc":{"start":{"line":3,"column":7},"end":{"line":3,"column":25}},
+          "param": {
+            "type": "Identifier",
+            "start":65,"end":72,"loc":{"start":{"line":3,"column":14},"end":{"line":3,"column":21},"identifierName":"ex"},
+            "name": "ex",
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":67,"end":72,"loc":{"start":{"line":3,"column":16},"end":{"line":3,"column":21}},
+              "typeAnnotation": {
+                "type": "TSAnyKeyword",
+                "start":69,"end":72,"loc":{"start":{"line":3,"column":18},"end":{"line":3,"column":21}}
+              }
+            }
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":74,"end":76,"loc":{"start":{"line":3,"column":23},"end":{"line":3,"column":25}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "finalizer": null,
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " The following can't be error'd at parse time",
+            "start":78,"end":125,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":47}}
+          }
+        ]
+      },
+      {
+        "type": "TryStatement",
+        "start":126,"end":149,"loc":{"start":{"line":6,"column":0},"end":{"line":6,"column":23}},
+        "block": {
+          "type": "BlockStatement",
+          "start":130,"end":132,"loc":{"start":{"line":6,"column":4},"end":{"line":6,"column":6}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":133,"end":149,"loc":{"start":{"line":6,"column":7},"end":{"line":6,"column":23}},
+          "param": {
+            "type": "Identifier",
+            "start":140,"end":145,"loc":{"start":{"line":6,"column":14},"end":{"line":6,"column":19},"identifierName":"ex"},
+            "name": "ex",
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":142,"end":145,"loc":{"start":{"line":6,"column":16},"end":{"line":6,"column":19}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":144,"end":145,"loc":{"start":{"line":6,"column":18},"end":{"line":6,"column":19}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":144,"end":145,"loc":{"start":{"line":6,"column":18},"end":{"line":6,"column":19},"identifierName":"A"},
+                  "name": "A"
+                }
+              }
+            }
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":147,"end":149,"loc":{"start":{"line":6,"column":21},"end":{"line":6,"column":23}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "finalizer": null,
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " The following can't be error'd at parse time",
+            "start":78,"end":125,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":47}}
+          }
+        ]
+      },
+      {
+        "type": "TryStatement",
+        "start":150,"end":177,"loc":{"start":{"line":7,"column":0},"end":{"line":7,"column":27}},
+        "block": {
+          "type": "BlockStatement",
+          "start":154,"end":156,"loc":{"start":{"line":7,"column":4},"end":{"line":7,"column":6}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":157,"end":177,"loc":{"start":{"line":7,"column":7},"end":{"line":7,"column":27}},
+          "param": {
+            "type": "Identifier",
+            "start":164,"end":173,"loc":{"start":{"line":7,"column":14},"end":{"line":7,"column":23},"identifierName":"ex"},
+            "name": "ex",
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":166,"end":173,"loc":{"start":{"line":7,"column":16},"end":{"line":7,"column":23}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":168,"end":173,"loc":{"start":{"line":7,"column":18},"end":{"line":7,"column":23}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":168,"end":173,"loc":{"start":{"line":7,"column":18},"end":{"line":7,"column":23},"identifierName":"Error"},
+                  "name": "Error"
+                }
+              }
+            }
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":175,"end":177,"loc":{"start":{"line":7,"column":25},"end":{"line":7,"column":27}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "finalizer": null
+      },
+      {
+        "type": "TryStatement",
+        "start":178,"end":206,"loc":{"start":{"line":8,"column":0},"end":{"line":8,"column":28}},
+        "block": {
+          "type": "BlockStatement",
+          "start":182,"end":184,"loc":{"start":{"line":8,"column":4},"end":{"line":8,"column":6}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":185,"end":206,"loc":{"start":{"line":8,"column":7},"end":{"line":8,"column":28}},
+          "param": {
+            "type": "Identifier",
+            "start":192,"end":202,"loc":{"start":{"line":8,"column":14},"end":{"line":8,"column":24},"identifierName":"ex"},
+            "name": "ex",
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":194,"end":202,"loc":{"start":{"line":8,"column":16},"end":{"line":8,"column":24}},
+              "typeAnnotation": {
+                "type": "TSStringKeyword",
+                "start":196,"end":202,"loc":{"start":{"line":8,"column":18},"end":{"line":8,"column":24}}
+              }
+            }
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":204,"end":206,"loc":{"start":{"line":8,"column":26},"end":{"line":8,"column":28}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "finalizer": null
+      },
+      {
+        "type": "TryStatement",
+        "start":207,"end":244,"loc":{"start":{"line":9,"column":0},"end":{"line":9,"column":37}},
+        "block": {
+          "type": "BlockStatement",
+          "start":211,"end":213,"loc":{"start":{"line":9,"column":4},"end":{"line":9,"column":6}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":214,"end":244,"loc":{"start":{"line":9,"column":7},"end":{"line":9,"column":37}},
+          "param": {
+            "type": "Identifier",
+            "start":221,"end":240,"loc":{"start":{"line":9,"column":14},"end":{"line":9,"column":33},"identifierName":"ex"},
+            "name": "ex",
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":223,"end":240,"loc":{"start":{"line":9,"column":16},"end":{"line":9,"column":33}},
+              "typeAnnotation": {
+                "type": "TSUnionType",
+                "start":225,"end":240,"loc":{"start":{"line":9,"column":18},"end":{"line":9,"column":33}},
+                "types": [
+                  {
+                    "type": "TSStringKeyword",
+                    "start":225,"end":231,"loc":{"start":{"line":9,"column":18},"end":{"line":9,"column":24}}
+                  },
+                  {
+                    "type": "TSNumberKeyword",
+                    "start":234,"end":240,"loc":{"start":{"line":9,"column":27},"end":{"line":9,"column":33}}
+                  }
+                ]
+              }
+            }
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":242,"end":244,"loc":{"start":{"line":9,"column":35},"end":{"line":9,"column":37}},
+            "body": [],
+            "directives": []
+          }
+        },
+        "finalizer": null
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " The following can't be error'd at parse time",
+      "start":78,"end":125,"loc":{"start":{"line":5,"column":0},"end":{"line":5,"column":47}}
+    }
+  ]
+}

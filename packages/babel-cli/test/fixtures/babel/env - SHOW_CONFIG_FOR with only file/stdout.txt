@@ -1,0 +1,1 @@
+No config is applied to "<CWD>/src/index.js" because it fails to match one of `only: ["./src/unicorn.js"]` from "<CWD>"

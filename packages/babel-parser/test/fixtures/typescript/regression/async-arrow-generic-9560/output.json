@@ -40,7 +40,11 @@
                     {
                       "type": "TSTypeParameter",
                       "start":23,"end":24,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13}},
-                      "name": "T"
+                      "name": {
+                        "type": "Identifier",
+                        "start":23,"end":24,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":13},"identifierName":"T"},
+                        "name": "T"
+                      }
                     }
                   ]
                 },
@@ -94,7 +98,11 @@
                     {
                       "type": "TSTypeParameter",
                       "start":64,"end":65,"loc":{"start":{"line":6,"column":12},"end":{"line":6,"column":13}},
-                      "name": "T"
+                      "name": {
+                        "type": "Identifier",
+                        "start":64,"end":65,"loc":{"start":{"line":6,"column":12},"end":{"line":6,"column":13},"identifierName":"T"},
+                        "name": "T"
+                      }
                     }
                   ]
                 },

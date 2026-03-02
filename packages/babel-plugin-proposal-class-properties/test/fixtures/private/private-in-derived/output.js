@@ -1,11 +1,10 @@
-var _outer = new WeakMap();
+var _outer = /*#__PURE__*/new WeakMap();
 
-var Outer = function Outer() {
+var Outer = /*#__PURE__*/babelHelpers.createClass(function Outer() {
   "use strict";
 
   babelHelpers.classCallCheck(this, Outer);
-
-  _outer.set(this, {
+  babelHelpers.classPrivateFieldInitSpec(this, _outer, {
     writable: true,
     value: void 0
   });
@@ -20,6 +19,6 @@ var Outer = function Outer() {
       return _super.apply(this, arguments);
     }
 
-    return Test;
+    return babelHelpers.createClass(Test);
   }(babelHelpers.classPrivateFieldGet(this, _outer));
-};
+});

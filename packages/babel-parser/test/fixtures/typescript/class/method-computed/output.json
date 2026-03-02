@@ -33,12 +33,12 @@
                   "start":15,"end":21,"loc":{"start":{"line":2,"column":5},"end":{"line":2,"column":11},"identifierName":"Symbol"},
                   "name": "Symbol"
                 },
+                "computed": false,
                 "property": {
                   "type": "Identifier",
                   "start":22,"end":30,"loc":{"start":{"line":2,"column":12},"end":{"line":2,"column":20},"identifierName":"iterator"},
                   "name": "iterator"
-                },
-                "computed": false
+                }
               },
               "kind": "method",
               "id": null,
@@ -67,12 +67,12 @@
                   "start":46,"end":52,"loc":{"start":{"line":3,"column":5},"end":{"line":3,"column":11},"identifierName":"Symbol"},
                   "name": "Symbol"
                 },
+                "computed": false,
                 "property": {
                   "type": "Identifier",
                   "start":53,"end":61,"loc":{"start":{"line":3,"column":12},"end":{"line":3,"column":20},"identifierName":"iterator"},
                   "name": "iterator"
-                },
-                "computed": false
+                }
               },
               "optional": true,
               "kind": "method",

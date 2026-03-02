@@ -2,29 +2,24 @@
  * Basic declarations for the npm modules we use.
  */
 
-declare module "resolve" {
-  declare export default {
-    (string, {| basedir: string |}, (err: ?Error, res: string) => void): void;
-    sync: (string, {| basedir: string |}) => string;
-  };
+ declare module "module" {
+   declare export function createRequire(url: any): any;
+ }
+
+declare module "debug" {
+  declare export default (namespace: string) => (formatter: string, ...args: any[]) => void;
 }
+
+declare var require: {
+  resolve(specifier: string, opts?: {
+    paths: string[]
+  }): string,
+};
 
 declare module "json5" {
   declare export default {
     parse: (string) => mixed,
   };
-}
-
-declare module "lodash/defaults" {
-  declare export default <T: Object>(T, Object) =>  T;
-}
-
-declare module "lodash/clone" {
-  declare export default <T>(obj: T) => T;
-}
-
-declare module "lodash/merge" {
-  declare export default <T: Object>(T, Object) => T;
 }
 
 declare module "semver" {
@@ -192,7 +187,7 @@ declare module "convert-source-map" {
 }
 
 declare module "core-js-compat/data" {
-  declare type Target = "node" | "chrome" | "opera" | "edge" | "firefox" | "safari" | "ie" | "ios" | "android" | "electron" | "samsung";
+  declare type Target = "node" | "chrome" | "opera" | "edge" | "firefox" | "safari" | "ie" | "ios" | "android" | "electron" | "samsung" | "rhino";
 
   declare module.exports: {
     [key: string]: {

@@ -1,5 +1,5 @@
 import assert from "assert";
-import { Hub } from "../lib";
+import { Hub } from "../lib/index.js";
 
 describe("hub", function () {
   it("default buildError should return TypeError", function () {

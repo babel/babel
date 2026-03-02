@@ -14,4 +14,4 @@ var f = (x: mixed): %checks => typeof x === "string";
 
 const foo2 = (x: mixed): boolean %checks => typeof x === "string";
 
-x: %checks => x !== null;
+(x): %checks => x !== null;

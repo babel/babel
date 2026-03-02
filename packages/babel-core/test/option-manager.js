@@ -1,11 +1,11 @@
-import { loadOptions as loadOptionsOrig } from "../lib";
+import { loadOptions as loadOptionsOrig } from "../lib/index.js";
 import path from "path";
+import { fileURLToPath } from "url";
+
+const cwd = path.dirname(fileURLToPath(import.meta.url));
 
 function loadOptions(opts) {
-  return loadOptionsOrig({
-    cwd: __dirname,
-    ...opts,
-  });
+  return loadOptionsOrig({ cwd, ...opts });
 }
 
 describe("option-manager", () => {
@@ -62,7 +62,7 @@ describe("option-manager", () => {
     });
 
     it("should not throw when a preset string followed by valid preset object", () => {
-      const { plugin } = makePlugin("my-plugin");
+      const { plugin } = makePlugin();
       expect(
         loadOptions({
           presets: [
@@ -73,8 +73,8 @@ describe("option-manager", () => {
       ).toBeTruthy();
     });
 
-    it("should throw if a plugin is repeated, with information about the repeated plugin", () => {
-      const { calls, plugin } = makePlugin("my-plugin");
+    it("should throw if a plugin name is repeated, with information about the repeated plugin", () => {
+      const { calls, plugin } = makePlugin();
 
       expect(() => {
         loadOptions({
@@ -101,17 +101,15 @@ describe("option-manager", () => {
     });
 
     it("should not throw if a repeated plugin has a different name", () => {
-      const { calls: calls1, plugin: plugin1 } = makePlugin();
-      const { calls: calls2, plugin: plugin2 } = makePlugin();
+      const { calls, plugin } = makePlugin();
 
       loadOptions({
         plugins: [
-          [plugin1, { arg: 1 }],
-          [plugin2, { arg: 2 }, "some-name"],
+          [plugin, { arg: 1 }],
+          [plugin, { arg: 2 }, "some-name"],
         ],
       });
-      expect(calls1).toEqual([{ arg: 1 }]);
-      expect(calls2).toEqual([{ arg: 2 }]);
+      expect(calls).toEqual([{ arg: 1 }, { arg: 2 }]);
     });
 
     it("should merge .env[] plugins with parent presets", () => {
@@ -146,17 +144,15 @@ describe("option-manager", () => {
     });
 
     it("should not throw if a repeated preset has a different name", () => {
-      const { calls: calls1, plugin: preset1 } = makePlugin();
-      const { calls: calls2, plugin: preset2 } = makePlugin();
+      const { calls, plugin: preset } = makePlugin();
 
       loadOptions({
         presets: [
-          [preset1, { arg: 1 }],
-          [preset2, { arg: 2 }, "some-name"],
+          [preset, { arg: 1 }],
+          [preset, { arg: 2 }, "some-name"],
         ],
       });
-      expect(calls1).toEqual([{ arg: 1 }]);
-      expect(calls2).toEqual([{ arg: 2 }]);
+      expect(calls).toEqual([{ arg: 1 }, { arg: 2 }]);
     });
     it("should merge .env[] presets with parent presets", () => {
       const { calls: calls1, plugin: preset1 } = makePlugin();
@@ -224,9 +220,7 @@ describe("option-manager", () => {
     it("throws for resolved but erroring preset", () => {
       return expect(() => {
         loadOptions({
-          presets: [
-            path.join(__dirname, "fixtures/option-manager/not-a-preset"),
-          ],
+          presets: [path.join(cwd, "fixtures/option-manager/not-a-preset")],
         });
       }).toThrow(
         /While processing: .*option-manager(?:\/|\\\\)not-a-preset\.js/,
@@ -235,42 +229,31 @@ describe("option-manager", () => {
   });
 
   describe("presets", function () {
-    function presetTest(name) {
-      it(name, function () {
-        const options = loadOptions({
-          presets: [
-            path.join(__dirname, "fixtures/option-manager/presets", name),
-          ],
-        });
-
-        expect(Array.isArray(options.plugins)).toBe(true);
-        expect(options.plugins).toHaveLength(1);
-        expect(options.presets).toHaveLength(0);
+    it.each([
+      "es5_function",
+      "es5_object",
+      "es2015_default_function",
+      "es2015_default_object",
+    ])("%p should work", name => {
+      const options = loadOptions({
+        presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
       });
-    }
 
-    function presetThrowsTest(name, msg) {
-      it(name, function () {
-        expect(() =>
-          loadOptions({
-            presets: [
-              path.join(__dirname, "fixtures/option-manager/presets", name),
-            ],
-          }),
-        ).toThrow(msg);
-      });
-    }
+      expect(Array.isArray(options.plugins)).toBe(true);
+      expect(options.plugins).toHaveLength(1);
+      expect(options.presets).toHaveLength(0);
+    });
 
-    presetTest("es5_function");
-    presetTest("es5_object");
-    presetTest("es2015_default_function");
-    presetTest("es2015_default_object");
-
-    presetThrowsTest(
-      "es2015_named",
-      /Must export a default export when using ES6 modules/,
-    );
-    presetThrowsTest("es2015_invalid", /Unsupported format: string/);
-    presetThrowsTest("es5_invalid", /Unsupported format: string/);
+    it.each([
+      ["es2015_named", /Must export a default export when using ES6 modules/],
+      ["es2015_invalid", /Unsupported format: string/],
+      ["es5_invalid", /Unsupported format: string/],
+    ])("%p should throw %p", (name, msg) => {
+      expect(() =>
+        loadOptions({
+          presets: [path.join(cwd, "fixtures/option-manager/presets", name)],
+        }),
+      ).toThrow(msg);
+    });
   });
 });

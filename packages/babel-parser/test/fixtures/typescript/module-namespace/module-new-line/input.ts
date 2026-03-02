@@ -1,3 +1,7 @@
 module
 Foo
 {}
+
+module
+'m'
+{}

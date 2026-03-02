@@ -9,4 +9,4 @@ coverage:
     patch:
       enabled: false
 ignore:
-  - packages/babel-types/src/*/generated/index.js
+  - packages/babel-types/src/*/generated/*

@@ -22,13 +22,13 @@
             {
               "type": "TSPropertySignature",
               "start":18,"end":37,"loc":{"start":{"line":2,"column":4},"end":{"line":2,"column":23}},
+              "readonly": true,
               "key": {
                 "type": "Identifier",
                 "start":27,"end":28,"loc":{"start":{"line":2,"column":13},"end":{"line":2,"column":14},"identifierName":"x"},
                 "name": "x"
               },
               "computed": false,
-              "readonly": true,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start":28,"end":36,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":22}},

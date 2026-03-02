@@ -1,4 +1,4 @@
 {
-  var _a = 3;
+  let _a = 3;
 }
-var a = 3;
+let a = 3;
