@@ -949,10 +949,10 @@ export default declare((api, opts: Options) => {
             isFirstSpread = false;
             make();
             // ensure that exp is a call expression before pushing
-            if (!t.isCallExpression(exp)) {
-              exp = t.callExpression(t.cloneNode(helper), [exp!]);
+            if (!exp || !t.isCallExpression(exp)) {
+              exp = t.callExpression(t.cloneNode(helper), [exp ?? t.objectExpression([])]);
             }
-            (exp as t.CallExpression).arguments.push(prop.argument);
+            (exp as t.CallExpression).arguments.push(prop.argument as t.Expression);
           } else {
             isFirstSpread = false;
             props.push(prop);
