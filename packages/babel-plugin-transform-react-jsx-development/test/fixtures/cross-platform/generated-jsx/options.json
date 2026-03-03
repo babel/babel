@@ -1,6 +1,6 @@
 {
   "plugins": [
     "./plugin.js",
-    ["transform-react-jsx-development", { "runtime": "automatic", "developmentSourceSelf": true }]
+    ["../dev-with-source-self.cjs", { "runtime": "automatic" }]
   ]
 }

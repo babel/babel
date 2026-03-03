@@ -1,6 +1,6 @@
 import { declarePreset } from "@babel/helper-plugin-utils";
 import transformReactJSX from "@babel/plugin-transform-react-jsx";
-import transformReactJSXDevelopment from "@babel/plugin-transform-react-jsx-development";
+import createReactJSXPlugin from "@babel/plugin-transform-react-jsx/lib/create-plugin";
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
 import transformReactPure from "@babel/plugin-transform-react-pure-annotations";
 import normalizeOptions from "./normalize-options.ts";
@@ -36,10 +36,15 @@ export default declarePreset((api, opts: Options) => {
   return {
     plugins: [
       [
-        development ? transformReactJSXDevelopment : transformReactJSX,
+        development
+          ? createReactJSXPlugin({
+              name: "transform-react-jsx/development",
+              development: true,
+              developmentSourceSelf,
+            })
+          : transformReactJSX,
 
         {
-          developmentSourceSelf,
           importSource,
           pragma,
           pragmaFrag,
