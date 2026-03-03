@@ -945,7 +945,7 @@ export default declare((api, opts: Options) => {
             if (!exp || !t.isCallExpression(exp)) {
               exp = t.callExpression(t.cloneNode(helper), [exp ?? t.objectExpression([])]);
             }
-            (exp as t.CallExpression).arguments.push(prop.argument as t.Expression);
+            exp.arguments.push(prop.argument);
           } else {
             isFirstSpread = false;
             props.push(prop);
