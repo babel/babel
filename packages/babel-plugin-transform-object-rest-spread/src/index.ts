@@ -911,17 +911,10 @@ export default declare((api, opts: Options) => {
             return;
           }
 
-          if (t.isCallExpression(exp)) {
-            exp = t.callExpression(t.cloneNode(helper), [
-              exp,
-              ...(hadProps ? [t.objectExpression([]), obj] : []),
-            ]);
-          } else {
-            exp = t.callExpression(t.cloneNode(helper), [
-              exp,
-              ...(hadProps ? [t.objectExpression([]), obj] : []),
-            ]);
-          }
+          exp = t.callExpression(t.cloneNode(helper), [
+            exp,
+            ...(hadProps ? [t.objectExpression([]), obj] : []),
+          ]);
         }
 
         let isFirstSpread = true;
