@@ -146,6 +146,9 @@
       "path": "./packages/babel-plugin-proposal-async-do-expressions"
     },
     {
+      "path": "./packages/babel-plugin-proposal-bytes-modules"
+    },
+    {
       "path": "./packages/babel-plugin-proposal-decorators"
     },
     {

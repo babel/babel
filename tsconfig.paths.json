@@ -128,6 +128,9 @@
       "@babel/plugin-proposal-async-do-expressions": [
         "./packages/babel-plugin-proposal-async-do-expressions/src"
       ],
+      "@babel/plugin-proposal-bytes-modules": [
+        "./packages/babel-plugin-proposal-bytes-modules/src"
+      ],
       "@babel/plugin-proposal-decorators": [
         "./packages/babel-plugin-proposal-decorators/src"
       ],
