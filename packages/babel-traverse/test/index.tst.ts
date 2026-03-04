@@ -46,6 +46,35 @@ describe("traverse", () => {
         >[]
       >();
     });
+
+    it("should support template literal expressions - number", () => {
+      const path = {} as NodePath<t.BlockStatement>;
+      const index: number = 0;
+      const statement = path.get(`body.${index}`);
+      const statement2 = path.get(`body.0`);
+      expect(statement).type.toBe(statement2);
+    });
+
+    it("should support template literal expressions - string", () => {
+      const path = {} as NodePath<t.ClassDeclaration>;
+      const bodyKey: string = "body";
+      const body = path.get(`body.${bodyKey}`);
+      expect(body).type.toBe<NodePath<t.Node | null>>();
+    });
+
+    it("should support const string type", () => {
+      const path = {} as NodePath<t.ClassDeclaration>;
+      const key = "body" as const;
+      const statement = path.get(`body.${key}`);
+      const statement2 = path.get(`body.body`);
+      expect(statement).type.toBe(statement2);
+    });
+
+    it("falsy path", () => {
+      const path = {} as NodePath<t.ClassDeclaration>;
+      const body = path.get(`body.x`);
+      expect(body).type.toBe<NodePath<null>>();
+    });
   });
 
   describe("NodePath#is*", () => {

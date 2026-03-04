@@ -295,7 +295,6 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
   const { node, scope } = path;
   if (!hasRest(node)) return false;
 
-  // @ts-expect-error FIXME: Allow `{number}` in get arguments
   const restPath = path.get(
     `params.${node.params.length - 1}.argument`,
   ) as NodePath<t.ArrayPattern | t.ObjectPattern | t.Identifier>;
