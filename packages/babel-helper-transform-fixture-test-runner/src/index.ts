@@ -440,10 +440,6 @@ function validateFile(
   }
 }
 
-function escapeRegExp(string: string) {
-  return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
-}
-
 function normalizeOutput(
   code: string,
   { normalizePathSeparator = false } = {},
@@ -457,20 +453,16 @@ function normalizeOutput(
     .trim()
     // (non-win32) /foo/babel/packages -> <CWD>/packages
     // (win32) C:\foo\babel\packages -> <CWD>\packages
-    .replace(new RegExp(escapeRegExp(dir), "g"), symbol);
+    .replaceAll(dir, symbol);
   if (process.platform === "win32") {
     result = result
       // C:/foo/babel/packages -> <CWD>/packages
-      .replace(new RegExp(escapeRegExp(dir.replace(/\\/g, "/")), "g"), symbol)
+      .replaceAll(dir.replaceAll("\\", "/"), symbol)
       // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
-      .replace(
-        new RegExp(escapeRegExp(dir.replace(/\\/g, "\\\\")), "g"),
-        symbol,
-      );
+      .replaceAll(dir.replaceAll("\\", "\\\\"), symbol);
     if (normalizePathSeparator) {
-      result = result.replace(
-        new RegExp(`${escapeRegExp(symbol)}[\\w\\\\/.-]+`, "g"),
-        path => path.replace(/\\\\?/g, "/"),
+      result = result.replaceAll(/<CWD>[\w\\/.-]+/g, path =>
+        path.replaceAll(/\\\\?/g, "/"),
       );
     }
   }
