@@ -20,3 +20,12 @@ runFixtureTests(
     "SingleTypeParameterWithoutTrailingComma",
   ],
 );
+
+describe("locations: false", () => {
+  it("should not share loc data", () => {
+    const code = "var a = 1;";
+    const ast1 = parse(code, { locations: "packed" });
+    const ast2 = parse(code, { locations: "packed" });
+    expect(ast1.locData).not.toBe(ast2.locData);
+  });
+});

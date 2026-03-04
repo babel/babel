@@ -80,7 +80,12 @@ export class Token {
   declare loc: SourceLocation;
 }
 
-export let locDataCache: Uint32Array;
+export let locDataCache: Uint32Array | undefined;
+export function resetLocData() {
+  const data = locDataCache;
+  locDataCache = undefined;
+  return data;
+}
 
 // ## Tokenizer
 

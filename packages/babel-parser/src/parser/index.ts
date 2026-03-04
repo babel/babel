@@ -3,7 +3,7 @@ import { getOptions, OptionFlags } from "../options.ts";
 import StatementParser from "./statement.ts";
 import ScopeHandler from "../util/scope.ts";
 import type { ParserOptions, ParseResult, File } from "@babel/parser";
-import { locDataCache } from "../tokenizer/index.ts";
+import { resetLocData } from "../tokenizer/index.ts";
 
 export type PluginsMap = Map<string, Record<string, any>>;
 
@@ -87,7 +87,7 @@ export default class Parser extends StatementParser {
     result.errors = this.state.errors;
     result.comments.length = this.state.commentsLen;
     if (this.options.locations === "packed") {
-      result.locData = locDataCache;
+      result.locData = resetLocData();
     }
     return result as ParseResult<File>;
   }
