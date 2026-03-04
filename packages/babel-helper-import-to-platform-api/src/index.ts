@@ -332,7 +332,7 @@ export function injectParallelStaticImports(
     }
   }
 
-  const varDecl = buildParallelStaticImports(data, needsAwait);
+  const varDecl = buildParallelStaticImports(data, needsAwait)!;
 
   PREV_PARALLEL_IMPORTS.set(program, { node: varDecl, data, needsAwait });
 
