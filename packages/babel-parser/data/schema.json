@@ -40,6 +40,15 @@
       },
       "type": "object"
     },
+    "PartialApplicationPluginOptions": {
+      "properties": {
+        "version": {
+          "enum": ["2018-07"],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "PipelineOperatorPluginOptions": {
       "properties": {
         "proposal": {
@@ -147,6 +156,19 @@
               },
               {
                 "$ref": "#/definitions/ImportAttributesPluginOptions"
+              }
+            ],
+            "additionalItems": false,
+            "type": "array"
+          },
+          {
+            "items": [
+              {
+                "enum": ["partialApplication"],
+                "type": "string"
+              },
+              {
+                "$ref": "#/definitions/PartialApplicationPluginOptions"
               }
             ],
             "additionalItems": false,

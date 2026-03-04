@@ -1,0 +1,53 @@
+{
+  "type": "File",
+  "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+        "expression": {
+          "type": "NewExpression",
+          "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+          "callee": {
+            "type": "Identifier",
+            "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"C"},
+            "name": "C",
+            "trailingComments": [
+              {
+                "type": "CommentBlock",
+                "value": " 1 ",
+                "start":6,"end":13,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":13,"index":13}}
+              }
+            ]
+          },
+          "arguments": [],
+          "innerComments": [
+            {
+              "type": "CommentBlock",
+              "value": " 2 ",
+              "start":15,"end":22,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":22,"index":22}}
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": " 1 ",
+      "start":6,"end":13,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":13,"index":13}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": " 2 ",
+      "start":15,"end":22,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":22,"index":22}}
+    }
+  ]
+}

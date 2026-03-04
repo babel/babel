@@ -1,0 +1,72 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":44}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":44}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":44}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"I"},
+          "name": "I"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":12,"end":44,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":3,"column":1,"index":44}},
+          "body": [
+            {
+              "type": "TSPropertySignature",
+              "start":16,"end":34,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":2,"column":20,"index":34}},
+              "key": {
+                "type": "Identifier",
+                "start":16,"end":17,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":2,"column":3,"index":17},"identifierName":"a"},
+                "name": "a"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":17,"end":25,"loc":{"start":{"line":2,"column":3,"index":17},"end":{"line":2,"column":11,"index":25}},
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start":19,"end":25,"loc":{"start":{"line":2,"column":5,"index":19},"end":{"line":2,"column":11,"index":25}}
+                },
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": " 1 ",
+                    "start":26,"end":33,"loc":{"start":{"line":2,"column":12,"index":26},"end":{"line":2,"column":19,"index":33}}
+                  }
+                ]
+              },
+              "trailingComments": [
+                {
+                  "type": "CommentBlock",
+                  "value": " 2 ",
+                  "start":35,"end":42,"loc":{"start":{"line":2,"column":21,"index":35},"end":{"line":2,"column":28,"index":42}}
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": " 1 ",
+      "start":26,"end":33,"loc":{"start":{"line":2,"column":12,"index":26},"end":{"line":2,"column":19,"index":33}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": " 2 ",
+      "start":35,"end":42,"loc":{"start":{"line":2,"column":21,"index":35},"end":{"line":2,"column":28,"index":42}}
+    }
+  ]
+}
