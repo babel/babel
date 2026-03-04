@@ -1,0 +1,236 @@
+diff --git a/dist/index.es5.js b/dist/index.es5.js
+index 5f41491dc512cd9261a44c629951d897210d2ba4..8f62d0904da429ae320f1b64f73d0ef2b2e4280e 100644
+--- a/dist/index.es5.js
++++ b/dist/index.es5.js
+@@ -1,6 +1,20 @@
+-import { setupCore, teardownCore, InstrumentHooks, getCodspeedRunnerMode, optimizeFunction, mongoMeasurement, msToNs, writeWalltimeResults, calculateQuantiles, msToS, tryIntrospect, getInstrumentMode, getGitDir } from '@codspeed/core';
+-import path from 'path';
+-import { fileURLToPath } from 'url';
++import {
++  setupCore,
++  teardownCore,
++  InstrumentHooks,
++  getCodspeedRunnerMode,
++  optimizeFunction,
++  mongoMeasurement,
++  msToNs,
++  writeWalltimeResults,
++  calculateQuantiles,
++  msToS,
++  tryIntrospect,
++  getInstrumentMode,
++  getGitDir,
++} from "@codspeed/core";
++import path from "path";
++import { fileURLToPath } from "url";
+
+ function get(belowFn) {
+   const oldLimit = Error.stackTraceLimit;
+@@ -9,7 +23,7 @@ function get(belowFn) {
+   const dummyObject = {};
+
+   const v8Handler = Error.prepareStackTrace;
+-  Error.prepareStackTrace = function(dummyObject, v8StackTrace) {
++  Error.prepareStackTrace = function (dummyObject, v8StackTrace) {
+     return v8StackTrace;
+   };
+   Error.captureStackTrace(dummyObject, belowFn || get);
+@@ -28,36 +42,33 @@ function CallSite(properties) {
+ }
+
+ const strProperties = [
+-  'this',
+-  'typeName',
+-  'functionName',
+-  'methodName',
+-  'fileName',
+-  'lineNumber',
+-  'columnNumber',
+-  'function',
+-  'evalOrigin'
++  "this",
++  "typeName",
++  "functionName",
++  "methodName",
++  "fileName",
++  "lineNumber",
++  "columnNumber",
++  "function",
++  "evalOrigin",
+ ];
+
+-const boolProperties = [
+-  'topLevel',
+-  'eval',
+-  'native',
+-  'constructor'
+-];
++const boolProperties = ["topLevel", "eval", "native", "constructor"];
+
+ strProperties.forEach(function (property) {
+   CallSite.prototype[property] = null;
+-  CallSite.prototype['get' + property[0].toUpperCase() + property.substr(1)] = function () {
+-    return this[property];
+-  };
++  CallSite.prototype["get" + property[0].toUpperCase() + property.substr(1)] =
++    function () {
++      return this[property];
++    };
+ });
+
+ boolProperties.forEach(function (property) {
+   CallSite.prototype[property] = false;
+-  CallSite.prototype['is' + property[0].toUpperCase() + property.substr(1)] = function () {
+-    return this[property];
+-  };
++  CallSite.prototype["is" + property[0].toUpperCase() + property.substr(1)] =
++    function () {
++      return this[property];
++    };
+ });
+
+ const taskUriMap = /* @__PURE__ */ new WeakMap();
+@@ -75,7 +86,15 @@ function getOrCreateUriMap(bench) {
+ }
+
+ var __defProp$1 = Object.defineProperty;
+-var __defNormalProp$1 = (obj, key, value) => key in obj ? __defProp$1(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
++var __defNormalProp$1 = (obj, key, value) =>
++  key in obj
++    ? __defProp$1(obj, key, {
++        enumerable: true,
++        configurable: true,
++        writable: true,
++        value,
++      })
++    : (obj[key] = value);
+ var __publicField$1 = (obj, key, value) => {
+   __defNormalProp$1(obj, typeof key !== "symbol" ? key + "" : key, value);
+   return value;
+@@ -93,7 +112,7 @@ class BaseBenchRunner {
+   }
+   logStart() {
+     console.log(
+-      `[CodSpeed] running with @codspeed/tinybench v${"5.2.0"} (${this.getModeName()})`
++      `[CodSpeed] running with @codspeed/tinybench v${"5.2.0"} (${this.getModeName()})`,
+     );
+   }
+   getTaskUri(task) {
+@@ -177,7 +196,7 @@ class AnalysisBenchRunner extends BaseBenchRunner {
+     global.gc?.();
+     await this.wrapWithInstrumentHooksAsync(
+       this.wrapFunctionWithFrame(fn, true),
+-      uri
++      uri,
+     );
+     await mongoMeasurement.stop(uri);
+     await fnOpts?.afterEach?.call(task, "run");
+@@ -202,9 +221,17 @@ class AnalysisBenchRunner extends BaseBenchRunner {
+ }
+
+ var __defProp = Object.defineProperty;
+-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
++var __defNormalProp = (obj, key, value) =>
++  key in obj
++    ? __defProp(obj, key, {
++        enumerable: true,
++        configurable: true,
++        writable: true,
++        value,
++      })
++    : (obj[key] = value);
+ var __publicField = (obj, key, value) => {
+-  __defNormalProp(obj, key + "" , value);
++  __defNormalProp(obj, key + "", value);
+   return value;
+ };
+ function setupCodspeedWalltimeBench(bench, rootCallingFile) {
+@@ -221,7 +248,7 @@ class WalltimeBenchRunner extends BaseBenchRunner {
+   }
+   async runTaskAsync(task, uri) {
+     this.wrapTaskFunction(task, true);
+-    if (this.bench.opts.warmup) {
++    if (this.bench.warmup) {
+       await task.warmup();
+     }
+     await mongoMeasurement.start(uri);
+@@ -231,7 +258,7 @@ class WalltimeBenchRunner extends BaseBenchRunner {
+   }
+   runTaskSync(task, uri) {
+     this.wrapTaskFunction(task, false);
+-    if (this.bench.opts.warmup) {
++    if (this.bench.warmup) {
+       task.warmup();
+     }
+     this.wrapWithInstrumentHooks(() => task.runSync(), uri);
+@@ -251,7 +278,7 @@ class WalltimeBenchRunner extends BaseBenchRunner {
+       }
+       task.fn = __codspeed_root_frame__2;
+     } else {
+-      let __codspeed_root_frame__2 = function() {
++      let __codspeed_root_frame__2 = function () {
+         fn();
+       };
+       task.fn = __codspeed_root_frame__2;
+@@ -263,22 +290,27 @@ class WalltimeBenchRunner extends BaseBenchRunner {
+       console.warn(`    \u26A0 No result data available for ${uri}`);
+       return;
+     }
+-    const warmupIterations = this.bench.opts.warmup ? this.bench.opts.warmupIterations ?? TINYBENCH_WARMUP_DEFAULT : 0;
++    const warmupIterations = this.bench.warmup
++      ? this.bench.warmupIterations ?? TINYBENCH_WARMUP_DEFAULT
++      : 0;
+     const stats = convertTinybenchResultToBenchmarkStats(
+       task.result,
+-      warmupIterations
++      warmupIterations,
+     );
+     this.codspeedBenchmarks.push({
+       name: task.name,
+       uri,
+       config: {
+-        max_rounds: this.bench.opts.iterations ?? null,
+-        max_time_ns: this.bench.opts.time ? msToNs(this.bench.opts.time) : null,
++        max_rounds: this.bench.iterations ?? null,
++        max_time_ns: this.bench.time ? msToNs(this.bench.time) : null,
+         min_round_time_ns: null,
+         // tinybench does not have an option for this
+-        warmup_time_ns: this.bench.opts.warmup && this.bench.opts.warmupTime ? msToNs(this.bench.opts.warmupTime) : null
++        warmup_time_ns:
++          this.bench.warmup && this.bench.warmupTime
++            ? msToNs(this.bench.warmupTime)
++            : null,
+       },
+-      stats
++      stats,
+     });
+     this.logTaskCompletion(uri, "Collected walltime data for");
+   }
+@@ -287,7 +319,7 @@ class WalltimeBenchRunner extends BaseBenchRunner {
+       writeWalltimeResults(this.codspeedBenchmarks, isAsync);
+     }
+     console.log(
+-      `[CodSpeed] Done collecting walltime data for ${this.bench.tasks.length} benches.`
++      `[CodSpeed] Done collecting walltime data for ${this.bench.tasks.length} benches.`,
+     );
+     return this.bench.tasks;
+   }
+@@ -298,7 +330,8 @@ function convertTinybenchResultToBenchmarkStats(result, warmupIterations) {
+   const sortedTimesNs = samples.map(msToNs).sort((a, b) => a - b);
+   const meanNs = msToNs(mean);
+   const stdevNs = msToNs(sd);
+-  const { q1_ns, q3_ns, median_ns, iqr_outlier_rounds, stdev_outlier_rounds } = calculateQuantiles({ meanNs, stdevNs, sortedTimesNs });
++  const { q1_ns, q3_ns, median_ns, iqr_outlier_rounds, stdev_outlier_rounds } =
++    calculateQuantiles({ meanNs, stdevNs, sortedTimesNs });
+   return {
+     min_ns: msToNs(min),
+     max_ns: msToNs(max),
+@@ -313,7 +346,7 @@ function convertTinybenchResultToBenchmarkStats(result, warmupIterations) {
+     rounds: sortedTimesNs.length,
+     iqr_outlier_rounds,
+     stdev_outlier_rounds,
+-    warmup_iters: warmupIterations
++    warmup_iters: warmupIterations,
+   };
+ }
+
