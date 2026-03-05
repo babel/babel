@@ -888,8 +888,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const ident = this.flowParseTypeAnnotatableIdentifier();
       node.name = ident.name;
       node.variance = variance;
-      // @ts-expect-error migrate to Babel types
-      node.bound = ident.typeAnnotation;
+      node.bound = ident.typeAnnotation as N.TypeAnnotation | null;
 
       if (this.match(tt.eq)) {
         this.eat(tt.eq);
@@ -1232,12 +1231,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.flowParseObjectTypeCallProperty(node, isStatic),
           );
         } else {
-          let kind = "init";
+          let kind: N.ObjectTypeProperty["kind"] = "init";
 
           if (this.isContextual(tt._get) || this.isContextual(tt._set)) {
             const lookahead = this.lookahead();
             if (tokenIsLiteralPropertyName(lookahead.type)) {
-              kind = this.state.value;
+              kind = this.state.value as "get" | "set";
               this.next();
             }
           }
@@ -1297,7 +1296,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       isStatic: boolean,
       protoStartLoc: Position | undefined | null,
       variance: N.Variance | undefined | null,
-      kind: string,
+      kind: N.ObjectTypeProperty["kind"],
       allowSpread: boolean,
       allowInexact: boolean,
     ): N.ObjectTypeProperty | N.ObjectTypeSpreadProperty | null {
@@ -1348,7 +1347,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           this.flowParseObjectPropertyKey();
         (node as Undone<N.ObjectTypeProperty>).static = isStatic;
         (node as Undone<N.ObjectTypeProperty>).proto = protoStartLoc != null;
-        // @ts-expect-error Todo: kind is not defined in ObjectTypeProperty
         (node as Undone<N.ObjectTypeProperty>).kind = kind;
 
         let optional = false;
