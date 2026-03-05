@@ -116,8 +116,6 @@ export type AssignmentProperty = N.ObjectProperty & {
   value: N.Identifier | N.Pattern | N.RestElement;
 };
 
-export type ForInOf = N.ForInStatement | N.ForOfStatement;
-
 export type JSXElementTag = N.JSXOpeningElement | N.JSXClosingElement;
 export type JSXFragmentTag = N.JSXOpeningFragment | N.JSXClosingFragment;
 export type JSXTag = JSXElementTag | JSXFragmentTag;
