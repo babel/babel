@@ -138,7 +138,7 @@ export default class ExpressionScopeHandler {
     toParseError: ArrowHeadParsingParameterInitializerError,
     node: Undone<Node>,
   ): void {
-    const origin = node.loc.start;
+    const origin = node.loc!.start;
     const { stack } = this;
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];
@@ -180,7 +180,7 @@ export default class ExpressionScopeHandler {
   ): void {
     const { stack } = this;
     const scope: ExpressionScope = stack[stack.length - 1];
-    const origin = node.loc.start;
+    const origin = node.loc!.start;
     if (scope.isCertainlyParameterDeclaration()) {
       this.parser.raise(error, origin);
     } else if (scope.canBeArrowParameterDeclaration()) {

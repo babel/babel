@@ -402,8 +402,8 @@ export default (superClass: typeof Parser) =>
     // Parses following JSX attribute name-value pair.
 
     jsxParseAttribute(): N.JSXAttribute | N.JSXSpreadAttribute {
-      const node = this.startNode<N.JSXAttribute | N.JSXSpreadAttribute>();
       if (this.match(tt.braceL)) {
+        const node = this.startNode<N.JSXSpreadAttribute>();
         this.setContext(tc.brace);
         this.next();
         this.expect(tt.ellipsis);
@@ -413,6 +413,7 @@ export default (superClass: typeof Parser) =>
         this.expect(tt.braceR);
         return this.finishNode(node, "JSXSpreadAttribute");
       }
+      const node = this.startNode<N.JSXAttribute>();
       node.name = this.jsxParseNamespacedName();
       node.value = this.eat(tt.eq) ? this.jsxParseAttributeValue() : null;
       return this.finishNode(node, "JSXAttribute");
@@ -423,16 +424,13 @@ export default (superClass: typeof Parser) =>
     jsxParseOpeningElementAt(
       startLoc: Position,
     ): N.JSXOpeningElement | N.JSXOpeningFragment {
-      const node = this.startNodeAt<N.JSXOpeningElement | N.JSXOpeningFragment>(
-        startLoc,
-      );
       if (this.eat(tt.jsxTagEnd)) {
+        const node = this.startNodeAt<N.JSXOpeningFragment>(startLoc);
         return this.finishNode(node, "JSXOpeningFragment");
       }
+      const node = this.startNodeAt<N.JSXOpeningElement>(startLoc);
       node.name = this.jsxParseElementName();
-      return this.jsxParseOpeningElementAfterName(
-        node as Undone<N.JSXOpeningElement>,
-      );
+      return this.jsxParseOpeningElementAfterName(node);
     }
 
     jsxParseOpeningElementAfterName(
@@ -453,12 +451,11 @@ export default (superClass: typeof Parser) =>
     jsxParseClosingElementAt(
       startLoc: Position,
     ): N.JSXClosingElement | N.JSXClosingFragment {
-      const node = this.startNodeAt<N.JSXClosingFragment | N.JSXClosingElement>(
-        startLoc,
-      );
       if (this.eat(tt.jsxTagEnd)) {
+        const node = this.startNodeAt<N.JSXClosingFragment>(startLoc);
         return this.finishNode(node, "JSXClosingFragment");
       }
+      const node = this.startNodeAt<N.JSXClosingElement>(startLoc);
       node.name = this.jsxParseElementName();
       this.expect(tt.jsxTagEnd);
       return this.finishNode(node, "JSXClosingElement");
@@ -473,6 +470,7 @@ export default (superClass: typeof Parser) =>
       const openingElement = this.jsxParseOpeningElementAt(startLoc);
       let closingElement = null;
 
+      // @ts-expect-error todo: selfClosing is not defined in JSXOpeningFragment
       if (!openingElement.selfClosing) {
         contents: for (;;) {
           switch (this.state.type) {
@@ -497,10 +495,15 @@ export default (superClass: typeof Parser) =>
               this.setContext(tc.brace);
               this.next();
               if (this.match(tt.ellipsis)) {
-                children.push(this.jsxParseSpreadChild(node));
+                children.push(
+                  this.jsxParseSpreadChild(node as Undone<N.JSXSpreadChild>),
+                );
               } else {
                 children.push(
-                  this.jsxParseExpressionContainer(node, tc.j_expr),
+                  this.jsxParseExpressionContainer(
+                    node as Undone<N.JSXExpressionContainer>,
+                    tc.j_expr,
+                  ),
                 );
               }
 
@@ -535,11 +538,13 @@ export default (superClass: typeof Parser) =>
       }
 
       if (isFragment(openingElement)) {
-        node.openingFragment = openingElement;
-        node.closingFragment = closingElement;
+        (node as Undone<N.JSXFragment>).openingFragment = openingElement;
+        // @ts-expect-error todo: closingElement could be null
+        (node as Undone<N.JSXFragment>).closingFragment = closingElement;
       } else {
-        node.openingElement = openingElement;
-        node.closingElement = closingElement;
+        (node as Undone<N.JSXElement>).openingElement = openingElement;
+        // @ts-expect-error todo: closingElement could be null
+        (node as Undone<N.JSXElement>).closingElement = closingElement;
       }
       node.children = children;
       if (this.match(tt.lt)) {
@@ -571,7 +576,7 @@ export default (superClass: typeof Parser) =>
     // Overrides
     // ==================================
 
-    parseExprAtom(refExpressionErrors?: ExpressionErrors | null): N.Expression {
+    parseExprAtom(refExpressionErrors?: ExpressionErrors | null) {
       if (this.match(tt.jsxTagStart)) {
         return this.jsxParseElement();
       } else if (

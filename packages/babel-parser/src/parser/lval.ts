@@ -13,7 +13,8 @@ import type {
   ObjectOrClassMember,
   ClassMember,
   ObjectMember,
-  TsNamedTypeElementBase,
+  TSPropertySignature,
+  TSMethodSignature,
   PrivateName,
   ObjectExpression,
   ObjectPattern,
@@ -21,6 +22,9 @@ import type {
   AssignmentProperty,
   Assignable,
   VoidPattern,
+  ArgumentPlaceholder,
+  TSTypeCastExpression,
+  TypeCastExpression,
 } from "../types.ts";
 import type { Position } from "../util/location.ts";
 import {
@@ -74,7 +78,11 @@ export default abstract class LValParser extends NodeUtils {
     refExpressionErrors?: ExpressionErrors | null,
   ): void;
   abstract parsePropertyName(
-    prop: ObjectOrClassMember | ClassMember | TsNamedTypeElementBase,
+    prop:
+      | ObjectOrClassMember
+      | ClassMember
+      | TSPropertySignature
+      | TSMethodSignature,
   ): void;
   abstract parsePrivateName(): PrivateName;
   // Forward-declaration: defined in statement.js
@@ -160,7 +168,7 @@ export default abstract class LValParser extends NodeUtils {
         if (this.isPrivateName(key)) {
           this.classScope.usePrivateName(
             this.getPrivateNameSV(key),
-            key.loc.start,
+            key.loc!.start,
           );
         }
         this.toAssignable(value, isLHS);
@@ -178,19 +186,20 @@ export default abstract class LValParser extends NodeUtils {
         this.castNodeTo(node, "ArrayPattern");
         this.toAssignableList(
           node.elements,
-          node.extra?.trailingCommaLoc,
+          node.extra?.trailingCommaLoc as Position,
           isLHS,
         );
         break;
 
       case "AssignmentExpression":
         if (node.operator !== "=") {
-          this.raise(Errors.MissingEqInAssignment, node.left.loc.end);
+          this.raise(Errors.MissingEqInAssignment, node.left.loc!.end);
         }
 
         this.castNodeTo(node, "AssignmentPattern");
         // @ts-expect-error delete non-optional properties
         delete node.operator;
+        // @ts-expect-error VoidPattern is not allowed in AssignmentExpression, here we throw a recoverable error
         if (node.left.type === "VoidPattern") {
           this.raise(Errors.VoidPatternInitializer, node.left);
         }
@@ -244,6 +253,9 @@ export default abstract class LValParser extends NodeUtils {
       | RestElement
       | VoidPattern
       | AssignmentPattern
+      | ArgumentPlaceholder
+      | TSTypeCastExpression
+      | TypeCastExpression
       | null
     )[],
     trailingCommaLoc: Position | undefined | null,
@@ -284,6 +296,7 @@ export default abstract class LValParser extends NodeUtils {
       | RestElement
       | VoidPattern
       | AssignmentPattern
+      | TSTypeCastExpression
     )[],
     index: number,
     isLHS: boolean,
@@ -356,6 +369,9 @@ export default abstract class LValParser extends NodeUtils {
           | SpreadElement
           | VoidPattern
           | AssignmentPattern
+          | ArgumentPlaceholder
+          | TSTypeCastExpression
+          | TypeCastExpression
           | null
         )[]
       | readonly (
@@ -363,6 +379,8 @@ export default abstract class LValParser extends NodeUtils {
           | RestElement
           | VoidPattern
           | AssignmentPattern
+          | TSTypeCastExpression
+          | TypeCastExpression
           | null
         )[],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -373,6 +391,9 @@ export default abstract class LValParser extends NodeUtils {
         | SpreadElement
         | VoidPattern
         | AssignmentPattern
+        | ArgumentPlaceholder
+        | TSTypeCastExpression
+        | TypeCastExpression
         | null
       )[]
     | readonly (
@@ -380,6 +401,8 @@ export default abstract class LValParser extends NodeUtils {
         | RestElement
         | VoidPattern
         | AssignmentPattern
+        | TSTypeCastExpression
+        | TypeCastExpression
         | null
       )[] {
     return exprList;
@@ -408,12 +431,16 @@ export default abstract class LValParser extends NodeUtils {
     if (argument.type === "VoidPattern") {
       this.raise(Errors.UnexpectedVoidPattern, argument);
     }
+    // @ts-expect-error VoidPattern is not allowed in RestElement, here we parse it
+    // and throw a recoverable error
     node.argument = argument;
     return this.finishNode(node, "RestElement");
   }
 
   // Parses lvalue (assignable) atom.
-  parseBindingAtom(this: Parser): Pattern {
+  parseBindingAtom(
+    this: Parser,
+  ): ArrayPattern | ObjectPattern | VoidPattern | Identifier {
     // https://tc39.es/ecma262/#prod-BindingPattern
     switch (this.state.type) {
       case tt.bracketL: {
@@ -444,22 +471,28 @@ export default abstract class LValParser extends NodeUtils {
     close: TokenType,
     closeCharCode: (typeof charCodes)[keyof typeof charCodes],
     flags: ParseBindingListFlags.ALLOW_EMPTY,
-  ): (Pattern | null)[];
+  ): (Pattern | RestElement | null)[];
   parseBindingList(
     this: Parser,
     close: TokenType,
     closeCharCode: (typeof charCodes)[keyof typeof charCodes],
     flags: ParseBindingListFlags.IS_FUNCTION_PARAMS,
-  ): (Pattern | TSParameterProperty)[];
+  ): (Pattern | RestElement | TSParameterProperty)[];
   parseBindingList(
     this: Parser,
     close: TokenType,
     closeCharCode: (typeof charCodes)[keyof typeof charCodes],
     flags: ParseBindingListFlags,
-  ): (Pattern | TSParameterProperty | null)[] {
+  ): (Pattern | Identifier | RestElement | TSParameterProperty | null)[] {
     const allowEmpty = flags & ParseBindingListFlags.ALLOW_EMPTY;
 
-    const elts: (Pattern | TSParameterProperty | null)[] = [];
+    const elts: (
+      | Pattern
+      | Identifier
+      | RestElement
+      | TSParameterProperty
+      | null
+    )[] = [];
     let first = true;
     while (!this.eat(close)) {
       if (first) {
@@ -472,7 +505,7 @@ export default abstract class LValParser extends NodeUtils {
       } else if (this.eat(close)) {
         break;
       } else if (this.match(tt.ellipsis)) {
-        let rest: Pattern = this.parseRestBinding();
+        let rest = this.parseRestBinding();
         if (flags & ParseBindingListFlags.IS_FUNCTION_PARAMS) {
           rest = this.parseFunctionParamType(rest);
         }
@@ -508,6 +541,8 @@ export default abstract class LValParser extends NodeUtils {
   ): RestElement {
     this.next(); // eat '...'
     if (this.hasPlugin("discardBinding") && this.match(tt._void)) {
+      // @ts-expect-error VoidPattern is not allowed in RestElement, here we parse it
+      // and throw a recoverable error
       prop.argument = this.parseVoidPattern(null);
       this.raise(Errors.UnexpectedVoidPattern, prop.argument);
     } else {
@@ -533,6 +568,8 @@ export default abstract class LValParser extends NodeUtils {
     } else {
       this.parsePropertyName(prop);
     }
+    // @ts-expect-error todo: Undocumented AST property for ESTree compatibility
+    // consider move it to the estree parser
     prop.method = false;
     return this.parseObjPropValue(
       prop,
@@ -549,27 +586,30 @@ export default abstract class LValParser extends NodeUtils {
     this: Parser,
     flags: ParseBindingListFlags,
     decorators: Decorator[],
-  ): Pattern | TSParameterProperty {
+  ): Pattern | Identifier | TSParameterProperty {
     const left = this.parseMaybeDefault();
     if (flags & ParseBindingListFlags.IS_FUNCTION_PARAMS) {
       this.parseFunctionParamType(left);
     }
     if (decorators.length) {
+      // @ts-expect-error Todo: throw an error if decorators come before a void pattern
       left.decorators = decorators;
       this.resetStartLocationFromNode(left, decorators[0]);
     }
-    const elt = this.parseMaybeDefault(left.loc.start, left);
+    const elt = this.parseMaybeDefault(left.loc!.start, left);
     return elt;
   }
 
   // Used by flow/typescript plugin to add type annotations to binding elements
-  parseFunctionParamType(param: Pattern): Pattern {
+  parseFunctionParamType<T extends Pattern | Identifier | RestElement>(
+    param: T,
+  ): T {
     return param;
   }
 
   // Parses assignment pattern around given atom if possible.
   // https://tc39.es/ecma262/#prod-BindingElement
-  parseMaybeDefault<P extends Pattern>(
+  parseMaybeDefault<P extends Pattern | Identifier>(
     this: Parser,
     startLoc?: Position | null,
     left?: P | null,
@@ -577,8 +617,8 @@ export default abstract class LValParser extends NodeUtils {
   parseMaybeDefault(
     this: Parser,
     startLoc?: Position | null,
-    left?: Pattern | null,
-  ): Pattern {
+    left?: Pattern | Identifier | null,
+  ): Pattern | Identifier {
     startLoc ??= this.state.startLoc;
     left = left ?? this.parseBindingAtom();
     if (!this.eat(tt.eq)) return left;
@@ -587,6 +627,8 @@ export default abstract class LValParser extends NodeUtils {
     if (left.type === "VoidPattern") {
       this.raise(Errors.VoidPatternInitializer, left);
     }
+    // @ts-expect-error VoidPattern is not allowed in AssignmentPattern, here we parse it
+    // and throw a recoverable error
     node.left = left;
     node.right = this.parseMaybeAssignAllowIn();
     return this.finishNode(node, "AssignmentPattern");
@@ -712,7 +754,7 @@ export default abstract class LValParser extends NodeUtils {
 
     if (isOptionalMemberExpression || type === "MemberExpression") {
       if (isOptionalMemberExpression) {
-        this.expectPlugin("optionalChainingAssign", expression.loc.start);
+        this.expectPlugin("optionalChainingAssign", expression.loc!.start);
         if (ancestor.type !== "AssignmentExpression") {
           this.raise(Errors.InvalidLhsOptionalChaining, expression, {
             ancestor,
@@ -840,7 +882,7 @@ export default abstract class LValParser extends NodeUtils {
   }
 
   declareNameFromIdentifier(identifier: Identifier, binding: BindingFlag) {
-    this.scope.declareName(identifier.name, binding, identifier.loc.start);
+    this.scope.declareName(identifier.name, binding, identifier.loc!.start);
   }
 
   checkToRestConversion(node: Node, allowPattern: boolean): void {
