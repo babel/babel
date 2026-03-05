@@ -793,8 +793,5 @@
     "./core-js/instance/trim-start": "./core-js/instance/trim-start.js",
     "./core-js/instance/values": "./core-js/instance/values.js"
   },
-  "engines": {
-    "node": "^20.19.0 || >=22.12.0"
-  },
   "type": "commonjs"
 }

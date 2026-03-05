@@ -483,8 +483,5 @@
     "./package": "./package.json",
     "./package.json": "./package.json"
   },
-  "engines": {
-    "node": "^20.19.0 || >=22.12.0"
-  },
   "type": "commonjs"
 }
