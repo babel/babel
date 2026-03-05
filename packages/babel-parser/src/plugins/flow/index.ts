@@ -371,16 +371,21 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
-    flowParseTypeAndPredicateInitialiser(): [
-      N.FlowType | null,
-      N.FlowPredicate | null,
-    ] {
+    flowParseTypeAndPredicateInitialiser(
+      allowLonePredicate: true,
+    ): [N.FlowType | null, N.FlowPredicate | null];
+    flowParseTypeAndPredicateInitialiser(
+      allowLonePredicate: false,
+    ): [N.FlowType, N.FlowPredicate | null];
+    flowParseTypeAndPredicateInitialiser(
+      allowLonePredicate: boolean,
+    ): [N.FlowType | null, N.FlowPredicate | null] {
       const oldInType = this.state.inType;
       this.state.inType = true;
       this.expect(tt.colon);
       let type = null;
       let predicate = null;
-      if (this.match(tt.modulo)) {
+      if (allowLonePredicate && this.match(tt.modulo)) {
         this.state.inType = oldInType;
         predicate = this.flowParsePredicate();
       } else {
@@ -422,10 +427,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       typeNode.this = tmp._this;
       this.expect(tt.parenR);
 
-      // @ts-expect-error null it not assignable to returnType and predicate
-      // consider refine typings
       [typeNode.returnType, node.predicate] =
-        this.flowParseTypeAndPredicateInitialiser();
+        this.flowParseTypeAndPredicateInitialiser(false);
 
       typeContainer.typeAnnotation = this.finishNode(
         typeNode,
@@ -675,13 +678,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: Undone<N.DeclareOpaqueType>,
     ): N.DeclareOpaqueType {
       this.next();
-      const finished = this.flowParseOpaqueType(
-        node as Undone<N.OpaqueType>,
-        true,
-      ) as unknown as N.DeclareOpaqueType;
-      // Don't do finishNode as we don't want to process comments twice
-      this.castNodeTo(finished, "DeclareOpaqueType");
-      return finished;
+      return this.flowParseOpaqueType(node, true);
     }
 
     flowParseDeclareInterface(
@@ -837,10 +834,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TypeAlias");
     }
 
-    flowParseOpaqueType(
-      node: Undone<N.OpaqueType>,
+    flowParseOpaqueType<T extends N.OpaqueType | N.DeclareOpaqueType>(
+      node: Undone<T>,
       declare: boolean,
-    ): N.OpaqueType {
+    ): T {
       this.expectContextual(tt._type);
       node.id = this.flowParseRestrictedIdentifier(
         /* liberal */ true,
@@ -864,14 +861,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.supertype = this.flowParseTypeInitialiser(tt.colon);
       }
 
-      // @ts-expect-error impltype can not be null
       node.impltype = null;
       if (!declare) {
         node.impltype = this.flowParseTypeInitialiser(tt.eq);
       }
       this.semicolon();
 
-      return this.finishNode(node, "OpaqueType");
+      return this.finishNode(
+        node,
+        declare ? "DeclareOpaqueType" : "OpaqueType",
+      );
     }
 
     // Type annotations
@@ -1983,7 +1982,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           typeNode.typeAnnotation,
           // @ts-expect-error predicate may not exist
           node.predicate,
-        ] = this.flowParseTypeAndPredicateInitialiser() as [
+        ] = this.flowParseTypeAndPredicateInitialiser(true) as [
           N.FlowType,
           N.FlowPredicate,
         ];
@@ -2021,7 +2020,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     // declares, interfaces and type aliases
     parseExpressionStatement(
-      node: N.ExpressionStatement,
+      node: Undone<N.ExpressionStatement>,
       expr: N.Expression,
       decorators: N.Decorator[] | null,
     ): N.ExpressionStatement {
@@ -2046,7 +2045,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             return this.flowParseTypeAlias(node);
           } else if (expr.name === "opaque") {
             // @ts-expect-error: refine typings
-            return this.flowParseOpaqueType(node, false);
+            return this.flowParseOpaqueType(
+              node as unknown as Undone<N.OpaqueType>,
+              false,
+            );
           }
         }
       }
@@ -2321,7 +2323,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       } else if (this.isContextual(tt._opaque)) {
         node.exportKind = "type";
 
-        const declarationNode = this.startNode();
+        const declarationNode = this.startNode<N.OpaqueType>();
         this.next();
         // export opaque type Foo = Bar;
         return this.flowParseOpaqueType(declarationNode, false);
@@ -3153,17 +3155,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): Undone<N.ArrowFunctionExpression> | undefined | null {
       if (this.match(tt.colon)) {
         // @ts-expect-error todo(flow->ts)
-        const result = this.tryParse<N.TypeAnnotation>(() => {
+        const result = this.tryParse<Undone<N.TypeAnnotation>>(() => {
           const oldNoAnonFunctionType = this.state.noAnonFunctionType;
           this.state.noAnonFunctionType = true;
 
           const typeNode = this.startNode<N.TypeAnnotation>();
 
+          // @ts-expect-error if typeAnnotation is null, we will not assign
+          // the TypeAnnotation to returnType
           [typeNode.typeAnnotation, node.predicate] =
-            this.flowParseTypeAndPredicateInitialiser() as [
-              N.FlowType,
-              N.FlowPredicate,
-            ];
+            this.flowParseTypeAndPredicateInitialiser(true);
 
           this.state.noAnonFunctionType = oldNoAnonFunctionType;
 
@@ -3174,13 +3175,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         });
 
         if (result.thrown) return null;
-        /*:: invariant(result.node) */
 
         if (result.error) this.state = result.failState;
 
         // assign after it is clear it is an arrow
-        // @ts-expect-error todo(flow->ts)
-        node.returnType = result.node.typeAnnotation
+        node.returnType = result.node!.typeAnnotation
           ? this.finishNode(result.node!, "TypeAnnotation")
           : null;
       }
