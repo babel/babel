@@ -17,6 +17,7 @@ export interface ExplVisitorBase<S> {
   AssignmentPattern?: ExplVisitNode<S, t.AssignmentPattern>;
   AwaitExpression?: ExplVisitNode<S, t.AwaitExpression>;
   BigIntLiteral?: ExplVisitNode<S, t.BigIntLiteral>;
+  BigIntLiteralTypeAnnotation?: ExplVisitNode<S, t.BigIntLiteralTypeAnnotation>;
   BinaryExpression?: ExplVisitNode<S, t.BinaryExpression>;
   BindExpression?: ExplVisitNode<S, t.BindExpression>;
   BlockStatement?: ExplVisitNode<S, t.BlockStatement>;
@@ -283,6 +284,7 @@ export interface VisitorBaseNodes<S> {
   AssignmentPattern?: VisitNode<S, t.AssignmentPattern>;
   AwaitExpression?: VisitNode<S, t.AwaitExpression>;
   BigIntLiteral?: VisitNode<S, t.BigIntLiteral>;
+  BigIntLiteralTypeAnnotation?: VisitNode<S, t.BigIntLiteralTypeAnnotation>;
   BinaryExpression?: VisitNode<S, t.BinaryExpression>;
   BindExpression?: VisitNode<S, t.BindExpression>;
   BlockStatement?: VisitNode<S, t.BlockStatement>;

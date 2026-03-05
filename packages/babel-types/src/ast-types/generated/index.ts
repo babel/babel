@@ -30,7 +30,7 @@ export type Comment = CommentBlock | CommentLine;
 export interface SourceLocation {
   start: Position;
   end: Position;
-  filename: string;
+  filename: string | undefined;
   identifierName: string | undefined | null;
 }
 
@@ -58,6 +58,7 @@ export type Node =
   | AssignmentPattern
   | AwaitExpression
   | BigIntLiteral
+  | BigIntLiteralTypeAnnotation
   | BinaryExpression
   | BindExpression
   | BlockStatement
@@ -867,10 +868,12 @@ export interface ExportAllDeclaration extends BaseNode {
 export interface ExportDefaultDeclaration extends BaseNode {
   type: "ExportDefaultDeclaration";
   declaration:
-    | TSDeclareFunction
     | FunctionDeclaration
     | ClassDeclaration
-    | Expression;
+    | Expression
+    | TSDeclareFunction
+    | TSInterfaceDeclaration
+    | EnumDeclaration;
   exportKind?: "value" | null;
 }
 
@@ -1064,7 +1067,7 @@ export interface BigIntLiteral extends BaseNode {
 
 export interface ExportNamespaceSpecifier extends BaseNode {
   type: "ExportNamespaceSpecifier";
-  exported: Identifier;
+  exported: Identifier | StringLiteral;
 }
 
 export interface OptionalMemberExpression extends BaseNode {
@@ -1347,6 +1350,11 @@ export interface NullableTypeAnnotation extends BaseNode {
 export interface NumberLiteralTypeAnnotation extends BaseNode {
   type: "NumberLiteralTypeAnnotation";
   value: number;
+}
+
+export interface BigIntLiteralTypeAnnotation extends BaseNode {
+  type: "BigIntLiteralTypeAnnotation";
+  value: bigint;
 }
 
 export interface NumberTypeAnnotation extends BaseNode {
@@ -1694,7 +1702,7 @@ export interface ArgumentPlaceholder extends BaseNode {
 
 export interface BindExpression extends BaseNode {
   type: "BindExpression";
-  object: Expression;
+  object: null | Expression;
   callee: Expression;
 }
 
@@ -2082,7 +2090,7 @@ export interface TSInterfaceDeclaration extends BaseNode {
   type: "TSInterfaceDeclaration";
   id: Identifier;
   typeParameters?: TSTypeParameterDeclaration | null;
-  extends?: TSClassImplements[] | null;
+  extends?: TSInterfaceHeritage[] | null;
   body: TSInterfaceBody;
   declare?: boolean | null;
 }
@@ -2148,7 +2156,7 @@ export interface TSModuleDeclaration extends BaseNode {
   id: TSEntityName | StringLiteral;
   body: TSModuleBlock;
   declare?: boolean | null;
-  kind: "global" | "namespace";
+  kind: "global" | "namespace" | "module";
 }
 
 export interface TSModuleBlock extends BaseNode {
@@ -2642,6 +2650,7 @@ export type Flow =
   | EmptyTypeAnnotation
   | NullableTypeAnnotation
   | NumberLiteralTypeAnnotation
+  | BigIntLiteralTypeAnnotation
   | NumberTypeAnnotation
   | ObjectTypeAnnotation
   | ObjectTypeInternalSlot
@@ -2692,6 +2701,7 @@ export type FlowType =
   | EmptyTypeAnnotation
   | NullableTypeAnnotation
   | NumberLiteralTypeAnnotation
+  | BigIntLiteralTypeAnnotation
   | NumberTypeAnnotation
   | ObjectTypeAnnotation
   | StringLiteralTypeAnnotation
@@ -3352,6 +3362,31 @@ export interface ParentMaps {
     | WhileStatement
     | WithStatement
     | YieldExpression;
+  BigIntLiteralTypeAnnotation:
+    | ArrayTypeAnnotation
+    | DeclareExportDeclaration
+    | DeclareOpaqueType
+    | DeclareTypeAlias
+    | DeclaredPredicate
+    | FunctionTypeAnnotation
+    | FunctionTypeParam
+    | IndexedAccessType
+    | IntersectionTypeAnnotation
+    | NullableTypeAnnotation
+    | ObjectTypeCallProperty
+    | ObjectTypeIndexer
+    | ObjectTypeInternalSlot
+    | ObjectTypeProperty
+    | ObjectTypeSpreadProperty
+    | OpaqueType
+    | OptionalIndexedAccessType
+    | TupleTypeAnnotation
+    | TypeAlias
+    | TypeAnnotation
+    | TypeParameter
+    | TypeParameterInstantiation
+    | TypeofTypeAnnotation
+    | UnionTypeAnnotation;
   BinaryExpression:
     | ArrayExpression
     | ArrowFunctionExpression
@@ -4197,6 +4232,7 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclaredPredicate
     | DoWhileStatement
+    | ExportDefaultDeclaration
     | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
@@ -6192,6 +6228,7 @@ export interface ParentMaps {
     | ExportAllDeclaration
     | ExportDefaultDeclaration
     | ExportNamedDeclaration
+    | ExportNamespaceSpecifier
     | ExportSpecifier
     | ExpressionStatement
     | ForInStatement
@@ -6496,7 +6533,6 @@ export interface ParentMaps {
     | TSAsExpression
     | TSConditionalType
     | TSIndexedAccessType
-    | TSInterfaceDeclaration
     | TSIntersectionType
     | TSMappedType
     | TSNamedTupleMember
@@ -6779,6 +6815,7 @@ export interface ParentMaps {
   TSInterfaceDeclaration:
     | BlockStatement
     | DoWhileStatement
+    | ExportDefaultDeclaration
     | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
@@ -6796,6 +6833,7 @@ export interface ParentMaps {
     | TSAsExpression
     | TSConditionalType
     | TSIndexedAccessType
+    | TSInterfaceDeclaration
     | TSIntersectionType
     | TSMappedType
     | TSNamedTupleMember
