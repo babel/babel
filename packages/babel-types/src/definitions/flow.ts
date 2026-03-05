@@ -264,6 +264,14 @@ defineType("NumberLiteralTypeAnnotation", {
   },
 });
 
+defineType("BigIntLiteralTypeAnnotation", {
+  builder: ["value"],
+  aliases: ["FlowType"],
+  fields: {
+    value: validate(assertValueType("bigint")),
+  },
+});
+
 defineType("NumberTypeAnnotation", {
   aliases: ["FlowType", "FlowBaseAnnotation"],
 });
