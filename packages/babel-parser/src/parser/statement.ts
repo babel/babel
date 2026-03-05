@@ -22,7 +22,7 @@ import {
   newExpressionScope,
   newParameterDeclarationScope,
 } from "../util/expression-scope.ts";
-import { OptionFlags, type SourceType } from "../options.ts";
+import { OptionFlags } from "../options.ts";
 import type { Token } from "../tokenizer/index.ts";
 import type { Position } from "../util/location.ts";
 import { createPositionWithColumnOffset } from "../util/location.ts";
@@ -103,7 +103,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this: Parser,
     program: Undone<N.Program>,
     end: TokenType,
-    sourceType: SourceType,
+    sourceType: N.Program["sourceType"],
   ): N.Program {
     program.sourceType = sourceType;
     program.interpreter = this.parseInterpreterDirective();
@@ -146,8 +146,8 @@ export default abstract class StatementParser extends ExpressionParser {
     );
     const expressionValue = directiveLiteral.value;
     const raw = this.input.slice(
-      this.offsetToSourcePos(directiveLiteral.start),
-      this.offsetToSourcePos(directiveLiteral.end),
+      this.offsetToSourcePos(directiveLiteral.start!),
+      this.offsetToSourcePos(directiveLiteral.end!),
     );
     const val = (directiveLiteral.value = raw.slice(1, -1)); // remove quotes
 
@@ -804,10 +804,7 @@ export default abstract class StatementParser extends ExpressionParser {
   // part (semicolon immediately after the opening parenthesis), it
   // is a regular `for` loop.
 
-  parseForStatement(
-    this: Parser,
-    node: Undone<N.ForStatement | N.ForInOf>,
-  ): N.ForLike {
+  parseForStatement(this: Parser, node: Undone<N.For>): N.For {
     this.next();
     this.state.labels.push(loopLabel);
 
@@ -1025,7 +1022,7 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.finishNode(node, "ThrowStatement");
   }
 
-  parseCatchClauseParam(this: Parser): N.Pattern {
+  parseCatchClauseParam(this: Parser) {
     const param = this.parseBindingAtom();
 
     this.scope.enter(
@@ -1039,7 +1036,11 @@ export default abstract class StatementParser extends ExpressionParser {
       BindingFlag.TYPE_CATCH_PARAM,
     );
 
-    return param;
+    // checkLVal ensures that VoidPattern can not be used as a catch clause parameter.
+    return param as Exclude<
+      ReturnType<typeof this.parseBindingAtom>,
+      N.VoidPattern
+    >;
   }
 
   parseTryStatement(
@@ -1329,17 +1330,17 @@ export default abstract class StatementParser extends ExpressionParser {
 
   parseForIn(
     this: Parser,
-    node: Undone<N.ForInOf>,
+    node: Undone<N.ForXStatement>,
     init: N.VariableDeclaration | N.AssignmentPattern,
     awaitAt?: Position | null,
-  ): N.ForInOf {
+  ): N.ForXStatement {
     const isForIn = this.match(tt._in);
     this.next();
 
     if (isForIn) {
       if (awaitAt !== null) this.unexpected(awaitAt);
     } else {
-      node.await = awaitAt !== null;
+      (node as Undone<N.ForOfStatement>).await = awaitAt !== null;
     }
 
     if (
@@ -1362,7 +1363,7 @@ export default abstract class StatementParser extends ExpressionParser {
       });
     }
 
-    node.left = init;
+    node.left = init as N.VariableDeclaration;
     node.right = isForIn
       ? this.parseExpression()
       : this.parseMaybeAssignAllowIn();
@@ -1538,6 +1539,7 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   registerFunctionStatementId(node: N.Function): void {
+    // @ts-expect-error Fixme: id is not defined in ArrowFunctionExpression
     if (!node.id) return;
 
     // If it is a regular function declaration in sloppy mode, then it is
@@ -1545,12 +1547,14 @@ export default abstract class StatementParser extends ExpressionParser {
     // mode depends on properties of the current scope (see
     // treatFunctionsAsVar).
     this.scope.declareName(
+      // @ts-expect-error Fixme: id is not defined in ArrowFunctionExpression
       node.id.name,
       !this.options.annexB || this.state.strict || node.generator || node.async
         ? this.scope.treatFunctionsAsVar
           ? BindingFlag.TYPE_VAR
           : BindingFlag.TYPE_LEXICAL
         : BindingFlag.TYPE_FUNCTION,
+      // @ts-expect-error Fixme: id is not defined in ArrowFunctionExpression
       node.id.start,
     );
   }
@@ -1641,7 +1645,6 @@ export default abstract class StatementParser extends ExpressionParser {
 
       // steal the decorators if there are any
       if (decorators.length) {
-        // @ts-expect-error Fixme
         member.decorators = decorators;
         this.resetStartLocationFromNode(member, decorators[0]);
         decorators = [];
@@ -1649,12 +1652,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
       this.parseClassMember(classBody, member, state);
 
-      if (
-        // @ts-expect-error Fixme
-        member.decorators &&
-        // @ts-expect-error Fixme
-        member.decorators.length > 0
-      ) {
+      if (member.decorators && member.decorators.length > 0) {
         if (
           this.hasPlugin("typescript") &&
           (this.hasPlugin("estree")
@@ -1824,6 +1822,8 @@ export default abstract class StatementParser extends ExpressionParser {
         if (state.hadConstructor && !this.hasPlugin("typescript")) {
           this.raise(Errors.DuplicateConstructor, key);
         }
+        // @ts-expect-error override is not defined in ClassMethod, here we parse it
+        // and throw a recoverable error
         if (isConstructor && this.hasPlugin("typescript") && member.override) {
           this.raise(Errors.OverrideOnConstructor, key);
         }
@@ -2014,7 +2014,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.classScope.declarePrivateName(
       this.getPrivateNameSV(node.key),
       ClassElementType.OTHER,
-      node.key.start,
+      node.key.start!,
     );
   }
 
@@ -2037,7 +2037,7 @@ export default abstract class StatementParser extends ExpressionParser {
       this.classScope.declarePrivateName(
         this.getPrivateNameSV(node.key as N.PrivateName),
         ClassElementType.OTHER,
-        node.key.start,
+        node.key.start!,
       );
     }
   }
@@ -2102,7 +2102,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.classScope.declarePrivateName(
       this.getPrivateNameSV(node.key as N.PrivateName),
       kind,
-      node.key.start,
+      node.key.start!,
     );
   }
 
@@ -2269,7 +2269,7 @@ export default abstract class StatementParser extends ExpressionParser {
       node2.declaration = decl;
 
       if (decl.type === "ClassDeclaration") {
-        this.maybeTakeDecorators(decorators, decl as N.ClassDeclaration, node2);
+        this.maybeTakeDecorators(decorators, decl, node2);
       } else if (decorators) {
         throw this.raise(Errors.UnsupportedDecoratorExport, node);
       }
@@ -2376,7 +2376,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   parseExportDefaultExpression(
     this: Parser,
-  ): N.ExportDefaultDeclaration["declaration"] {
+  ): N.ExportDefaultDeclaration["declaration"] | N.EnumDeclaration {
     const expr = this.startNode();
 
     if (this.match(tt._function)) {
@@ -2559,7 +2559,8 @@ export default abstract class StatementParser extends ExpressionParser {
           if (
             declaration.type === "Identifier" &&
             declaration.name === "from" &&
-            declaration.end - declaration.start === 4 && // does not contain escape
+            // eslint-disable-next-line @typescript-eslint/no-confusing-non-null-assertion
+            declaration.end! - declaration.start! === 4 && // does not contain escape
             !declaration.extra?.parenthesized
           ) {
             this.raise(Errors.ExportDefaultFromAsIdentifier, declaration);
@@ -2609,7 +2610,9 @@ export default abstract class StatementParser extends ExpressionParser {
     }
   }
 
-  checkDeclaration(node: N.Pattern | N.ObjectProperty): void {
+  checkDeclaration(
+    node: N.Identifier | N.Pattern | N.RestElement | N.ObjectProperty,
+  ): void {
     if (node.type === "Identifier") {
       this.checkDuplicateExports(node, node.name);
     } else if (node.type === "ObjectPattern") {
@@ -2619,16 +2622,17 @@ export default abstract class StatementParser extends ExpressionParser {
     } else if (node.type === "ArrayPattern") {
       for (const elem of node.elements) {
         if (elem) {
-          this.checkDeclaration(elem);
+          this.checkDeclaration(elem as N.Pattern | N.Identifier);
         }
       }
     } else if (node.type === "ObjectProperty") {
-      // @ts-expect-error migrate to Babel types
-      this.checkDeclaration(node.value);
+      this.checkDeclaration(node.value as N.Pattern | N.Identifier);
     } else if (node.type === "RestElement") {
-      this.checkDeclaration(node.argument);
+      this.checkDeclaration(node.argument as N.Pattern | N.Identifier);
     } else if (node.type === "AssignmentPattern") {
-      this.checkDeclaration(node.left);
+      this.checkDeclaration(
+        node.left as N.AssignmentPattern["left"] & (N.Pattern | N.Identifier),
+      );
     }
   }
 
@@ -2778,7 +2782,7 @@ export default abstract class StatementParser extends ExpressionParser {
    * in the TS and Flow plugins, and for parsing `import defer`.
    */
   parseMaybeImportPhase(
-    node: Undone<N.ImportDeclaration | N.TsImportEqualsDeclaration>,
+    node: Undone<N.ImportDeclaration | N.TSImportEqualsDeclaration>,
     isExport: boolean,
   ): N.Identifier | null {
     if (!this.isPotentialImportPhase(isExport)) {
@@ -2816,7 +2820,7 @@ export default abstract class StatementParser extends ExpressionParser {
         node as Undone<N.ImportDeclaration>,
         isExport,
         phaseIdentifierName,
-        phaseIdentifier.start,
+        phaseIdentifier.start!,
       );
       return null;
     } else {
@@ -3124,7 +3128,7 @@ export default abstract class StatementParser extends ExpressionParser {
       }
       this.checkReservedWord(
         (imported as N.Identifier).name,
-        specifier.start,
+        specifier.start!,
         true,
         true,
       );
@@ -3142,7 +3146,7 @@ export default abstract class StatementParser extends ExpressionParser {
   // This is used in flow and typescript plugin
   // Determine whether a parameter is a this param
   isThisParam(
-    param: N.Pattern | N.Identifier | N.TSParameterProperty,
+    param: N.Pattern | N.Identifier | N.TSParameterProperty | N.RestElement,
   ): boolean {
     return param.type === "Identifier" && param.name === "this";
   }
