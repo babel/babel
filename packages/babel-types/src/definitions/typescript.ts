@@ -462,7 +462,7 @@ defineType("TSInterfaceDeclaration", {
     declare: validateOptional(bool),
     id: validateType("Identifier"),
     typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
-    extends: validateOptional(arrayOfType("TSClassImplements")),
+    extends: validateOptional(arrayOfType("TSInterfaceHeritage")),
     body: validateType("TSInterfaceBody"),
   },
 });
@@ -548,7 +548,7 @@ defineType("TSModuleDeclaration", {
   visitor: ["id", "body"],
   fields: {
     kind: {
-      validate: assertOneOf("global", "namespace"),
+      validate: assertOneOf("global", "namespace", "module"),
       default: "namespace",
     },
     declare: validateOptional(bool),

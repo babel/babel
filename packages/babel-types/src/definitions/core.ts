@@ -1513,10 +1513,12 @@ defineType("ExportDefaultDeclaration", {
   ],
   fields: {
     declaration: validateType(
-      "TSDeclareFunction",
       "FunctionDeclaration",
       "ClassDeclaration",
       "Expression",
+      "TSDeclareFunction",
+      "TSInterfaceDeclaration",
+      "EnumDeclaration",
     ),
     exportKind: validateOptional(assertOneOf("value")),
   },
@@ -2106,7 +2108,7 @@ defineType("ExportNamespaceSpecifier", {
   aliases: ["ModuleSpecifier"],
   fields: {
     exported: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "StringLiteral"),
     },
   },
 });
