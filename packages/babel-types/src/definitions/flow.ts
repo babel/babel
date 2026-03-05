@@ -355,7 +355,7 @@ defineType("ObjectTypeProperty", {
   visitor: ["key", "value", "variance"],
   aliases: ["UserWhitespacable"],
   fields: {
-    key: validateType("Identifier", "StringLiteral"),
+    key: validateType("Identifier", "StringLiteral", "NumericLiteral"),
     value: validateType("FlowType"),
     kind: {
       validate: assertOneOf("init", "get", "set"),
