@@ -88,7 +88,7 @@ defineType("DeclareFunction", {
   aliases: ["FlowDeclaration", "Statement", "Declaration"],
   fields: {
     id: validateType("Identifier"),
-    predicate: validateOptionalType("DeclaredPredicate"),
+    predicate: validateOptionalType("FlowPredicate"),
   },
 });
 
