@@ -480,7 +480,7 @@ export interface FunctionDeclaration extends BaseNode {
   generator: boolean;
   async: boolean;
   declare?: boolean | null;
-  predicate?: DeclaredPredicate | InferredPredicate | null;
+  predicate?: FlowPredicate | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | null;
   typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
@@ -492,7 +492,7 @@ export interface FunctionExpression extends BaseNode {
   body: BlockStatement;
   generator: boolean;
   async: boolean;
-  predicate?: DeclaredPredicate | InferredPredicate | null;
+  predicate?: FlowPredicate | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | null;
   typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
@@ -807,7 +807,7 @@ export interface ArrowFunctionExpression extends BaseNode {
   async: boolean;
   expression: boolean;
   generator?: boolean | null;
-  predicate?: DeclaredPredicate | InferredPredicate | null;
+  predicate?: FlowPredicate | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | null;
   typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
@@ -1215,7 +1215,7 @@ export interface DeclareClass extends BaseNode {
 export interface DeclareFunction extends BaseNode {
   type: "DeclareFunction";
   id: Identifier;
-  predicate?: DeclaredPredicate | null;
+  predicate?: FlowPredicate | null;
 }
 
 export interface DeclareInterface extends BaseNode {
@@ -1276,7 +1276,7 @@ export interface DeclareExportAllDeclaration extends BaseNode {
 
 export interface DeclaredPredicate extends BaseNode {
   type: "DeclaredPredicate";
-  value: Flow;
+  value: Expression;
 }
 
 export interface ExistsTypeAnnotation extends BaseNode {
@@ -1397,7 +1397,7 @@ export interface ObjectTypeIndexer extends BaseNode {
 
 export interface ObjectTypeProperty extends BaseNode {
   type: "ObjectTypeProperty";
-  key: Identifier | StringLiteral;
+  key: Identifier | StringLiteral | NumericLiteral;
   value: FlowType;
   variance?: Variance | null;
   kind: "init" | "get" | "set";
@@ -2970,7 +2970,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -3007,6 +3006,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -3081,7 +3081,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -3117,6 +3116,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -3179,6 +3179,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -3253,6 +3254,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -3315,6 +3317,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -3367,7 +3370,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -3403,6 +3405,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -3465,6 +3468,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -3551,6 +3555,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | EnumBooleanMember
@@ -3604,7 +3609,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -3629,7 +3633,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -3679,6 +3682,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -3760,6 +3764,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -3810,8 +3815,7 @@ export interface ParentMaps {
     | ClassDeclaration
     | ClassExpression
     | DeclareClass
-    | DeclareExportDeclaration
-    | DeclaredPredicate;
+    | DeclareExportDeclaration;
   ClassMethod: ClassBody;
   ClassPrivateMethod: ClassBody;
   ClassPrivateProperty: ClassBody;
@@ -3834,6 +3838,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -3911,7 +3916,6 @@ export interface ParentMaps {
   DeclareClass:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -3928,7 +3932,6 @@ export interface ParentMaps {
   DeclareExportAllDeclaration:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -3945,7 +3948,6 @@ export interface ParentMaps {
   DeclareExportDeclaration:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -3962,7 +3964,6 @@ export interface ParentMaps {
   DeclareFunction:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -3979,7 +3980,6 @@ export interface ParentMaps {
   DeclareInterface:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -3996,7 +3996,6 @@ export interface ParentMaps {
   DeclareModule:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -4013,7 +4012,6 @@ export interface ParentMaps {
   DeclareModuleExports:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -4030,7 +4028,6 @@ export interface ParentMaps {
   DeclareOpaqueType:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -4047,7 +4044,6 @@ export interface ParentMaps {
   DeclareTypeAlias:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -4064,7 +4060,6 @@ export interface ParentMaps {
   DeclareVariable:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -4082,7 +4077,6 @@ export interface ParentMaps {
     | ArrowFunctionExpression
     | DeclareExportDeclaration
     | DeclareFunction
-    | DeclaredPredicate
     | FunctionDeclaration
     | FunctionExpression;
   Decorator:
@@ -4120,6 +4114,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -4199,7 +4194,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -4219,18 +4213,11 @@ export interface ParentMaps {
     | TypeParameterInstantiation
     | TypeofTypeAnnotation
     | UnionTypeAnnotation;
-  EnumBooleanBody:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | EnumDeclaration;
-  EnumBooleanMember:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | EnumBooleanBody;
+  EnumBooleanBody: DeclareExportDeclaration | EnumDeclaration;
+  EnumBooleanMember: DeclareExportDeclaration | EnumBooleanBody;
   EnumDeclaration:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportDefaultDeclaration
     | ExportNamedDeclaration
@@ -4247,35 +4234,18 @@ export interface ParentMaps {
     | WithStatement;
   EnumDefaultedMember:
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | EnumStringBody
     | EnumSymbolBody;
-  EnumNumberBody:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | EnumDeclaration;
-  EnumNumberMember:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | EnumNumberBody;
-  EnumStringBody:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | EnumDeclaration;
-  EnumStringMember:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | EnumStringBody;
-  EnumSymbolBody:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | EnumDeclaration;
+  EnumNumberBody: DeclareExportDeclaration | EnumDeclaration;
+  EnumNumberMember: DeclareExportDeclaration | EnumNumberBody;
+  EnumStringBody: DeclareExportDeclaration | EnumDeclaration;
+  EnumStringMember: DeclareExportDeclaration | EnumStringBody;
+  EnumSymbolBody: DeclareExportDeclaration | EnumDeclaration;
   ExistsTypeAnnotation:
     | ArrayTypeAnnotation
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -4432,6 +4402,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -4483,7 +4454,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -4503,16 +4473,12 @@ export interface ParentMaps {
     | TypeParameterInstantiation
     | TypeofTypeAnnotation
     | UnionTypeAnnotation;
-  FunctionTypeParam:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | FunctionTypeAnnotation;
+  FunctionTypeParam: DeclareExportDeclaration | FunctionTypeAnnotation;
   GenericTypeAnnotation:
     | ArrayTypeAnnotation
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -4561,6 +4527,7 @@ export interface ParentMaps {
     | DeclareOpaqueType
     | DeclareTypeAlias
     | DeclareVariable
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | EnumBooleanMember
@@ -4688,6 +4655,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -4772,6 +4740,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -4825,7 +4794,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -4848,13 +4816,12 @@ export interface ParentMaps {
   InferredPredicate:
     | ArrowFunctionExpression
     | DeclareExportDeclaration
-    | DeclaredPredicate
+    | DeclareFunction
     | FunctionDeclaration
     | FunctionExpression;
   InterfaceDeclaration:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -4874,7 +4841,6 @@ export interface ParentMaps {
     | DeclareClass
     | DeclareExportDeclaration
     | DeclareInterface
-    | DeclaredPredicate
     | InterfaceDeclaration
     | InterfaceTypeAnnotation;
   InterfaceTypeAnnotation:
@@ -4882,7 +4848,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -4908,7 +4873,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -4947,6 +4911,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -5014,6 +4979,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -5109,6 +5075,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -5172,6 +5139,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -5236,6 +5204,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -5287,7 +5256,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -5323,6 +5291,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -5385,6 +5354,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -5447,6 +5417,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -5498,7 +5469,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -5523,7 +5493,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -5549,7 +5518,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -5574,7 +5542,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -5610,6 +5577,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | EnumNumberMember
@@ -5628,6 +5596,7 @@ export interface ParentMaps {
     | NewExpression
     | ObjectMethod
     | ObjectProperty
+    | ObjectTypeProperty
     | OptionalCallExpression
     | OptionalMemberExpression
     | ParenthesizedExpression
@@ -5674,6 +5643,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -5753,7 +5723,6 @@ export interface ParentMaps {
     | DeclareInterface
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -5775,30 +5744,14 @@ export interface ParentMaps {
     | TypeParameterInstantiation
     | TypeofTypeAnnotation
     | UnionTypeAnnotation;
-  ObjectTypeCallProperty:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | ObjectTypeAnnotation;
-  ObjectTypeIndexer:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | ObjectTypeAnnotation;
-  ObjectTypeInternalSlot:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | ObjectTypeAnnotation;
-  ObjectTypeProperty:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | ObjectTypeAnnotation;
-  ObjectTypeSpreadProperty:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | ObjectTypeAnnotation;
+  ObjectTypeCallProperty: DeclareExportDeclaration | ObjectTypeAnnotation;
+  ObjectTypeIndexer: DeclareExportDeclaration | ObjectTypeAnnotation;
+  ObjectTypeInternalSlot: DeclareExportDeclaration | ObjectTypeAnnotation;
+  ObjectTypeProperty: DeclareExportDeclaration | ObjectTypeAnnotation;
+  ObjectTypeSpreadProperty: DeclareExportDeclaration | ObjectTypeAnnotation;
   OpaqueType:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -5828,6 +5781,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -5879,7 +5833,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -5915,6 +5868,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -5977,6 +5931,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -6034,7 +5989,6 @@ export interface ParentMaps {
   Program: File | ModuleExpression;
   QualifiedTypeIdentifier:
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | GenericTypeAnnotation
     | InterfaceExtends
     | QualifiedTypeIdentifier;
@@ -6054,6 +6008,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -6149,6 +6104,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -6222,6 +6178,7 @@ export interface ParentMaps {
     | DeclareExportAllDeclaration
     | DeclareExportDeclaration
     | DeclareModule
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | EnumStringMember
@@ -6287,7 +6244,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -6312,7 +6268,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -6353,7 +6308,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -6434,6 +6388,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -6765,6 +6720,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -7010,6 +6966,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -7215,6 +7172,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -7431,6 +7389,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -7725,6 +7684,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -7788,6 +7748,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -7851,6 +7812,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -7908,7 +7870,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -7958,6 +7919,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -8023,7 +7985,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -8046,7 +8007,6 @@ export interface ParentMaps {
   TypeAlias:
     | BlockStatement
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | DoWhileStatement
     | ExportNamedDeclaration
     | ForInStatement
@@ -8071,7 +8031,6 @@ export interface ParentMaps {
     | ClassProperty
     | DeclareExportDeclaration
     | DeclareModuleExports
-    | DeclaredPredicate
     | FunctionDeclaration
     | FunctionExpression
     | Identifier
@@ -8145,10 +8104,7 @@ export interface ParentMaps {
     | WhileStatement
     | WithStatement
     | YieldExpression;
-  TypeParameter:
-    | DeclareExportDeclaration
-    | DeclaredPredicate
-    | TypeParameterDeclaration;
+  TypeParameter: DeclareExportDeclaration | TypeParameterDeclaration;
   TypeParameterDeclaration:
     | ArrowFunctionExpression
     | ClassDeclaration
@@ -8160,7 +8116,6 @@ export interface ParentMaps {
     | DeclareInterface
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionDeclaration
     | FunctionExpression
     | FunctionTypeAnnotation
@@ -8174,7 +8129,6 @@ export interface ParentMaps {
     | ClassExpression
     | ClassImplements
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | GenericTypeAnnotation
     | InterfaceExtends
     | JSXOpeningElement
@@ -8186,7 +8140,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -8222,6 +8175,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -8274,7 +8228,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -8310,6 +8263,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration
@@ -8378,7 +8332,6 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | DeclareExportDeclaration
-    | DeclaredPredicate
     | ObjectTypeIndexer
     | ObjectTypeProperty
     | TypeParameter;
@@ -8399,7 +8352,6 @@ export interface ParentMaps {
     | DeclareExportDeclaration
     | DeclareOpaqueType
     | DeclareTypeAlias
-    | DeclaredPredicate
     | FunctionTypeAnnotation
     | FunctionTypeParam
     | IndexedAccessType
@@ -8463,6 +8415,7 @@ export interface ParentMaps {
     | ClassPrivateProperty
     | ClassProperty
     | ConditionalExpression
+    | DeclaredPredicate
     | Decorator
     | DoWhileStatement
     | ExportDefaultDeclaration

@@ -1725,7 +1725,7 @@ export function declareExportAllDeclaration(
   validate(defs.attributes, node, "attributes", attributes, 1);
   return node;
 }
-export function declaredPredicate(value: t.Flow): t.DeclaredPredicate {
+export function declaredPredicate(value: t.Expression): t.DeclaredPredicate {
   const node: t.DeclaredPredicate = {
     type: "DeclaredPredicate",
     value,
@@ -1979,7 +1979,7 @@ export function objectTypeIndexer(
   return node;
 }
 export function objectTypeProperty(
-  key: t.Identifier | t.StringLiteral,
+  key: t.Identifier | t.StringLiteral | t.NumericLiteral,
   value: t.FlowType,
   variance: t.Variance | null = null,
 ): t.ObjectTypeProperty {
