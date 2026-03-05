@@ -24,8 +24,8 @@
   "types": "./types.d.ts",
   "exports": {
     ".": {
-      "default": "./lib/index.js",
-      "types": "./types.d.ts"
+      "types": "./types.d.ts",
+      "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
   },

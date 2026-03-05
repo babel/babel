@@ -707,3 +707,18 @@ jobs:
       - name: Ensure npm packages exist
         run: |
           node ./scripts/ensure-packages-exist.ts --check-only
+  publint:
+    name: Publint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: "*"
+          cache: "yarn"
+      - name: Build
+        run: make prepublish
+      - name: Publint
+        run: node ./scripts/publint.ts

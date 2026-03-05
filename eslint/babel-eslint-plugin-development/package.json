@@ -12,8 +12,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "default": "./lib/index.cjs",
-      "types": "./types.d.cts"
+      "types": "./types.d.cts",
+      "default": "./lib/index.cjs"
     },
     "./package.json": "./package.json"
   },

@@ -2,12 +2,6 @@
 {
   "compilerOptions": {
     "paths": {
-      "@babel/build-external-helpers": [
-        "./packages/babel-build-external-helpers/src"
-      ],
-      "@babel/cli": [
-        "./packages/babel-cli/src"
-      ],
       "@babel/code-frame": [
         "./packages/babel-code-frame/src"
       ],
@@ -100,9 +94,6 @@
       ],
       "@babel/helpers": [
         "./packages/babel-helpers/src"
-      ],
-      "@babel/node": [
-        "./packages/babel-node/src"
       ],
       "@babel/parser": [
         "./packages/babel-parser/src"
