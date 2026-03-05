@@ -170,7 +170,7 @@ defineType("DeclaredPredicate", {
   visitor: ["value"],
   aliases: ["FlowPredicate"],
   fields: {
-    value: validateType("Flow"),
+    value: validateType("Expression"),
   },
 });
 
