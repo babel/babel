@@ -857,7 +857,11 @@ export default abstract class StatementParser extends ExpressionParser {
           (isForIn || this.isContextual(tt._of)) &&
           init.declarations.length === 1
         ) {
-          return this.parseForIn(node as Undone<N.ForInOf>, init, awaitAt);
+          return this.parseForIn(
+            node as Undone<N.ForXStatement>,
+            init,
+            awaitAt,
+          );
         }
         if (awaitAt !== null) {
           this.unexpected(awaitAt);
