@@ -1051,8 +1051,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       // Note: bracketL has already been consumed
       if (this.lookahead().type === tt.colon) {
-        // @ts-expect-error Allow NumericLiteral | StringLiteral for id
-        node.id = this.flowParseObjectPropertyKey();
+        node.id = this.parseIdentifier(true);
         node.key = this.flowParseTypeInitialiser();
       } else {
         node.id = null;
@@ -1071,8 +1070,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.ObjectTypeInternalSlot {
       node.static = isStatic;
       // Note: both bracketL have already been consumed
-      // @ts-expect-error Allow NumericLiteral | StringLiteral for id
-      node.id = this.flowParseObjectPropertyKey();
+      node.id = this.parseIdentifier(true);
       this.expect(tt.bracketR);
       this.expect(tt.bracketR);
       if (this.match(tt.lt) || this.match(tt.parenL)) {
