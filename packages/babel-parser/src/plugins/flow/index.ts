@@ -726,7 +726,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       if (isClass) {
-        const implementsList: N.ClassImplements[] = [];
+        const implemented: N.ClassImplements[] = [];
         const mixins: N.InterfaceExtends[] = [];
 
         if (this.eatContextual(tt._mixins)) {
@@ -737,13 +737,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         if (this.eatContextual(tt._implements)) {
           do {
-            // @ts-expect-error We should have parsed a ClassImplements node,
-            // but incorrectly parsed them as interface extends.
-            implementsList.push(this.flowParseInterfaceExtends());
+            implemented.push(this.flowParseClassImplements());
           } while (this.eat(tt.comma));
         }
+        (node as Undone<N.DeclareClass>).implements = implemented;
         (node as Undone<N.DeclareClass>).mixins = mixins;
-        (node as Undone<N.DeclareClass>).implements = implementsList;
       }
 
       node.body = this.flowParseObjectType({
@@ -2675,6 +2673,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       super.pushClassPrivateMethod(classBody, method, isGenerator, isAsync);
     }
 
+    flowParseClassImplements() {
+      const node = this.startNode<N.ClassImplements>();
+      node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
+      if (this.match(tt.lt)) {
+        node.typeParameters = this.flowParseTypeParameterInstantiation();
+      } else {
+        node.typeParameters = null;
+      }
+      return this.finishNode(node, "ClassImplements");
+    }
+
     // parse a the super class type parameters and implements
     parseClassSuper(node: N.Class): void {
       super.parseClassSuper(node);
@@ -2688,18 +2697,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           this.flowParseTypeParameterInstantiationInExpression();
       }
 
-      if (this.isContextual(tt._implements)) {
-        this.next();
+      if (this.eatContextual(tt._implements)) {
         const implemented: N.ClassImplements[] = (node.implements = []);
         do {
-          const node = this.startNode<N.ClassImplements>();
-          node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
-          if (this.match(tt.lt)) {
-            node.typeParameters = this.flowParseTypeParameterInstantiation();
-          } else {
-            node.typeParameters = null;
-          }
-          implemented.push(this.finishNode(node, "ClassImplements"));
+          implemented.push(this.flowParseClassImplements());
         } while (this.eat(tt.comma));
       }
     }
