@@ -87,7 +87,10 @@ gen_enforced_field(WorkspaceCwd, 'engines.node', null) :-
  */
 function enforceEnginesNodeForPublicUnsetForPrivate({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
-    if (workspace.manifest.private) {
+    if (
+      workspace.manifest.private ||
+      workspace.ident?.startsWith("@babel/runtime")
+    ) {
       workspace.unset("engines.node");
     } else {
       workspace.set("engines.node", "^20.19.0 || >=22.12.0");
