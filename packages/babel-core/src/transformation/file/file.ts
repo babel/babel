@@ -215,13 +215,13 @@ export default class File {
           {
             start: {
               line: loc.start.line,
-              column: loc.start.column + 1,
+              column: loc.start.column,
             },
             end:
               loc.end && loc.start.line === loc.end.line
                 ? {
                     line: loc.end.line,
-                    column: loc.end.column + 1,
+                    column: loc.end.column,
                   }
                 : undefined,
           },
