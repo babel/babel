@@ -1,0 +1,80 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":47,"index":47}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":12,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":12,"index":12},"identifierName":"foo"},
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start":12,"end":42,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":42,"index":42}},
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start":13,"end":26,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":26,"index":26}},
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start":15,"end":26,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":26,"index":26}},
+                "typeAnnotation": {
+                  "type": "GenericTypeAnnotation",
+                  "start":23,"end":26,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":26,"index":26}},
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start":23,"end":26,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":26,"index":26},"identifierName":"Foo"},
+                    "name": "Foo"
+                  }
+                }
+              }
+            },
+            {
+              "type": "TypeParameter",
+              "start":28,"end":41,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":41,"index":41}},
+              "name": "U",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start":30,"end":41,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":41,"index":41}},
+                "typeAnnotation": {
+                  "type": "GenericTypeAnnotation",
+                  "start":38,"end":41,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":1,"column":41,"index":41}},
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start":38,"end":41,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":1,"column":41,"index":41},"identifierName":"Bar"},
+                    "name": "Bar"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":45,"end":47,"loc":{"start":{"line":1,"column":45,"index":45},"end":{"line":1,"column":47,"index":47}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

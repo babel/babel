@@ -863,12 +863,18 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       const variance = this.flowParseVariance();
 
-      const ident = this.flowParseTypeAnnotatableIdentifier();
+      const ident = this.flowParseRestrictedIdentifier();
       node.name = ident.name;
       // @ts-expect-error migrate to Babel types
       node.variance = variance;
-      // @ts-expect-error migrate to Babel types
-      node.bound = ident.typeAnnotation;
+
+      if (this.match(tt.colon) || this.match(tt._extends)) {
+        const boundNode = this.startNode<N.TypeAnnotation>();
+        this.next();
+        boundNode.typeAnnotation = this.flowParseType();
+        // @ts-expect-error migrate to Babel types
+        node.bound = this.finishNode(boundNode, "TypeAnnotation");
+      }
 
       if (this.match(tt.eq)) {
         this.eat(tt.eq);
