@@ -1,4 +1,4 @@
 {
-  "plugins": ["transform-react-jsx-development"],
+  "plugins": [["../dev-with-source-self.cjs"]],
   "sourceType": "module"
 }

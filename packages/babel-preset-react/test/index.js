@@ -33,13 +33,8 @@ describe("react preset", () => {
         envName: "development",
       }).code,
     ).toMatchInlineSnapshot(`
-      "var _jsxFileName = \\"\\";
-      import { jsxDEV as _jsxDEV } from \\"react/jsx-dev-runtime\\";
-      /*#__PURE__*/_jsxDEV(\\"a\\", {}, void 0, false, {
-        fileName: _jsxFileName,
-        lineNumber: 1,
-        columnNumber: 1
-      }, this);"
+      "import { jsxDEV as _jsxDEV } from \\"react/jsx-dev-runtime\\";
+      /*#__PURE__*/_jsxDEV(\\"a\\", {}, void 0, false);"
     `);
 
     expect(
