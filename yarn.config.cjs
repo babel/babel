@@ -250,6 +250,9 @@ function enforceExports({ Yarn }) {
         "@babel/types", // @babel/types has types exports
         "@babel/register", // index.cjs
         "@babel/code-frame", // browser.js
+        "@babel/node",
+        "@babel/build-external-helpers",
+        "@babel/cli",
       ].includes(packageName) ||
       packageName.startsWith("@babel/eslint-") ||
       packageName.startsWith("@babel/runtime")

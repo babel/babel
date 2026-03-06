@@ -37,7 +37,6 @@
   },
   "exports": {
     ".": {
-      "types": "./lib/index.d.ts",
       "default": "./lib/index.cjs"
     },
     "./package.json": "./package.json"
