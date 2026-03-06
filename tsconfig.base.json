@@ -22,6 +22,7 @@
     "allowUnusedLabels": false,
     "strictBindCallApply": true,
     "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "incremental": true,
     "stripInternal": true
   },

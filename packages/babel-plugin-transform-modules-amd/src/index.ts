@@ -79,8 +79,7 @@ export default declare<State>((api, options: Options) => {
     },
 
     visitor: {
-      ["CallExpression" +
-        (api.types.importExpression ? "|ImportExpression" : "")](
+      "CallExpression|ImportExpression"(
         this: State & PluginPass,
         path: NodePath<t.CallExpression | t.ImportExpression>,
         state: State,
@@ -100,7 +99,7 @@ export default declare<State>((api, options: Options) => {
           state.rejectId = rejectId;
         }
 
-        let result: t.Node = t.identifier("imported");
+        let result: t.Node | null = t.identifier("imported");
         if (!noInterop) {
           result = wrapInterop(this.file.path, result, "namespace");
         }

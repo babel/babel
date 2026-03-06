@@ -28,9 +28,9 @@ export { hasExports, isSideEffectImport, isModule, rewriteThis };
 
 export interface RewriteModuleStatementsAndPrepareHeaderOptions {
   exportName?: string;
-  strict: boolean;
+  strict?: boolean;
   allowTopLevelThis?: boolean;
-  strictMode: boolean;
+  strictMode?: boolean;
   loose?: boolean;
   importInterop?: ImportInterop;
   noInterop?: boolean;
@@ -493,7 +493,7 @@ function buildExportInitializationStatements(
   const results = [];
   if (noIncompleteNsImportDetection) {
     for (const [, initStatement] of initStatements) {
-      results.push(initStatement);
+      results.push(initStatement!);
     }
   } else {
     // We generate init statements (`exports.a = exports.b = ... = void 0`)
