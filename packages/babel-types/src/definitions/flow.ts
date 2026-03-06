@@ -88,7 +88,7 @@ defineType("DeclareFunction", {
   aliases: ["FlowDeclaration", "Statement", "Declaration"],
   fields: {
     id: validateType("Identifier"),
-    predicate: validateOptionalType("DeclaredPredicate"),
+    predicate: validateOptionalType("FlowPredicate"),
   },
 });
 
@@ -170,7 +170,7 @@ defineType("DeclaredPredicate", {
   visitor: ["value"],
   aliases: ["FlowPredicate"],
   fields: {
-    value: validateType("Flow"),
+    value: validateType("Expression"),
   },
 });
 
@@ -264,6 +264,14 @@ defineType("NumberLiteralTypeAnnotation", {
   },
 });
 
+defineType("BigIntLiteralTypeAnnotation", {
+  builder: ["value"],
+  aliases: ["FlowType"],
+  fields: {
+    value: validate(assertValueType("bigint")),
+  },
+});
+
 defineType("NumberTypeAnnotation", {
   aliases: ["FlowType", "FlowBaseAnnotation"],
 });
@@ -347,7 +355,7 @@ defineType("ObjectTypeProperty", {
   visitor: ["key", "value", "variance"],
   aliases: ["UserWhitespacable"],
   fields: {
-    key: validateType("Identifier", "StringLiteral"),
+    key: validateType("Identifier", "StringLiteral", "NumericLiteral"),
     value: validateType("FlowType"),
     kind: {
       validate: assertOneOf("init", "get", "set"),

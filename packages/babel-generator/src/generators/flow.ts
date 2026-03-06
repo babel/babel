@@ -473,6 +473,7 @@ export function NullableTypeAnnotation(
 }
 
 export {
+  BigIntLiteral as BigIntLiteralTypeAnnotation,
   NumericLiteral as NumberLiteralTypeAnnotation,
   StringLiteral as StringLiteralTypeAnnotation,
 } from "./types.ts";

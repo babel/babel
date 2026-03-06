@@ -27,7 +27,9 @@ export default (superClass: typeof Parser) =>
      * parser/expression.js                                         *
      * ============================================================ */
 
-    parseExprAtom(refExpressionErrors?: ExpressionErrors | null): N.Expression {
+    parseExprAtom(
+      refExpressionErrors?: ExpressionErrors | null,
+    ): N.Expression | N.Super {
       return (
         this.parseV8Intrinsic() || super.parseExprAtom(refExpressionErrors)
       );

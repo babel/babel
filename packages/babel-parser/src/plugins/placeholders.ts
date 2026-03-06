@@ -17,7 +17,7 @@ type PossiblePlaceholders = {
   Declaration: N.Declaration;
   BlockStatement: N.BlockStatement;
   ClassBody: N.ClassBody;
-  Pattern: N.Pattern;
+  Pattern: Exclude<N.Pattern, N.AssignmentPattern>;
 };
 export type PlaceholderTypes = keyof PossiblePlaceholders;
 
@@ -97,7 +97,7 @@ export default (superClass: typeof Parser) =>
 
     parseExprAtom(
       refExpressionErrors?: ExpressionErrors | null,
-    ): MaybePlaceholder<"Expression"> {
+    ): MaybePlaceholder<"Expression"> | N.Super {
       return (
         this.parsePlaceholder("Expression") ||
         super.parseExprAtom(refExpressionErrors)
@@ -153,7 +153,7 @@ export default (superClass: typeof Parser) =>
      * parser/lval.ts                                               *
      * ============================================================ */
 
-    parseBindingAtom(): MaybePlaceholder<"Pattern"> {
+    parseBindingAtom(): MaybePlaceholder<"Pattern" | "Identifier"> {
       return this.parsePlaceholder("Pattern") || super.parseBindingAtom();
     }
 
@@ -384,7 +384,7 @@ export default (superClass: typeof Parser) =>
 
     parseImport(
       node: Undone<N.ImportDeclaration>,
-    ): N.ImportDeclaration | N.TsImportEqualsDeclaration {
+    ): N.ImportDeclaration | N.TSImportEqualsDeclaration {
       const placeholder = this.parsePlaceholder("Identifier");
       if (!placeholder) return super.parseImport(node);
 

@@ -1388,7 +1388,7 @@ export default abstract class Tokenizer extends CommentsParser {
     at: Position | Undone<Node>,
     details: ErrorDetails = {} as ErrorDetails,
   ): ParseError {
-    const loc = at instanceof Position ? at : at.loc.start;
+    const loc = at instanceof Position ? at : at.loc!.start;
     const error = toParseError(loc, details);
 
     if (!(this.optionFlags & OptionFlags.ErrorRecovery)) throw error;
@@ -1408,7 +1408,7 @@ export default abstract class Tokenizer extends CommentsParser {
     at: Position | Undone<Node>,
     details: ErrorDetails = {} as ErrorDetails,
   ): ParseError {
-    const loc = at instanceof Position ? at : at.loc.start;
+    const loc = at instanceof Position ? at : at.loc!.start;
     const pos = loc.index;
     const errors = this.state.errors;
 

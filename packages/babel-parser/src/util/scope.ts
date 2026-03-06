@@ -204,7 +204,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     const { name } = id;
     const topLevelScope = this.scopeStack[0];
     if (!topLevelScope.names.has(name)) {
-      this.undefinedExports.set(name, id.loc.start);
+      this.undefinedExports.set(name, id.loc!.start);
     }
   }
 

@@ -3,7 +3,7 @@ import { SourceLocation, type Position } from "../util/location.ts";
 import type {
   Comment,
   Node as NodeType,
-  NodeBase,
+  BaseNode,
   EstreeLiteral,
   Identifier,
   Placeholder,
@@ -13,7 +13,7 @@ import { OptionFlags } from "../options.ts";
 
 // Start an AST node, attaching a start offset.
 
-class Node implements NodeBase {
+class Node implements BaseNode {
   constructor(parser: UtilParser, pos: number, loc: Position) {
     this.start = pos;
     this.end = 0;
@@ -52,7 +52,7 @@ export abstract class NodeUtils extends UtilParser {
   startNodeAtNode<T extends NodeType = never>(
     type: Undone<NodeType>,
   ): Undone<T> {
-    return this.startNodeAt(type.loc.start);
+    return this.startNodeAt(type.loc!.start);
   }
 
   // Finish an AST node, adding `type` and `end` properties.
@@ -68,7 +68,7 @@ export abstract class NodeUtils extends UtilParser {
     type: T["type"],
     endLoc: Position,
   ): T {
-    if (!process.env.IS_PUBLISH && node.end > 0) {
+    if (!process.env.IS_PUBLISH && node.end! > 0) {
       throw new Error(
         "Do not call finishNode*() twice on the same node." +
           " Instead use resetEndLocation() or change type directly.",
@@ -76,7 +76,7 @@ export abstract class NodeUtils extends UtilParser {
     }
     (node as T).type = type;
     node.end = endLoc.index;
-    node.loc.end = endLoc;
+    node.loc!.end = endLoc;
     if (this.optionFlags & OptionFlags.Ranges) node.range![1] = endLoc.index;
     if (this.optionFlags & OptionFlags.AttachComment) {
       this.processComment(node as T);
@@ -84,26 +84,26 @@ export abstract class NodeUtils extends UtilParser {
     return node as T;
   }
 
-  resetStartLocation(node: NodeBase, startLoc: Position): void {
+  resetStartLocation(node: BaseNode, startLoc: Position): void {
     node.start = startLoc.index;
-    node.loc.start = startLoc;
+    node.loc!.start = startLoc;
     if (this.optionFlags & OptionFlags.Ranges) node.range![0] = startLoc.index;
   }
 
   resetEndLocation(
-    node: NodeBase,
+    node: BaseNode,
     endLoc: Position = this.state.lastTokEndLoc!,
   ): void {
     node.end = endLoc.index;
-    node.loc.end = endLoc;
+    node.loc!.end = endLoc;
     if (this.optionFlags & OptionFlags.Ranges) node.range![1] = endLoc.index;
   }
 
   /**
    * Reset the start location of node to the start location of locationNode
    */
-  resetStartLocationFromNode(node: NodeBase, locationNode: NodeBase): void {
-    this.resetStartLocation(node, locationNode.loc.start);
+  resetStartLocationFromNode(node: BaseNode, locationNode: BaseNode): void {
+    this.resetStartLocation(node, locationNode.loc!.start);
   }
 
   castNodeTo<T extends NodeType["type"]>(
