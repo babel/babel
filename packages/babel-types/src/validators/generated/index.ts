@@ -2054,6 +2054,24 @@ export function isNumberLiteralTypeAnnotation<
 
   return opts == null || shallowEqual(node, opts);
 }
+export function isBigIntLiteralTypeAnnotation(
+  node: t.Node | null | undefined,
+): node is t.BigIntLiteralTypeAnnotation;
+export function isBigIntLiteralTypeAnnotation<
+  Opts extends Options<t.BigIntLiteralTypeAnnotation>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.BigIntLiteralTypeAnnotation & Opts;
+export function isBigIntLiteralTypeAnnotation<
+  Opts extends Options<t.BigIntLiteralTypeAnnotation>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
+  if (!node) return false;
+
+  if (node.type !== "BigIntLiteralTypeAnnotation") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
 export function isNumberTypeAnnotation(
   node: t.Node | null | undefined,
 ): node is t.NumberTypeAnnotation;
@@ -5524,6 +5542,7 @@ export function isFlow<Opts extends Options<t.Flow>>(
     case "EmptyTypeAnnotation":
     case "NullableTypeAnnotation":
     case "NumberLiteralTypeAnnotation":
+    case "BigIntLiteralTypeAnnotation":
     case "NumberTypeAnnotation":
     case "ObjectTypeAnnotation":
     case "ObjectTypeInternalSlot":
@@ -5592,6 +5611,7 @@ export function isFlowType<Opts extends Options<t.FlowType>>(
     case "EmptyTypeAnnotation":
     case "NullableTypeAnnotation":
     case "NumberLiteralTypeAnnotation":
+    case "BigIntLiteralTypeAnnotation":
     case "NumberTypeAnnotation":
     case "ObjectTypeAnnotation":
     case "StringLiteralTypeAnnotation":

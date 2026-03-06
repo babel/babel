@@ -49,6 +49,11 @@ export interface NodePathAssertions {
   assertBigIntLiteral<Opts extends Options<t.BigIntLiteral>>(
     opts?: Opts,
   ): asserts this is NodePath<t.BigIntLiteral & Opts>;
+  assertBigIntLiteralTypeAnnotation<
+    Opts extends Options<t.BigIntLiteralTypeAnnotation>,
+  >(
+    opts?: Opts,
+  ): asserts this is NodePath<t.BigIntLiteralTypeAnnotation & Opts>;
   assertBinary<Opts extends Options<t.Binary>>(
     opts?: Opts,
   ): asserts this is NodePath<t.Binary & Opts>;

@@ -433,7 +433,7 @@ defineType("FunctionDeclaration", {
       validate: assertNodeType("BlockStatement"),
     },
     predicate: {
-      validate: assertNodeType("DeclaredPredicate", "InferredPredicate"),
+      validate: assertNodeType("FlowPredicate"),
       optional: true,
     },
   },
@@ -478,7 +478,7 @@ defineType("FunctionExpression", {
       validate: assertNodeType("BlockStatement"),
     },
     predicate: {
-      validate: assertNodeType("DeclaredPredicate", "InferredPredicate"),
+      validate: assertNodeType("FlowPredicate"),
       optional: true,
     },
   },
@@ -1339,7 +1339,7 @@ defineType("ArrowFunctionExpression", {
       validate: assertNodeType("BlockStatement", "Expression"),
     },
     predicate: {
-      validate: assertNodeType("DeclaredPredicate", "InferredPredicate"),
+      validate: assertNodeType("FlowPredicate"),
       optional: true,
     },
   },
@@ -1513,10 +1513,12 @@ defineType("ExportDefaultDeclaration", {
   ],
   fields: {
     declaration: validateType(
-      "TSDeclareFunction",
       "FunctionDeclaration",
       "ClassDeclaration",
       "Expression",
+      "TSDeclareFunction",
+      "TSInterfaceDeclaration",
+      "EnumDeclaration",
     ),
     exportKind: validateOptional(assertOneOf("value")),
   },
@@ -2106,7 +2108,7 @@ defineType("ExportNamespaceSpecifier", {
   aliases: ["ModuleSpecifier"],
   fields: {
     exported: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "StringLiteral"),
     },
   },
 });

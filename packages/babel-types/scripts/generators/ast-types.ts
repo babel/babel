@@ -84,7 +84,7 @@ export type Comment = CommentBlock | CommentLine;
 export interface SourceLocation {
   start: Position;
   end: Position;
-  filename: string;
+  filename: string | undefined;
   identifierName: string | undefined | null;
 }
 

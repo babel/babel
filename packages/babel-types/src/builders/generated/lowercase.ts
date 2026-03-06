@@ -989,10 +989,12 @@ export function exportAllDeclaration(
 }
 export function exportDefaultDeclaration(
   declaration:
-    | t.TSDeclareFunction
     | t.FunctionDeclaration
     | t.ClassDeclaration
-    | t.Expression,
+    | t.Expression
+    | t.TSDeclareFunction
+    | t.TSInterfaceDeclaration
+    | t.EnumDeclaration,
 ): t.ExportDefaultDeclaration {
   const node: t.ExportDefaultDeclaration = {
     type: "ExportDefaultDeclaration",
@@ -1333,7 +1335,7 @@ export function bigIntLiteral(value: bigint): t.BigIntLiteral {
   return node;
 }
 export function exportNamespaceSpecifier(
-  exported: t.Identifier,
+  exported: t.Identifier | t.StringLiteral,
 ): t.ExportNamespaceSpecifier {
   const node: t.ExportNamespaceSpecifier = {
     type: "ExportNamespaceSpecifier",
@@ -1723,7 +1725,7 @@ export function declareExportAllDeclaration(
   validate(defs.attributes, node, "attributes", attributes, 1);
   return node;
 }
-export function declaredPredicate(value: t.Flow): t.DeclaredPredicate {
+export function declaredPredicate(value: t.Expression): t.DeclaredPredicate {
   const node: t.DeclaredPredicate = {
     type: "DeclaredPredicate",
     value,
@@ -1881,6 +1883,17 @@ export function numberLiteralTypeAnnotation(
   validate(defs.value, node, "value", value);
   return node;
 }
+export function bigIntLiteralTypeAnnotation(
+  value: bigint,
+): t.BigIntLiteralTypeAnnotation {
+  const node: t.BigIntLiteralTypeAnnotation = {
+    type: "BigIntLiteralTypeAnnotation",
+    value,
+  };
+  const defs = NODE_FIELDS.BigIntLiteralTypeAnnotation;
+  validate(defs.value, node, "value", value);
+  return node;
+}
 export function numberTypeAnnotation(): t.NumberTypeAnnotation {
   return {
     type: "NumberTypeAnnotation",
@@ -1966,7 +1979,7 @@ export function objectTypeIndexer(
   return node;
 }
 export function objectTypeProperty(
-  key: t.Identifier | t.StringLiteral,
+  key: t.Identifier | t.StringLiteral | t.NumericLiteral,
   value: t.FlowType,
   variance: t.Variance | null = null,
 ): t.ObjectTypeProperty {
@@ -2558,7 +2571,7 @@ export function argumentPlaceholder(): t.ArgumentPlaceholder {
   };
 }
 export function bindExpression(
-  object: t.Expression,
+  object: null | t.Expression,
   callee: t.Expression,
 ): t.BindExpression {
   const node: t.BindExpression = {
@@ -3257,7 +3270,7 @@ export function tsInterfaceHeritage(
 export function tsInterfaceDeclaration(
   id: t.Identifier,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
-  _extends: t.TSClassImplements[] | null | undefined = null,
+  _extends: t.TSInterfaceHeritage[] | null | undefined = null,
   body: t.TSInterfaceBody,
 ): t.TSInterfaceDeclaration {
   const node: t.TSInterfaceDeclaration = {
