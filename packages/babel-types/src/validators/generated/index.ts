@@ -2979,6 +2979,77 @@ export function isArgumentPlaceholder<
 
   return opts == null || shallowEqual(node, opts);
 }
+export function isRestPlaceholder(
+  node: t.Node | null | undefined,
+): node is t.RestPlaceholder;
+export function isRestPlaceholder<Opts extends Options<t.RestPlaceholder>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.RestPlaceholder & Opts;
+export function isRestPlaceholder<Opts extends Options<t.RestPlaceholder>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
+  if (!node) return false;
+
+  if (node.type !== "RestPlaceholder") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
+export function isPartialCallExpression(
+  node: t.Node | null | undefined,
+): node is t.PartialCallExpression;
+export function isPartialCallExpression<
+  Opts extends Options<t.PartialCallExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.PartialCallExpression & Opts;
+export function isPartialCallExpression<
+  Opts extends Options<t.PartialCallExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
+  if (!node) return false;
+
+  if (node.type !== "PartialCallExpression") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
+export function isPartialNewExpression(
+  node: t.Node | null | undefined,
+): node is t.PartialNewExpression;
+export function isPartialNewExpression<
+  Opts extends Options<t.PartialNewExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.PartialNewExpression & Opts;
+export function isPartialNewExpression<
+  Opts extends Options<t.PartialNewExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
+  if (!node) return false;
+
+  if (node.type !== "PartialNewExpression") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
+export function isOptionalPartialCallExpression(
+  node: t.Node | null | undefined,
+): node is t.OptionalPartialCallExpression;
+export function isOptionalPartialCallExpression<
+  Opts extends Options<t.OptionalPartialCallExpression>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.OptionalPartialCallExpression & Opts;
+export function isOptionalPartialCallExpression<
+  Opts extends Options<t.OptionalPartialCallExpression>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
+  if (!node) return false;
+
+  if (node.type !== "OptionalPartialCallExpression") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
 export function isBindExpression(
   node: t.Node | null | undefined,
 ): node is t.BindExpression;
@@ -4467,6 +4538,9 @@ export function isExpression<Opts extends Options<t.Expression>>(
     case "TypeCastExpression":
     case "JSXElement":
     case "JSXFragment":
+    case "PartialCallExpression":
+    case "PartialNewExpression":
+    case "OptionalPartialCallExpression":
     case "BindExpression":
     case "DoExpression":
     case "ModuleExpression":

@@ -81,7 +81,7 @@ export function setInnerComments(node: Undone<Node>, comments: Comment[]) {
  */
 function adjustInnerComments(
   node: Undone<Node>,
-  elements: (Node | null)[],
+  elements: readonly (Node | null)[],
   commentWS: CommentWhitespace,
 ) {
   let lastElement = null;
@@ -180,6 +180,9 @@ export default class CommentsParser extends BaseParser {
           case "CallExpression":
           case "NewExpression":
           case "OptionalCallExpression":
+          case "OptionalPartialCallExpression":
+          case "PartialCallExpression":
+          case "PartialNewExpression":
             adjustInnerComments(node, node.arguments, commentWS);
             break;
           case "ImportExpression":
