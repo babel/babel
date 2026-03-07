@@ -181,15 +181,6 @@ jobs:
         with:
           prefix: v8
 
-      # Remove this when Babel 8 becomes stable
-      - name: Use Babel 8 PR labels
-        run: |
-          node -e "
-            const pkg = require('./package.json');
-            pkg.changelog.labels = pkg.changelog.labels_breaking
-            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
-          "
-
       - name: Generate the changelog
         id: changelog
         uses: babel/actions/generate-lerna-changelog@v2
