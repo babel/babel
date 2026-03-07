@@ -2,10 +2,10 @@
 
 Using targets:
 {
-  "safari": "13"
+  "safari": "13.1"
 }
 
-Using modules transform: false
+Using modules transform: auto
 
 Using plugins:
   transform-explicit-resource-management { safari }
@@ -17,10 +17,10 @@ Using plugins:
   transform-class-properties { safari < 14.1 }
   transform-private-methods { safari < 15 }
   transform-logical-assignment-operators { safari < 14 }
-  transform-nullish-coalescing-operator { safari < 13.1 }
-  transform-optional-chaining { safari < 13.1 }
   transform-export-namespace-from { safari < 14.1 }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari < 16.3 }
   bugfix/transform-safari-rest-destructuring-rhs-array { safari < 14.1 }
+  transform-modules-commonjs
+  transform-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
