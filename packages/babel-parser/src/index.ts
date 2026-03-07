@@ -159,3 +159,17 @@ function getParserClass(
   }
   return cls;
 }
+
+export function getLine(locData: Uint32Array, pos: number): number {
+  if (pos < 0 || pos * 2 >= locData.length) {
+    throw new Error(`Position ${pos} is out of bounds for location data.`);
+  }
+  return locData[pos * 2];
+}
+
+export function getColumn(locData: Uint32Array, pos: number): number {
+  if (pos < 0 || pos * 2 + 1 >= locData.length) {
+    throw new Error(`Position ${pos} is out of bounds for location data.`);
+  }
+  return locData[pos * 2 + 1];
+}
