@@ -74,9 +74,9 @@ export default declare((api, options: Options) => {
    */
   function buildBrowserInit(
     browserGlobals: Record<string, string>,
-    exactGlobals: boolean,
+    exactGlobals: boolean | undefined,
     filename: string,
-    moduleName: t.StringLiteral | void,
+    moduleName: t.StringLiteral | undefined,
   ) {
     const moduleNameOrBasename = moduleName
       ? moduleName.value
@@ -126,7 +126,7 @@ export default declare((api, options: Options) => {
    */
   function buildBrowserArg(
     browserGlobals: Record<string, string>,
-    exactGlobals: boolean,
+    exactGlobals: boolean | undefined,
     source: string,
   ) {
     let memberExpression: t.MemberExpression;
@@ -168,7 +168,7 @@ export default declare((api, options: Options) => {
           const browserGlobals = globals || {};
 
           const moduleName = getModuleName(this.file.opts, options);
-          let moduleNameLiteral: void | t.StringLiteral;
+          let moduleNameLiteral: t.StringLiteral | undefined;
           if (moduleName) moduleNameLiteral = t.stringLiteral(moduleName);
 
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
@@ -265,7 +265,7 @@ export default declare((api, options: Options) => {
             }) as t.Statement,
           ])[0] as NodePath<t.ExpressionStatement>;
           const umdFactory = (
-            umdWrapper.get("expression.arguments")[1] as NodePath<t.Function>
+            umdWrapper.get("expression.arguments.1") as NodePath<t.Function>
           ).get("body") as NodePath<t.BlockStatement>;
           umdFactory.pushContainer("directives", directives);
           umdFactory.pushContainer("body", body);

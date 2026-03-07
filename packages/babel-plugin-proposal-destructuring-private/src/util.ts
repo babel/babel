@@ -53,7 +53,7 @@ function initRestExcludingKeys(
  * @param {Scope} scope Where should we register the memoised id
  */
 function growRestExcludingKeys(
-  excludingKeys: ExcludingKey[],
+  excludingKeys: ExcludingKey[] | null,
   properties: t.ObjectProperty[],
   scope: Scope,
 ) {
@@ -119,7 +119,7 @@ export function buildVariableDeclarationFromParams(
   params: t.Function["params"],
   scope: Scope,
 ): {
-  params: (t.Identifier | t.RestElement)[];
+  params: (t.Identifier | t.RestElement | null)[];
   variableDeclaration: t.VariableDeclaration;
 } {
   const { elements, transformed } = buildAssignmentsFromPatternList(
@@ -131,7 +131,7 @@ export function buildVariableDeclarationFromParams(
     params: elements,
     variableDeclaration: variableDeclaration(
       "var",
-      transformed.map(({ left, right }) =>
+      (transformed as Transformed[]).map(({ left, right }) =>
         variableDeclarator(
           left as t.Identifier | t.ArrayPattern | t.ObjectPattern,
           right,
@@ -150,12 +150,9 @@ function buildAssignmentsFromPatternList(
   elements: (t.LVal | t.PatternLike | t.TSParameterProperty | null)[],
   scope: Scope,
   isAssignment: boolean,
-): {
-  elements: (t.Identifier | t.RestElement | null)[];
-  transformed: Transformed[];
-} {
-  const newElements: (t.Identifier | t.RestElement)[] = [],
-    transformed: Transformed[] = [];
+) {
+  const newElements: (t.Identifier | t.RestElement | null)[] = [],
+    transformed: (Transformed | null)[] = [];
   for (let element of elements) {
     if (element === null || element.type === "VoidPattern") {
       newElements.push(null);
@@ -195,7 +192,8 @@ type StackItem = {
     | t.ObjectProperty
     | t.TSParameterProperty
     | t.OptionalMemberExpression
-    | null;
+    | null
+    | undefined;
   index: number;
   depth: number;
 };
@@ -217,7 +215,9 @@ export function* traversePattern(
     | t.LVal
     | t.PatternLike
     | t.TSParameterProperty
-    | t.OptionalMemberExpression,
+    | t.OptionalMemberExpression
+    | null
+    | undefined,
   visitor: (
     node:
       | t.LVal
@@ -231,10 +231,10 @@ export function* traversePattern(
 ) {
   const stack: StackItem[] = [];
   stack.push({ node: root, index: 0, depth: 0 });
-  let item: StackItem;
+  let item: StackItem | undefined;
   while ((item = stack.pop()) !== undefined) {
     const { node, index } = item;
-    if (node === null) continue;
+    if (node == null) continue;
     yield* visitor(node, index, item.depth);
     const depth = item.depth + 1;
     switch (node.type) {
@@ -275,7 +275,12 @@ export function* traversePattern(
 }
 
 export function hasPrivateKeys(
-  pattern: t.LVal | t.PatternLike | t.OptionalMemberExpression,
+  pattern:
+    | t.LVal
+    | t.PatternLike
+    | t.OptionalMemberExpression
+    | null
+    | undefined,
 ) {
   let result = false;
   traversePattern(pattern, function* (node) {
@@ -376,13 +381,13 @@ export function* transformPrivateKeyDestructuring(
     right,
     restExcludingKeys: initRestExcludingKeys(left),
   });
-  let item: Item;
+  let item: Item | undefined;
   while ((item = stack.pop()) !== undefined) {
     const { restExcludingKeys } = item;
     let { left, right } = item;
     const searchPrivateKey = privateKeyPathIterator(left).next();
     if (searchPrivateKey.done) {
-      if (restExcludingKeys?.length > 0) {
+      if (restExcludingKeys?.length) {
         // optimize out the rest element because `objectWithoutProperties`
         // returns a new object
         // `{ ...z } = babelHelpers.objectWithoutProperties(m, ["x"])`
@@ -499,7 +504,7 @@ export function* transformPrivateKeyDestructuring(
               // the first level, otherwise initialize a new restExcludingKeys
               const nextRestExcludingKeys =
                 indexPathIndex === 0
-                  ? restExcludingKeys
+                  ? (restExcludingKeys as ExcludingKey[] | null)
                   : initRestExcludingKeys(left);
               growRestExcludingKeys(
                 nextRestExcludingKeys,
@@ -561,10 +566,10 @@ export function* transformPrivateKeyDestructuring(
             for (let i = transformed.length - 1; i > 0; i--) {
               // skipping array holes
               if (transformed[i] !== null) {
-                stack.push(transformed[i]);
+                stack.push(transformed[i]!);
               }
             }
-            ({ left, right } = transformed[0]);
+            ({ left, right } = transformed[0]!);
             break;
           }
           default:
