@@ -43,7 +43,7 @@ export function shouldTransform(
         ? parentPath.get("right")
         : null;
     if (
-      rhsPath &&
+      rhsPath?.node &&
       isPathSimpleArrayWithLength(
         skipTransparentExprWrappers(rhsPath),
         elementPathsLength,
