@@ -101,6 +101,7 @@ target["clean-all"] = function () {
   target["clean"]();
   target["clean-lib"]();
   target["clean-node-modules"]();
+  target["clean-ts"]();
 };
 
 target["clean-node-modules"] = function () {
