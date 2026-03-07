@@ -1,0 +1,106 @@
+{
+  "type": "File",
+  "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":33,"index":73}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":33,"index":73}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":10,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":10,"index":10}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":10,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+              "name": "a",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":5,"end":10,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":10,"index":10}},
+                "typeAnnotation": {
+                  "type": "BigIntLiteralTypeAnnotation",
+                  "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10}},
+                  "extra": {
+                    "rawValue": -1,
+                    "raw": "-1n"
+                  },
+                  "value": -1
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":11,"end":39,"loc":{"start":{"line":2,"column":0,"index":11},"end":{"line":2,"column":28,"index":39}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":15,"end":39,"loc":{"start":{"line":2,"column":4,"index":15},"end":{"line":2,"column":28,"index":39}},
+            "id": {
+              "type": "Identifier",
+              "start":15,"end":39,"loc":{"start":{"line":2,"column":4,"index":15},"end":{"line":2,"column":28,"index":39},"identifierName":"b"},
+              "name": "b",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":16,"end":39,"loc":{"start":{"line":2,"column":5,"index":16},"end":{"line":2,"column":28,"index":39}},
+                "typeAnnotation": {
+                  "type": "BigIntLiteralTypeAnnotation",
+                  "start":18,"end":39,"loc":{"start":{"line":2,"column":7,"index":18},"end":{"line":2,"column":28,"index":39}},
+                  "extra": {
+                    "rawValue": -9007199254740992,
+                    "raw": "-0x20_0000_0000_0000n"
+                  },
+                  "value": -9007199254740992
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":40,"end":73,"loc":{"start":{"line":3,"column":0,"index":40},"end":{"line":3,"column":33,"index":73}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":44,"end":73,"loc":{"start":{"line":3,"column":4,"index":44},"end":{"line":3,"column":33,"index":73}},
+            "id": {
+              "type": "Identifier",
+              "start":44,"end":73,"loc":{"start":{"line":3,"column":4,"index":44},"end":{"line":3,"column":33,"index":73},"identifierName":"c"},
+              "name": "c",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start":45,"end":73,"loc":{"start":{"line":3,"column":5,"index":45},"end":{"line":3,"column":33,"index":73}},
+                "typeAnnotation": {
+                  "type": "BigIntLiteralTypeAnnotation",
+                  "start":47,"end":73,"loc":{"start":{"line":3,"column":7,"index":47},"end":{"line":3,"column":33,"index":73}},
+                  "extra": {
+                    "rawValue": -590295810358705700000,
+                    "raw": "-0x20_0000_0000_0000_0000n"
+                  },
+                  "value": -590295810358705700000
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

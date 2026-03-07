@@ -723,6 +723,12 @@ export function assertNumberLiteralTypeAnnotation(
 ): asserts node is t.NumberLiteralTypeAnnotation {
   assert("NumberLiteralTypeAnnotation", node, opts);
 }
+export function assertBigIntLiteralTypeAnnotation(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.BigIntLiteralTypeAnnotation {
+  assert("BigIntLiteralTypeAnnotation", node, opts);
+}
 export function assertNumberTypeAnnotation(
   node: object | null | undefined,
   opts?: object | null,

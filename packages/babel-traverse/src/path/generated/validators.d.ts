@@ -90,6 +90,15 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.BigIntLiteral & Opts>;
+  isBigIntLiteralTypeAnnotation(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<t.BigIntLiteralTypeAnnotation>;
+  isBigIntLiteralTypeAnnotation<
+    Opts extends Options<t.BigIntLiteralTypeAnnotation>,
+  >(
+    this: NodePath<t.Node | null>,
+    opts: Opts,
+  ): this is NodePath<t.BigIntLiteralTypeAnnotation & Opts>;
   isBinary(this: NodePath<t.Node | null>): this is NodePath<t.Binary>;
   isBinary<Opts extends Options<t.Binary>>(
     this: NodePath<t.Node | null>,

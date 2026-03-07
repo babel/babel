@@ -6,6 +6,7 @@ import type * as t from "../index.ts";
 import defineType, {
   arrayOfType,
   assertNodeType,
+  assertNodeOrValueType,
   assertValueType,
   chain,
   type ValidatorImpl,
@@ -20,7 +21,7 @@ defineType("BindExpression", {
   aliases: ["Expression"],
   fields: {
     object: {
-      validate: assertNodeType("Expression"),
+      validate: assertNodeOrValueType("null", "Expression"),
     },
     callee: {
       validate: assertNodeType("Expression"),
