@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-typescript", "bugfix-safari-rest-destructuring-rhs-array"]
+}

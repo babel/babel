@@ -25,6 +25,7 @@ Using plugins:
   transform-parameters { safari < 16.3 }
   syntax-async-generators
   syntax-object-rest-spread
+  transform-destructuring { safari < 14.1 }
   transform-export-namespace-from { safari < 14.1 }
   syntax-dynamic-import
   syntax-top-level-await
