@@ -35,6 +35,13 @@ export default {
     features: ["destructuring, parameters / duplicate identifier"],
     replaces: "transform-parameters",
   },
+  "bugfix/transform-safari-rest-destructuring-rhs-array": {
+    features: [
+      "destructuring, assignment / rest with identical number of elements in RHS",
+      "destructuring, declarations / rest with identical number of elements in RHS",
+    ],
+    replaces: "transform-destructuring",
+  },
   "bugfix/transform-tagged-template-caching": {
     features: ["template literals / TemplateStrings permanent caching"],
     replaces: "transform-template-literals",
