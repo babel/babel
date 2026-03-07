@@ -32,6 +32,7 @@ Using plugins:
   transform-exponentiation-operator { safari < 10.1 }
   transform-template-literals { safari < 13 }
   transform-unicode-regex { safari < 12 }
+  transform-destructuring { safari < 14.1 }
   transform-block-scoping { safari < 11 }
   transform-export-namespace-from { safari < 14.1 }
   transform-modules-commonjs
