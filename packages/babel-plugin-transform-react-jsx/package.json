@@ -44,10 +44,6 @@
       "types": "./lib/index.d.ts",
       "default": "./lib/development.js"
     },
-    "./lib/create-plugin": {
-      "types": "./lib/create-plugin.d.ts",
-      "default": "./lib/create-plugin.js"
-    },
     "./package.json": "./package.json"
   },
   "type": "module"
