@@ -1,15 +1,14 @@
 #!/usr/bin/env node
-/* eslint-disable no-var, unicorn/prefer-node-protocol */
 
-var parser = require("..");
-var fs = require("fs");
+import { parse } from "..";
+import { readFileSync } from "node:fs";
 
-var filename = process.argv[2];
+const filename = process.argv[2];
 if (!filename) {
   console.error("no filename specified");
 } else {
-  var file = fs.readFileSync(filename, "utf8");
-  var ast = parser.parse(file);
+  const file = readFileSync(filename, "utf8");
+  const ast = parse(file);
 
   console.log(JSON.stringify(ast, null, "  "));
 }
