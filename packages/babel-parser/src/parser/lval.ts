@@ -760,7 +760,7 @@ export default abstract class LValParser extends NodeUtils {
 
     if (isOptionalMemberExpression || type === "MemberExpression") {
       if (isOptionalMemberExpression) {
-        this.expectPlugin("optionalChainingAssign", expression.start!);
+        this.expectPlugin("optionalChainingAssign", expression.start);
         if (ancestor.type !== "AssignmentExpression") {
           this.raise(Errors.InvalidLhsOptionalChaining, expression, {
             ancestor,
