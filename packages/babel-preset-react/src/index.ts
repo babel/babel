@@ -1,6 +1,6 @@
 import { declarePreset } from "@babel/helper-plugin-utils";
 import transformReactJSX from "@babel/plugin-transform-react-jsx";
-import createReactJSXPlugin from "@babel/plugin-transform-react-jsx/lib/create-plugin";
+import transformReactJSXDevelopment from "@babel/plugin-transform-react-jsx-development";
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
 import transformReactPure from "@babel/plugin-transform-react-pure-annotations";
 import normalizeOptions from "./normalize-options.ts";
@@ -33,26 +33,23 @@ export default declarePreset((api, opts: Options) => {
     throwIfNamespace,
   } = normalizeOptions(opts);
 
+  const pluginOptios = {
+    importSource,
+    pragma,
+    pragmaFrag,
+    runtime,
+    throwIfNamespace,
+    pure,
+  };
+
   return {
     plugins: [
-      [
-        development
-          ? createReactJSXPlugin({
-              name: "transform-react-jsx/development",
-              development: true,
-              developmentSourceSelf,
-            })
-          : transformReactJSX,
-
-        {
-          importSource,
-          pragma,
-          pragmaFrag,
-          runtime,
-          throwIfNamespace,
-          pure,
-        },
-      ] satisfies PluginItem,
+      development
+        ? [
+            transformReactJSXDevelopment,
+            { ...pluginOptios, sourceSelf: developmentSourceSelf },
+          ]
+        : [transformReactJSX, pluginOptios],
       transformReactDisplayName,
       pure !== false && transformReactPure,
     ].filter(Boolean) as PluginItem[],

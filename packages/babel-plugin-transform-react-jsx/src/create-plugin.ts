@@ -56,16 +56,20 @@ export interface Options {
   runtime?: "automatic" | "classic";
   throwIfNamespace?: boolean;
 }
-export default function createPlugin({
+
+export interface OptionsDevelopment extends Options {
+  sourceSelf?: boolean;
+}
+
+export default function createPlugin<const Development extends boolean>({
   name,
   development,
-  developmentSourceSelf = false,
 }: {
   name: string;
-  development: boolean;
-  developmentSourceSelf?: boolean;
+  development: Development;
 }) {
-  return declare((_, options: Options) => {
+  type Opts = Development extends true ? OptionsDevelopment : Options;
+  return declare((_, options: Opts) => {
     const {
       pure: PURE_ANNOTATION,
 
@@ -79,6 +83,10 @@ export default function createPlugin({
       pragma: PRAGMA_DEFAULT = DEFAULT.pragma,
       pragmaFrag: PRAGMA_FRAG_DEFAULT = DEFAULT.pragmaFrag,
     } = options;
+
+    const sourceSelf = development
+      ? (options as OptionsDevelopment).sourceSelf
+      : undefined;
 
     if ("useSpread" in options) {
       throw new Error(
@@ -210,7 +218,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               );
             }
 
-            if (development && developmentSourceSelf) {
+            if (development && sourceSelf) {
               // Returns whether the class has specified a superclass.
               function isDerivedClass(classNode: Class) {
                 return classNode.superClass !== null;
@@ -598,7 +606,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           extracted.key ?? path.scope.buildUndefinedNode(),
           t.booleanLiteral(children.length > 1),
         );
-        if (developmentSourceSelf) {
+        if (sourceSelf) {
           if (extracted.__source) {
             args.push(extracted.__source);
             if (extracted.__self) args.push(extracted.__self);
