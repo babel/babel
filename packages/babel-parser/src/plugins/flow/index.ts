@@ -1362,19 +1362,23 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.flowCheckGetterSetterParams(
               node as Undone<N.ObjectTypeProperty>,
             );
-          }
-          /** Declared classes/interfaces do not allow spread */
-          if (
+          } else if (
+            !isStatic &&
+            /** Declared classes/interfaces do not allow spread */
             !allowSpread &&
             // @ts-expect-error name is not define in StringLiteral
             (node as Undone<N.ObjectTypeProperty>).key.name === "constructor" &&
-            // @ts-expect-error this is not defined in AnyTypeAnnotation
-            (node as Undone<N.ObjectTypeProperty>).value.this
+            (
+              (node as Undone<N.ObjectTypeProperty>)
+                .value as N.FunctionTypeAnnotation
+            ).this
           ) {
             this.raise(
               FlowErrors.ThisParamBannedInConstructor,
-              // @ts-expect-error this is not defined in AnyTypeAnnotation
-              (node as Undone<N.ObjectTypeProperty>).value.this,
+              (
+                (node as Undone<N.ObjectTypeProperty>)
+                  .value as N.FunctionTypeAnnotation
+              ).this!,
             );
           }
         } else {
@@ -1399,18 +1403,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // @babel/parser uses non estree properties we cannot reuse it here
     flowCheckGetterSetterParams(property: Undone<N.ObjectTypeProperty>): void {
       const paramCount = property.kind === "get" ? 0 : 1;
-      const length =
-        // @ts-expect-error fix: should check the value type first
-        property.value.params.length + (property.value.rest ? 1 : 0);
+      const value = property.value as N.FunctionTypeAnnotation;
+      const length = value.params.length + (value.rest ? 1 : 0);
 
-      // @ts-expect-error fix: this is not defined in AnyTypeAnnotation
-      if (property.value.this) {
+      if (value.this) {
         this.raise(
           property.kind === "get"
             ? FlowErrors.GetterMayNotHaveThisParam
             : FlowErrors.SetterMayNotHaveThisParam,
-          // @ts-expect-error fix: this is not defined in AnyTypeAnnotation
-          property.value.this,
+          value.this,
         );
       }
 
@@ -1423,8 +1424,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         );
       }
 
-      // @ts-expect-error fix: rest is not defined in AnyTypeAnnotation
-      if (property.kind === "set" && property.value.rest) {
+      if (property.kind === "set" && value.rest) {
         this.raise(Errors.BadSetterRestParameter, property);
       }
     }
