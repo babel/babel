@@ -1978,14 +1978,27 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (this.match(tt.colon)) {
         const typeNode = this.startNode<N.TypeAnnotation>();
 
-        [
-          typeNode.typeAnnotation,
-          // @ts-expect-error predicate may not exist
-          node.predicate,
-        ] = this.flowParseTypeAndPredicateInitialiser(true) as [
-          N.FlowType,
-          N.FlowPredicate,
-        ];
+        if (
+          type === "FunctionDeclaration" ||
+          type === "FunctionExpression" ||
+          type === "ArrowFunctionExpression"
+        ) {
+          [
+            typeNode.typeAnnotation,
+            (
+              node as Undone<
+                | N.FunctionDeclaration
+                | N.FunctionExpression
+                | N.ArrowFunctionExpression
+              >
+            ).predicate,
+          ] = this.flowParseTypeAndPredicateInitialiser(true) as [
+            N.FlowType,
+            N.FlowPredicate,
+          ];
+        } else {
+          typeNode.typeAnnotation = this.flowParseTypeInitialiser();
+        }
 
         node.returnType = typeNode.typeAnnotation
           ? this.finishNode(typeNode, "TypeAnnotation")
@@ -2982,7 +2995,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): void {
       super.parseVarId(decl, kind);
       if (this.match(tt.colon)) {
-        // @ts-expect-error typeAnnotation is not defined on array pattern
+        // @ts-expect-error typeAnnotation is not defined on VoidPattern
         decl.id.typeAnnotation = this.flowParseTypeAnnotation();
         this.resetEndLocation(decl.id); // set end position to end of type
       }
@@ -3595,20 +3608,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }: {
       enumName: string;
       explicitType: EnumExplicitType;
-    }): {
-      members: {
-        booleanMembers: Extract<N.EnumMember, { type: "EnumBooleanMember" }>[];
-        numberMembers: Extract<N.EnumMember, { type: "EnumNumberMember" }>[];
-        stringMembers: Extract<N.EnumMember, { type: "EnumStringMember" }>[];
-        defaultedMembers: Extract<
-          N.EnumMember,
-          { type: "EnumDefaultedMember" }
-        >[];
-      };
-      hasUnknownMembers: boolean;
-    } {
+    }) {
       const seenNames = new Set();
-      const members = {
+      const members: {
+        booleanMembers: N.EnumBooleanMember[];
+        numberMembers: N.EnumNumberMember[];
+        stringMembers: N.EnumStringMember[];
+        defaultedMembers: N.EnumDefaultedMember[];
+      } = {
         booleanMembers: [],
         numberMembers: [],
         stringMembers: [],
@@ -3651,8 +3658,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             );
             (memberNode as Undone<N.EnumBooleanMember>).init = init.value;
             members.booleanMembers.push(
-              // @ts-expect-error NodeAny not supported
-              this.finishNode(memberNode, "EnumBooleanMember"),
+              this.finishNode(
+                memberNode as Undone<N.EnumBooleanMember>,
+                "EnumBooleanMember",
+              ),
             );
             break;
           }
@@ -3660,8 +3669,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.flowEnumCheckExplicitTypeMismatch(init.loc, context, "number");
             (memberNode as Undone<N.EnumNumberMember>).init = init.value;
             members.numberMembers.push(
-              // @ts-expect-error NodeAny not supported
-              this.finishNode(memberNode, "EnumNumberMember"),
+              this.finishNode(
+                memberNode as Undone<N.EnumNumberMember>,
+                "EnumNumberMember",
+              ),
             );
             break;
           }
@@ -3669,8 +3680,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.flowEnumCheckExplicitTypeMismatch(init.loc, context, "string");
             (memberNode as Undone<N.EnumStringMember>).init = init.value;
             members.stringMembers.push(
-              // @ts-expect-error NodeAny not supported
-              this.finishNode(memberNode, "EnumStringMember"),
+              this.finishNode(
+                memberNode as Undone<N.EnumStringMember>,
+                "EnumStringMember",
+              ),
             );
             break;
           }
@@ -3690,8 +3703,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
                 break;
               default:
                 members.defaultedMembers.push(
-                  // @ts-expect-error NodeAny not supported
-                  this.finishNode(memberNode, "EnumDefaultedMember"),
+                  this.finishNode(
+                    memberNode as Undone<N.EnumDefaultedMember>,
+                    "EnumDefaultedMember",
+                  ),
                 );
             }
           }
