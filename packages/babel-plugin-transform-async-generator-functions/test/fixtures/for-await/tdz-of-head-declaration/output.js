@@ -10,8 +10,9 @@ function _method() {
     var _didIteratorError = false;
     var _iteratorError;
     var _object;
-    {
+    init: {
       _object = x(a);
+      break init;
       let a;
     }
     try {

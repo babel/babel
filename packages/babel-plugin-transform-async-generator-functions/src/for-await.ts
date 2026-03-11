@@ -29,38 +29,6 @@ const buildForAwait = template(`
   }
 `);
 
-// Per spec (ForIn/OfHeadEvaluation), const/let ForDeclarations create a TDZ
-// scope before the iterable expression is evaluated. Check if the iterable
-// expression references any of the declared binding names to determine if a
-// TDZ wrapper is needed to preserve this behavior after transformation.
-function nodeReferencesNames(node: t.Node, names: Set<string>): boolean {
-  if (t.isIdentifier(node)) return names.has(node.name);
-
-  const keys = t.VISITOR_KEYS[node.type];
-  if (!keys) return false;
-
-  for (const key of keys) {
-    const child = (node as unknown as Record<string, unknown>)[key];
-    if (Array.isArray(child)) {
-      for (const item of child) {
-        if (
-          (item as t.Node)?.type &&
-          nodeReferencesNames(item as t.Node, names)
-        ) {
-          return true;
-        }
-      }
-    } else if (
-      (child as t.Node)?.type &&
-      nodeReferencesNames(child as t.Node, names)
-    ) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
 export default function (
   path: NodePath<t.ForOfStatement>,
   { getAsyncIterator }: { getAsyncIterator: t.Identifier },
@@ -84,10 +52,11 @@ export default function (
     ]);
   }
 
-  // When the for-await has a const/let declaration whose bound names appear
-  // in the iterable expression, we must wrap the iterator initialization in a
-  // block that creates TDZ bindings for those names, matching the spec's
-  // ForIn/OfHeadEvaluation behavior.
+  // Per spec (ForIn/OfHeadEvaluation), const/let ForDeclarations create a TDZ
+  // scope before the iterable expression is evaluated. When bound names from
+  // the ForDeclaration are referenced in the iterable expression, wrap the
+  // iterator initialization in a labeled block with a break so that the let
+  // declarations are never reached and bindings stay in TDZ permanently.
   let object: t.Expression = node.right;
   let tdzNodes: t.Statement[] | undefined;
 
@@ -95,26 +64,37 @@ export default function (
     const boundNames = Object.keys(
       t.getBindingIdentifiers(left.declarations[0].id),
     );
-    if (boundNames.length > 0) {
-      const nameSet = new Set(boundNames);
-      if (nodeReferencesNames(node.right, nameSet)) {
-        const objectUid = scope.generateUidIdentifier("object");
-        tdzNodes = [
-          // var _object;
-          t.variableDeclaration("var", [t.variableDeclarator(objectUid)]),
-          // { _object = EXPR; let name1, name2, ...; }
+    const rightPath = path.get("right");
+    const needsTDZ = boundNames.some(name => {
+      const binding = scope.getBinding(name);
+      return binding?.referencePaths.some(
+        refPath =>
+          refPath.node === rightPath.node || refPath.isDescendant(rightPath),
+      );
+    });
+
+    if (needsTDZ) {
+      const objectUid = scope.generateUidIdentifier("object");
+      const initLabel = t.identifier("init");
+      tdzNodes = [
+        // var _object;
+        t.variableDeclaration("var", [t.variableDeclarator(objectUid)]),
+        // init: { _object = EXPR; break init; let name1, name2, ...; }
+        t.labeledStatement(
+          initLabel,
           t.blockStatement([
             t.expressionStatement(
               t.assignmentExpression("=", t.cloneNode(objectUid), node.right),
             ),
+            t.breakStatement(t.cloneNode(initLabel)),
             t.variableDeclaration(
               "let",
               boundNames.map(name => t.variableDeclarator(t.identifier(name))),
             ),
           ]),
-        ];
-        object = t.cloneNode(objectUid);
-      }
+        ),
+      ];
+      object = t.cloneNode(objectUid);
     }
   }
 
