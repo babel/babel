@@ -11,16 +11,9 @@ requireOfJsonFileWithoutResolveJsonModule.ts
 strictModeReservedWordInModuleDeclaration.ts
 
 
-# 132 valid programs produced a parsing error
+# 117 valid programs produced a parsing error
 
-ArrowFunctionExpression1.ts
-MemberAccessorDeclaration15.ts
-ParameterList13.ts
-ParameterList4.ts
-ParameterList5.ts
-ParameterList6.ts
 accessorBodyInTypeContext.ts
-accessorParameterAccessibilityModifier.ts
 anyDeclare.ts
 asiAbstract.ts
 augmentedTypesClass.ts
@@ -44,7 +37,6 @@ constDeclarations-validContexts.ts
 declarationEmitDestructuring2.ts
 declarationEmitDestructuringParameterProperties.ts
 declarationEmitDestructuringWithOptionalBindingParameters.ts
-declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts
 declareModifierOnImport1.ts
 decoratorsOnComputedProperties.ts
 decrementAndIncrementOperators.ts
@@ -86,13 +78,11 @@ importAndVariableDeclarationConflict3.ts
 importAssertionNonstring.ts
 importDeclWithClassModifiers.ts
 importDeclWithDeclareModifierInAmbientContext.ts
-indexSignatureWithAccessibilityModifier.ts
 indexSignatureWithInitializer1.ts
 indexSignatureWithTrailingComma.ts
 indexTypeCheck.ts
 indexWithoutParamType.ts
 indexerSignatureWithRestParam.ts
-interfaceMayNotBeExtendedWitACall.ts
 interfaceNaming1.ts
 interfaceWithImplements1.ts
 invalidOptionalChainFromNewExpression.ts
@@ -123,7 +113,6 @@ nameCollisions.ts
 nonMergedOverloads.ts
 optionalChainWithInstantiationExpression1.ts
 parameterInitializerBeforeDestructuringEmit.ts
-parameterPropertyOutsideConstructor.ts
 parseInvalidNonNullableTypes.ts
 parseInvalidNullableTypes.ts
 parserConstructorDeclaration12.ts
@@ -132,10 +121,8 @@ reExportGlobalDeclaration2.ts
 reExportGlobalDeclaration3.ts
 reExportGlobalDeclaration4.ts
 reExportUndefined1.ts
-readonlyInNonPropertyParameters.ts
 redeclareParameterInCatchBlock.ts
 regularExpressionScanning.ts
-restParamModifier2.ts
 shadowedReservedCompilerDeclarationsWithNoEmit.ts
 sourceMap-LineBreaks.ts
 sourceMapValidationDecorators.ts
@@ -144,4 +131,3 @@ strictOptionalProperties1.ts
 superCallFromClassThatHasNoBaseType1.ts
 superNewCall1.ts
 unicodeEscapesInNames02.ts
-varArgConstructorMemberParameter.ts

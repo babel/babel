@@ -75,6 +75,7 @@ export default [
   "TS1260", // Keywords cannot contain escape characters.
   "TS1308", // 'await' expression is only allowed within an async function.
   "TS1312", // '=' can only be used in an object literal property inside a destructuring assignment.
+  "TS1317", // A parameter property cannot be declared using a rest parameter.
   "TS1384", // A 'new' expression with type arguments must always be followed by a parenthesized argument list.
   "TS1385", // Function type notation must be parenthesized when used in a union type.
   "TS1386", // Constructor type notation must be parenthesized when used in a union type.
@@ -88,13 +89,14 @@ export default [
   "TS2337", // Super calls are not permitted outside constructors or in nested functions inside constructors.
   // "TS2340", // Only public and protected methods of the base class are accessible via the 'super' keyword.
   "TS2364", // The left-hand side of an assignment expression must be a variable or a property access.
-  // "TS2369", // A parameter property is only allowed in a constructor implementation.
+  "TS2369", // A parameter property is only allowed in a constructor implementation.
   // "TS2371", // A parameter initializer is only allowed in a function or constructor implementation.
   //"TS2393", // Duplicate function implementation.
   "TS2396", // Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
   // "TS2440", // Import declaration conflicts with local declaration of '{0}'.
   // "TS2451", // Cannot redeclare block-scoped variable '{0}'.
   "TS2452", // An enum member cannot have a numeric name.
+  "TS2499", // An interface can only extend an identifier/qualified-name with optional type arguments.
   // "TS2552", // Cannot find name 'foo'. Did you mean 'zoo'?
   "TS2566", // A rest element cannot have a property name.
   //"TS2580",

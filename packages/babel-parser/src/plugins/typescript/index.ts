@@ -2506,6 +2506,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             ? "TSDeclareMethod"
             : undefined;
       if (bodilessType && !this.match(tt.braceL) && this.isLineTerminator()) {
+        if (
+          bodilessType === "TSDeclareMethod" &&
+          (node as Undone<N.TSDeclareMethod>).kind === "constructor"
+        ) {
+          for (const param of node.params) {
+            if (param.type === "TSParameterProperty") {
+              this.raise(TSErrors.UnexpectedParameterModifier, param);
+            }
+          }
+        }
         return this.finishNode(node, bodilessType);
       }
       if (bodilessType === "TSDeclareFunction" && this.state.isAmbientContext) {
@@ -2761,18 +2771,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
           return this.tsParseType();
         });
-        this.finishNode(
+        const result = this.finishNode(
           node,
           isSatisfies! ? "TSSatisfiesExpression" : "TSAsExpression",
         );
         // rescan `<`, `>` because they were scanned when this.state.inType was true
         this.reScan_lt_gt();
-        return this.parseExprOp(
-          // @ts-expect-error todo(flow->ts)
-          node,
-          leftStartLoc,
-          minPrec,
-        );
+        return this.parseExprOp(result, leftStartLoc, minPrec);
       }
 
       return super.parseExprOp(left, leftStartLoc, minPrec);
