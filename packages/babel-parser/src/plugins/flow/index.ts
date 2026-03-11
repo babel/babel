@@ -2388,6 +2388,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       isStatement: boolean,
       optionalId?: boolean | null,
     ) {
+      if ((!isStatement || optionalId) && this.isContextual(tt._implements)) {
+        node.id = null;
+        return;
+      }
       super.parseClassId(node, isStatement, optionalId);
       if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
