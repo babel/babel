@@ -79,7 +79,6 @@ ts_syntax/in_out_variance.js
 ts_syntax/readonly_type.js
 ts_syntax/readonly_variance.js
 ts_syntax/satisfies.js
-ts_syntax/type_param_extends.js
 type_guards/arrows.js
 type_guards/asserts_is.js
 type_guards/callback.js
