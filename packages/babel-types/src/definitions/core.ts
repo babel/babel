@@ -746,7 +746,7 @@ defineType("LogicalExpression", {
 });
 
 defineType("MemberExpression", {
-  builder: ["object", "property", "computed", ...[]],
+  builder: ["object", "property", "computed"],
   visitor: ["object", "property"],
   aliases: ["Expression", "LVal", "PatternLike"],
   ...memberExpressionUnionShapeCommon,
@@ -854,7 +854,6 @@ defineType("ObjectMethod", {
           const validator = node.computed ? computed : normal;
           validator(node, key, val);
         };
-        // todo(ts): can be discriminated union by `computed` property
         validator.oneOfNodeTypes = [
           "Expression",
           "Identifier",
@@ -885,36 +884,8 @@ defineType("ObjectMethod", {
 });
 
 defineType("ObjectProperty", {
-  builder: ["key", "value", "computed", "shorthand", ...[]],
-  unionShape: {
-    discriminator: "computed",
-    shapes: [
-      {
-        name: "computed",
-        value: [true],
-        properties: {
-          key: {
-            validate: assertNodeType("Expression"),
-          },
-        },
-      },
-      {
-        name: "nonComputed",
-        value: [false],
-        properties: {
-          key: {
-            validate: assertNodeType(
-              "Identifier",
-              "StringLiteral",
-              "NumericLiteral",
-              "BigIntLiteral",
-              "PrivateName",
-            ),
-          },
-        },
-      },
-    ],
-  },
+  builder: ["key", "value", "computed", "shorthand"],
+  ...classMethodOrPropertyUnionShapeCommon(true),
   fields: {
     computed: {
       default: false,
@@ -937,7 +908,6 @@ defineType("ObjectProperty", {
             validator(node, key, val);
           } satisfies ValidatorImpl,
           {
-            // todo(ts): can be discriminated union by `computed` property
             oneOfNodeTypes: [
               "Expression",
               "Identifier",
