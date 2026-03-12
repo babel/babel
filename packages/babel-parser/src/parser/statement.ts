@@ -2441,7 +2441,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   parseExportDefaultExpression(
     this: Parser,
-  ): N.ExportDefaultDeclaration["declaration"] | N.EnumDeclaration {
+  ): N.ExportDefaultDeclaration["declaration"] {
     const expr = this.startNode();
 
     if (this.match(tt._function)) {
@@ -2473,7 +2473,6 @@ export default abstract class StatementParser extends ExpressionParser {
         this.chStartsBindingIdentifier(nextCh, next)
       ) {
         this.expectPlugin("structs");
-        // @ts-expect-error Fixme: StructionDeclaration should be added to ExportDefaultDeclaration.declaration
         return this.parseStructDeclaration(
           expr as Undone<N.StructDeclaration>,
           true,

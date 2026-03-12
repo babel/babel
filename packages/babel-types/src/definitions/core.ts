@@ -1535,6 +1535,7 @@ defineType("ExportDefaultDeclaration", {
       "FunctionDeclaration",
       "ClassDeclaration",
       "Expression",
+      "StructDeclaration",
       "TSDeclareFunction",
       "TSInterfaceDeclaration",
       "EnumDeclaration",

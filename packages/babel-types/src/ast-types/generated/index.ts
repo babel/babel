@@ -879,6 +879,7 @@ export interface ExportDefaultDeclaration extends BaseNode {
     | FunctionDeclaration
     | ClassDeclaration
     | Expression
+    | StructDeclaration
     | TSDeclareFunction
     | TSInterfaceDeclaration
     | EnumDeclaration;
@@ -6299,6 +6300,7 @@ export interface ParentMaps {
   StructDeclaration:
     | BlockStatement
     | DoWhileStatement
+    | ExportDefaultDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
