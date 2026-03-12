@@ -54,7 +54,7 @@ export type ParseErrorConstructor<ErrorDetails> = (
   loc: Position,
   pos: number,
   details: ErrorDetails,
-  filename: string | undefined,
+  filename: string | null | undefined,
 ) => ParseError;
 
 type ToMessage<ErrorDetails> = (self: ErrorDetails) => string;
