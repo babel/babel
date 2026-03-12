@@ -1445,14 +1445,14 @@ export default abstract class Tokenizer extends CommentsParser {
         : typeof at === "number"
           ? this.getLoc(at)
           : this.optionFlags & OptionFlags.Locations
-            ? at.loc.start
-            : this.getLoc(at.start);
+            ? at.loc!.start
+            : this.getLoc(at.start!);
     const pos =
       at instanceof Position
         ? loc.index
         : typeof at === "number"
           ? at
-          : at.start;
+          : at.start!;
     const error = toParseError(loc, pos, details);
 
     if (!(this.optionFlags & OptionFlags.ErrorRecovery)) throw error;
@@ -1476,9 +1476,9 @@ export default abstract class Tokenizer extends CommentsParser {
       at instanceof Position
         ? at
         : this.optionFlags & OptionFlags.Locations
-          ? at.loc.start
-          : this.getLoc(at.start);
-    const pos = at instanceof Position ? loc.index : at.start;
+          ? at.loc!.start
+          : this.getLoc(at.start!);
+    const pos = at instanceof Position ? loc.index : at.start!;
     const errors = this.state.errors;
 
     for (let i = errors.length - 1; i >= 0; i--) {
@@ -1507,7 +1507,7 @@ export default abstract class Tokenizer extends CommentsParser {
     );
   }
 
-  expectPlugin(pluginName: Plugin, loc?: Position | number): true {
+  expectPlugin(pluginName: Plugin, loc?: Position | number | null): true {
     if (this.hasPlugin(pluginName)) {
       return true;
     }

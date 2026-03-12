@@ -3,7 +3,7 @@ import { SourceLocation, type Position } from "../util/location.ts";
 import type {
   Comment,
   Node as NodeType,
-  NodeBase,
+  BaseNode,
   EstreeLiteral,
   Identifier,
   Placeholder,
@@ -13,7 +13,7 @@ import { OptionFlags } from "../options.ts";
 
 // Start an AST node, attaching a start offset.
 
-class Node implements NodeBase {
+class Node implements BaseNode {
   constructor(
     optionFlags: OptionFlags,
     filename: string | undefined | null,
@@ -78,14 +78,14 @@ export abstract class NodeUtils extends UtilParser {
       return new Node(
         optionFlags,
         filename,
-        type.start,
+        type.start!,
       ) as unknown as Undone<T>;
     }
     return new Node(
       optionFlags,
       filename,
-      type.start,
-      type.loc.start,
+      type.start!,
+      type.loc!.start,
     ) as unknown as Undone<T>;
   }
 
@@ -102,7 +102,7 @@ export abstract class NodeUtils extends UtilParser {
     type: T["type"],
     endLoc: Position,
   ): T {
-    if (!process.env.IS_PUBLISH && node.end > 0) {
+    if (!process.env.IS_PUBLISH && node.end! > 0) {
       throw new Error(
         "Do not call finishNode*() twice on the same node." +
           " Instead use resetEndLocation() or change type directly.",
@@ -112,7 +112,7 @@ export abstract class NodeUtils extends UtilParser {
     node.end = endLoc.index;
     const { optionFlags } = this;
     if (optionFlags & OptionFlags.Locations) {
-      node.loc.end = this.createPosition(endLoc);
+      node.loc!.end = this.createPosition(endLoc);
     }
     if (optionFlags & OptionFlags.Ranges) node.range![1] = endLoc.index;
     if (optionFlags & OptionFlags.AttachComment) this.processComment(node as T);
@@ -124,7 +124,7 @@ export abstract class NodeUtils extends UtilParser {
     type: T["type"],
     endNode: NodeType,
   ): T {
-    if (process.env.NODE_ENV !== "production" && node.end > 0) {
+    if (!process.env.IS_PUBLISH && node.end! > 0) {
       throw new Error(
         "Do not call finishNode*() twice on the same node." +
           " Instead use resetEndLocation() or change type directly.",
@@ -134,30 +134,30 @@ export abstract class NodeUtils extends UtilParser {
     node.end = endNode.end;
     const { optionFlags } = this;
     if (optionFlags & OptionFlags.Locations) {
-      node.loc.end = endNode.loc.end;
+      node.loc!.end = endNode.loc!.end;
     }
-    if (optionFlags & OptionFlags.Ranges) node.range![1] = node.end;
+    if (optionFlags & OptionFlags.Ranges) node.range![1] = node.end!;
     if (optionFlags & OptionFlags.AttachComment) this.processComment(node as T);
     return node as T;
   }
 
-  resetStartLocation(node: NodeBase, startLoc: Position): void {
+  resetStartLocation(node: BaseNode, startLoc: Position): void {
     node.start = startLoc.index;
     const { optionFlags } = this;
     if (optionFlags & OptionFlags.Locations) {
-      node.loc.start = this.createPosition(startLoc);
+      node.loc!.start = this.createPosition(startLoc);
     }
     if (optionFlags & OptionFlags.Ranges) node.range![0] = startLoc.index;
   }
 
   resetEndLocation(
-    node: NodeBase,
+    node: BaseNode,
     endLoc: Position = this.state.lastTokEndLoc!,
   ): void {
     node.end = endLoc.index;
     const { optionFlags } = this;
     if (optionFlags & OptionFlags.Locations) {
-      node.loc.end = this.createPosition(endLoc);
+      node.loc!.end = this.createPosition(endLoc);
     }
     if (optionFlags & OptionFlags.Ranges) node.range![1] = endLoc.index;
   }
@@ -165,22 +165,22 @@ export abstract class NodeUtils extends UtilParser {
   /**
    * Reset the start location of node to the start location of locationNode
    */
-  resetStartLocationFromNode(node: NodeBase, locationNode: NodeBase): void {
+  resetStartLocationFromNode(node: BaseNode, locationNode: BaseNode): void {
     node.start = locationNode.start;
     const { optionFlags } = this;
     if (optionFlags & OptionFlags.Locations) {
-      node.loc.start = locationNode.loc.start;
+      node.loc!.start = locationNode.loc!.start;
     }
-    if (optionFlags & OptionFlags.Ranges) node.range![0] = locationNode.start;
+    if (optionFlags & OptionFlags.Ranges) node.range![0] = locationNode.start!;
   }
 
-  resetEndLocationFromNode(node: NodeBase, locationNode: NodeBase): void {
+  resetEndLocationFromNode(node: BaseNode, locationNode: BaseNode): void {
     node.end = locationNode.end;
     const { optionFlags } = this;
     if (optionFlags & OptionFlags.Locations) {
-      node.loc.end = locationNode.loc.end;
+      node.loc!.end = locationNode.loc!.end;
     }
-    if (optionFlags & OptionFlags.Ranges) node.range![1] = locationNode.end;
+    if (optionFlags & OptionFlags.Ranges) node.range![1] = locationNode.end!;
   }
 
   castNodeTo<T extends NodeType["type"]>(

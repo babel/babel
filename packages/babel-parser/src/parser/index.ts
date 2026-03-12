@@ -82,13 +82,16 @@ export default class Parser extends StatementParser {
     const file = this.startNode<N.File>();
     const program = this.startNode<N.Program>();
     this.nextToken();
+    // @ts-expect-error "errors" does not exist on type "File"
     file.errors = [];
-    const result = this.parseTopLevel(file, program);
+    const result = this.parseTopLevel(file, program) as ParseResult<File>;
     result.errors = this.state.errors;
+    // @ts-expect-error todo: check if comments exist when `options.attachComment` is false
     result.comments.length = this.state.commentsLen;
     if (this.options.locations === "packed") {
+      // @ts-expect-error "locData" does not exist on type "File"
       result.locData = resetLocData();
     }
-    return result as ParseResult<File>;
+    return result;
   }
 }
