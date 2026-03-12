@@ -711,8 +711,26 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     base: N.Expression | N.Super | N.Import,
     startLoc: Position,
+    noCalls?: false | null,
+  ): N.Expression;
+  parseSubscripts(
+    this: Parser,
+    base: N.Expression | N.Super | N.Import,
+    startLoc: Position,
+    noCalls: true,
+  ): N.Expression | N.Super | N.Import;
+  parseSubscripts(
+    this: Parser,
+    base: N.Expression | N.Super | N.Import,
+    startLoc: Position,
     noCalls?: boolean | null,
-  ): N.Expression {
+  ): N.Expression | N.Super | N.Import;
+  parseSubscripts(
+    this: Parser,
+    base: N.Expression | N.Super | N.Import,
+    startLoc: Position,
+    noCalls?: boolean | null,
+  ) {
     const state = {
       optionalChainMember: false,
       maybeAsyncArrow: this.atPossibleAsyncArrow(base),
@@ -741,7 +759,7 @@ export default abstract class ExpressionParser extends LValParser {
     const { type } = this.state;
     if (!noCalls && type === tt.doubleColon) {
       // super:: or import:: are not allowed
-      return this.parseBind(base as N.Expression, startLoc, noCalls, state);
+      return this.parseBind(base as N.Expression, startLoc, state);
     } else if (tokenIsTemplate(type)) {
       return this.parseTaggedTemplateExpression(
         base as N.Expression,
@@ -839,18 +857,26 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     base: N.Expression,
     startLoc: Position,
-    noCalls: boolean | undefined | null,
     state: N.ParseSubscriptState,
   ): N.Expression {
     const node = this.startNodeAt<N.BindExpression>(startLoc);
     node.object = base;
     this.next(); // eat '::'
-    node.callee = this.parseNoCallExpr() as N.Expression;
+    const callee = this.parseNoCallExpr();
+    if (
+      callee.type === "Super" ||
+      callee.type === "Import" ||
+      callee.type === "ImportExpression"
+    ) {
+      throw this.raise(Errors.UnsupportedBind, callee);
+    }
+    node.callee = callee;
+
     state.stop = true;
     return this.parseSubscripts(
       this.finishNode(node, "BindExpression"),
       startLoc,
-      noCalls,
+      false,
     );
   }
 
@@ -1876,6 +1902,9 @@ export default abstract class ExpressionParser extends LValParser {
       (callee.type === "Import" || callee.type === "ImportExpression")
     ) {
       this.raise(Errors.ImportCallNotNewExpression, callee);
+    }
+    if (callee.type === "Super") {
+      this.raise(Errors.SuperCallNotNewExpression, callee);
     }
   }
 

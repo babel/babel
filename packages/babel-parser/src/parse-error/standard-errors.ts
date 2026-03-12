@@ -216,6 +216,7 @@ export default {
   SourcePhaseImportRequiresDefault:
     'Only `import source x from "./module"` is valid.',
   StaticPrototype: "Classes may not have static property named prototype.",
+  SuperCallNotNewExpression: "Cannot use new with super(...).",
   SuperNotAllowed:
     "`super()` is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class?",
   SuperPrivateField: "Private fields can't be accessed on super.",
