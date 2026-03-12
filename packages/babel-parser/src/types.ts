@@ -47,7 +47,7 @@ export interface NumericLiteral extends N.NumericLiteral {
   extra: {
     rawValue: number;
     raw: string;
-  }
+  };
 }
 
 // ================
