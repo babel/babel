@@ -96,7 +96,7 @@ export default (superClass: typeof Parser) =>
 
     parseExprAtom(
       refExpressionErrors?: ExpressionErrors | null,
-    ): MaybePlaceholder<"Expression"> | N.Super {
+    ): MaybePlaceholder<"Expression"> | N.Super | N.Import {
       return (
         this.parsePlaceholder("Expression") ||
         super.parseExprAtom(refExpressionErrors)

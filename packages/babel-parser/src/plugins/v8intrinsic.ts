@@ -29,7 +29,7 @@ export default (superClass: typeof Parser) =>
 
     parseExprAtom(
       refExpressionErrors?: ExpressionErrors | null,
-    ): N.Expression | N.Super {
+    ): N.Expression | N.Super | N.Import {
       return (
         this.parseV8Intrinsic() || super.parseExprAtom(refExpressionErrors)
       );

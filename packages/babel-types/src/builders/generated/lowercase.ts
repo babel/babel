@@ -156,7 +156,7 @@ export function breakStatement(
   return node;
 }
 export function callExpression(
-  callee: t.Expression | t.Super | t.V8IntrinsicIdentifier,
+  callee: t.Expression | t.Super | t.Import | t.V8IntrinsicIdentifier,
   _arguments: (t.Expression | t.SpreadElement | t.ArgumentPlaceholder)[],
 ): t.CallExpression {
   const node: t.CallExpression = {
@@ -496,7 +496,7 @@ export function memberExpression(
   return node;
 }
 export function newExpression(
-  callee: t.Expression | t.Super | t.V8IntrinsicIdentifier,
+  callee: t.Expression | t.Super | t.Import | t.V8IntrinsicIdentifier,
   _arguments: (t.Expression | t.SpreadElement | t.ArgumentPlaceholder)[],
 ): t.NewExpression {
   const node: t.NewExpression = {
@@ -1142,20 +1142,6 @@ export function importSpecifier(
   validate(defs.imported, node, "imported", imported, 1);
   return node;
 }
-export function importExpression(
-  source: t.Expression,
-  options: t.Expression | null = null,
-): t.ImportExpression {
-  const node: t.ImportExpression = {
-    type: "ImportExpression",
-    source,
-    options,
-  };
-  const defs = NODE_FIELDS.ImportExpression;
-  validate(defs.source, node, "source", source, 1);
-  validate(defs.options, node, "options", options, 1);
-  return node;
-}
 export function metaProperty(
   meta: t.Identifier,
   property: t.Identifier,
@@ -1331,6 +1317,20 @@ export function awaitExpression(argument: t.Expression): t.AwaitExpression {
   };
   const defs = NODE_FIELDS.AwaitExpression;
   validate(defs.argument, node, "argument", argument, 1);
+  return node;
+}
+export function importExpression(
+  source: t.Expression,
+  options: t.Expression | null = null,
+): t.ImportExpression {
+  const node: t.ImportExpression = {
+    type: "ImportExpression",
+    source,
+    options,
+  };
+  const defs = NODE_FIELDS.ImportExpression;
+  validate(defs.source, node, "source", source, 1);
+  validate(defs.options, node, "options", options, 1);
   return node;
 }
 function _import(): t.Import {

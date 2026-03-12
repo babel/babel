@@ -240,7 +240,12 @@ defineType("CallExpression", {
   aliases: ["Expression"],
   fields: {
     callee: {
-      validate: assertNodeType("Expression", "Super", "V8IntrinsicIdentifier"),
+      validate: assertNodeType(
+        "Expression",
+        "Super",
+        "Import",
+        "V8IntrinsicIdentifier",
+      ),
     },
     arguments: validateArrayOfType(
       "Expression",
@@ -1766,24 +1771,6 @@ defineType("ImportSpecifier", {
   },
 });
 
-defineType("ImportExpression", {
-  visitor: ["source", "options"],
-  aliases: ["Expression"],
-  fields: {
-    phase: {
-      default: null,
-      validate: assertOneOf("source", "defer"),
-    },
-    source: {
-      validate: assertNodeType("Expression"),
-    },
-    options: {
-      validate: assertNodeType("Expression"),
-      optional: true,
-    },
-  },
-});
-
 defineType("MetaProperty", {
   visitor: ["meta", "property"],
   aliases: ["Expression"],
@@ -1955,11 +1942,7 @@ defineType("SpreadElement", {
   },
 });
 
-defineType(
-  "Super",
-
-  undefined,
-);
+defineType("Super");
 
 defineType("TaggedTemplateExpression", {
   visitor: ["tag", "typeArguments", "quasi"],
@@ -2107,9 +2090,28 @@ defineType("AwaitExpression", {
 });
 
 // --- ES2019 ---
-defineType("Import", {
+defineType("ImportExpression", {
+  visitor: ["source", "options"],
   aliases: ["Expression"],
+  fields: {
+    phase: {
+      default: null,
+      validate: assertOneOf("source", "defer"),
+    },
+    source: {
+      validate: assertNodeType("Expression"),
+    },
+    options: {
+      validate: assertNodeType("Expression"),
+      optional: true,
+    },
+  },
 });
+
+/**
+ * @deprecated Use `ImportExpression` instead.
+ */
+defineType("Import");
 
 // --- ES2020 ---
 defineType("BigIntLiteral", {

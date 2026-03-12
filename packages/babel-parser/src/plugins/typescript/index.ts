@@ -274,7 +274,7 @@ function tsIsVarianceAnnotations(
 }
 
 function tsIsEntityName(
-  node: N.Expression | N.Super,
+  node: N.Expression | N.Super | N.Import,
 ): node is N.MemberExpression | N.Identifier | N.TSInstantiationExpression {
   if (node.extra?.parenthesized) {
     return false;
@@ -4708,7 +4708,7 @@ function isNegativeNumber(
 }
 
 function isUncomputedMemberExpressionChain(
-  expression: N.Expression | N.Super,
+  expression: N.Expression | N.Super | N.Import,
 ): boolean {
   if (expression.type === "Identifier") return true;
   if (expression.type !== "MemberExpression" || expression.computed) {

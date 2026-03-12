@@ -1151,23 +1151,6 @@ export function isImportSpecifier<Opts extends Options<t.ImportSpecifier>>(
 
   return opts == null || shallowEqual(node, opts);
 }
-export function isImportExpression(
-  node: t.Node | null | undefined,
-): node is t.ImportExpression;
-export function isImportExpression<Opts extends Options<t.ImportExpression>>(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): node is t.ImportExpression & Opts;
-export function isImportExpression<Opts extends Options<t.ImportExpression>>(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ImportExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
-}
 export function isMetaProperty(
   node: t.Node | null | undefined,
 ): node is t.MetaProperty;
@@ -1334,6 +1317,23 @@ export function isAwaitExpression<Opts extends Options<t.AwaitExpression>>(
   if (!node) return false;
 
   if (node.type !== "AwaitExpression") return false;
+
+  return opts == null || shallowEqual(node, opts);
+}
+export function isImportExpression(
+  node: t.Node | null | undefined,
+): node is t.ImportExpression;
+export function isImportExpression<Opts extends Options<t.ImportExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.ImportExpression & Opts;
+export function isImportExpression<Opts extends Options<t.ImportExpression>>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): boolean {
+  if (!node) return false;
+
+  if (node.type !== "ImportExpression") return false;
 
   return opts == null || shallowEqual(node, opts);
 }
@@ -4395,7 +4395,6 @@ export function isStandardized<Opts extends Options<t.Standardized>>(
     case "ImportDefaultSpecifier":
     case "ImportNamespaceSpecifier":
     case "ImportSpecifier":
-    case "ImportExpression":
     case "MetaProperty":
     case "ClassMethod":
     case "ObjectPattern":
@@ -4406,6 +4405,7 @@ export function isStandardized<Opts extends Options<t.Standardized>>(
     case "TemplateLiteral":
     case "YieldExpression":
     case "AwaitExpression":
+    case "ImportExpression":
     case "Import":
     case "BigIntLiteral":
     case "ExportNamespaceSpecifier":
@@ -4472,13 +4472,12 @@ export function isExpression<Opts extends Options<t.Expression>>(
     case "UpdateExpression":
     case "ArrowFunctionExpression":
     case "ClassExpression":
-    case "ImportExpression":
     case "MetaProperty":
     case "TaggedTemplateExpression":
     case "TemplateLiteral":
     case "YieldExpression":
     case "AwaitExpression":
-    case "Import":
+    case "ImportExpression":
     case "BigIntLiteral":
     case "OptionalMemberExpression":
     case "OptionalCallExpression":

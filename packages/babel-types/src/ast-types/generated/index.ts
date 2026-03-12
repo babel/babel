@@ -396,7 +396,7 @@ export interface BreakStatement extends BaseNode {
 
 export interface CallExpression extends BaseNode {
   type: "CallExpression";
-  callee: Expression | Super | V8IntrinsicIdentifier;
+  callee: Expression | Super | Import | V8IntrinsicIdentifier;
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
   typeArguments?:
     | TypeParameterInstantiation
@@ -585,7 +585,7 @@ export type MemberExpression =
 
 export interface NewExpression extends BaseNode {
   type: "NewExpression";
-  callee: Expression | Super | V8IntrinsicIdentifier;
+  callee: Expression | Super | Import | V8IntrinsicIdentifier;
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
   typeArguments?:
     | TypeParameterInstantiation
@@ -959,13 +959,6 @@ export interface ImportSpecifier extends BaseNode {
   importKind?: "type" | "typeof" | "value" | null;
 }
 
-export interface ImportExpression extends BaseNode {
-  type: "ImportExpression";
-  source: Expression;
-  options?: Expression | null;
-  phase?: "source" | "defer" | null;
-}
-
 export interface MetaProperty extends BaseNode {
   type: "MetaProperty";
   meta: Identifier;
@@ -1068,6 +1061,13 @@ export interface YieldExpression extends BaseNode {
 export interface AwaitExpression extends BaseNode {
   type: "AwaitExpression";
   argument: Expression;
+}
+
+export interface ImportExpression extends BaseNode {
+  type: "ImportExpression";
+  source: Expression;
+  options?: Expression | null;
+  phase?: "source" | "defer" | null;
 }
 
 export interface Import extends BaseNode {
@@ -2315,7 +2315,6 @@ export type Standardized =
   | ImportDefaultSpecifier
   | ImportNamespaceSpecifier
   | ImportSpecifier
-  | ImportExpression
   | MetaProperty
   | ClassMethod
   | ObjectPattern
@@ -2326,6 +2325,7 @@ export type Standardized =
   | TemplateLiteral
   | YieldExpression
   | AwaitExpression
+  | ImportExpression
   | Import
   | BigIntLiteral
   | ExportNamespaceSpecifier
@@ -2361,13 +2361,12 @@ export type Expression =
   | UpdateExpression
   | ArrowFunctionExpression
   | ClassExpression
-  | ImportExpression
   | MetaProperty
   | TaggedTemplateExpression
   | TemplateLiteral
   | YieldExpression
   | AwaitExpression
-  | Import
+  | ImportExpression
   | BigIntLiteral
   | OptionalMemberExpression
   | OptionalCallExpression
@@ -4650,69 +4649,7 @@ export interface ParentMaps {
     | TSModuleBlock
     | WhileStatement
     | WithStatement;
-  Import:
-    | ArrayExpression
-    | ArrowFunctionExpression
-    | AssignmentExpression
-    | AssignmentPattern
-    | AwaitExpression
-    | BinaryExpression
-    | BindExpression
-    | CallExpression
-    | ClassAccessorProperty
-    | ClassDeclaration
-    | ClassExpression
-    | ClassMethod
-    | ClassPrivateProperty
-    | ClassProperty
-    | ConditionalExpression
-    | DeclaredPredicate
-    | Decorator
-    | DoWhileStatement
-    | ExportDefaultDeclaration
-    | ExpressionStatement
-    | ForInStatement
-    | ForOfStatement
-    | ForStatement
-    | IfStatement
-    | ImportExpression
-    | JSXExpressionContainer
-    | JSXSpreadAttribute
-    | JSXSpreadChild
-    | LogicalExpression
-    | MemberExpression
-    | NewExpression
-    | ObjectMethod
-    | ObjectProperty
-    | OptionalCallExpression
-    | OptionalMemberExpression
-    | ParenthesizedExpression
-    | ReturnStatement
-    | SequenceExpression
-    | SpreadElement
-    | SwitchCase
-    | SwitchStatement
-    | TSAsExpression
-    | TSClassImplements
-    | TSDeclareMethod
-    | TSEnumMember
-    | TSExportAssignment
-    | TSInstantiationExpression
-    | TSInterfaceHeritage
-    | TSMethodSignature
-    | TSNonNullExpression
-    | TSPropertySignature
-    | TSSatisfiesExpression
-    | TSTypeAssertion
-    | TaggedTemplateExpression
-    | TemplateLiteral
-    | ThrowStatement
-    | TypeCastExpression
-    | UnaryExpression
-    | VariableDeclarator
-    | WhileStatement
-    | WithStatement
-    | YieldExpression;
+  Import: CallExpression | NewExpression;
   ImportAttribute:
     | DeclareExportAllDeclaration
     | DeclareExportDeclaration

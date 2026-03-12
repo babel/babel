@@ -146,7 +146,7 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   shouldExitDescending(
-    expr: N.Expression | N.PrivateName | N.Super,
+    expr: N.Expression | N.PrivateName | N.Super | N.Import,
   ): expr is N.ArrowFunctionExpression {
     return (
       expr.type === "ArrowFunctionExpression" && !expr.extra?.parenthesized
@@ -709,7 +709,7 @@ export default abstract class ExpressionParser extends LValParser {
 
   parseSubscripts(
     this: Parser,
-    base: N.Expression | N.Super,
+    base: N.Expression | N.Super | N.Import,
     startLoc: Position,
     noCalls?: boolean | null,
   ): N.Expression {
@@ -733,14 +733,14 @@ export default abstract class ExpressionParser extends LValParser {
    */
   parseSubscript(
     this: Parser,
-    base: N.Expression | N.Super,
+    base: N.Expression | N.Super | N.Import,
     startLoc: Position,
     noCalls: boolean | undefined | null,
     state: N.ParseSubscriptState,
   ): N.Expression {
     const { type } = this.state;
     if (!noCalls && type === tt.doubleColon) {
-      // super:: is not allowed
+      // super:: or import:: are not allowed
       return this.parseBind(base as N.Expression, startLoc, noCalls, state);
     } else if (tokenIsTemplate(type)) {
       return this.parseTaggedTemplateExpression(
@@ -774,7 +774,13 @@ export default abstract class ExpressionParser extends LValParser {
     } else {
       const computed = this.eat(tt.bracketL);
       if (computed || optional || this.eat(tt.dot)) {
-        return this.parseMember(base, startLoc, state, computed, optional);
+        return this.parseMember(
+          base as N.Expression | N.Super,
+          startLoc,
+          state,
+          computed,
+          optional,
+        );
       } else {
         return this.stopParseSubscript(base as N.Expression, state);
       }
@@ -839,7 +845,7 @@ export default abstract class ExpressionParser extends LValParser {
     const node = this.startNodeAt<N.BindExpression>(startLoc);
     node.object = base;
     this.next(); // eat '::'
-    node.callee = this.parseNoCallExpr();
+    node.callee = this.parseNoCallExpr() as N.Expression;
     state.stop = true;
     return this.parseSubscripts(
       this.finishNode(node, "BindExpression"),
@@ -854,7 +860,7 @@ export default abstract class ExpressionParser extends LValParser {
   // OptionalChain[?Yield, ?Await] Arguments[?Yield, ?Await]
   parseCoverCallAndAsyncArrowHead(
     this: Parser,
-    base: N.Expression | N.Super,
+    base: N.Expression | N.Super | N.Import,
     startLoc: Position,
     state: N.ParseSubscriptState,
     optional: boolean,
@@ -933,7 +939,7 @@ export default abstract class ExpressionParser extends LValParser {
     return this.finishNode(node, "TaggedTemplateExpression");
   }
 
-  atPossibleAsyncArrow(base: N.Expression | N.Super): boolean {
+  atPossibleAsyncArrow(base: N.Expression | N.Super | N.Import): boolean {
     return (
       base.type === "Identifier" &&
       base.name === "async" &&
@@ -1034,7 +1040,7 @@ export default abstract class ExpressionParser extends LValParser {
 
   // Parse a no-call expression (like argument of `new` or `::` operators).
   // https://tc39.es/ecma262/#prod-MemberExpression
-  parseNoCallExpr(this: Parser): N.Expression {
+  parseNoCallExpr(this: Parser): N.Expression | N.Super | N.Import {
     const startLoc = this.state.startLoc;
     return this.parseSubscripts(this.parseExprAtom(), startLoc, true);
   }
@@ -1054,7 +1060,7 @@ export default abstract class ExpressionParser extends LValParser {
   parseExprAtom(
     this: Parser,
     refExpressionErrors?: ExpressionErrors | null,
-  ): N.Expression | N.Super {
+  ): N.Expression | N.Super | N.Import {
     let node;
     let decorators: N.Decorator[] | null = null;
 
@@ -1160,6 +1166,8 @@ export default abstract class ExpressionParser extends LValParser {
         node = this.startNode<N.BindExpression>();
         this.next();
         node.object = null;
+        // @ts-expect-error Accept expression, super and import as callee to
+        // throw a recoverable error later
         const callee = (node.callee = this.parseNoCallExpr());
         if (callee.type === "MemberExpression") {
           return this.finishNode(node, "BindExpression");
