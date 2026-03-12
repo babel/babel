@@ -5,12 +5,12 @@ module.exports = function (babel) {
     visitor: {
       Program(path) {
         const { file } = this;
-        const { sourceFileName } = file.opts.generatorOpts;
+        const { sourceFilename } = file.opts.generatorOpts;
 
         // This injects the sourcesContent, though I don't imagine anyone's
         // doing it.
         file.code = {
-            [sourceFileName]: file.code,
+            [sourceFilename]: file.code,
             'test.js': '<bar />',
         };
       },

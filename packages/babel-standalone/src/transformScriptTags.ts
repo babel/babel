@@ -93,7 +93,7 @@ function buildBabelOptions(
     presets,
     plugins,
     sourceMaps: "inline" as const,
-    sourceFileName: filename,
+    sourceFilename: filename,
     targets,
   };
 }

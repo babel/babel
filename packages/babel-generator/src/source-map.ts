@@ -1,3 +1,4 @@
+import path from "node:path";
 import {
   GenMapping,
   maybeAddMapping,
@@ -27,7 +28,22 @@ import { originalPositionFor, TraceMap } from "@jridgewell/trace-mapping";
 export default class SourceMap {
   private _map: GenMapping;
   private _rawMappings: Mapping[] | undefined;
-  private _sourceFileName: string | undefined;
+
+  // The source filename used in the source map's "sources" array.
+  // This is the "normalized" version: if sourceRoot is set, it's
+  // relative to sourceRoot; if the path is absolute with no sourceRoot,
+  // it's reduced to its basename. Relative paths are kept as-is.
+  #sourceFilename: string | undefined;
+
+  // The original absolute filename (opts.filename, or opts.sourceFilename
+  // as a fallback), converted to a POSIX path.
+  // This is used in #resolveSourceFilename to detect when a node's
+  // loc.filename refers to the main source file, so we can map it back
+  // to the normalized #sourceFilename instead of creating a duplicate
+  // source entry.
+  #rawSourceFilename: string | undefined;
+
+  private _sourceRoot: string | undefined;
 
   // Any real line is > 0, so init to 0 is fine.
   private _lastGenLine = 0;
@@ -41,14 +57,22 @@ export default class SourceMap {
 
   constructor(
     opts: {
-      sourceFileName?: string;
+      filename?: string; // The complete filename
+      sourceFilename?: string; // The name for `sources` in the source map
       sourceRoot?: string;
       inputSourceMap?: SourceMapInput;
     },
     code: string | Record<string, string> | null | undefined,
   ) {
     const map = (this._map = new GenMapping({ sourceRoot: opts.sourceRoot }));
-    this._sourceFileName = opts.sourceFileName?.replace(/\\/g, "/");
+    this._sourceRoot = opts.sourceRoot;
+    this.#rawSourceFilename = (opts.filename ?? opts.sourceFilename)?.replace(
+      /\\/g,
+      "/",
+    );
+    this.#sourceFilename = this.#normalizeFilename(
+      opts.sourceFilename?.replace(/\\/g, "/"),
+    );
     this._rawMappings = undefined;
 
     if (opts.inputSourceMap) {
@@ -67,7 +91,7 @@ export default class SourceMap {
     }
 
     if (typeof code === "string" && !opts.inputSourceMap) {
-      setSourceContent(map, this._sourceFileName!, code);
+      setSourceContent(map, this.#sourceFilename!, code);
     } else if (typeof code === "object") {
       for (const sourceFileName of Object.keys(code!)) {
         setSourceContent(
@@ -92,6 +116,33 @@ export default class SourceMap {
 
   getRawMappings(): Mapping[] {
     return (this._rawMappings ||= allMappings(this._map));
+  }
+
+  #normalizeFilename(filename: string | undefined): string | undefined {
+    if (filename && path.isAbsolute(filename)) {
+      if (this._sourceRoot) {
+        return path.relative(this._sourceRoot, filename);
+      }
+      return path.basename(filename);
+    }
+    return filename;
+  }
+
+  /**
+   * Resolve the source filename for a mapping entry. If the loc filename
+   * matches the main source file (raw or normalized), use _sourceFilename.
+   * Otherwise normalize it as a secondary source.
+   */
+  #resolveSourceFilename(filename: string | null | undefined): string {
+    if (!filename) return this.#sourceFilename!;
+    const normalized = filename.replace(/\\/g, "/");
+    if (
+      normalized === this.#rawSourceFilename ||
+      normalized === this.#sourceFilename
+    ) {
+      return this.#sourceFilename!;
+    }
+    return this.#normalizeFilename(normalized) ?? normalized;
   }
 
   /**
@@ -138,7 +189,7 @@ export default class SourceMap {
       } else {
         originalMapping = {
           name: null,
-          source: filename?.replace(/\\/g, "/") || this._sourceFileName!,
+          source: this.#resolveSourceFilename(filename),
           line: line,
           column: column!,
         };

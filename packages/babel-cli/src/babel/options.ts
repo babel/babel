@@ -289,7 +289,7 @@ export default function parseArgv(args: string[]): CmdOptions | null {
     auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
     auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
     sourceMaps: opts.sourceMaps,
-    sourceFileName: opts.sourceFileName,
+    sourceFilename: opts.sourceFilename,
     sourceRoot: opts.sourceRoot,
 
     // Commander will default the "--no-" arguments to true, but we want to

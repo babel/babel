@@ -2,7 +2,6 @@
   "type": "File",
   "start": 0,
   "end": 91,
-  "errors": [],
   "loc": {
     "start": {
       "line": 1,
@@ -15,6 +14,7 @@
       "index": 91
     }
   },
+  "errors": [],
   "program": {
     "type": "Program",
     "start": 0,
@@ -31,8 +31,8 @@
         "index": 91
       }
     },
-    "interpreter": null,
     "sourceType": "module",
+    "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
@@ -270,6 +270,7 @@
                     },
                     "name": "target"
                   },
+                  "computed": false,
                   "property": {
                     "type": "Identifier",
                     "start": 71,
@@ -288,8 +289,7 @@
                       "identifierName": "annotated"
                     },
                     "name": "annotated"
-                  },
-                  "computed": false
+                  }
                 },
                 "right": {
                   "type": "BooleanLiteral",
