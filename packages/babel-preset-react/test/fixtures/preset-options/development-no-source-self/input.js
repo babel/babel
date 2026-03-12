@@ -1,0 +1,1 @@
+<Foo bar="baz" />
