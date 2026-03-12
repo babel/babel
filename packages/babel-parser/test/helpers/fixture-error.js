@@ -68,9 +68,9 @@ Object.assign(
   FixtureError,
   mapEntries(
     {
-      DifferentError: ({ expected }) =>
+      DifferentError: ({ expected, actual }) =>
         `Expected unrecoverable error:    \n\n${expected}\n\n` +
-        `But instead encountered different unrecoverable error.`,
+        `But instead encountered different unrecoverable error.:\n\n${actual}\n\n`,
 
       DifferentAST: ({ message }) => message,
 
