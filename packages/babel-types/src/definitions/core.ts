@@ -1556,7 +1556,23 @@ defineType("ExportNamedDeclaration", {
               throw new TypeError("Cannot export a declaration from a source");
             }
           } satisfies ValidatorImpl,
-          { oneOfNodeTypes: ["Declaration"] as const },
+          {
+            oneOfNodeTypes: [
+              "VariableDeclaration",
+              "FunctionDeclaration",
+              "ClassDeclaration",
+              "TSDeclareFunction",
+              "TSEnumDeclaration",
+              "TSImportEqualsDeclaration",
+              "TSInterfaceDeclaration",
+              "TSModuleDeclaration",
+              "TSTypeAliasDeclaration",
+              "EnumDeclaration",
+              "InterfaceDeclaration",
+              "OpaqueType",
+              "TypeAlias",
+            ] as const,
+          },
         ) satisfies ValidatorOneOfNodeTypes,
       ),
     },

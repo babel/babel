@@ -321,6 +321,7 @@ export default (superClass: typeof Parser) =>
         // export %%DECL%%;
         node2.specifiers = [];
         node2.source = null;
+        // @ts-expect-error Consider refine placeholder types here to ExportNamedDeclaration["declaration"].
         node2.declaration = this.finishPlaceholder(placeholder, "Declaration");
         return this.finishNode(node2, "ExportNamedDeclaration");
       }

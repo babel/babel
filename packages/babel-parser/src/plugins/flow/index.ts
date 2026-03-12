@@ -2304,7 +2304,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseExportDeclaration(
       node: N.ExportNamedDeclaration,
-    ): N.Declaration | undefined | null {
+    ): N.ExportNamedDeclaration["declaration"] | undefined {
       if (this.isContextual(tt._type)) {
         node.exportKind = "type";
 

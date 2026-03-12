@@ -2435,7 +2435,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this: Parser,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     node: Undone<N.ExportNamedDeclaration>,
-  ): N.Declaration | undefined | null {
+  ): N.ExportNamedDeclaration["declaration"] | undefined {
     if (this.match(tt._class)) {
       const node = this.parseClass(
         this.startNode<N.ClassDeclaration>(),
@@ -2444,7 +2444,7 @@ export default abstract class StatementParser extends ExpressionParser {
       );
       return node;
     }
-    return this.parseStatementListItem() as N.Declaration;
+    return this.parseStatementListItem() as N.ExportNamedDeclaration["declaration"];
   }
 
   isExportDefaultSpecifier(): boolean {

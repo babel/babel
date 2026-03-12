@@ -1005,7 +1005,21 @@ export function exportDefaultDeclaration(
   return node;
 }
 export function exportNamedDeclaration(
-  declaration: t.Declaration | null = null,
+  declaration:
+    | t.VariableDeclaration
+    | t.FunctionDeclaration
+    | t.ClassDeclaration
+    | t.TSDeclareFunction
+    | t.TSEnumDeclaration
+    | t.TSImportEqualsDeclaration
+    | t.TSInterfaceDeclaration
+    | t.TSModuleDeclaration
+    | t.TSTypeAliasDeclaration
+    | t.EnumDeclaration
+    | t.InterfaceDeclaration
+    | t.OpaqueType
+    | t.TypeAlias
+    | null = null,
   specifiers: (
     | t.ExportSpecifier
     | t.ExportDefaultSpecifier

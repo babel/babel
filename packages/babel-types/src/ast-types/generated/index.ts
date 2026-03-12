@@ -879,7 +879,21 @@ export interface ExportDefaultDeclaration extends BaseNode {
 
 export interface ExportNamedDeclaration extends BaseNode {
   type: "ExportNamedDeclaration";
-  declaration?: Declaration | null;
+  declaration?:
+    | VariableDeclaration
+    | FunctionDeclaration
+    | ClassDeclaration
+    | TSDeclareFunction
+    | TSEnumDeclaration
+    | TSImportEqualsDeclaration
+    | TSInterfaceDeclaration
+    | TSModuleDeclaration
+    | TSTypeAliasDeclaration
+    | EnumDeclaration
+    | InterfaceDeclaration
+    | OpaqueType
+    | TypeAlias
+    | null;
   specifiers: (
     | ExportSpecifier
     | ExportDefaultSpecifier
@@ -3917,7 +3931,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -3933,7 +3946,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -3949,7 +3961,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -3965,7 +3976,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -3981,7 +3991,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -3997,7 +4006,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4013,7 +4021,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4029,7 +4036,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4045,7 +4051,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4061,7 +4066,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4268,7 +4272,6 @@ export interface ParentMaps {
   ExportAllDeclaration:
     | BlockStatement
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4283,7 +4286,6 @@ export interface ParentMaps {
   ExportDefaultDeclaration:
     | BlockStatement
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4299,7 +4301,6 @@ export interface ParentMaps {
   ExportNamedDeclaration:
     | BlockStatement
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4711,7 +4712,6 @@ export interface ParentMaps {
   ImportDeclaration:
     | BlockStatement
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement

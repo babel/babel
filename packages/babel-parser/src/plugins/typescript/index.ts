@@ -2252,7 +2252,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     // Note: this won't be called unless the keyword is allowed in `shouldParseExportDeclaration`.
-    tsTryParseExportDeclaration(): N.Declaration | null | undefined {
+    tsTryParseExportDeclaration() {
       return this.tsParseDeclaration(
         this.startNode(),
         this.state.type,
@@ -3341,7 +3341,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseExportDeclaration(
       node: N.ExportNamedDeclaration,
-    ): N.Declaration | undefined | null {
+    ): N.ExportNamedDeclaration["declaration"] | undefined {
       if (!this.state.isAmbientContext && this.isContextual(tt._declare)) {
         return this.tsInAmbientContext(() => this.parseExportDeclaration(node));
       }
@@ -3362,7 +3362,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       const isIdentifier = tokenIsIdentifier(this.state.type);
-      const declaration: N.Declaration | undefined | null =
+      const declaration: N.ExportNamedDeclaration["declaration"] | undefined =
         (isIdentifier && this.tsTryParseExportDeclaration()) ||
         super.parseExportDeclaration(node);
 
