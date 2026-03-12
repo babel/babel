@@ -169,7 +169,6 @@ defineType("BinaryExpression", {
             const validator = node.operator === "in" ? inOp : expression;
             validator(node, key, val);
           } satisfies ValidatorImpl,
-          // todo(ts): can be discriminated union by `operator` property
           { oneOfNodeTypes: ["Expression", "PrivateName"] as const },
         );
         return validator;
@@ -178,6 +177,29 @@ defineType("BinaryExpression", {
     right: {
       validate: assertNodeType("Expression"),
     },
+  },
+  unionShape: {
+    discriminator: "operator",
+    shapes: [
+      {
+        name: "in",
+        value: ["in"],
+        properties: {
+          left: {
+            validate: assertNodeType("Expression", "PrivateName"),
+          },
+        },
+      },
+      {
+        name: "notIn",
+        value: BINARY_OPERATORS.filter(op => op !== "in"),
+        properties: {
+          left: {
+            validate: assertNodeType("Expression"),
+          },
+        },
+      },
+    ],
   },
   visitor: ["left", "right"],
   aliases: ["Binary", "Expression"],

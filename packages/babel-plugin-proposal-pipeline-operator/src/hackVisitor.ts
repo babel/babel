@@ -81,12 +81,7 @@ const visitor: Visitor<PluginPass> = {
       // Replace the pipe expression itself with an assignment expression.
       path.replaceWith(
         t.sequenceExpression([
-          t.assignmentExpression(
-            "=",
-            t.cloneNode(topicVariable),
-            // @ts-expect-error node.left must not be a PrivateName when operator is |>
-            node.left,
-          ),
+          t.assignmentExpression("=", t.cloneNode(topicVariable), node.left),
           node.right,
         ]),
       );

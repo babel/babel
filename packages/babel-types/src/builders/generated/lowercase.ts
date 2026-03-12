@@ -64,6 +64,93 @@ export function assignmentExpression(
   return node;
 }
 export function binaryExpression(
+  operator: "in",
+  left: t.Expression | t.PrivateName,
+  right: t.Expression,
+): Extract<t.BinaryExpression, { operator: "in" }>;
+export function binaryExpression(
+  operator:
+    | "+"
+    | "-"
+    | "/"
+    | "%"
+    | "*"
+    | "**"
+    | "&"
+    | "|"
+    | ">>"
+    | ">>>"
+    | "<<"
+    | "^"
+    | "=="
+    | "==="
+    | "!="
+    | "!=="
+    | "instanceof"
+    | ">"
+    | "<"
+    | ">="
+    | "<="
+    | "|>",
+  left: t.Expression,
+  right: t.Expression,
+): Extract<
+  t.BinaryExpression,
+  {
+    operator:
+      | "+"
+      | "-"
+      | "/"
+      | "%"
+      | "*"
+      | "**"
+      | "&"
+      | "|"
+      | ">>"
+      | ">>>"
+      | "<<"
+      | "^"
+      | "=="
+      | "==="
+      | "!="
+      | "!=="
+      | "instanceof"
+      | ">"
+      | "<"
+      | ">="
+      | "<="
+      | "|>";
+  }
+>;
+export function binaryExpression(
+  operator:
+    | "+"
+    | "-"
+    | "/"
+    | "%"
+    | "*"
+    | "**"
+    | "&"
+    | "|"
+    | ">>"
+    | ">>>"
+    | "<<"
+    | "^"
+    | "=="
+    | "==="
+    | "!="
+    | "!=="
+    | "in"
+    | "instanceof"
+    | ">"
+    | "<"
+    | ">="
+    | "<="
+    | "|>",
+  left: t.Expression | t.PrivateName,
+  right: t.Expression,
+): t.BinaryExpression;
+export function binaryExpression(
   operator:
     | "+"
     | "-"
@@ -91,12 +178,12 @@ export function binaryExpression(
   left: t.Expression | t.PrivateName,
   right: t.Expression,
 ): t.BinaryExpression {
-  const node: t.BinaryExpression = {
+  const node = {
     type: "BinaryExpression",
     operator,
     left,
     right,
-  };
+  } as t.BinaryExpression;
   const defs = NODE_FIELDS.BinaryExpression;
   validate(defs.operator, node, "operator", operator);
   validate(defs.left, node, "left", left, 1);

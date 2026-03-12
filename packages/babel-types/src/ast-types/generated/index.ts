@@ -338,8 +338,15 @@ export interface AssignmentExpression extends BaseNode {
   right: Expression;
 }
 
-export interface BinaryExpression extends BaseNode {
+export interface BinaryExpressionIn extends BaseNode {
   type: "BinaryExpression";
+  right: Expression;
+  operator: "in";
+  left: Expression | PrivateName;
+}
+export interface BinaryExpressionNotIn extends BaseNode {
+  type: "BinaryExpression";
+  right: Expression;
   operator:
     | "+"
     | "-"
@@ -357,16 +364,15 @@ export interface BinaryExpression extends BaseNode {
     | "==="
     | "!="
     | "!=="
-    | "in"
     | "instanceof"
     | ">"
     | "<"
     | ">="
     | "<="
     | "|>";
-  left: Expression | PrivateName;
-  right: Expression;
+  left: Expression;
 }
+export type BinaryExpression = BinaryExpressionIn | BinaryExpressionNotIn;
 
 export interface InterpreterDirective extends BaseNode {
   type: "InterpreterDirective";
