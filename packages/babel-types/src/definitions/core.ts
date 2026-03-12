@@ -74,6 +74,32 @@ export const classMethodOrPropertyUnionShapeCommon = (
   },
 });
 
+export const memberExpressionUnionShapeCommon = {
+  unionShape: {
+    discriminator: "computed",
+    shapes: [
+      {
+        name: "computed",
+        value: [true],
+        properties: {
+          property: {
+            validate: assertNodeType("Expression"),
+          },
+        },
+      },
+      {
+        name: "nonComputed",
+        value: [false],
+        properties: {
+          property: {
+            validate: assertNodeType("Identifier", "PrivateName"),
+          },
+        },
+      },
+    ],
+  },
+};
+
 const defineType = defineAliasedType("Standardized");
 
 defineType("ArrayExpression", {
@@ -696,29 +722,7 @@ defineType("MemberExpression", {
   builder: ["object", "property", "computed", ...[]],
   visitor: ["object", "property"],
   aliases: ["Expression", "LVal", "PatternLike"],
-  unionShape: {
-    discriminator: "computed",
-    shapes: [
-      {
-        name: "computed",
-        value: [true],
-        properties: {
-          property: {
-            validate: assertNodeType("Expression"),
-          },
-        },
-      },
-      {
-        name: "nonComputed",
-        value: [false],
-        properties: {
-          property: {
-            validate: assertNodeType("Identifier", "PrivateName"),
-          },
-        },
-      },
-    ],
-  },
+  ...memberExpressionUnionShapeCommon,
   fields: {
     object: {
       validate: assertNodeType("Expression", "Super"),
@@ -736,7 +740,6 @@ defineType("MemberExpression", {
           const validator: Validator = node.computed ? computed : normal;
           validator(node, key, val);
         };
-        // todo(ts): can be discriminated union by `computed` property
         validator.oneOfNodeTypes = ["Expression", "Identifier", "PrivateName"];
         return validator;
       })(),
@@ -2134,13 +2137,14 @@ defineType("OptionalMemberExpression", {
   visitor: ["object", "property"],
   // todo: Add OptionalMemberExpression to LVal when optional-chaining-assign reaches stage 4
   aliases: ["Expression"],
+  ...memberExpressionUnionShapeCommon,
   fields: {
     object: {
       validate: assertNodeType("Expression"),
     },
     property: {
       validate: (function () {
-        const normal = assertNodeType("Identifier");
+        const normal = assertNodeType("Identifier", "PrivateName");
         const computed = assertNodeType("Expression");
 
         const validator: ValidatorOneOfNodeTypes = Object.assign(
@@ -2148,8 +2152,7 @@ defineType("OptionalMemberExpression", {
             const validator = node.computed ? computed : normal;
             validator(node, key, val);
           } satisfies ValidatorImpl,
-          // todo(ts): can be discriminated union by `computed` property
-          { oneOfNodeTypes: ["Expression", "Identifier"] as const },
+          { oneOfNodeTypes: ["Expression", "PrivateName"] as const },
         );
         return validator;
       })(),

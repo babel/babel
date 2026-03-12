@@ -369,7 +369,7 @@ export default declare(api => {
             t.conditionalExpression(test.node, consequent.node, alternate.node),
           );
           return statements;
-        } else if (path.isOptionalMemberExpression() && path.node.computed) {
+        } else if (path.isOptionalMemberExpression({ computed: true })) {
           const object = path.get("object");
           const property = path.get("property");
           const uid = path.scope.generateDeclaredUidIdentifier("do");

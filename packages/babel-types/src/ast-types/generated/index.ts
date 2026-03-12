@@ -1084,13 +1084,23 @@ export interface ExportNamespaceSpecifier extends BaseNode {
   exported: Identifier | StringLiteral;
 }
 
-export interface OptionalMemberExpression extends BaseNode {
+export interface OptionalMemberExpressionComputed extends BaseNode {
   type: "OptionalMemberExpression";
   object: Expression;
-  property: Expression | Identifier;
-  computed: boolean;
   optional: boolean;
+  computed: true;
+  property: Expression;
 }
+export interface OptionalMemberExpressionNonComputed extends BaseNode {
+  type: "OptionalMemberExpression";
+  object: Expression;
+  optional: boolean;
+  computed: false;
+  property: Identifier | PrivateName;
+}
+export type OptionalMemberExpression =
+  | OptionalMemberExpressionComputed
+  | OptionalMemberExpressionNonComputed;
 
 export interface OptionalCallExpression extends BaseNode {
   type: "OptionalCallExpression";
@@ -5985,7 +5995,8 @@ export interface ParentMaps {
     | ClassPrivateMethod
     | ClassPrivateProperty
     | MemberExpression
-    | ObjectProperty;
+    | ObjectProperty
+    | OptionalMemberExpression;
   Program: File | ModuleExpression;
   QualifiedTypeIdentifier:
     | DeclareExportDeclaration

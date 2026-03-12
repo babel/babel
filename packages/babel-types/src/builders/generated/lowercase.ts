@@ -1361,17 +1361,35 @@ export function exportNamespaceSpecifier(
 }
 export function optionalMemberExpression(
   object: t.Expression,
-  property: t.Expression | t.Identifier,
+  property: t.Expression,
+  computed: true | undefined,
+  optional: boolean,
+): Extract<t.OptionalMemberExpression, { computed: true }>;
+export function optionalMemberExpression(
+  object: t.Expression,
+  property: t.Identifier | t.PrivateName,
+  computed: false | undefined,
+  optional: boolean,
+): Extract<t.OptionalMemberExpression, { computed: false }>;
+export function optionalMemberExpression(
+  object: t.Expression,
+  property: t.Expression | t.PrivateName,
+  computed: boolean | undefined,
+  optional: boolean,
+): t.OptionalMemberExpression;
+export function optionalMemberExpression(
+  object: t.Expression,
+  property: t.Expression | t.PrivateName,
   computed: boolean | undefined = false,
   optional: boolean,
 ): t.OptionalMemberExpression {
-  const node: t.OptionalMemberExpression = {
+  const node = {
     type: "OptionalMemberExpression",
     object,
     property,
     computed,
     optional,
-  };
+  } as t.OptionalMemberExpression;
   const defs = NODE_FIELDS.OptionalMemberExpression;
   validate(defs.object, node, "object", object, 1);
   validate(defs.property, node, "property", property, 1);
