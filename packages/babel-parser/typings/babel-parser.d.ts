@@ -214,6 +214,7 @@ type ErrorInfoCompressed = {
   SloppyFunctionAnnexB: [];
   SourcePhaseImportRequiresDefault: [];
   StaticPrototype: [];
+  SuperCallNotNewExpression: [];
   SuperNotAllowed: [];
   SuperPrivateField: [];
   TrailingDecorator: [];
