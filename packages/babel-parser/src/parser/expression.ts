@@ -800,7 +800,12 @@ export default abstract class ExpressionParser extends LValParser {
       this.match(tt.tilde) &&
       !this.hasPrecedingLineBreak()
     ) {
-      return this.parsePartialArguments(base as N.Expression, startLoc, state, optional);
+      return this.parsePartialArguments(
+        base as N.Expression,
+        startLoc,
+        state,
+        optional,
+      );
     } else {
       const computed = this.eat(tt.bracketL);
       if (computed || optional || this.eat(tt.dot)) {
