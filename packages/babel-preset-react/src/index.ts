@@ -8,6 +8,7 @@ import type { PluginItem } from "@babel/core";
 
 export interface Options {
   development?: boolean;
+  developmentSourceSelf?: boolean;
   importSource?: string;
   pragma?: string;
   pragmaFrag?: string;
@@ -25,6 +26,7 @@ export default declarePreset((api, opts: Options) => {
     development = process.env.BABEL_8_BREAKING
       ? api.env(env => env === "development")
       : false,
+    developmentSourceSelf,
     importSource,
     pragma,
     pragmaFrag,
@@ -45,6 +47,7 @@ export default declarePreset((api, opts: Options) => {
               runtime,
               throwIfNamespace,
               pure,
+              sourceSelf: developmentSourceSelf,
             }
           : {
               importSource,
@@ -55,6 +58,7 @@ export default declarePreset((api, opts: Options) => {
               pure,
               useBuiltIns: !!opts.useBuiltIns,
               useSpread: opts.useSpread,
+              sourceSelf: developmentSourceSelf,
             },
       ] satisfies PluginItem,
       transformReactDisplayName,
