@@ -1074,6 +1074,7 @@ export function exportDefaultDeclaration(
     | t.FunctionDeclaration
     | t.ClassDeclaration
     | t.Expression
+    | t.StructDeclaration
     | t.TSDeclareFunction
     | t.TSInterfaceDeclaration
     | t.EnumDeclaration,
