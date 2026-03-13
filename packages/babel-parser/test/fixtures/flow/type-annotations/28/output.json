@@ -49,7 +49,6 @@
                   }
                 }
               ],
-              "predicate": null,
               "returnType": {
                 "type": "TypeAnnotation",
                 "start":36,"end":41,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":41,"index":41}},

@@ -35,7 +35,6 @@
               "generator": false,
               "async": false,
               "params": [],
-              "predicate": null,
               "returnType": {
                 "type": "TypeAnnotation",
                 "start":25,"end":33,"loc":{"start":{"line":2,"column":15,"index":25},"end":{"line":2,"column":23,"index":33}},
