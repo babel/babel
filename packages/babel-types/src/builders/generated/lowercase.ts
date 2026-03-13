@@ -992,6 +992,7 @@ export function exportDefaultDeclaration(
     | t.FunctionDeclaration
     | t.ClassDeclaration
     | t.Expression
+    | t.StructDeclaration
     | t.TSDeclareFunction
     | t.TSInterfaceDeclaration
     | t.EnumDeclaration,
@@ -2703,6 +2704,40 @@ export function voidPattern(): t.VoidPattern {
   return {
     type: "VoidPattern",
   };
+}
+export function structDeclaration(
+  id: t.Identifier | null | undefined = null,
+  superClass: t.Expression | null | undefined = null,
+  body: t.StructBody,
+): t.StructDeclaration {
+  const node: t.StructDeclaration = {
+    type: "StructDeclaration",
+    id,
+    superClass,
+    body,
+  };
+  const defs = NODE_FIELDS.StructDeclaration;
+  validate(defs.id, node, "id", id, 1);
+  validate(defs.superClass, node, "superClass", superClass, 1);
+  validate(defs.body, node, "body", body, 1);
+  return node;
+}
+export function structBody(
+  body: (
+    | t.ClassMethod
+    | t.ClassPrivateMethod
+    | t.ClassProperty
+    | t.ClassPrivateProperty
+    | t.StaticBlock
+  )[],
+): t.StructBody {
+  const node: t.StructBody = {
+    type: "StructBody",
+    body,
+  };
+  const defs = NODE_FIELDS.StructBody;
+  validate(defs.body, node, "body", body, 1);
+  return node;
 }
 export function tsParameterProperty(
   parameter: t.Identifier | t.AssignmentPattern,
