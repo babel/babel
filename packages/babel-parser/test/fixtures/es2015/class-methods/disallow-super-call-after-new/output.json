@@ -1,0 +1,78 @@
+{
+  "type": "File",
+  "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":60}},
+  "errors": [
+    "SyntaxError: Cannot use new with super(...). (2:22)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":60}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":60,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":60}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": {
+          "type": "ClassExpression",
+          "start":16,"end":24,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":24,"index":24}},
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":22,"end":24,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":24,"index":24}},
+            "body": []
+          }
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":25,"end":60,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":3,"column":1,"index":60}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":29,"end":58,"loc":{"start":{"line":2,"column":2,"index":29},"end":{"line":2,"column":31,"index":58}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":29,"end":40,"loc":{"start":{"line":2,"column":2,"index":29},"end":{"line":2,"column":13,"index":40},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":43,"end":58,"loc":{"start":{"line":2,"column":16,"index":43},"end":{"line":2,"column":31,"index":58}},
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start":45,"end":56,"loc":{"start":{"line":2,"column":18,"index":45},"end":{"line":2,"column":29,"index":56}},
+                    "expression": {
+                      "type": "NewExpression",
+                      "start":45,"end":56,"loc":{"start":{"line":2,"column":18,"index":45},"end":{"line":2,"column":29,"index":56}},
+                      "callee": {
+                        "type": "Super",
+                        "start":49,"end":54,"loc":{"start":{"line":2,"column":22,"index":49},"end":{"line":2,"column":27,"index":54}}
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
