@@ -29,7 +29,7 @@ describe("highlight", function () {
       const rawLines = "console.log('babel')";
       const result = codeFrameColumns(
         rawLines,
-        { start: { line: 1, column: 9 } },
+        { start: { line: 1, column: 8 } },
         { highlightCode: true },
       );
       const stripped = stripVTControlCharacters(result);
@@ -56,7 +56,7 @@ describe("highlight", function () {
         {
           start: {
             line: 1,
-            column: 1,
+            column: 0,
           },
           end: {
             line: 3,
@@ -178,7 +178,7 @@ describe("highlight", function () {
       const rawLines = "console.log('babel')";
       const result = codeFrameColumns(
         rawLines,
-        { start: { line: 1, column: 9 } },
+        { start: { line: 1, column: 8 } },
         { highlightCode: true },
       );
       const stripped = stripVTControlCharacters(result);
