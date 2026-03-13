@@ -274,7 +274,7 @@ function tsIsVarianceAnnotations(
 }
 
 function tsIsEntityName(
-  node: N.Expression | N.Super,
+  node: N.Expression | N.Super | N.Import,
 ): node is N.MemberExpression | N.Identifier | N.TSInstantiationExpression {
   if (node.extra?.parenthesized) {
     return false;
@@ -2252,7 +2252,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     // Note: this won't be called unless the keyword is allowed in `shouldParseExportDeclaration`.
-    tsTryParseExportDeclaration(): N.Declaration | null | undefined {
+    tsTryParseExportDeclaration() {
       return this.tsParseDeclaration(
         this.startNode(),
         this.state.type,
@@ -3341,7 +3341,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseExportDeclaration(
       node: N.ExportNamedDeclaration,
-    ): N.Declaration | undefined | null {
+    ): N.ExportNamedDeclaration["declaration"] | undefined {
       if (!this.state.isAmbientContext && this.isContextual(tt._declare)) {
         return this.tsInAmbientContext(() => this.parseExportDeclaration(node));
       }
@@ -3362,7 +3362,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       const isIdentifier = tokenIsIdentifier(this.state.type);
-      const declaration: N.Declaration | undefined | null =
+      const declaration: N.ExportNamedDeclaration["declaration"] | undefined =
         (isIdentifier && this.tsTryParseExportDeclaration()) ||
         super.parseExportDeclaration(node);
 
@@ -4708,7 +4708,7 @@ function isNegativeNumber(
 }
 
 function isUncomputedMemberExpressionChain(
-  expression: N.Expression | N.Super,
+  expression: N.Expression | N.Super | N.Import,
 ): boolean {
   if (expression.type === "Identifier") return true;
   if (expression.type !== "MemberExpression" || expression.computed) {

@@ -28,8 +28,7 @@ const buildOptimizedSequenceExpression = ({
 }: Options) => {
   // @ts-expect-error AwaitExpression does not have callee property
   const { callee: calledExpression } = call;
-  // pipelineLeft must not be a PrivateName
-  const pipelineLeft = path.node.left as t.Expression;
+  const pipelineLeft = path.node.left;
   const assign = t.assignmentExpression(
     "=",
     t.cloneNode(placeholder),

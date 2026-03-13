@@ -64,6 +64,93 @@ export function assignmentExpression(
   return node;
 }
 export function binaryExpression(
+  operator: "in",
+  left: t.Expression | t.PrivateName,
+  right: t.Expression,
+): Extract<t.BinaryExpression, { operator: "in" }>;
+export function binaryExpression(
+  operator:
+    | "+"
+    | "-"
+    | "/"
+    | "%"
+    | "*"
+    | "**"
+    | "&"
+    | "|"
+    | ">>"
+    | ">>>"
+    | "<<"
+    | "^"
+    | "=="
+    | "==="
+    | "!="
+    | "!=="
+    | "instanceof"
+    | ">"
+    | "<"
+    | ">="
+    | "<="
+    | "|>",
+  left: t.Expression,
+  right: t.Expression,
+): Extract<
+  t.BinaryExpression,
+  {
+    operator:
+      | "+"
+      | "-"
+      | "/"
+      | "%"
+      | "*"
+      | "**"
+      | "&"
+      | "|"
+      | ">>"
+      | ">>>"
+      | "<<"
+      | "^"
+      | "=="
+      | "==="
+      | "!="
+      | "!=="
+      | "instanceof"
+      | ">"
+      | "<"
+      | ">="
+      | "<="
+      | "|>";
+  }
+>;
+export function binaryExpression(
+  operator:
+    | "+"
+    | "-"
+    | "/"
+    | "%"
+    | "*"
+    | "**"
+    | "&"
+    | "|"
+    | ">>"
+    | ">>>"
+    | "<<"
+    | "^"
+    | "=="
+    | "==="
+    | "!="
+    | "!=="
+    | "in"
+    | "instanceof"
+    | ">"
+    | "<"
+    | ">="
+    | "<="
+    | "|>",
+  left: t.Expression | t.PrivateName,
+  right: t.Expression,
+): t.BinaryExpression;
+export function binaryExpression(
   operator:
     | "+"
     | "-"
@@ -91,12 +178,12 @@ export function binaryExpression(
   left: t.Expression | t.PrivateName,
   right: t.Expression,
 ): t.BinaryExpression {
-  const node: t.BinaryExpression = {
+  const node = {
     type: "BinaryExpression",
     operator,
     left,
     right,
-  };
+  } as t.BinaryExpression;
   const defs = NODE_FIELDS.BinaryExpression;
   validate(defs.operator, node, "operator", operator);
   validate(defs.left, node, "left", left, 1);
@@ -156,7 +243,7 @@ export function breakStatement(
   return node;
 }
 export function callExpression(
-  callee: t.Expression | t.Super | t.V8IntrinsicIdentifier,
+  callee: t.Expression | t.Super | t.Import | t.V8IntrinsicIdentifier,
   _arguments: (t.Expression | t.SpreadElement | t.ArgumentPlaceholder)[],
 ): t.CallExpression {
   const node: t.CallExpression = {
@@ -496,7 +583,7 @@ export function memberExpression(
   return node;
 }
 export function newExpression(
-  callee: t.Expression | t.Super | t.V8IntrinsicIdentifier,
+  callee: t.Expression | t.Super | t.Import | t.V8IntrinsicIdentifier,
   _arguments: (t.Expression | t.SpreadElement | t.ArgumentPlaceholder)[],
 ): t.NewExpression {
   const node: t.NewExpression = {
@@ -1005,7 +1092,21 @@ export function exportDefaultDeclaration(
   return node;
 }
 export function exportNamedDeclaration(
-  declaration: t.Declaration | null = null,
+  declaration:
+    | t.VariableDeclaration
+    | t.FunctionDeclaration
+    | t.ClassDeclaration
+    | t.TSDeclareFunction
+    | t.TSEnumDeclaration
+    | t.TSImportEqualsDeclaration
+    | t.TSInterfaceDeclaration
+    | t.TSModuleDeclaration
+    | t.TSTypeAliasDeclaration
+    | t.EnumDeclaration
+    | t.InterfaceDeclaration
+    | t.OpaqueType
+    | t.TypeAlias
+    | null = null,
   specifiers: (
     | t.ExportSpecifier
     | t.ExportDefaultSpecifier
@@ -1126,20 +1227,6 @@ export function importSpecifier(
   const defs = NODE_FIELDS.ImportSpecifier;
   validate(defs.local, node, "local", local, 1);
   validate(defs.imported, node, "imported", imported, 1);
-  return node;
-}
-export function importExpression(
-  source: t.Expression,
-  options: t.Expression | null = null,
-): t.ImportExpression {
-  const node: t.ImportExpression = {
-    type: "ImportExpression",
-    source,
-    options,
-  };
-  const defs = NODE_FIELDS.ImportExpression;
-  validate(defs.source, node, "source", source, 1);
-  validate(defs.options, node, "options", options, 1);
   return node;
 }
 export function metaProperty(
@@ -1319,6 +1406,20 @@ export function awaitExpression(argument: t.Expression): t.AwaitExpression {
   validate(defs.argument, node, "argument", argument, 1);
   return node;
 }
+export function importExpression(
+  source: t.Expression,
+  options: t.Expression | null = null,
+): t.ImportExpression {
+  const node: t.ImportExpression = {
+    type: "ImportExpression",
+    source,
+    options,
+  };
+  const defs = NODE_FIELDS.ImportExpression;
+  validate(defs.source, node, "source", source, 1);
+  validate(defs.options, node, "options", options, 1);
+  return node;
+}
 function _import(): t.Import {
   return {
     type: "Import",
@@ -1347,17 +1448,35 @@ export function exportNamespaceSpecifier(
 }
 export function optionalMemberExpression(
   object: t.Expression,
-  property: t.Expression | t.Identifier,
+  property: t.Expression,
+  computed: true | undefined,
+  optional: boolean,
+): Extract<t.OptionalMemberExpression, { computed: true }>;
+export function optionalMemberExpression(
+  object: t.Expression,
+  property: t.Identifier | t.PrivateName,
+  computed: false | undefined,
+  optional: boolean,
+): Extract<t.OptionalMemberExpression, { computed: false }>;
+export function optionalMemberExpression(
+  object: t.Expression,
+  property: t.Expression | t.PrivateName,
+  computed: boolean | undefined,
+  optional: boolean,
+): t.OptionalMemberExpression;
+export function optionalMemberExpression(
+  object: t.Expression,
+  property: t.Expression | t.PrivateName,
   computed: boolean | undefined = false,
   optional: boolean,
 ): t.OptionalMemberExpression {
-  const node: t.OptionalMemberExpression = {
+  const node = {
     type: "OptionalMemberExpression",
     object,
     property,
     computed,
     optional,
-  };
+  } as t.OptionalMemberExpression;
   const defs = NODE_FIELDS.OptionalMemberExpression;
   validate(defs.object, node, "object", object, 1);
   validate(defs.property, node, "property", property, 1);

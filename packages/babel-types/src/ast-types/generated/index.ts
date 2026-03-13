@@ -338,8 +338,15 @@ export interface AssignmentExpression extends BaseNode {
   right: Expression;
 }
 
-export interface BinaryExpression extends BaseNode {
+export interface BinaryExpressionIn extends BaseNode {
   type: "BinaryExpression";
+  right: Expression;
+  operator: "in";
+  left: Expression | PrivateName;
+}
+export interface BinaryExpressionNotIn extends BaseNode {
+  type: "BinaryExpression";
+  right: Expression;
   operator:
     | "+"
     | "-"
@@ -357,16 +364,15 @@ export interface BinaryExpression extends BaseNode {
     | "==="
     | "!="
     | "!=="
-    | "in"
     | "instanceof"
     | ">"
     | "<"
     | ">="
     | "<="
     | "|>";
-  left: Expression | PrivateName;
-  right: Expression;
+  left: Expression;
 }
+export type BinaryExpression = BinaryExpressionIn | BinaryExpressionNotIn;
 
 export interface InterpreterDirective extends BaseNode {
   type: "InterpreterDirective";
@@ -396,7 +402,7 @@ export interface BreakStatement extends BaseNode {
 
 export interface CallExpression extends BaseNode {
   type: "CallExpression";
-  callee: Expression | Super | V8IntrinsicIdentifier;
+  callee: Expression | Super | Import | V8IntrinsicIdentifier;
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
   typeArguments?:
     | TypeParameterInstantiation
@@ -585,7 +591,7 @@ export type MemberExpression =
 
 export interface NewExpression extends BaseNode {
   type: "NewExpression";
-  callee: Expression | Super | V8IntrinsicIdentifier;
+  callee: Expression | Super | Import | V8IntrinsicIdentifier;
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
   typeArguments?:
     | TypeParameterInstantiation
@@ -879,7 +885,21 @@ export interface ExportDefaultDeclaration extends BaseNode {
 
 export interface ExportNamedDeclaration extends BaseNode {
   type: "ExportNamedDeclaration";
-  declaration?: Declaration | null;
+  declaration?:
+    | VariableDeclaration
+    | FunctionDeclaration
+    | ClassDeclaration
+    | TSDeclareFunction
+    | TSEnumDeclaration
+    | TSImportEqualsDeclaration
+    | TSInterfaceDeclaration
+    | TSModuleDeclaration
+    | TSTypeAliasDeclaration
+    | EnumDeclaration
+    | InterfaceDeclaration
+    | OpaqueType
+    | TypeAlias
+    | null;
   specifiers: (
     | ExportSpecifier
     | ExportDefaultSpecifier
@@ -943,13 +963,6 @@ export interface ImportSpecifier extends BaseNode {
   local: Identifier;
   imported: Identifier | StringLiteral;
   importKind?: "type" | "typeof" | "value" | null;
-}
-
-export interface ImportExpression extends BaseNode {
-  type: "ImportExpression";
-  source: Expression;
-  options?: Expression | null;
-  phase?: "source" | "defer" | null;
 }
 
 export interface MetaProperty extends BaseNode {
@@ -1056,6 +1069,13 @@ export interface AwaitExpression extends BaseNode {
   argument: Expression;
 }
 
+export interface ImportExpression extends BaseNode {
+  type: "ImportExpression";
+  source: Expression;
+  options?: Expression | null;
+  phase?: "source" | "defer" | null;
+}
+
 export interface Import extends BaseNode {
   type: "Import";
 }
@@ -1070,13 +1090,23 @@ export interface ExportNamespaceSpecifier extends BaseNode {
   exported: Identifier | StringLiteral;
 }
 
-export interface OptionalMemberExpression extends BaseNode {
+export interface OptionalMemberExpressionComputed extends BaseNode {
   type: "OptionalMemberExpression";
   object: Expression;
-  property: Expression | Identifier;
-  computed: boolean;
   optional: boolean;
+  computed: true;
+  property: Expression;
 }
+export interface OptionalMemberExpressionNonComputed extends BaseNode {
+  type: "OptionalMemberExpression";
+  object: Expression;
+  optional: boolean;
+  computed: false;
+  property: Identifier | PrivateName;
+}
+export type OptionalMemberExpression =
+  | OptionalMemberExpressionComputed
+  | OptionalMemberExpressionNonComputed;
 
 export interface OptionalCallExpression extends BaseNode {
   type: "OptionalCallExpression";
@@ -2291,7 +2321,6 @@ export type Standardized =
   | ImportDefaultSpecifier
   | ImportNamespaceSpecifier
   | ImportSpecifier
-  | ImportExpression
   | MetaProperty
   | ClassMethod
   | ObjectPattern
@@ -2302,6 +2331,7 @@ export type Standardized =
   | TemplateLiteral
   | YieldExpression
   | AwaitExpression
+  | ImportExpression
   | Import
   | BigIntLiteral
   | ExportNamespaceSpecifier
@@ -2337,13 +2367,12 @@ export type Expression =
   | UpdateExpression
   | ArrowFunctionExpression
   | ClassExpression
-  | ImportExpression
   | MetaProperty
   | TaggedTemplateExpression
   | TemplateLiteral
   | YieldExpression
   | AwaitExpression
-  | Import
+  | ImportExpression
   | BigIntLiteral
   | OptionalMemberExpression
   | OptionalCallExpression
@@ -3917,7 +3946,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -3933,7 +3961,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -3949,7 +3976,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -3965,7 +3991,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -3981,7 +4006,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -3997,7 +4021,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4013,7 +4036,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4029,7 +4051,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4045,7 +4066,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4061,7 +4081,6 @@ export interface ParentMaps {
     | BlockStatement
     | DeclareExportDeclaration
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4268,7 +4287,6 @@ export interface ParentMaps {
   ExportAllDeclaration:
     | BlockStatement
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4283,7 +4301,6 @@ export interface ParentMaps {
   ExportDefaultDeclaration:
     | BlockStatement
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4299,7 +4316,6 @@ export interface ParentMaps {
   ExportNamedDeclaration:
     | BlockStatement
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -4639,69 +4655,7 @@ export interface ParentMaps {
     | TSModuleBlock
     | WhileStatement
     | WithStatement;
-  Import:
-    | ArrayExpression
-    | ArrowFunctionExpression
-    | AssignmentExpression
-    | AssignmentPattern
-    | AwaitExpression
-    | BinaryExpression
-    | BindExpression
-    | CallExpression
-    | ClassAccessorProperty
-    | ClassDeclaration
-    | ClassExpression
-    | ClassMethod
-    | ClassPrivateProperty
-    | ClassProperty
-    | ConditionalExpression
-    | DeclaredPredicate
-    | Decorator
-    | DoWhileStatement
-    | ExportDefaultDeclaration
-    | ExpressionStatement
-    | ForInStatement
-    | ForOfStatement
-    | ForStatement
-    | IfStatement
-    | ImportExpression
-    | JSXExpressionContainer
-    | JSXSpreadAttribute
-    | JSXSpreadChild
-    | LogicalExpression
-    | MemberExpression
-    | NewExpression
-    | ObjectMethod
-    | ObjectProperty
-    | OptionalCallExpression
-    | OptionalMemberExpression
-    | ParenthesizedExpression
-    | ReturnStatement
-    | SequenceExpression
-    | SpreadElement
-    | SwitchCase
-    | SwitchStatement
-    | TSAsExpression
-    | TSClassImplements
-    | TSDeclareMethod
-    | TSEnumMember
-    | TSExportAssignment
-    | TSInstantiationExpression
-    | TSInterfaceHeritage
-    | TSMethodSignature
-    | TSNonNullExpression
-    | TSPropertySignature
-    | TSSatisfiesExpression
-    | TSTypeAssertion
-    | TaggedTemplateExpression
-    | TemplateLiteral
-    | ThrowStatement
-    | TypeCastExpression
-    | UnaryExpression
-    | VariableDeclarator
-    | WhileStatement
-    | WithStatement
-    | YieldExpression;
+  Import: CallExpression | NewExpression;
   ImportAttribute:
     | DeclareExportAllDeclaration
     | DeclareExportDeclaration
@@ -4711,7 +4665,6 @@ export interface ParentMaps {
   ImportDeclaration:
     | BlockStatement
     | DoWhileStatement
-    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement
@@ -5985,7 +5938,8 @@ export interface ParentMaps {
     | ClassPrivateMethod
     | ClassPrivateProperty
     | MemberExpression
-    | ObjectProperty;
+    | ObjectProperty
+    | OptionalMemberExpression;
   Program: File | ModuleExpression;
   QualifiedTypeIdentifier:
     | DeclareExportDeclaration

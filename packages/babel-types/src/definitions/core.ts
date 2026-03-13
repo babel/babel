@@ -74,6 +74,32 @@ export const classMethodOrPropertyUnionShapeCommon = (
   },
 });
 
+export const memberExpressionUnionShapeCommon = {
+  unionShape: {
+    discriminator: "computed",
+    shapes: [
+      {
+        name: "computed",
+        value: [true],
+        properties: {
+          property: {
+            validate: assertNodeType("Expression"),
+          },
+        },
+      },
+      {
+        name: "nonComputed",
+        value: [false],
+        properties: {
+          property: {
+            validate: assertNodeType("Identifier", "PrivateName"),
+          },
+        },
+      },
+    ],
+  },
+};
+
 const defineType = defineAliasedType("Standardized");
 
 defineType("ArrayExpression", {
@@ -143,7 +169,6 @@ defineType("BinaryExpression", {
             const validator = node.operator === "in" ? inOp : expression;
             validator(node, key, val);
           } satisfies ValidatorImpl,
-          // todo(ts): can be discriminated union by `operator` property
           { oneOfNodeTypes: ["Expression", "PrivateName"] as const },
         );
         return validator;
@@ -152,6 +177,29 @@ defineType("BinaryExpression", {
     right: {
       validate: assertNodeType("Expression"),
     },
+  },
+  unionShape: {
+    discriminator: "operator",
+    shapes: [
+      {
+        name: "in",
+        value: ["in"],
+        properties: {
+          left: {
+            validate: assertNodeType("Expression", "PrivateName"),
+          },
+        },
+      },
+      {
+        name: "notIn",
+        value: BINARY_OPERATORS.filter(op => op !== "in"),
+        properties: {
+          left: {
+            validate: assertNodeType("Expression"),
+          },
+        },
+      },
+    ],
   },
   visitor: ["left", "right"],
   aliases: ["Binary", "Expression"],
@@ -214,7 +262,12 @@ defineType("CallExpression", {
   aliases: ["Expression"],
   fields: {
     callee: {
-      validate: assertNodeType("Expression", "Super", "V8IntrinsicIdentifier"),
+      validate: assertNodeType(
+        "Expression",
+        "Super",
+        "Import",
+        "V8IntrinsicIdentifier",
+      ),
     },
     arguments: validateArrayOfType(
       "Expression",
@@ -693,32 +746,10 @@ defineType("LogicalExpression", {
 });
 
 defineType("MemberExpression", {
-  builder: ["object", "property", "computed", ...[]],
+  builder: ["object", "property", "computed"],
   visitor: ["object", "property"],
   aliases: ["Expression", "LVal", "PatternLike"],
-  unionShape: {
-    discriminator: "computed",
-    shapes: [
-      {
-        name: "computed",
-        value: [true],
-        properties: {
-          property: {
-            validate: assertNodeType("Expression"),
-          },
-        },
-      },
-      {
-        name: "nonComputed",
-        value: [false],
-        properties: {
-          property: {
-            validate: assertNodeType("Identifier", "PrivateName"),
-          },
-        },
-      },
-    ],
-  },
+  ...memberExpressionUnionShapeCommon,
   fields: {
     object: {
       validate: assertNodeType("Expression", "Super"),
@@ -736,7 +767,6 @@ defineType("MemberExpression", {
           const validator: Validator = node.computed ? computed : normal;
           validator(node, key, val);
         };
-        // todo(ts): can be discriminated union by `computed` property
         validator.oneOfNodeTypes = ["Expression", "Identifier", "PrivateName"];
         return validator;
       })(),
@@ -824,7 +854,6 @@ defineType("ObjectMethod", {
           const validator = node.computed ? computed : normal;
           validator(node, key, val);
         };
-        // todo(ts): can be discriminated union by `computed` property
         validator.oneOfNodeTypes = [
           "Expression",
           "Identifier",
@@ -855,36 +884,8 @@ defineType("ObjectMethod", {
 });
 
 defineType("ObjectProperty", {
-  builder: ["key", "value", "computed", "shorthand", ...[]],
-  unionShape: {
-    discriminator: "computed",
-    shapes: [
-      {
-        name: "computed",
-        value: [true],
-        properties: {
-          key: {
-            validate: assertNodeType("Expression"),
-          },
-        },
-      },
-      {
-        name: "nonComputed",
-        value: [false],
-        properties: {
-          key: {
-            validate: assertNodeType(
-              "Identifier",
-              "StringLiteral",
-              "NumericLiteral",
-              "BigIntLiteral",
-              "PrivateName",
-            ),
-          },
-        },
-      },
-    ],
-  },
+  builder: ["key", "value", "computed", "shorthand"],
+  ...classMethodOrPropertyUnionShapeCommon(true),
   fields: {
     computed: {
       default: false,
@@ -907,7 +908,6 @@ defineType("ObjectProperty", {
             validator(node, key, val);
           } satisfies ValidatorImpl,
           {
-            // todo(ts): can be discriminated union by `computed` property
             oneOfNodeTypes: [
               "Expression",
               "Identifier",
@@ -1556,7 +1556,23 @@ defineType("ExportNamedDeclaration", {
               throw new TypeError("Cannot export a declaration from a source");
             }
           } satisfies ValidatorImpl,
-          { oneOfNodeTypes: ["Declaration"] as const },
+          {
+            oneOfNodeTypes: [
+              "VariableDeclaration",
+              "FunctionDeclaration",
+              "ClassDeclaration",
+              "TSDeclareFunction",
+              "TSEnumDeclaration",
+              "TSImportEqualsDeclaration",
+              "TSInterfaceDeclaration",
+              "TSModuleDeclaration",
+              "TSTypeAliasDeclaration",
+              "EnumDeclaration",
+              "InterfaceDeclaration",
+              "OpaqueType",
+              "TypeAlias",
+            ] as const,
+          },
         ) satisfies ValidatorOneOfNodeTypes,
       ),
     },
@@ -1747,24 +1763,6 @@ defineType("ImportSpecifier", {
   },
 });
 
-defineType("ImportExpression", {
-  visitor: ["source", "options"],
-  aliases: ["Expression"],
-  fields: {
-    phase: {
-      default: null,
-      validate: assertOneOf("source", "defer"),
-    },
-    source: {
-      validate: assertNodeType("Expression"),
-    },
-    options: {
-      validate: assertNodeType("Expression"),
-      optional: true,
-    },
-  },
-});
-
 defineType("MetaProperty", {
   visitor: ["meta", "property"],
   aliases: ["Expression"],
@@ -1936,11 +1934,7 @@ defineType("SpreadElement", {
   },
 });
 
-defineType(
-  "Super",
-
-  undefined,
-);
+defineType("Super");
 
 defineType("TaggedTemplateExpression", {
   visitor: ["tag", "typeArguments", "quasi"],
@@ -2088,9 +2082,28 @@ defineType("AwaitExpression", {
 });
 
 // --- ES2019 ---
-defineType("Import", {
+defineType("ImportExpression", {
+  visitor: ["source", "options"],
   aliases: ["Expression"],
+  fields: {
+    phase: {
+      default: null,
+      validate: assertOneOf("source", "defer"),
+    },
+    source: {
+      validate: assertNodeType("Expression"),
+    },
+    options: {
+      validate: assertNodeType("Expression"),
+      optional: true,
+    },
+  },
 });
+
+/**
+ * @deprecated Use `ImportExpression` instead.
+ */
+defineType("Import");
 
 // --- ES2020 ---
 defineType("BigIntLiteral", {
@@ -2118,13 +2131,14 @@ defineType("OptionalMemberExpression", {
   visitor: ["object", "property"],
   // todo: Add OptionalMemberExpression to LVal when optional-chaining-assign reaches stage 4
   aliases: ["Expression"],
+  ...memberExpressionUnionShapeCommon,
   fields: {
     object: {
       validate: assertNodeType("Expression"),
     },
     property: {
       validate: (function () {
-        const normal = assertNodeType("Identifier");
+        const normal = assertNodeType("Identifier", "PrivateName");
         const computed = assertNodeType("Expression");
 
         const validator: ValidatorOneOfNodeTypes = Object.assign(
@@ -2132,8 +2146,7 @@ defineType("OptionalMemberExpression", {
             const validator = node.computed ? computed : normal;
             validator(node, key, val);
           } satisfies ValidatorImpl,
-          // todo(ts): can be discriminated union by `computed` property
-          { oneOfNodeTypes: ["Expression", "Identifier"] as const },
+          { oneOfNodeTypes: ["Expression", "PrivateName"] as const },
         );
         return validator;
       })(),

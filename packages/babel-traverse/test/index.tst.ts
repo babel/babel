@@ -14,7 +14,23 @@ describe("traverse", () => {
       const path = {} as NodePath<t.ExportDeclaration>;
       const declaration = path.get("declaration");
       expect(declaration).type.toBe<
-        NodePath<t.Declaration | t.Expression | null>
+        NodePath<
+          | t.VariableDeclaration
+          | t.FunctionDeclaration
+          | t.ClassDeclaration
+          | t.TSDeclareFunction
+          | t.TSEnumDeclaration
+          | t.TSImportEqualsDeclaration
+          | t.TSInterfaceDeclaration
+          | t.TSModuleDeclaration
+          | t.TSTypeAliasDeclaration
+          | t.EnumDeclaration
+          | t.InterfaceDeclaration
+          | t.OpaqueType
+          | t.TypeAlias
+          | t.Expression
+          | null
+        >
       >();
     });
 

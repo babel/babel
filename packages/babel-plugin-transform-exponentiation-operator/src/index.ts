@@ -97,13 +97,7 @@ export default declare(api => {
       BinaryExpression(path) {
         const { node } = path;
         if (node.operator === "**") {
-          path.replaceWith(
-            build(
-              // left can be PrivateName only if operator is `"in"`
-              node.left as t.Expression,
-              node.right,
-            ),
-          );
+          path.replaceWith(build(node.left, node.right));
         }
       },
     },

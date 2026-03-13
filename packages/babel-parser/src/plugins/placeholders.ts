@@ -96,7 +96,7 @@ export default (superClass: typeof Parser) =>
 
     parseExprAtom(
       refExpressionErrors?: ExpressionErrors | null,
-    ): MaybePlaceholder<"Expression"> | N.Super {
+    ): MaybePlaceholder<"Expression"> | N.Super | N.Import {
       return (
         this.parsePlaceholder("Expression") ||
         super.parseExprAtom(refExpressionErrors)
@@ -321,6 +321,7 @@ export default (superClass: typeof Parser) =>
         // export %%DECL%%;
         node2.specifiers = [];
         node2.source = null;
+        // @ts-expect-error Consider refine placeholder types here to ExportNamedDeclaration["declaration"].
         node2.declaration = this.finishPlaceholder(placeholder, "Declaration");
         return this.finishNode(node2, "ExportNamedDeclaration");
       }
