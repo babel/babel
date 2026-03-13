@@ -99,6 +99,35 @@ export default declare((api, opts: Options) => {
     return false;
   }
 
+  function isKnownFreshObjectCall(calleePath: NodePath<t.Node>): boolean {
+    if (calleePath.isIdentifier()) {
+      return calleePath.node.name.includes("objectWithoutProperties");
+    }
+    if (calleePath.isMemberExpression()) {
+      const property = calleePath.get("property");
+      if (property.isIdentifier()) {
+        const name = property.node.name;
+        if (name.includes("objectWithoutProperties")) return true;
+        if (name === "default") {
+          const object = calleePath.get("object");
+          if (object.isIdentifier()) {
+            return object.node.name.includes("objectWithoutProperties");
+          }
+        }
+      }
+    }
+    if (calleePath.isSequenceExpression()) {
+      const expressions = calleePath.get("expressions");
+      if (expressions.length > 0) {
+        return isKnownFreshObjectCall(expressions[expressions.length - 1]);
+      }
+    }
+    if (calleePath.isCallExpression()) {
+      return isKnownFreshObjectCall(calleePath.get("callee"));
+    }
+    return false;
+  }
+
   // returns an array of all keys of an object, and a status flag indicating if all extracted keys
   // were converted to stringLiterals or not
   // e.g. extracts {keys: ["a", "b", "3", ++x], allPrimitives: false }
@@ -290,10 +319,10 @@ export default declare((api, opts: Options) => {
     file: PluginPass,
     objRef: t.Identifier | t.MemberExpression,
   ): [
-    t.VariableDeclarator[],
-    t.AssignmentExpression["left"],
-    t.CallExpression,
-  ] {
+      t.VariableDeclarator[],
+      t.AssignmentExpression["left"],
+      t.CallExpression,
+    ] {
     const props = path.get("properties");
     const last = props[props.length - 1];
     t.assertRestElement(last.node);
@@ -852,7 +881,7 @@ export default declare((api, opts: Options) => {
           helper = file.addHelper("objectSpread2");
         }
 
-        let exp: t.CallExpression | null = null;
+        let exp: t.Expression | null = null;
         let props: t.ObjectMember[] = [];
 
         function make() {
@@ -869,25 +898,56 @@ export default declare((api, opts: Options) => {
           // the order of evaluation, we can avoid making multiple calls.
           if (pureGetters) {
             if (hadProps) {
-              exp.arguments.push(obj);
+              if (t.isCallExpression(exp)) {
+                exp.arguments.push(obj);
+              } else {
+                exp = t.callExpression(t.cloneNode(helper), [
+                  exp,
+                  t.objectExpression([]),
+                  obj
+                ]);
+              }
             }
             return;
           }
 
           exp = t.callExpression(t.cloneNode(helper), [
             exp,
-            // If we have static props, we need to insert an empty object
-            // because the odd arguments are copied with [[Get]], not
-            // [[GetOwnProperty]]
             ...(hadProps ? [t.objectExpression([]), obj] : []),
           ]);
         }
 
+        let isFirstSpread = true;
+
         for (const prop of path.node.properties) {
           if (t.isSpreadElement(prop)) {
+            if (isFirstSpread && t.isIdentifier(prop.argument)) {
+              isFirstSpread = false;
+              const binding = path.scope.getBinding(prop.argument.name);
+              if (
+                binding &&
+                binding.references <= 1 &&
+                binding.constant &&
+                binding.path.isVariableDeclarator() &&
+                binding.path.get("init").isCallExpression()
+              ) {
+                const init = binding.path.get("init") as NodePath<t.CallExpression>;
+                const callee = init.get("callee");
+                if (isKnownFreshObjectCall(callee)) {
+                  exp = t.cloneNode(prop.argument);
+                  continue;
+                }
+              }
+            }
+            isFirstSpread = false;
             make();
-            exp!.arguments.push(prop.argument);
+            // ensure that exp is a call expression before pushing
+            if (!exp || !t.isCallExpression(exp)) {
+              exp = t.callExpression(t.cloneNode(helper), [exp ?? t.objectExpression([])]);
+            }
+            exp.arguments.push(prop.argument);
           } else {
+            isFirstSpread = false;
             props.push(prop);
           }
         }
