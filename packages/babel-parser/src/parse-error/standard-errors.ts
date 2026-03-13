@@ -254,7 +254,6 @@ export default {
   UnexpectedUsingDeclaration:
     "Using declaration cannot appear in the top level when source type is `script` or in the bare case statement.",
   UnexpectedVoidPattern: "Unexpected void binding.",
-  UnsupportedBind: "Binding should be performed on object property.",
   UnsupportedDecoratorExport:
     "A decorated export must export a class declaration.",
   UnsupportedDefaultExport:

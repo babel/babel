@@ -862,13 +862,14 @@ export default abstract class ExpressionParser extends LValParser {
     const node = this.startNodeAt<N.BindExpression>(startLoc);
     node.object = base;
     this.next(); // eat '::'
+    const isImport = this.match(tt._import);
     const callee = this.parseNoCallExpr();
     if (
       callee.type === "Super" ||
-      callee.type === "Import" ||
-      callee.type === "ImportExpression"
+      (isImport && callee.type === "ImportExpression") ||
+      callee.type === "Import" // This check implies isImport
     ) {
-      throw this.raise(Errors.UnsupportedBind, callee);
+      throw this.raise(Errors.UnsupportedBindRHS, callee);
     }
     node.callee = callee;
 
@@ -1898,8 +1899,8 @@ export default abstract class ExpressionParser extends LValParser {
     const callee = this.parseNoCallExpr();
     node.callee = callee;
     if (
-      isImport &&
-      (callee.type === "Import" || callee.type === "ImportExpression")
+      (isImport && callee.type === "ImportExpression") ||
+      callee.type === "Import" // This check implies isImport
     ) {
       this.raise(Errors.ImportCallNotNewExpression, callee);
     }
