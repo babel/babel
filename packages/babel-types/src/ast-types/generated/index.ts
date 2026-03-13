@@ -183,7 +183,10 @@ export type Node =
   | OptionalCallExpression
   | OptionalIndexedAccessType
   | OptionalMemberExpression
+  | OptionalPartialCallExpression
   | ParenthesizedExpression
+  | PartialCallExpression
+  | PartialNewExpression
   | Placeholder
   | PrivateName
   | Program
@@ -191,6 +194,7 @@ export type Node =
   | RegExpLiteral
   | RegexLiteral
   | RestElement
+  | RestPlaceholder
   | RestProperty
   | ReturnStatement
   | SequenceExpression
@@ -1698,6 +1702,45 @@ export interface V8IntrinsicIdentifier extends BaseNode {
 
 export interface ArgumentPlaceholder extends BaseNode {
   type: "ArgumentPlaceholder";
+  ordinal?: NumericLiteral | null;
+}
+
+export interface RestPlaceholder extends BaseNode {
+  type: "RestPlaceholder";
+}
+
+export interface PartialCallExpression extends BaseNode {
+  type: "PartialCallExpression";
+  callee: Expression;
+  arguments: (
+    | Expression
+    | SpreadElement
+    | ArgumentPlaceholder
+    | RestPlaceholder
+  )[];
+}
+
+export interface PartialNewExpression extends BaseNode {
+  type: "PartialNewExpression";
+  callee: Expression;
+  arguments: (
+    | Expression
+    | SpreadElement
+    | ArgumentPlaceholder
+    | RestPlaceholder
+  )[];
+}
+
+export interface OptionalPartialCallExpression extends BaseNode {
+  type: "OptionalPartialCallExpression";
+  callee: Expression;
+  arguments: (
+    | Expression
+    | SpreadElement
+    | ArgumentPlaceholder
+    | RestPlaceholder
+  )[];
+  optional: boolean;
 }
 
 export interface BindExpression extends BaseNode {
@@ -2350,6 +2393,9 @@ export type Expression =
   | TypeCastExpression
   | JSXElement
   | JSXFragment
+  | PartialCallExpression
+  | PartialNewExpression
+  | OptionalPartialCallExpression
   | BindExpression
   | DoExpression
   | ModuleExpression
@@ -2989,7 +3035,13 @@ export interface ParentMaps {
     | TypeParameterInstantiation
     | TypeofTypeAnnotation
     | UnionTypeAnnotation;
-  ArgumentPlaceholder: CallExpression | NewExpression | OptionalCallExpression;
+  ArgumentPlaceholder:
+    | CallExpression
+    | NewExpression
+    | OptionalCallExpression
+    | OptionalPartialCallExpression
+    | PartialCallExpression
+    | PartialNewExpression;
   ArrayExpression:
     | ArrayExpression
     | ArrowFunctionExpression
@@ -3026,7 +3078,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3136,7 +3191,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3199,7 +3257,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3274,7 +3335,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3337,7 +3401,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3425,7 +3492,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3488,7 +3558,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3576,7 +3649,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3702,7 +3778,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3784,7 +3863,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -3858,7 +3940,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -4134,7 +4219,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -4422,7 +4510,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -4571,7 +4662,10 @@ export interface ParentMaps {
     | OpaqueType
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | Placeholder
     | PrivateName
     | QualifiedTypeIdentifier
@@ -4675,7 +4769,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -4760,7 +4857,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -4934,7 +5034,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5002,7 +5105,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5095,7 +5201,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5159,7 +5268,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | RestElement
     | ReturnStatement
     | SequenceExpression
@@ -5224,7 +5336,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5311,7 +5426,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5374,7 +5492,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5437,7 +5558,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5562,6 +5686,7 @@ export interface ParentMaps {
     | TypeofTypeAnnotation
     | UnionTypeAnnotation;
   NumericLiteral:
+    | ArgumentPlaceholder
     | ArrayExpression
     | ArrowFunctionExpression
     | AssignmentExpression
@@ -5599,7 +5724,10 @@ export interface ParentMaps {
     | ObjectTypeProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5663,7 +5791,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5801,7 +5932,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5888,7 +6022,76 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
+    | ReturnStatement
+    | SequenceExpression
+    | SpreadElement
+    | SwitchCase
+    | SwitchStatement
+    | TSAsExpression
+    | TSClassImplements
+    | TSDeclareMethod
+    | TSEnumMember
+    | TSExportAssignment
+    | TSInstantiationExpression
+    | TSInterfaceHeritage
+    | TSMethodSignature
+    | TSNonNullExpression
+    | TSPropertySignature
+    | TSSatisfiesExpression
+    | TSTypeAssertion
+    | TaggedTemplateExpression
+    | TemplateLiteral
+    | ThrowStatement
+    | TypeCastExpression
+    | UnaryExpression
+    | VariableDeclarator
+    | WhileStatement
+    | WithStatement
+    | YieldExpression;
+  OptionalPartialCallExpression:
+    | ArrayExpression
+    | ArrowFunctionExpression
+    | AssignmentExpression
+    | AssignmentPattern
+    | AwaitExpression
+    | BinaryExpression
+    | BindExpression
+    | CallExpression
+    | ClassAccessorProperty
+    | ClassDeclaration
+    | ClassExpression
+    | ClassMethod
+    | ClassPrivateProperty
+    | ClassProperty
+    | ConditionalExpression
+    | DeclaredPredicate
+    | Decorator
+    | DoWhileStatement
+    | ExportDefaultDeclaration
+    | ExpressionStatement
+    | ForInStatement
+    | ForOfStatement
+    | ForStatement
+    | IfStatement
+    | ImportExpression
+    | JSXExpressionContainer
+    | JSXSpreadAttribute
+    | JSXSpreadChild
+    | LogicalExpression
+    | MemberExpression
+    | NewExpression
+    | ObjectMethod
+    | ObjectProperty
+    | OptionalCallExpression
+    | OptionalMemberExpression
+    | OptionalPartialCallExpression
+    | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -5951,7 +6154,142 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
+    | ReturnStatement
+    | SequenceExpression
+    | SpreadElement
+    | SwitchCase
+    | SwitchStatement
+    | TSAsExpression
+    | TSClassImplements
+    | TSDeclareMethod
+    | TSEnumMember
+    | TSExportAssignment
+    | TSInstantiationExpression
+    | TSInterfaceHeritage
+    | TSMethodSignature
+    | TSNonNullExpression
+    | TSPropertySignature
+    | TSSatisfiesExpression
+    | TSTypeAssertion
+    | TaggedTemplateExpression
+    | TemplateLiteral
+    | ThrowStatement
+    | TypeCastExpression
+    | UnaryExpression
+    | VariableDeclarator
+    | WhileStatement
+    | WithStatement
+    | YieldExpression;
+  PartialCallExpression:
+    | ArrayExpression
+    | ArrowFunctionExpression
+    | AssignmentExpression
+    | AssignmentPattern
+    | AwaitExpression
+    | BinaryExpression
+    | BindExpression
+    | CallExpression
+    | ClassAccessorProperty
+    | ClassDeclaration
+    | ClassExpression
+    | ClassMethod
+    | ClassPrivateProperty
+    | ClassProperty
+    | ConditionalExpression
+    | DeclaredPredicate
+    | Decorator
+    | DoWhileStatement
+    | ExportDefaultDeclaration
+    | ExpressionStatement
+    | ForInStatement
+    | ForOfStatement
+    | ForStatement
+    | IfStatement
+    | ImportExpression
+    | JSXExpressionContainer
+    | JSXSpreadAttribute
+    | JSXSpreadChild
+    | LogicalExpression
+    | MemberExpression
+    | NewExpression
+    | ObjectMethod
+    | ObjectProperty
+    | OptionalCallExpression
+    | OptionalMemberExpression
+    | OptionalPartialCallExpression
+    | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
+    | ReturnStatement
+    | SequenceExpression
+    | SpreadElement
+    | SwitchCase
+    | SwitchStatement
+    | TSAsExpression
+    | TSClassImplements
+    | TSDeclareMethod
+    | TSEnumMember
+    | TSExportAssignment
+    | TSInstantiationExpression
+    | TSInterfaceHeritage
+    | TSMethodSignature
+    | TSNonNullExpression
+    | TSPropertySignature
+    | TSSatisfiesExpression
+    | TSTypeAssertion
+    | TaggedTemplateExpression
+    | TemplateLiteral
+    | ThrowStatement
+    | TypeCastExpression
+    | UnaryExpression
+    | VariableDeclarator
+    | WhileStatement
+    | WithStatement
+    | YieldExpression;
+  PartialNewExpression:
+    | ArrayExpression
+    | ArrowFunctionExpression
+    | AssignmentExpression
+    | AssignmentPattern
+    | AwaitExpression
+    | BinaryExpression
+    | BindExpression
+    | CallExpression
+    | ClassAccessorProperty
+    | ClassDeclaration
+    | ClassExpression
+    | ClassMethod
+    | ClassPrivateProperty
+    | ClassProperty
+    | ConditionalExpression
+    | DeclaredPredicate
+    | Decorator
+    | DoWhileStatement
+    | ExportDefaultDeclaration
+    | ExpressionStatement
+    | ForInStatement
+    | ForOfStatement
+    | ForStatement
+    | IfStatement
+    | ImportExpression
+    | JSXExpressionContainer
+    | JSXSpreadAttribute
+    | JSXSpreadChild
+    | LogicalExpression
+    | MemberExpression
+    | NewExpression
+    | ObjectMethod
+    | ObjectProperty
+    | OptionalCallExpression
+    | OptionalMemberExpression
+    | OptionalPartialCallExpression
+    | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -6028,7 +6366,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -6073,6 +6414,10 @@ export interface ParentMaps {
     | TSDeclareMethod
     | TSFunctionType
     | TSMethodSignature;
+  RestPlaceholder:
+    | OptionalPartialCallExpression
+    | PartialCallExpression
+    | PartialNewExpression;
   RestProperty: null;
   ReturnStatement:
     | BlockStatement
@@ -6124,7 +6469,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -6156,7 +6504,10 @@ export interface ParentMaps {
     | CallExpression
     | NewExpression
     | ObjectExpression
-    | OptionalCallExpression;
+    | OptionalCallExpression
+    | OptionalPartialCallExpression
+    | PartialCallExpression
+    | PartialNewExpression;
   SpreadProperty: null;
   StaticBlock: ClassBody;
   StringLiteral:
@@ -6208,7 +6559,10 @@ export interface ParentMaps {
     | ObjectTypeProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -6408,7 +6762,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | RestElement
     | ReturnStatement
     | SequenceExpression
@@ -6740,7 +7097,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -6986,7 +7346,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | RestElement
     | ReturnStatement
     | SequenceExpression
@@ -7192,7 +7555,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | RestElement
     | ReturnStatement
     | SequenceExpression
@@ -7409,7 +7775,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | RestElement
     | ReturnStatement
     | SequenceExpression
@@ -7704,7 +8073,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -7768,7 +8140,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -7832,7 +8207,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -7939,7 +8317,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -8077,7 +8458,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -8195,7 +8579,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -8283,7 +8670,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
@@ -8435,7 +8825,10 @@ export interface ParentMaps {
     | ObjectProperty
     | OptionalCallExpression
     | OptionalMemberExpression
+    | OptionalPartialCallExpression
     | ParenthesizedExpression
+    | PartialCallExpression
+    | PartialNewExpression
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
