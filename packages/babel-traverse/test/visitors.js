@@ -87,4 +87,21 @@ describe("visitors", () => {
       `);
     });
   });
+
+  describe("deprecated option handling", () => {
+    it("should throw when using deprecated blacklist without denylist", () => {
+      expect(() => {
+        visitors.explode({ blacklist: ["MemberExpression"], enter() {} });
+      }).toThrow(/blacklist.*renamed.*denylist/);
+    });
+
+    it("should not throw when both blacklist and denylist are provided", () => {
+      const visitor = visitors.explode({
+        blacklist: ["MemberExpression"],
+        denylist: ["MemberExpression"],
+        enter() {},
+      });
+      expect(visitor._exploded).toBe(true);
+    });
+  });
 });
