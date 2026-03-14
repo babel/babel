@@ -5,7 +5,7 @@ module.exports = function (babel) {
     visitor: {
       CallExpression(path) {
         const { file } = this;
-        const { sourceFileName } = file.opts.generatorOpts;
+        const { sourceFilename } = file.opts.generatorOpts;
         const callee = path.node;
         const { loc } = callee;
 
@@ -22,7 +22,7 @@ module.exports = function (babel) {
         // This injects the sourcesContent, though I don't imagine anyone's
         // doing it.
         file.code = {
-            [sourceFileName]: file.code,
+            [sourceFilename]: file.code,
             'test.js': '<bar />',
         };
         path.stop();

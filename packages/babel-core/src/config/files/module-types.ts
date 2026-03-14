@@ -169,7 +169,7 @@ function ensureTsSupport<T>(
     configFile: false,
     sourceType: "unambiguous",
     sourceMaps: "inline",
-    sourceFileName: path.basename(filepath),
+    sourceFilename: path.basename(filepath),
     presets: [
       [
         getTSPreset(filepath),

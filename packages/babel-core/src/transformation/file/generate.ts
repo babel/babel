@@ -67,7 +67,7 @@ export default function generateCode(
         outputMap = mergeSourceMap(
           inputMap.toObject(),
           outputMap,
-          generatorOpts.sourceFileName!,
+          generatorOpts.sourceFilename!,
         );
       } else {
         // We cannot output a decoded map, so retrieve the encoded form. Because

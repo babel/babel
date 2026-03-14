@@ -200,7 +200,7 @@ export interface GeneratorOptions {
    * The filename for the source code (i.e. the code in the `code` argument).
    * This will only be used if `code` is a string.
    */
-  sourceFileName?: string;
+  sourceFilename?: string;
 
   /**
    * Options for outputting jsesc representation.

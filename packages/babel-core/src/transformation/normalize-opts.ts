@@ -16,7 +16,7 @@ export default function normalizeOptions(
     sourceMaps = !!inputSourceMap,
     sourceRoot = undefined,
 
-    sourceFileName = path.basename(filenameRelative),
+    sourceFilename,
 
     comments = true,
     compact = "auto",
@@ -31,9 +31,7 @@ export default function normalizeOptions(
       sourceType:
         path.extname(filenameRelative) === ".mjs" ? "module" : sourceType,
 
-      // @ts-expect-error We should have passed `sourceFilename` here
-      // pending https://github.com/babel/babel/issues/15917#issuecomment-2789278964
-      sourceFileName: filename,
+      sourceFilename: filename,
       plugins: [],
       ...opts.parserOpts,
     },
@@ -54,7 +52,8 @@ export default function normalizeOptions(
       // babel-generator does not differentiate between `true`, `"inline"` or `"both"`
       sourceMaps: !!sourceMaps,
       sourceRoot,
-      sourceFileName,
+      sourceFilename:
+        sourceFilename ?? filename ?? path.basename(filenameRelative),
 
       ...opts.generatorOpts,
     },
