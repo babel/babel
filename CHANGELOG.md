@@ -25,6 +25,72 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-rc.3 (2026-03-16)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#17839](https://github.com/babel/babel/pull/17839) Fix(parser): async x => {} must be in leading pos ([@JLHwung](https://github.com/JLHwung))
+  * [#17803](https://github.com/babel/babel/pull/17803) Disallow non-leading solo await within F# pipeline ([@JLHwung](https://github.com/JLHwung))
+
+#### :boom: Breaking Change
+* `babel-parser`, `babel-plugin-proposal-do-expressions`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-transform-exponentiation-operator`, `babel-plugin-transform-instanceof`, `babel-traverse`, `babel-types`
+  * [#17867](https://github.com/babel/babel/pull/17867) [Babel 8] Remove `Import` from the `Expression` alias ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx`, `babel-preset-react`
+  * [#17845](https://github.com/babel/babel/pull/17845) Gate jsxDEV source/self with `developmentSourceSelf` option ([@rootvector2](https://github.com/rootvector2))
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#17835](https://github.com/babel/babel/pull/17835) fix: Remove `decorators` from `TSDeclareMethod` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-helper-import-to-platform-api`, `babel-plugin-proposal-import-wasm-source`, `babel-plugin-transform-json-modules`
+  * [#17816](https://github.com/babel/babel/pull/17816) Pass `file` instead of `path` to importToPlatformApi builders ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :rocket: New Feature
+* `babel-plugin-transform-react-jsx-development`, `babel-plugin-transform-react-jsx`, `babel-preset-react`
+  * [#17862](https://github.com/babel/babel/pull/17862) Add `sourceSelf` option to `@babel/plugin-transform-react-jsx-development` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#16935](https://github.com/babel/babel/pull/16935) feat: Add `locations` option to parser ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :bug: Bug Fix
+* `babel-compat-data`, `babel-plugin-bugfix-safari-rest-destructuring-rhs-array`, `babel-preset-env`
+  * [#17788](https://github.com/babel/babel/pull/17788) Add bugfix plugin for Safari array rest destructuring bug ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`, `babel-traverse`, `babel-types`
+  * [#17852](https://github.com/babel/babel/pull/17852) Fix(types): Align AST definitions to parser implementations ([@JLHwung](https://github.com/JLHwung))
+* `babel-build-external-helpers`, `babel-cli`, `babel-node`, `babel-parser`
+  * [#17859](https://github.com/babel/babel/pull/17859) fix: Ensure packages are executable ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-build-external-helpers`, `babel-cli`, `babel-node`, `babel-register`
+  * [#17822](https://github.com/babel/babel/pull/17822) Fix eslint package types ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-parameters`, `babel-traverse`
+  * [#17829](https://github.com/babel/babel/pull/17829) Fix types for `path.get("body.${index}")` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#17806](https://github.com/babel/babel/pull/17806) Improve F# pipeline direct body check ([@JLHwung](https://github.com/JLHwung))
+  * [#17799](https://github.com/babel/babel/pull/17799) Fix TypeScript parser failing on async calls in ternary consequent ([@veeceey](https://github.com/veeceey))
+* `babel-build-external-helpers`
+  * [#17827](https://github.com/babel/babel/pull/17827) fix(build-external-helpers): incorrect bin path ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-generator`, `babel-helper-transform-fixture-test-runner`, `babel-plugin-transform-runtime`, `babel-types`
+  * [#17811](https://github.com/babel/babel/pull/17811) Support ESLint v10 for babel-eslint-plugin ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#17782](https://github.com/babel/babel/pull/17782) Improve trailing comma comment handling ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-regenerator`
+  * [#17362](https://github.com/babel/babel/pull/17362) Do not split `awaitAsyncGenerator` in `await yield` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :memo: Documentation
+* [#17847](https://github.com/babel/babel/pull/17847) Replace npmjs.com links with npmx.dev ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-parser`
+  * [#17853](https://github.com/babel/babel/pull/17853) refactor(parser): use AST definitions from babel/types ([@JLHwung](https://github.com/JLHwung))
+  * [#17838](https://github.com/babel/babel/pull/17838) refactor(parser): simplify arrow start tracking ([@JLHwung](https://github.com/JLHwung))
+  * [#17808](https://github.com/babel/babel/pull/17808) Build: Ensure `make build` will build Babel parser typings ([@JLHwung](https://github.com/JLHwung))
+* `babel-runtime-corejs3`, `babel-runtime`
+  * [#17855](https://github.com/babel/babel/pull/17855) Remove `engines` field  from `@babel/runtime` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* Other
+  * [#17825](https://github.com/babel/babel/pull/17825) chore: Set `allowUnreachableCode: false` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :running_woman: Performance
+* `babel-helper-import-to-platform-api`, `babel-plugin-proposal-import-wasm-source`, `babel-plugin-transform-json-modules`
+  * [#17818](https://github.com/babel/babel/pull/17818) Load async Wasm and JSON imports in parallel ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#17834](https://github.com/babel/babel/pull/17834) fix(parser): performance issue due to debug code ([@JLHwung](https://github.com/JLHwung))
 ## v8.0.0-rc.2 (2026-02-15)
 
 #### :boom: Breaking Change
