@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-bugfix-safari-rest-destructuring-rhs-array",
-  "version": "8.0.0-rc.1",
+  "version": "8.0.0-rc.3",
   "description": "Workaround a Safari bug where rest destructuring with an array literal on the rhs can yield incorrect results",
   "repository": {
     "type": "git",
