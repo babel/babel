@@ -37,8 +37,8 @@
   },
   "homepage": "https://babel.dev/",
   "peerDependencies": {
-    "@babel/eslint-parser": "^7.11.0",
-    "eslint": "^9.0.0"
+    "@babel/eslint-parser": "workspace:^",
+    "eslint": "^9.0.0 || ^10.0.0"
   },
   "devDependencies": {
     "eslint": "^10.0.0"

@@ -523,8 +523,8 @@ __metadata:
   dependencies:
     eslint: "npm:^10.0.0"
   peerDependencies:
-    "@babel/eslint-parser": ">=7.11.0"
-    eslint: ">=7.5.0"
+    "@babel/eslint-parser": "workspace:^"
+    eslint: ^9.0.0 || ^10.0.0
   languageName: unknown
   linkType: soft
 
@@ -542,8 +542,8 @@ __metadata:
   dependencies:
     eslint: "npm:^10.0.0"
   peerDependencies:
-    "@babel/eslint-parser": ^7.11.0
-    eslint: ^9.0.0
+    "@babel/eslint-parser": "workspace:^"
+    eslint: ^9.0.0 || ^10.0.0
   languageName: unknown
   linkType: soft
 
