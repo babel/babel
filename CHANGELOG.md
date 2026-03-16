@@ -25,6 +25,20 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.2 (2026-03-16)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#17840](https://github.com/babel/babel/pull/17840) [7.x backport] async x => {} must be in leading pos ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#17805](https://github.com/babel/babel/pull/17805) [7.x backport] fix: Properly handle await in finally ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-preset-env`
+  * [#17789](https://github.com/babel/babel/pull/17789) [7.x backport] preset-env include/exclude should accept bugfix plugins ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* [#17813](https://github.com/babel/babel/pull/17813) chore: update eslint peer deps ([@JLHwung](https://github.com/JLHwung))
 ## v7.29.1 (2026-02-04)
 
 #### :bug: Bug Fix
