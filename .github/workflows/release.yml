@@ -8,7 +8,7 @@ on:
       version:
         # Often minor versions require human intervention, so it's safer if we
         # force ourselves to always create them locally.
-        description: ⚠️ This workflow can only automatically release patch versions, or Babel 8 pre-releases
+        description: ⚠️ This workflow can only automatically release patch versions
         required: true
         default: patch
         type: choice

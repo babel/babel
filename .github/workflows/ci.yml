@@ -282,7 +282,7 @@ jobs:
         run: |
           node ./packages/babel-node/scripts/list-node-flags.js
       - name: Test on node.js ${{ matrix.node-version }}
-        # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
+        # Jest execution path is hardcoded because Yarn does not support node 6
         run: |
           node ./node_modules/.bin/jest --ci
         env:
