@@ -777,7 +777,26 @@ defineType("MemberExpression", {
   },
 });
 
-defineType("NewExpression", { inherits: "CallExpression" });
+defineType("NewExpression", {
+  inherits: "CallExpression",
+  fields: {
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+    arguments: validateArrayOfType(
+      "Expression",
+      "SpreadElement",
+      "ArgumentPlaceholder",
+    ),
+    typeArguments: {
+      validate: assertNodeType(
+        "TypeParameterInstantiation",
+        "TSTypeParameterInstantiation",
+      ),
+      optional: true,
+    },
+  },
+});
 
 defineType("Program", {
   // Note: We explicitly leave 'interpreter' out here because it is

@@ -583,7 +583,7 @@ export function memberExpression(
   return node;
 }
 export function newExpression(
-  callee: t.Expression | t.Super | t.Import | t.V8IntrinsicIdentifier,
+  callee: t.Expression,
   _arguments: (t.Expression | t.SpreadElement | t.ArgumentPlaceholder)[],
 ): t.NewExpression {
   const node: t.NewExpression = {
