@@ -56,15 +56,6 @@ jobs:
           git commit -am "chore: update test fixtures"
         env:
           OVERWRITE: true
-      - name: Update tests (Babel 8) and commit test fixtures
-        if: steps.updated.outputs.updated == 'true'
-        continue-on-error: true
-        run: |
-          yarn jest -u
-          git commit -am "chore: update test fixtures for Babel 8"
-        env:
-          OVERWRITE: true
-          BABEL_8_BREAKING: true
       - name: Push changes
         if: steps.updated.outputs.updated == 'true'
         run: |
