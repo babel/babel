@@ -19,16 +19,16 @@ export type ProcessTestOpts = {
   executor?: string;
   ipc?: boolean;
   ipcMessage?: string;
-  stdout?: string;
-  stderr?: string;
-  stdin?: string;
-  stdoutPath?: string;
-  stderrPath?: string;
+  stdout: string;
+  stderr: string;
+  stdin: string;
+  stdoutPath: string;
+  stderrPath: string;
   stdoutContains?: boolean;
   stderrContains?: boolean;
-  testLoc?: string;
-  outFiles?: Record<string, string>;
-  inFiles?: Record<string, string>;
+  testLoc: string;
+  outFiles: Record<string, string>;
+  inFiles: Record<string, string>;
   noBabelrc?: boolean;
   minNodeVersion?: number;
   env?: Record<string, string>;
@@ -208,6 +208,14 @@ export function buildProcessTests(
 
       let opts: ProcessTestOpts = {
         args: [],
+        stdout: "",
+        stderr: "",
+        stdin: "",
+        stdoutPath: "",
+        stderrPath: "",
+        testLoc: "",
+        outFiles: {},
+        inFiles: {},
       };
 
       const optionsLoc = path.join(testLoc, "options.json");
@@ -289,7 +297,7 @@ export function buildProcessTests(
           deleteDir(tmpLoc);
           mkdirSync(tmpLoc, { recursive: true });
 
-          const { inFiles } = opts;
+          const inFiles = opts.inFiles;
           for (const filename of Object.keys(inFiles)) {
             outputFileSync(path.join(tmpLoc, filename), inFiles[filename]);
           }
@@ -370,16 +378,16 @@ export function buildProcessTests(
             }
 
             if (opts.stdin) {
-              child.stdin.write(opts.stdin);
-              child.stdin.end();
+              child.stdin!.write(opts.stdin);
+              child.stdin!.end();
             }
 
             const captureOutput = (proc: ChildProcess) => {
-              proc.stderr.on("data", function (chunk) {
+              proc.stderr!.on("data", function (chunk) {
                 stderr += chunk;
               });
 
-              proc.stdout.on("data", function (chunk) {
+              proc.stdout!.on("data", function (chunk) {
                 stdout += chunk;
               });
             };
@@ -389,8 +397,8 @@ export function buildProcessTests(
                 cwd: tmpLoc,
               });
 
-              child.stdout.pipe(executor.stdin);
-              child.stderr.pipe(executor.stdin);
+              child.stdout!.pipe(executor.stdin);
+              child.stderr!.pipe(executor.stdin);
 
               executor.on("close", function () {
                 child.send("exit");

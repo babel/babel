@@ -60,9 +60,9 @@ export async function runCodeMayInWorker(
           if (error) {
             const e = new Error(error.msg);
             e.stack = error.stack;
-            tasks.get(id)[1](e);
+            tasks.get(id)![1](e);
           } else {
-            tasks.get(id)[0]();
+            tasks.get(id)![0]();
           }
         } catch {
           throw new Error("Failed to parse worker response: " + data);
