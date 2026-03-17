@@ -1,3 +1,3 @@
-import "f";
+import {} from "f";
 import "g";
 ;

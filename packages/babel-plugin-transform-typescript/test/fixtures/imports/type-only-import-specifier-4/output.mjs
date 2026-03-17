@@ -1,1 +1,1 @@
-import "x";
+import {} from "x";
