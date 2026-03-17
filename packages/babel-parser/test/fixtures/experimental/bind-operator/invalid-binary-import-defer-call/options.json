@@ -3,5 +3,5 @@
     "functionBind",
     "deferredImportEvaluation"
   ],
-  "throws": "Unexpected token (1:16)"
+  "throws": "The right-hand side of binding can not be super or import. (1:3)"
 }

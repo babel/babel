@@ -1,1 +1,1 @@
-a::import.defer()
+a::import.defer("foo")

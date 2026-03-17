@@ -1,1 +1,1 @@
-a::import()
+a::import("foo")
