@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "functionBind",
+    "deferredImportEvaluation"
+  ],
+  "throws": "Unexpected token (1:16)"
+}
