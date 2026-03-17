@@ -10,7 +10,13 @@ let watcher: FSWatcher;
 const watchQueue = new Set<string>();
 let hasStarted = false;
 
-export function enable({ enableGlobbing }: { enableGlobbing: boolean }) {
+export function enable({
+  enableGlobbing,
+  ignore,
+}: {
+  enableGlobbing: boolean;
+  ignore?: string[];
+}) {
   isWatchMode = true;
 
   const { FSWatcher } = requireChokidar();
@@ -23,6 +29,7 @@ export function enable({ enableGlobbing }: { enableGlobbing: boolean }) {
       stabilityThreshold: 50,
       pollInterval: 10,
     },
+    ignored: ignore,
   };
   watcher = new FSWatcher(options);
 
