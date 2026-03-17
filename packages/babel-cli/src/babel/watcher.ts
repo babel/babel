@@ -2,6 +2,8 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import type { WatchOptions, FSWatcher } from "chokidar";
 
+import micromatch from "micromatch";
+
 const fileToDeps = new Map<string, Set<string>>();
 const depToFiles = new Map<string, Set<string>>();
 
@@ -15,11 +17,25 @@ export function enable({
   ignore,
 }: {
   enableGlobbing: boolean;
-  ignore?: string[];
+  ignore?: (string | RegExp | Function)[];
 }) {
   isWatchMode = true;
 
   const { FSWatcher } = requireChokidar();
+
+  const ignored =
+    ignore && ignore.length
+      ? (watchedPath: string): boolean => {
+          const relPath = path.isAbsolute(watchedPath)
+            ? path.relative(process.cwd(), watchedPath)
+            : watchedPath;
+          const normalizedPath = relPath.split(path.sep).join("/");
+          const stringPatterns = ignore.filter(
+            (p): p is string => typeof p === "string",
+          );
+          return micromatch.isMatch(normalizedPath, stringPatterns);
+        }
+      : undefined;
 
   const options: WatchOptions = {
     disableGlobbing: !enableGlobbing,
@@ -29,7 +45,7 @@ export function enable({
       stabilityThreshold: 50,
       pollInterval: 10,
     },
-    ignored: ignore,
+    ignored,
   };
   watcher = new FSWatcher(options);
 

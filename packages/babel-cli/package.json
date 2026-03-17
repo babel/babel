@@ -28,6 +28,7 @@
     "commander": "^14.0.2",
     "convert-source-map": "^2.0.0",
     "glob": "^13.0.0",
+    "micromatch": "^4.0.8",
     "slash": "^5.1.0"
   },
   "optionalDependencies": {
@@ -41,6 +42,7 @@
     "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@types/fs-readdir-recursive": "^1.1.0",
     "@types/glob": "^7.2.0",
+    "@types/micromatch": "^4",
     "semver": "^7.7.3"
   },
   "bin": {
