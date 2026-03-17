@@ -205,6 +205,7 @@ function parseWithCodeFrame(
     allowNewTargetOutsideFunction: true,
     allowSuperOutsideMethod: true,
     allowYieldOutsideFunction: true,
+    allowPrivateFieldsOutsideClass: true,
     sourceType: "module",
     ...parserOpts,
     plugins,

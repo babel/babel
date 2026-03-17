@@ -460,6 +460,11 @@ interface Options {
    */
   allowAwaitOutsideFunction?: boolean;
   /**
+   * By default, private fields are not allowed outside of a class.
+   * Set this to true to accept such code.
+   */
+  allowPrivateFieldsOutsideClass?: boolean;
+  /**
    * By default, a return statement at the top level raises an error.
    * Set this to true to accept such code.
    */
