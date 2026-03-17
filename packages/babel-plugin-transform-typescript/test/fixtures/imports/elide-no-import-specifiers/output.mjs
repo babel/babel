@@ -1,2 +1,2 @@
-import "a";
+import {} from "a";
 import "b";

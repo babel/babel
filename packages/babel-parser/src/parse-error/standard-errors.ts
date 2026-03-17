@@ -167,7 +167,7 @@ export default {
   // FIXME: Would be nice to make this "missingPlugins" instead.
   // Also, seems like we can drop the "(s)" from the message and just make it "s".
   MissingOneOfPlugins: ({ missingPlugin }: { missingPlugin: string[] }) =>
-    `This experimental syntax requires enabling one of the following parser plugin(s): ${missingPlugin
+    `This experimental syntax requires enabling one of the following parser plugins: ${missingPlugin
       .map(name => JSON.stringify(name))
       .join(", ")}.`,
   MissingUnicodeEscape: "Expecting Unicode escape sequence \\uXXXX.",

@@ -3084,6 +3084,15 @@ export default abstract class StatementParser extends ExpressionParser {
   parseNamedImportSpecifiers(node: Undone<N.ImportDeclaration>) {
     let first = true;
     this.expect(tt.braceL);
+    // Preserve `import {} from "mod"` vs `import "mod"`.
+    // The AST for both forms has `specifiers: []`, so we track whether the
+    // original source had braces in order to allow printers/transforms to
+    // round-trip the syntax when needed (e.g. TS `verbatimModuleSyntax` output).
+    if (this.match(tt.braceR)) {
+      this.next();
+      (node.extra ??= {}).emptyImportBraces = true;
+      return;
+    }
     while (!this.eat(tt.braceR)) {
       if (first) {
         first = false;

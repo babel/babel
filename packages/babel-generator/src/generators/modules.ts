@@ -260,9 +260,13 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
     hasBrace = true;
     this.token("{");
     this.token("}");
+  } else if ((node as any).extra?.emptyImportBraces) {
+    hasBrace = true;
+    this.token("{");
+    this.token("}");
   }
 
-  if (hasSpecifiers || isTypeKind) {
+  if (hasSpecifiers || isTypeKind || (node as any).extra?.emptyImportBraces) {
     this.space();
     this.word("from");
     this.space();

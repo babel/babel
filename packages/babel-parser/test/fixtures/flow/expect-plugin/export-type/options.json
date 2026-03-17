@@ -1,3 +1,3 @@
 {
-  "throws": "This experimental syntax requires enabling one of the following parser plugin(s): \"flow\", \"typescript\". (1:7)"
+  "throws": "This experimental syntax requires enabling one of the following parser plugins: \"flow\", \"typescript\". (1:7)"
 }

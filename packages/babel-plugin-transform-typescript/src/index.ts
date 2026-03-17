@@ -328,6 +328,13 @@ export default declare((api, opts: Options) => {
                 for (const importPath of importsToRemove) {
                   importPath.remove();
                 }
+                // When the last specifier is removed (e.g. `import { type T } from "m"`),
+                // preserve the braces so we can emit `import {} from "m"` instead of
+                // normalizing it to `import "m"`. This matches TypeScript's
+                // `verbatimModuleSyntax` output style and allows round-tripping.
+                if (specifiersLength > 0 && stmt.node.specifiers.length === 0) {
+                  (stmt.node.extra ??= {}).emptyImportBraces = true;
+                }
               }
 
               continue;
