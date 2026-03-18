@@ -90,7 +90,6 @@
     "transform-object-set-prototype-of-to-assign",
     "transform-parameters",
     "transform-property-literals",
-    "transform-property-mutators",
     "transform-proto-to-assign",
     "transform-react-constant-elements",
     "transform-react-display-name",

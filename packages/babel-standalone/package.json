@@ -85,7 +85,6 @@
     "@babel/plugin-transform-private-methods": "workspace:^",
     "@babel/plugin-transform-private-property-in-object": "workspace:^",
     "@babel/plugin-transform-property-literals": "workspace:^",
-    "@babel/plugin-transform-property-mutators": "workspace:^",
     "@babel/plugin-transform-proto-to-assign": "workspace:^",
     "@babel/plugin-transform-react-constant-elements": "workspace:^",
     "@babel/plugin-transform-react-display-name": "workspace:^",

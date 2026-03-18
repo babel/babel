@@ -347,9 +347,6 @@
       "@babel/plugin-transform-property-literals": [
         "./packages/babel-plugin-transform-property-literals/src"
       ],
-      "@babel/plugin-transform-property-mutators": [
-        "./packages/babel-plugin-transform-property-mutators/src"
-      ],
       "@babel/plugin-transform-proto-to-assign": [
         "./packages/babel-plugin-transform-proto-to-assign/src"
       ],

@@ -374,9 +374,6 @@
       "path": "./packages/babel-plugin-transform-property-literals"
     },
     {
-      "path": "./packages/babel-plugin-transform-property-mutators"
-    },
-    {
       "path": "./packages/babel-plugin-transform-proto-to-assign"
     },
     {
