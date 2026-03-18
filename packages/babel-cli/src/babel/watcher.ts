@@ -1,8 +1,9 @@
-import { createRequire } from "node:module";
 import path from "node:path";
+import { createRequire } from "node:module";
+import { loadPartialConfigSync } from "@babel/core";
 import type { WatchOptions, FSWatcher } from "chokidar";
 
-import micromatch from "micromatch";
+// micromatch is no longer needed since we use @babel/core's matching logic
 
 const fileToDeps = new Map<string, Set<string>>();
 const depToFiles = new Map<string, Set<string>>();
@@ -14,10 +15,10 @@ let hasStarted = false;
 
 export function enable({
   enableGlobbing,
-  ignore,
+  babelOptions,
 }: {
   enableGlobbing: boolean;
-  ignore?: any;
+  babelOptions: any;
 }) {
   if (watcher) {
     void watcher.close();
@@ -31,28 +32,18 @@ export function enable({
 
   const { FSWatcher } = requireChokidar();
 
-  const ignoreArray = Array.isArray(ignore) ? ignore : ignore ? [ignore] : [];
-
-  const ignored = ignoreArray.length
-    ? (watchedPath: string): boolean => {
-        const relPath = path.isAbsolute(watchedPath)
-          ? path.relative(process.cwd(), watchedPath)
-          : watchedPath;
-        const normalizedPath = relPath.split(path.sep).join("/");
-
-        const stringPatterns = ignoreArray.filter(
-          (p): p is string => typeof p === "string",
-        );
-        const isMatch = micromatch.isMatch(normalizedPath, stringPatterns);
-        if (isMatch) return true;
-
-        for (const p of ignoreArray) {
-          if (typeof p === "function" && p(watchedPath)) return true;
-          if (p instanceof RegExp && p.test(watchedPath)) return true;
-        }
-        return false;
-      }
-    : undefined;
+  const ignored = (watchedPath: string): boolean => {
+    try {
+      const config = loadPartialConfigSync({
+        ...babelOptions,
+        filename: path.resolve(watchedPath),
+        showIgnoredFiles: false,
+      });
+      return config === null;
+    } catch (_) {
+      return false;
+    }
+  };
 
   const options: WatchOptions = {
     disableGlobbing: !enableGlobbing,

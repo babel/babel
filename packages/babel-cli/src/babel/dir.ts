@@ -153,8 +153,7 @@ export default async function ({
     startTime = null;
   }, 100);
 
-  if (cliOptions.watch)
-    watcher.enable({ enableGlobbing: true, ignore: babelOptions.ignore });
+  if (cliOptions.watch) watcher.enable({ enableGlobbing: true, babelOptions });
 
   if (!cliOptions.skipInitialBuild) {
     if (cliOptions.deleteDirOnStart) {
