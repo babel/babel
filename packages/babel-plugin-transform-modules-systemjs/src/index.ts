@@ -409,7 +409,7 @@ export default declare<PluginState>((api, options: Options) => {
                 const id = declar.id;
                 if (id) {
                   exportNames.push("default");
-                  exportValues.push(scope.buildUndefinedNode());
+                  exportValues.push(t.buildUndefinedNode());
                   variableIds.push(t.cloneNode(id));
                   addExportName(id.name, "default");
                   path.replaceWith(
@@ -458,7 +458,7 @@ export default declare<PluginState>((api, options: Options) => {
                 } else if (t.isClass(declar)) {
                   const name = declar.id!.name;
                   exportNames.push(name);
-                  exportValues.push(scope.buildUndefinedNode());
+                  exportValues.push(t.buildUndefinedNode());
                   variableIds.push(t.cloneNode(declar.id!));
                   path.replaceWith(
                     t.expressionStatement(
@@ -659,12 +659,9 @@ export default declare<PluginState>((api, options: Options) => {
             path.remove();
           }
 
-          let hasTLA = false;
-
-          t.traverseFast(path.node, node => {
+          const hasTLA = t.traverseFast(path.node, node => {
             if (t.isFunction(node)) return t.traverseFast.skip;
             if (t.isAwaitExpression(node)) {
-              hasTLA = true;
               return t.traverseFast.stop;
             }
           });

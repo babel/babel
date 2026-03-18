@@ -15,6 +15,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
   const {
     assignmentExpression,
     assignmentPattern,
+    buildUndefinedNode,
     cloneNode,
     expressionStatement,
     isExpressionStatement,
@@ -62,7 +63,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
         params[firstAssignmentPatternIndex] = assignmentPattern(
           // @ts-expect-error The transformed assignment pattern must not be a RestElement
           params[firstAssignmentPatternIndex],
-          scope.buildUndefinedNode(),
+          buildUndefinedNode(),
         );
       }
       scope.crawl();

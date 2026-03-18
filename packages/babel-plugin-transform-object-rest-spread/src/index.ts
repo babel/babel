@@ -752,7 +752,7 @@ export default declare((api, opts: Options) => {
           // but the new do-expression proposal plans to ban iteration ends in the
           // do block, maybe we can get rid of this
           if (statementBody.length === 0 && path.isCompletionRecord()) {
-            nodes.unshift(t.expressionStatement(scope.buildUndefinedNode()));
+            nodes.unshift(t.expressionStatement(t.buildUndefinedNode()));
           }
 
           nodes.unshift(

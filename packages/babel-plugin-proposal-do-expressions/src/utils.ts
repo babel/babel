@@ -1,5 +1,5 @@
-import type { NodePath, Visitor, types as t } from "@babel/core";
-import { traverse } from "@babel/core";
+import type { NodePath, Visitor } from "@babel/core";
+import { traverse, types as t } from "@babel/core";
 const mergeVisitors = traverse.visitors.merge;
 
 // Wrap all do expressions in an IIFE.
@@ -68,7 +68,7 @@ export function wrapDoExpressionInIIFE(path: NodePath) {
           if (body.length) {
             path.replaceExpressionWithStatements(body);
           } else {
-            path.replaceWith(path.scope.buildUndefinedNode());
+            path.replaceWith(t.buildUndefinedNode());
           }
         },
       },
