@@ -17,25 +17,30 @@ export function enable({
   ignore,
 }: {
   enableGlobbing: boolean;
-  ignore?: (string | RegExp | Function)[];
+  ignore?: (string | RegExp | ((path: string) => boolean))[];
 }) {
   isWatchMode = true;
 
   const { FSWatcher } = requireChokidar();
 
-  const ignored =
-    ignore && ignore.length
-      ? (watchedPath: string): boolean => {
-          const relPath = path.isAbsolute(watchedPath)
-            ? path.relative(process.cwd(), watchedPath)
-            : watchedPath;
-          const normalizedPath = relPath.split(path.sep).join("/");
-          const stringPatterns = ignore.filter(
-            (p): p is string => typeof p === "string",
-          );
-          return micromatch.isMatch(normalizedPath, stringPatterns);
+  const ignored = ignore?.length
+    ? (watchedPath: string): boolean => {
+        const relPath = path.isAbsolute(watchedPath)
+          ? path.relative(process.cwd(), watchedPath)
+          : watchedPath;
+        const normalizedPath = relPath.split(path.sep).join("/");
+        const stringPatterns = ignore.filter(
+          (p): p is string => typeof p === "string",
+        );
+        if (micromatch.isMatch(normalizedPath, stringPatterns)) return true;
+
+        for (const p of ignore) {
+          if (typeof p === "function" && p(watchedPath)) return true;
+          if (p instanceof RegExp && p.test(watchedPath)) return true;
         }
-      : undefined;
+        return false;
+      }
+    : undefined;
 
   const options: WatchOptions = {
     disableGlobbing: !enableGlobbing,
