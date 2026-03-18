@@ -3250,10 +3250,25 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseSubscripts(
-      base: N.Expression,
+      base: N.Expression | N.Super | N.Import,
+      startLoc: Position,
+      noCalls?: false | null,
+    ): N.Expression;
+    parseSubscripts(
+      base: N.Expression | N.Super | N.Import,
+      startLoc: Position,
+      noCalls: true,
+    ): N.Expression | N.Super | N.Import;
+    parseSubscripts(
+      base: N.Expression | N.Super | N.Import,
       startLoc: Position,
       noCalls?: boolean | null,
-    ): N.Expression {
+    ): N.Expression | N.Super | N.Import;
+    parseSubscripts(
+      base: N.Expression | N.Super | N.Import,
+      startLoc: Position,
+      noCalls?: boolean | null,
+    ) {
       if (
         base.type === "Identifier" &&
         base.name === "async" &&
@@ -3277,7 +3292,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         );
 
         /*:: invariant(arrow.node != null) */
-        // @ts-expect-error: refine tryParse typings
         if (!arrow.error && !arrow.aborted) return arrow.node;
 
         const result = this.tryParse(
@@ -3289,7 +3303,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         if (arrow.node) {
           this.state = arrow.failState;
-          // @ts-expect-error: refine tryParse typings
           return arrow.node;
         }
 
