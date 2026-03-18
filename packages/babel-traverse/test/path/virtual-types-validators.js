@@ -1,7 +1,6 @@
 import { parse } from "@babel/parser";
 
-import _traverse from "../../lib/index.js";
-const traverse = _traverse.default || _traverse;
+import traverse from "../../lib/index.js";
 
 function getPath(code, options) {
   const ast = parse(code, { sourceType: "module", ...options });

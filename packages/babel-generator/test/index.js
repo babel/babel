@@ -7,8 +7,7 @@ import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import { commonJS } from "$repo-utils";
 import { encode } from "@jridgewell/sourcemap-codec";
 
-import _generate from "../lib/index.js";
-const generate = _generate.default || _generate;
+import generate from "../lib/index.js";
 
 const { __dirname } = commonJS(import.meta.url);
 
@@ -1562,7 +1561,7 @@ export const App = () => {
   });
 });
 
-const suites = (fixtures.default || fixtures)(path.join(__dirname, "fixtures"));
+const suites = fixtures(path.join(__dirname, "fixtures"));
 
 afterEach(() => {
   jest.restoreAllMocks();

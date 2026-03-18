@@ -73,7 +73,7 @@ describe("parser and generator options", function () {
       return opts.parser.parse(code);
     },
     print: function (ast) {
-      return (generator.default || generator)(ast);
+      return generator(ast);
     },
   };
 

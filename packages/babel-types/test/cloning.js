@@ -1,7 +1,6 @@
 import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
-import _generate from "@babel/generator";
-const generate = _generate.default || _generate;
+import generate from "@babel/generator";
 
 describe("cloneNode", function () {
   it("should handle undefined", function () {

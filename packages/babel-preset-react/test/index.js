@@ -1,7 +1,6 @@
 import * as babel from "@babel/core";
 
-import _reactPreset from "../lib/index.js";
-const reactPreset = _reactPreset.default || _reactPreset;
+import reactPreset from "../lib/index.js";
 
 describe("react preset", () => {
   it("does throw clear error when no options passed for Babel 6", () => {

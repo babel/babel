@@ -6,12 +6,11 @@ import pluginTransformTypeScript from "@babel/plugin-transform-typescript";
 import { commonJS } from "$repo-utils";
 import { cloneNode } from "@babel/types";
 
-import _generate from "../lib/index.js";
-const generate = _generate.default || _generate;
+import generate from "../lib/index.js";
 
 const { __dirname } = commonJS(import.meta.url);
 
-const suites = (fixtures.default || fixtures)(path.join(__dirname, "fixtures"));
+const suites = fixtures(path.join(__dirname, "fixtures"));
 
 const FAILURES = [
   // Todo: support trailing comments spanned across trailing comma

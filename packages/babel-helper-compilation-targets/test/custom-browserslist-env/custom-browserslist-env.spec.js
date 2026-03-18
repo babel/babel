@@ -1,8 +1,7 @@
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
-import _getTargets from "../../lib/index.js";
-const getTargets = _getTargets.default || _getTargets;
+import getTargets from "../../lib/index.js";
 
 it("allows custom browserslist env", () => {
   const actual = getTargets(

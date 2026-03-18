@@ -1,7 +1,6 @@
 import { parse } from "@babel/parser";
 
-import _traverse, { visitors } from "../lib/index.js";
-const traverse = _traverse.default || _traverse;
+import traverse, { visitors } from "../lib/index.js";
 
 describe("visitors", () => {
   describe("merge", () => {
