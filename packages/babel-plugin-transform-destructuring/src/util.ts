@@ -147,14 +147,14 @@ export class DestructuringTransformer {
         t.assignmentExpression(
           op,
           id,
-          t.cloneNode(init) || this.scope.buildUndefinedNode(),
+          t.cloneNode(init) || t.buildUndefinedNode(),
         ),
       );
     } else {
       let nodeInit: t.Expression;
 
       if (this.kind === "const" && init === null) {
-        nodeInit = this.scope.buildUndefinedNode();
+        nodeInit = t.buildUndefinedNode();
       } else {
         nodeInit = t.cloneNode(init);
       }
@@ -268,11 +268,7 @@ export class DestructuringTransformer {
     this.nodes.push(this.buildVariableDeclaration(tempId, valueRef));
 
     const tempConditional = t.conditionalExpression(
-      t.binaryExpression(
-        "===",
-        t.cloneNode(tempId),
-        this.scope.buildUndefinedNode(),
-      ),
+      t.binaryExpression("===", t.cloneNode(tempId), t.buildUndefinedNode()),
       right,
       t.cloneNode(tempId),
     );
@@ -450,8 +446,7 @@ export class DestructuringTransformer {
     pattern: t.ArrayPattern,
     arr: UnpackableArrayExpression,
   ) {
-    const holeToUndefined = (el: t.Expression) =>
-      el ?? this.scope.buildUndefinedNode();
+    const holeToUndefined = (el: t.Expression) => el ?? t.buildUndefinedNode();
 
     for (let i = 0; i < pattern.elements.length; i++) {
       const elem = pattern.elements[i];

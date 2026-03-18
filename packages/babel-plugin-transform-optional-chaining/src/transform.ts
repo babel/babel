@@ -295,7 +295,7 @@ export function transform(
       path,
       willPathCastToBoolean(maybeWrapped)
         ? t.booleanLiteral(false)
-        : scope.buildUndefinedNode(),
+        : t.buildUndefinedNode(),
       wrapLast,
     );
   }

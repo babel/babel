@@ -9,17 +9,12 @@ const {
   isObjectProperty,
   isPrivateName,
   memberExpression,
-  numericLiteral,
   objectPattern,
   restElement,
   variableDeclarator,
   variableDeclaration,
-  unaryExpression,
+  buildUndefinedNode,
 } = t;
-
-function buildUndefinedNode() {
-  return unaryExpression("void", numericLiteral(0));
-}
 
 function transformAssignmentPattern(
   initializer: t.Expression,

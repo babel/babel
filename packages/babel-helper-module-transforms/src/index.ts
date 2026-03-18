@@ -132,7 +132,6 @@ export function rewriteModuleStatementsAndPrepareHeader(
   // Create all of the statically known named exports.
   headers.push(
     ...buildExportInitializationStatements(
-      path,
       meta,
       wrapReference,
       constantReexports,
@@ -447,7 +446,6 @@ function buildExportNameListDeclaration(
  * export names with their expected values.
  */
 function buildExportInitializationStatements(
-  programPath: NodePath,
   metadata: ModuleMetadata,
   wrapReference: (ref: t.Expression, payload: unknown) => t.Expression | null,
   constantReexports: boolean | void = false,
@@ -520,7 +518,7 @@ function buildExportInitializationStatements(
               buildInitStatement(
                 metadata,
                 uninitializedExportNames,
-                programPath.scope.buildUndefinedNode(),
+                t.buildUndefinedNode(),
               ),
             );
             // reset after uninitializedExportNames has been transformed
@@ -537,7 +535,7 @@ function buildExportInitializationStatements(
           buildInitStatement(
             metadata,
             uninitializedExportNames,
-            programPath.scope.buildUndefinedNode(),
+            t.buildUndefinedNode(),
           ),
         );
       }

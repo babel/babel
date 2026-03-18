@@ -350,7 +350,7 @@ export function wrapLoopBody(
 
     if (returnNum) {
       for (const path of state.returns) {
-        const arg = path.node.argument || path.scope.buildUndefinedNode();
+        const arg = path.node.argument || t.buildUndefinedNode();
         path.replaceWith(
           template.statement.ast`
           return { v: ${arg} };

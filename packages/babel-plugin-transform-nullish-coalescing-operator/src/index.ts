@@ -64,7 +64,7 @@ export default declare((api, { loose = false }: Options) => {
                   t.binaryExpression(
                     "!==",
                     t.cloneNode(ref),
-                    scope.buildUndefinedNode(),
+                    t.buildUndefinedNode(),
                   ),
                 ),
             t.cloneNode(ref),

@@ -705,9 +705,7 @@ function generateDecorationList(
         (!process.env.BABEL_8_BREAKING && version === "2023-05")) &&
       haveOneThis
     ) {
-      decs.push(
-        decoratorsThis[i] || t.unaryExpression("void", t.numericLiteral(0)),
-      );
+      decs.push(decoratorsThis[i] || t.buildUndefinedNode());
     }
     decs.push(decorators[i].expression);
   }
@@ -873,7 +871,7 @@ function fieldInitializerToClosure(value: t.Expression) {
 }
 
 function maybeSequenceExpression(exprs: t.Expression[]) {
-  if (exprs.length === 0) return t.unaryExpression("void", t.numericLiteral(0));
+  if (exprs.length === 0) return t.buildUndefinedNode();
   if (exprs.length === 1) return exprs[0];
   return t.sequenceExpression(exprs);
 }
@@ -2165,7 +2163,7 @@ function createLocalsAssignment(
       if (maybePrivateBrandName) {
         args.push(createPrivateBrandCheckClosure(maybePrivateBrandName));
       } else if (superClass) {
-        args.push(t.unaryExpression("void", t.numericLiteral(0)));
+        args.push(t.buildUndefinedNode());
       }
       if (superClass) args.push(superClass);
       rhs = t.callExpression(state.addHelper("applyDecs2305"), args);
@@ -2182,7 +2180,7 @@ function createLocalsAssignment(
     if (maybePrivateBrandName) {
       args.push(createPrivateBrandCheckClosure(maybePrivateBrandName));
     } else if (superClass) {
-      args.push(t.unaryExpression("void", t.numericLiteral(0)));
+      args.push(t.buildUndefinedNode());
     }
     if (superClass) args.push(superClass);
     rhs = t.callExpression(state.addHelper("applyDecs2311"), args);

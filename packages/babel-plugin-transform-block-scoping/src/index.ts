@@ -204,7 +204,7 @@ function transformBlockScopedVariable(
       //  for (;;) { let a; }
       // to make sure that `a` doesn't keep the value from
       // the previous iteration.
-      decl.init ??= path.scope.buildUndefinedNode();
+      decl.init ??= t.buildUndefinedNode();
     }
   }
 
