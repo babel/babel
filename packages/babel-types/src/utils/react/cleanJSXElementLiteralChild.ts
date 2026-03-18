@@ -47,5 +47,18 @@ export default function cleanJSXElementLiteralChild(
     }
   }
 
+  // Decode normalized whitespace entities that the parser preserved in
+  // JSXText.value (e.g. &#x20; for entity-encoded space). These were
+  // kept as entities so that the trimming logic above would not strip
+  // whitespace the developer explicitly encoded as HTML entities.
+  // See: https://github.com/babel/babel/issues/17683
+  if (str) {
+    str = str
+      .replace(/&#x20;/gi, " ")
+      .replace(/&#x9;/gi, "\t")
+      .replace(/&#xa;/gi, "\n")
+      .replace(/&#xd;/gi, "\r");
+  }
+
   if (str) args.push(inherits(stringLiteral(str), child));
 }
