@@ -95,9 +95,6 @@
       "path": "./packages/babel-helper-replace-supers"
     },
     {
-      "path": "./packages/babel-helper-simple-access"
-    },
-    {
       "path": "./packages/babel-helper-skip-transparent-expression-wrappers"
     },
     {

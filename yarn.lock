@@ -1081,16 +1081,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/helper-simple-access@workspace:packages/babel-helper-simple-access":
-  version: 0.0.0-use.local
-  resolution: "@babel/helper-simple-access@workspace:packages/babel-helper-simple-access"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
-  languageName: unknown
-  linkType: soft
-
 "@babel/helper-skip-transparent-expression-wrappers@npm:^8.0.0-rc.2":
   version: 8.0.0-rc.2
   resolution: "@babel/helper-skip-transparent-expression-wrappers@npm:8.0.0-rc.2"
