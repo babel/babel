@@ -1,0 +1,145 @@
+{
+  "type": "File",
+  "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":51,"index":51}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":51,"index":51}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":51,"index":51}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":50,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":50,"index":50}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"_"},
+              "name": "_"
+            },
+            "init": {
+              "type": "ConditionalExpression",
+              "start":8,"end":50,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":50,"index":50}},
+              "test": {
+                "type": "Identifier",
+                "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9},"identifierName":"a"},
+                "name": "a"
+              },
+              "consequent": {
+                "type": "ConditionalExpression",
+                "start":12,"end":31,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":31,"index":31}},
+                "test": {
+                  "type": "Identifier",
+                  "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"b"},
+                  "name": "b"
+                },
+                "consequent": {
+                  "type": "AssignmentExpression",
+                  "start":17,"end":22,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":22,"index":22}},
+                  "operator": "=",
+                  "left": {
+                    "type": "Identifier",
+                    "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18},"identifierName":"b"},
+                    "name": "b"
+                  },
+                  "right": {
+                    "type": "NumericLiteral",
+                    "start":21,"end":22,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":22,"index":22}},
+                    "extra": {
+                      "rawValue": 1,
+                      "raw": "1"
+                    },
+                    "value": 1
+                  },
+                  "extra": {
+                    "parenthesized": true,
+                    "parenStart": 16
+                  }
+                },
+                "alternate": {
+                  "type": "ArrowFunctionExpression",
+                  "start":25,"end":31,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":31,"index":31}},
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "start":25,"end":26,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":26,"index":26},"identifierName":"c"},
+                      "name": "c"
+                    }
+                  ],
+                  "body": {
+                    "type": "NumericLiteral",
+                    "start":30,"end":31,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":31,"index":31}},
+                    "extra": {
+                      "rawValue": 0,
+                      "raw": "0"
+                    },
+                    "value": 0
+                  }
+                }
+              },
+              "alternate": {
+                "type": "ArrowFunctionExpression",
+                "start":34,"end":50,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":50,"index":50}},
+                "returnType": {
+                  "type": "TSTypeAnnotation",
+                  "start":42,"end":45,"loc":{"start":{"line":1,"column":42,"index":42},"end":{"line":1,"column":45,"index":45}},
+                  "typeAnnotation": {
+                    "type": "TSTypeReference",
+                    "start":44,"end":45,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":45,"index":45}},
+                    "typeName": {
+                      "type": "Identifier",
+                      "start":44,"end":45,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":45,"index":45},"identifierName":"c"},
+                      "name": "c"
+                    }
+                  }
+                },
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "AssignmentPattern",
+                    "start":35,"end":40,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":40,"index":40}},
+                    "left": {
+                      "type": "Identifier",
+                      "start":35,"end":36,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":36,"index":36},"identifierName":"b"},
+                      "name": "b"
+                    },
+                    "right": {
+                      "type": "NumericLiteral",
+                      "start":39,"end":40,"loc":{"start":{"line":1,"column":39,"index":39},"end":{"line":1,"column":40,"index":40}},
+                      "extra": {
+                        "rawValue": 1,
+                        "raw": "1"
+                      },
+                      "value": 1
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "NumericLiteral",
+                  "start":49,"end":50,"loc":{"start":{"line":1,"column":49,"index":49},"end":{"line":1,"column":50,"index":50}},
+                  "extra": {
+                    "rawValue": 0,
+                    "raw": "0"
+                  },
+                  "value": 0
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
