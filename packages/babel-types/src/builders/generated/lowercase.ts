@@ -466,13 +466,14 @@ export function memberExpression(
   return node;
 }
 export function newExpression(
-  callee: t.Expression | t.Super | t.V8IntrinsicIdentifier,
+  callee: t.Expression,
   _arguments: (t.Expression | t.SpreadElement | t.ArgumentPlaceholder)[],
 ): t.NewExpression {
   const node: t.NewExpression = {
     type: "NewExpression",
     callee,
     arguments: _arguments,
+    typeParameters: null,
   };
   const defs = NODE_FIELDS.NewExpression;
   validate(defs.callee, node, "callee", callee, 1);

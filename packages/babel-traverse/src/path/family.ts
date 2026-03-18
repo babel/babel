@@ -584,7 +584,7 @@ function getBindingIdentifierPaths(
           // @ts-expect-error FIXME: NodePath<null>
           search.push(...child);
         } else if (child.node) {
-          search.push(child);
+          search.push(child as NodePath);
         }
       }
     }

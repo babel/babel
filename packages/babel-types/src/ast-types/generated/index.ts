@@ -555,11 +555,13 @@ export interface MemberExpression extends BaseNode {
 
 export interface NewExpression extends BaseNode {
   type: "NewExpression";
-  callee: Expression | Super | V8IntrinsicIdentifier;
+  callee: Expression;
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
-  optional?: boolean | null;
-  typeArguments?: TypeParameterInstantiation | null;
-  typeParameters?: TSTypeParameterInstantiation | null;
+  typeArguments?:
+    | TypeParameterInstantiation
+    | TSTypeParameterInstantiation
+    | null;
+  typeParameters: any;
 }
 
 export interface Program extends BaseNode {
@@ -8853,7 +8855,7 @@ export interface ParentMaps {
     | WhileStatement
     | WithStatement
     | YieldExpression;
-  V8IntrinsicIdentifier: CallExpression | NewExpression;
+  V8IntrinsicIdentifier: CallExpression;
   VariableDeclaration:
     | BlockStatement
     | DoWhileStatement

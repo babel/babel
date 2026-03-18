@@ -9,7 +9,7 @@ multipleExports.ts
 regularExpressionAnnexB.ts # Babel parser does not handle regex parsing
 
 
-# 130 valid programs produced a parsing error
+# 131 valid programs produced a parsing error
 
 ArrowFunctionExpression1.ts
 MemberAccessorDeclaration15.ts
@@ -139,5 +139,6 @@ sourceMapValidationDecorators.ts
 stackDepthLimitCastingType.ts
 strictOptionalProperties1.ts
 superCallFromClassThatHasNoBaseType1.ts
+superNewCall1.ts
 unicodeEscapesInNames02.ts
 varArgConstructorMemberParameter.ts

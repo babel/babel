@@ -752,8 +752,26 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     base: N.Expression,
     startLoc: Position,
+    noCalls?: false | null,
+  ): N.Expression;
+  parseSubscripts(
+    this: Parser,
+    base: N.Expression | N.Super | N.Import,
+    startLoc: Position,
+    noCalls: true,
+  ): N.Expression | N.Super | N.Import;
+  parseSubscripts(
+    this: Parser,
+    base: N.Expression | N.Super | N.Import,
+    startLoc: Position,
     noCalls?: boolean | null,
-  ): N.Expression {
+  ): N.Expression | N.Super | N.Import;
+  parseSubscripts(
+    this: Parser,
+    base: N.Expression | N.Super | N.Import,
+    startLoc: Position,
+    noCalls?: boolean | null,
+  ) {
     const state = {
       optionalChainMember: false,
       maybeAsyncArrow: this.atPossibleAsyncArrow(base),
@@ -781,7 +799,7 @@ export default abstract class ExpressionParser extends LValParser {
   ): N.Expression {
     const { type } = this.state;
     if (!noCalls && type === tt.doubleColon) {
-      return this.parseBind(base, startLoc, noCalls, state);
+      return this.parseBind(base, startLoc, state);
     } else if (tokenIsTemplate(type)) {
       return this.parseTaggedTemplateExpression(base, startLoc, state);
     }
@@ -869,18 +887,27 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     base: N.Expression,
     startLoc: Position,
-    noCalls: boolean | undefined | null,
     state: N.ParseSubscriptState,
   ): N.Expression {
     const node = this.startNodeAt<N.BindExpression>(startLoc);
     node.object = base;
     this.next(); // eat '::'
-    node.callee = this.parseNoCallExpr();
+    const isImport = this.match(tt._import);
+    const callee = this.parseNoCallExpr();
+    if (
+      callee.type === "Super" ||
+      (isImport && callee.type === "ImportExpression") ||
+      callee.type === "Import" // This check implies isImport
+    ) {
+      throw this.raise(Errors.UnsupportedBindRHS, callee);
+    }
+    node.callee = callee;
+
     state.stop = true;
     return this.parseSubscripts(
       this.finishNode(node, "BindExpression"),
       startLoc,
-      noCalls,
+      false,
     );
   }
 
@@ -1971,10 +1998,13 @@ export default abstract class ExpressionParser extends LValParser {
     const callee = this.parseNoCallExpr();
     node.callee = callee;
     if (
-      isImport &&
-      (callee.type === "Import" || callee.type === "ImportExpression")
+      (isImport && callee.type === "ImportExpression") ||
+      callee.type === "Import" // This check implies isImport
     ) {
       this.raise(Errors.ImportCallNotNewExpression, callee);
+    }
+    if (callee.type === "Super") {
+      this.raise(Errors.SuperCallNotNewExpression, callee);
     }
   }
 

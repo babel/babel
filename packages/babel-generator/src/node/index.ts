@@ -38,12 +38,13 @@ for (const type of Object.keys(parens) as (keyof typeof parens)[]) {
   }
 }
 
-function isOrHasCallExpression(node: t.Node): boolean {
+function isOrHasLeadingCallExpression(node: t.Node): boolean {
   switch (node.type) {
     case "CallExpression":
+    case "ImportExpression":
       return true;
     case "MemberExpression":
-      return isOrHasCallExpression(node.object);
+      return isOrHasLeadingCallExpression(node.object);
   }
   return false;
 }
@@ -56,7 +57,12 @@ export function parentNeedsParens(
   switch (parentId) {
     case __node("NewExpression"):
       if (parent.callee === node) {
-        if (isOrHasCallExpression(node)) return true;
+        if (
+          isOrHasLeadingCallExpression(node) ||
+          node.type === "OptionalCallExpression" ||
+          node.type === "OptionalMemberExpression"
+        )
+          return true;
       }
       break;
     case __node("Decorator"):

@@ -10,7 +10,7 @@ declare class Position {
     constructor(line: number, col: number, index: number);
 }
 
-type SyntaxPlugin = "flow" | "typescript" | "jsx" | "pipelineOperator" | "placeholders";
+type SyntaxPlugin = "flow" | "typescript" | "jsx" | "functionBind" | "pipelineOperator" | "placeholders";
 type ParseErrorCode = "BABEL_PARSER_SYNTAX_ERROR" | "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED";
 interface ParseErrorSpecification<ErrorDetails> {
     code: ParseErrorCode;
