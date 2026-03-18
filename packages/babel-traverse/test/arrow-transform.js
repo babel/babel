@@ -2,8 +2,7 @@ import { NodePath } from "../lib/index.js";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
-import _generate from "@babel/generator";
-const generate = _generate.default || _generate;
+import generate from "@babel/generator";
 
 function assertConversion(
   input,

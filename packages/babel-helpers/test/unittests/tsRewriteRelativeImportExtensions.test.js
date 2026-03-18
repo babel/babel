@@ -1,7 +1,4 @@
-import _tsRewriteRelativeImportExtensions from "../../lib/helpers/tsRewriteRelativeImportExtensions.js";
-const tsRewriteRelativeImportExtensions =
-  _tsRewriteRelativeImportExtensions.default ||
-  _tsRewriteRelativeImportExtensions;
+import tsRewriteRelativeImportExtensions from "../../lib/helpers/tsRewriteRelativeImportExtensions.js";
 
 describe("tsRewriteRelativeImportExtensions", () => {
   it.each([

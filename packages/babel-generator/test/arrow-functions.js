@@ -1,7 +1,6 @@
 import { parse } from "@babel/parser";
 
-import _generate from "../lib/index.js";
-const generate = _generate.default || _generate;
+import generate from "../lib/index.js";
 
 describe("parameter parentheses", () => {
   // Common source text for several snapshot tests

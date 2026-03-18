@@ -15,9 +15,7 @@ import {
 import { dirname, join } from "node:path";
 import { spawn } from "node:child_process";
 import { transformSync } from "@babel/core";
-import _checkDuplicatedNodes from "@babel/helper-check-duplicate-nodes";
-const checkDuplicatedNodes =
-  _checkDuplicatedNodes.default || _checkDuplicatedNodes;
+import checkDuplicatedNodes from "@babel/helper-check-duplicate-nodes";
 
 import { commonJS } from "$repo-utils";
 

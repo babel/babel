@@ -1,7 +1,6 @@
 import cloneDeep from "../lib/transformation/util/clone-deep.js";
 
 describe("util", () => {
-  const clone = cloneDeep.default || cloneDeep;
   it("deep clone", () => {
     const circle = {};
     circle.circle = circle;
@@ -16,7 +15,7 @@ describe("util", () => {
       object,
       object2: object,
     };
-    const cloned = clone(ast);
+    const cloned = cloneDeep(ast);
 
     expect(cloned.object === ast.object).toBe(false);
     expect(cloned.object === cloned.object2).toBe(false);
@@ -35,7 +34,7 @@ describe("util", () => {
       circle,
     };
     expect(() => {
-      clone(ast);
+      cloneDeep(ast);
     }).toThrow("Babel-deepClone: Cycles are not allowed in AST");
   });
 });

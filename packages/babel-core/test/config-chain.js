@@ -5,8 +5,7 @@ import { fileURLToPath } from "node:url";
 import * as babel from "../lib/index.js";
 import { itSatisfies, itNegate } from "$repo-utils";
 
-import _getTargets from "@babel/helper-compilation-targets";
-const getTargets = _getTargets.default || _getTargets;
+import getTargets from "@babel/helper-compilation-targets";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
