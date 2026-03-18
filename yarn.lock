@@ -475,7 +475,6 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
-    "@jridgewell/remapping": "npm:^2.3.5"
     "@jridgewell/trace-mapping": "npm:^0.3.28"
     "@types/convert-source-map": "npm:^2.0.0"
     "@types/gensync": "npm:^1.0.0"
