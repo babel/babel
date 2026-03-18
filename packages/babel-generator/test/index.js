@@ -329,24 +329,6 @@ describe("generation", function () {
 
     expect(generated).toMatchInlineSnapshot(`
       Object {
-        "__mergedMap": Object {
-          "file": undefined,
-          "ignoreList": Array [],
-          "mappings": "AAAA,SAASA,IAAGA,CAAA,EAAG;EAAEC,IAAG;AAAE",
-          "names": Array [
-            "foo",
-            "bar",
-          ],
-          "sourceRoot": undefined,
-          "sources": Array [
-            "inline",
-          ],
-          "sourcesContent": Array [
-            "function foo() { bar; }
-      ",
-          ],
-          "version": 3,
-        },
         "code": "function foo2() {
         bar2;
       }",

@@ -50,7 +50,7 @@ export default function generateCode(
 
   let { code: outputCode } = result;
 
-  let outputMap: typeof result.map = { ...result.map! };
+  let outputMap = result.map;
 
   if (opts.sourceMaps === "inline" || opts.sourceMaps === "both") {
     outputCode += "\n" + convertSourceMap.fromObject(outputMap).toComment();
