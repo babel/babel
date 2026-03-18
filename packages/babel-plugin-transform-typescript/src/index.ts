@@ -720,11 +720,8 @@ export default declare((api, opts: Options) => {
     }
 
     // "React" or the JSX pragma is referenced as a value if there are any JSX elements/fragments in the code.
-    let sourceFileHasJsx = false;
-
-    t.traverseFast(programPath.node, node => {
+    const sourceFileHasJsx = t.traverseFast(programPath.node, node => {
       if (t.isJSXElement(node) || t.isJSXFragment(node)) {
-        sourceFileHasJsx = true;
         return t.traverseFast.stop;
       }
     });

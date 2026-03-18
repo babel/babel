@@ -261,7 +261,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                 const location = node.loc;
                 if (!location) {
                   // the element was generated and doesn't have location information
-                  return path.scope.buildUndefinedNode();
+                  return t.buildUndefinedNode();
                 }
 
                 if (!fileNameIdentifier) {
@@ -603,7 +603,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         // automatically include __source and __self in this plugin
         // so we can eliminate the need for separate Babel plugins in Babel 8
         args.push(
-          extracted.key ?? path.scope.buildUndefinedNode(),
+          extracted.key ?? t.buildUndefinedNode(),
           t.booleanLiteral(children.length > 1),
         );
         if (sourceSelf) {
@@ -611,7 +611,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
             args.push(extracted.__source);
             if (extracted.__self) args.push(extracted.__self);
           } else if (extracted.__self) {
-            args.push(path.scope.buildUndefinedNode(), extracted.__self);
+            args.push(t.buildUndefinedNode(), extracted.__self);
           }
         }
       } else if (extracted.key !== undefined) {
@@ -666,7 +666,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
       if (development) {
         args.push(
-          path.scope.buildUndefinedNode(),
+          t.buildUndefinedNode(),
           t.booleanLiteral(children.length > 1),
         );
       }

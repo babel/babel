@@ -816,7 +816,7 @@ function buildPrivateFieldInitLoose(
   privateNamesMap: PrivateNamesMap,
 ) {
   const { id } = privateNamesMap.get(prop.node.key.id.name)!;
-  const value = prop.node.value || prop.scope.buildUndefinedNode();
+  const value = prop.node.value || t.buildUndefinedNode();
 
   return inheritPropComments(
     template.statement.ast`
@@ -838,7 +838,7 @@ function buildPrivateInstanceFieldInitSpec(
   state: File,
 ) {
   const { id } = privateNamesMap.get(prop.node.key.id.name)!;
-  const value = prop.node.value || prop.scope.buildUndefinedNode();
+  const value = prop.node.value || t.buildUndefinedNode();
 
   const helper = state.addHelper("classPrivateFieldInitSpec");
   return inheritLoc(
@@ -913,8 +913,8 @@ function buildPrivateMethodInitLoose(
           // configurable is false by default
           // enumerable is false by default
           // writable is false by default
-          get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-          set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+          get: ${getId ? getId.name : t.buildUndefinedNode()},
+          set: ${setId ? setId.name : t.buildUndefinedNode()}
         });
       ` as t.ExpressionStatement,
       prop,
@@ -964,7 +964,7 @@ function buildPublicFieldInitLoose(
   prop: NodePath<t.ClassProperty>,
 ) {
   const { key, computed } = prop.node;
-  const value = prop.node.value || prop.scope.buildUndefinedNode();
+  const value = prop.node.value || t.buildUndefinedNode();
 
   return inheritPropComments(
     t.expressionStatement(
@@ -984,7 +984,7 @@ function buildPublicFieldInitSpec(
   state: File,
 ) {
   const { key, computed } = prop.node;
-  const value = prop.node.value || prop.scope.buildUndefinedNode();
+  const value = prop.node.value || t.buildUndefinedNode();
 
   return inheritPropComments(
     t.expressionStatement(
@@ -1021,8 +1021,8 @@ function buildPrivateStaticMethodInitLoose(
           // configurable is false by default
           // enumerable is false by default
           // writable is false by default
-          get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-          set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+          get: ${getId ? getId.name : t.buildUndefinedNode()},
+          set: ${setId ? setId.name : t.buildUndefinedNode()}
         })
       `,
       prop,
@@ -1155,11 +1155,11 @@ const thisContextVisitor = visitors.environmentVisitor<ReplaceThisState>({
     path.replaceWith(t.cloneNode(state.thisRef));
   },
   MetaProperty(path) {
-    const { node, scope } = path;
+    const { node } = path;
     // if there are `new.target` in static field
     // we should replace it with `undefined`
     if (node.meta.name === "new" && node.property.name === "target") {
-      path.replaceWith(scope.buildUndefinedNode());
+      path.replaceWith(t.buildUndefinedNode());
     }
   },
 });

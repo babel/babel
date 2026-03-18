@@ -58,7 +58,6 @@ export const getVisitor = (): Visitor<PluginPass> => ({
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       bodyBlockPath.traverse(functionSentVisitor, {
         context: contextId,
-        pluginPass: this,
       });
 
       const outerBody: any[] = [];
@@ -357,7 +356,6 @@ const argumentsThisVisitor: Visitor<{
 
 const functionSentVisitor: Visitor<{
   context: t.Identifier;
-  pluginPass: PluginPass;
 }> = {
   MetaProperty(path, state) {
     const { node } = path;

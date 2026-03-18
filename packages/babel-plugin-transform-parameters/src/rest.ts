@@ -266,7 +266,7 @@ function optimiseIndexGetter(
     const valRes = offsetTestPath.get("left").evaluate();
     if (valRes.confident) {
       if (valRes.value === true) {
-        replacedParentPath.replaceWith(scope.buildUndefinedNode());
+        replacedParentPath.replaceWith(t.buildUndefinedNode());
       } else {
         offsetTestPath.replaceWith(offsetTestPath.get("right"));
       }

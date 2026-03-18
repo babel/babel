@@ -12,7 +12,7 @@ export default function rewriteThis(programPath: NodePath) {
   if (!rewriteThisVisitor) {
     rewriteThisVisitor = visitors.environmentVisitor({
       ThisExpression(path) {
-        path.replaceWith(t.unaryExpression("void", t.numericLiteral(0), true));
+        path.replaceWith(t.buildUndefinedNode());
       },
     });
     rewriteThisVisitor.noScope = true;

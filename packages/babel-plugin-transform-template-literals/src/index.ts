@@ -69,9 +69,7 @@ export default declare((api, options: Options) => {
         for (const elem of quasi.quasis) {
           const { raw, cooked } = elem.value;
           const value =
-            cooked == null
-              ? path.scope.buildUndefinedNode()
-              : t.stringLiteral(cooked);
+            cooked == null ? t.buildUndefinedNode() : t.stringLiteral(cooked);
 
           strings.push(value);
           raws.push(t.stringLiteral(raw));
