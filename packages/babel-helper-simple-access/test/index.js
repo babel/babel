@@ -7,7 +7,7 @@ const plugin = (_api, options) => {
   return {
     visitor: {
       Program(path) {
-        (simplifyAccess.default || simplifyAccess)(path, new Set(bindingNames));
+        simplifyAccess(path, new Set(bindingNames));
       },
     },
   };

@@ -3,7 +3,7 @@ import { createRequire } from "node:module";
 
 const [parse, generate] = await Promise.all([
   import("@babel/parser").then(ns => ns.parse),
-  import("@babel/generator").then(ns => ns.default.default || ns.default),
+  import("@babel/generator").then(ns => ns.default),
 ]).catch(error => {
   console.error(error);
   throw new Error(

@@ -1,10 +1,9 @@
-import _normalizeOptions, {
+import normalizeOptions, {
   checkDuplicateIncludeExcludes,
   validateModulesOption,
   validateUseBuiltInsOption,
   normalizePluginName,
 } from "../lib/normalize-options.js";
-const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
 
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {

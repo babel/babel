@@ -1,7 +1,5 @@
-import _helper from "../lib/index.js";
+import helper from "../lib/index.js";
 import { transformSync, types as t } from "@babel/core";
-
-const helper = _helper.default || _helper;
 
 describe("@babel/helper-builder-react-jsx", () => {
   // The builder-react-jsx usage in transform-react-jsx 7.9.0

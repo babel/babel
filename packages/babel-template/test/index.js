@@ -1,9 +1,7 @@
 import * as t from "@babel/types";
 
-import _generator from "../../babel-generator/lib/index.js";
-import _template from "../lib/index.js";
-const generator = _generator.default || _generator;
-const template = _template.default || _template;
+import generator from "../../babel-generator/lib/index.js";
+import template from "../lib/index.js";
 
 const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
 

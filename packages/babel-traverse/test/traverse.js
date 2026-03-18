@@ -2,8 +2,7 @@ import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 import { describeNoCITGM } from "$repo-utils";
 
-import _traverse from "../lib/index.js";
-const traverse = _traverse.default || _traverse;
+import traverse from "../lib/index.js";
 
 import { callFromAtBabelPackage } from "./helpers/@babel/fake-babel-package/index.js";
 
