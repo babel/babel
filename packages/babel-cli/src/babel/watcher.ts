@@ -17,24 +17,36 @@ export function enable({
   ignore,
 }: {
   enableGlobbing: boolean;
-  ignore?: (string | RegExp | ((path: string) => boolean))[];
+  ignore?: any;
 }) {
+  if (watcher) {
+    void watcher.close();
+  }
+  fileToDeps.clear();
+  depToFiles.clear();
+  watchQueue.clear();
+  hasStarted = false;
+
   isWatchMode = true;
 
   const { FSWatcher } = requireChokidar();
 
-  const ignored = ignore?.length
+  const ignoreArray = Array.isArray(ignore) ? ignore : ignore ? [ignore] : [];
+
+  const ignored = ignoreArray.length
     ? (watchedPath: string): boolean => {
         const relPath = path.isAbsolute(watchedPath)
           ? path.relative(process.cwd(), watchedPath)
           : watchedPath;
         const normalizedPath = relPath.split(path.sep).join("/");
-        const stringPatterns = ignore.filter(
+
+        const stringPatterns = ignoreArray.filter(
           (p): p is string => typeof p === "string",
         );
-        if (micromatch.isMatch(normalizedPath, stringPatterns)) return true;
+        const isMatch = micromatch.isMatch(normalizedPath, stringPatterns);
+        if (isMatch) return true;
 
-        for (const p of ignore) {
+        for (const p of ignoreArray) {
           if (typeof p === "function" && p(watchedPath)) return true;
           if (p instanceof RegExp && p.test(watchedPath)) return true;
         }

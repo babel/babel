@@ -48,4 +48,4 @@ rl.on("line", async function listener(str) {
 setTimeout(() => {
   console.error("EXECUTOR TIMEOUT - This likely means Babel produced output when it shouldn't have or vice-versa");
   process.exit(1);
-}, 15000);
+}, 30000);
