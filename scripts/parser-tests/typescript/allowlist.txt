@@ -1,4 +1,4 @@
-# 9 invalid programs did not produce a parsing error
+# 11 invalid programs did not produce a parsing error
 
 collisionArgumentsArrowFunctions.ts
 collisionArgumentsFunction.ts
@@ -9,13 +9,13 @@ multipleExports.ts
 regularExpressionAnnexB.ts
 requireOfJsonFileWithoutResolveJsonModule.ts
 strictModeReservedWordInModuleDeclaration.ts
+typeAliasDeclarationEmit3.ts
+typeInterfaceDeclarationsInBlockStatements1.ts
 
 
-# 115 valid programs produced a parsing error
+# 108 valid programs produced a parsing error
 
-accessorBodyInTypeContext.ts
 anyDeclare.ts
-asiAbstract.ts
 augmentedTypesClass.ts
 augmentedTypesClass2.ts
 augmentedTypesClass2a.ts
@@ -31,7 +31,6 @@ classOverloadForFunction.ts
 classWithEmptyTypeParameter.ts
 conflictingDeclarationsImportFromNamespace1.ts
 conflictingDeclarationsImportFromNamespace2.ts
-constDeclarations-invalidContexts.ts
 constDeclarations-scopes.ts
 constDeclarations-validContexts.ts
 declarationEmitDestructuring2.ts
@@ -49,9 +48,6 @@ duplicateIdentifierInCatchBlock.ts
 duplicateLabel1.ts
 duplicateLabel2.ts
 duplicatePackage_withErrors.ts
-emptyGenericParamList.ts
-emptyTypeArgumentList.ts
-emptyTypeArgumentListWithNew.ts
 enumGenericTypeClash.ts
 es6ImportDefaultBindingMergeErrors.ts
 es6ImportNameSpaceImportMergeErrors.ts
@@ -87,7 +83,6 @@ jsxAttributeMissingInitializer.tsx
 jsxAttributeWithoutExpressionReact.tsx
 letAndVarRedeclaration.ts
 letAsIdentifier.ts
-letDeclarations-invalidContexts.ts
 letDeclarations-scopes-duplicates.ts
 letDeclarations-scopes.ts
 letDeclarations-validContexts.ts

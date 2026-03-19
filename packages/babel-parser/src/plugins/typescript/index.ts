@@ -2530,9 +2530,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
         return this.finishNode(node, bodilessType);
       }
-      if (bodilessType === "TSDeclareFunction" && this.state.isAmbientContext) {
-        this.raise(TSErrors.DeclareFunctionHasImplementation, node);
-        if ((node as Undone<N.FunctionDeclaration>).declare) {
+      if (bodilessType && this.state.isAmbientContext) {
+        if (bodilessType === "TSDeclareFunction" || !node.declare) {
+          this.raise(TSErrors.DeclareFunctionHasImplementation, node);
+        }
+        if (
+          bodilessType === "TSDeclareFunction" &&
+          (node as Undone<N.FunctionDeclaration>).declare
+        ) {
           return super.parseFunctionBodyAndFinish(node, bodilessType, isMethod);
         }
       }

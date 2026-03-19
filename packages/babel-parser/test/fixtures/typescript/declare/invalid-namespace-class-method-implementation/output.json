@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":55}},
+  "errors": [
+    "SyntaxError: An implementation cannot be declared in ambient contexts. (3:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":55}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":55}},
+        "kind": "namespace",
+        "id": {
+          "type": "Identifier",
+          "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"m"},
+          "name": "m"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":20,"end":55,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":5,"column":1,"index":55}},
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start":24,"end":53,"loc":{"start":{"line":2,"column":2,"index":24},"end":{"line":4,"column":3,"index":53}},
+              "id": {
+                "type": "Identifier",
+                "start":30,"end":31,"loc":{"start":{"line":2,"column":8,"index":30},"end":{"line":2,"column":9,"index":31},"identifierName":"C"},
+                "name": "C"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start":32,"end":53,"loc":{"start":{"line":2,"column":10,"index":32},"end":{"line":4,"column":3,"index":53}},
+                "body": [
+                  {
+                    "type": "ClassMethod",
+                    "start":38,"end":49,"loc":{"start":{"line":3,"column":4,"index":38},"end":{"line":3,"column":15,"index":49}},
+                    "static": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":38,"end":44,"loc":{"start":{"line":3,"column":4,"index":38},"end":{"line":3,"column":10,"index":44},"identifierName":"method"},
+                      "name": "method"
+                    },
+                    "computed": false,
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":47,"end":49,"loc":{"start":{"line":3,"column":13,"index":47},"end":{"line":3,"column":15,"index":49}},
+                      "body": [],
+                      "directives": []
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

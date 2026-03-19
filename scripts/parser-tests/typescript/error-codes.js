@@ -28,6 +28,7 @@ export default [
   // "TS1071", // '{0}' modifier cannot appear on an index signature.
   "TS1089", // '{0}' modifier cannot appear on a constructor declaration.
   "TS1090", // '{0}' modifier cannot appear on a parameter.
+  "TS1099", // Type argument list cannot be empty.
   "TS1100", // Invalid use of 'arguments' in strict mode.
   "TS1101", // 'with' statements are not allowed in strict mode.
   "TS1104", // A 'continue' statement can only be used within an enclosing iteration statement.
@@ -50,6 +51,7 @@ export default [
   "TS1142", // Line break not permitted here.
   "TS1144", // '{' or ';' expected.
   "TS1155", // 'const' declarations must be initialized.
+  "TS1156", // 'const' declarations can only be declared inside a block.
   "TS1160", // Unterminated template literal.
   "TS1161", // Unterminated regular expression literal.
   "TS1162", // An object member cannot be declared optional.
@@ -58,6 +60,7 @@ export default [
   "TS1173", // 'extends' clause must precede 'implements' clause.
   "TS1175", // 'implements' clause already seen.
   "TS1182", // A destructuring declaration must have an initializer.
+  "TS1183", // An implementation cannot be declared in ambient contexts.
   "TS1184", // Modifiers cannot appear here.
   "TS1185", // Merge conflict marker encountered.
   "TS1191", // An import declaration cannot have modifiers.
@@ -69,6 +72,7 @@ export default [
   "TS1212", // Identifier expected. '{0}' is a reserved word in strict mode."
   "TS1213", // Identifier expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.
   "TS1214", // Identifier expected. '{0}' is a reserved word in strict mode. Modules are automatically in strict mode.
+  "TS1244", // Abstract methods can only appear within an abstract class.
   "TS1246", // An interface property cannot have an initializer.
   "TS1247", // A type literal property cannot have an initializer.
   "TS1248", // A class member cannot have the 'const' keyword.
