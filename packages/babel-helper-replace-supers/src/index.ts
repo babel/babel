@@ -354,7 +354,7 @@ export default class ReplaceSupers {
         // @ts-expect-error static is not in ClassPrivateMethod
         methodPath.node.static ||
         methodPath.isStaticBlock(),
-      isPrivateMethod: methodPath.isPrivate() && methodPath.isMethod(),
+      isPrivateMethod: methodPath.isClassPrivateMethod(),
       getObjectRef: () => {
         return cloneNode(opts.objectRef || opts.getObjectRef!());
       },
