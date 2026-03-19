@@ -1,4 +1,4 @@
-# 9 invalid programs did not produce a parsing error
+# 10 invalid programs did not produce a parsing error
 
 collisionArgumentsArrowFunctions.ts
 collisionArgumentsFunction.ts
@@ -6,12 +6,13 @@ collisionArgumentsFunctionExpressions.ts
 dynamicImportTrailingComma.ts
 exportDeclarationsInAmbientNamespaces2.ts
 multipleExports.ts
+regExpWithOpenBracketInCharClass.ts
 regularExpressionAnnexB.ts
 requireOfJsonFileWithoutResolveJsonModule.ts
 strictModeReservedWordInModuleDeclaration.ts
 
 
-# 108 valid programs produced a parsing error
+# 95 valid programs produced a parsing error
 
 anyDeclare.ts
 augmentedTypesClass.ts
@@ -26,7 +27,6 @@ augmentedTypesVar.ts
 classCannotExtendVar.ts
 classExtendsMultipleBaseClasses.ts
 classOverloadForFunction.ts
-classWithEmptyTypeParameter.ts
 conflictingDeclarationsImportFromNamespace1.ts
 conflictingDeclarationsImportFromNamespace2.ts
 constDeclarations-scopes.ts
@@ -37,14 +37,11 @@ declarationEmitDestructuringWithOptionalBindingParameters.ts
 declareModifierOnImport1.ts
 decoratorsOnComputedProperties.ts
 decrementAndIncrementOperators.ts
-deleteOperatorInStrictMode.ts
 duplicateErrorNameNotFound.ts
 duplicateIdentifierBindingElementInParameterDeclaration1.ts
 duplicateIdentifierBindingElementInParameterDeclaration2.ts
 duplicateIdentifierEnum.ts
 duplicateIdentifierInCatchBlock.ts
-duplicateLabel1.ts
-duplicateLabel2.ts
 duplicatePackage_withErrors.ts
 enumGenericTypeClash.ts
 es6ImportDefaultBindingMergeErrors.ts
@@ -55,7 +52,6 @@ exportAssignmentImportMergeNoCrash.ts
 exportAssignmentWithDeclareAndExportModifiers.ts
 exportAssignmentWithDeclareModifier.ts
 exportAssignmentWithExportModifier.ts
-exportClassWithoutName.ts
 exportDefaultAsyncFunction2.ts
 exportInterfaceClassAndValue.ts
 exportSameNameFuncVar.ts
@@ -71,8 +67,6 @@ importAssertionNonstring.ts
 importDeclWithClassModifiers.ts
 importDeclWithDeclareModifierInAmbientContext.ts
 indexSignatureWithTrailingComma.ts
-indexTypeCheck.ts
-indexWithoutParamType.ts
 indexerSignatureWithRestParam.ts
 interfaceNaming1.ts
 interfaceWithImplements1.ts
@@ -91,8 +85,6 @@ letInLetConstDeclOfForOfAndForIn_ES6.ts
 letInLetDeclarations_ES5.ts
 letInLetDeclarations_ES6.ts
 mismatchedClassConstructorVariable.ts
-misspelledNewMetaProperty.ts
-modifiersOnInterfaceIndexSignature1.ts
 moduleDuplicateIdentifiers.ts
 moduleKeywordDeprecated.ts
 modulePreserve2.ts
@@ -101,18 +93,15 @@ moduleSharesNameWithImportDeclarationInsideIt5.ts
 multipleInheritance.ts
 nameCollisions.ts
 nonMergedOverloads.ts
-optionalChainWithInstantiationExpression1.ts
 parameterInitializerBeforeDestructuringEmit.ts
 parseInvalidNonNullableTypes.ts
 parseInvalidNullableTypes.ts
-parserConstructorDeclaration12.ts
 reExportGlobalDeclaration1.ts
 reExportGlobalDeclaration2.ts
 reExportGlobalDeclaration3.ts
 reExportGlobalDeclaration4.ts
 reExportUndefined1.ts
 redeclareParameterInCatchBlock.ts
-regularExpressionScanning.ts
 shadowedReservedCompilerDeclarationsWithNoEmit.ts
 sourceMap-LineBreaks.ts
 sourceMapValidationDecorators.ts
@@ -120,4 +109,3 @@ stackDepthLimitCastingType.ts
 strictOptionalProperties1.ts
 superCallFromClassThatHasNoBaseType1.ts
 superNewCall1.ts
-unicodeEscapesInNames02.ts

@@ -13,6 +13,7 @@ export default [
   "TS1003", // Identifier expected.
   "TS1005", // '{0}' expected.
   "TS1009", // Trailing comma not allowed.
+  "TS1011", // An element access expression should take an argument."
   "TS1014", // A rest parameter must be last in a parameter list.
   "TS1019", // An index signature parameter cannot have a question mark.
   "TS1028", // Accessibility modifier already seen.
@@ -25,20 +26,23 @@ export default [
   "TS1048", // A rest parameter cannot have an initializer.
   "TS1053", // A 'set' accessor cannot have rest parameter.
   "TS1054", // A 'get' accessor cannot have parameters.
-  // "TS1071", // '{0}' modifier cannot appear on an index signature.
+  "TS1071", // '{0}' modifier cannot appear on an index signature.
   "TS1089", // '{0}' modifier cannot appear on a constructor declaration.
   "TS1090", // '{0}' modifier cannot appear on a parameter.
+  "TS1096", // An index signature must have exactly one parameter.
+  "TS1098", // Type parameter list cannot be empty.
   "TS1099", // Type argument list cannot be empty.
   "TS1100", // Invalid use of 'arguments' in strict mode.
   "TS1101", // 'with' statements are not allowed in strict mode.
+  "TS1102", // 'delete' cannot be called on an identifier in strict mode.
   "TS1104", // A 'continue' statement can only be used within an enclosing iteration statement.
   "TS1105", // A 'break' statement can only be used within an enclosing iteration or switch statement.
   "TS1107", // Jump target cannot cross function boundary.
   "TS1108", // A 'return' statement can only be used within a function body.
   "TS1109", // Expression expected.
   "TS1110", // Type expected.
-  "TS1011", // An element access expression should take an argument.
   "TS1113", // A 'default' clause cannot appear more than once in a 'switch' statement.
+  "TS1114", // Duplicate label '{0}'.
   "TS1115", // A 'continue' statement can only jump to a label of an enclosing iteration statement.
   "TS1116", // A 'break' statement can only jump to a label of an enclosing statement.
   "TS1123", // Variable declaration list cannot be empty.
@@ -69,6 +73,7 @@ export default [
   "TS1197", // Catch clause variable cannot have an initializer.
   "TS1198", // An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
   "TS1200", // Line terminator not permitted before arrow.
+  "TS1211", // A class declaration without the 'default' modifier must have a name.
   "TS1212", // Identifier expected. '{0}' is a reserved word in strict mode."
   "TS1213", // Identifier expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.
   "TS1214", // Identifier expected. '{0}' is a reserved word in strict mode. Modules are automatically in strict mode.
@@ -80,15 +85,18 @@ export default [
   "TS1308", // 'await' expression is only allowed within an async function.
   "TS1312", // '=' can only be used in an object literal property inside a destructuring assignment.
   "TS1317", // A parameter property cannot be declared using a rest parameter.
+  "TS1344", // A label is not allowed here.
   "TS1384", // A 'new' expression with type arguments must always be followed by a parenthesized argument list.
   "TS1385", // Function type notation must be parenthesized when used in a union type.
   "TS1386", // Constructor type notation must be parenthesized when used in a union type.
   "TS1434", // Unexpected keyword or identifier.
   "TS1437", // Namespace must be given a name.
+  "TS1477", // An instantiation expression cannot be followed by a property access.
   "TS1487", // Octal escape sequences are not allowed.
   "TS1488", // Escape sequence '\8' is not allowed.
   "TS1490", // File appears to be binary.
   "TS1499", // Unknown regular expression flag.
+  "TS1500", // Duplicate regular expression flag.
   // "TS2300", // Duplicate identifier '{0}'.
   "TS2337", // Super calls are not permitted outside constructors or in nested functions inside constructors.
   // "TS2340", // Only public and protected methods of the base class are accessible via the 'super' keyword.
@@ -114,5 +122,5 @@ export default [
   "TS2809", // Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
   "TS2815", // 'arguments' cannot be referenced in property initializers.
   "TS8018", // Octal literals are not allowed in enums members initializer.
-  // "TS17012", // '{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?
+  "TS17012", // '{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?
 ];
