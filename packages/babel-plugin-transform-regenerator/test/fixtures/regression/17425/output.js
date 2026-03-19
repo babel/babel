@@ -1,5 +1,5 @@
 var replay = /*#__PURE__*/function () {
-  var _ref = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
+  var _replay = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
     var _t;
     return babelHelpers.regenerator().w(function (_context) {
       while (1) switch (_context.p = _context.n) {
@@ -18,9 +18,10 @@ var replay = /*#__PURE__*/function () {
       }
     }, _callee, null, [[0, 1]]);
   }));
-  return function replay() {
-    return _ref.apply(this, arguments);
-  };
+  function replay() {
+    return _replay.apply(this, arguments);
+  }
+  return replay;
 }();
 return expect(function () {
   return replay();

@@ -1,24 +1,27 @@
 var foo = /*#__PURE__*/function () {
-  var _ref = babelHelpers.asyncToGenerator(function* () {
+  var _foo = babelHelpers.asyncToGenerator(function* () {
     var wat = yield bar();
   });
-  return function foo() {
-    return _ref.apply(this, arguments);
-  };
+  function foo() {
+    return _foo.apply(this, arguments);
+  }
+  return foo;
 }();
 var foo2 = /*#__PURE__*/function () {
-    var _ref2 = babelHelpers.asyncToGenerator(function* () {
+    var _foo2 = babelHelpers.asyncToGenerator(function* () {
       var wat = yield bar();
     });
-    return function foo2() {
-      return _ref2.apply(this, arguments);
-    };
+    function foo2() {
+      return _foo2.apply(this, arguments);
+    }
+    return foo2;
   }(),
   bar = /*#__PURE__*/function () {
-    var _ref3 = babelHelpers.asyncToGenerator(function* () {
+    var _bar = babelHelpers.asyncToGenerator(function* () {
       var wat = yield foo();
     });
-    return function bar() {
-      return _ref3.apply(this, arguments);
-    };
+    function bar() {
+      return _bar.apply(this, arguments);
+    }
+    return bar;
   }();
