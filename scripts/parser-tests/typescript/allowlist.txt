@@ -1,4 +1,4 @@
-# 11 invalid programs did not produce a parsing error
+# 9 invalid programs did not produce a parsing error
 
 collisionArgumentsArrowFunctions.ts
 collisionArgumentsFunction.ts
@@ -9,8 +9,6 @@ multipleExports.ts
 regularExpressionAnnexB.ts
 requireOfJsonFileWithoutResolveJsonModule.ts
 strictModeReservedWordInModuleDeclaration.ts
-typeAliasDeclarationEmit3.ts
-typeInterfaceDeclarationsInBlockStatements1.ts
 
 
 # 108 valid programs produced a parsing error

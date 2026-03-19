@@ -19,7 +19,7 @@ import { ScopeFlag, BindingFlag } from "../../util/scopeflags.ts";
 import TypeScriptScopeHandler from "./scope.ts";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util.ts";
-import type { ParseStatementFlag } from "../../parser/statement.ts";
+import { ParseStatementFlag } from "../../parser/statement.ts";
 import { ParamKind } from "../../util/production-parameter.ts";
 import {
   Errors,
@@ -213,6 +213,8 @@ export const TSErrorTemplates = {
     "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.",
   TypeModifierIsUsedInTypeImports:
     "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.",
+  UnexpectedDeclaration: (type: "interface" | "type") =>
+    `'${type}' declarations can only be declared inside a block.`,
   UnexpectedParameterInitializer:
     "A parameter initializer is only allowed in a function or constructor implementation.",
   UnexpectedParameterModifier:
@@ -3037,12 +3039,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       flags: ParseStatementFlag,
       decorators: N.Decorator[] | null,
     ): N.Statement {
+      const allowDeclaration = !!(flags & ParseStatementFlag.AllowDeclaration);
       if (!this.state.containsEsc) {
         switch (this.state.type) {
           case tt._const: {
             if (this.isLookaheadContextual("enum")) {
               const node = this.startNode<N.TSEnumDeclaration>();
-              this.expect(tt._const); // eat 'const'
+              this.next(); // eat 'const'
               return this.tsParseEnumDeclaration(node, { const: true });
             }
             break;
@@ -3090,7 +3093,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           }
           case tt._interface: {
             const result = this.tsParseInterfaceDeclaration(this.startNode());
-            if (result) return result;
+            if (result) {
+              if (!allowDeclaration) {
+                this.raise(TSErrors.UnexpectedDeclaration, result, "interface");
+              }
+              return result;
+            }
             break;
           }
           case tt._module: {
@@ -3135,6 +3143,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           case tt._type: {
             if (this.nextTokenIsIdentifierOnSameLine()) {
               const node = this.startNode<N.TSTypeAliasDeclaration>();
+              if (!allowDeclaration) {
+                this.raise(TSErrors.UnexpectedDeclaration, node, "type");
+              }
               this.next(); // eat 'type'
               return this.tsParseTypeAliasDeclaration(node);
             }
