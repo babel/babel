@@ -351,6 +351,7 @@ type ErrorInfoCompressed = {
   TypeImportCannotSpecifyDefaultAndNamed: [];
   TypeModifierIsUsedInTypeExports: [];
   TypeModifierIsUsedInTypeImports: [];
+  UnexpectedParameterInitializer: [];
   UnexpectedParameterModifier: [];
   UnexpectedReadonly: [];
   UnexpectedTypeAnnotation: [];

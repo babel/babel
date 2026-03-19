@@ -11,7 +11,7 @@ requireOfJsonFileWithoutResolveJsonModule.ts
 strictModeReservedWordInModuleDeclaration.ts
 
 
-# 117 valid programs produced a parsing error
+# 115 valid programs produced a parsing error
 
 accessorBodyInTypeContext.ts
 anyDeclare.ts
@@ -40,8 +40,6 @@ declarationEmitDestructuringWithOptionalBindingParameters.ts
 declareModifierOnImport1.ts
 decoratorsOnComputedProperties.ts
 decrementAndIncrementOperators.ts
-defaultArgsInOverloads.ts
-defaultValueInFunctionTypes.ts
 deleteOperatorInStrictMode.ts
 duplicateErrorNameNotFound.ts
 duplicateIdentifierBindingElementInParameterDeclaration1.ts
@@ -78,7 +76,6 @@ importAndVariableDeclarationConflict3.ts
 importAssertionNonstring.ts
 importDeclWithClassModifiers.ts
 importDeclWithDeclareModifierInAmbientContext.ts
-indexSignatureWithInitializer1.ts
 indexSignatureWithTrailingComma.ts
 indexTypeCheck.ts
 indexWithoutParamType.ts

@@ -213,6 +213,8 @@ export const TSErrorTemplates = {
     "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.",
   TypeModifierIsUsedInTypeImports:
     "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.",
+  UnexpectedParameterInitializer:
+    "A parameter initializer is only allowed in a function or constructor implementation.",
   UnexpectedParameterModifier:
     "A parameter property is only allowed in a constructor implementation.",
   UnexpectedReadonly:
@@ -2437,6 +2439,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           : this.startNodeAtNode<N.TSParameterProperty>(decorators[0]);
         if (decorators.length) {
           pp.decorators = decorators;
+        } else {
+          this.setLoc(startLoc!);
         }
         if (accessibility) pp.accessibility = accessibility;
         if (readonly) pp.readonly = readonly;
@@ -2513,6 +2517,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           for (const param of node.params) {
             if (param.type === "TSParameterProperty") {
               this.raise(TSErrors.UnexpectedParameterModifier, param);
+            } else if (param.type === "AssignmentPattern") {
+              this.raise(TSErrors.UnexpectedParameterInitializer, param);
+            }
+          }
+        } else {
+          for (const param of node.params) {
+            if (param.type === "AssignmentPattern") {
+              this.raise(TSErrors.UnexpectedParameterInitializer, param);
             }
           }
         }

@@ -90,7 +90,7 @@ export default [
   // "TS2340", // Only public and protected methods of the base class are accessible via the 'super' keyword.
   "TS2364", // The left-hand side of an assignment expression must be a variable or a property access.
   "TS2369", // A parameter property is only allowed in a constructor implementation.
-  // "TS2371", // A parameter initializer is only allowed in a function or constructor implementation.
+  "TS2371", // A parameter initializer is only allowed in a function or constructor implementation.
   //"TS2393", // Duplicate function implementation.
   "TS2396", // Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
   // "TS2440", // Import declaration conflicts with local declaration of '{0}'.
