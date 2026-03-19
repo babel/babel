@@ -320,7 +320,7 @@ describe("generation", function () {
       ast,
       {
         filename: "inline",
-        sourceFileName: "inline",
+        sourceFilename: "inline",
         sourceMaps: true,
       },
       code,
@@ -552,7 +552,7 @@ describe("generation", function () {
       ast,
       {
         filename: "inline",
-        sourceFileName: "inline",
+        sourceFilename: "inline",
         sourceMaps: true,
       },
       code,
@@ -573,7 +573,7 @@ describe("generation", function () {
       ast,
       {
         filename: "inline",
-        sourceFileName: "inline",
+        sourceFilename: "inline",
         sourceMaps: true,
       },
       code,
@@ -592,7 +592,7 @@ describe("generation", function () {
 
     const ast = parse(code, { filename: "a.js" }).program;
     const generated = generate(ast, {
-      sourceFileName: "a.js",
+      sourceFilename: "a.js",
       sourceMaps: true,
     });
 
@@ -1591,7 +1591,7 @@ suites.forEach(function (testSuite) {
             };
             const actualAst = parse(actualCode, parserOpts);
             const options = {
-              sourceFileName: path.relative(__dirname, actual.loc),
+              sourceFilename: path.relative(__dirname, actual.loc),
               ...task.options,
               sourceMaps: task.sourceMap ? true : task.options.sourceMaps,
             };

@@ -24,7 +24,18 @@ describe("parseSync", function () {
       filename: fixture("input.js"),
       cwd: fixture(),
     });
-    expect(JSON.parse(JSON.stringify(result))).toEqual(output);
+    // When a filename is provided, the parser sets loc.filename on all nodes.
+    // Strip it before comparing to the fixture since it contains absolute paths.
+    const resultJson = JSON.parse(
+      JSON.stringify(result, (key, value) =>
+        key === "filename" &&
+        typeof value === "string" &&
+        value.endsWith("input.js")
+          ? undefined
+          : value,
+      ),
+    );
+    expect(resultJson).toEqual(output);
   });
 
   it("should parse using passed in configuration", function () {

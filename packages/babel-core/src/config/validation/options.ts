@@ -116,7 +116,7 @@ const COMMON_VALIDATORS: ValidatorSet = {
   highlightCode: assertBoolean as Validator<InputOptions["highlightCode"]>,
   sourceMaps: assertSourceMaps as Validator<InputOptions["sourceMaps"]>,
   sourceMap: assertSourceMaps as Validator<InputOptions["sourceMap"]>,
-  sourceFileName: assertString as Validator<InputOptions["sourceFileName"]>,
+  sourceFilename: assertString as Validator<InputOptions["sourceFilename"]>,
   sourceRoot: assertString as Validator<InputOptions["sourceRoot"]>,
   parserOpts: assertObject as Validator<InputOptions["parserOpts"]>,
   generatorOpts: assertObject as Validator<InputOptions["generatorOpts"]>,
@@ -198,7 +198,7 @@ export type InputOptions = {
   // Sourcemap generation options.
   sourceMaps?: SourceMapsOption;
   sourceMap?: SourceMapsOption;
-  sourceFileName?: string;
+  sourceFilename?: string;
   sourceRoot?: string;
   // Todo(Babel 9): Deprecate top level parserOpts
   parserOpts?: ParserOptions;

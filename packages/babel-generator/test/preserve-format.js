@@ -89,7 +89,7 @@ describe("experimental_preserveFormat", () => {
             tokens: true,
           };
           const generatorOpts = {
-            sourceFileName: path.relative(__dirname, task.actual.loc),
+            sourceFilename: path.relative(__dirname, task.actual.loc),
             ...task.options,
             retainLines: true,
             experimental_preserveFormat: true,

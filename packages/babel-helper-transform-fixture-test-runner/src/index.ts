@@ -270,7 +270,7 @@ async function run(task: Test) {
       cwd: path.dirname(self.loc!),
       filename: self.loc,
       filenameRelative: self.filename,
-      sourceFileName: self.filename,
+      sourceFilename: self.filename,
       ...(doNotSetSourceType ? {} : { sourceType: "script" }),
       babelrc: false,
       configFile: false,

@@ -144,7 +144,7 @@ export default async function ({
 
     const res = await util.transformRepl(cliOptions.filename, code, {
       ...babelOptions,
-      sourceFileName: "stdin",
+      sourceFilename: "stdin",
     });
 
     output([res]);
@@ -184,7 +184,7 @@ export default async function ({
         try {
           return await util.compile(filename, {
             ...babelOptions,
-            sourceFileName: sourceFilename,
+            sourceFilename,
             // Since we're compiling everything to be merged together,
             // "inline" applies to the final output file, but not to the individual
             // files being concatenated.
