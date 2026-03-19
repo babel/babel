@@ -992,7 +992,6 @@ export function arrowFunctionExpression(
     params,
     body,
     async,
-    expression: body.type !== "BlockStatement",
   };
   const defs = NODE_FIELDS.ArrowFunctionExpression;
   validate(defs.params, node, "params", params, 1);
