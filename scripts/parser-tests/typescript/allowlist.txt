@@ -12,7 +12,7 @@ requireOfJsonFileWithoutResolveJsonModule.ts
 strictModeReservedWordInModuleDeclaration.ts
 
 
-# 95 valid programs produced a parsing error
+# 83 valid programs produced a parsing error
 
 anyDeclare.ts
 augmentedTypesClass.ts
@@ -36,7 +36,6 @@ declarationEmitDestructuringParameterProperties.ts
 declarationEmitDestructuringWithOptionalBindingParameters.ts
 declareModifierOnImport1.ts
 decoratorsOnComputedProperties.ts
-decrementAndIncrementOperators.ts
 duplicateErrorNameNotFound.ts
 duplicateIdentifierBindingElementInParameterDeclaration1.ts
 duplicateIdentifierBindingElementInParameterDeclaration2.ts
@@ -49,16 +48,12 @@ es6ImportNameSpaceImportMergeErrors.ts
 es6ImportNamedImportMergeErrors.ts
 expandoFunctionContextualTypesNoValue.ts
 exportAssignmentImportMergeNoCrash.ts
-exportAssignmentWithDeclareAndExportModifiers.ts
-exportAssignmentWithDeclareModifier.ts
-exportAssignmentWithExportModifier.ts
 exportDefaultAsyncFunction2.ts
 exportInterfaceClassAndValue.ts
 exportSameNameFuncVar.ts
 exportSpecifierForAGlobal.ts
 exportSpecifierReferencingOuterDeclaration2.ts
 expressionWithJSDocTypeArguments.ts
-expressionsForbiddenInParameterInitializers.ts
 fileWithNextLine2.ts
 funClodule.ts
 functionCall15.ts
@@ -66,13 +61,6 @@ importAndVariableDeclarationConflict3.ts
 importAssertionNonstring.ts
 importDeclWithClassModifiers.ts
 importDeclWithDeclareModifierInAmbientContext.ts
-indexSignatureWithTrailingComma.ts
-indexerSignatureWithRestParam.ts
-interfaceNaming1.ts
-interfaceWithImplements1.ts
-invalidOptionalChainFromNewExpression.ts
-jsxAttributeMissingInitializer.tsx
-jsxAttributeWithoutExpressionReact.tsx
 letAndVarRedeclaration.ts
 letAsIdentifier.ts
 letDeclarations-scopes-duplicates.ts

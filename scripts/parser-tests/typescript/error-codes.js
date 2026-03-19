@@ -15,7 +15,9 @@ export default [
   "TS1009", // Trailing comma not allowed.
   "TS1011", // An element access expression should take an argument."
   "TS1014", // A rest parameter must be last in a parameter list.
+  "TS1017", // An index signature cannot have a rest parameter.
   "TS1019", // An index signature parameter cannot have a question mark.
+  "TS1025", // An index signature cannot have a trailing comma.
   "TS1028", // Accessibility modifier already seen.
   "TS1029", // '{0}' modifier must precede '{1}' modifier.
   "TS1030", // '{0}' modifier already seen.
@@ -45,6 +47,7 @@ export default [
   "TS1114", // Duplicate label '{0}'.
   "TS1115", // A 'continue' statement can only jump to a label of an enclosing iteration statement.
   "TS1116", // A 'break' statement can only jump to a label of an enclosing statement.
+  "TS1120", // An export assignment cannot have modifiers.
   "TS1123", // Variable declaration list cannot be empty.
   "TS1126", // Unexpected end of text.
   "TS1127", // Invalid character.
@@ -54,6 +57,7 @@ export default [
   "TS1141", // String literal expected.
   "TS1142", // Line break not permitted here.
   "TS1144", // '{' or ';' expected.
+  "TS1145", // '{' or JSX element expected.
   "TS1155", // 'const' declarations must be initialized.
   "TS1156", // 'const' declarations can only be declared inside a block.
   "TS1160", // Unterminated template literal.
@@ -63,6 +67,7 @@ export default [
   "TS1172", // 'extends' clause already seen."
   "TS1173", // 'extends' clause must precede 'implements' clause.
   "TS1175", // 'implements' clause already seen.
+  "TS1176", // Interface declaration cannot have 'implements' clause.
   "TS1182", // A destructuring declaration must have an initializer.
   "TS1183", // An implementation cannot be declared in ambient contexts.
   "TS1184", // Modifiers cannot appear here.
@@ -73,6 +78,7 @@ export default [
   "TS1197", // Catch clause variable cannot have an initializer.
   "TS1198", // An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
   "TS1200", // Line terminator not permitted before arrow.
+  "TS1209", // Invalid optional chain from new expression.
   "TS1211", // A class declaration without the 'default' modifier must have a name.
   "TS1212", // Identifier expected. '{0}' is a reserved word in strict mode."
   "TS1213", // Identifier expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.
@@ -91,6 +97,7 @@ export default [
   "TS1386", // Constructor type notation must be parenthesized when used in a union type.
   "TS1434", // Unexpected keyword or identifier.
   "TS1437", // Namespace must be given a name.
+  "TS1438", // Interface must be given a name.
   "TS1477", // An instantiation expression cannot be followed by a property access.
   "TS1487", // Octal escape sequences are not allowed.
   "TS1488", // Escape sequence '\8' is not allowed.
@@ -100,6 +107,7 @@ export default [
   // "TS2300", // Duplicate identifier '{0}'.
   "TS2337", // Super calls are not permitted outside constructors or in nested functions inside constructors.
   // "TS2340", // Only public and protected methods of the base class are accessible via the 'super' keyword.
+  "TS2357", // The operand of an increment or decrement operator must be a variable or a property access.
   "TS2364", // The left-hand side of an assignment expression must be a variable or a property access.
   "TS2369", // A parameter property is only allowed in a constructor implementation.
   "TS2371", // A parameter initializer is only allowed in a function or constructor implementation.
@@ -109,6 +117,8 @@ export default [
   // "TS2451", // Cannot redeclare block-scoped variable '{0}'.
   "TS2452", // An enum member cannot have a numeric name.
   "TS2499", // An interface can only extend an identifier/qualified-name with optional type arguments.
+  "TS2523", // 'yield' expressions cannot be used in a parameter initializer.
+  "TS2524", // 'await' expressions cannot be used in a parameter initializer.
   // "TS2552", // Cannot find name 'foo'. Did you mean 'zoo'?
   "TS2566", // A rest element cannot have a property name.
   //"TS2580",
@@ -122,5 +132,6 @@ export default [
   "TS2809", // Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
   "TS2815", // 'arguments' cannot be referenced in property initializers.
   "TS8018", // Octal literals are not allowed in enums members initializer.
+  "TS17000", // JSX attributes must only be assigned a non-empty 'expression'.
   "TS17012", // '{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?
 ];
