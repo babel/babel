@@ -109,6 +109,7 @@
   "immutable-arraybuffer",
   "import-attributes",
   "import-bytes",
+  "import-text",
   "import.meta",
   "intl-normative-optional",
   "iterator-helpers",
