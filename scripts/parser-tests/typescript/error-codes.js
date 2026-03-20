@@ -13,7 +13,7 @@ export default [
   "TS1003", // Identifier expected.
   "TS1005", // '{0}' expected.
   "TS1009", // Trailing comma not allowed.
-  "TS1011", // An element access expression should take an argument."
+  "TS1011", // An element access expression should take an argument.
   "TS1014", // A rest parameter must be last in a parameter list.
   "TS1017", // An index signature cannot have a rest parameter.
   "TS1019", // An index signature parameter cannot have a question mark.
