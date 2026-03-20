@@ -5,7 +5,8 @@
     "SyntaxError: Abstract methods can only appear within an abstract class. (5:2)",
     "SyntaxError: Method 'd' cannot have an implementation because it is marked abstract. (5:2)",
     "SyntaxError: Class methods cannot have the 'readonly' modifier. (6:2)",
-    "SyntaxError: Class methods cannot have the 'declare' modifier. (7:2)"
+    "SyntaxError: Class methods cannot have the 'declare' modifier. (7:2)",
+    "SyntaxError: An implementation cannot be declared in ambient contexts. (7:14)"
   ],
   "program": {
     "type": "Program",
