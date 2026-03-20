@@ -2533,8 +2533,19 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         return this.finishNode(node, bodilessType);
       }
       if (bodilessType && this.state.isAmbientContext) {
-        if (bodilessType === "TSDeclareFunction" || !node.declare) {
-          this.raise(TSErrors.DeclareFunctionHasImplementation, node);
+        if (
+          bodilessType === "TSDeclareFunction" ||
+          // @ts-expect-error declare is not defined on ClassMethod, if we have seen "declare"
+          // here, there is already an error thrown from parsePostMemberNameModifiers.
+          !(node as Undone<N.ClassMethod>).declare
+        ) {
+          // Here we throw from the start of block statement `{` rather than the start of node,
+          // because estree wraps the implementation within the `value` node, which starts from
+          // the parameters rather than the class method key.
+          this.raise(
+            TSErrors.DeclareFunctionHasImplementation,
+            this.state.lastTokEndLoc!,
+          );
         }
         if (
           bodilessType === "TSDeclareFunction" &&
