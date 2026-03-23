@@ -4,6 +4,7 @@
     "target": "ESNext",
     "module": "Preserve",
     "lib": ["ESNext"],
+    "types": ["node"],
     "declaration": false,
     "noEmit": true,
     "moduleResolution": "Bundler",
