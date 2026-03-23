@@ -2,12 +2,6 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as babel from "../lib/index.js";
 
-import {
-  spawnTransformAsync,
-  spawnTransformAsyncParallel,
-  spawnTransformSync,
-} from "./helpers/esm.js";
-
 describe("asynchronicity", () => {
   const base = path.join(
     path.dirname(fileURLToPath(import.meta.url)),
@@ -244,7 +238,7 @@ describe("asynchronicity", () => {
       it("called synchronously", async () => {
         process.chdir("plugin-mjs-native");
 
-        await expect(spawnTransformSync()).resolves.toMatchObject({
+        expect(babel.transformSync("")).toMatchObject({
           code: `"success"`,
         });
       });
@@ -252,7 +246,7 @@ describe("asynchronicity", () => {
       it("called asynchronously", async () => {
         process.chdir("plugin-mjs-native");
 
-        await expect(spawnTransformAsync()).resolves.toMatchObject({
+        await expect(babel.transformAsync("")).resolves.toMatchObject({
           code: `"success"`,
         });
       });
@@ -260,7 +254,7 @@ describe("asynchronicity", () => {
       it("called asynchronously when contain TLA", async () => {
         process.chdir("plugin-mjs-tla-native");
 
-        await expect(spawnTransformAsync()).resolves.toMatchObject({
+        await expect(babel.transformAsync("")).resolves.toMatchObject({
           code: `"success"`,
         });
       });
@@ -268,7 +262,9 @@ describe("asynchronicity", () => {
       it("called asynchronously twice in parallel when contain TLA", async () => {
         process.chdir("config-mjs-tla-native");
 
-        await expect(spawnTransformAsyncParallel()).resolves.toMatchObject([
+        await expect(
+          Promise.all([babel.transformAsync(""), babel.transformAsync("")]),
+        ).resolves.toMatchObject([
           { code: `"success"` },
           { code: `"success"` },
         ]);
@@ -324,7 +320,7 @@ describe("asynchronicity", () => {
       it("called synchronously", async () => {
         process.chdir("preset-mjs-native");
 
-        await expect(spawnTransformSync()).resolves.toMatchObject({
+        expect(babel.transformSync("")).toMatchObject({
           code: `"success"`,
         });
       });
@@ -332,7 +328,7 @@ describe("asynchronicity", () => {
       it("called asynchronously", async () => {
         process.chdir("preset-mjs-native");
 
-        await expect(spawnTransformAsync()).resolves.toMatchObject({
+        await expect(babel.transformAsync("")).resolves.toMatchObject({
           code: `"success"`,
         });
       });
@@ -340,7 +336,7 @@ describe("asynchronicity", () => {
       it("must use the 'default' export", async () => {
         process.chdir("preset-mjs-named-exports-native");
 
-        await expect(spawnTransformAsync()).rejects.toThrow(
+        await expect(babel.transformAsync("")).rejects.toThrow(
           `Unexpected falsy value: undefined`,
         );
       });
