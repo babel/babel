@@ -17,13 +17,13 @@ jobs:
       contents: write # for Git to git push
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
         with:
           repository: tc39/test262
           path: build/test262
       - name: Use Node.js latest
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "*"
           cache: "yarn"
