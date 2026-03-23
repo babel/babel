@@ -486,7 +486,6 @@ function transformNamedBabelTypesImportToDestructuring({
 function pluginReplaceTSImportExtension() {
   return {
     visitor: {
-      // @ts-expect-error FIXME: Type '(this: unknown, path: NodePath_Final<ImportDeclaration | ExportDeclaration>) => void' is not assignable to type 'VisitNode<unknown, Node>
       "ImportDeclaration|ExportDeclaration"({
         node,
       }: NodePath<t.ImportDeclaration | t.ExportDeclaration>) {
