@@ -2538,7 +2538,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // the parameters rather than the class method key.
         this.raise(
           TSErrors.DeclareFunctionHasImplementation,
-          this.state.lastTokEndLoc!,
+          this.state.startLoc,
         );
         if (
           bodilessType === "TSDeclareFunction" &&

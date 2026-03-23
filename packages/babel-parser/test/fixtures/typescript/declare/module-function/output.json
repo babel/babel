@@ -2,7 +2,7 @@
   "type": "File",
   "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":42}},
   "errors": [
-    "SyntaxError: An implementation cannot be declared in ambient contexts. (2:16)"
+    "SyntaxError: An implementation cannot be declared in ambient contexts. (2:17)"
   ],
   "program": {
     "type": "Program",
