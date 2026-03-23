@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the new tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: This release will publish the following packages
@@ -44,7 +44,7 @@ jobs:
     outputs:
       branch: ${{ steps.branch-name.outputs.branch }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -82,11 +82,11 @@ jobs:
       always() &&
       (needs.git-version.result == 'success' || needs.git-version.result == 'skipped')
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Use Node.js latest
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "25.6.1"
           check-latest: true
@@ -122,7 +122,7 @@ jobs:
 
       - name: Upload babel-types docs
         continue-on-error: true
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: babel-types-docs
           path: build/types.md
@@ -142,7 +142,7 @@ jobs:
       changelog: ${{ steps.changelog.outputs.changelog }}
       version: ${{ steps.tags.outputs.new }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -195,7 +195,7 @@ jobs:
       needs.github-release.result == 'success' &&
       needs.github-release.outputs.is-main
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ref: '7.x'
@@ -240,13 +240,13 @@ jobs:
       needs.github-release.result == 'success' &&
       needs.github-release.outputs.is-main
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           repository: babel/website
           fetch-depth: 0 # Otherwise we cannot push
           persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
       - name: Download babel-types docs
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: babel-types-docs
           # Downloaded as ./docs/types.md
