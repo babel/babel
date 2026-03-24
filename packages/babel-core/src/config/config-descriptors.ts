@@ -145,7 +145,10 @@ export function createUncachedDescriptors(
   };
 }
 
-const PRESET_DESCRIPTOR_CACHE = new WeakMap();
+const PRESET_DESCRIPTOR_CACHE = new WeakMap<
+  object | Function,
+  WeakMap<object, UnloadedDescriptor<PresetAPI>[]>
+>();
 const createCachedPresetDescriptors = makeWeakCacheSync(
   (items: PresetItem[], cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
@@ -170,7 +173,10 @@ const createCachedPresetDescriptors = makeWeakCacheSync(
   },
 );
 
-const PLUGIN_DESCRIPTOR_CACHE = new WeakMap();
+const PLUGIN_DESCRIPTOR_CACHE = new WeakMap<
+  object | Function,
+  WeakMap<object, UnloadedDescriptor<PluginAPI>[]>
+>();
 const createCachedPluginDescriptors = makeWeakCacheSync(
   (items: PluginItem[], cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
