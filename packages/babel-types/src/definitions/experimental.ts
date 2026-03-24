@@ -195,6 +195,7 @@ defineType("StructBody", {
       "ClassProperty",
       "ClassPrivateProperty",
       "StaticBlock",
+      "ClassAccessorProperty",
     ),
   },
 });

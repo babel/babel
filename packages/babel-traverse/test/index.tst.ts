@@ -18,6 +18,7 @@ describe("traverse", () => {
           | t.VariableDeclaration
           | t.FunctionDeclaration
           | t.ClassDeclaration
+          | t.StructDeclaration
           | t.TSDeclareFunction
           | t.TSEnumDeclaration
           | t.TSImportEqualsDeclaration
