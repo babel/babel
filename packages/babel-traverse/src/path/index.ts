@@ -1,10 +1,14 @@
 import type { HubInterface } from "../hub.ts";
 import type TraversalContext from "../context.ts";
-import type { ExplodedTraverseOptions } from "../index.ts";
 import * as virtualTypes from "./lib/virtual-types.ts";
 import { createDebug } from "obug";
 import traverse from "../index.ts";
-import type { Visitor } from "../types.ts";
+import type {
+  Visitor,
+  VisitorProp,
+  TraverseOptions,
+  ExplodedVisitor,
+} from "../types.ts";
 import Scope from "../scope/index.ts";
 import { validate } from "@babel/types";
 import * as t from "@babel/types";
@@ -74,7 +78,7 @@ const NodePath_Final = class NodePath {
 
   contexts: TraversalContext[] = [];
   state: any = null;
-  declare opts: ExplodedTraverseOptions;
+  declare opts: TraverseOptions & ExplodedVisitor;
 
   @bit.storage _traverseFlags: number = 0;
   @bit(REMOVED) accessor removed = false;
@@ -161,8 +165,25 @@ const NodePath_Final = class NodePath {
     return this.hub.buildError(this.node!, msg, Error);
   }
 
-  traverse<T>(this: NodePath_Final, visitor: Visitor<T>, state: T): void;
-  traverse(this: NodePath_Final, visitor: Visitor): void;
+  traverse<S, T extends object>(
+    this: NodePath_Final,
+    visitor: {
+      [P in keyof T]: VisitorProp<S, P & string>;
+    },
+    state: S,
+  ): void;
+  traverse<T extends object>(
+    this: NodePath_Final,
+    visitor: {
+      [P in keyof T]: VisitorProp<any, P & string>;
+    },
+  ): void;
+  traverse<S>(
+    this: NodePath_Final,
+    visitor: TraverseOptions & Visitor<S>,
+    state: S,
+  ): void;
+  traverse(this: NodePath_Final, visitor: TraverseOptions & Visitor<any>): void;
   traverse(this: NodePath_Final, visitor: any, state?: any) {
     traverse(this.node, visitor, this.scope, state, this);
   }

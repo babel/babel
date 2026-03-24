@@ -9,7 +9,12 @@ import {
   __internal__deprecationWarning as deprecationWarning,
 } from "@babel/types";
 import type { ExplodedVisitor, NodePath, Visitor } from "./index.ts";
-import type { ExplVisitNode, VisitNodeFunction, VisitPhase } from "./types.ts";
+import type {
+  ExplVisitNode,
+  VisitNodeFunction,
+  VisitPhase,
+  VisitorProp,
+} from "./types.ts";
 
 type VIRTUAL_TYPES = keyof typeof virtualTypes;
 function isVirtualType(type: string): type is VIRTUAL_TYPES {
@@ -49,6 +54,10 @@ export { explode$1 as explode };
  * * `enter` and `exit` functions are wrapped in arrays, to ease merging of
  *   visitors
  */
+function explode$1<S, T extends object>(visitor: {
+  [P in keyof T]: VisitorProp<any, P & string>;
+}): ExplodedVisitor<S>;
+function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S>;
 function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
   if (isExplodedVisitor(visitor)) return visitor;
   // @ts-expect-error `visitor` will be cast to ExplodedVisitor by this function
@@ -398,6 +407,6 @@ const _environmentVisitor: Visitor = {
   },
 };
 
-export function environmentVisitor<S>(visitor: Visitor<S>): Visitor<S> {
+export function environmentVisitor<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
   return merge([_environmentVisitor, visitor]);
 }

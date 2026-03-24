@@ -1,5 +1,6 @@
 import { expect, it, describe } from "tstyche";
-import type { NodePath, Visitor } from "../src/index.ts";
+import type { NodePath, Visitor, TraverseOptions } from "../src/index.ts";
+import { default as traverse, visitors } from "../src/index.ts";
 import type * as t from "@babel/types";
 
 describe("traverse", () => {
@@ -112,18 +113,52 @@ describe("traverse", () => {
   });
 
   describe("Visitor", () => {
-    // TODO: support `strictFunctionTypes: true`
-    it.todo("Union types", () => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const visitor: Visitor<unknown> = {
-        "ImportDeclaration|ExportDeclaration"(
-          path: NodePath<t.ImportDeclaration | t.ExportDeclaration>,
-        ) {
-          expect(path).type.toBe<
-            NodePath<t.ImportDeclaration | t.ExportDeclaration>
-          >();
-        },
-      };
+    describe("Union types", () => {
+      it("traverse", () => {
+        traverse({} as t.Node, {
+          "ImportDeclaration|ExportDeclaration"(path) {
+            expect(path).type.toBe<
+              NodePath<t.ImportDeclaration | t.ExportDeclaration>
+            >();
+          },
+          noScope: true,
+        });
+        traverse({} as t.Node, {} as Visitor);
+      });
+
+      it("visitors.explode", () => {
+        visitors.explode({
+          "ImportDeclaration|ExportDeclaration"(path) {
+            expect(path).type.toBe<
+              NodePath<t.ImportDeclaration | t.ExportDeclaration>
+            >();
+          },
+          noScope: true,
+        });
+        visitors.explode({
+          "ImportDeclaration|ExportDeclaration"(path) {
+            expect(path).type.toBe<NodePath<t.Node>>();
+          },
+          noScope: true,
+        } as TraverseOptions & Visitor);
+      });
+
+      it("path#traverse", () => {
+        (({}) as NodePath<t.Node>).traverse({
+          "ImportDeclaration|ExportDeclaration"(path) {
+            expect(path).type.toBe<
+              NodePath<t.ImportDeclaration | t.ExportDeclaration>
+            >();
+          },
+          noScope: true,
+        });
+        (({}) as NodePath<t.Node>).traverse({
+          "ImportDeclaration|ExportDeclaration"(path) {
+            expect(path).type.toBe<NodePath<t.Node>>();
+          },
+          noScope: true,
+        } as TraverseOptions & Visitor);
+      });
     });
   });
 

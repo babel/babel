@@ -1,4 +1,5 @@
 import { types as t } from "@babel/core";
+import type { TraverseOptions, ExplodedVisitor } from "@babel/traverse";
 import traverse, { visitors, type NodePath } from "@babel/traverse";
 
 /**
@@ -6,7 +7,7 @@ import traverse, { visitors, type NodePath } from "@babel/traverse";
  * top-level scope to be `void 0` (undefined).
  *
  */
-let rewriteThisVisitor: Parameters<typeof traverse>[1];
+let rewriteThisVisitor: TraverseOptions & ExplodedVisitor;
 
 export default function rewriteThis(programPath: NodePath) {
   if (!rewriteThisVisitor) {

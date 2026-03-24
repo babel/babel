@@ -1,5 +1,5 @@
 import type * as t from "@babel/types";
-import type { NodePath } from "./index.ts";
+import type { NodePath, Scope } from "./index.ts";
 import type { VirtualTypeAliases } from "./path/lib/virtual-types.ts";
 import type {
   ExplVisitorBase,
@@ -72,3 +72,26 @@ export type VisitNodeFunction<S, P extends t.Node> = (
   path: NodePath<P>,
   state: S,
 ) => void;
+
+type Split<S extends string> = S extends `${infer L}|${infer R}`
+  ? L | Split<R>
+  : S;
+
+type ToNode<S extends string, N = Split<S>> = N extends keyof t.Aliases
+  ? t.Aliases[N]
+  : N extends keyof VirtualTypeAliases
+    ? VirtualTypeAliases[N]
+    : Extract<t.Node, { type: N }>;
+
+type OptionKeys = keyof TraverseOptions;
+
+export type VisitorProp<S, K extends string> = K extends OptionKeys
+  ? TraverseOptions[K]
+  : VisitNode<S, ToNode<K>>;
+
+export type TraverseOptions = {
+  scope?: Scope;
+  noScope?: boolean;
+  denylist?: string[];
+  shouldSkip?: (node: NodePath) => boolean;
+};

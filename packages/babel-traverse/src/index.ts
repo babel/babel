@@ -10,10 +10,16 @@ import type * as t from "@babel/types";
 import * as cache from "./cache.ts";
 import type NodePath from "./path/index.ts";
 import type { default as Scope, Binding } from "./scope/index.ts";
-import type { ExplodedVisitor, Visitor, VisitorBase } from "./types.ts";
+import type {
+  ExplodedVisitor,
+  Visitor,
+  VisitorBase,
+  VisitorProp,
+  TraverseOptions,
+} from "./types.ts";
 import { traverseNode } from "./traverse-node.ts";
 
-export type { ExplodedVisitor, Visitor, VisitorBase, Binding };
+export type { ExplodedVisitor, Visitor, VisitorBase, Binding, TraverseOptions };
 export { default as NodePath } from "./path/index.ts";
 export { default as Scope, type BindingKind } from "./scope/index.ts";
 export { default as Hub } from "./hub.ts";
@@ -22,38 +28,45 @@ export type { VisitWrapper } from "./visitors.ts";
 
 export { visitors };
 
-export type TraverseOptions<S = t.Node> = {
-  scope?: Scope;
-  noScope?: boolean;
-  denylist?: string[];
-  shouldSkip?: (node: NodePath) => boolean;
-} & Visitor<S>;
-
-export type ExplodedTraverseOptions<S = t.Node> = TraverseOptions<S> &
-  ExplodedVisitor<S>;
-
-function traverse<S>(
+function traverse<S, T extends object>(
   parent: t.Node,
-  opts: TraverseOptions<S>,
+  opts: {
+    [P in keyof T]: VisitorProp<S, P & string>;
+  },
   scope: Scope | null | undefined,
   state: S,
   parentPath?: NodePath,
   visitSelf?: boolean,
 ): void;
-
-function traverse(
+function traverse<T extends object>(
   parent: t.Node,
-  opts: TraverseOptions,
+  opts: {
+    [P in keyof T]: VisitorProp<any, P & string>;
+  },
   scope?: Scope | null,
   state?: any,
   parentPath?: NodePath,
   visitSelf?: boolean,
 ): void;
-
-function traverse<Options extends TraverseOptions>(
+function traverse<S>(
   parent: t.Node,
-  // @ts-expect-error provide {} as default value for Options
-  opts: Options = {},
+  opts: TraverseOptions & Visitor<S>,
+  scope: Scope | null | undefined,
+  state: S,
+  parentPath?: NodePath,
+  visitSelf?: boolean,
+): void;
+function traverse(
+  parent: t.Node,
+  opts: TraverseOptions & Visitor<any>,
+  scope?: Scope | null,
+  state?: any,
+  parentPath?: NodePath,
+  visitSelf?: boolean,
+): void;
+function traverse(
+  parent: t.Node,
+  opts: any = {},
   scope?: Scope | null,
   state?: any,
   parentPath?: NodePath,
@@ -79,11 +92,11 @@ function traverse<Options extends TraverseOptions>(
     return;
   }
 
-  visitors.explode(opts as Visitor);
+  visitors.explode(opts);
 
   traverseNode(
     parent,
-    opts as ExplodedVisitor,
+    opts,
     scope,
     state,
     parentPath,
@@ -105,7 +118,7 @@ traverse.cheap = function (node: t.Node, enter: (node: t.Node) => void) {
 
 traverse.node = function (
   node: t.Node,
-  opts: ExplodedTraverseOptions,
+  opts: TraverseOptions & ExplodedVisitor,
   scope?: Scope,
   state?: any,
   path?: NodePath,

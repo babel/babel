@@ -1,15 +1,15 @@
+import type { ExplodedVisitor, TraverseOptions } from "./types.ts";
 import type NodePath from "./path/index.ts";
-import type { ExplodedTraverseOptions } from "./index.ts";
 import type * as t from "@babel/types";
 
 export default class TraversalContext<S = unknown> {
-  constructor(opts: ExplodedTraverseOptions<S>, state: S) {
+  constructor(opts: TraverseOptions & ExplodedVisitor<S>, state: S) {
     this.state = state;
     this.opts = opts;
   }
 
   declare state: S;
-  declare opts: ExplodedTraverseOptions<S>;
+  declare opts: TraverseOptions & ExplodedVisitor<S>;
   queue: NodePath<t.Node | null>[] | null = null;
   priorityQueue: NodePath<t.Node | null>[] | null = null;
 
