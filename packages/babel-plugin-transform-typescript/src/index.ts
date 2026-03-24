@@ -102,7 +102,7 @@ export default declare((api, opts: Options) => {
   // Ref: https://github.com/babel/babel/issues/15089
   const { types: t, template } = api;
 
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const JSX_PRAGMA_REGEX = /\*?\s*@jsx((?:Frag)?)\s+(\S+)/;
 

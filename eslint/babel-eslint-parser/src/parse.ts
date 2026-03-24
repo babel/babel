@@ -21,7 +21,7 @@ let client: Client;
 
 export default function parse(code: string, options: Options) {
   // Ensure we're using a version of `@babel/core` that includes `parse()` and `tokTypes`.
-  const minSupportedCoreVersion = REQUIRED_VERSION(">=7.2.0 || ^8.0.0");
+  const minSupportedCoreVersion = REQUIRED_VERSION("^7.2.0 || ^8.0.0");
 
   if (typeof isRunningMinSupportedCoreVersion !== "boolean") {
     isRunningMinSupportedCoreVersion = semver.satisfies(

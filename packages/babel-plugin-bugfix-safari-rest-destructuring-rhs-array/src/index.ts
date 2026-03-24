@@ -3,7 +3,7 @@ import { shouldTransform } from "./util.ts";
 
 export default declare(api => {
   const { types: t, assertVersion } = api;
-  assertVersion(REQUIRED_VERSION(7));
+  assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   return {
     name: "plugin-bugfix-safari-rest-destructuring-rhs-array",
