@@ -1,6 +1,6 @@
 {
   "plugins": [
-    "transform-react-jsx-development",
+    ["transform-react-jsx-development", { "sourceSelf": true }],
     "transform-react-jsx-source",
     "transform-react-jsx-self"
   ],
