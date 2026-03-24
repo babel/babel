@@ -3388,7 +3388,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseClassId(
-      node: N.Class,
+      node: Undone<N.Class>,
       isStatement: boolean,
       optionalId?: boolean | null,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -3414,7 +3414,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseClassPropertyAnnotation(
-      node: N.ClassProperty | N.ClassPrivateProperty | N.ClassAccessorProperty,
+      node: Undone<
+        N.ClassProperty | N.ClassPrivateProperty | N.ClassAccessorProperty
+      >,
     ): void {
       if (!node.optional) {
         if (this.eat(tt.bang)) {
@@ -3428,7 +3430,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (type) node.typeAnnotation = type;
     }
 
-    parseClassProperty(node: N.ClassProperty): N.ClassProperty {
+    parseClassProperty(node: Undone<N.ClassProperty>): N.ClassProperty {
       this.parseClassPropertyAnnotation(node);
 
       if (
@@ -3459,7 +3461,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseClassPrivateProperty(
-      node: N.ClassPrivateProperty,
+      node: Undone<N.ClassPrivateProperty>,
     ): N.ClassPrivateProperty {
       // @ts-expect-error abstract is not allowed on ClassPrivateProperty, here
       // we parse it and throw a recoverable error
@@ -3482,7 +3484,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseClassAccessorProperty(
-      node: N.ClassAccessorProperty,
+      node: Undone<N.ClassAccessorProperty>,
     ): N.ClassAccessorProperty {
       this.parseClassPropertyAnnotation(node);
       if (node.optional) {
@@ -3492,8 +3494,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     pushClassMethod(
-      classBody: N.ClassBody,
-      method: N.ClassMethod,
+      classBody: Undone<N.ClassBody>,
+      method: Undone<N.ClassMethod>,
       isGenerator: boolean,
       isAsync: boolean,
       isConstructor: boolean,
@@ -3524,8 +3526,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     pushClassPrivateMethod(
-      classBody: N.ClassBody,
-      method: N.ClassPrivateMethod,
+      classBody: Undone<N.ClassBody>,
+      method: Undone<N.ClassPrivateMethod>,
       isGenerator: boolean,
       isAsync: boolean,
     ): void {
@@ -3552,7 +3554,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       super.declareClassPrivateMethodInScope(node, kind);
     }
 
-    parseClassSuper(node: N.Class): void {
+    parseClassSuper(node: Undone<N.Class>): void {
       super.parseClassSuper(node);
       if (node.superClass) {
         if (node.superClass.type === "TSInstantiationExpression") {
@@ -3611,7 +3613,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       );
     }
 
-    parseFunctionParams(node: N.Function, isConstructor: boolean): void {
+    parseFunctionParams(
+      node: Undone<N.Function>,
+      isConstructor: boolean,
+    ): void {
       const typeParameters = this.tsTryParseTypeParameters(
         this.tsParseConstModifier,
       );
@@ -3621,7 +3626,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     // `let x: number;`
     parseVarId(
-      decl: N.VariableDeclarator,
+      decl: Undone<N.VariableDeclarator>,
       kind: "var" | "let" | "const" | "using" | "await using",
     ): void {
       super.parseVarId(decl, kind);
@@ -3643,7 +3648,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     // parse the return type of an async arrow function - let foo = (async (): number => {});
     parseAsyncArrowFromCallExpression(
-      node: N.ArrowFunctionExpression,
+      node: Undone<N.ArrowFunctionExpression>,
       call: N.CallExpression,
     ): N.ArrowFunctionExpression {
       if (this.match(tt.colon)) {
@@ -4160,7 +4165,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     getGetterSetterExpectedParamCount(
-      method: N.ObjectMethod | N.ClassMethod,
+      method: Undone<N.ObjectMethod | N.ClassMethod>,
     ): number {
       const baseCount = super.getGetterSetterExpectedParamCount(method);
       const params = this.getObjectOrClassMethodParams(method);

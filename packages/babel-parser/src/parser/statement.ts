@@ -1604,7 +1604,9 @@ export default abstract class StatementParser extends ExpressionParser {
     );
   }
 
-  isNonstaticConstructor(method: N.ClassMethod | N.ClassProperty): boolean {
+  isNonstaticConstructor(
+    method: Undone<N.ClassMethod | N.ClassProperty>,
+  ): boolean {
     return (
       !method.computed && !method.static && this.nameIsConstructor(method.key)
     );
@@ -1758,11 +1760,11 @@ export default abstract class StatementParser extends ExpressionParser {
     state: N.ParseClassMemberState,
     isStatic: boolean,
   ) {
-    const publicMethod = member as N.ClassMethod;
-    const privateMethod = member as N.ClassPrivateMethod;
-    const publicProp = member as N.ClassProperty;
-    const privateProp = member as N.ClassPrivateProperty;
-    const accessorProp = member as N.ClassAccessorProperty;
+    const publicMethod = member as Undone<N.ClassMethod>;
+    const privateMethod = member as Undone<N.ClassPrivateMethod>;
+    const publicProp = member as Undone<N.ClassProperty>;
+    const privateProp = member as Undone<N.ClassPrivateProperty>;
+    const accessorProp = member as Undone<N.ClassAccessorProperty>;
 
     const method: typeof publicMethod | typeof privateMethod = publicMethod;
     const publicMember: typeof publicMethod | typeof publicProp = publicMethod;
@@ -1996,7 +1998,7 @@ export default abstract class StatementParser extends ExpressionParser {
   pushClassProperty(
     this: Parser,
     classBody: Undone<N.ClassBody>,
-    prop: N.ClassProperty,
+    prop: Undone<N.ClassProperty>,
   ) {
     if (!prop.computed && this.nameIsConstructor(prop.key)) {
       // Non-computed field, which is either an identifier named "constructor"
@@ -2025,7 +2027,7 @@ export default abstract class StatementParser extends ExpressionParser {
   pushClassAccessorProperty(
     this: Parser,
     classBody: Undone<N.ClassBody>,
-    prop: N.ClassAccessorProperty,
+    prop: Undone<N.ClassAccessorProperty>,
     isPrivate: boolean,
   ) {
     if (!isPrivate && !prop.computed && this.nameIsConstructor(prop.key)) {
@@ -2127,7 +2129,10 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   // https://tc39.es/ecma262/#prod-FieldDefinition
-  parseClassProperty(this: Parser, node: N.ClassProperty): N.ClassProperty {
+  parseClassProperty(
+    this: Parser,
+    node: Undone<N.ClassProperty>,
+  ): N.ClassProperty {
     this.parseInitializer(node);
     this.semicolon();
     return this.finishNode(node, "ClassProperty");
@@ -2135,7 +2140,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   parseClassAccessorProperty(
     this: Parser,
-    node: N.ClassAccessorProperty,
+    node: Undone<N.ClassAccessorProperty>,
   ): N.ClassAccessorProperty {
     this.parseInitializer(node);
     this.semicolon();
