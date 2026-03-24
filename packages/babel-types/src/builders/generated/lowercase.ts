@@ -1092,6 +1092,7 @@ export function exportNamedDeclaration(
     | t.VariableDeclaration
     | t.FunctionDeclaration
     | t.ClassDeclaration
+    | t.StructDeclaration
     | t.TSDeclareFunction
     | t.TSEnumDeclaration
     | t.TSImportEqualsDeclaration
@@ -2842,6 +2843,7 @@ export function structBody(
     | t.ClassProperty
     | t.ClassPrivateProperty
     | t.StaticBlock
+    | t.ClassAccessorProperty
   )[],
 ): t.StructBody {
   const node: t.StructBody = {

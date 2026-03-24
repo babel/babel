@@ -879,6 +879,7 @@ export interface ExportNamedDeclaration extends BaseNode {
     | VariableDeclaration
     | FunctionDeclaration
     | ClassDeclaration
+    | StructDeclaration
     | TSDeclareFunction
     | TSEnumDeclaration
     | TSImportEqualsDeclaration
@@ -1787,6 +1788,7 @@ export interface StructBody extends BaseNode {
     | ClassProperty
     | ClassPrivateProperty
     | StaticBlock
+    | ClassAccessorProperty
   )[];
 }
 
@@ -3732,7 +3734,7 @@ export interface ParentMaps {
     | WithStatement
     | YieldExpression;
   CatchClause: TryStatement;
-  ClassAccessorProperty: ClassBody;
+  ClassAccessorProperty: ClassBody | StructBody;
   ClassBody: ClassDeclaration | ClassExpression;
   ClassDeclaration:
     | BlockStatement
@@ -6242,6 +6244,7 @@ export interface ParentMaps {
     | BlockStatement
     | DoWhileStatement
     | ExportDefaultDeclaration
+    | ExportNamedDeclaration
     | ForInStatement
     | ForOfStatement
     | ForStatement

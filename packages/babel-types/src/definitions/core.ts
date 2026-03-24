@@ -1572,6 +1572,7 @@ defineType("ExportNamedDeclaration", {
               "VariableDeclaration",
               "FunctionDeclaration",
               "ClassDeclaration",
+              "StructDeclaration",
               "TSDeclareFunction",
               "TSEnumDeclaration",
               "TSImportEqualsDeclaration",
