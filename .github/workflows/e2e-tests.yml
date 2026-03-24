@@ -19,11 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Use Node.js latest
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "25.6.1"
           cache: "yarn"
@@ -32,7 +32,7 @@ jobs:
       - name: Pack published packages
         working-directory: /tmp
         run: tar -cvf verdaccio-workspace.tar verdaccio-workspace
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: verdaccio-workspace
           path: /tmp/verdaccio-workspace.tar
@@ -59,23 +59,23 @@ jobs:
         id: yarn1-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Use Node.js latest
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "25.6.1"
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
       - name: Use yarn1 cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: yarn1-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn1-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn1-e2e-${{ matrix.project }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: ${{ runner.os }}-yarn1-e2e-${{ matrix.project }}-
       - name: Use yarn cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -85,7 +85,7 @@ jobs:
         run: |
           rm -rf ${{ steps.yarn1-cache-dir-path.outputs.dir }}/*babel*
           rm -rf ${{ steps.yarn-cache-dir-path.outputs.dir }}/*babel*
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: verdaccio-workspace
           path: /tmp
