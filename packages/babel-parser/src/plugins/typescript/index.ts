@@ -19,7 +19,7 @@ import { ScopeFlag, BindingFlag } from "../../util/scopeflags.ts";
 import TypeScriptScopeHandler from "./scope.ts";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util.ts";
-import type { ParseStatementFlag } from "../../parser/statement.ts";
+import { ParseStatementFlag } from "../../parser/statement.ts";
 import { ParamKind } from "../../util/production-parameter.ts";
 import {
   Errors,
@@ -213,12 +213,16 @@ export const TSErrorTemplates = {
     "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.",
   TypeModifierIsUsedInTypeImports:
     "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.",
+  UnexpectedParameterInitializer:
+    "A parameter initializer is only allowed in a function or constructor implementation.",
   UnexpectedParameterModifier:
     "A parameter property is only allowed in a constructor implementation.",
   UnexpectedReadonly:
     "'readonly' type modifier is only permitted on array and tuple literal types.",
   UnexpectedTypeAnnotation: "Did not expect a type annotation here.",
   UnexpectedTypeCastInParameter: "Unexpected type cast in parameter position.",
+  UnexpectedTypeDeclaration: (type: "interface" | "type") =>
+    `'${type}' declarations can only be declared inside a block.`,
   UnsupportedImportTypeArgument:
     "Argument in a type import must be a string literal.",
   UnsupportedParameterPropertyKind:
@@ -2437,6 +2441,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           : this.startNodeAtNode<N.TSParameterProperty>(decorators[0]);
         if (decorators.length) {
           pp.decorators = decorators;
+        } else {
+          this.setLoc(startLoc!);
         }
         if (accessibility) pp.accessibility = accessibility;
         if (readonly) pp.readonly = readonly;
@@ -2506,11 +2512,38 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             ? "TSDeclareMethod"
             : undefined;
       if (bodilessType && !this.match(tt.braceL) && this.isLineTerminator()) {
+        if (
+          bodilessType === "TSDeclareMethod" &&
+          (node as Undone<N.TSDeclareMethod>).kind === "constructor"
+        ) {
+          for (const param of node.params) {
+            if (param.type === "TSParameterProperty") {
+              this.raise(TSErrors.UnexpectedParameterModifier, param);
+            } else if (param.type === "AssignmentPattern") {
+              this.raise(TSErrors.UnexpectedParameterInitializer, param);
+            }
+          }
+        } else {
+          for (const param of node.params) {
+            if (param.type === "AssignmentPattern") {
+              this.raise(TSErrors.UnexpectedParameterInitializer, param);
+            }
+          }
+        }
         return this.finishNode(node, bodilessType);
       }
-      if (bodilessType === "TSDeclareFunction" && this.state.isAmbientContext) {
-        this.raise(TSErrors.DeclareFunctionHasImplementation, node);
-        if ((node as Undone<N.FunctionDeclaration>).declare) {
+      if (bodilessType && this.state.isAmbientContext) {
+        // Here we throw from the start of block statement `{` rather than the start of node,
+        // because estree wraps the implementation within the `value` node, which starts from
+        // the parameters rather than the class method key.
+        this.raise(
+          TSErrors.DeclareFunctionHasImplementation,
+          this.state.startLoc,
+        );
+        if (
+          bodilessType === "TSDeclareFunction" &&
+          (node as Undone<N.FunctionDeclaration>).declare
+        ) {
           return super.parseFunctionBodyAndFinish(node, bodilessType, isMethod);
         }
       }
@@ -2761,18 +2794,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
           return this.tsParseType();
         });
-        this.finishNode(
+        const result = this.finishNode(
           node,
           isSatisfies! ? "TSSatisfiesExpression" : "TSAsExpression",
         );
         // rescan `<`, `>` because they were scanned when this.state.inType was true
         this.reScan_lt_gt();
-        return this.parseExprOp(
-          // @ts-expect-error todo(flow->ts)
-          node,
-          leftStartLoc,
-          minPrec,
-        );
+        return this.parseExprOp(result, leftStartLoc, minPrec);
       }
 
       return super.parseExprOp(left, leftStartLoc, minPrec);
@@ -3015,12 +3043,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       flags: ParseStatementFlag,
       decorators: N.Decorator[] | null,
     ): N.Statement {
+      const allowDeclaration = !!(flags & ParseStatementFlag.AllowDeclaration);
       if (!this.state.containsEsc) {
         switch (this.state.type) {
           case tt._const: {
             if (this.isLookaheadContextual("enum")) {
               const node = this.startNode<N.TSEnumDeclaration>();
-              this.expect(tt._const); // eat 'const'
+              this.next(); // eat 'const'
               return this.tsParseEnumDeclaration(node, { const: true });
             }
             break;
@@ -3068,7 +3097,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           }
           case tt._interface: {
             const result = this.tsParseInterfaceDeclaration(this.startNode());
-            if (result) return result;
+            if (result) {
+              if (!allowDeclaration) {
+                this.raise(
+                  TSErrors.UnexpectedTypeDeclaration,
+                  result,
+                  "interface",
+                );
+              }
+              return result;
+            }
             break;
           }
           case tt._module: {
@@ -3113,6 +3151,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           case tt._type: {
             if (this.nextTokenIsIdentifierOnSameLine()) {
               const node = this.startNode<N.TSTypeAliasDeclaration>();
+              if (!allowDeclaration) {
+                this.raise(TSErrors.UnexpectedTypeDeclaration, node, "type");
+              }
               this.next(); // eat 'type'
               return this.tsParseTypeAliasDeclaration(node);
             }

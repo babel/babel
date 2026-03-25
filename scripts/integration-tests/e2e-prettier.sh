@@ -48,6 +48,8 @@ yarn info
   rm tests/format/js/import-assertions/format.test.js
   rm tests/format/js/import-assertions/bracket-spacing/format.test.js
 
+  rm tests/format/typescript/conformance/classes/constructorDeclarations/constructorParameters/constructorOverloadsWithDefaultValues.ts
+
 # Test typings for @babel/parser
 yarn lint:typecheck
 
