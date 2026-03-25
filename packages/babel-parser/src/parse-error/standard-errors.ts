@@ -115,7 +115,7 @@ export default {
   ImportCallArity: ({ phase }: { phase?: string | null }) =>
     `\`import${phase ? `.${phase}` : ""}()\` requires exactly one or two arguments.`,
   ImportCallNotNewExpression: ({ phase }: { phase?: string | null }) =>
-    `Cannot use new with import${phase ? `.${phase}` : ""}(...).`,
+    `Cannot use new with import${phase ? `.${phase}` : ""}().`,
   ImportCallSpreadArgument: ({ phase }: { phase?: string | null }) =>
     `\`...\` is not allowed in \`import${phase ? `.${phase}` : ""}()\`.`,
   IncompatibleRegExpUVFlags:
