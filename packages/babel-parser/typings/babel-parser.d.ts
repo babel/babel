@@ -351,12 +351,12 @@ type ErrorInfoCompressed = {
   TypeImportCannotSpecifyDefaultAndNamed: [];
   TypeModifierIsUsedInTypeExports: [];
   TypeModifierIsUsedInTypeImports: [];
-  UnexpectedDeclaration: ["interface" | "type"];
   UnexpectedParameterInitializer: [];
   UnexpectedParameterModifier: [];
   UnexpectedReadonly: [];
   UnexpectedTypeAnnotation: [];
   UnexpectedTypeCastInParameter: [];
+  UnexpectedTypeDeclaration: ["interface" | "type"];
   UnsupportedImportTypeArgument: [];
   UnsupportedParameterPropertyKind: [];
   UnsupportedSignatureParameterKind: [{ type: string }];

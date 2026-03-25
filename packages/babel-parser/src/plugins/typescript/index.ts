@@ -213,8 +213,6 @@ export const TSErrorTemplates = {
     "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.",
   TypeModifierIsUsedInTypeImports:
     "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.",
-  UnexpectedDeclaration: (type: "interface" | "type") =>
-    `'${type}' declarations can only be declared inside a block.`,
   UnexpectedParameterInitializer:
     "A parameter initializer is only allowed in a function or constructor implementation.",
   UnexpectedParameterModifier:
@@ -223,6 +221,8 @@ export const TSErrorTemplates = {
     "'readonly' type modifier is only permitted on array and tuple literal types.",
   UnexpectedTypeAnnotation: "Did not expect a type annotation here.",
   UnexpectedTypeCastInParameter: "Unexpected type cast in parameter position.",
+  UnexpectedTypeDeclaration: (type: "interface" | "type") =>
+    `'${type}' declarations can only be declared inside a block.`,
   UnsupportedImportTypeArgument:
     "Argument in a type import must be a string literal.",
   UnsupportedParameterPropertyKind:
@@ -3099,7 +3099,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             const result = this.tsParseInterfaceDeclaration(this.startNode());
             if (result) {
               if (!allowDeclaration) {
-                this.raise(TSErrors.UnexpectedDeclaration, result, "interface");
+                this.raise(
+                  TSErrors.UnexpectedTypeDeclaration,
+                  result,
+                  "interface",
+                );
               }
               return result;
             }
@@ -3148,7 +3152,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             if (this.nextTokenIsIdentifierOnSameLine()) {
               const node = this.startNode<N.TSTypeAliasDeclaration>();
               if (!allowDeclaration) {
-                this.raise(TSErrors.UnexpectedDeclaration, node, "type");
+                this.raise(TSErrors.UnexpectedTypeDeclaration, node, "type");
               }
               this.next(); // eat 'type'
               return this.tsParseTypeAliasDeclaration(node);
