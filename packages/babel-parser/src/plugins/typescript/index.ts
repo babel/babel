@@ -3395,6 +3395,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       bindingType?: BindingFlag,
     ): void {
       if ((!isStatement || optionalId) && this.isContextual(tt._implements)) {
+        node.id = null;
         return;
       }
 

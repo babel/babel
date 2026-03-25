@@ -62,7 +62,6 @@
                         }
                       }
                     ],
-                    "predicate": null,
                     "returnType": {
                       "type": "TypeAnnotation",
                       "start":26,"end":29,"loc":{"start":{"line":2,"column":14},"end":{"line":2,"column":17}},
