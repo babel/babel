@@ -170,10 +170,10 @@ export default (superClass: typeof Parser) =>
     isValidDirective(stmt: N.Statement): stmt is N.ExpressionStatement {
       return (
         stmt.type === "ExpressionStatement" &&
-        (stmt.expression as N.ESTreeExpression).type === "Literal" &&
-        typeof (stmt.expression as unknown as N.EstreeLiteral).value ===
+        (stmt.expression as N.Node as N.ESTreeExpression).type === "Literal" &&
+        typeof (stmt.expression as N.Node as N.EstreeLiteral).value ===
           "string" &&
-        !(stmt.expression as unknown as N.EstreeLiteral).extra?.parenthesized
+        !(stmt.expression as N.Node as N.EstreeLiteral).extra?.parenthesized
       );
     }
 
