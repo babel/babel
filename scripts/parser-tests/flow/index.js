@@ -81,7 +81,7 @@ async function* loadTests(root) {
 
 const runner = new TestRunner({
   testDir: path.join(dirname, "../../../build/flow/src/parser/test/flow"),
-  allowlist: path.join(dirname, "allowlist.txt"),
+  allowlist: path.join(dirname, "allowlist.md"),
   shouldUpdate: process.argv.includes("--update-allowlist"),
 
   async *getTests() {
