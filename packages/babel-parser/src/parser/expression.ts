@@ -1900,10 +1900,11 @@ export default abstract class ExpressionParser extends LValParser {
     // @ts-expect-error we allow callee to be Import and Super to throw a
     // recoverable error later
     node.callee = callee;
-    if (
-      (isImport && callee.type === "ImportExpression") ||
-      callee.type === "Import" // This check implies isImport
-    ) {
+    if (isImport && callee.type === "ImportExpression") {
+      this.raise(Errors.ImportCallNotNewExpression, callee, callee);
+    }
+    if (callee.type === "Import") {
+      // This check implies isImport
       this.raise(Errors.ImportCallNotNewExpression, callee);
     }
     if (callee.type === "Super") {
@@ -2961,11 +2962,11 @@ export default abstract class ExpressionParser extends LValParser {
     this.next(); // eat `(`
     const args = this.parseCallExpressionArguments();
     if (args.length === 0 || args.length > 2) {
-      this.raise(Errors.ImportCallArity, node);
+      this.raise(Errors.ImportCallArity, node, node);
     } else {
       for (const arg of args) {
         if (arg.type === "SpreadElement") {
-          this.raise(Errors.ImportCallSpreadArgument, arg);
+          this.raise(Errors.ImportCallSpreadArgument, arg, node);
         }
       }
     }
