@@ -33,7 +33,7 @@ export const getVisitor = (): Visitor<PluginPass> => ({
 
     // Unwrap the wrapper IIFE's environment so super and this and such still work.
     (
-      path.get("body.body.0.argument.callee") as NodePath
+      path.get("body.body.0.argument.callee") as NodePath<t.FunctionExpression>
     ).unwrapFunctionEnvironment();
   },
   Function: {

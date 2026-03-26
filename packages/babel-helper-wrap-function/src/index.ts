@@ -112,7 +112,9 @@ function classOrObjectMethod(
     ];
 
     (
-      path.get("body.body.0.argument.callee.object.arguments.0") as NodePath
+      path.get(
+        "body.body.0.argument.callee.object.arguments.0",
+      ) as NodePath<t.FunctionExpression>
     ).unwrapFunctionEnvironment();
   } else {
     // return asyncToGenerator(function*() { ... })();
@@ -122,7 +124,9 @@ function classOrObjectMethod(
 
     // Unwrap the wrapper IIFE's environment so super and this and such still work.
     (
-      path.get("body.body.0.argument.callee.arguments.0") as NodePath
+      path.get(
+        "body.body.0.argument.callee.arguments.0",
+      ) as NodePath<t.FunctionExpression>
     ).unwrapFunctionEnvironment();
   }
 
