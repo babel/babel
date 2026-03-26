@@ -907,10 +907,12 @@ describe("buildConfigChain", function () {
 
         const opts1 = loadOptionsSync({
           filename,
+          babelrc: true,
           cwd: path.dirname(filename),
         });
         const opts2 = loadOptionsSync({
           filename,
+          babelrc: true,
           cwd: path.dirname(filename),
         });
 
@@ -918,10 +920,12 @@ describe("buildConfigChain", function () {
 
         const opts3 = loadOptionsSync({
           filename,
+          babelrc: true,
           cwd: path.dirname(filename),
         });
         const opts4 = loadOptionsSync({
           filename,
+          babelrc: true,
           cwd: path.dirname(filename),
         });
 
@@ -953,10 +957,12 @@ describe("buildConfigChain", function () {
 
         const opts1 = loadOptionsSync({
           filename,
+          babelrc: true,
           cwd: path.dirname(filename),
         });
         const opts2 = loadOptionsSync({
           filename,
+          babelrc: true,
           cwd: path.dirname(filename),
         });
 
@@ -964,10 +970,12 @@ describe("buildConfigChain", function () {
 
         const opts3 = loadOptionsSync({
           filename,
+          babelrc: true,
           cwd: path.dirname(filename),
         });
         const opts4 = loadOptionsSync({
           filename,
+          babelrc: true,
           cwd: path.dirname(filename),
         });
 
@@ -993,20 +1001,24 @@ describe("buildConfigChain", function () {
 
         const opts1 = loadOptionsSync({
           filename,
+          babelrc: true,
           cwd: path.dirname(filename),
         });
         const opts2 = loadOptionsSync({
           filename,
+          babelrc: true,
           cwd: path.dirname(filename),
         });
 
         const opts3 = loadOptionsSync({
           filename,
+          babelrc: true,
           envName: "new-env",
           cwd: path.dirname(filename),
         });
         const opts4 = loadOptionsSync({
           filename,
+          babelrc: true,
           envName: "new-env",
           cwd: path.dirname(filename),
         });
@@ -1225,7 +1237,7 @@ describe("buildConfigChain", function () {
 
         await config(name);
 
-        expect(loadOptionsSync({ filename, cwd })).toEqual({
+        expect(loadOptionsSync({ filename, babelrc: true, cwd })).toEqual({
           ...getDefaults(),
           filename,
           cwd,
@@ -1260,7 +1272,7 @@ describe("buildConfigChain", function () {
 
           await config(".babelrc.mjs");
 
-          expect(loadOptionsSync({ filename, cwd })).toEqual({
+          expect(loadOptionsSync({ filename, babelrc: true, cwd })).toEqual({
             ...getDefaults(),
             filename,
             cwd,
@@ -1287,7 +1299,7 @@ describe("buildConfigChain", function () {
         await config(name);
 
         await expect(
-          babel.loadOptionsAsync({ filename, cwd }),
+          babel.loadOptionsAsync({ filename, babelrc: true, cwd }),
         ).resolves.toEqual({
           ...getDefaults(),
           filename,
@@ -1300,7 +1312,11 @@ describe("buildConfigChain", function () {
       it("should load .babelignore", () => {
         const loadOptions = name => {
           const filename = fixture("config-files", "babelignore", name);
-          return loadOptionsSync({ filename, cwd: path.dirname(filename) });
+          return loadOptionsSync({
+            filename,
+            babelrc: true,
+            cwd: path.dirname(filename),
+          });
         };
 
         expect(loadOptions("src.js")).toBeNull();
@@ -1328,7 +1344,11 @@ describe("buildConfigChain", function () {
         await Promise.all([config(name1), config(name2)]);
 
         await expect(
-          babel.loadOptionsAsync({ filename: tmp("src.js"), cwd }),
+          babel.loadOptionsAsync({
+            filename: tmp("src.js"),
+            babelrc: true,
+            cwd,
+          }),
         ).rejects.toThrow(/Multiple configuration files found/);
       });
 
@@ -1336,7 +1356,11 @@ describe("buildConfigChain", function () {
         const filename = fixture("config-files", "pkg-ignored", "src.js");
 
         expect(
-          loadOptionsSync({ filename, cwd: path.dirname(filename) }),
+          loadOptionsSync({
+            filename,
+            babelrc: true,
+            cwd: path.dirname(filename),
+          }),
         ).toEqual({
           ...getDefaults(),
           filename: filename,
@@ -1358,7 +1382,11 @@ describe("buildConfigChain", function () {
         const filename = fixture("config-files", dir, "src.js");
 
         await expect(
-          babel.loadOptionsAsync({ filename, cwd: path.dirname(filename) }),
+          babel.loadOptionsAsync({
+            filename,
+            babelrc: true,
+            cwd: path.dirname(filename),
+          }),
         ).rejects.toThrow(error);
       });
 
@@ -1368,6 +1396,7 @@ describe("buildConfigChain", function () {
         expect(
           babel.loadPartialConfigSync({
             filename,
+            babelrc: true,
             cwd: path.dirname(filename),
           }),
         ).toEqual({
@@ -1396,6 +1425,7 @@ describe("buildConfigChain", function () {
         expect(
           babel.loadPartialConfigSync({
             filename,
+            babelrc: true,
             cwd: path.dirname(filename),
           }),
         ).toBeNull();
@@ -1407,6 +1437,7 @@ describe("buildConfigChain", function () {
         expect(
           babel.loadPartialConfigSync({
             filename,
+            babelrc: true,
             cwd: path.dirname(filename),
             showIgnoredFiles: true,
           }),

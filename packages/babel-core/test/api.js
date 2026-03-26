@@ -503,6 +503,7 @@ describe("api", function () {
 
     const result = transformSync("", {
       cwd: path.join(cwd, "fixtures", "config", "complex-plugin-config"),
+      babelrc: true,
       filename: path.join(
         cwd,
         "fixtures",

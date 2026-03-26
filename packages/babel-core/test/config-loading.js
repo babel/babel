@@ -39,6 +39,7 @@ describe("@babel/core config loading", () => {
     return {
       cwd: path.dirname(FILEPATH),
       filename: FILEPATH,
+      babelrc: true,
       presets: skipProgrammatic
         ? null
         : [[require("./fixtures/config-loading/preset3.js"), {}]],
