@@ -67,7 +67,7 @@ for (const type in t.NODE_FIELDS) {
       return indexA - indexB;
     })
     .forEach(fieldName => {
-      const field: FieldOptions = fields[fieldName];
+      const field: FieldOptions<t.Node> = fields[fieldName];
 
       let suffix = "";
       if (field.optional || field.default != null) suffix += "?";

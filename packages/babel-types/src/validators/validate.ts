@@ -20,9 +20,9 @@ export default function validate(
   validateChild(node, key, val);
 }
 
-export function validateInternal(
-  field: FieldOptions,
-  node: t.Node | undefined | null,
+export function validateInternal<T extends t.Node>(
+  field: FieldOptions<T>,
+  node: T,
   key: string,
   val: unknown,
   maybeNode?: 1,
@@ -39,11 +39,11 @@ export function validateInternal(
   }
 }
 
-export function validateField(
-  node: t.Node | undefined | null,
+export function validateField<T extends t.Node>(
+  node: T,
   key: string,
   val: unknown,
-  field: FieldOptions | undefined | null,
+  field: FieldOptions<T> | undefined | null,
 ): void {
   if (!field?.validate) return;
   if (field.optional && val == null) return;
@@ -52,7 +52,7 @@ export function validateField(
 }
 
 export function validateChild(
-  node: t.Node | undefined | null,
+  node: t.Node,
   key: string | { toString(): string },
   val?: unknown,
 ) {

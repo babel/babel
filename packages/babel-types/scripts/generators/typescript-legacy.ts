@@ -69,7 +69,7 @@ for (const type in t.NODE_FIELDS) {
   const args: string[] = [];
 
   fieldNames.forEach(fieldName => {
-    const field: FieldOptions = fields[fieldName];
+    const field: FieldOptions<t.Node> = fields[fieldName];
     // Future / annoying TODO:
     // MemberExpression.property, ObjectProperty.key and ObjectMethod.key need special cases; either:
     // - convert the declaration to chain() like ClassProperty.key and ClassMethod.key,

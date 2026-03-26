@@ -24,14 +24,14 @@ const {
  * @param declare Whether to generate arguments for TS declaration functions
  */
 function generateBuilderArgs(type: string, declare = false): string[] {
-  const fields = NODE_FIELDS[type] as Record<string, FieldOptions>;
+  const fields = NODE_FIELDS[type] as Record<string, FieldOptions<_t.Node>>;
   const fieldNames = sortFieldNames(Object.keys(NODE_FIELDS[type]), type);
   const builderNames = BUILDER_KEYS[type];
 
   const args: string[] = [];
 
   fieldNames.forEach(fieldName => {
-    const field: FieldOptions = fields[fieldName];
+    const field: FieldOptions<_t.Node> = fields[fieldName];
     let typeAnnotation = stringifyValidator(field.validate, "t.");
 
     if (isNullable(field) && !hasDefault(field)) {
@@ -39,7 +39,7 @@ function generateBuilderArgs(type: string, declare = false): string[] {
     }
 
     if (builderNames.includes(fieldName)) {
-      const field: FieldOptions = NODE_FIELDS[type][fieldName];
+      const field: FieldOptions<_t.Node> = NODE_FIELDS[type][fieldName];
       const def = JSON.stringify(field.default);
       const bindingIdentifierName = toBindingIdentifierName(fieldName);
       let arg;
@@ -66,7 +66,7 @@ function generateBuilderDeclareFunctions(
   type: string,
   formattedBuilderNameLocal: string
 ) {
-  const fields = NODE_FIELDS[type] as Record<string, FieldOptions>;
+  const fields = NODE_FIELDS[type] as Record<string, FieldOptions<_t.Node>>;
   const fieldNames = sortFieldNames(Object.keys(NODE_FIELDS[type]), type);
   const builderNames = BUILDER_KEYS[type];
   const unionShape = NODE_UNION_SHAPES__PRIVATE[type];
