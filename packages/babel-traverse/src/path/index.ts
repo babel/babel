@@ -243,7 +243,6 @@ const methods = {
   evaluate: NodePath_evaluation.evaluate,
 
   // NodePath_conversion
-  toComputedKey: NodePath_conversion.toComputedKey,
   ensureBlock: NodePath_conversion.ensureBlock,
   unwrapFunctionEnvironment: NodePath_conversion.unwrapFunctionEnvironment,
   arrowFunctionToExpression: NodePath_conversion.arrowFunctionToExpression,

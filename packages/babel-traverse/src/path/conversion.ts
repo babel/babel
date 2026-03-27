@@ -9,7 +9,6 @@ import {
   conditionalExpression,
   expressionStatement,
   identifier,
-  isIdentifier,
   jsxIdentifier,
   logicalExpression,
   LOGICAL_OPERATORS,
@@ -46,24 +45,6 @@ import type NodePath from "./index.ts";
 import type { Visitor } from "../types.ts";
 import { setup } from "./context.ts";
 import type Scope from "../scope/index.ts";
-
-export function toComputedKey(this: NodePath) {
-  let key;
-  if (this.isMemberExpression()) {
-    key = this.node.property;
-  } else if (this.isProperty() || this.isMethod()) {
-    key = this.node.key;
-  } else {
-    throw new ReferenceError("todo");
-  }
-
-  // @ts-expect-error todo(flow->ts) computed does not exist in ClassPrivateProperty
-  if (!this.node.computed) {
-    if (isIdentifier(key)) key = stringLiteral(key.name);
-  }
-
-  return key;
-}
 
 export function ensureBlock(
   this: NodePath<
@@ -136,7 +117,11 @@ export function ensureBlock(
  * you have wrapped some set of items in an IIFE or other function, but want "this", "arguments", and super"
  * to continue behaving as expected.
  */
-export function unwrapFunctionEnvironment(this: NodePath<t.Node | null>) {
+export function unwrapFunctionEnvironment(
+  this: NodePath<
+    t.ArrayExpression | t.FunctionExpression | t.FunctionDeclaration
+  >,
+) {
   if (
     !this.isArrowFunctionExpression() &&
     !this.isFunctionExpression() &&
@@ -168,8 +153,8 @@ export function arrowFunctionToExpression(
     // TODO(Babel 9): Consider defaulting to `false` for spec compliance
     noNewArrows = true,
   }: {
-    allowInsertArrow?: boolean | void;
-    allowInsertArrowWithRest?: boolean | void;
+    allowInsertArrow?: boolean;
+    allowInsertArrowWithRest?: boolean;
     noNewArrows?: boolean;
   } = {},
 ): NodePath<
@@ -254,9 +239,9 @@ const getSuperCallsVisitor = environmentVisitor<{
 function hoistFunctionEnvironment(
   fnPath: NodePath<t.Function>,
   // TODO(Babel 9): Consider defaulting to `false` for spec compliance
-  noNewArrows: boolean | void = true,
-  allowInsertArrow: boolean | void = true,
-  allowInsertArrowWithRest: boolean | void = true,
+  noNewArrows: boolean = true,
+  allowInsertArrow: boolean = true,
+  allowInsertArrowWithRest: boolean = true,
 ): { thisBinding: string; fnPath: NodePath<t.Function> } {
   let arrowParent;
   let thisEnvFn: NodePath<t.Function> = fnPath.findParent(p => {
