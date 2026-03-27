@@ -1,12 +1,13 @@
 function f() {
   var _this = this;
   let g = /*#__PURE__*/function () {
-    var _ref = babelHelpers.asyncToGenerator(function* () {
+    var _g = babelHelpers.asyncToGenerator(function* () {
       _this;
     });
-    return function g() {
-      return _ref.apply(this, arguments);
-    };
+    function g() {
+      return _g.apply(this, arguments);
+    }
+    return g;
   }();
 }
 class Class {
@@ -14,12 +15,13 @@ class Class {
     var _this2 = this;
     return babelHelpers.asyncToGenerator(function* () {
       var c = /*#__PURE__*/function () {
-        var _ref2 = babelHelpers.asyncToGenerator(function* (b) {
+        var _c = babelHelpers.asyncToGenerator(function* (b) {
           _this2;
         });
-        return function c(_x) {
-          return _ref2.apply(this, arguments);
-        };
+        function c(_x) {
+          return _c.apply(this, arguments);
+        }
+        return c;
       }();
     })();
   }
