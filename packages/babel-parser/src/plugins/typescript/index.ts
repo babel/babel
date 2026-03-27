@@ -419,7 +419,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       };
 
-      for (;;) {
+      for (; ;) {
         const { startLoc } = this.state;
         const modifier: TsModifier | undefined | null = this.tsParseModifier(
           allowedModifiers.concat(disallowedModifiers ?? []),
@@ -529,7 +529,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const result: T[] = [];
       let trailingCommaPos = -1;
 
-      for (;;) {
+      for (; ;) {
         if (this.tsIsListTerminator(kind)) {
           break;
         }
@@ -621,7 +621,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // qualifier, so allow it to be a reserved word as well.
         node.qualifier = this.tsParseEntityName(
           tsParseEntityNameFlags.ALLOW_RESERVED_WORDS |
-            tsParseEntityNameFlags.LEADING_THIS_AS_IDENTIFIER,
+          tsParseEntityNameFlags.LEADING_THIS_AS_IDENTIFIER,
         );
       }
       if (this.match(tt.lt)) {
@@ -1498,8 +1498,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         : this.isContextual(tt._infer)
           ? this.tsParseInferType()
           : this.tsInAllowConditionalTypesContext(() =>
-              this.tsParseArrayTypeOrHigher(),
-            );
+            this.tsParseArrayTypeOrHigher(),
+          );
     }
 
     tsParseUnionOrIntersectionType(
@@ -2828,7 +2828,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     2. We have a type checker to warn us about this sort of thing.
     */
-    checkDuplicateExports() {}
+    checkDuplicateExports() { }
 
     isPotentialImportPhase(isExport: boolean): boolean {
       if (super.isPotentialImportPhase(isExport)) return true;
@@ -3354,11 +3354,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // But we parse them here and change them when completing the arrow function.
     parseParenItem<
       T extends
-        | N.Expression
-        | N.RestElement
-        | N.SpreadElement
-        | N.TSTypeCastExpression
-        | N.TypeCastExpression,
+      | N.Expression
+      | N.RestElement
+      | N.SpreadElement
+      | N.TSTypeCastExpression
+      | N.TypeCastExpression,
     >(node: T, startLoc: Position): T | N.TSTypeCastExpression {
       const newNode = super.parseParenItem(node, startLoc);
       if (this.eat(tt.question)) {
@@ -4160,6 +4160,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     shouldParseArrow(params: N.Node[]) {
       if (this.match(tt.colon)) {
+        // When inside a ternary consequent, `:` after `)` is the
+        // ternary separator, not a return type annotation.
+        // We check _outerInConditionalConsequent because the direct
+        // inConditionalConsequent flag has already been reset to false
+        // by parseParenAndDistinguishExpression (needed so that async
+        // arrows inside parens still work).
+        if (this._outerInConditionalConsequent) return false;
         return params.every(expr => this.isAssignable(expr, true));
       }
       return super.shouldParseArrow(params);
@@ -4175,13 +4182,44 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return super.shouldParseAsyncArrow();
     }
 
+    // Tracks whether we are inside a conditional consequent at the
+    // paren-expression level. This is set by
+    // parseParenAndDistinguishExpression from inConditionalConsequent
+    // before resetting that flag, and checked by shouldParseArrow.
+    _outerInConditionalConsequent: boolean = false;
+
     // Reset inConditionalConsequent inside parenthesized expressions,
     // since `:` inside parens can never be a ternary separator.
+    // Save the outer value for shouldParseArrow which runs after `)`.
     parseParenAndDistinguishExpression(canStartArrow: boolean): N.Expression {
       const oldInConditionalConsequent = this.state.inConditionalConsequent;
+      const oldOuter = this._outerInConditionalConsequent;
+      this._outerInConditionalConsequent = oldInConditionalConsequent;
       this.state.inConditionalConsequent = false;
       const result = super.parseParenAndDistinguishExpression(canStartArrow);
       this.state.inConditionalConsequent = oldInConditionalConsequent;
+      this._outerInConditionalConsequent = oldOuter;
+      return result;
+    }
+
+    // Reset _outerInConditionalConsequent when entering an arrow
+    // function body, since parenthesized expressions inside arrow
+    // bodies are not direct consequents of the outer ternary.
+    parseArrowExpression(
+      node: Undone<N.ArrowFunctionExpression>,
+      params: Parameters<Parser["parseArrowExpression"]>[1],
+      isAsync: boolean,
+      trailingCommaLoc?: Position | null,
+    ): N.ArrowFunctionExpression {
+      const oldOuter = this._outerInConditionalConsequent;
+      this._outerInConditionalConsequent = false;
+      const result = super.parseArrowExpression(
+        node,
+        params,
+        isAsync,
+        trailingCommaLoc,
+      );
+      this._outerInConditionalConsequent = oldOuter;
       return result;
     }
 
@@ -4313,7 +4351,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         const hasEstreePlugin = this.hasPlugin("estree");
         const methodFn = hasEstreePlugin
           ? // @ts-expect-error estree typings
-            method.value
+          method.value
           : method;
         if (methodFn.body) {
           const { key } = method;
