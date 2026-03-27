@@ -1006,7 +1006,7 @@ export default abstract class ExpressionParser extends LValParser {
     allowPlaceholder?: boolean,
     nodeForExtra?: Undone<N.Node> | null,
     refExpressionErrors?: ExpressionErrors | null,
-  ): N.Expression[] {
+  ): (N.Expression | N.SpreadElement)[] {
     const elts: N.Expression[] = [];
     let first = true;
 
@@ -1900,10 +1900,11 @@ export default abstract class ExpressionParser extends LValParser {
     // @ts-expect-error we allow callee to be Import and Super to throw a
     // recoverable error later
     node.callee = callee;
-    if (
-      (isImport && callee.type === "ImportExpression") ||
-      callee.type === "Import" // This check implies isImport
-    ) {
+    if (isImport && callee.type === "ImportExpression") {
+      this.raise(Errors.ImportCallNotNewExpression, callee, callee);
+    }
+    if (callee.type === "Import") {
+      // This check implies isImport
       this.raise(Errors.ImportCallNotNewExpression, callee);
     }
     if (callee.type === "Super") {
@@ -2960,29 +2961,22 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     node: Undone<N.ImportExpression>,
   ): N.ImportExpression {
-    this.next(); // eat tt.parenL
-    node.source = this.parseMaybeAssignAllowIn();
-    node.options = null;
-    if (this.eat(tt.comma)) {
-      if (!this.match(tt.parenR)) {
-        node.options = this.parseMaybeAssignAllowIn();
-        if (this.eat(tt.comma)) {
-          this.addTrailingCommaExtraToNode(node.options);
-          if (!this.match(tt.parenR)) {
-            // keep consuming arguments, to then throw ImportCallArity
-            // instead of "expected )"
-            do {
-              this.parseMaybeAssignAllowIn();
-            } while (this.eat(tt.comma) && !this.match(tt.parenR));
-
-            this.raise(Errors.ImportCallArity, node);
-          }
+    this.next(); // eat `(`
+    const args = this.parseCallExpressionArguments();
+    if (args.length === 0 || args.length > 2) {
+      this.raise(Errors.ImportCallArity, node, node);
+    } else {
+      for (const arg of args) {
+        if (arg.type === "SpreadElement") {
+          this.raise(Errors.ImportCallSpreadArgument, arg, node);
         }
-      } else {
-        this.addTrailingCommaExtraToNode(node.source);
       }
     }
-    this.expect(tt.parenR);
+    // @ts-expect-error we allow SpreadElement for error recovery
+    node.source = args[0];
+    // @ts-expect-error we allow SpreadElement for error recovery
+    node.options = args[1] ?? null;
+
     return this.finishNode(node, "ImportExpression");
   }
 

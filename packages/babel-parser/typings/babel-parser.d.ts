@@ -157,9 +157,9 @@ type ErrorInfoCompressed = {
   IllegalLanguageModeDirective: [];
   IllegalReturn: [];
   ImportBindingIsString: [{ importName: string }];
-  ImportCallArity: [];
-  ImportCallNotNewExpression: [];
-  ImportCallSpreadArgument: [];
+  ImportCallArity: [{ phase?: string | null | undefined }];
+  ImportCallNotNewExpression: [{ phase?: string | null | undefined }];
+  ImportCallSpreadArgument: [{ phase?: string | null | undefined }];
   IncompatibleRegExpUVFlags: [];
   InvalidBigIntLiteral: [];
   InvalidCodePoint: [];
