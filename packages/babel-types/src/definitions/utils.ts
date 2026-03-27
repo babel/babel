@@ -40,14 +40,14 @@ type UnionShape<T extends t.Node> = {
 };
 
 type DefineTypeOpts<T extends t.Node> = {
-  fields?: FieldDefinitions<T>;
+  fields?: FieldDefinitions<NoInfer<T>>;
   visitor?: string[];
   aliases?: string[];
   builder?: string[];
   inherits?: NodeTypes;
   deprecatedAlias?: string;
-  validate?: Validator<T>;
-  unionShape?: UnionShape<T>;
+  validate?: Validator<NoInfer<T>>;
+  unionShape?: UnionShape<NoInfer<T>>;
 };
 
 export type ValidatorImpl<T extends t.Node> = (
