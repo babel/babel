@@ -27,10 +27,10 @@ function registerParentMaps(parent: string, nodes: string[]) {
 /**
  * Get the node types from a validator. It will also resolve alias types to their
  * corresponding node types.
- * @param validator
- * @returns
  */
-function getNodeTypesFromValidator(validator: Validator | undefined): string[] {
+function getNodeTypesFromValidator(
+  validator: Validator<_t.Node> | undefined
+): string[] {
   if (validator === undefined) return [];
   if ("each" in validator) {
     return getNodeTypesFromValidator(validator.each);
@@ -117,7 +117,7 @@ export type Node = ${t.TYPES.filter((k: string) => !t.FLIPPED_ALIAS_KEYS[k])
     const struct: string[] = [];
 
     fieldNames.forEach(fieldName => {
-      const field: FieldOptions = fields[fieldName];
+      const field: FieldOptions<_t.Node> = fields[fieldName];
       registerParentMaps(type, getNodeTypesFromValidator(field.validate));
 
       if (

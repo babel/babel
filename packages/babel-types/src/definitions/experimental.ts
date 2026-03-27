@@ -9,7 +9,6 @@ import defineType, {
   assertNodeOrValueType,
   assertValueType,
   chain,
-  type ValidatorImpl,
 } from "./utils.ts";
 
 // https://github.com/tc39/proposal-partial-application
@@ -56,14 +55,10 @@ defineType("ClassAccessorProperty", {
           );
           const computed = assertNodeType("Expression");
 
-          return function (
-            node: t.ClassAccessorProperty,
-            key: string,
-            val: any,
-          ) {
+          return function (node: t.ClassAccessorProperty, key, val) {
             const validator = node.computed ? computed : normal;
             validator(node, key, val);
-          } satisfies ValidatorImpl;
+          };
         })(),
         assertNodeType(
           "Identifier",
