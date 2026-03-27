@@ -287,9 +287,6 @@
       "path": "./packages/babel-plugin-transform-export-namespace-from"
     },
     {
-      "path": "./packages/babel-plugin-transform-flow-comments"
-    },
-    {
       "path": "./packages/babel-plugin-transform-flow-strip-types"
     },
     {

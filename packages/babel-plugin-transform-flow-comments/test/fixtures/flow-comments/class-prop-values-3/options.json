@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "transform-flow-comments",
-    ["transform-class-properties", { "loose": true }]
-  ]
-}
