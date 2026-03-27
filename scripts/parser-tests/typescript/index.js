@@ -73,7 +73,7 @@ const AlwaysStrictRegExp = /^\/\/\s*@alwaysStrict:\s*true/m;
 
 const runner = new TestRunner({
   testDir: path.join(TSTestsPath, "./cases/compiler"),
-  allowlist: path.join(dirname, "allowlist.txt"),
+  allowlist: path.join(dirname, "allowlist.md"),
   logInterval: 50,
   shouldUpdate: process.argv.includes("--update-allowlist"),
 
@@ -89,7 +89,12 @@ const runner = new TestRunner({
       const expectedError =
         files.length > 0 && baselineContainsParserErrorCodes(test.name);
 
-      yield { id: test.name, expectedError, contents: files };
+      yield {
+        id: test.name,
+        expectedError,
+        contents: files,
+        fileName: test.name,
+      };
     }
   },
 });
