@@ -2,7 +2,7 @@ import type { types as t, NodePath } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
 
 export default declare(({ types: t, assertVersion }) => {
-  assertVersion(REQUIRED_VERSION(7));
+  assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   function containsClassExpression(path: NodePath<t.Node | null>) {
     if (t.isClassExpression(path.node)) return true;

@@ -8,7 +8,7 @@ export interface Options {
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const ignoreFunctionLength =
     api.assumption("ignoreFunctionLength") ?? options.loose;

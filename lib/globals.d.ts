@@ -1,6 +1,5 @@
 declare const IS_STANDALONE: boolean;
 declare const PACKAGE_JSON: { name: string; version: string };
-declare function REQUIRED_VERSION(version: number): number | string;
 declare function REQUIRED_VERSION(version: string): string;
 
 declare namespace NodeJS {
