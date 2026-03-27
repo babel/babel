@@ -28,7 +28,7 @@ export default function populatePlaceholders(
         throw new Error(
           `Error: No substitution given for "${placeholderName}". If this is not meant to be a
             placeholder you may want to consider passing one of the following options to @babel/template:
-            - { placeholderPattern: false, placeholderWhitelist: new Set(['${placeholderName}'])}
+            - { placeholderPattern: false, placeholderAllowlist: new Set(['${placeholderName}'])}
             - { placeholderPattern: /^${placeholderName}$/ }`,
         );
       }
