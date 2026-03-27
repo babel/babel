@@ -198,7 +198,14 @@ export function normalizeCoreJSOption(
   return { version, proposals };
 }
 
-export default function normalizeOptions(opts: Partial<Options>) {
+export default function normalizeOptions(opts: Partial<Options>): Omit<
+  Options,
+  "corejs" | "include" | "exclude"
+> & {
+  corejs: NormalizedCorejsOption;
+  include: string[];
+  exclude: string[];
+} {
   v.invariant(
     !Object.hasOwn(opts, "bugfixes"),
     "The 'bugfixes' option has been removed, and now bugfix plugins are" +

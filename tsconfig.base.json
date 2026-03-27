@@ -7,7 +7,7 @@
     "lib": ["ESNext"],
     "types": ["node", "jest"],
     "declaration": true,
-    "declarationMap": true,
+    "declarationMap": false,
     "emitDeclarationOnly": true,
     "declarationDir": "./dts",
     "moduleResolution": "Bundler",
