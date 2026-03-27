@@ -163,7 +163,9 @@ export default (superClass: typeof Parser) =>
       }
     }
 
-    getObjectOrClassMethodParams(method: N.ObjectMethod | N.ClassMethod) {
+    getObjectOrClassMethodParams(
+      method: Undone<N.ObjectMethod | N.ClassMethod>,
+    ) {
       return (method as unknown as N.EstreeMethodDefinition).value.params;
     }
 

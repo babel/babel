@@ -2630,8 +2630,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     // parse type parameters for class methods
     pushClassMethod(
-      classBody: N.ClassBody,
-      method: N.ClassMethod,
+      classBody: Undone<N.ClassBody>,
+      method: Undone<N.ClassMethod>,
       isGenerator: boolean,
       isAsync: boolean,
       isConstructor: boolean,
@@ -2676,8 +2676,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     pushClassPrivateMethod(
-      classBody: N.ClassBody,
-      method: N.ClassPrivateMethod,
+      classBody: Undone<N.ClassBody>,
+      method: Undone<N.ClassPrivateMethod>,
       isGenerator: boolean,
       isAsync: boolean,
     ): void {
@@ -2704,7 +2704,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     // parse a the super class type parameters and implements
-    parseClassSuper(node: N.Class): void {
+    parseClassSuper(node: Undone<N.Class>): void {
       super.parseClassSuper(node);
       if (
         node.superClass &&
@@ -2724,7 +2724,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
-    checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
+    checkGetterSetterParams(
+      method: Undone<N.ObjectMethod | N.ClassMethod>,
+    ): void {
       super.checkGetterSetterParams(method);
       const params = this.getObjectOrClassMethodParams(method);
       if (params.length > 0) {
