@@ -1,0 +1,3 @@
+{
+  "plugins": ["estree", ["partialApplication", { "version": "2021-10" }]]
+}
