@@ -94,24 +94,6 @@ describe("traverse", () => {
     });
   });
 
-  describe("NodePath#is*", () => {
-    it("allows null", () => {
-      const path = {} as NodePath<t.VariableDeclarator>;
-      const init = path.get("init");
-      expect(init).type.toBe<NodePath<t.Expression | null>>();
-      if (init.isIdentifier()) {
-        expect(init).type.toBe<NodePath<t.Identifier>>();
-      }
-    });
-
-    it("virtual types", () => {
-      const path = {} as NodePath<t.Node>;
-      if (path.isBindingIdentifier()) {
-        expect(path).type.toBe<NodePath<t.Identifier>>();
-      }
-    });
-  });
-
   describe("Visitor", () => {
     describe("Union types", () => {
       it("traverse", () => {
@@ -143,7 +125,7 @@ describe("traverse", () => {
         } as TraverseOptions & Visitor);
       });
 
-      it("path#traverse", () => {
+      it("NodePath#traverse", () => {
         (({}) as NodePath<t.Node>).traverse({
           "ImportDeclaration|ExportDeclaration"(path) {
             expect(path).type.toBe<
@@ -159,6 +141,24 @@ describe("traverse", () => {
           noScope: true,
         } as TraverseOptions & Visitor);
       });
+    });
+  });
+
+  describe("NodePath#is*", () => {
+    it("allows null", () => {
+      const path = {} as NodePath<t.VariableDeclarator>;
+      const init = path.get("init");
+      expect(init).type.toBe<NodePath<t.Expression | null>>();
+      if (init.isIdentifier()) {
+        expect(init).type.toBe<NodePath<t.Identifier>>();
+      }
+    });
+
+    it("virtual types", () => {
+      const path = {} as NodePath<t.Node>;
+      if (path.isBindingIdentifier()) {
+        expect(path).type.toBe<NodePath<t.Identifier>>();
+      }
     });
   });
 
