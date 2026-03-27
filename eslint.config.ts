@@ -1,6 +1,6 @@
 import babelParser from "@babel/eslint-parser";
 import globals from "globals";
-import js from "@eslint/js";
+import eslintJS from "@eslint/js";
 import { defineConfig } from "eslint/config";
 import pluginImport from "eslint-plugin-import";
 import pluginJest from "eslint-plugin-jest";
@@ -14,8 +14,6 @@ import typescriptEslint from "typescript-eslint";
 import { commonJS } from "$repo-utils";
 
 const { require } = commonJS(import.meta.url);
-
-const recommendedConfig = js.configs.recommended;
 
 const cjsGlobals = ["__dirname", "__filename", "require", "module", "exports"];
 
@@ -67,8 +65,8 @@ export default defineConfig([
       ...(process.env.IS_PUBLISH ? testFiles : []),
     ],
   },
-  recommendedConfig,
-  pluginRegexp.configs["flat/recommended"],
+  eslintJS.configs.recommended,
+  pluginRegexp.configs.recommended,
   {
     languageOptions: {
       parser: babelParser,
@@ -85,6 +83,10 @@ export default defineConfig([
         ...globals.node,
         ...globals.browser,
       },
+    },
+    linterOptions: {
+      reportUnusedDisableDirectives: "error",
+      reportUnusedInlineConfigs: "error",
     },
     rules: {
       curly: ["error", "multi-line"],
