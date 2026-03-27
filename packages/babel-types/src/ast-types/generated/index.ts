@@ -811,7 +811,7 @@ export interface ArrowFunctionExpression extends BaseNode {
   params: FunctionParameter[];
   body: BlockStatement | Expression;
   async: boolean;
-  expression: boolean;
+  expression?: boolean | null;
   generator?: boolean | null;
   predicate?: FlowPredicate | null;
   returnType?: TypeAnnotation | TSTypeAnnotation | null;
