@@ -1,4 +1,10 @@
 import type { Config } from "jest";
+import { spawnSync } from "node:child_process";
+
+// Avoid multiple threads downloading concurrently during testing.
+if (process.env.EXEC_TESTS_NODE) {
+  spawnSync(`./node_modules/.bin/get-node ${process.env.EXEC_TESTS_NODE}`);
+}
 
 const isPublishBundle = process.env.IS_PUBLISH;
 
