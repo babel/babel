@@ -135,6 +135,7 @@ describe("browserslist", () => {
         loadOptionsSync({
           cwd: join(cwd, "fixtures", "targets"),
           filename: "./node_modules/dep/test.js",
+          babelrc: true,
           babelrcRoots: ["./node_modules/dep/"],
         }).targets,
       ).toEqual({ edge: "14.0.0" });

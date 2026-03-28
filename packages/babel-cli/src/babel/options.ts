@@ -190,7 +190,6 @@ export type CmdOptions = {
 };
 
 export default function parseArgv(args: string[]): CmdOptions | null {
-  //
   program.parse(args);
 
   const opts = program.opts();
@@ -292,10 +291,12 @@ export default function parseArgv(args: string[]): CmdOptions | null {
     sourceFileName: opts.sourceFileName,
     sourceRoot: opts.sourceRoot,
 
+    // Commander will default the "--no-" arguments to true.
+    // We will use `true` to override the default value of `@babel/core`.
+    babelrc: opts.babelrc,
     // Commander will default the "--no-" arguments to true, but we want to
     // leave them undefined so that @babel/core can handle the
     // default-assignment logic on its own.
-    babelrc: opts.babelrc === true ? undefined : opts.babelrc,
     highlightCode: opts.highlightCode === true ? undefined : opts.highlightCode,
     comments: opts.comments === true ? undefined : opts.comments,
   };
