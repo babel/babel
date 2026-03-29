@@ -47,19 +47,21 @@ class WorkerClient extends Client {
     { env: markInRegisterWorker(process.env) },
   );
 
-  #signal = new Int32Array(new SharedArrayBuffer(4));
-
   constructor() {
     super((action, payload) => {
-      this.#signal[0] = 0;
+      // We create a new SharedArrayBuffer every time rather than reusing
+      // the same one, otherwise sometimes its contents get corrupted and
+      // Atomics.wait wakes up too early.
+      // https://github.com/babel/babel/pull/14541
+      const signal = new Int32Array(new SharedArrayBuffer(4));
       const subChannel = new worker_threads.MessageChannel();
 
       this.#worker.postMessage(
-        { signal: this.#signal, port: subChannel.port1, action, payload },
+        { signal, port: subChannel.port1, action, payload },
         [subChannel.port1],
       );
 
-      Atomics.wait(this.#signal, 0, 0);
+      Atomics.wait(signal, 0, 0);
       const { message } = worker_threads.receiveMessageOnPort(
         subChannel.port2,
       )!;
