@@ -171,6 +171,23 @@ function writeHelpers(
   { polyfillProvider }: { polyfillProvider?: PluginItem } = {}
 ) {
   const pkgDirname = getRuntimeRoot(runtimeName);
+  try {
+    fs.rmSync(path.join(pkgDirname, "helpers"), {
+      recursive: true,
+      force: true,
+    });
+    fs.mkdirSync(path.join(pkgDirname, "helpers/esm"), { recursive: true });
+    fs.writeFileSync(
+      path.join(pkgDirname, "helpers/esm/package.json"),
+      JSON.stringify(
+        {
+          type: "module",
+        },
+        undefined,
+        2
+      )
+    );
+  } catch {}
   const helperSubExports: HelperSubExports = {};
   for (const helperName of helpers.list) {
     const cjs = writeHelperFile(runtimeName, pkgDirname, helperName, {
