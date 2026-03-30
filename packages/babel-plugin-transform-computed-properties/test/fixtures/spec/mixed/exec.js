@@ -1,10 +1,10 @@
 var heh = "heh";
-var noo = "noo";
+var no = "no";
 var foo = "foo";
 
 var obj = {
   ["x" + heh]: "heh",
-  ["y" + noo]: "noo",
+  ["y" + no]: "no",
   [foo]: "foo1",
   foo: "foo2",
   bar: "bar",
@@ -12,7 +12,7 @@ var obj = {
 
 expect(obj).toEqual({
   xheh: "heh",
-  ynoo: "noo",
+  ynoo: "no",
   foo: "foo2",
   bar: "bar",
 });

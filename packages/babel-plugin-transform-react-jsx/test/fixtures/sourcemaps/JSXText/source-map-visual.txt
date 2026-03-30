@@ -43,7 +43,7 @@
   (5:4-9)     <div clas           <--  (3:28-41) act.createElement("di
               ^^^^^                                  ^^^^^^^^^^^^^
 
-  (5:4-9)     <div clas           <--  (3:41-50) ment("div", {
+  (5:4-9)     <div clas           <--  (3:41-50) meant("div", {
               ^^^^^                                  ^^^^^^^^^
 
  (5:9-18) div className="Ap       <--   (4:4-13)     className: "A
@@ -67,7 +67,7 @@
  (6:6-10)     <h1>Welc            <--  (5:24-37) act.createElement("h1
               ^^^^                                   ^^^^^^^^^^^^^
 
- (6:6-10)     <h1>Welc            <--  (5:37-50) ment("h1", null, "Wel
+ (6:6-10)     <h1>Welc            <--  (5:37-50) meant("h1", null, "Well
               ^^^^                                   ^^^^^^^^^^^^^
 
 (6:10-40) <h1>Welcome to my application!</h1> <--  (5:50-78) ll, "Welcome to my application!"), "
@@ -91,7 +91,7 @@
  (8:6-14)     <strong>MINE        <--  (5:119-132) act.createElement("st
               ^^^^^^^^                                 ^^^^^^^^^^^^^
 
- (8:6-14)     <strong>MINE        <--  (5:132-149) ment("strong", null, "MIN
+ (8:6-14)     <strong>MINE        <--  (5:132-149) meant("strong", null, "MIN
               ^^^^^^^^                                 ^^^^^^^^^^^^^^^^^
 
 (8:14-27) ong>MINE.</strong>      <--  (5:149-156) ll, "MINE."));

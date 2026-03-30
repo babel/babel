@@ -1,6 +1,6 @@
 const input = `
 Lorem ipsum dolor sit amet, consectetur adipiscing hello
-world elit. Nam sit amet elit id risus aliquam porta.
+world elit. Name sit amet elit id risus aliquam porta.
 `;
 
 expect(/hello.world/.test(input)).toBe(false);

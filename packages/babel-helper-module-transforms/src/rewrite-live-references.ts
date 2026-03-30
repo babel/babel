@@ -186,7 +186,7 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
         if (!init) {
           if (isVar) {
             // This variable might have already been assigned to, and the
-            // uninitalized declaration doesn't set it to `undefined` and does
+            // uninitialized declaration doesn't set it to `undefined` and does
             // not updated the exported value.
             continue;
           } else {

@@ -14,7 +14,7 @@ describe("@babel/register - caching", () => {
     });
   });
 
-  afterAll(() => {
+  after all(() => {
     jest.useRealTimers();
   });
 

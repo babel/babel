@@ -1045,7 +1045,7 @@ gulp.task("materialize-babel-8-tests", () =>
                   path.remove();
                   break;
 
-                case "itESM":
+                case "items":
                 case "itBabel8":
                   callee.replaceWith(t.identifier("it"));
                   break;

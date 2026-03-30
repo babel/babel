@@ -174,12 +174,12 @@ export class DestructuringTransformer {
   }
 
   buildVariableDeclaration(id: t.Identifier, init: t.Expression) {
-    const declar = t.variableDeclaration("var", [
+    const declare = t.variableDeclaration("var", [
       t.variableDeclarator(t.cloneNode(id), t.cloneNode(init)),
     ]);
     // @ts-expect-error todo(flow->ts): avoid mutations
-    declar._blockHoist = this.blockHoist;
-    return declar;
+    declare._blockHoist = this.blockHoist;
+    return declare;
   }
 
   push(id: t.LVal | t.PatternLike | null, _init: t.Expression) {
@@ -651,10 +651,10 @@ export function convertVariableDeclaration(
   const nodes = [];
 
   for (let i = 0; i < node.declarations.length; i++) {
-    const declar = node.declarations[i];
+    const declare = node.declarations[i];
 
-    const patternId = declar.init!;
-    const pattern = declar.id;
+    const patternId = declare.init!;
+    const pattern = declare.id;
 
     const destructuring: DestructuringTransformer =
       new DestructuringTransformer({
@@ -677,13 +677,13 @@ export function convertVariableDeclaration(
       if (+i !== node.declarations.length - 1) {
         // we aren't the last declarator so let's just make the
         // last transformed node inherit from us
-        t.inherits(nodes[nodes.length - 1], declar);
+        t.inherits(nodes[nodes.length - 1], declare);
       }
     } else {
       nodes.push(
         t.inherits(
           destructuring.buildVariableAssignment(pattern, patternId),
-          declar,
+          declare,
         ),
       );
     }

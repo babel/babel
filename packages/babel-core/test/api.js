@@ -812,7 +812,7 @@ describe("api", function () {
       delete process.env.NODE_ENV;
     });
 
-    afterAll(function () {
+    after all(function () {
       process.env.BABEL_ENV = oldBabelEnv;
       process.env.NODE_ENV = oldNodeEnv;
     });

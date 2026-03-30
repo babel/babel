@@ -17,8 +17,8 @@ export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util.ts";
 function variableDeclarationHasDestructuringPattern(
   node: t.VariableDeclaration,
 ) {
-  for (const declar of node.declarations) {
-    if (t.isPattern(declar.id) && declar.id.type !== "VoidPattern") {
+  for (const declare of node.declarations) {
+    if (t.isPattern(declare.id) && declare.id.type !== "VoidPattern") {
       return true;
     }
   }

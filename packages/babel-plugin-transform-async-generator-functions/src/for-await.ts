@@ -38,16 +38,16 @@ export default function (
   const stepKey = scope.generateUidIdentifier("step");
   const stepValue = t.memberExpression(stepKey, t.identifier("value"));
   const left = node.left;
-  let declar;
+  let declare;
 
   if (t.isIdentifier(left) || t.isPattern(left) || t.isMemberExpression(left)) {
     // for await (i of test), for await ({ i } of test)
-    declar = t.expressionStatement(
+    declare = t.expressionStatement(
       t.assignmentExpression("=", left, stepValue),
     );
   } else if (t.isVariableDeclaration(left)) {
     // for await (let i of test)
-    declar = t.variableDeclaration(left.kind, [
+    declare = t.variableDeclaration(left.kind, [
       t.variableDeclarator(left.declarations[0].id, stepValue),
     ]);
   }
@@ -78,7 +78,7 @@ export default function (
   return {
     replaceParent: isLabeledParent,
     node: template,
-    declar,
+    declare,
     loop,
   };
 }

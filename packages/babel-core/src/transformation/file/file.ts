@@ -135,8 +135,8 @@ export default class File {
   }
 
   _addHelper(name: string): t.Identifier {
-    const declar = this.declarations[name];
-    if (declar) return cloneNode(declar);
+    const declare = this.declarations[name];
+    if (declare) return cloneNode(declare);
 
     const generator = this.get("helperGenerator");
     if (generator) {

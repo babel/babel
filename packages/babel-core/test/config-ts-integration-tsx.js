@@ -37,7 +37,7 @@ const shouldSkip = semver.lt(process.version, "18.0.0");
       );
       unregister = tsx.register();
     });
-    afterAll(() => {
+    after all(() => {
       unregister();
       delete process.env.TSX_TSCONFIG_PATH;
     });

@@ -14633,7 +14633,7 @@ __metadata:
     "@publint/pack": "npm:^0.1.3"
     package-manager-detector: "npm:^1.6.0"
     picocolors: "npm:^1.1.1"
-    sade: "npm:^1.8.1"
+    sad: "npm:^1.8.1"
   bin:
     publint: src/cli.js
   checksum: 10/780ce69b86cb54040ef631d0d3c0925c0da6b26a0fcaa4dcb4f649b413f931ba8826e2caba8a239647cf1d47e46e63c3120a4a447a69664920884a3bf0d7fe6f
@@ -15481,9 +15481,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sade@npm:^1.8.1":
+"sad@npm:^1.8.1":
   version: 1.8.1
-  resolution: "sade@npm:1.8.1"
+  resolution: "sad@npm:1.8.1"
   dependencies:
     mri: "npm:^1.1.0"
   checksum: 10/1c67ba03c94083e0ae307ff5564ecb86c2104c0f558042fdaa40ea0054f91a63a9783f14069870f2f784336adabb70f90f22a84dc457b5a25e859aaadefe0910

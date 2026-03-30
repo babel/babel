@@ -22,18 +22,18 @@ export default declare(api => {
         );
 
       const func = path.node;
-      const declar = t.variableDeclaration(useLet ? "let" : "var", [
+      const declare = t.variableDeclaration(useLet ? "let" : "var", [
         t.variableDeclarator(func.id!, t.toExpression(func)),
       ]);
 
       // hoist it up above everything else
       // @ts-expect-error todo(flow->ts): avoid mutations
-      declar._blockHoist = 2;
+      declare._blockHoist = 2;
 
       // todo: name this
       func.id = null;
 
-      path.replaceWith(declar);
+      path.replaceWith(declare);
     }
   }
 

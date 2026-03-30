@@ -49,7 +49,7 @@ function swap (...rest) {
   [rest[0], rest[1]] = [rest[1], rest[0]];
 }
 
-function forIn (...rest) {
+function foreign (...rest) {
   for (rest[0] in this) {
     foo(rest[0]);
   }

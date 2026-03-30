@@ -479,7 +479,7 @@ describe("traverse", function () {
       afterEach(() => {
         console.warn.mockClear();
       });
-      afterAll(() => {
+      after all(() => {
         console.warn.mockRestore();
       });
       it("should warn for deprecated node types", function testFn1() {

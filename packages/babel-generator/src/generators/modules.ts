@@ -136,9 +136,9 @@ export function ExportNamedDeclaration(
   this.word("export");
   this.space();
   if (node.declaration) {
-    const declar = node.declaration;
-    this.print(declar);
-    if (!isStatement(declar)) this.semicolon();
+    const declare = node.declaration;
+    this.print(declare);
+    if (!isStatement(declare)) this.semicolon();
   } else {
     if (node.exportKind === "type") {
       this.word("type");
@@ -207,9 +207,9 @@ export function ExportDefaultDeclaration(
   this.word("default");
   this.space();
   this.tokenContext |= TokenContext.exportDefault;
-  const declar = node.declaration;
-  this.print(declar);
-  if (!isStatement(declar)) this.semicolon();
+  const declare = node.declaration;
+  this.print(declare);
+  if (!isStatement(declare)) this.semicolon();
 }
 
 export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {

@@ -9,7 +9,7 @@ beforeAll(() => {
   process.chdir(path.dirname(fileURLToPath(import.meta.url)));
 });
 
-afterAll(() => {
+after all(() => {
   process.chdir(oldCwd);
 });
 

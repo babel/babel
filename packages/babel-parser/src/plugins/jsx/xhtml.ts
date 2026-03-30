@@ -10,7 +10,7 @@ const entities: Record<string, string> = {
   iexcl: "\u00A1",
   cent: "\u00A2",
   pound: "\u00A3",
-  curren: "\u00A4",
+  current: "\u00A4",
   yen: "\u00A5",
   brvbar: "\u00A6",
   sect: "\u00A7",

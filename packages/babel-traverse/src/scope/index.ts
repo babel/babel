@@ -252,12 +252,12 @@ interface CollectVisitorState {
 
 const collectorVisitor: Visitor<CollectVisitorState> = {
   ForStatement(path) {
-    const declar = path.get("init");
+    const declare = path.get("init");
     // delegate block scope handling to the `BlockScoped` method
-    if (declar.isVar()) {
+    if (declare.isVar()) {
       const { scope } = path;
       const parentScope = scope.getFunctionParent() || scope.getProgramParent();
-      parentScope.registerBinding("var", declar);
+      parentScope.registerBinding("var", declare);
     }
   },
 
@@ -316,15 +316,15 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
       const { node, scope } = path;
       // ExportAllDeclaration does not have `declaration`
       if (isExportAllDeclaration(node)) return;
-      const declar = node.declaration;
-      if (isClassDeclaration(declar) || isFunctionDeclaration(declar)) {
-        const id = declar.id;
+      const declare = node.declaration;
+      if (isClassDeclaration(declare) || isFunctionDeclaration(declare)) {
+        const id = declare.id;
         if (!id) return;
 
         const binding = scope.getBinding(id.name);
         binding?.reference(path);
-      } else if (isVariableDeclaration(declar)) {
-        for (const decl of declar.declarations) {
+      } else if (isVariableDeclaration(declare)) {
+        for (const decl of declare.declarations) {
           for (const name of Object.keys(getBindingIdentifiers(decl))) {
             const binding = scope.getBinding(name);
             binding?.reference(path);
@@ -697,10 +697,10 @@ class Scope {
     } else if (path.isVariableDeclaration()) {
       const declarations = path.get("declarations");
       const { kind } = path.node;
-      for (const declar of declarations) {
+      for (const declare of declarations) {
         this.registerBinding(
           kind === "using" || kind === "await using" ? "const" : kind,
-          declar,
+          declare,
         );
       }
     } else if (path.isClassDeclaration()) {
@@ -721,13 +721,13 @@ class Scope {
       }
     } else if (path.isExportDeclaration()) {
       // todo: improve babel-types
-      const declar = path.get("declaration") as NodePath;
+      const declare = path.get("declaration") as NodePath;
       if (
-        declar.isClassDeclaration() ||
-        declar.isFunctionDeclaration() ||
-        declar.isVariableDeclaration()
+        declare.isClassDeclaration() ||
+        declare.isFunctionDeclaration() ||
+        declare.isVariableDeclaration()
       ) {
-        this.registerDeclaration(declar);
+        this.registerDeclaration(declare);
       }
     } else {
       this.registerBinding("unknown", path);
@@ -754,8 +754,8 @@ class Scope {
 
     if (path.isVariableDeclaration()) {
       const declarators = path.get("declarations");
-      for (const declar of declarators) {
-        this.registerBinding(kind, declar);
+      for (const declare of declarators) {
+        this.registerBinding(kind, declare);
       }
       return;
     }
@@ -1078,13 +1078,13 @@ class Scope {
     let declarPath = !unique && path.getData(dataKey);
 
     if (!declarPath) {
-      const declar = variableDeclaration(kind, []);
+      const declare = variableDeclaration(kind, []);
       // @ts-expect-error todo(flow->ts): avoid modifying nodes
-      declar._blockHoist = blockHoist;
+      declare._blockHoist = blockHoist;
 
       [declarPath] = (path as NodePath<t.BlockStatement>).unshiftContainer(
         "body",
-        [declar],
+        [declare],
       );
       if (!unique) path.setData(dataKey, declarPath);
     }
@@ -1315,7 +1315,7 @@ class Scope {
 
   /**
    * Hoist all the `var` variable to the beginning of the function/program
-   * scope where their binding will be actually defined. For exmaple,
+   * scope where their binding will be actually defined. For example,
    *     { var x = 2 }
    * will be transformed to
    *     var x; { x = 2 }

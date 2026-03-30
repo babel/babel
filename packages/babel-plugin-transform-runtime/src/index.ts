@@ -72,7 +72,7 @@ export default declare((api, options: Options, dirname) => {
   if (Object.hasOwn(options, "regenerator")) {
     throw new Error(
       "The 'regenerator' option has been removed. The generators transform " +
-        "no longers relies on a 'regeneratorRuntime' global. " +
+        "no longer relies on a 'regeneratorRuntime' global. " +
         "If you still need to replace imports to the 'regeneratorRuntime' " +
         "global, you can use babel-plugin-polyfill-regenerator.",
     );

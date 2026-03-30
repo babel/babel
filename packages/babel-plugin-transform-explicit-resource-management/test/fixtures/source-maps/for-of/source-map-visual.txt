@@ -1,4 +1,4 @@
-  (1:0-5) for (usin               <--    (1:0-5) for (cons
+  (1:0-5) for (using               <--    (1:0-5) for (cons
           ^^^^^                                  ^^^^^
 
  (1:5-11) or (using x of          <--   (1:5-11) or (const _x o
@@ -31,7 +31,7 @@
 (1:20-20) it) {                   <--  (2:18-30) x = babelHelpers.usi
              ><                                      ^^^^^^^^^^^^
 
-(1:20-20) it) {                   <--  (2:30-31) pers.usin
+(1:20-20) it) {                   <--  (2:30-31) pers.using
              ><                                      ^
 
 (1:20-20) it) {                   <--  (2:31-39) ers.usingCtx();

@@ -24,8 +24,8 @@
         "start":4,"end":8,"loc":{"start":{"line":2,"column":1,"index":4},"end":{"line":2,"column":5,"index":8}},
         "expression": {
           "type": "Identifier",
-          "start":4,"end":8,"loc":{"start":{"line":2,"column":1,"index":4},"end":{"line":2,"column":5,"index":8},"identifierName":"isnt"},
-          "name": "isnt"
+          "start":4,"end":8,"loc":{"start":{"line":2,"column":1,"index":4},"end":{"line":2,"column":5,"index":8},"identifierName":"isn't"},
+          "name": "isn't"
         }
       },
       {

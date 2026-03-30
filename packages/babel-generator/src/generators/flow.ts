@@ -270,9 +270,9 @@ function FlowExportDeclaration(
   node: t.DeclareExportDeclaration,
 ) {
   if (node.declaration) {
-    const declar = node.declaration;
-    this.print(declar);
-    if (!isStatement(declar)) this.semicolon();
+    const declare = node.declaration;
+    this.print(declare);
+    if (!isStatement(declare)) this.semicolon();
   } else {
     this.token("{");
     if (node.specifiers!.length) {

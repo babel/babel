@@ -34,7 +34,7 @@ const shouldSkip = semver.lt(process.version, "14.0.0");
       });
       service.enabled(true);
     });
-    afterAll(() => {
+    after all(() => {
       service.enabled(false);
     });
     it("should work with ts-node", async () => {

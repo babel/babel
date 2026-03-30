@@ -149,7 +149,7 @@ export function hoist(
       paramNames[param.name] = param;
     } else {
       // Variables declared by destructuring parameter patterns will be
-      // harmlessly re-declared.
+      // harmlessly redeclared.
     }
   });
 

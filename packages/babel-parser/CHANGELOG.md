@@ -40,7 +40,7 @@ See the [Babel Changelog](https://github.com/babel/babel/blob/main/CHANGELOG.md)
 
 ### New Feature
 * Add support for flow type spread (#418) (Conrad Buck)
-* Allow statics in flow interfaces (#427) (Brian Ng)
+* Allow statistics in flow interfaces (#427) (Brian Ng)
 
 ### Bug Fix
 * Fix predicate attachment to match flow parser (#428) (Brian Ng)
@@ -222,7 +222,7 @@ import { default } from "foo";
 import { a as debugger } from "foo";
 ```
 
-Do not allow overwritting of primitive types ([#314](https://github.com/babel/babylon/pull/314)) (Daniel Tschinder)
+Do not allow overwriting of primitive types ([#314](https://github.com/babel/babylon/pull/314)) (Daniel Tschinder)
 
 In flow it is now forbidden to overwrite the primitive types `"any"`, `"mixed"`, `"empty"`, `"bool"`, `"boolean"`, `"number"`, `"string"`, `"void"` and `"null"` with your own type declaration.
 

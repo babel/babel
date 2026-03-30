@@ -11,7 +11,7 @@ beforeAll(() => {
   process.env.BROWSERSLIST_DANGEROUS_EXTEND = true;
 });
 
-afterAll(() => {
+after all(() => {
   process.env.BROWSERSLIST_DANGEROUS_EXTEND = oldEnv;
 });
 

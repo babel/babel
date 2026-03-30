@@ -85,7 +85,7 @@
  (3:4-10)     throw new           <--  (10:6-12)     throw new 
               ^^^^^^                                 ^^^^^^
 
-(3:10-14) row new Erro            <--  (10:12-16) row new Erro
+(3:10-14) row new Error            <--  (10:12-16) row new Error
               ^^^^                                    ^^^^
 
 (3:14-19) new Error("wo           <--  (10:16-21) new Error("wo

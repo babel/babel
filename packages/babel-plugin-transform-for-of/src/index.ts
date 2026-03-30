@@ -11,7 +11,7 @@ export interface Options {
 
 function buildLoopBody(
   path: NodePath<t.ForXStatement>,
-  declar: t.Statement,
+  declare: t.Statement,
   newBody?: t.Statement | t.Expression,
 ) {
   let block;
@@ -23,10 +23,10 @@ function buildLoopBody(
       bodyPath.scope.hasOwnBinding(id),
     )
   ) {
-    block = t.blockStatement([declar, body]);
+    block = t.blockStatement([declare, body]);
   } else {
     block = t.toBlock(body);
-    block.body.unshift(declar);
+    block.body.unshift(declare);
   }
   return block;
 }
@@ -186,18 +186,18 @@ export default declare((api, options: Options) => {
       true,
     );
 
-    let declar;
+    let declare;
     const left = node.left;
     if (t.isVariableDeclaration(left)) {
       left.declarations[0].init = iterationValue;
-      declar = left;
+      declare = left;
     } else {
-      declar = t.expressionStatement(
+      declare = t.expressionStatement(
         t.assignmentExpression("=", left, iterationValue),
       );
     }
 
-    loop.body = buildLoopBody(path, declar, loop.body);
+    loop.body = buildLoopBody(path, declare, loop.body);
 
     return loop;
   }
@@ -214,7 +214,7 @@ export default declare((api, options: Options) => {
 
         const { node, parent, scope } = path;
         const left = node.left;
-        let declar;
+        let declare;
 
         const stepKey = scope.generateUid("step");
         const stepValue = t.memberExpression(
@@ -224,12 +224,12 @@ export default declare((api, options: Options) => {
 
         if (t.isVariableDeclaration(left)) {
           // for (let i of test)
-          declar = t.variableDeclaration(left.kind, [
+          declare = t.variableDeclaration(left.kind, [
             t.variableDeclarator(left.declarations[0].id, stepValue),
           ]);
         } else {
           // for (i of test), for ({ i } of test)
-          declar = t.expressionStatement(
+          declare = t.expressionStatement(
             t.assignmentExpression("=", left, stepValue),
           );
         }
@@ -242,7 +242,7 @@ export default declare((api, options: Options) => {
             : null,
           STEP_KEY: t.identifier(stepKey),
           OBJECT: node.right,
-          BODY: buildLoopBody(path, declar),
+          BODY: buildLoopBody(path, declare),
         });
         const container = builder.getContainer(nodes);
 

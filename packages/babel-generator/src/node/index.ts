@@ -14,7 +14,7 @@ export const enum TokenContext {
   forInHead = 1 << 5,
   forOfHead = 1 << 6,
   // This flag lives across the token boundary, and will
-  // be reset after forIn or forInit head is printed
+  // be reset after foreign or forInit head is printed
   forInOrInitHeadAccumulate = 1 << 7,
   forInOrInitHeadAccumulatePassThroughMask = 0b10000000,
 }

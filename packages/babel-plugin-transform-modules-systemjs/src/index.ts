@@ -404,9 +404,9 @@ export default declare<PluginState>((api, options: Options) => {
               pushModule(path.node.source.value, "exports", path.node);
               path.remove();
             } else if (path.isExportDefaultDeclaration()) {
-              const declar = path.node.declaration;
-              if (t.isClassDeclaration(declar)) {
-                const id = declar.id;
+              const declare = path.node.declaration;
+              if (t.isClassDeclaration(declare)) {
+                const id = declare.id;
                 if (id) {
                   exportNames.push("default");
                   exportValues.push(t.buildUndefinedNode());
@@ -417,67 +417,67 @@ export default declare<PluginState>((api, options: Options) => {
                       t.assignmentExpression(
                         "=",
                         t.cloneNode(id),
-                        t.toExpression(declar),
+                        t.toExpression(declare),
                       ),
                     ),
                   );
                 } else {
                   exportNames.push("default");
-                  exportValues.push(t.toExpression(declar));
+                  exportValues.push(t.toExpression(declare));
                   removedPaths.push(path);
                 }
-              } else if (t.isFunctionDeclaration(declar)) {
-                const id = declar.id;
+              } else if (t.isFunctionDeclaration(declare)) {
+                const id = declare.id;
                 if (id) {
-                  beforeBody.push(declar);
+                  beforeBody.push(declare);
                   exportNames.push("default");
                   exportValues.push(t.cloneNode(id));
                   addExportName(id.name, "default");
                 } else {
                   exportNames.push("default");
-                  exportValues.push(t.toExpression(declar));
+                  exportValues.push(t.toExpression(declare));
                 }
                 removedPaths.push(path);
               } else {
                 // @ts-expect-error TSDeclareFunction is not expected here
-                path.replaceWith(buildExportCall("default", declar));
+                path.replaceWith(buildExportCall("default", declare));
               }
             } else if (path.isExportNamedDeclaration()) {
-              const declar = path.node.declaration;
+              const declare = path.node.declaration;
 
-              if (declar) {
-                path.replaceWith(declar);
+              if (declare) {
+                path.replaceWith(declare);
 
-                if (t.isFunction(declar)) {
-                  const name = declar.id!.name;
+                if (t.isFunction(declare)) {
+                  const name = declare.id!.name;
                   addExportName(name, name);
-                  beforeBody.push(declar);
+                  beforeBody.push(declare);
                   exportNames.push(name);
-                  exportValues.push(t.cloneNode(declar.id!));
+                  exportValues.push(t.cloneNode(declare.id!));
                   removedPaths.push(path);
-                } else if (t.isClass(declar)) {
-                  const name = declar.id!.name;
+                } else if (t.isClass(declare)) {
+                  const name = declare.id!.name;
                   exportNames.push(name);
                   exportValues.push(t.buildUndefinedNode());
-                  variableIds.push(t.cloneNode(declar.id!));
+                  variableIds.push(t.cloneNode(declare.id!));
                   path.replaceWith(
                     t.expressionStatement(
                       t.assignmentExpression(
                         "=",
-                        t.cloneNode(declar.id!),
-                        t.toExpression(declar),
+                        t.cloneNode(declare.id!),
+                        t.toExpression(declare),
                       ),
                     ),
                   );
                   addExportName(name, name);
                 } else {
-                  if (t.isVariableDeclaration(declar)) {
+                  if (t.isVariableDeclaration(declare)) {
                     // Convert top-level variable declarations to "var",
                     // because they must be hoisted
-                    declar.kind = "var";
+                    declare.kind = "var";
                   }
                   for (const name of Object.keys(
-                    t.getBindingIdentifiers(declar),
+                    t.getBindingIdentifiers(declare),
                   )) {
                     addExportName(name, name);
                   }

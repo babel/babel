@@ -58,16 +58,16 @@ export function _getTypeAnnotation(this: NodePath): any {
   if (!node) {
     // handle initializerless variables, add in checks for loop initializers too
     if (this.key === "init" && this.parentPath.isVariableDeclarator()) {
-      const declar = this.parentPath.parentPath;
-      const declarParent = declar.parentPath;
+      const declare = this.parentPath.parentPath;
+      const declarParent = declare.parentPath;
 
       // for (let NODE in bar) {}
-      if (declar.key === "left" && declarParent.isForInStatement()) {
+      if (declare.key === "left" && declarParent.isForInStatement()) {
         return stringTypeAnnotation();
       }
 
       // for (let NODE of bar) {}
-      if (declar.key === "left" && declarParent.isForOfStatement()) {
+      if (declare.key === "left" && declarParent.isForOfStatement()) {
         return anyTypeAnnotation();
       }
 

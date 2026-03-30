@@ -1275,7 +1275,7 @@ interface ImportDeclaration <: Node {
   importKind: null | "type" | "typeof" | "value";
   specifiers: [ ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier ];
   source: StringLiteral;
-  attribtues?: [ ImportAttribute ];
+  attributes?: [ ImportAttribute ];
 }
 ```
 

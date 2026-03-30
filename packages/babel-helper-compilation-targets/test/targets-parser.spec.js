@@ -59,7 +59,7 @@ describe("getTargets", () => {
   });
 
   describe("when process.env.BROWSERSLIST is specified", () => {
-    afterAll(() => {
+    after all(() => {
       delete process.env.BROWSERSLIST;
     });
     it("should provide fallback to any targets option", () => {
@@ -69,7 +69,7 @@ describe("getTargets", () => {
   });
 
   describe("when process.env.BROWSERSLIST_CONFIG is specified", () => {
-    afterAll(() => {
+    after all(() => {
       delete process.env.BROWSERSLIST_CONFIG;
     });
     it("should provide fallback to any targets option", () => {

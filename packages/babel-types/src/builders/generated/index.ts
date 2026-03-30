@@ -8,7 +8,7 @@ export * from "./uppercase.ts";
 
 // Uppercase builders and AST types conflict with each other, which is
 // not allowed by TypeScript when using `export * from ...`
-// We instead explicity list the AST types here, so that:
+// We instead explicitly list the AST types here, so that:
 // - From a TypeScript perspective, the AST types win over the uppercase
 //   builders (which is the standard behavior for JS when a named
 //   re-export conflicts with a * re-export.)

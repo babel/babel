@@ -39,15 +39,15 @@ export default declare(api => {
         getAsyncIterator: file.addHelper("asyncIterator"),
       });
 
-      const { declar, loop } = build;
+      const { declare, loop } = build;
       const block = loop.body as t.BlockStatement;
 
       // ensure that it's a block so we can take all its statements
       path.ensureBlock();
 
       // add the value declaration to the new loop body
-      if (declar) {
-        block.body.push(declar);
+      if (declare) {
+        block.body.push(declare);
         if (path.node.body.body.length) {
           block.body.push(t.blockStatement(path.node.body.body));
         }

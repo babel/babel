@@ -1,3 +1,3 @@
 declare module A {
-  declar var a:number
+  declare var a:number
 }

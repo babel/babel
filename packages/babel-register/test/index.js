@@ -85,7 +85,7 @@ describe("@babel/register", function () {
       );
     });
 
-    afterAll(() => {
+    after all(() => {
       Object.defineProperty(Module, "_cache", originalRequireCacheDescriptor);
     });
   }
@@ -154,7 +154,7 @@ describe("@babel/register", function () {
       revertRegister();
     });
 
-    afterAll(() => {
+    after all(() => {
       resetCache();
     });
 

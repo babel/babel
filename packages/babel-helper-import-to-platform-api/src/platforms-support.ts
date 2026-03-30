@@ -8,7 +8,7 @@ const isRequiredOptions = {
   compatData: {
     // `import.meta.resolve` compat data.
     // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta/resolve#browser_compatibility
-    // Once Node.js implements `fetch` of local files, we can re-use the web implementation for it
+    // Once Node.js implements `fetch` of local files, we can reuse the web implementation for it
     // similarly to how we do for Deno.
     webIMR: {
       chrome: "105.0.0",

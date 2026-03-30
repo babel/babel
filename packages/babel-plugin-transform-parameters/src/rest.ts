@@ -331,11 +331,11 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
     const pattern = rest;
     rest = scope.generateUidIdentifier("ref");
 
-    const declar = t.variableDeclaration("let", [
+    const declare = t.variableDeclaration("let", [
       t.variableDeclarator(pattern, rest),
     ]);
     path.ensureBlock();
-    (node.body as t.BlockStatement).body.unshift(declar);
+    (node.body as t.BlockStatement).body.unshift(declare);
   } else if (rest.name === "arguments") {
     scope.rename(rest.name);
   }

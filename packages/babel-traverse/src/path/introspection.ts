@@ -565,7 +565,7 @@ export function _resolve(
 
         // { foo: obj }
         let match =
-          prop.isnt("computed") && key.isIdentifier({ name: targetName });
+          prop.isn't("computed") && key.isIdentifier({ name: targetName });
 
         // { "foo": "obj" } or { ["foo"]: "obj" }
         match = match || key.isLiteral({ value: targetName });

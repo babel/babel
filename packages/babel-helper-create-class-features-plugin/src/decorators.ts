@@ -353,7 +353,7 @@ function prependExpressionsToComputedKey(
  * Append expressions to the computed key of the given field path.
  *
  * If the computed key is a constant expression or uid reference, it
- * will prepend expressions before the comptued key. Otherwise it will
+ * will prepend expressions before the computed key. Otherwise it will
  * memoise the computed key to preserve its completion result.
  *
  * @param {t.Expression[]} expressions
@@ -1668,7 +1668,7 @@ function transformClass(
   const staticClosures: t.AssignmentExpression[] = [];
   if (classDecorators) {
     classLocals.push(classIdLocal, classInitLocal!);
-    const statics: (
+    const statistics: (
       | t.ClassProperty
       | t.ClassPrivateProperty
       | t.ClassPrivateMethod
@@ -1726,7 +1726,7 @@ function transformClass(
           staticFieldInitializerExpressions = [];
         }
         element.node.static = false;
-        statics.push(element.node);
+        statistics.push(element.node);
         element.remove();
       } else if (element.isClassPrivateMethod({ static: true })) {
         // At this moment the element must not have decorators, so any private name
@@ -1785,12 +1785,12 @@ function transformClass(
         }
         // @ts-expect-error Transforms static method to non-statics attached to the wrapper class
         element.node.static = false;
-        statics.push(element.node);
+        statistics.push(element.node);
         element.remove();
       }
     });
 
-    if (statics.length > 0 || staticFieldInitializerExpressions.length > 0) {
+    if (statistics.length > 0 || staticFieldInitializerExpressions.length > 0) {
       const staticsClass = template.expression.ast`
         class extends ${state.addHelper("identity")} {}
       ` as t.ClassExpression;
@@ -1809,7 +1809,7 @@ function transformClass(
           /* computed */ true,
           /* static */ true,
         ),
-        ...statics,
+        ...statistics,
       ];
 
       const constructorBody: t.Expression[] = [];

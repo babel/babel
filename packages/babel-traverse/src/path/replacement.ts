@@ -350,19 +350,19 @@ function gatherSequenceExpressions(
     } else if (isVariableDeclaration(node)) {
       if (node.kind !== "var") return; // bailed
 
-      for (const declar of node.declarations) {
-        const bindings = getBindingIdentifiers(declar);
+      for (const declare of node.declarations) {
+        const bindings = getBindingIdentifiers(declare);
         for (const key of Object.keys(bindings)) {
           declars.push(cloneNode(bindings[key]));
         }
 
-        if (declar.init) {
+        if (declare.init) {
           exprs.push(
             assignmentExpression(
               "=",
               // var declarator must not be a void pattern
-              declar.id as Exclude<t.VariableDeclarator["id"], t.VoidPattern>,
-              declar.init,
+              declare.id as Exclude<t.VariableDeclarator["id"], t.VoidPattern>,
+              declare.init,
             ),
           );
         }

@@ -64,7 +64,7 @@ function swap() {
   rest[0] = _ref[0];
   rest[1] = _ref[1];
 }
-function forIn() {
+function foreign() {
   for (var _len9 = arguments.length, rest = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
     rest[_key9] = arguments[_key9];
   }

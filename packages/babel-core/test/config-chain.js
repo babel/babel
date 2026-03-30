@@ -47,7 +47,7 @@ async function getTemp(name) {
   return { cwd, tmp, config };
 }
 
-afterAll(() => {
+after all(() => {
   for (const dir of tempDirs) {
     fs.rmSync(dir, { recursive: true, force: true });
   }
@@ -1102,7 +1102,7 @@ describe("buildConfigChain", function () {
       delete process.env.NODE_ENV;
       delete process.env.BABEL_ENV;
     });
-    afterAll(() => {
+    after all(() => {
       if (realEnv) {
         process.env.NODE_ENV = realEnv;
         process.env.NODE_ENV = realBabelEnv;

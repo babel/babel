@@ -383,17 +383,17 @@ export default declare((api, opts: Options) => {
     if (paramPath.isObjectPattern() && hasObjectRestElement(paramPath)) {
       const uid = parentPath.scope.generateUidIdentifier("ref");
 
-      const declar = t.variableDeclaration("let", [
+      const declare = t.variableDeclaration("let", [
         t.variableDeclarator(paramPath.node, uid),
       ]);
 
       if (container) {
-        container.push(declar);
+        container.push(declare);
       } else {
         parentPath.ensureBlock();
         (parentPath.get("body") as NodePath<t.BlockStatement>).unshiftContainer(
           "body",
-          declar,
+          declare,
         );
       }
       paramPath.replaceWith(t.cloneNode(uid));
