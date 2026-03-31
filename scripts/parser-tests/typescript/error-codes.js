@@ -121,7 +121,7 @@ export default [
   //"TS2393", // Duplicate function implementation.
   "TS2396", // Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
   // "TS2440", // Import declaration conflicts with local declaration of '{0}'.
-  // "TS2451", // Cannot redeclare block-scoped variable '{0}'.
+  "TS2451", // Cannot redeclare block-scoped variable '{0}'.
   "TS2452", // An enum member cannot have a numeric name.
   "TS2492", // Cannot redeclare identifier '{0}' in catch clause.
   "TS2499", // An interface can only extend an identifier/qualified-name with optional type arguments.
