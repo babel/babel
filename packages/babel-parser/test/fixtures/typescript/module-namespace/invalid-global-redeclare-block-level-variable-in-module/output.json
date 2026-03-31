@@ -1,0 +1,106 @@
+{
+  "type": "File",
+  "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":73}},
+  "errors": [
+    "SyntaxError: Identifier 'x' has already been declared. (4:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":73}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":73,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":73}},
+        "kind": "module",
+        "id": {
+          "type": "StringLiteral",
+          "start":15,"end":18,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":18,"index":18}},
+          "extra": {
+            "rawValue": "m",
+            "raw": "\"m\""
+          },
+          "value": "m"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":19,"end":73,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":6,"column":1,"index":73}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":23,"end":37,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":16,"index":37}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":27,"end":36,"loc":{"start":{"line":2,"column":6,"index":27},"end":{"line":2,"column":15,"index":36}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":27,"end":36,"loc":{"start":{"line":2,"column":6,"index":27},"end":{"line":2,"column":15,"index":36},"identifierName":"x"},
+                    "name": "x",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":28,"end":36,"loc":{"start":{"line":2,"column":7,"index":28},"end":{"line":2,"column":15,"index":36}},
+                      "typeAnnotation": {
+                        "type": "TSStringKeyword",
+                        "start":30,"end":36,"loc":{"start":{"line":2,"column":9,"index":30},"end":{"line":2,"column":15,"index":36}}
+                      }
+                    }
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "let"
+            },
+            {
+              "type": "TSModuleDeclaration",
+              "start":40,"end":71,"loc":{"start":{"line":3,"column":2,"index":40},"end":{"line":5,"column":3,"index":71}},
+              "kind": "global",
+              "id": {
+                "type": "Identifier",
+                "start":40,"end":46,"loc":{"start":{"line":3,"column":2,"index":40},"end":{"line":3,"column":8,"index":46},"identifierName":"global"},
+                "name": "global"
+              },
+              "body": {
+                "type": "TSModuleBlock",
+                "start":47,"end":71,"loc":{"start":{"line":3,"column":9,"index":47},"end":{"line":5,"column":3,"index":71}},
+                "body": [
+                  {
+                    "type": "VariableDeclaration",
+                    "start":53,"end":67,"loc":{"start":{"line":4,"column":4,"index":53},"end":{"line":4,"column":18,"index":67}},
+                    "declarations": [
+                      {
+                        "type": "VariableDeclarator",
+                        "start":57,"end":66,"loc":{"start":{"line":4,"column":8,"index":57},"end":{"line":4,"column":17,"index":66}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":57,"end":66,"loc":{"start":{"line":4,"column":8,"index":57},"end":{"line":4,"column":17,"index":66},"identifierName":"x"},
+                          "name": "x",
+                          "typeAnnotation": {
+                            "type": "TSTypeAnnotation",
+                            "start":58,"end":66,"loc":{"start":{"line":4,"column":9,"index":58},"end":{"line":4,"column":17,"index":66}},
+                            "typeAnnotation": {
+                              "type": "TSNumberKeyword",
+                              "start":60,"end":66,"loc":{"start":{"line":4,"column":11,"index":60},"end":{"line":4,"column":17,"index":66}}
+                            }
+                          }
+                        },
+                        "init": null
+                      }
+                    ],
+                    "kind": "let"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

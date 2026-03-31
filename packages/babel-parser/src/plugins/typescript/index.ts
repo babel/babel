@@ -2029,9 +2029,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TSEnumBody");
     }
 
-    tsParseModuleBlock(): N.TSModuleBlock {
+    tsParseModuleBlock(isGlobal: boolean): N.TSModuleBlock {
       const node = this.startNode<N.TSModuleBlock>();
-      this.scope.enter(ScopeFlag.OTHER);
+      if (!isGlobal) {
+        this.scope.enter(ScopeFlag.OTHER);
+      }
 
       this.expect(tt.braceL);
       // Inside of a module block is considered "top-level", meaning it can have imports and exports.
@@ -2041,7 +2043,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         /* topLevel */ true,
         /* end */ tt.braceR,
       );
-      this.scope.exit();
+      if (!isGlobal) {
+        this.scope.exit();
+      }
       return this.finishNode(node, "TSModuleBlock");
     }
 
@@ -2058,7 +2062,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       this.scope.enter(ScopeFlag.TS_MODULE);
       this.prodParam.enter(ParamKind.PARAM);
-      node.body = this.tsParseModuleBlock();
+      node.body = this.tsParseModuleBlock(false);
       this.prodParam.exit();
       this.scope.exit();
 
@@ -2068,7 +2072,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     tsParseAmbientExternalModuleDeclaration(
       node: Undone<N.TSModuleDeclaration>,
     ): N.TSModuleDeclaration {
-      if (this.isContextual(tt._global)) {
+      const isGlobal = this.isContextual(tt._global);
+      if (isGlobal) {
         node.kind = "global";
         node.id = this.parseIdentifier();
       } else {
@@ -2076,11 +2081,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.id = super.parseStringLiteral(this.state.value);
       }
       if (this.match(tt.braceL)) {
-        this.scope.enter(ScopeFlag.TS_MODULE);
+        if (!isGlobal) {
+          this.scope.enter(ScopeFlag.TS_MODULE);
+        }
         this.prodParam.enter(ParamKind.PARAM);
-        node.body = this.tsParseModuleBlock();
+        node.body = this.tsParseModuleBlock(isGlobal);
         this.prodParam.exit();
-        this.scope.exit();
+        if (!isGlobal) {
+          this.scope.exit();
+        }
       } else {
         this.semicolon();
       }
