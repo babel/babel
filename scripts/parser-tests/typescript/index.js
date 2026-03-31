@@ -69,7 +69,6 @@ function baselineContainsParserErrorCodes(testName) {
 }
 
 const IgnoreRegExp = /@noTypesAndSymbols|ts-ignore|\n#!/;
-const AlwaysStrictRegExp = /^\/\/\s*@alwaysStrict:\s*true/m;
 
 const runner = new TestRunner({
   testDir: path.join(TSTestsPath, "./cases/compiler"),
@@ -84,8 +83,7 @@ const runner = new TestRunner({
         continue;
       }
 
-      const strictMode = AlwaysStrictRegExp.test(test.contents) || void 0;
-      const files = toFiles(strictMode, test.contents, test.name);
+      const files = toFiles(test.contents, test.name);
       const expectedError =
         files.length > 0 && baselineContainsParserErrorCodes(test.name);
 
@@ -99,15 +97,26 @@ const runner = new TestRunner({
   },
 });
 
-function toFiles(strictMode, contents, name) {
-  return splitTwoslashCodeInfoFiles(contents, "default", `${name}/`)
+const AlwaysStrictRegExp = /^\/\/\s*@alwaysStrict:\s*true/m;
+const jsxPragmaRegExp = /^\/\/\s*@jsx:\s*\S+/m;
+
+function toFiles(contents, name) {
+  const rawContents = contents;
+  const strictMode = AlwaysStrictRegExp.test(rawContents) || void 0;
+  const isJSX = jsxPragmaRegExp.test(rawContents);
+  return splitTwoslashCodeInfoFiles(rawContents, "default", `${name}/`)
     .map(([filename, lines]) => [
       filename.replace(/\/default$/, ""),
       lines.join("\n"),
     ])
     .filter(
       ([sourceFilename, contents]) =>
-        !/\.(?:css|js|json|md)$/.test(sourceFilename) &&
+        !/\.(?:css|json|md)$/.test(sourceFilename) &&
+        // Some test cases deliberately include non-JS content to assert that they are not
+        // read by tsc due to an error thrown before.
+        !/^\s*(?:This file is not|Nor is this one|content not parsed|not read)/m.test(
+          contents
+        ) &&
         contents.split("\n").some(line => !/^\s*$|^\/\/[^\n]*$/.test(line))
     )
     .map(([sourceFilename, contents]) => ({
@@ -116,10 +125,13 @@ function toFiles(strictMode, contents, name) {
       sourceType: "unambiguous",
       strictMode,
       plugins: [
-        ["typescript", { dts: sourceFilename.endsWith(".d.ts") }],
+        /\.[cm]?tsx?$/.test(sourceFilename) && [
+          "typescript",
+          { dts: sourceFilename.endsWith(".d.ts") },
+        ],
         "decorators-legacy", // For TS parameter decorator
         "decoratorAutoAccessors",
-        /\.[tj]sx$/.test(sourceFilename) && "jsx",
+        (isJSX || /\.[tj]sx$/.test(sourceFilename)) && "jsx",
       ].filter(plugin => !!plugin),
     }));
 }
@@ -161,17 +173,7 @@ function splitTwoslashCodeInfoFiles(code, defaultFileName, root = "") {
     }
   }
   fileMap.push([root + nameForFile, currentFileContent]);
-
-  // Basically, strip these:
-  // ["index.ts", []]
-  // ["index.ts", [""]]
-  const nameContent = fileMap.filter(
-    n =>
-      n[1].length > 2 ||
-      (n[1].length === 1 && n[1][0] !== "") ||
-      (n[1].length === 2 && n[1][0] !== "content not parsed" && n[1][0] !== "")
-  );
-  return nameContent;
+  return fileMap;
 }
 
 runner.run().catch(err => {

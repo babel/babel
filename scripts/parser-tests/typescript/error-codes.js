@@ -81,6 +81,7 @@ export default [
   "TS1198", // An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
   "TS1200", // Line terminator not permitted before arrow.
   "TS1209", // Invalid optional chain from new expression.
+  "TS1210", // Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'.
   "TS1211", // A class declaration without the 'default' modifier must have a name.
   "TS1212", // Identifier expected. '{0}' is a reserved word in strict mode."
   "TS1213", // Identifier expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.
@@ -102,6 +103,7 @@ export default [
   "TS1434", // Unexpected keyword or identifier.
   "TS1437", // Namespace must be given a name.
   "TS1438", // Interface must be given a name.
+  "TS1473", // An import declaration can only be used at the top level of a module.
   "TS1477", // An instantiation expression cannot be followed by a property access.
   "TS1487", // Octal escape sequences are not allowed.
   "TS1488", // Escape sequence '\8' is not allowed.
@@ -138,7 +140,21 @@ export default [
   "TS2754", // 'super' may not use type arguments.
   "TS2809", // Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
   "TS2815", // 'arguments' cannot be referenced in property initializers.
+
+  "TS8002", // 'import ... =' can only be used in TypeScript files.
+  "TS8003", // 'export =' can only be used in TypeScript files."
+  "TS8004", // Type parameter declarations can only be used in TypeScript files.
+  "TS8005", // 'implements' clauses can only be used in TypeScript files.
+  "TS8006", // '{0}' declarations can only be used in TypeScript files.
+  "TS8008", // Type aliases can only be used in TypeScript files.
+  "TS8009", // The '{0}' modifier can only be used in TypeScript files.
+  "TS8010", // Type annotations can only be used in TypeScript files.
+  "TS8012", // Parameter modifiers can only be used in TypeScript files.
+  "TS8013", // Non-null assertions can only be used in TypeScript files.
+  "TS8016", // Type assertion expressions can only be used in TypeScript files.
+  "TS8017", // Signature declarations can only be used in TypeScript files.
   "TS8018", // Octal literals are not allowed in enums members initializer.
   "TS17000", // JSX attributes must only be assigned a non-empty 'expression'.
+  "TS17008", // JSX element '{0}' has no corresponding closing tag.
   "TS17012", // '{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?
 ];
