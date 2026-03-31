@@ -1,0 +1,70 @@
+{
+  "type": "File",
+  "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":62}},
+  "errors": [
+    "SyntaxError: Identifier 'foo' has already been declared. (4:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":62}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSNamespaceExportDeclaration",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":24,"index":24}},
+        "id": {
+          "type": "Identifier",
+          "start":20,"end":23,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":23,"index":23},"identifierName":"foo"},
+          "name": "foo"
+        }
+      },
+      {
+        "type": "TSModuleDeclaration",
+        "start":26,"end":62,"loc":{"start":{"line":3,"column":0,"index":26},"end":{"line":5,"column":1,"index":62}},
+        "kind": "global",
+        "id": {
+          "type": "Identifier",
+          "start":34,"end":40,"loc":{"start":{"line":3,"column":8,"index":34},"end":{"line":3,"column":14,"index":40},"identifierName":"global"},
+          "name": "global"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":41,"end":62,"loc":{"start":{"line":3,"column":15,"index":41},"end":{"line":5,"column":1,"index":62}},
+          "body": [
+            {
+              "type": "ExportNamedDeclaration",
+              "start":45,"end":60,"loc":{"start":{"line":4,"column":2,"index":45},"end":{"line":4,"column":17,"index":60}},
+              "exportKind": "value",
+              "specifiers": [],
+              "source": null,
+              "attributes": [],
+              "declaration": {
+                "type": "VariableDeclaration",
+                "start":52,"end":60,"loc":{"start":{"line":4,"column":9,"index":52},"end":{"line":4,"column":17,"index":60}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":56,"end":59,"loc":{"start":{"line":4,"column":13,"index":56},"end":{"line":4,"column":16,"index":59}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":56,"end":59,"loc":{"start":{"line":4,"column":13,"index":56},"end":{"line":4,"column":16,"index":59},"identifierName":"foo"},
+                      "name": "foo"
+                    },
+                    "init": null
+                  }
+                ],
+                "kind": "let"
+              }
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

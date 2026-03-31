@@ -2967,6 +2967,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // See `parseNamespaceExportDeclaration` in TypeScript's own parser
         this.expectContextual(tt._namespace);
         decl.id = this.parseIdentifier();
+        this.checkIdentifier(decl.id, BindingFlag.TYPE_LEXICAL);
         this.semicolon();
         return this.finishNode(decl, "TSNamespaceExportDeclaration");
       } else {
