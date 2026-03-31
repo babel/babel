@@ -33,7 +33,7 @@
 - [umdNamespaceMergedWithGlobalAugmentationIsNotCircular.ts](../../../build/typescript/tests/cases/compiler/umdNamespaceMergedWithGlobalAugmentationIsNotCircular.ts) <!-- TS checks duplicate identifiers across related files, but babel-parser handles them separately -->
 - [uniqueSymbolJs.ts](../../../build/typescript/tests/cases/compiler/uniqueSymbolJs.ts) <!-- JSDoc syntax error. babel-parser does not parse JSDoc comments -->
 
-## 67 valid programs produced a parsing error
+## 61 valid programs produced a parsing error
 
 - [anyDeclare.ts](../../../build/typescript/tests/cases/compiler/anyDeclare.ts)
 - [augmentedTypesClass.ts](../../../build/typescript/tests/cases/compiler/augmentedTypesClass.ts)
@@ -82,12 +82,6 @@
 - [letAsIdentifier.ts](../../../build/typescript/tests/cases/compiler/letAsIdentifier.ts)
 - [letDeclarations-scopes.ts](../../../build/typescript/tests/cases/compiler/letDeclarations-scopes.ts)
 - [letDeclarations-validContexts.ts](../../../build/typescript/tests/cases/compiler/letDeclarations-validContexts.ts)
-- [letInConstDeclarations_ES5.ts](../../../build/typescript/tests/cases/compiler/letInConstDeclarations_ES5.ts)
-- [letInConstDeclarations_ES6.ts](../../../build/typescript/tests/cases/compiler/letInConstDeclarations_ES6.ts)
-- [letInLetConstDeclOfForOfAndForIn_ES5.ts](../../../build/typescript/tests/cases/compiler/letInLetConstDeclOfForOfAndForIn_ES5.ts)
-- [letInLetConstDeclOfForOfAndForIn_ES6.ts](../../../build/typescript/tests/cases/compiler/letInLetConstDeclOfForOfAndForIn_ES6.ts)
-- [letInLetDeclarations_ES5.ts](../../../build/typescript/tests/cases/compiler/letInLetDeclarations_ES5.ts)
-- [letInLetDeclarations_ES6.ts](../../../build/typescript/tests/cases/compiler/letInLetDeclarations_ES6.ts)
 - [mismatchedClassConstructorVariable.ts](../../../build/typescript/tests/cases/compiler/mismatchedClassConstructorVariable.ts)
 - [moduleDuplicateIdentifiers.ts](../../../build/typescript/tests/cases/compiler/moduleDuplicateIdentifiers.ts)
 - [moduleKeywordDeprecated.ts](../../../build/typescript/tests/cases/compiler/moduleKeywordDeprecated.ts)
