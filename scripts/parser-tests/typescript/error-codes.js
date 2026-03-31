@@ -25,6 +25,7 @@ export default [
   "TS1034", // 'super' must be followed by an argument list or member access.
   "TS1039", // Initializers are not allowed in ambient contexts.
   "TS1042", // '{0}' modifier cannot be used here.
+  "TS1044", // '{0}' modifier cannot appear on a module or namespace element.
   "TS1048", // A rest parameter cannot have an initializer.
   "TS1053", // A 'set' accessor cannot have rest parameter.
   "TS1054", // A 'get' accessor cannot have parameters.
@@ -66,6 +67,7 @@ export default [
   "TS1163", // A 'yield' expression is only allowed in a generator body.
   "TS1172", // 'extends' clause already seen."
   "TS1173", // 'extends' clause must precede 'implements' clause.
+  "TS1174", // Classes can only extend a single class.
   "TS1175", // 'implements' clause already seen.
   "TS1176", // Interface declaration cannot have 'implements' clause.
   "TS1182", // A destructuring declaration must have an initializer.
@@ -83,6 +85,7 @@ export default [
   "TS1212", // Identifier expected. '{0}' is a reserved word in strict mode."
   "TS1213", // Identifier expected. '{0}' is a reserved word in strict mode. Class definitions are automatically in strict mode.
   "TS1214", // Identifier expected. '{0}' is a reserved word in strict mode. Modules are automatically in strict mode.
+  "TS1215", // Invalid use of 'arguments'. Modules are automatically in strict mode.
   "TS1244", // Abstract methods can only appear within an abstract class.
   "TS1246", // An interface property cannot have an initializer.
   "TS1247", // A type literal property cannot have an initializer.
@@ -92,6 +95,7 @@ export default [
   "TS1312", // '=' can only be used in an object literal property inside a destructuring assignment.
   "TS1317", // A parameter property cannot be declared using a rest parameter.
   "TS1344", // A label is not allowed here.
+  "TS1347", // 'use strict' directive cannot be used with non-simple parameter list.
   "TS1384", // A 'new' expression with type arguments must always be followed by a parenthesized argument list.
   "TS1385", // Function type notation must be parenthesized when used in a union type.
   "TS1386", // Constructor type notation must be parenthesized when used in a union type.
@@ -105,6 +109,7 @@ export default [
   "TS1499", // Unknown regular expression flag.
   "TS1500", // Duplicate regular expression flag.
   // "TS2300", // Duplicate identifier '{0}'.
+  "TS2335", // 'super' can only be referenced in a derived class.
   "TS2337", // Super calls are not permitted outside constructors or in nested functions inside constructors.
   // "TS2340", // Only public and protected methods of the base class are accessible via the 'super' keyword.
   "TS2357", // The operand of an increment or decrement operator must be a variable or a property access.
@@ -116,6 +121,7 @@ export default [
   // "TS2440", // Import declaration conflicts with local declaration of '{0}'.
   // "TS2451", // Cannot redeclare block-scoped variable '{0}'.
   "TS2452", // An enum member cannot have a numeric name.
+  "TS2492", // Cannot redeclare identifier '{0}' in catch clause.
   "TS2499", // An interface can only extend an identifier/qualified-name with optional type arguments.
   "TS2523", // 'yield' expressions cannot be used in a parameter initializer.
   "TS2524", // 'await' expressions cannot be used in a parameter initializer.
@@ -126,6 +132,7 @@ export default [
   // "TS2567", // Enum declarations can only merge with namespace or other enum declarations.
   "TS2659", // 'super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.
   "TS2660", // 'super' can only be referenced in members of derived classes or object literal expressions.
+  "TS2661", // Cannot export '{0}'. Only local declarations can be exported from a module.
   //"TS2693", // 'interface' only refers to a type, but is being used as a value here.
   "TS2699", // Static property '{0}' conflicts with built-in property 'Function.{0}' of constructor function '{1}'.
   "TS2754", // 'super' may not use type arguments.
