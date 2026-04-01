@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":29}},
+  "errors": [
+    "SyntaxError: An export assignment cannot be used in a namespace. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":29}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":29}},
+        "kind": "namespace",
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"N"},
+          "name": "N"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":12,"end":29,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":3,"column":1,"index":29}},
+          "body": [
+            {
+              "type": "TSExportAssignment",
+              "start":16,"end":27,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":2,"column":13,"index":27}},
+              "expression": {
+                "type": "Identifier",
+                "start":25,"end":26,"loc":{"start":{"line":2,"column":11,"index":25},"end":{"line":2,"column":12,"index":26},"identifierName":"N"},
+                "name": "N"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

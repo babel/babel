@@ -1,0 +1,96 @@
+{
+  "type": "File",
+  "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":79}},
+  "errors": [
+    "SyntaxError: Export declarations are not permitted in a namespace. (2:2)",
+    "SyntaxError: Export declarations are not permitted in a namespace. (3:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":79}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":79,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":79}},
+        "kind": "namespace",
+        "id": {
+          "type": "Identifier",
+          "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"N"},
+          "name": "N"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":20,"end":79,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":4,"column":1,"index":79}},
+          "body": [
+            {
+              "type": "ExportNamedDeclaration",
+              "start":24,"end":48,"loc":{"start":{"line":2,"column":2,"index":24},"end":{"line":2,"column":26,"index":48}},
+              "exportKind": "value",
+              "specifiers": [
+                {
+                  "type": "ExportSpecifier",
+                  "start":33,"end":34,"loc":{"start":{"line":2,"column":11,"index":33},"end":{"line":2,"column":12,"index":34}},
+                  "local": {
+                    "type": "Identifier",
+                    "start":33,"end":34,"loc":{"start":{"line":2,"column":11,"index":33},"end":{"line":2,"column":12,"index":34},"identifierName":"x"},
+                    "name": "x"
+                  },
+                  "exportKind": "value",
+                  "exported": {
+                    "type": "Identifier",
+                    "start":33,"end":34,"loc":{"start":{"line":2,"column":11,"index":33},"end":{"line":2,"column":12,"index":34},"identifierName":"x"},
+                    "name": "x"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":42,"end":47,"loc":{"start":{"line":2,"column":20,"index":42},"end":{"line":2,"column":25,"index":47}},
+                "extra": {
+                  "rawValue": "foo",
+                  "raw": "\"foo\""
+                },
+                "value": "foo"
+              },
+              "attributes": [],
+              "declaration": null
+            },
+            {
+              "type": "ExportNamedDeclaration",
+              "start":51,"end":77,"loc":{"start":{"line":3,"column":2,"index":51},"end":{"line":3,"column":28,"index":77}},
+              "exportKind": "value",
+              "specifiers": [
+                {
+                  "type": "ExportNamespaceSpecifier",
+                  "start":58,"end":65,"loc":{"start":{"line":3,"column":9,"index":58},"end":{"line":3,"column":16,"index":65}},
+                  "exported": {
+                    "type": "Identifier",
+                    "start":63,"end":65,"loc":{"start":{"line":3,"column":14,"index":63},"end":{"line":3,"column":16,"index":65},"identifierName":"ns"},
+                    "name": "ns"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":71,"end":76,"loc":{"start":{"line":3,"column":22,"index":71},"end":{"line":3,"column":27,"index":76}},
+                "extra": {
+                  "rawValue": "foo",
+                  "raw": "\"foo\""
+                },
+                "value": "foo"
+              },
+              "attributes": []
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

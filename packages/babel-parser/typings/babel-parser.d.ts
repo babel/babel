@@ -295,7 +295,10 @@ type ErrorInfoCompressed = {
   EmptyTypeArguments: [];
   EmptyTypeParameters: [];
   ExpectedAmbientAfterExportDeclare: [];
+  ExportAssignmentInTSNamespace: [];
+  ExportInTSNamespace: [];
   ImportAliasHasImportType: [];
+  ImportInTSNamespace: [];
   IncompatibleModifiers: [{ modifiers: [TsModifier, TsModifier] }];
   IndexSignatureHasAbstract: [];
   IndexSignatureHasAccessibility: [{ modifier: Accessibility }];
@@ -332,6 +335,7 @@ type ErrorInfoCompressed = {
   InvalidPropertyAccessAfterInstantiationExpression: [];
   InvalidTupleMemberLabel: [];
   MissingInterfaceName: [];
+  NamespaceExportInTSNamespace: [];
   NonAbstractClassHasAbstractMethod: [];
   NonClassMethodPropertyHasAbstractModifier: [];
   OptionalTypeBeforeRequired: [];

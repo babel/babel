@@ -26,6 +26,15 @@ class TypeScriptScope extends Scope {
 // explanation of how typescript handles scope.
 
 export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope> {
+  get inTSNamespace() {
+    const scopeStack = this.scopeStack;
+    return (
+      scopeStack.length >= 2 &&
+      scopeStack[scopeStack.length - 1].flags === ScopeFlag.OTHER &&
+      (scopeStack[scopeStack.length - 2].flags & ScopeFlag.TS_NAMESPACE) > 0
+    );
+  }
+
   importsStack: Set<string>[] = [];
 
   createScope(flags: ScopeFlag): TypeScriptScope {
@@ -35,7 +44,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   }
 
   enter(flags: ScopeFlag): void {
-    if (flags === ScopeFlag.TS_MODULE) {
+    if (flags & (ScopeFlag.TS_MODULE | ScopeFlag.TS_NAMESPACE)) {
       this.importsStack.push(new Set());
     }
 
@@ -45,7 +54,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   exit() {
     const flags = super.exit();
 
-    if (flags === ScopeFlag.TS_MODULE) {
+    if (flags & (ScopeFlag.TS_MODULE | ScopeFlag.TS_NAMESPACE)) {
       this.importsStack.pop();
     }
 

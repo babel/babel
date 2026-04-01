@@ -59,6 +59,7 @@ export default [
   "TS1142", // Line break not permitted here.
   "TS1144", // '{' or ';' expected.
   "TS1145", // '{' or JSX element expected.
+  "TS1147", // Import declarations in a namespace cannot reference a module.
   "TS1155", // 'const' declarations must be initialized.
   "TS1156", // 'const' declarations can only be declared inside a block.
   "TS1160", // Unterminated template literal.
@@ -95,6 +96,7 @@ export default [
   "TS1308", // 'await' expression is only allowed within an async function.
   "TS1312", // '=' can only be used in an object literal property inside a destructuring assignment.
   "TS1317", // A parameter property cannot be declared using a rest parameter.
+  "TS1319", // A default export can only be used in an ECMAScript-style module.
   "TS1344", // A label is not allowed here.
   "TS1347", // 'use strict' directive cannot be used with non-simple parameter list.
   "TS1384", // A 'new' expression with type arguments must always be followed by a parenthesized argument list.

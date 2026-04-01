@@ -110,7 +110,12 @@ export const TSErrorTemplates = {
   EmptyTypeParameters: "Type parameter list cannot be empty.",
   ExpectedAmbientAfterExportDeclare:
     "'export declare' must be followed by an ambient declaration.",
+  ExportAssignmentInTSNamespace:
+    "An export assignment cannot be used in a namespace.",
+  ExportInTSNamespace: "Export declarations are not permitted in a namespace.",
   ImportAliasHasImportType: "An import alias can not use 'import type'.",
+  ImportInTSNamespace:
+    "Import declarations in a namespace cannot reference a module.",
   IncompatibleModifiers: ({
     modifiers,
   }: {
@@ -165,6 +170,8 @@ export const TSErrorTemplates = {
     "Tuple members must be labeled with a simple identifier.",
   MissingInterfaceName:
     "'interface' declarations must be followed by an identifier.",
+  NamespaceExportInTSNamespace:
+    "Global module exports may only appear at top level.",
   NonAbstractClassHasAbstractMethod:
     "Abstract methods can only appear within an abstract class.",
   NonClassMethodPropertyHasAbstractModifier:
@@ -303,6 +310,7 @@ export const enum tsParseEntityNameFlags {
 
 export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
   class TypeScriptParserMixin extends superClass implements Parser {
+    declare scope: TypeScriptScopeHandler;
     getScopeHandler(): new (...args: any) => TypeScriptScopeHandler {
       return TypeScriptScopeHandler;
     }
@@ -2058,7 +2066,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.checkIdentifier(node.id, BindingFlag.TYPE_TS_NAMESPACE);
       }
 
-      this.scope.enter(ScopeFlag.TS_MODULE);
+      this.scope.enter(ScopeFlag.TS_NAMESPACE);
       this.prodParam.enter(ParamKind.PARAM);
       node.body = this.tsParseModuleBlock(false);
       this.prodParam.exit();
@@ -2869,6 +2877,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.AnyImport {
       if (this.match(tt.string)) {
         node.importKind = "value";
+        if (this.scope.inTSNamespace) {
+          this.raise(TSErrors.ImportInTSNamespace, node);
+        }
         return super.parseImport(node as Undone<N.ImportDeclaration>);
       }
 
@@ -2878,15 +2889,25 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.lookaheadCharCode() === charCodes.equalsTo
       ) {
         node.importKind = "value";
-        return this.tsParseImportEqualsDeclaration(
+        const result = this.tsParseImportEqualsDeclaration(
           node as Undone<N.TSImportEqualsDeclaration>,
         );
+        if (
+          this.scope.inTSNamespace &&
+          result.moduleReference.type === "TSExternalModuleReference"
+        ) {
+          this.raise(TSErrors.ImportInTSNamespace, node);
+        }
+        return result;
       } else if (this.isContextual(tt._type)) {
         const maybeDefaultIdentifier = this.parseMaybeImportPhase(
           node as Undone<N.ImportDeclaration>,
           /* isExport */ false,
         );
         if (this.lookaheadCharCode() === charCodes.equalsTo) {
+          if (this.scope.inTSNamespace) {
+            this.raise(TSErrors.ImportInTSNamespace, node);
+          }
           return this.tsParseImportEqualsDeclaration(
             node as Undone<N.TSImportEqualsDeclaration>,
             maybeDefaultIdentifier,
@@ -2911,6 +2932,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         importNode.specifiers[0].type === "ImportDefaultSpecifier"
       ) {
         this.raise(TSErrors.TypeImportCannotSpecifyDefaultAndNamed, importNode);
+      } else if (this.scope.inTSNamespace) {
+        this.raise(TSErrors.ImportInTSNamespace, importNode);
       }
 
       return importNode;
@@ -2958,6 +2981,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         assign.expression = super.parseExpression();
         this.semicolon();
         this.sawUnambiguousESM = true;
+        if (this.scope.inTSNamespace) {
+          this.raise(TSErrors.ExportAssignmentInTSNamespace, assign);
+        }
         return this.finishNode(assign, "TSExportAssignment");
       } else if (this.eatContextual(tt._as)) {
         // `export as namespace A;`
@@ -2967,12 +2993,21 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         decl.id = this.parseIdentifier();
         this.checkIdentifier(decl.id, BindingFlag.TYPE_LEXICAL);
         this.semicolon();
+        if (this.scope.inTSNamespace) {
+          this.raise(TSErrors.NamespaceExportInTSNamespace, decl);
+        }
         return this.finishNode(decl, "TSNamespaceExportDeclaration");
       } else {
-        return super.parseExport(
-          node as Undone<N.ExportAllDeclaration | N.ExportDefaultDeclaration>,
-          decorators,
-        );
+        const result = super.parseExport(node, decorators);
+        if (
+          this.scope.inTSNamespace &&
+          (result.type !== "ExportNamedDeclaration" ||
+            result.source ||
+            (!result.declaration && !this.state.isAmbientContext))
+        ) {
+          this.raise(TSErrors.ExportInTSNamespace, result);
+        }
+        return result;
       }
     }
 
