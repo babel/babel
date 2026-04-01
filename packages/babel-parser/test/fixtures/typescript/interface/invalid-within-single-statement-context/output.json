@@ -1,0 +1,40 @@
+{
+  "type": "File",
+  "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":16,"index":25}},
+  "errors": [
+    "SyntaxError: 'interface' declarations can only be declared inside a block. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":16,"index":25}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForStatement",
+        "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":16,"index":25}},
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "TSInterfaceDeclaration",
+          "start":11,"end":25,"loc":{"start":{"line":2,"column":2,"index":11},"end":{"line":2,"column":16,"index":25}},
+          "id": {
+            "type": "Identifier",
+            "start":21,"end":22,"loc":{"start":{"line":2,"column":12,"index":21},"end":{"line":2,"column":13,"index":22},"identifierName":"I"},
+            "name": "I"
+          },
+          "body": {
+            "type": "TSInterfaceBody",
+            "start":23,"end":25,"loc":{"start":{"line":2,"column":14,"index":23},"end":{"line":2,"column":16,"index":25}},
+            "body": []
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

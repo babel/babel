@@ -85,7 +85,7 @@ export default function convertFunctionParams(
       const left = param.get("left");
       const right = param.get("right");
 
-      const undefinedNode = scope.buildUndefinedNode();
+      const undefinedNode = t.buildUndefinedNode();
 
       if (left.isIdentifier()) {
         body.push(

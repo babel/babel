@@ -46,7 +46,6 @@
     "@babel/template": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",
-    "@jridgewell/remapping": "^2.3.5",
     "@types/gensync": "^1.0.0",
     "convert-source-map": "^2.0.0",
     "gensync": "^1.0.0-beta.2",

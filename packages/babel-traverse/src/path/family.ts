@@ -6,8 +6,7 @@ import {
   getAssignmentIdentifiers as _getAssignmentIdentifiers,
   getBindingIdentifiers as _getBindingIdentifiers,
   getOuterBindingIdentifiers as _getOuterBindingIdentifiers,
-  numericLiteral,
-  unaryExpression,
+  buildUndefinedNode,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -117,7 +116,7 @@ function replaceBreakStatementInBreakCompletion(
   completions.forEach(c => {
     if (c.path.isBreakStatement({ label: null })) {
       if (reachable) {
-        c.path.replaceWith(unaryExpression("void", numericLiteral(0)));
+        c.path.replaceWith(buildUndefinedNode());
       } else {
         c.path.remove();
       }

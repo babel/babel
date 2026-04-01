@@ -477,7 +477,6 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
-    "@jridgewell/remapping": "npm:^2.3.5"
     "@jridgewell/trace-mapping": "npm:^0.3.28"
     "@types/convert-source-map": "npm:^2.0.0"
     "@types/gensync": "npm:^1.0.0"
@@ -1080,16 +1079,6 @@ __metadata:
     "@babel/traverse": "workspace:^"
   peerDependencies:
     "@babel/core": "workspace:^"
-  languageName: unknown
-  linkType: soft
-
-"@babel/helper-simple-access@workspace:packages/babel-helper-simple-access":
-  version: 0.0.0-use.local
-  resolution: "@babel/helper-simple-access@workspace:packages/babel-helper-simple-access"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -3194,18 +3183,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-property-mutators@workspace:^, @babel/plugin-transform-property-mutators@workspace:packages/babel-plugin-transform-property-mutators":
-  version: 0.0.0-use.local
-  resolution: "@babel/plugin-transform-property-mutators@workspace:packages/babel-plugin-transform-property-mutators"
-  dependencies:
-    "@babel/core": "workspace:^"
-    "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
-  peerDependencies:
-    "@babel/core": "workspace:^"
-  languageName: unknown
-  linkType: soft
-
 "@babel/plugin-transform-proto-to-assign@workspace:^, @babel/plugin-transform-proto-to-assign@workspace:packages/babel-plugin-transform-proto-to-assign":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-proto-to-assign@workspace:packages/babel-plugin-transform-proto-to-assign"
@@ -4050,7 +4027,6 @@ __metadata:
     "@babel/plugin-transform-private-methods": "workspace:^"
     "@babel/plugin-transform-private-property-in-object": "workspace:^"
     "@babel/plugin-transform-property-literals": "workspace:^"
-    "@babel/plugin-transform-property-mutators": "workspace:^"
     "@babel/plugin-transform-proto-to-assign": "workspace:^"
     "@babel/plugin-transform-react-constant-elements": "workspace:^"
     "@babel/plugin-transform-react-display-name": "workspace:^"
@@ -7365,7 +7341,7 @@ __metadata:
     terser: "npm:^5.43.1"
     test262-stream: "npm:^1.4.0"
     tstyche: "npm:^6.2.0"
-    typescript: "npm:5.9.3"
+    typescript: "npm:6.0.2"
     typescript-eslint: "npm:8.56.0"
   languageName: unknown
   linkType: soft
@@ -17137,23 +17113,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.9.3":
-  version: 5.9.3
-  resolution: "typescript@npm:5.9.3"
+"typescript@npm:6.0.2":
+  version: 6.0.2
+  resolution: "typescript@npm:6.0.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/c089d9d3da2729fd4ac517f9b0e0485914c4b3c26f80dc0cffcb5de1719a17951e92425d55db59515c1a7ddab65808466debb864d0d56dcf43f27007d0709594
+  checksum: 10/b9fc2fcee7ee8e5ca6f5138181964550531e18e2d20ecb71b802d4d495881e3444e0ef94cbb6e84eb2ba41e913f6feae3ca33cc722b32e6e6dfadb32d23b80e6
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>":
-  version: 5.9.3
-  resolution: "typescript@patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"
+"typescript@patch:typescript@npm%3A6.0.2#optional!builtin<compat/typescript>":
+  version: 6.0.2
+  resolution: "typescript@patch:typescript@npm%3A6.0.2#optional!builtin<compat/typescript>::version=6.0.2&hash=5786d5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 10/696e1b017bc2635f4e0c94eb4435357701008e2f272f553d06e35b494b8ddc60aa221145e286c28ace0c89ee32827a28c2040e3a69bdc108b1a5dc8fb40b72e3
+  checksum: 10/e5501dfcf8c5b6b9a61f6fa53decc40187cebe3a2b7b2bd51c615007ad4cf6d58298461fef63294f6be9d5f2f33019b2a2e2bf02d9cb7d7f6ec94372bf24ffa2
   languageName: node
   linkType: hard
 

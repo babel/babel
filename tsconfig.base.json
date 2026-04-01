@@ -5,6 +5,7 @@
     "target": "ESNext",
     "module": "Preserve",
     "lib": ["ESNext"],
+    "types": ["node", "jest"],
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": true,
@@ -23,6 +24,8 @@
     "strictBindCallApply": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
+    "strictFunctionTypes": false,
+    "useUnknownInCatchVariables": false,
     "incremental": true,
     "stripInternal": true
   },

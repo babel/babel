@@ -1,10 +1,8 @@
-import type { NodePath, Scope, File } from "@babel/core";
+import type { NodePath, File } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import { template, types as t } from "@babel/core";
 import { visitors } from "@babel/traverse";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
-
-import addCallSuperHelper from "./inline-callSuper-helpers.ts";
 
 type ClassAssumptions = {
   setClassMethods: boolean;
@@ -15,20 +13,6 @@ type ClassAssumptions = {
 
 type ClassConstructor = t.ClassMethod & { kind: "constructor" };
 
-function buildConstructor(
-  classRef: t.Identifier,
-  constructorBody: t.BlockStatement,
-  node: t.Class,
-) {
-  const func = t.functionDeclaration(
-    t.cloneNode(classRef),
-    [],
-    constructorBody,
-  );
-  t.inherits(func, node);
-  return func;
-}
-
 type Descriptor = {
   key: t.Expression;
   get?: t.Expression | null;
@@ -38,31 +22,17 @@ type Descriptor = {
 };
 
 type State = {
-  parent: t.Node | undefined;
-  scope: Scope | undefined;
-  node: t.Class | undefined;
-  path: NodePath<t.Class> | undefined;
-  file: File | undefined;
-
-  classId: t.Identifier | undefined;
   classRef: t.Identifier | undefined;
-  superName: t.Expression | null;
+  superName: t.Expression | null | undefined;
   superReturns: NodePath<t.ReturnStatement>[];
-  isDerived: boolean;
-  extendsNative: boolean;
 
   construct: t.FunctionDeclaration | undefined;
-  constructorBody: t.BlockStatement | undefined;
-  userConstructor: ClassConstructor | undefined;
   userConstructorPath: NodePath<ClassConstructor> | undefined;
-  hasConstructor: boolean;
 
   body: t.Statement[];
   superThises: NodePath<t.ThisExpression>[];
-  pushedInherits: boolean;
   pushedCreateClass: boolean;
   protoAlias: t.Identifier | null;
-  isLoose: boolean;
 
   dynamicKeys: Map<string, t.Expression>;
 
@@ -97,31 +67,17 @@ export default function transformClass(
   supportUnicodeId: boolean,
 ) {
   const classState: State = {
-    parent: undefined,
-    scope: undefined,
-    node: undefined,
-    path: undefined,
-    file: undefined,
-
-    classId: undefined,
     classRef: undefined,
     superName: null,
     superReturns: [],
-    isDerived: false,
-    extendsNative: false,
 
     construct: undefined,
-    constructorBody: undefined,
-    userConstructor: undefined,
     userConstructorPath: undefined,
-    hasConstructor: false,
 
     body: [],
     superThises: [],
-    pushedInherits: false,
     pushedCreateClass: false,
     protoAlias: null,
-    isLoose: false,
 
     dynamicKeys: new Map(),
 
@@ -138,10 +94,7 @@ export default function transformClass(
       },
     },
   };
-
-  const setState = (newState: Partial<State>) => {
-    Object.assign(classState, newState);
-  };
+  const scope = path.scope;
 
   const findThisesVisitor = visitors.environmentVisitor({
     ThisExpression(path) {
@@ -150,22 +103,26 @@ export default function transformClass(
   });
 
   function createClassHelper(args: t.Expression[]) {
-    return t.callExpression(classState.file!.addHelper("createClass"), args);
+    return t.callExpression(file.addHelper("createClass"), args);
   }
 
   /**
    * Creates a class constructor or bail out if there is one
    */
   function maybeCreateConstructor() {
-    const classBodyPath = classState.path!.get("body");
-    for (const path of classBodyPath.get("body")) {
-      if (path.isClassMethod({ kind: "constructor" })) return;
+    const classBodyPath = path.get("body");
+    if (
+      classBodyPath.node.body.some(
+        path => t.isClassMethod(path) && path.kind === "constructor",
+      )
+    ) {
+      return;
     }
 
     const params: t.FunctionExpression["params"] = [];
     let body;
 
-    if (classState.isDerived) {
+    if (classState.superName) {
       body = template.statement.ast`{
           super(...arguments);
         }` as t.BlockStatement;
@@ -179,24 +136,8 @@ export default function transformClass(
     );
   }
 
-  function buildBody() {
-    maybeCreateConstructor();
-    pushBody();
-    verifyConstructor();
-
-    if (classState.userConstructor) {
-      const { constructorBody, userConstructor, construct } = classState;
-
-      constructorBody!.body.push(...userConstructor.body.body);
-      t.inherits(construct, userConstructor);
-      t.inherits(constructorBody, userConstructor.body);
-    }
-
-    pushDescriptors();
-  }
-
   function pushBody() {
-    const classBodyPaths: any[] = classState.path!.get("body.body");
+    const classBodyPaths: any[] = path.get("body.body");
 
     for (const path of classBodyPaths) {
       const node = path.node;
@@ -219,25 +160,28 @@ export default function transformClass(
           objectRef: classState.classRef,
           superRef: classState.superName,
           constantSuper: assumptions.constantSuper,
-          file: classState.file!,
+          file: file,
           refToPreserve: classState.classRef,
         });
 
         replaceSupers.replace();
 
-        const superReturns: NodePath<t.ReturnStatement>[] = [];
-        path.traverse(
-          visitors.environmentVisitor({
-            ReturnStatement(path) {
-              if (!path.getFunctionParent()!.isArrowFunctionExpression()) {
-                superReturns.push(path);
-              }
-            },
-          }),
-        );
-
         if (isConstructor) {
-          pushConstructor(superReturns, node as ClassConstructor, path);
+          const superReturns: NodePath<t.ReturnStatement>[] = [];
+          path.traverse(
+            visitors.environmentVisitor({
+              ReturnStatement(path) {
+                if (!path.getFunctionParent()!.isArrowFunctionExpression()) {
+                  superReturns.push(path);
+                }
+              },
+            }),
+          );
+          classState.superReturns = superReturns;
+          classState.userConstructorPath = path;
+          // Replace the constructor body of our class.
+          t.inheritsComments(classState.construct!, node).params =
+            node.params as t.FunctionParameter[];
         } else {
           path.ensureFunctionName(supportUnicodeId);
           let wrapped;
@@ -368,7 +312,7 @@ export default function transformClass(
           args.push(t.arrayExpression(bareSuperNodeArguments));
         }
       }
-      call = t.callExpression(addCallSuperHelper(classState.file!), args);
+      call = t.callExpression(file.addHelper("callSuper"), args);
     }
 
     if (
@@ -390,10 +334,9 @@ export default function transformClass(
   }
 
   function verifyConstructor() {
-    if (!classState.isDerived) return;
+    if (!classState.superName) return;
 
     const path = classState.userConstructorPath!;
-    const body = path.get("body");
 
     const constructorBody = path.get("body");
 
@@ -409,10 +352,9 @@ export default function transformClass(
     };
 
     const buildAssertThisInitialized = function () {
-      return t.callExpression(
-        classState.file!.addHelper("assertThisInitialized"),
-        [thisRef()],
-      );
+      return t.callExpression(file.addHelper("assertThisInitialized"), [
+        thisRef(),
+      ]);
     };
 
     const bareSupers: NodePath<t.CallExpression>[] = [];
@@ -428,7 +370,7 @@ export default function transformClass(
     );
 
     for (const bareSuper of bareSupers) {
-      wrapSuperCall(bareSuper, classState.superName!, thisRef, body);
+      wrapSuperCall(bareSuper, classState.superName, thisRef, constructorBody);
 
       if (maxGuaranteedSuperBeforeIndex >= 0) {
         let lastParentPath: NodePath;
@@ -529,7 +471,7 @@ export default function transformClass(
 
     let wrapReturn;
 
-    if (classState.isLoose) {
+    if (isLoose) {
       wrapReturn = (returnArg: t.Expression | void) => {
         const thisExpr = buildAssertThisInitialized();
         return returnArg
@@ -543,7 +485,7 @@ export default function transformClass(
           returnParams.push(returnArg);
         }
         return t.callExpression(
-          classState.file!.addHelper("possibleConstructorReturn"),
+          file.addHelper("possibleConstructorReturn"),
           returnParams,
         );
       };
@@ -551,12 +493,12 @@ export default function transformClass(
 
     // if we have a return as the last node in the body then we've already caught that
     // return
-    const bodyPaths = body.get("body");
+    const bodyPaths = constructorBody.get("body");
     const guaranteedSuperBeforeFinish =
       maxGuaranteedSuperBeforeIndex !== -1 &&
       maxGuaranteedSuperBeforeIndex < bodyPaths.length;
     if (!bodyPaths.length || !bodyPaths.pop()!.isReturnStatement()) {
-      body.pushContainer(
+      constructorBody.pushContainer(
         "body",
         t.returnStatement(
           guaranteedSuperBeforeFinish
@@ -660,15 +602,13 @@ export default function transformClass(
 
   function insertProtoAliasOnce() {
     if (classState.protoAlias === null) {
-      setState({
-        protoAlias: classState.scope!.generateUidIdentifier("proto"),
-      });
+      classState.protoAlias = scope.generateUidIdentifier("proto");
       const classProto = t.memberExpression(
         classState.classRef!,
         t.identifier("prototype"),
       );
       const protoDeclaration = t.variableDeclaration("var", [
-        t.variableDeclarator(classState.protoAlias!, classProto),
+        t.variableDeclarator(classState.protoAlias, classProto),
       ]);
 
       classState.body.push(protoDeclaration);
@@ -676,59 +616,20 @@ export default function transformClass(
   }
 
   /**
-   * Replace the constructor body of our class.
-   */
-  function pushConstructor(
-    superReturns: NodePath<t.ReturnStatement>[],
-    method: ClassConstructor,
-    path: NodePath<ClassConstructor>,
-  ) {
-    setState({
-      userConstructorPath: path,
-      userConstructor: method,
-      hasConstructor: true,
-      superReturns,
-    });
-
-    const construct = classState.construct!;
-
-    t.inheritsComments(construct, method);
-
-    // @ts-expect-error Fixme: should throw when we see TSParameterProperty
-    construct.params = method.params;
-
-    t.inherits(construct.body, method.body);
-    construct.body.directives = method.body.directives;
-
-    // we haven't pushed any descriptors yet
-    // @ts-expect-error todo(flow->ts) maybe remove this block - properties from condition are not used anywhere else
-    if (classState.hasInstanceDescriptors || classState.hasStaticDescriptors) {
-      pushDescriptors();
-    }
-
-    pushInheritsToBody();
-  }
-
-  /**
    * Push inherits helper to body.
    */
   function pushInheritsToBody() {
-    if (!classState.isDerived || classState.pushedInherits) return;
-
-    classState.pushedInherits = true;
+    if (!classState.superName) return;
 
     // Unshift to ensure that the constructor inheritance is set up before
     // any properties can be assigned to the prototype.
-
     classState.body.unshift(
       t.expressionStatement(
         t.callExpression(
-          classState.file!.addHelper(
-            classState.isLoose ? "inheritsLoose" : "inherits",
-          ),
+          file.addHelper(isLoose ? "inheritsLoose" : "inherits"),
           [
             t.cloneNode(classState.classRef!),
-            t.cloneNode(classState.superName!),
+            t.cloneNode(classState.superName),
           ],
         ),
       ),
@@ -736,8 +637,7 @@ export default function transformClass(
   }
 
   function extractDynamicKeys() {
-    const node = classState.node!;
-    const scope = classState.scope!;
+    const node = path.node;
     const { dynamicKeys } = classState;
 
     for (const elem of node.body.body) {
@@ -757,22 +657,23 @@ export default function transformClass(
     const closureParams = [];
     const closureArgs = [];
 
-    if (classState.isDerived) {
+    if (superName) {
       let arg = t.cloneNode(superName);
-      if (classState.extendsNative) {
-        arg = t.callExpression(classState.file!.addHelper("wrapNativeSuper"), [
-          arg,
-        ]);
+      if (
+        t.isIdentifier(superName) &&
+        builtinClasses.has(superName.name) &&
+        !scope.hasBinding(superName.name, /* noGlobals */ true)
+      ) {
+        arg = t.callExpression(file.addHelper("wrapNativeSuper"), [arg]);
         annotateAsPure(arg);
       }
 
-      const param =
-        classState.scope!.generateUidIdentifierBasedOnNode(superName);
+      const param = scope.generateUidIdentifierBasedOnNode(superName);
 
       closureParams.push(param);
       closureArgs.push(arg);
 
-      setState({ superName: t.cloneNode(param) });
+      classState.superName = t.cloneNode(param);
     }
 
     for (const [name, value] of dynamicKeys) {
@@ -783,85 +684,67 @@ export default function transformClass(
     return { closureParams, closureArgs };
   }
 
-  function classTransformer(
-    path: NodePath<t.Class>,
-    file: File,
-    builtinClasses: ReadonlySet<string>,
-    isLoose: boolean,
-  ) {
-    setState({
-      parent: path.parent,
-      scope: path.scope,
-      node: path.node,
-      path,
-      file,
-      isLoose,
-    });
+  function classTransformer(path: NodePath<t.Class>) {
+    const node = path.node;
 
-    const node = classState.node!;
+    classState.superName = node.superClass;
+    // this is the name of the binding that will **always** reference the class we've constructed
+    classState.classRef = node.id
+      ? t.identifier(node.id.name)
+      : scope.generateUidIdentifier("class");
 
-    setState({
-      classId: node.id!,
-      // this is the name of the binding that will **always** reference the class we've constructed
-      classRef: node.id
-        ? t.identifier(node.id.name)
-        : classState.scope!.generateUidIdentifier("class"),
-      superName: node.superClass,
-      isDerived: !!node.superClass,
-      constructorBody: t.blockStatement([]),
-    });
+    const { classRef } = classState;
 
-    setState({
-      extendsNative:
-        t.isIdentifier(classState.superName) &&
-        builtinClasses.has(classState.superName.name) &&
-        !classState.scope!.hasBinding(
-          classState.superName.name,
-          /* noGlobals */ true,
-        ),
-    });
-
-    const { classRef, constructorBody } = classState;
-
-    setState({
-      construct: buildConstructor(classRef!, constructorBody!, node),
-    });
+    const constructorBody = t.blockStatement([]);
+    classState.construct = t.inherits(
+      t.functionDeclaration(t.cloneNode(classRef), [], constructorBody),
+      node,
+    );
 
     extractDynamicKeys();
 
     const { body } = classState;
     const { closureParams, closureArgs } = setupClosureParamsArgs();
 
-    buildBody();
+    maybeCreateConstructor();
+    pushBody();
+    verifyConstructor();
+    pushDescriptors();
+
+    if (classState.userConstructorPath) {
+      const { node } = classState.userConstructorPath;
+
+      constructorBody.body.push(...node.body.body);
+      constructorBody.directives = node.body.directives;
+      t.inherits(classState.construct, node);
+      t.inherits(constructorBody, node.body);
+    }
 
     // make sure this class isn't directly called (with A() instead new A())
     if (!assumptions.noClassCalls) {
-      constructorBody!.body.unshift(
+      classState.construct.body.body.unshift(
         t.expressionStatement(
-          t.callExpression(classState.file!.addHelper("classCallCheck"), [
+          t.callExpression(file.addHelper("classCallCheck"), [
             t.thisExpression(),
-            t.cloneNode(classState.classRef!),
+            t.cloneNode(classState.classRef),
           ]),
         ),
       );
     }
 
     const isStrict = path.isInStrictMode();
+    // It's illegal to put a use strict directive into the body of a function
+    // with non-simple parameters for some reason. So, we have to use a strict
+    // wrapper function.
     let constructorOnly = body.length === 0;
     if (constructorOnly && !isStrict) {
-      for (const param of classState.construct!.params) {
-        // It's illegal to put a use strict directive into the body of a function
-        // with non-simple parameters for some reason. So, we have to use a strict
-        // wrapper function.
-        if (!t.isIdentifier(param)) {
-          constructorOnly = false;
-          break;
-        }
-      }
+      constructorOnly = classState.construct.params.every(param =>
+        t.isIdentifier(param),
+      );
     }
 
     const directives = constructorOnly
-      ? classState.construct!.body.directives
+      ? classState.construct.body.directives
       : [];
     if (!isStrict) {
       directives.push(t.directive(t.directiveLiteral("use strict")));
@@ -869,21 +752,21 @@ export default function transformClass(
 
     if (constructorOnly) {
       // named class with only a constructor
-      const expr = t.toExpression(classState.construct!);
-      return classState.isLoose ? expr : createClassHelper([expr]);
+      const expr = t.toExpression(classState.construct);
+      return isLoose ? expr : createClassHelper([expr]);
     }
 
     if (!classState.pushedCreateClass) {
       body.push(
         t.returnStatement(
-          classState.isLoose
+          isLoose
             ? t.cloneNode(classState.classRef)
-            : createClassHelper([t.cloneNode(classState.classRef!)]),
+            : createClassHelper([t.cloneNode(classState.classRef)]),
         ),
       );
     }
 
-    body.unshift(classState.construct!);
+    body.unshift(classState.construct);
 
     const container = t.arrowFunctionExpression(
       closureParams,
@@ -892,5 +775,5 @@ export default function transformClass(
     return t.callExpression(container, closureArgs);
   }
 
-  return classTransformer(path, file, builtinClasses, isLoose);
+  return classTransformer(path);
 }

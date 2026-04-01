@@ -43,7 +43,7 @@ export default declare(api => {
 
           const { node } = func;
           if (t.isMethod(node)) {
-            path.replaceWith(scope.buildUndefinedNode());
+            path.replaceWith(t.buildUndefinedNode());
             return;
           }
 
@@ -82,7 +82,7 @@ export default declare(api => {
                 t.cloneNode(node.id),
               ),
               constructor,
-              scope.buildUndefinedNode(),
+              t.buildUndefinedNode(),
             ),
           );
         }

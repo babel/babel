@@ -14,5 +14,5 @@ class MyClass extends BaseClass {
 }
 
 declare class DeclaredClass extends BaseClass {
-  override test() {}
+  override test()
 }

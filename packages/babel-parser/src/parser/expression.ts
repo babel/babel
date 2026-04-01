@@ -2131,19 +2131,21 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   getGetterSetterExpectedParamCount(
-    method: N.ObjectMethod | N.ClassMethod,
+    method: Undone<N.ObjectMethod | N.ClassMethod>,
   ): number {
     return method.kind === "get" ? 0 : 1;
   }
 
   // This exists so we can override within the ESTree plugin
-  getObjectOrClassMethodParams(method: N.ObjectMethod | N.ClassMethod) {
+  getObjectOrClassMethodParams(method: Undone<N.ObjectMethod | N.ClassMethod>) {
     return method.params;
   }
 
   // get methods aren't allowed to have any parameters
   // set methods must have exactly 1 parameter which is not a rest parameter
-  checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
+  checkGetterSetterParams(
+    method: Undone<N.ObjectMethod | N.ClassMethod>,
+  ): void {
     const paramCount = this.getGetterSetterExpectedParamCount(method);
     const params = this.getObjectOrClassMethodParams(method);
 
