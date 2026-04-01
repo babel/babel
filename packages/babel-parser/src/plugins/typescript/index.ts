@@ -2052,9 +2052,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     tsParseNamespaceDeclaration(
       node: Undone<N.TSModuleDeclaration>,
     ): N.TSModuleDeclaration {
-      node.id = this.tsParseEntityName(
-        tsParseEntityNameFlags.ALLOW_RESERVED_WORDS,
-      );
+      node.id = this.tsParseEntityName(tsParseEntityNameFlags.NONE);
 
       if (node.id.type === "Identifier") {
         this.checkIdentifier(node.id, BindingFlag.TYPE_TS_NAMESPACE);

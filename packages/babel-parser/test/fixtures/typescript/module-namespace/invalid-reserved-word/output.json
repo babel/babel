@@ -1,0 +1,75 @@
+{
+  "type": "File",
+  "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":26,"index":69}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'public'. (1:10)",
+    "SyntaxError: Unexpected reserved word 'private'. (3:10)",
+    "SyntaxError: Unexpected reserved word 'protected'. (5:10)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":69,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":26,"index":69}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "kind": "namespace",
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":16,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":16,"index":16},"identifierName":"public"},
+          "name": "public"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":17,"end":19,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":19,"index":19}},
+          "body": []
+        }
+      },
+      {
+        "type": "TSModuleDeclaration",
+        "start":21,"end":41,"loc":{"start":{"line":3,"column":0,"index":21},"end":{"line":3,"column":20,"index":41}},
+        "kind": "namespace",
+        "id": {
+          "type": "Identifier",
+          "start":31,"end":38,"loc":{"start":{"line":3,"column":10,"index":31},"end":{"line":3,"column":17,"index":38},"identifierName":"private"},
+          "name": "private"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":39,"end":41,"loc":{"start":{"line":3,"column":18,"index":39},"end":{"line":3,"column":20,"index":41}},
+          "body": []
+        }
+      },
+      {
+        "type": "TSModuleDeclaration",
+        "start":43,"end":69,"loc":{"start":{"line":5,"column":0,"index":43},"end":{"line":5,"column":26,"index":69}},
+        "kind": "namespace",
+        "id": {
+          "type": "TSQualifiedName",
+          "start":53,"end":66,"loc":{"start":{"line":5,"column":10,"index":53},"end":{"line":5,"column":23,"index":66}},
+          "left": {
+            "type": "Identifier",
+            "start":53,"end":62,"loc":{"start":{"line":5,"column":10,"index":53},"end":{"line":5,"column":19,"index":62},"identifierName":"protected"},
+            "name": "protected"
+          },
+          "right": {
+            "type": "Identifier",
+            "start":63,"end":66,"loc":{"start":{"line":5,"column":20,"index":63},"end":{"line":5,"column":23,"index":66},"identifierName":"foo"},
+            "name": "foo"
+          }
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":67,"end":69,"loc":{"start":{"line":5,"column":24,"index":67},"end":{"line":5,"column":26,"index":69}},
+          "body": []
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
