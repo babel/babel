@@ -126,7 +126,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
       if (bindingType & BindingFlag.FLAG_TS_ENUM) {
         // Enums can be merged with other enums if they are both
         //  const or both non-const.
-        const isConst = !!(bindingType & BindingFlag.FLAG_TS_CONST_ENUM);
+        const isConst = (bindingType & BindingFlag.FLAG_TS_CONST_ENUM) > 0;
         const wasConst = (type & TsNameType.ConstEnums) > 0;
         return isConst !== wasConst;
       }

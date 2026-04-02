@@ -132,6 +132,7 @@ export default [
   "TS2524", // 'await' expressions cannot be used in a parameter initializer.
   // "TS2552", // Cannot find name 'foo'. Did you mean 'zoo'?
   "TS2566", // A rest element cannot have a property name.
+  "TS2567", // Enum declarations can only merge with namespace or other enum declarations.
   //"TS2580",
   "TS2481", // Cannot initialize outer scoped variable '{0}' in the same scope as block scoped declaration '{0}'.
   // "TS2567", // Enum declarations can only merge with namespace or other enum declarations.

@@ -57,7 +57,7 @@ export const enum BindingFlag {
   // function expressions IDs.
   TYPE_NONE            = 0          | 0         | 0              | FLAG_NONE,
   TYPE_OUTSIDE         = KIND_VALUE | 0         | 0              | FLAG_NONE,
-  TYPE_TS_CONST_ENUM   = TYPE_TS_ENUM | FLAG_TS_CONST_ENUM,
+  TYPE_TS_CONST_ENUM   = TYPE_TS_ENUM                            | FLAG_TS_CONST_ENUM,
   TYPE_TS_NAMESPACE    = 0          | 0         | 0              | FLAG_TS_EXPORT_ONLY,
   TYPE_TS_TYPE_IMPORT  = 0          | KIND_TYPE | 0              | FLAG_TS_IMPORT,
   TYPE_TS_VALUE_IMPORT = 0          | 0         | 0              | FLAG_TS_IMPORT,
