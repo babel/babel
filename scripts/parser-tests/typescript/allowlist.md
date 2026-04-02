@@ -32,7 +32,7 @@
 - [umdNamespaceMergedWithGlobalAugmentationIsNotCircular.ts](../../../build/typescript/tests/cases/compiler/umdNamespaceMergedWithGlobalAugmentationIsNotCircular.ts) <!-- TS checks duplicate identifiers across related files, but babel-parser handles them separately -->
 - [uniqueSymbolJs.ts](../../../build/typescript/tests/cases/compiler/uniqueSymbolJs.ts) <!-- JSDoc syntax error. babel-parser does not parse JSDoc comments -->
 
-## 52 valid programs produced a parsing error
+## 49 valid programs produced a parsing error
 
 - [anyDeclare.ts](../../../build/typescript/tests/cases/compiler/anyDeclare.ts)
 - [augmentedTypesClass2a.ts](../../../build/typescript/tests/cases/compiler/augmentedTypesClass2a.ts)
@@ -60,7 +60,6 @@
 - [exportAssignmentImportMergeNoCrash.ts](../../../build/typescript/tests/cases/compiler/exportAssignmentImportMergeNoCrash.ts)
 - [exportDefaultAsyncFunction2.ts](../../../build/typescript/tests/cases/compiler/exportDefaultAsyncFunction2.ts)
 - [exportSameNameFuncVar.ts](../../../build/typescript/tests/cases/compiler/exportSameNameFuncVar.ts)
-- [expressionWithJSDocTypeArguments.ts](../../../build/typescript/tests/cases/compiler/expressionWithJSDocTypeArguments.ts)
 - [fileWithNextLine2.ts](../../../build/typescript/tests/cases/compiler/fileWithNextLine2.ts) <!-- TS quirk introduced in https://github.com/microsoft/TypeScript/pull/2448. The general category of U+0085 is Cc rather than Zs, so U_0085 should not be considered a whitespace-->
 - [funClodule.ts](../../../build/typescript/tests/cases/compiler/funClodule.ts)
 - [functionCall15.ts](../../../build/typescript/tests/cases/compiler/functionCall15.ts)
@@ -81,8 +80,6 @@
 - [nameCollisions.ts](../../../build/typescript/tests/cases/compiler/nameCollisions.ts)
 - [nonMergedOverloads.ts](../../../build/typescript/tests/cases/compiler/nonMergedOverloads.ts)
 - [parameterInitializerBeforeDestructuringEmit.ts](../../../build/typescript/tests/cases/compiler/parameterInitializerBeforeDestructuringEmit.ts) <!-- TS does not throw error because of noImplicitUseStrict: true, babel-parser does not have such options -->
-- [parseInvalidNonNullableTypes.ts](../../../build/typescript/tests/cases/compiler/parseInvalidNonNullableTypes.ts)
-- [parseInvalidNullableTypes.ts](../../../build/typescript/tests/cases/compiler/parseInvalidNullableTypes.ts)
 - [sourceMap-LineBreaks.ts](../../../build/typescript/tests/cases/compiler/sourceMap-LineBreaks.ts)
 - [sourceMapValidationDecorators.ts](../../../build/typescript/tests/cases/compiler/sourceMapValidationDecorators.ts)
 - [superNewCall1.ts](../../../build/typescript/tests/cases/compiler/superNewCall1.ts)

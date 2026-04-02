@@ -161,4 +161,5 @@ export default [
   "TS17000", // JSX attributes must only be assigned a non-empty 'expression'.
   "TS17008", // JSX element '{0}' has no corresponding closing tag.
   "TS17012", // '{0}' is not a valid meta-property for keyword '{1}'. Did you mean '{2}'?
+  "TS17019", // '!' at the end of a type is not valid TypeScript syntax. Did you mean to write '{0}'?
 ];
