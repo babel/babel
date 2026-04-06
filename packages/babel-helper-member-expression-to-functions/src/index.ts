@@ -5,6 +5,7 @@ import {
   assignmentExpression,
   binaryExpression,
   booleanLiteral,
+  buildUndefinedNode,
   callExpression,
   cloneNode,
   conditionalExpression,
@@ -313,11 +314,7 @@ const handle = {
           nonNullishCheck = logicalExpression(
             "&&",
             binaryExpression("!==", baseMemoised, nullLiteral()),
-            binaryExpression(
-              "!==",
-              cloneNode(baseRef),
-              scope.buildUndefinedNode(),
-            ),
+            binaryExpression("!==", cloneNode(baseRef), buildUndefinedNode()),
           );
         }
         replacementPath.replaceWith(
@@ -331,20 +328,14 @@ const handle = {
           nullishCheck = logicalExpression(
             "||",
             binaryExpression("===", baseMemoised, nullLiteral()),
-            binaryExpression(
-              "===",
-              cloneNode(baseRef),
-              scope.buildUndefinedNode(),
-            ),
+            binaryExpression("===", cloneNode(baseRef), buildUndefinedNode()),
           );
         }
 
         replacementPath.replaceWith(
           conditionalExpression(
             nullishCheck,
-            isDeleteOperation
-              ? booleanLiteral(true)
-              : scope.buildUndefinedNode(),
+            isDeleteOperation ? booleanLiteral(true) : buildUndefinedNode(),
             regular,
           ),
         );

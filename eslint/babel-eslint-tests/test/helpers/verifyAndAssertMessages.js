@@ -18,7 +18,7 @@ export default function verifyAndAssertMessages(
       ...globals.node,
       ...globals.es2024,
     },
-    parser: babelEslintParser.default || babelEslintParser,
+    parser: babelEslintParser,
     parserOptions: {
       sourceType,
       requireConfigFile: false,

@@ -34,7 +34,7 @@ type LValAncestor =
         | "RestElement"
         | "VariableDeclarator";
     };
-//# sourceMappingURL=parse-expression-errors.d.ts.map
+//# sourceMappingURL=bind-operator-errors.d.ts.map
 
 type Accessibility = "public" | "protected" | "private";
 type VarianceAnnotations = "in" | "out";
@@ -214,6 +214,7 @@ type ErrorInfoCompressed = {
   SloppyFunctionAnnexB: [];
   SourcePhaseImportRequiresDefault: [];
   StaticPrototype: [];
+  SuperCallNotNewExpression: [];
   SuperNotAllowed: [];
   SuperPrivateField: [];
   TrailingDecorator: [];
@@ -231,7 +232,6 @@ type ErrorInfoCompressed = {
   UnexpectedTokenUnaryExponentiation: [];
   UnexpectedUsingDeclaration: [];
   UnexpectedVoidPattern: [];
-  UnsupportedBind: [];
   UnsupportedDecoratorExport: [];
   UnsupportedDefaultExport: [];
   UnsupportedImport: [];
@@ -261,6 +261,8 @@ type ErrorInfoCompressed = {
   StrictWith: [];
   ParseExpressionEmptyInput: [];
   ParseExpressionExpectsEOF: [{ unexpected: number }];
+  UnsupportedBind: [];
+  UnsupportedBindRHS: [];
   PipeTopicRequiresHackPipes: [];
   PipeTopicUnbound: [];
   PipeTopicUnconfiguredToken: [{ token: string }];
@@ -349,10 +351,12 @@ type ErrorInfoCompressed = {
   TypeImportCannotSpecifyDefaultAndNamed: [];
   TypeModifierIsUsedInTypeExports: [];
   TypeModifierIsUsedInTypeImports: [];
+  UnexpectedParameterInitializer: [];
   UnexpectedParameterModifier: [];
   UnexpectedReadonly: [];
   UnexpectedTypeAnnotation: [];
   UnexpectedTypeCastInParameter: [];
+  UnexpectedTypeDeclaration: ["interface" | "type"];
   UnsupportedImportTypeArgument: [];
   UnsupportedParameterPropertyKind: [];
   UnsupportedSignatureParameterKind: [{ type: string }];

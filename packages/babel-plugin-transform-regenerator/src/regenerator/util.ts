@@ -1,10 +1,6 @@
-import type { PluginPass } from "@babel/core";
+import type { NodePath } from "@babel/core";
 
-export let newHelpersAvailable: (file: PluginPass) => boolean;
-
-export let runtimeProperty: (file: PluginPass, name: any) => any;
-
-export function isReference(path: any) {
+export function isReference(path: NodePath) {
   return (
     path.isReferenced() ||
     path.parentPath.isAssignmentExpression({ left: path.node })

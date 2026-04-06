@@ -2,8 +2,7 @@ import * as babel from "@babel/core";
 
 import * as babelPresetEnv from "../lib/index.js";
 
-import _availablePlugins from "../lib/available-plugins.js";
-const availablePlugins = _availablePlugins.default || _availablePlugins;
+import availablePlugins from "../lib/available-plugins.js";
 
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);

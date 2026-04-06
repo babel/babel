@@ -711,8 +711,26 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     base: N.Expression | N.Super | N.Import,
     startLoc: Position,
+    noCalls?: false | null,
+  ): N.Expression;
+  parseSubscripts(
+    this: Parser,
+    base: N.Expression | N.Super | N.Import,
+    startLoc: Position,
+    noCalls: true,
+  ): N.Expression | N.Super | N.Import;
+  parseSubscripts(
+    this: Parser,
+    base: N.Expression | N.Super | N.Import,
+    startLoc: Position,
     noCalls?: boolean | null,
-  ): N.Expression {
+  ): N.Expression | N.Super | N.Import;
+  parseSubscripts(
+    this: Parser,
+    base: N.Expression | N.Super | N.Import,
+    startLoc: Position,
+    noCalls?: boolean | null,
+  ) {
     const state = {
       optionalChainMember: false,
       maybeAsyncArrow: this.atPossibleAsyncArrow(base),
@@ -741,7 +759,7 @@ export default abstract class ExpressionParser extends LValParser {
     const { type } = this.state;
     if (!noCalls && type === tt.doubleColon) {
       // super:: or import:: are not allowed
-      return this.parseBind(base as N.Expression, startLoc, noCalls, state);
+      return this.parseBind(base as N.Expression, startLoc, state);
     } else if (tokenIsTemplate(type)) {
       return this.parseTaggedTemplateExpression(
         base as N.Expression,
@@ -839,18 +857,27 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     base: N.Expression,
     startLoc: Position,
-    noCalls: boolean | undefined | null,
     state: N.ParseSubscriptState,
   ): N.Expression {
     const node = this.startNodeAt<N.BindExpression>(startLoc);
     node.object = base;
     this.next(); // eat '::'
-    node.callee = this.parseNoCallExpr() as N.Expression;
+    const isImport = this.match(tt._import);
+    const callee = this.parseNoCallExpr();
+    if (
+      callee.type === "Super" ||
+      (isImport && callee.type === "ImportExpression") ||
+      callee.type === "Import" // This check implies isImport
+    ) {
+      throw this.raise(Errors.UnsupportedBindRHS, callee);
+    }
+    node.callee = callee;
+
     state.stop = true;
     return this.parseSubscripts(
       this.finishNode(node, "BindExpression"),
       startLoc,
-      noCalls,
+      false,
     );
   }
 
@@ -1870,12 +1897,17 @@ export default abstract class ExpressionParser extends LValParser {
   parseNewCallee(this: Parser, node: Undone<N.NewExpression>): void {
     const isImport = this.match(tt._import);
     const callee = this.parseNoCallExpr();
+    // @ts-expect-error we allow callee to be Import and Super to throw a
+    // recoverable error later
     node.callee = callee;
     if (
-      isImport &&
-      (callee.type === "Import" || callee.type === "ImportExpression")
+      (isImport && callee.type === "ImportExpression") ||
+      callee.type === "Import" // This check implies isImport
     ) {
       this.raise(Errors.ImportCallNotNewExpression, callee);
+    }
+    if (callee.type === "Super") {
+      this.raise(Errors.SuperCallNotNewExpression, callee);
     }
   }
 
@@ -2099,19 +2131,21 @@ export default abstract class ExpressionParser extends LValParser {
   }
 
   getGetterSetterExpectedParamCount(
-    method: N.ObjectMethod | N.ClassMethod,
+    method: Undone<N.ObjectMethod | N.ClassMethod>,
   ): number {
     return method.kind === "get" ? 0 : 1;
   }
 
   // This exists so we can override within the ESTree plugin
-  getObjectOrClassMethodParams(method: N.ObjectMethod | N.ClassMethod) {
+  getObjectOrClassMethodParams(method: Undone<N.ObjectMethod | N.ClassMethod>) {
     return method.params;
   }
 
   // get methods aren't allowed to have any parameters
   // set methods must have exactly 1 parameter which is not a rest parameter
-  checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
+  checkGetterSetterParams(
+    method: Undone<N.ObjectMethod | N.ClassMethod>,
+  ): void {
     const paramCount = this.getGetterSetterExpectedParamCount(method);
     const params = this.getObjectOrClassMethodParams(method);
 

@@ -7,8 +7,7 @@ import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
 import { commonJS } from "$repo-utils";
 import { encode } from "@jridgewell/sourcemap-codec";
 
-import _generate from "../lib/index.js";
-const generate = _generate.default || _generate;
+import generate from "../lib/index.js";
 
 const { __dirname } = commonJS(import.meta.url);
 
@@ -329,24 +328,6 @@ describe("generation", function () {
 
     expect(generated).toMatchInlineSnapshot(`
       Object {
-        "__mergedMap": Object {
-          "file": undefined,
-          "ignoreList": Array [],
-          "mappings": "AAAA,SAASA,IAAGA,CAAA,EAAG;EAAEC,IAAG;AAAE",
-          "names": Array [
-            "foo",
-            "bar",
-          ],
-          "sourceRoot": undefined,
-          "sources": Array [
-            "inline",
-          ],
-          "sourcesContent": Array [
-            "function foo() { bar; }
-      ",
-          ],
-          "version": 3,
-        },
         "code": "function foo2() {
         bar2;
       }",
@@ -1562,7 +1543,7 @@ export const App = () => {
   });
 });
 
-const suites = (fixtures.default || fixtures)(path.join(__dirname, "fixtures"));
+const suites = fixtures(path.join(__dirname, "fixtures"));
 
 afterEach(() => {
   jest.restoreAllMocks();

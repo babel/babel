@@ -1,6 +1,5 @@
 import browserslist from "browserslist";
-import _getTargets from "../lib/index.js";
-const getTargets = _getTargets.default || _getTargets;
+import getTargets from "../lib/index.js";
 import { commonJS } from "$repo-utils";
 const { require } = commonJS(import.meta.url);
 

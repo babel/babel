@@ -79,12 +79,6 @@ export default class Buffer {
       code: code,
       // Decoded sourcemap is free to generate.
       decodedMap: _map.getDecoded(),
-      // Used as a marker for backwards compatibility. We moved input map merging
-      // into the generator. We cannot merge the input map a second time, so the
-      // presence of this field tells us we've already done the work.
-      get __mergedMap() {
-        return this.map;
-      },
       // Encoding the sourcemap is moderately CPU expensive.
       get map() {
         const resultMap = _map.get();

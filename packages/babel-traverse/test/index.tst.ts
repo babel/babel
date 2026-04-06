@@ -112,10 +112,10 @@ describe("traverse", () => {
   });
 
   describe("Visitor", () => {
+    // TODO: support `strictFunctionTypes: true`
     it.todo("Union types", () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const visitor: Visitor<unknown> = {
-        // @ts-expect-error Type '(this: unknown, path: NodePath_Final<ImportDeclaration | ExportDeclaration>) => void' is not assignable to type 'VisitNode<unknown, Node>
         "ImportDeclaration|ExportDeclaration"(
           path: NodePath<t.ImportDeclaration | t.ExportDeclaration>,
         ) {

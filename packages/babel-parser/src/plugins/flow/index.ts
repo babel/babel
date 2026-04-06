@@ -371,16 +371,21 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
-    flowParseTypeAndPredicateInitialiser(): [
-      N.FlowType | null,
-      N.FlowPredicate | null,
-    ] {
+    flowParseTypeAndPredicateInitialiser(
+      allowLonePredicate: true,
+    ): [N.FlowType | null, N.FlowPredicate | null];
+    flowParseTypeAndPredicateInitialiser(
+      allowLonePredicate: false,
+    ): [N.FlowType, N.FlowPredicate | null];
+    flowParseTypeAndPredicateInitialiser(
+      allowLonePredicate: boolean,
+    ): [N.FlowType | null, N.FlowPredicate | null] {
       const oldInType = this.state.inType;
       this.state.inType = true;
       this.expect(tt.colon);
       let type = null;
       let predicate = null;
-      if (this.match(tt.modulo)) {
+      if (allowLonePredicate && this.match(tt.modulo)) {
         this.state.inType = oldInType;
         predicate = this.flowParsePredicate();
       } else {
@@ -422,10 +427,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       typeNode.this = tmp._this;
       this.expect(tt.parenR);
 
-      // @ts-expect-error null it not assignable to returnType and predicate
-      // consider refine typings
       [typeNode.returnType, node.predicate] =
-        this.flowParseTypeAndPredicateInitialiser();
+        this.flowParseTypeAndPredicateInitialiser(false);
 
       typeContainer.typeAnnotation = this.finishNode(
         typeNode,
@@ -675,13 +678,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: Undone<N.DeclareOpaqueType>,
     ): N.DeclareOpaqueType {
       this.next();
-      const finished = this.flowParseOpaqueType(
-        node as Undone<N.OpaqueType>,
-        true,
-      ) as unknown as N.DeclareOpaqueType;
-      // Don't do finishNode as we don't want to process comments twice
-      this.castNodeTo(finished, "DeclareOpaqueType");
-      return finished;
+      return this.flowParseOpaqueType(node, true);
     }
 
     flowParseDeclareInterface(
@@ -726,7 +723,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
 
       if (isClass) {
-        const implementsList: N.ClassImplements[] = [];
+        const implemented: N.ClassImplements[] = [];
         const mixins: N.InterfaceExtends[] = [];
 
         if (this.eatContextual(tt._mixins)) {
@@ -737,13 +734,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         if (this.eatContextual(tt._implements)) {
           do {
-            // @ts-expect-error We should have parsed a ClassImplements node,
-            // but incorrectly parsed them as interface extends.
-            implementsList.push(this.flowParseInterfaceExtends());
+            implemented.push(this.flowParseClassImplements());
           } while (this.eat(tt.comma));
         }
+        (node as Undone<N.DeclareClass>).implements = implemented;
         (node as Undone<N.DeclareClass>).mixins = mixins;
-        (node as Undone<N.DeclareClass>).implements = implementsList;
       }
 
       node.body = this.flowParseObjectType({
@@ -839,10 +834,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TypeAlias");
     }
 
-    flowParseOpaqueType(
-      node: Undone<N.OpaqueType>,
+    flowParseOpaqueType<T extends N.OpaqueType | N.DeclareOpaqueType>(
+      node: Undone<T>,
       declare: boolean,
-    ): N.OpaqueType {
+    ): T {
       this.expectContextual(tt._type);
       node.id = this.flowParseRestrictedIdentifier(
         /* liberal */ true,
@@ -866,14 +861,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.supertype = this.flowParseTypeInitialiser(tt.colon);
       }
 
-      // @ts-expect-error impltype can not be null
       node.impltype = null;
       if (!declare) {
         node.impltype = this.flowParseTypeInitialiser(tt.eq);
       }
       this.semicolon();
 
-      return this.finishNode(node, "OpaqueType");
+      return this.finishNode(
+        node,
+        declare ? "DeclareOpaqueType" : "OpaqueType",
+      );
     }
 
     // Type annotations
@@ -1051,8 +1048,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       // Note: bracketL has already been consumed
       if (this.lookahead().type === tt.colon) {
-        // @ts-expect-error Allow NumericLiteral | StringLiteral for id
-        node.id = this.flowParseObjectPropertyKey();
+        node.id = this.parseIdentifier(true);
         node.key = this.flowParseTypeInitialiser();
       } else {
         node.id = null;
@@ -1071,8 +1067,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.ObjectTypeInternalSlot {
       node.static = isStatic;
       // Note: both bracketL have already been consumed
-      // @ts-expect-error Allow NumericLiteral | StringLiteral for id
-      node.id = this.flowParseObjectPropertyKey();
+      node.id = this.parseIdentifier(true);
       this.expect(tt.bracketR);
       this.expect(tt.bracketR);
       if (this.match(tt.lt) || this.match(tt.parenL)) {
@@ -1367,19 +1362,23 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.flowCheckGetterSetterParams(
               node as Undone<N.ObjectTypeProperty>,
             );
-          }
-          /** Declared classes/interfaces do not allow spread */
-          if (
+          } else if (
+            !isStatic &&
+            /** Declared classes/interfaces do not allow spread */
             !allowSpread &&
             // @ts-expect-error name is not define in StringLiteral
             (node as Undone<N.ObjectTypeProperty>).key.name === "constructor" &&
-            // @ts-expect-error this is not defined in AnyTypeAnnotation
-            (node as Undone<N.ObjectTypeProperty>).value.this
+            (
+              (node as Undone<N.ObjectTypeProperty>)
+                .value as N.FunctionTypeAnnotation
+            ).this
           ) {
             this.raise(
               FlowErrors.ThisParamBannedInConstructor,
-              // @ts-expect-error this is not defined in AnyTypeAnnotation
-              (node as Undone<N.ObjectTypeProperty>).value.this,
+              (
+                (node as Undone<N.ObjectTypeProperty>)
+                  .value as N.FunctionTypeAnnotation
+              ).this!,
             );
           }
         } else {
@@ -1404,18 +1403,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // @babel/parser uses non estree properties we cannot reuse it here
     flowCheckGetterSetterParams(property: Undone<N.ObjectTypeProperty>): void {
       const paramCount = property.kind === "get" ? 0 : 1;
-      const length =
-        // @ts-expect-error fix: should check the value type first
-        property.value.params.length + (property.value.rest ? 1 : 0);
+      const value = property.value as N.FunctionTypeAnnotation;
+      const length = value.params.length + (value.rest ? 1 : 0);
 
-      // @ts-expect-error fix: this is not defined in AnyTypeAnnotation
-      if (property.value.this) {
+      if (value.this) {
         this.raise(
           property.kind === "get"
             ? FlowErrors.GetterMayNotHaveThisParam
             : FlowErrors.SetterMayNotHaveThisParam,
-          // @ts-expect-error fix: this is not defined in AnyTypeAnnotation
-          property.value.this,
+          value.this,
         );
       }
 
@@ -1428,8 +1424,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         );
       }
 
-      // @ts-expect-error fix: rest is not defined in AnyTypeAnnotation
-      if (property.kind === "set" && property.value.rest) {
+      if (property.kind === "set" && value.rest) {
         this.raise(Errors.BadSetterRestParameter, property);
       }
     }
@@ -1983,14 +1978,27 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (this.match(tt.colon)) {
         const typeNode = this.startNode<N.TypeAnnotation>();
 
-        [
-          typeNode.typeAnnotation,
-          // @ts-expect-error predicate may not exist
-          node.predicate,
-        ] = this.flowParseTypeAndPredicateInitialiser() as [
-          N.FlowType,
-          N.FlowPredicate,
-        ];
+        if (
+          type === "FunctionDeclaration" ||
+          type === "FunctionExpression" ||
+          type === "ArrowFunctionExpression"
+        ) {
+          [
+            typeNode.typeAnnotation,
+            (
+              node as Undone<
+                | N.FunctionDeclaration
+                | N.FunctionExpression
+                | N.ArrowFunctionExpression
+              >
+            ).predicate,
+          ] = this.flowParseTypeAndPredicateInitialiser(true) as [
+            N.FlowType,
+            N.FlowPredicate,
+          ];
+        } else {
+          typeNode.typeAnnotation = this.flowParseTypeInitialiser();
+        }
 
         node.returnType = typeNode.typeAnnotation
           ? this.finishNode(typeNode, "TypeAnnotation")
@@ -2025,7 +2033,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     // declares, interfaces and type aliases
     parseExpressionStatement(
-      node: N.ExpressionStatement,
+      node: Undone<N.ExpressionStatement>,
       expr: N.Expression,
       decorators: N.Decorator[] | null,
     ): N.ExpressionStatement {
@@ -2050,7 +2058,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             return this.flowParseTypeAlias(node);
           } else if (expr.name === "opaque") {
             // @ts-expect-error: refine typings
-            return this.flowParseOpaqueType(node, false);
+            return this.flowParseOpaqueType(
+              node as unknown as Undone<N.OpaqueType>,
+              false,
+            );
           }
         }
       }
@@ -2325,7 +2336,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       } else if (this.isContextual(tt._opaque)) {
         node.exportKind = "type";
 
-        const declarationNode = this.startNode();
+        const declarationNode = this.startNode<N.OpaqueType>();
         this.next();
         // export opaque type Foo = Bar;
         return this.flowParseOpaqueType(declarationNode, false);
@@ -2377,6 +2388,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       isStatement: boolean,
       optionalId?: boolean | null,
     ) {
+      if ((!isStatement || optionalId) && this.isContextual(tt._implements)) {
+        node.id = null;
+        return;
+      }
       super.parseClassId(node, isStatement, optionalId);
       if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -2615,8 +2630,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     // parse type parameters for class methods
     pushClassMethod(
-      classBody: N.ClassBody,
-      method: N.ClassMethod,
+      classBody: Undone<N.ClassBody>,
+      method: Undone<N.ClassMethod>,
       isGenerator: boolean,
       isAsync: boolean,
       isConstructor: boolean,
@@ -2661,8 +2676,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     pushClassPrivateMethod(
-      classBody: N.ClassBody,
-      method: N.ClassPrivateMethod,
+      classBody: Undone<N.ClassBody>,
+      method: Undone<N.ClassPrivateMethod>,
       isGenerator: boolean,
       isAsync: boolean,
     ): void {
@@ -2677,8 +2692,19 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       super.pushClassPrivateMethod(classBody, method, isGenerator, isAsync);
     }
 
+    flowParseClassImplements() {
+      const node = this.startNode<N.ClassImplements>();
+      node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
+      if (this.match(tt.lt)) {
+        node.typeParameters = this.flowParseTypeParameterInstantiation();
+      } else {
+        node.typeParameters = null;
+      }
+      return this.finishNode(node, "ClassImplements");
+    }
+
     // parse a the super class type parameters and implements
-    parseClassSuper(node: N.Class): void {
+    parseClassSuper(node: Undone<N.Class>): void {
       super.parseClassSuper(node);
       if (
         node.superClass &&
@@ -2690,23 +2716,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           this.flowParseTypeParameterInstantiationInExpression();
       }
 
-      if (this.isContextual(tt._implements)) {
-        this.next();
+      if (this.eatContextual(tt._implements)) {
         const implemented: N.ClassImplements[] = (node.implements = []);
         do {
-          const node = this.startNode<N.ClassImplements>();
-          node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
-          if (this.match(tt.lt)) {
-            node.typeParameters = this.flowParseTypeParameterInstantiation();
-          } else {
-            node.typeParameters = null;
-          }
-          implemented.push(this.finishNode(node, "ClassImplements"));
+          implemented.push(this.flowParseClassImplements());
         } while (this.eat(tt.comma));
       }
     }
 
-    checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
+    checkGetterSetterParams(
+      method: Undone<N.ObjectMethod | N.ClassMethod>,
+    ): void {
       super.checkGetterSetterParams(method);
       const params = this.getObjectOrClassMethodParams(method);
       if (params.length > 0) {
@@ -2981,7 +3001,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): void {
       super.parseVarId(decl, kind);
       if (this.match(tt.colon)) {
-        // @ts-expect-error typeAnnotation is not defined on array pattern
+        // @ts-expect-error typeAnnotation is not defined on VoidPattern
         decl.id.typeAnnotation = this.flowParseTypeAnnotation();
         this.resetEndLocation(decl.id); // set end position to end of type
       }
@@ -3154,17 +3174,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): Undone<N.ArrowFunctionExpression> | undefined | null {
       if (this.match(tt.colon)) {
         // @ts-expect-error todo(flow->ts)
-        const result = this.tryParse<N.TypeAnnotation>(() => {
+        const result = this.tryParse<Undone<N.TypeAnnotation>>(() => {
           const oldNoAnonFunctionType = this.state.noAnonFunctionType;
           this.state.noAnonFunctionType = true;
 
           const typeNode = this.startNode<N.TypeAnnotation>();
 
+          // @ts-expect-error if typeAnnotation is null, we will not assign
+          // the TypeAnnotation to returnType
           [typeNode.typeAnnotation, node.predicate] =
-            this.flowParseTypeAndPredicateInitialiser() as [
-              N.FlowType,
-              N.FlowPredicate,
-            ];
+            this.flowParseTypeAndPredicateInitialiser(true);
 
           this.state.noAnonFunctionType = oldNoAnonFunctionType;
 
@@ -3175,13 +3194,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         });
 
         if (result.thrown) return null;
-        /*:: invariant(result.node) */
 
         if (result.error) this.state = result.failState;
 
         // assign after it is clear it is an arrow
-        // @ts-expect-error todo(flow->ts)
-        node.returnType = result.node.typeAnnotation
+        node.returnType = result.node!.typeAnnotation
           ? this.finishNode(result.node!, "TypeAnnotation")
           : null;
       }
@@ -3250,10 +3267,25 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseSubscripts(
-      base: N.Expression,
+      base: N.Expression | N.Super | N.Import,
+      startLoc: Position,
+      noCalls?: false | null,
+    ): N.Expression;
+    parseSubscripts(
+      base: N.Expression | N.Super | N.Import,
+      startLoc: Position,
+      noCalls: true,
+    ): N.Expression | N.Super | N.Import;
+    parseSubscripts(
+      base: N.Expression | N.Super | N.Import,
       startLoc: Position,
       noCalls?: boolean | null,
-    ): N.Expression {
+    ): N.Expression | N.Super | N.Import;
+    parseSubscripts(
+      base: N.Expression | N.Super | N.Import,
+      startLoc: Position,
+      noCalls?: boolean | null,
+    ) {
       if (
         base.type === "Identifier" &&
         base.name === "async" &&
@@ -3277,7 +3309,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         );
 
         /*:: invariant(arrow.node != null) */
-        // @ts-expect-error: refine tryParse typings
         if (!arrow.error && !arrow.aborted) return arrow.node;
 
         const result = this.tryParse(
@@ -3289,7 +3320,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         if (arrow.node) {
           this.state = arrow.failState;
-          // @ts-expect-error: refine tryParse typings
           return arrow.node;
         }
 
@@ -3597,20 +3627,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }: {
       enumName: string;
       explicitType: EnumExplicitType;
-    }): {
-      members: {
-        booleanMembers: Extract<N.EnumMember, { type: "EnumBooleanMember" }>[];
-        numberMembers: Extract<N.EnumMember, { type: "EnumNumberMember" }>[];
-        stringMembers: Extract<N.EnumMember, { type: "EnumStringMember" }>[];
-        defaultedMembers: Extract<
-          N.EnumMember,
-          { type: "EnumDefaultedMember" }
-        >[];
-      };
-      hasUnknownMembers: boolean;
-    } {
+    }) {
       const seenNames = new Set();
-      const members = {
+      const members: {
+        booleanMembers: N.EnumBooleanMember[];
+        numberMembers: N.EnumNumberMember[];
+        stringMembers: N.EnumStringMember[];
+        defaultedMembers: N.EnumDefaultedMember[];
+      } = {
         booleanMembers: [],
         numberMembers: [],
         stringMembers: [],
@@ -3653,8 +3677,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             );
             (memberNode as Undone<N.EnumBooleanMember>).init = init.value;
             members.booleanMembers.push(
-              // @ts-expect-error NodeAny not supported
-              this.finishNode(memberNode, "EnumBooleanMember"),
+              this.finishNode(
+                memberNode as Undone<N.EnumBooleanMember>,
+                "EnumBooleanMember",
+              ),
             );
             break;
           }
@@ -3662,8 +3688,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.flowEnumCheckExplicitTypeMismatch(init.loc, context, "number");
             (memberNode as Undone<N.EnumNumberMember>).init = init.value;
             members.numberMembers.push(
-              // @ts-expect-error NodeAny not supported
-              this.finishNode(memberNode, "EnumNumberMember"),
+              this.finishNode(
+                memberNode as Undone<N.EnumNumberMember>,
+                "EnumNumberMember",
+              ),
             );
             break;
           }
@@ -3671,8 +3699,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.flowEnumCheckExplicitTypeMismatch(init.loc, context, "string");
             (memberNode as Undone<N.EnumStringMember>).init = init.value;
             members.stringMembers.push(
-              // @ts-expect-error NodeAny not supported
-              this.finishNode(memberNode, "EnumStringMember"),
+              this.finishNode(
+                memberNode as Undone<N.EnumStringMember>,
+                "EnumStringMember",
+              ),
             );
             break;
           }
@@ -3692,8 +3722,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
                 break;
               default:
                 members.defaultedMembers.push(
-                  // @ts-expect-error NodeAny not supported
-                  this.finishNode(memberNode, "EnumDefaultedMember"),
+                  this.finishNode(
+                    memberNode as Undone<N.EnumDefaultedMember>,
+                    "EnumDefaultedMember",
+                  ),
                 );
             }
           }

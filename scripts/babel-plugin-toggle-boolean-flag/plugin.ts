@@ -88,7 +88,6 @@ function pluginToggleBooleanFlag(
 
   return {
     visitor: {
-      // @ts-expect-error FIXME: type error
       "IfStatement|ConditionalExpression"(
         path: NodePath<t.IfStatement | t.ConditionalExpression>
       ) {

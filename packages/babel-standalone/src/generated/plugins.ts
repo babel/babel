@@ -74,7 +74,6 @@ import transformObjectSuper from "@babel/plugin-transform-object-super";
 import transformObjectSetPrototypeOfToAssign from "@babel/plugin-transform-object-set-prototype-of-to-assign";
 import transformParameters from "@babel/plugin-transform-parameters";
 import transformPropertyLiterals from "@babel/plugin-transform-property-literals";
-import transformPropertyMutators from "@babel/plugin-transform-property-mutators";
 import transformProtoToAssign from "@babel/plugin-transform-proto-to-assign";
 import transformReactConstantElements from "@babel/plugin-transform-react-constant-elements";
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
@@ -174,7 +173,6 @@ export {
   transformObjectSetPrototypeOfToAssign,
   transformParameters,
   transformPropertyLiterals,
-  transformPropertyMutators,
   transformProtoToAssign,
   transformReactConstantElements,
   transformReactDisplayName,
@@ -277,7 +275,6 @@ export const all: Record<string, any> = {
     transformObjectSetPrototypeOfToAssign,
   "transform-parameters": transformParameters,
   "transform-property-literals": transformPropertyLiterals,
-  "transform-property-mutators": transformPropertyMutators,
   "transform-proto-to-assign": transformProtoToAssign,
   "transform-react-constant-elements": transformReactConstantElements,
   "transform-react-display-name": transformReactDisplayName,

@@ -591,7 +591,7 @@ export type MemberExpression =
 
 export interface NewExpression extends BaseNode {
   type: "NewExpression";
-  callee: Expression | Super | Import | V8IntrinsicIdentifier;
+  callee: Expression;
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
   typeArguments?:
     | TypeParameterInstantiation
@@ -4655,7 +4655,7 @@ export interface ParentMaps {
     | TSModuleBlock
     | WhileStatement
     | WithStatement;
-  Import: CallExpression | NewExpression;
+  Import: CallExpression;
   ImportAttribute:
     | DeclareExportAllDeclaration
     | DeclareExportDeclaration
@@ -6241,7 +6241,7 @@ export interface ParentMaps {
     | TypeParameterInstantiation
     | TypeofTypeAnnotation
     | UnionTypeAnnotation;
-  Super: CallExpression | MemberExpression | NewExpression;
+  Super: CallExpression | MemberExpression;
   SwitchCase: SwitchStatement;
   SwitchStatement:
     | BlockStatement
@@ -8264,7 +8264,7 @@ export interface ParentMaps {
     | WhileStatement
     | WithStatement
     | YieldExpression;
-  V8IntrinsicIdentifier: CallExpression | NewExpression;
+  V8IntrinsicIdentifier: CallExpression;
   VariableDeclaration:
     | BlockStatement
     | DoWhileStatement

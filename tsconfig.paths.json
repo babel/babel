@@ -71,9 +71,6 @@
       "@babel/helper-replace-supers": [
         "./packages/babel-helper-replace-supers/src"
       ],
-      "@babel/helper-simple-access": [
-        "./packages/babel-helper-simple-access/src"
-      ],
       "@babel/helper-skip-transparent-expression-wrappers": [
         "./packages/babel-helper-skip-transparent-expression-wrappers/src"
       ],
@@ -346,9 +343,6 @@
       ],
       "@babel/plugin-transform-property-literals": [
         "./packages/babel-plugin-transform-property-literals/src"
-      ],
-      "@babel/plugin-transform-property-mutators": [
-        "./packages/babel-plugin-transform-property-mutators/src"
       ],
       "@babel/plugin-transform-proto-to-assign": [
         "./packages/babel-plugin-transform-proto-to-assign/src"

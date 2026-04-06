@@ -53,6 +53,121 @@ export interface BaseNode {
   extra?: Record<string, unknown>;
 }
 
+// ================
+// JSX
+// ================
+
+export type JSXElementTag = N.JSXOpeningElement | N.JSXClosingElement;
+export type JSXFragmentTag = N.JSXOpeningFragment | N.JSXClosingFragment;
+export type JSXTag = JSXElementTag | JSXFragmentTag;
+
+// ================
+// Flow
+// ================
+
+export type FlowDeclare =
+  | N.DeclareClass
+  | N.DeclareExportDeclaration
+  | N.DeclareExportAllDeclaration
+  | N.DeclareFunction
+  | N.DeclareVariable
+  | N.DeclareModule
+  | N.DeclareModuleExports
+  | N.DeclareTypeAlias
+  | N.DeclareOpaqueType
+  | N.DeclareInterface;
+
+export type FlowOtherTypeAnnotation =
+  | N.AnyTypeAnnotation
+  | N.BooleanTypeAnnotation
+  | N.MixedTypeAnnotation
+  | N.EmptyTypeAnnotation
+  | N.ExistsTypeAnnotation
+  | N.NumberTypeAnnotation
+  | N.BigIntLiteralTypeAnnotation
+  | N.StringTypeAnnotation
+  | N.SymbolTypeAnnotation
+  | N.NullLiteralTypeAnnotation
+  | N.VoidTypeAnnotation
+  | N.ThisTypeAnnotation
+  | N.ArrayTypeAnnotation
+  | N.NullableTypeAnnotation
+  | N.IntersectionTypeAnnotation
+  | N.UnionTypeAnnotation;
+
+export type Accessibility = "public" | "protected" | "private";
+
+export type VarianceAnnotations = "in" | "out";
+
+// ================
+// TypeScript
+// ================
+
+export type TSKeywordTypeType =
+  | "TSAnyKeyword"
+  | "TSUnknownKeyword"
+  | "TSNumberKeyword"
+  | "TSObjectKeyword"
+  | "TSBooleanKeyword"
+  | "TSBigIntKeyword"
+  | "TSStringKeyword"
+  | "TSSymbolKeyword"
+  | "TSVoidKeyword"
+  | "TSUndefinedKeyword"
+  | "TSNullKeyword"
+  | "TSNeverKeyword"
+  | "TSIntrinsicKeyword";
+
+export type TSKeywordType = Extract<N.Node, { type: TSKeywordTypeType }>;
+
+export type TSSignatureDeclaration =
+  | N.TSCallSignatureDeclaration
+  | N.TSConstructSignatureDeclaration
+  | N.TSMethodSignature
+  | N.TSFunctionType
+  | N.TSConstructorType;
+
+/**
+ * TSTypeCastExpression is not a valid TS production, the parser
+ * generates such code so that it can cast it to a valid pattern or
+ * throw an error
+ */
+export interface TSTypeCastExpression extends BaseNode {
+  type: "TSTypeCastExpression";
+  expression: N.Expression;
+  typeAnnotation: N.TSTypeAnnotation;
+}
+
+// ================
+// Babel placeholders %%foo%%
+// ================
+
+export interface Placeholder<
+  T extends PlaceholderTypes = PlaceholderTypes,
+> extends BaseNode {
+  type: "Placeholder";
+  name: N.Identifier;
+  expectedNode: T;
+}
+
+// ================
+// Other
+// ================
+export interface ParseSubscriptState {
+  optionalChainMember: boolean;
+  maybeAsyncArrow: boolean;
+  stop: boolean;
+}
+
+export interface ParseClassMemberState {
+  hadConstructor: boolean;
+  hadSuperClass: boolean;
+}
+
+// ================
+// ESTree
+// ================
+
 export type ESTreeNode =
   | ESTreeClassElement
   | ESTreeExpression
@@ -116,106 +231,6 @@ export type AssignmentProperty = N.ObjectProperty & {
   value: N.Identifier | N.Pattern | N.RestElement;
 };
 
-export type JSXElementTag = N.JSXOpeningElement | N.JSXClosingElement;
-export type JSXFragmentTag = N.JSXOpeningFragment | N.JSXClosingFragment;
-export type JSXTag = JSXElementTag | JSXFragmentTag;
-
-export type FlowDeclare =
-  | N.DeclareClass
-  | N.DeclareExportDeclaration
-  | N.DeclareExportAllDeclaration
-  | N.DeclareFunction
-  | N.DeclareVariable
-  | N.DeclareModule
-  | N.DeclareModuleExports
-  | N.DeclareTypeAlias
-  | N.DeclareOpaqueType
-  | N.DeclareInterface;
-
-export type FlowOtherTypeAnnotation =
-  | N.AnyTypeAnnotation
-  | N.BooleanTypeAnnotation
-  | N.MixedTypeAnnotation
-  | N.EmptyTypeAnnotation
-  | N.ExistsTypeAnnotation
-  | N.NumberTypeAnnotation
-  | N.BigIntLiteralTypeAnnotation
-  | N.StringTypeAnnotation
-  | N.SymbolTypeAnnotation
-  | N.NullLiteralTypeAnnotation
-  | N.VoidTypeAnnotation
-  | N.ThisTypeAnnotation
-  | N.ArrayTypeAnnotation
-  | N.NullableTypeAnnotation
-  | N.IntersectionTypeAnnotation
-  | N.UnionTypeAnnotation;
-
-export type Accessibility = "public" | "protected" | "private";
-
-export type VarianceAnnotations = "in" | "out";
-
-export type TSKeywordTypeType =
-  | "TSAnyKeyword"
-  | "TSUnknownKeyword"
-  | "TSNumberKeyword"
-  | "TSObjectKeyword"
-  | "TSBooleanKeyword"
-  | "TSBigIntKeyword"
-  | "TSStringKeyword"
-  | "TSSymbolKeyword"
-  | "TSVoidKeyword"
-  | "TSUndefinedKeyword"
-  | "TSNullKeyword"
-  | "TSNeverKeyword"
-  | "TSIntrinsicKeyword";
-
-export type TSKeywordType = Extract<N.Node, { type: TSKeywordTypeType }>;
-
-export type TSSignatureDeclaration =
-  | N.TSCallSignatureDeclaration
-  | N.TSConstructSignatureDeclaration
-  | N.TSMethodSignature
-  | N.TSFunctionType
-  | N.TSConstructorType;
-
-/**
- * TSTypeCastExpression is not a valid TS production, the parser
- * generates such code so that it can cast it to a valid pattern or
- * throw an error
- */
-export interface TSTypeCastExpression extends BaseNode {
-  type: "TSTypeCastExpression";
-  expression: N.Expression;
-  typeAnnotation: N.TSTypeAnnotation;
-}
-
-// ================
-// Babel placeholders %%foo%%
-// ================
-
-export interface Placeholder<
-  T extends PlaceholderTypes = PlaceholderTypes,
-> extends BaseNode {
-  type: "Placeholder";
-  name: N.Identifier;
-  expectedNode: T;
-}
-
-// ================
-// Other
-// ================
-export interface ParseSubscriptState {
-  optionalChainMember: boolean;
-  maybeAsyncArrow: boolean;
-  stop: boolean;
-}
-
-export interface ParseClassMemberState {
-  hadConstructor: boolean;
-  hadSuperClass: boolean;
-}
-
-// ESTree
 export interface EstreeLiteral extends BaseNode {
   type: "Literal";
   value: any;

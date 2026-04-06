@@ -190,7 +190,7 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
             // not updated the exported value.
             continue;
           } else {
-            init = path.scope.buildUndefinedNode();
+            init = t.buildUndefinedNode();
           }
         }
         // eslint-disable-next-line @typescript-eslint/no-use-before-define

@@ -34,25 +34,38 @@ function* loadTests(dir) {
 
 const TSTestsPath = path.join(dirname, "../../../build/typescript/tests");
 
+function generateTSBaselineErrorMap() {
+  const errorMap = new Map();
+  const baselineDir = path.join(TSTestsPath, "baselines/reference");
+  for (const filename of fs.readdirSync(baselineDir)) {
+    if (filename.endsWith(".errors.txt")) {
+      const testBasenameWithoutOptions = filename
+        .slice(0, -".errors.txt".length)
+        .replace(/\(\S+\)$/, "");
+      errorMap.set(testBasenameWithoutOptions, filename);
+    }
+  }
+  return errorMap;
+}
+
+const TSBaselineErrorMap = generateTSBaselineErrorMap();
+
 // Check if the baseline errors contain the codes that should also be thrown from babel-parser
 function baselineContainsParserErrorCodes(testName) {
-  try {
-    return ErrorCodeRegExp.test(
-      fs.readFileSync(
-        path.join(
-          TSTestsPath,
-          "baselines/reference",
-          testName.replace(/\.tsx?$/, ".errors.txt")
-        ),
-        "utf8"
-      )
-    );
-  } catch (e) {
-    if (e.code !== "ENOENT") {
-      throw e;
-    }
+  const testBasename = path.basename(testName, path.extname(testName));
+  if (!TSBaselineErrorMap.has(testBasename)) {
     return false;
   }
+  return ErrorCodeRegExp.test(
+    fs.readFileSync(
+      path.join(
+        TSTestsPath,
+        "baselines/reference",
+        TSBaselineErrorMap.get(testBasename)
+      ),
+      "utf8"
+    )
+  );
 }
 
 const IgnoreRegExp = /@noTypesAndSymbols|ts-ignore|\n#!/;

@@ -33,7 +33,7 @@ export default declare(api => {
             if (body.length) {
               path.replaceExpressionWithStatements(body);
             } else {
-              path.replaceWith(path.scope.buildUndefinedNode());
+              path.replaceWith(t.buildUndefinedNode());
             }
           }
         },
@@ -310,7 +310,7 @@ export default declare(api => {
               }
               path.replaceWith(uid);
             } else {
-              path.replaceWith(path.scope.buildUndefinedNode());
+              path.replaceWith(t.buildUndefinedNode());
             }
           }
           return [body.node];
