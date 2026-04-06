@@ -32,15 +32,23 @@ export function enable({
 
   const { FSWatcher } = requireChokidar();
 
+  const cache = new Map<string, boolean>();
   const ignored = (watchedPath: string): boolean => {
+    const absPath = path.resolve(watchedPath);
+    const cached = cache.get(absPath);
+    if (cached !== undefined) return cached;
+
     try {
       const config = loadPartialConfigSync({
         ...babelOptions,
-        filename: path.resolve(watchedPath),
-        showIgnoredFiles: false,
+        filename: absPath,
+        showIgnoredFiles: true,
       });
-      return config === null;
+      const result = config != null ? config.fileHandling === "ignored" : false;
+      cache.set(absPath, result);
+      return result;
     } catch (_) {
+      cache.set(absPath, false);
       return false;
     }
   };
