@@ -31,6 +31,10 @@ class Client implements IClient {
     return this.#send(ACTIONS.TRANSFORM, { code, filename });
   }
 
+  isFileIgnored(filename: string): boolean {
+    return this.#send(ACTIONS.IS_FILE_IGNORED, filename);
+  }
+
   close() {
     this.#send(ACTIONS.CLOSE, undefined);
   }

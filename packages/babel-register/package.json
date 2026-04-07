@@ -28,6 +28,7 @@
     "@babel/core": "workspace:^",
     "@babel/plugin-transform-arrow-functions": "workspace:^",
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
+    "@babel/preset-typescript": "workspace:^",
     "@types/cacache": "^20.0.0"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-register",

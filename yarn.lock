@@ -3937,6 +3937,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/plugin-transform-arrow-functions": "workspace:^"
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
+    "@babel/preset-typescript": "workspace:^"
     "@cspotcode/source-map-support": "npm:^0.8.1"
     "@types/cacache": "npm:^20.0.0"
     cacache: "npm:20.0.3"
