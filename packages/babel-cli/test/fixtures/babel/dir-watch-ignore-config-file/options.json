@@ -1,4 +1,5 @@
 {
   "args": ["src", "ignored", "--out-dir", ".", "--watch", "--config-file", "./babel-config.json"],
-  "noDefaultPlugins": true
+  "noDefaultPlugins": true,
+  "noBabelrc": true
 }
