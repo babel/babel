@@ -347,7 +347,7 @@ describe("@babel/register", function () {
           [entryFile],
           path.dirname(entryFile),
         );
-        expect(output).toContain("ignored/ignored-throw.ts");
+        expect(output).toContain(path.join("ignored", "ignored-throw.ts"));
         expect(output).toContain(
           "SyntaxError: TypeScript enum is not supported in strip-only mode",
         );
@@ -359,7 +359,7 @@ describe("@babel/register", function () {
           [entryFile],
           path.dirname(entryFile),
         );
-        expect(output).toContain("ignored/ignored-throw.ts");
+        expect(output).toContain(path.join("ignored", "ignored-throw.ts"));
         expect(output).toContain(
           "SyntaxError: TypeScript enum is not supported in strip-only mode",
         );
@@ -371,7 +371,7 @@ describe("@babel/register", function () {
           [entryFile],
           path.dirname(entryFile),
         );
-        expect(output).toContain("ignored/ignored-throw.ts");
+        expect(output).toContain(path.join("ignored", "ignored-throw.ts"));
         expect(output).toContain(
           "SyntaxError: TypeScript enum is not supported in strip-only mode",
         );
@@ -383,7 +383,7 @@ describe("@babel/register", function () {
           [entryFile],
           path.dirname(entryFile),
         );
-        expect(output).toContain("ignored/ignored-throw.ts");
+        expect(output).toContain(path.join("ignored", "ignored-throw.ts"));
         expect(output).toContain(
           "SyntaxError: TypeScript enum is not supported in strip-only mode",
         );
