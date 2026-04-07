@@ -44,9 +44,9 @@ export function enable({
         filename: absPath,
         showIgnoredFiles: true,
       });
-      const result = config != null ? config.fileHandling === "ignored" : false;
-      cache.set(absPath, result);
-      return result;
+      const isIgnored = !config || config.fileHandling === "ignored";
+      cache.set(absPath, isIgnored);
+      return isIgnored;
     } catch (_) {
       cache.set(absPath, false);
       return false;
