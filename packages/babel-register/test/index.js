@@ -340,7 +340,7 @@ describe("@babel/register", function () {
     describeGte("22.18.0")("hook skip ignored files", () => {
       // We can't use the test runner because the mocked `pirates`
       // does not support the `matcher` option.
-      test("via programmatic options", async () => {
+      test("via programmatic options ignored", async () => {
         const entryFile =
           require.resolve("./fixtures/ignore-programmatic/index.ts");
         const output = await spawnNodeAsync(
@@ -352,33 +352,9 @@ describe("@babel/register", function () {
           "SyntaxError: TypeScript enum is not supported in strip-only mode",
         );
       });
-      test("via babel.config.mts file", async () => {
+      test("via programmatic options only", async () => {
         const entryFile =
-          require.resolve("./fixtures/ignore-config-mts/index.ts");
-        const output = await spawnNodeAsync(
-          [entryFile],
-          path.dirname(entryFile),
-        );
-        expect(output).toContain(path.join("ignored", "ignored-throw.ts"));
-        expect(output).toContain(
-          "SyntaxError: TypeScript enum is not supported in strip-only mode",
-        );
-      });
-      test("via nested .babelrc file", async () => {
-        const entryFile =
-          require.resolve("./fixtures/ignore-nested-babelrc/index.ts");
-        const output = await spawnNodeAsync(
-          [entryFile],
-          path.dirname(entryFile),
-        );
-        expect(output).toContain(path.join("ignored", "ignored-throw.ts"));
-        expect(output).toContain(
-          "SyntaxError: TypeScript enum is not supported in strip-only mode",
-        );
-      });
-      test("via .babelignore file", async () => {
-        const entryFile =
-          require.resolve("./fixtures/ignore-babelignore/index.ts");
+          require.resolve("./fixtures/only-programmatic/index.ts");
         const output = await spawnNodeAsync(
           [entryFile],
           path.dirname(entryFile),

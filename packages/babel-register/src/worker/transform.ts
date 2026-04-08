@@ -124,13 +124,18 @@ async function isFileIgnored(filename: string) {
     ...cloneDeep(transformOpts),
     filename,
     showIgnoredFiles: true,
+    // @babel/register does not support ignore/only in config files,
+    // so we can skip checking those files
+    babelrc: false,
+    configFile: false,
+    browserslistConfigFile: false,
+    plugins: [],
+    presets: [],
+    targets: { browsers: undefined },
   });
 
-  // Ignored via programmatic API or config file.
-  if (opts === null || opts.fileHandling === "ignored") {
-    return true;
-  }
-  return false;
+  // Ignored via programmatic API.
+  return opts === null;
 }
 
 function disableCache() {
