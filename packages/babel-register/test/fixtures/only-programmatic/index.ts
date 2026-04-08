@@ -1,8 +1,11 @@
 const register = require('../../..');
 
 register( {
+  only: ["./loaded.ts"],
   babelrc: false,
+  configFile: false,
   extensions: [".ts"],
+  presets: ["@babel/preset-typescript"],
 } );
 
 // handled by Babel
