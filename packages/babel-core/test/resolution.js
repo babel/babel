@@ -363,9 +363,7 @@ describe("addon resolution", function () {
         plugins: ["foo"],
       });
     }).toThrow(
-      parseInt(process.versions.node, 10) <= 10
-        ? /Cannot (?:find|resolve) module 'babel-plugin-foo'/
-        : /Cannot (?:find|resolve) module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/s,
+      /Cannot (?:find|resolve) module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/s,
     );
   });
 
@@ -379,9 +377,7 @@ describe("addon resolution", function () {
         presets: ["foo"],
       });
     }).toThrow(
-      parseInt(process.versions.node, 10) <= 10
-        ? /Cannot (?:find|resolve) module 'babel-preset-foo'/
-        : /Cannot (?:find|resolve) module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/s,
+      /Cannot (?:find|resolve) module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/s,
     );
   });
 
@@ -395,9 +391,7 @@ describe("addon resolution", function () {
         plugins: ["foo"],
       });
     }).toThrow(
-      parseInt(process.versions.node, 10) <= 10
-        ? /Cannot (?:find|resolve) module 'babel-plugin-foo'/
-        : /Cannot (?:find|resolve) module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/s,
+      /Cannot (?:find|resolve) module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/s,
     );
   });
 
@@ -411,9 +405,7 @@ describe("addon resolution", function () {
         presets: ["testplugin"],
       });
     }).toThrow(
-      parseInt(process.versions.node, 10) <= 10
-        ? /Cannot (?:find|resolve) module 'babel-preset-testplugin'/
-        : /Cannot (?:find|resolve) module 'babel-preset-testplugin'.*\n- Did you accidentally pass a plugin as a preset\?/s,
+      /Cannot (?:find|resolve) module 'babel-preset-testplugin'.*\n- Did you accidentally pass a plugin as a preset\?/s,
     );
   });
 
@@ -427,9 +419,7 @@ describe("addon resolution", function () {
         plugins: ["testpreset"],
       });
     }).toThrow(
-      parseInt(process.versions.node, 10) <= 10
-        ? /Cannot (?:find|resolve) module 'babel-plugin-testpreset'/
-        : /Cannot (?:find|resolve) module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a preset as a plugin\?/s,
+      /Cannot (?:find|resolve) module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a preset as a plugin\?/s,
     );
   });
 

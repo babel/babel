@@ -13,11 +13,6 @@ export default declarePreset((api, opts) => {
   const plugins: any[] = [[transformFlowStripTypes, { all }]];
 
   if (useHermesParser) {
-    if (Number.parseInt(process.versions.node, 10) < 12) {
-      throw new Error(
-        "The Hermes parser is only supported in Node 12 and later.",
-      );
-    }
     if (IS_STANDALONE) {
       throw new Error(
         "The Hermes parser is not supported in the @babel/standalone.",
