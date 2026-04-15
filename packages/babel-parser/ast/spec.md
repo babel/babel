@@ -106,6 +106,9 @@ These are the core @babel/parser (babylon) AST node types.
   - [ClassDeclaration](#classdeclaration)
   - [ClassExpression](#classexpression)
   - [MetaProperty](#metaproperty)
+- [Structs](#structs)
+  - [StructBody](#structbody)
+  - [StructDeclaration](#structdeclaration)
 - [Modules](#modules)
   - [ModuleSpecifier](#modulespecifier)
   - [Imports](#imports)
@@ -1250,6 +1253,28 @@ interface MetaProperty <: Expression {
   type: "MetaProperty";
   meta: Identifier;
   property: Identifier;
+}
+```
+
+# Structs
+
+## StructDeclaration
+
+```js
+interface StructDeclaration <: Declaration {
+  type: "StructDeclaration";
+  id: Identifier | null;
+  superClass: Expression | null;
+  body: StructBody;
+}
+```
+
+## StructBody
+
+```js
+interface StructBody <: Node {
+  type: "StructBody";
+  body: [ ClassMethod | ClassPrivateMethod | ClassProperty | ClassPrivateProperty | StaticBlock ];
 }
 ```
 
