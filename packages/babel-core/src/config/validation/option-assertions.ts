@@ -454,8 +454,7 @@ export function assertAssumptions(
     throw new Error(`${msg(loc)} must be an object or undefined.`);
   }
 
-  // todo(flow->ts): remove any
-  let root: any = loc;
+  let root: GeneralPath | NestingPath = loc;
   do {
     root = root.parent;
   } while (root.type !== "root");

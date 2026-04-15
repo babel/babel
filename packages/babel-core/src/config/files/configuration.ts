@@ -95,10 +95,9 @@ function* readConfigCode(
     );
   }
 
-  // @ts-expect-error todo(flow->ts)
-  if (typeof options.then === "function") {
-    // @ts-expect-error We use ?. in case options is a thenable but not a promise
-    options.catch?.(() => {});
+  if (typeof (options as any).then === "function") {
+    // We use ?. in case options is a thenable but not a promise
+    (options as any).catch?.(() => {});
     throw new ConfigError(
       `You appear to be using an async configuration, ` +
         `which your current version of Babel does not support. ` +
