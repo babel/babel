@@ -7,15 +7,14 @@ import type {
   UnloadedDescriptor,
 } from "./config-descriptors.ts";
 
-// todo: Use flow enums when @babel/transform-flow-types supports it
-export const ChainFormatter = {
-  Programmatic: 0,
-  Config: 1,
-};
+export const enum ChainFormatter {
+  Programmatic = 0,
+  Config = 1,
+}
 
 type PrintableConfig = {
   content: OptionsAndDescriptors;
-  type: (typeof ChainFormatter)[keyof typeof ChainFormatter];
+  type: ChainFormatter;
   callerName: string | undefined | null;
   filepath: string | undefined | null;
   index: number | undefined | null;
@@ -24,7 +23,7 @@ type PrintableConfig = {
 
 const Formatter = {
   title(
-    type: (typeof ChainFormatter)[keyof typeof ChainFormatter],
+    type: ChainFormatter,
     callerName?: string | null,
     filepath?: string | null,
   ): string {
@@ -99,7 +98,7 @@ export class ConfigPrinter {
   _stack: PrintableConfig[] = [];
   configure(
     enabled: boolean,
-    type: (typeof ChainFormatter)[keyof typeof ChainFormatter],
+    type: ChainFormatter,
     {
       callerName,
       filepath,
