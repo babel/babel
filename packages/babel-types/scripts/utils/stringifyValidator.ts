@@ -1,12 +1,10 @@
 import type { Validator } from "../../src/definitions/utils.ts";
+import type * as t from "../../src/index.ts";
 /**
  * Stringify a validator to its corresponding TypeScript type.
- * @param {Validator | undefined} validator
- * @param {string} nodePrefix
- * @returns {string}
  */
 export default function stringifyValidator(
-  validator: Validator | undefined,
+  validator: Validator<t.Node> | undefined,
   nodePrefix: string
 ): string {
   if (validator === undefined) {

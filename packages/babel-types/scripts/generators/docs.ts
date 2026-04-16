@@ -204,7 +204,7 @@ function printNodeFields(key: string, readme: string[]) {
         return indexA - indexB;
       })
       .forEach(function (field) {
-        const fieldDefinition: FieldOptions = t.NODE_FIELDS[key][field];
+        const fieldDefinition: FieldOptions<t.Node> = t.NODE_FIELDS[key][field];
         const defaultValue = fieldDefinition.default;
         const fieldDescription = ["`" + field + "`"];
         const validator = fieldDefinition.validate;

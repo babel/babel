@@ -14,7 +14,10 @@ export default function isType(
 /**
  * Test if a `nodeType` is a `targetType` or if `targetType` is an alias of `nodeType`.
  */
-export default function isType(nodeType: string, targetType: string): boolean {
+export default function isType(
+  nodeType: string | null | undefined,
+  targetType: string,
+): boolean {
   if (nodeType === targetType) return true;
 
   // If nodeType is nullish, it can't be an alias of targetType.

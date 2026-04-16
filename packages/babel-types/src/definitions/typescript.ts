@@ -11,8 +11,7 @@ import {
   validateOptional,
   validateOptionalType,
   validateType,
-  type ValidatorImpl,
-  type ValidatorOneOfNodeTypes,
+  combine,
 } from "./utils.ts";
 import {
   functionDeclarationCommon,
@@ -381,7 +380,7 @@ defineType("TSTemplateLiteralType", {
               } quasis but got ${node.quasis.length}`,
             );
           }
-        } satisfies ValidatorImpl,
+        },
       ),
     },
   },
@@ -406,31 +405,29 @@ defineType("TSLiteralType", {
           "BigIntLiteral",
           "TemplateLiteral",
         );
-        const validator: ValidatorOneOfNodeTypes = function validator(
-          parent: t.Node,
-          key: string,
-          node: t.Node,
-        ) {
-          // type A = -1 | 1;
-          if (is("UnaryExpression", node)) {
-            // check operator first
-            unaryOperator(node, "operator", node.operator);
-            unaryExpression(node, "argument", node.argument);
-          } else {
-            // type A = 'foo' | 'bar' | false | 1;
-            literal(parent, key, node);
-          }
-        };
-
-        validator.oneOfNodeTypes = [
-          "NumericLiteral",
-          "StringLiteral",
-          "BooleanLiteral",
-          "BigIntLiteral",
-          "TemplateLiteral",
-          "UnaryExpression",
-        ];
-
+        const validator = combine(
+          function validator(parent, key, node: t.Node) {
+            // type A = -1 | 1;
+            if (is("UnaryExpression", node)) {
+              // check operator first
+              unaryOperator(node, "operator", node.operator);
+              unaryExpression(node, "argument", node.argument);
+            } else {
+              // type A = 'foo' | 'bar' | false | 1;
+              literal(parent, key, node);
+            }
+          },
+          {
+            oneOfNodeTypes: [
+              "NumericLiteral",
+              "StringLiteral",
+              "BooleanLiteral",
+              "BigIntLiteral",
+              "TemplateLiteral",
+              "UnaryExpression",
+            ],
+          },
+        );
         return validator;
       })(),
     },
@@ -555,10 +552,10 @@ defineType("TSModuleDeclaration", {
     id: {
       validate: chain(
         assertNodeType("TSEntityName", "StringLiteral"),
-        Object.assign(
+        combine(
           function (
             node: t.TSModuleDeclaration,
-            key: string,
+            key,
             val: t.TSEntityName | t.StringLiteral,
           ) {
             if (node.kind === "namespace" && is("StringLiteral", val)) {
@@ -566,9 +563,9 @@ defineType("TSModuleDeclaration", {
                 `TSModuleDeclaration of kind 'namespace' cannot have a StringLiteral id.`,
               );
             }
-          } satisfies ValidatorImpl,
-          { oneOfNodeTypes: ["TSEntityName", "StringLiteral"] as const },
-        ) satisfies ValidatorOneOfNodeTypes,
+          },
+          { oneOfNodeTypes: ["TSEntityName", "StringLiteral"] },
+        ),
       ),
     },
     body: validateType("TSModuleBlock"),
