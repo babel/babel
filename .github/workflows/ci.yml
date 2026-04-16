@@ -106,7 +106,6 @@ jobs:
             packages/*/lib/**/*
             packages/babel-standalone/*.js
             packages/babel-runtime/**/*.js
-            packages/babel-runtime-corejs2/**/*.js
             packages/babel-runtime-corejs3/**/*.js
             !**/node_modules/**
           retention-days: 5
@@ -291,7 +290,6 @@ jobs:
             packages/*/lib/**/*
             packages/babel-standalone/*.js
             packages/babel-runtime/**/*.js
-            packages/babel-runtime-corejs2/**/*.js
             packages/babel-runtime-corejs3/**/*.js
             !**/node_modules/**
           retention-days: 5
