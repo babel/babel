@@ -116,7 +116,7 @@ function isInDetachedTree(path: NodePath) {
 
 type Member = NodePath<t.OptionalMemberExpression | t.MemberExpression>;
 
-const handle = {
+const handler = {
   memoise() {
     // noop.
   },
@@ -270,7 +270,7 @@ const handle = {
         current = parentPath;
       }
 
-      let context: t.Identifier;
+      let context: t.Identifier | undefined;
       const endParentPath = endPath.parentPath as NodePath<t.Expression>;
       if (
         isMemberExpression(regular) &&
@@ -342,7 +342,7 @@ const handle = {
       }
 
       // context and isDeleteOperation can not be both truthy
-      if (context!) {
+      if (context) {
         const endParent = endParentPath.node as t.OptionalCallExpression;
         endParentPath.replaceWith(
           optionalCallExpression(
@@ -594,7 +594,7 @@ export default function memberExpressionToFunctions<CustomState extends object>(
   state: Handler<CustomState> & CustomState,
 ) {
   path.traverse(visitor, {
-    ...handle,
+    ...handler,
     ...state,
     memoiser: new AssignmentMemoiser(),
   });

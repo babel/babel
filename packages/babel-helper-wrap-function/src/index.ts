@@ -137,7 +137,6 @@ function plainFunction(
   callId: t.Expression,
   noNewArrows: boolean,
   ignoreFunctionLength: boolean,
-  hadName: boolean,
 ) {
   let path: NodePath<
     | t.FunctionDeclaration
@@ -145,17 +144,13 @@ function plainFunction(
     | t.CallExpression
     | t.ArrowFunctionExpression
   > = inPath;
-  let node;
   let functionId = null;
   const nodeParams = inPath.node.params;
 
   if (path.isArrowFunctionExpression()) {
     path = path.arrowFunctionToExpression({ noNewArrows });
-
-    node = path.node;
-  } else {
-    node = path.node;
   }
+  const node = path.node;
 
   const isDeclaration = isFunctionDeclaration(node);
 
@@ -179,9 +174,7 @@ function plainFunction(
 
   const wrapperArgs = {
     NAME: functionId || null,
-    // TODO: Use `functionId` rather than `hadName` for the condition
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    REF: path.scope.generateUidIdentifier(hadName ? functionId!.name : "ref"),
+    REF: path.scope.generateUidIdentifier(functionId ? functionId.name : "ref"),
     FUNCTION: built,
     PARAMS: params,
   };
@@ -193,7 +186,7 @@ function plainFunction(
   } else {
     let container;
 
-    if (hadName) {
+    if (functionId) {
       container = buildNamedExpressionWrapper(wrapperArgs);
     } else {
       container = buildAnonymousExpressionWrapper(wrapperArgs);
@@ -218,8 +211,6 @@ export default function wrapFunction(
   if (path.isMethod()) {
     classOrObjectMethod(path, callId, ignoreFunctionLength);
   } else {
-    const hadName = "id" in path.node && !!path.node.id;
-
     // @ts-expect-error It is invalid to call this on an arrow expression,
     // but we'll convert it to a function expression anyway.
     path = path.ensureFunctionName(false);
@@ -228,7 +219,6 @@ export default function wrapFunction(
       callId,
       noNewArrows,
       ignoreFunctionLength,
-      hadName,
     );
   }
 }
