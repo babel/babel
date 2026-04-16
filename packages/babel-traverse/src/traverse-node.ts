@@ -1,5 +1,6 @@
 import TraversalContext from "./context.ts";
-import { Hub, type ExplodedTraverseOptions } from "./index.ts";
+import type { ExplodedVisitor, TraverseOptions } from "./types.ts";
+import { Hub } from "./index.ts";
 import NodePath from "./path/index.ts";
 import type Scope from "./scope/index.ts";
 import type * as t from "@babel/types";
@@ -126,7 +127,7 @@ function _visit(ctx: TraversalContext, path: NodePath<t.Node | null>) {
  */
 export function traverseNode<S = unknown>(
   node: t.Node,
-  opts: ExplodedTraverseOptions<S>,
+  opts: TraverseOptions & ExplodedVisitor<S>,
   scope?: Scope | null,
   state?: S,
   path?: NodePath,
