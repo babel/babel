@@ -841,8 +841,6 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       // No need to bundle JSON files
       "babel-compat-data",
       "babel-helper-globals",
-      // @rollup/plugin-commonjs will mess up with babel-helper-fixtures
-      "babel-helper-fixtures",
       // babel-standalone is handled by rollup-babel-standalone task
       "babel-standalone",
       "babel-build-external-helpers",
