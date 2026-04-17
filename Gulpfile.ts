@@ -835,8 +835,6 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       "babel-register",
       // todo: test/helpers/define-helper requires internal lib/helpers access
       "babel-helpers",
-      // rollup bug https://github.com/babel/babel/pull/16001
-      "babel-helper-builder-react-jsx",
       // exit-loader.cjs
       "babel-helper-transform-fixture-test-runner",
       // Many entry points
