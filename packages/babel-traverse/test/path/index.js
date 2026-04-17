@@ -155,7 +155,6 @@ describe("NodePath", () => {
           "skipKey",
           "splitExportDeclaration",
           "stop",
-          "toComputedKey",
           "unshiftContainer",
           "unwrapFunctionEnvironment",
           "willIMaybeExecuteBefore",

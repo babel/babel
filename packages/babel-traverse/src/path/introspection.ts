@@ -11,6 +11,7 @@ import {
   isStringLiteral,
   isType,
   matchesPattern as _matchesPattern,
+  toComputedKey,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -548,7 +549,7 @@ export function _resolve(
     // this is dangerous, as non-direct target assignments will mutate it's state
     // making this resolution inaccurate
 
-    const targetKey = this.toComputedKey();
+    const targetKey = toComputedKey(this.node);
     if (!isLiteral(targetKey)) return;
 
     // @ts-expect-error todo(flow->ts): NullLiteral
