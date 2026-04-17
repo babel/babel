@@ -1326,10 +1326,10 @@ defineType("ArrowFunctionExpression", {
   fields: {
     ...functionCommon(),
     generator: {
-      // NOTE: This is not actually supoprte by arrow function, but since it
+      // NOTE: This is not actually supported by arrow function, but since it
       // comes from functionCommon() also supporting it as a field here in the
       // type definitions makes usage of t.Function simpler.
-      // Make it optional at least, defautling to `null`.
+      // Make it optional at least, defaulting to `null`.
       default: null,
       optional: true,
       validate: combine(
@@ -1346,9 +1346,7 @@ defineType("ArrowFunctionExpression", {
     ...functionTypeAnnotationCommon(),
     expression: {
       // https://github.com/babel/babylon/issues/505
-      //
-      // NOTE: In the generated builder we compute the value of this field based
-      // on the body.
+      optional: true,
       validate: assertValueType("boolean"),
     },
     body: {
