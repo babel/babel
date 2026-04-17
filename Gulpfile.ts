@@ -389,25 +389,28 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
               case "UNUSED_EXTERNAL_IMPORT":
                 warn(warning);
                 return;
-              case "MISSING_EXPORT":
-                // Rollup warns about using babel.default at
-                // https://github.com/babel/babel-polyfills/blob/4ac92be5b70b13e3d8a34614d8ecd900eb3f40e4/packages/babel-helper-define-polyfill-provider/src/types.js#L5
+              case "MISSING_EXPORT": {
+                const exporter = warning.exporter!.replace(/\\/g, "/");
+                const specifier = warning.id!.replace(/\\/g, "/");
+                // Rollup warns about using babel.default, for example at
+                // https://npmx.dev/package-code/babel-plugin-polyfill-corejs3/v/1.0.0-rc.2/lib%2Findex.js#L489
+                // https://npmx.dev/package-code/@babel/helper-define-polyfill-provider/v/1.0.0-rc.2/lib%2Findex.browser.js#L792
                 // We can safely ignore this warning, and let Rollup replace it with undefined.
                 if (
-                  // @ts-expect-error warning.exporter is defined when code is MISSING_EXPORT
-                  warning.exporter
-                    .replace(/\\/g, "/")
-                    .endsWith("packages/babel-core/src/index.ts") &&
+                  (exporter.endsWith("packages/babel-core/src/index.ts") ||
+                    exporter.endsWith(
+                      "packages/babel-standalone/src/plugin-utils-shim.ts"
+                    )) &&
                   warning.binding === "default" &&
                   [
                     "@babel/helper-define-polyfill-provider",
                     "babel-plugin-polyfill-corejs3",
                     "babel-plugin-polyfill-regenerator",
-                    // @ts-expect-error warning.id is defined when code is MISSING_EXPORT
-                  ].some(pkg => warning.id.replace(/\\/g, "/").includes(pkg))
+                  ].some(pkg => specifier.includes(pkg))
                 ) {
                   return;
                 }
+              }
             }
 
             // We use console.warn here since it prints more info than just "warn",
