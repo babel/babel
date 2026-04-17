@@ -29,8 +29,8 @@ export default {
   testPathIgnorePatterns: [
     "/node_modules/",
     "/test/fixtures/",
-    "/test/debug-fixtures/",
-    "/test/regenerator-fixtures/",
+    "/babel-helpers/test/define-helper-fixtures/",
+    "/babel-plugin-transform-regenerator/test/regenerator-fixtures/",
     "/babel-preset-env/test/regressions/",
     "/babel-parser/test/expressions/",
     "/test/tmp/",

@@ -848,8 +848,6 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       // Eventually figure out how to bundle the rest.
       // todo: convert to ESM and bundle babel-register
       "babel-register",
-      // todo: test/helpers/define-helper requires internal lib/helpers access
-      "babel-helpers",
       // Many entry points
       "babel-runtime",
       "babel-runtime-corejs3",
