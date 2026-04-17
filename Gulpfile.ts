@@ -369,10 +369,10 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           input: Object.fromEntries(
             inputs.map(inputName => [
               filename ||
-                // packages/babel-foo/src/bar/baz.ts -> bar/baz.js
+                // ./packages/babel-foo/src/bar/baz.ts -> bar/baz.js
                 inputName
                   .split("/")
-                  .slice(3)
+                  .slice(4)
                   .join("/")
                   .replace(/(\.[cm]?)ts$/, "$1js"),
               inputName,
@@ -832,6 +832,8 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       ["./lib/babel-helpers-in-memory.js", "./lib/exit-loader.cjs"],
     ],
     ["babel-node", ["./lib/babel-node.js", "./lib/_babel-node.js"]],
+
+    ["babel-eslint-parser", ["./lib/worker/index.js"]],
   ]);
   const noBundle = new Set([
     // No need to bundle JSON files
@@ -846,8 +848,6 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
     // Many entry points
     "babel-runtime",
     "babel-runtime-corejs3",
-    // todo:
-    "babel-eslint-parser",
     // todo: convert to ESM and bundle
     "babel-eslint-plugin",
     "babel-eslint-plugin-development",
@@ -891,11 +891,15 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       src,
       format: "esm",
       dest: "lib",
-      inputs: entryPoints.map(lib =>
-        path.join(
-          src,
-          lib.replace("/lib/", "/src/").replace(/(\.c)?js$/, "$1ts")
-        )
+      inputs: entryPoints.map(
+        lib =>
+          // Prefix `./` to make it explicitly a relative path, otherwise rollup will
+          // try to resolve `eslint/babel-eslint-parser` from node_modules
+          "./" +
+          path.join(
+            src,
+            lib.replace("/lib/", "/src/").replace(/(\.c)?js$/, "$1ts")
+          )
       ),
       pkgJSON,
     };
