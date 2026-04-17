@@ -817,7 +817,7 @@ function* getPackageExports(
 }
 
 function* libBundlesIterator(): IterableIterator<PackageInfo> {
-  const binPackagesEntries = new Map<string, string[]>(
+  const extraPackagesEntries = new Map<string, string[]>(
     [
       ["babel-cli", ["./lib/babel/index.js"]],
       ["babel-node", ["./lib/babel-node.js", "./lib/_babel-node.js"]],
@@ -825,6 +825,9 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
   );
   const noBundle = new Set(
     [
+      // No need to bundle JSON files
+      "babel-compat-data",
+      "babel-helper-globals",
       // @rollup/plugin-commonjs will mess up with babel-helper-fixtures
       "babel-helper-fixtures",
       // babel-standalone is handled by rollup-babel-standalone task
@@ -846,17 +849,14 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
     const pkgJSON = JSON.parse(
       fs.readFileSync(new URL(`${src}/package.json`, import.meta.url), "utf-8")
     );
-    if (pkgJSON.exports && pkgJSON.exports["."]) {
-      const entryPoints = Array.from(
-        getPackageExports(
-          pkgJSON.exports,
-          new Set(["browser", "default"]),
-          /\.(?:js|mjs|cjs)$/
-        )
-      );
-      if (!entryPoints.length) {
-        continue;
-      }
+    const entryPoints = Array.from(
+      getPackageExports(
+        pkgJSON.exports,
+        new Set(["browser", "default"]),
+        /\.(?:js|mjs|cjs)$/
+      )
+    );
+    if (entryPoints.length) {
       if (pkgJSON.imports) {
         entryPoints.push(
           ...getPackageExports(
@@ -866,38 +866,26 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
           )
         );
       }
-
-      yield {
-        src,
-        format: "esm",
-        dest: "lib",
-        inputs: entryPoints.map(lib =>
-          path.join(
-            src,
-            lib.replace("/lib/", "/src/").replace(/(\.c)?js$/, "$1ts")
-          )
-        ),
-      };
-    } else if (pkgJSON.bin) {
-      const entryPoints = binPackagesEntries.get(src);
-      if (entryPoints) {
-        yield {
-          src,
-          format: "esm",
-          dest: "lib",
-          inputs: entryPoints.map(lib =>
-            path.join(
-              src,
-              lib.replace("/lib/", "/src/").replace(/(\.c)?js$/, "$1ts")
-            )
-          ),
-        };
-      } else {
-        throw new Error(
-          "Please specify the entry points for binary package: " + src
-        );
-      }
     }
+    if (extraPackagesEntries.has(src)) {
+      entryPoints.push(...extraPackagesEntries.get(src)!);
+    }
+
+    if (!entryPoints.length) {
+      throw new Error("Please specify the entry points for package: " + src);
+    }
+
+    yield {
+      src,
+      format: "esm",
+      dest: "lib",
+      inputs: entryPoints.map(lib =>
+        path.join(
+          src,
+          lib.replace("/lib/", "/src/").replace(/(\.c)?js$/, "$1ts")
+        )
+      ),
+    };
   }
 }
 
