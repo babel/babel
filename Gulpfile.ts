@@ -359,6 +359,9 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           /babel-plugin-dynamic-import-node\/utils/,
           // required by preset-env
           /@babel\/preset-modules\/.*/,
+          // required by babel-node
+          "core-js/stable/index.js",
+          "kexec",
         ];
 
         log(
@@ -814,20 +817,22 @@ function* getPackageExports(
 }
 
 function* libBundlesIterator(): IterableIterator<PackageInfo> {
+  const binPackagesEntries = new Map<string, string[]>(
+    [
+      ["babel-cli", ["./lib/babel/index.js"]],
+      ["babel-node", ["./lib/babel-node.js", "./lib/_babel-node.js"]],
+    ].map(([pkg, entries]) => [`packages/${pkg}`, entries as string[]])
+  );
   const noBundle = new Set(
     [
       // @rollup/plugin-commonjs will mess up with babel-helper-fixtures
       "babel-helper-fixtures",
       // babel-standalone is handled by rollup-babel-standalone task
       "babel-standalone",
-      // todo: Rollup hangs on allowHashBang: true with babel-cli/src/babel/index.ts hashbang
-      "babel-cli",
       "babel-build-external-helpers",
       // todo: These package use #import conditions, that we want to leave unbundled.
       // Eventually figure out how to bundle the rest.
       "babel-register",
-      // @babel/node invokes internal lib/_babel-node.js
-      "babel-node",
       // todo: test/helpers/define-helper requires internal lib/helpers access
       "babel-helpers",
       // rollup bug https://github.com/babel/babel/pull/16001
@@ -843,7 +848,7 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
     const pkgJSON = JSON.parse(
       fs.readFileSync(new URL(`${src}/package.json`, import.meta.url), "utf-8")
     );
-    if (pkgJSON.exports) {
+    if (pkgJSON.exports && pkgJSON.exports["."]) {
       const entryPoints = Array.from(
         getPackageExports(
           pkgJSON.exports,
@@ -876,20 +881,23 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
         ),
       };
     } else if (pkgJSON.bin) {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      for (const binPath of Object.values(pkgJSON.bin) as string[]) {
-        const filename = binPath.slice(binPath.lastIndexOf("/") + 1);
-        const input =
-          src === "packages/babel-cli" && filename === "babel.js"
-            ? `${src}/src/babel/index.ts`
-            : `${src}/src/${filename.slice(0, -3) + ".ts"}`;
+      const entryPoints = binPackagesEntries.get(src);
+      if (entryPoints) {
         yield {
           src,
           format: "esm",
           dest: "lib",
-          filename,
-          inputs: [input],
+          inputs: entryPoints.map(lib =>
+            path.join(
+              src,
+              lib.replace("/lib/", "/src/").replace(/(\.c)?js$/, "$1ts")
+            )
+          ),
         };
+      } else {
+        throw new Error(
+          "Please specify the entry points for binary package: " + src
+        );
       }
     }
   }
