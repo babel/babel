@@ -338,8 +338,6 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
         envName = "rollup",
         pkgJSON,
       }) => {
-        inputs = inputs.map(input => input.replaceAll("\\", "/"));
-
         const version = pkgJSON.version + versionSuffix;
         const {
           dependencies = {},
@@ -797,7 +795,7 @@ async function buildBabelParserDts() {
 function* packagesIterator(exclude: Set<string>) {
   for (const packageDir of ["packages", "codemods", "eslint"]) {
     for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {
-      const src = `./${packageDir}/${dir}`;
+      const src = `${packageDir}/${dir}`;
       if (exclude.has(dir)) continue;
       if (!fs.existsSync(new URL(`${src}/package.json`, import.meta.url))) {
         continue;
@@ -826,20 +824,15 @@ function* getPackageExports(
 }
 
 function* libBundlesIterator(): IterableIterator<PackageInfo> {
-  const extraPackagesEntries = new Map<string, string[]>(
+  const extraPackagesEntries = new Map<string, string[]>([
+    ["babel-build-external-helpers", ["./lib/babel-build-external-helpers.js"]],
+    ["babel-cli", ["./lib/babel/index.js"]],
     [
-      [
-        "babel-build-external-helpers",
-        ["./lib/babel-build-external-helpers.js"],
-      ],
-      ["babel-cli", ["./lib/babel/index.js"]],
-      [
-        "babel-helper-transform-fixture-test-runner",
-        ["./lib/babel-helpers-in-memory.js", "./lib/exit-loader.cjs"],
-      ],
-      ["babel-node", ["./lib/babel-node.js", "./lib/_babel-node.js"]],
-    ].map(([pkg, entries]) => [`./packages/${pkg}`, entries as string[]])
-  );
+      "babel-helper-transform-fixture-test-runner",
+      ["./lib/babel-helpers-in-memory.js", "./lib/exit-loader.cjs"],
+    ],
+    ["babel-node", ["./lib/babel-node.js", "./lib/_babel-node.js"]],
+  ]);
   const noBundle = new Set([
     // No need to bundle JSON files
     "babel-compat-data",
@@ -885,8 +878,9 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
         );
       }
     }
-    if (extraPackagesEntries.has(src)) {
-      entryPoints.push(...extraPackagesEntries.get(src)!);
+    const packageName = path.posix.basename(src);
+    if (extraPackagesEntries.has(packageName)) {
+      entryPoints.push(...extraPackagesEntries.get(packageName)!);
     }
 
     if (!entryPoints.length) {
