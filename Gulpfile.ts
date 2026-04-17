@@ -336,10 +336,10 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
         name,
         filename,
         envName = "rollup",
+        pkgJSON,
       }) => {
         inputs = inputs.map(input => input.replaceAll("\\", "/"));
 
-        const pkgJSON = require("./" + src + "/package.json");
         const version = pkgJSON.version + versionSuffix;
         const {
           dependencies = {},
@@ -795,10 +795,10 @@ async function buildBabelParserDts() {
 }
 
 function* packagesIterator(exclude: Set<string>) {
-  for (const packageDir of ["packages", "codemods"]) {
+  for (const packageDir of ["packages", "codemods", "eslint"]) {
     for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {
-      const src = `${packageDir}/${dir}`;
-      if (exclude.has(src)) continue;
+      const src = `./${packageDir}/${dir}`;
+      if (exclude.has(dir)) continue;
       if (!fs.existsSync(new URL(`${src}/package.json`, import.meta.url))) {
         continue;
       }
@@ -838,24 +838,31 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
         ["./lib/babel-helpers-in-memory.js", "./lib/exit-loader.cjs"],
       ],
       ["babel-node", ["./lib/babel-node.js", "./lib/_babel-node.js"]],
-    ].map(([pkg, entries]) => [`packages/${pkg}`, entries as string[]])
+    ].map(([pkg, entries]) => [`./packages/${pkg}`, entries as string[]])
   );
-  const noBundle = new Set(
-    [
-      // No need to bundle JSON files
-      "babel-compat-data",
-      "babel-helper-globals",
-      // babel-standalone is handled by rollup-babel-standalone task
-      "babel-standalone",
-      // todo: These package use #import conditions, that we want to leave unbundled.
-      // Eventually figure out how to bundle the rest.
-      // todo: convert to ESM and bundle babel-register
-      "babel-register",
-      // Many entry points
-      "babel-runtime",
-      "babel-runtime-corejs3",
-    ].map(n => `packages/${n}`)
-  );
+  const noBundle = new Set([
+    // No need to bundle JSON files
+    "babel-compat-data",
+    "babel-helper-globals",
+    // babel-standalone is handled by rollup-babel-standalone task
+    "babel-standalone",
+    // todo: These package use #import conditions, that we want to leave unbundled.
+    // Eventually figure out how to bundle the rest.
+    // todo: convert to ESM and bundle babel-register
+    "babel-register",
+    // Many entry points
+    "babel-runtime",
+    "babel-runtime-corejs3",
+    // todo:
+    "babel-eslint-parser",
+    // todo: convert to ESM and bundle
+    "babel-eslint-plugin",
+    "babel-eslint-plugin-development",
+    "babel-eslint-plugin-development-internal",
+    // Not meant to be consumed manually
+    "babel-eslint-shared-fixtures",
+    "babel-eslint-tests",
+  ]);
   for (const src of packagesIterator(noBundle)) {
     const pkgJSON = JSON.parse(
       fs.readFileSync(new URL(`${src}/package.json`, import.meta.url), "utf-8")
@@ -896,6 +903,7 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
           lib.replace("/lib/", "/src/").replace(/(\.c)?js$/, "$1ts")
         )
       ),
+      pkgJSON,
     };
   }
 }
@@ -908,6 +916,7 @@ type PackageInfo = {
   name?: string;
   filename?: string;
   envName?: string;
+  pkgJSON: any;
 };
 
 const libBundles: PackageInfo[] = Array.from(libBundlesIterator());
@@ -916,31 +925,43 @@ const dtsBundles = Array.from(
   packagesIterator(
     new Set([
       // CLIs
-      "packages/babel-cli",
-      "packages/babel-build-external-helpers",
-      "packages/babel-node",
+      "babel-cli",
+      "babel-build-external-helpers",
+      "babel-node",
       // This will be just JSON
-      "packages/babel-compat-data",
-      "packages/babel-helper-globals",
+      "babel-compat-data",
+      "babel-helper-globals",
       // Not meant to be consumed manually
-      "packages/babel-runtime",
-      "packages/babel-runtime-corejs3",
+      "babel-runtime",
+      "babel-runtime-corejs3",
       // TODO: Add type definitions
-      "packages/babel-register",
+      "babel-register",
+
+      "babel-eslint-plugin",
+      "babel-eslint-plugin-development",
+      "babel-eslint-plugin-development-internal",
+      // Not meant to be consumed manually
+      "babel-eslint-shared-fixtures",
+      "babel-eslint-tests",
     ])
   )
 );
 
-const standaloneBundle = [
+const standaloneBundle: PackageInfo[] = [
   {
     src: "packages/babel-standalone",
     format: "umd" as const,
     name: "Babel",
     filename: "babel.js",
     dest: "",
-    version: babelVersion,
     envName: "standalone",
     inputs: [getIndexFromPackage("packages/babel-standalone")],
+    pkgJSON: JSON.parse(
+      fs.readFileSync(
+        new URL(`./packages/babel-standalone/package.json`, import.meta.url),
+        "utf-8"
+      )
+    ),
   },
 ];
 
