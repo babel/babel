@@ -12,8 +12,9 @@ const commonIgnore = [
 ];
 
 const extraIgnore: Record<string, string[]> = {
-  "babel-plugin-proposal-decorators": ["CONTRIB.md"],
   "babel-compat-data": ["build"],
+  "babel-node": ["data"],
+  "babel-plugin-proposal-decorators": ["CONTRIB.md"],
 };
 
 const packages = glob
