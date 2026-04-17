@@ -48,7 +48,6 @@ import {
   isMetaProperty,
   isPrivateName,
   isExportDeclaration,
-  buildUndefinedNode,
   sequenceExpression,
 } from "@babel/types";
 import * as t from "@babel/types";
@@ -732,10 +731,6 @@ class Scope {
     } else {
       this.registerBinding("unknown", path);
     }
-  }
-
-  buildUndefinedNode() {
-    return buildUndefinedNode();
   }
 
   registerConstantViolation(path: NodePath<t.Node>) {
