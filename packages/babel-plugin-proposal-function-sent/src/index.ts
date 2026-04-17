@@ -3,7 +3,7 @@ import wrapFunction from "@babel/helper-wrap-function";
 import { types as t, type Visitor } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const isFunctionSent = (node: t.MetaProperty) =>
     t.isIdentifier(node.meta, { name: "function" }) &&

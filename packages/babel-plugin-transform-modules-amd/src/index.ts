@@ -61,7 +61,7 @@ type State = {
 };
 
 export default declare<State>((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const { allowTopLevelThis, strict, strictMode, importInterop, noInterop } =
     options;

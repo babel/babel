@@ -4,7 +4,7 @@ import { types as t, type NodePath } from "@babel/core";
 import generateCode from "@babel/generator";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   function commentFromString(comment: string | t.Comment): t.Comment {
     return typeof comment === "string"
