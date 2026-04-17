@@ -828,6 +828,10 @@ function* getPackageExports(
 function* libBundlesIterator(): IterableIterator<PackageInfo> {
   const extraPackagesEntries = new Map<string, string[]>(
     [
+      [
+        "babel-build-external-helpers",
+        ["./lib/babel-build-external-helpers.js"],
+      ],
       ["babel-cli", ["./lib/babel/index.js"]],
       [
         "babel-helper-transform-fixture-test-runner",
@@ -843,7 +847,6 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       "babel-helper-globals",
       // babel-standalone is handled by rollup-babel-standalone task
       "babel-standalone",
-      "babel-build-external-helpers",
       // todo: These package use #import conditions, that we want to leave unbundled.
       // Eventually figure out how to bundle the rest.
       // todo: convert to ESM and bundle babel-register
