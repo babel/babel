@@ -413,7 +413,16 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                 ) {
                   return;
                 }
+                break;
               }
+              case "EMPTY_BUNDLE":
+                if (
+                  warning.names?.length === 1 &&
+                  warning.names[0] === "babel-helpers-in-memory.js"
+                ) {
+                  // babel-helpers-in-memory.js is an empty file for jest v8 coverage provider
+                  return;
+                }
             }
 
             // We use console.warn here since it prints more info than just "warn",
@@ -820,6 +829,10 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
   const extraPackagesEntries = new Map<string, string[]>(
     [
       ["babel-cli", ["./lib/babel/index.js"]],
+      [
+        "babel-helper-transform-fixture-test-runner",
+        ["./lib/babel-helpers-in-memory.js", "./lib/exit-loader.cjs"],
+      ],
       ["babel-node", ["./lib/babel-node.js", "./lib/_babel-node.js"]],
     ].map(([pkg, entries]) => [`packages/${pkg}`, entries as string[]])
   );
@@ -835,11 +848,10 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       "babel-build-external-helpers",
       // todo: These package use #import conditions, that we want to leave unbundled.
       // Eventually figure out how to bundle the rest.
+      // todo: convert to ESM and bundle babel-register
       "babel-register",
       // todo: test/helpers/define-helper requires internal lib/helpers access
       "babel-helpers",
-      // exit-loader.cjs
-      "babel-helper-transform-fixture-test-runner",
       // Many entry points
       "babel-runtime",
       "babel-runtime-corejs3",
