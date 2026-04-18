@@ -841,8 +841,6 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
     "babel-helper-globals",
     // babel-standalone is handled by rollup-babel-standalone task
     "babel-standalone",
-    // todo: These package use #import conditions, that we want to leave unbundled.
-    // Eventually figure out how to bundle the rest.
     // todo: convert to ESM and bundle babel-register
     "babel-register",
     // Many entry points
