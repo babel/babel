@@ -187,7 +187,6 @@ export type ESTreeLiteral = EstreeLiteral | EstreeBigIntLiteral;
 
 export type ESTreeExpression =
   | EstreeChainExpression
-  | EstreeImportExpression
   | ESTreeLiteral
   | EstreeTSEmptyBodyFunctionExpression;
 
@@ -280,12 +279,6 @@ export interface EstreeMethodDefinition extends EstreeMethodDefinitionBase {
   type: "MethodDefinition";
   value: N.FunctionExpression;
   variance?: N.Variance | null;
-}
-
-export interface EstreeImportExpression extends BaseNode {
-  type: "ImportExpression";
-  source: N.Expression;
-  options?: N.Expression | null;
 }
 
 export interface EstreePrivateIdentifier extends BaseNode {

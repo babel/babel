@@ -112,9 +112,12 @@ export default {
   IllegalReturn: "'return' outside of function.",
   ImportBindingIsString: ({ importName }: { importName: string }) =>
     `A string literal cannot be used as an imported binding.\n- Did you mean \`import { "${importName}" as foo }\`?`,
-  ImportCallArity: `\`import()\` requires exactly one or two arguments.`,
-  ImportCallNotNewExpression: "Cannot use new with import(...).",
-  ImportCallSpreadArgument: "`...` is not allowed in `import()`.",
+  ImportCallArity: ({ phase }: { phase?: string | null }) =>
+    `\`import${phase ? `.${phase}` : ""}()\` requires exactly one or two arguments.`,
+  ImportCallNotNewExpression: ({ phase }: { phase?: string | null }) =>
+    `Cannot use new with import${phase ? `.${phase}` : ""}().`,
+  ImportCallSpreadArgument: ({ phase }: { phase?: string | null }) =>
+    `\`...\` is not allowed in \`import${phase ? `.${phase}` : ""}()\`.`,
   IncompatibleRegExpUVFlags:
     "The 'u' and 'v' regular expression flags cannot be enabled at the same time.",
   InvalidBigIntLiteral: "Invalid BigIntLiteral.",

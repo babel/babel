@@ -172,10 +172,10 @@ export default (superClass: typeof Parser) =>
     isValidDirective(stmt: N.Statement): stmt is N.ExpressionStatement {
       return (
         stmt.type === "ExpressionStatement" &&
-        (stmt.expression as N.ESTreeExpression).type === "Literal" &&
-        typeof (stmt.expression as unknown as N.EstreeLiteral).value ===
+        (stmt.expression as N.Node as N.ESTreeExpression).type === "Literal" &&
+        typeof (stmt.expression as N.Node as N.EstreeLiteral).value ===
           "string" &&
-        !(stmt.expression as unknown as N.EstreeLiteral).extra?.parenthesized
+        !(stmt.expression as N.Node as N.EstreeLiteral).extra?.parenthesized
       );
     }
 
@@ -472,9 +472,9 @@ export default (superClass: typeof Parser) =>
 
       if (node.callee.type === "Import") {
         this.castNodeTo(node, "ImportExpression");
-        (node as N.Node as N.EstreeImportExpression).source = node
+        (node as N.Node as N.ImportExpression).source = node
           .arguments[0] as N.Expression;
-        (node as N.Node as N.EstreeImportExpression).options =
+        (node as N.Node as N.ImportExpression).options =
           (node.arguments[1] as N.Expression) ?? null;
 
         // arguments isn't optional in the type definition
