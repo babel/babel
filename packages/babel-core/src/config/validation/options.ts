@@ -393,7 +393,6 @@ export function validate(
     );
   } catch (error) {
     const configError = new ConfigError(error.message, filename);
-    // @ts-expect-error TODO: .code is not defined on ConfigError or Error
     if (error.code) configError.code = error.code;
     throw configError;
   }

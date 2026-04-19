@@ -37,16 +37,16 @@ function* genTrue() {
   return true;
 }
 
-export function makeWeakCache<ArgT extends object, ResultT, SideChannel>(
+export function makeWeakCache<ArgT extends WeakKey, ResultT, SideChannel>(
   handler: (
     arg: ArgT,
     cache: CacheConfigurator<SideChannel>,
   ) => Handler<ResultT> | ResultT,
-): (arg: ArgT, data: SideChannel) => Handler<ResultT> {
+): (arg: ArgT, data?: SideChannel) => Handler<ResultT> {
   return makeCachedFunction<ArgT, ResultT, SideChannel>(WeakMap, handler);
 }
 
-export function makeWeakCacheSync<ArgT extends object, ResultT, SideChannel>(
+export function makeWeakCacheSync<ArgT extends WeakKey, ResultT, SideChannel>(
   handler: (arg: ArgT, cache?: CacheConfigurator<SideChannel>) => ResultT,
 ): (arg: ArgT, data?: SideChannel) => ResultT {
   return synchronize<[ArgT, SideChannel], ResultT>(
@@ -59,7 +59,7 @@ export function makeStrongCache<ArgT, ResultT, SideChannel>(
     arg: ArgT,
     cache: CacheConfigurator<SideChannel>,
   ) => Handler<ResultT> | ResultT,
-): (arg: ArgT, data: SideChannel) => Handler<ResultT> {
+): (arg: ArgT, data?: SideChannel) => Handler<ResultT> {
   return makeCachedFunction<ArgT, ResultT, SideChannel>(Map, handler);
 }
 
@@ -309,11 +309,10 @@ class CacheConfigurator<SideChannel = void> {
     );
 
     if (isThenable(key)) {
-      // @ts-expect-error todo(flow->ts): improve function return type annotation
       return key.then((key: unknown) => {
         this._pairs.push([key, fn]);
         return key;
-      });
+      }) as T;
     }
 
     this._pairs.push([key, fn]);

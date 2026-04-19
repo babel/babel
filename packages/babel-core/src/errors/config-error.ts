@@ -9,4 +9,5 @@ export default class ConfigError extends Error {
     expectedError(this);
     if (filename) injectVirtualStackFrame(this, filename);
   }
+  declare code: string;
 }

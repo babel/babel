@@ -102,13 +102,11 @@ export function createCachedDescriptors(
     options: optionsWithResolvedBrowserslistConfigFile(options, dirname),
     plugins: plugins
       ? () =>
-          // @ts-expect-error todo(flow->ts) ts complains about incorrect arguments
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
           createCachedPluginDescriptors(plugins, dirname)(alias)
       : () => handlerOf([]),
     presets: presets
       ? () =>
-          // @ts-expect-error todo(flow->ts) ts complains about incorrect arguments
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
           createCachedPresetDescriptors(presets, dirname)(alias)(
             !!passPerPreset,

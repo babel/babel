@@ -36,7 +36,7 @@ export function* createConfigItem<API>(
   return createItemFromDescriptor(descriptor);
 }
 
-const CONFIG_ITEM_BRAND = Symbol.for("@babel/core@7 - ConfigItem");
+const CONFIG_ITEM_BRAND = Symbol.for("@babel/core@8 - ConfigItem");
 
 export function getItemDescriptor<API>(
   item: unknown,
@@ -65,7 +65,6 @@ class ConfigItem<API> {
    */
   _descriptor: UnloadedDescriptor<API>;
 
-  // TODO(Babel 9): Check if this symbol needs to be updated
   /**
    * Used to detect ConfigItem instances from other Babel instances.
    */
