@@ -4,10 +4,11 @@ import hook = require("./hook.cjs");
 import workerClient = require("./worker-client.cjs");
 
 let client: IClient;
+let listener: undefined | ((signalOrCode: string | number) => void);
 function register(opts?: Options) {
   if (!client) {
     let hasClosed = false;
-    function listener(signalOrCode: string | number) {
+    listener = function (signalOrCode) {
       if (hasClosed) return;
       hasClosed = true;
       client.close();
@@ -15,7 +16,7 @@ function register(opts?: Options) {
         // eslint-disable-next-line n/no-process-exit
         process.exit(0);
       }
-    }
+    };
     process.on("exit", listener);
     process.on("SIGINT", listener);
     process.on("SIGTERM", listener);
@@ -24,8 +25,18 @@ function register(opts?: Options) {
   hook.register(client, opts);
 }
 
+function revert() {
+  hook.revert();
+  if (listener) {
+    process.off("exit", listener);
+    process.off("SIGINT", listener);
+    process.off("SIGTERM", listener);
+    listener = undefined;
+  }
+}
+
 export = Object.assign(register, {
-  revert: hook.revert,
+  revert,
   default: register,
   __esModule: true,
 });
