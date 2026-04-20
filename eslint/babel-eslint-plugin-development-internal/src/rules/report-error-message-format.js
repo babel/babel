@@ -2,7 +2,7 @@ const messageId = "mustMatchPattern";
 
 const pattern = /(?:('|`)[^'`]*\1|[A-Z]).*[.?]$/s;
 
-module.exports = {
+export default {
   meta: {
     type: "suggestion",
     docs: {
