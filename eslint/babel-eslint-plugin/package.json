@@ -2,13 +2,13 @@
   "name": "@babel/eslint-plugin",
   "version": "8.0.0-rc.3",
   "description": "Companion rules for @babel/eslint-parser",
-  "main": "./lib/index.cjs",
+  "main": "./lib/index.js",
   "type": "module",
-  "types": "./types.d.cts",
+  "types": "./types.d.ts",
   "exports": {
     ".": {
-      "types": "./types.d.cts",
-      "default": "./lib/index.cjs"
+      "types": "./types.d.ts",
+      "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
   },

@@ -1,5 +1,7 @@
-const ruleComposer = require("../rule-composer.cjs");
-const rule = require("eslint/use-at-your-own-risk").builtinRules.get("new-cap");
+import * as ruleComposer from "../rule-composer.js";
+// eslint-disable-next-line import/no-unresolved
+import { builtinRules } from "eslint/use-at-your-own-risk";
+const rule = builtinRules.get("new-cap");
 
 /**
  * Returns whether a node is under a decorator or not.
@@ -10,7 +12,7 @@ function isDecorator(node) {
   return node.parent.type === "Decorator";
 }
 
-module.exports = ruleComposer.filterReports(
+export default ruleComposer.filterReports(
   rule,
   problem => !isDecorator(problem.node),
 );

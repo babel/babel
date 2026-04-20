@@ -1,4 +1,4 @@
-import rule from "../../lib/rules/no-unused-expressions.cjs";
+import rule from "../../lib/rules/no-unused-expressions.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 const ruleTester = new RuleTester();

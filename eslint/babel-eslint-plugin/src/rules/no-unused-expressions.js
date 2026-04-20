@@ -1,7 +1,7 @@
-const ruleComposer = require("../rule-composer.cjs");
-const rule = require("eslint/use-at-your-own-risk").builtinRules.get(
-  "no-unused-expressions",
-);
+import * as ruleComposer from "../rule-composer.js";
+// eslint-disable-next-line import/no-unresolved
+import { builtinRules } from "eslint/use-at-your-own-risk";
+const rule = builtinRules.get("no-unused-expressions");
 
 /**
  * @param {ASTNode} node - any node
@@ -44,7 +44,7 @@ function isInDoStatement(node) {
   return false;
 }
 
-module.exports = ruleComposer.filterReports(
+export default ruleComposer.filterReports(
   rule,
   problem => !isInDoStatement(problem.node),
 );

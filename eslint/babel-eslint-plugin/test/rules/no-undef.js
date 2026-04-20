@@ -1,4 +1,4 @@
-import rule from "../../lib/rules/no-undef.cjs";
+import rule from "../../lib/rules/no-undef.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 const ruleTester = new RuleTester();

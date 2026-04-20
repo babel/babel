@@ -1,7 +1,5 @@
 // This file is revised from https://github.com/not-an-aardvark/eslint-rule-composer/blob/7e8ec43d3e62d9766e87b09c1958ce2863b421f4/lib/rule-composer.js
 
-"use strict";
-
 /**
  * Translates a multi-argument context.report() call into a single object argument call
  * @param {...*} arguments A list of arguments passed to `context.report`
@@ -139,44 +137,42 @@ function removeMessageIfMessageIdPresent(reportDescriptor) {
   return newDescriptor;
 }
 
-module.exports = Object.freeze({
-  filterReports(rule, predicate) {
-    return Object.freeze({
-      create(context) {
-        const filename = context.filename || context.getFilename();
-        const sourceCode = context.sourceCode || context.getSourceCode();
-        const settings = context.settings;
-        const options = context.options;
-        return getRuleCreateFunc(rule)(
-          Object.freeze(
-            Object.create(context, {
-              report: {
-                enumerable: true,
-                value() {
-                  const reportDescriptor = getReportNormalizer(rule).apply(
-                    null,
-                    arguments,
+export function filterReports(rule, predicate) {
+  return Object.freeze({
+    create(context) {
+      const filename = context.filename || context.getFilename();
+      const sourceCode = context.sourceCode || context.getSourceCode();
+      const settings = context.settings;
+      const options = context.options;
+      return getRuleCreateFunc(rule)(
+        Object.freeze(
+          Object.create(context, {
+            report: {
+              enumerable: true,
+              value() {
+                const reportDescriptor = getReportNormalizer(rule).apply(
+                  null,
+                  arguments,
+                );
+                if (
+                  predicate(reportDescriptor, {
+                    sourceCode,
+                    settings,
+                    options,
+                    filename,
+                  })
+                ) {
+                  context.report(
+                    removeMessageIfMessageIdPresent(reportDescriptor),
                   );
-                  if (
-                    predicate(reportDescriptor, {
-                      sourceCode,
-                      settings,
-                      options,
-                      filename,
-                    })
-                  ) {
-                    context.report(
-                      removeMessageIfMessageIdPresent(reportDescriptor),
-                    );
-                  }
-                },
+                }
               },
-            }),
-          ),
-        );
-      },
-      schema: rule.schema,
-      meta: getRuleMeta(rule),
-    });
-  },
-});
+            },
+          }),
+        ),
+      );
+    },
+    schema: rule.schema,
+    meta: getRuleMeta(rule),
+  });
+}
