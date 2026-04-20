@@ -1,4 +1,4 @@
-const register = require('../../..');
+const register = require('../../..').default;
 
 register( {
   ignore: [],
