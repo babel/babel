@@ -572,6 +572,8 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/eslint-parser": "workspace:^"
+    "@babel/plugin-proposal-decorators": "workspace:^"
+    "@babel/plugin-proposal-do-expressions": "workspace:^"
     "@babel/preset-flow": "workspace:^"
     "@babel/preset-react": "workspace:^"
     dedent: "npm:^1.5.3"
