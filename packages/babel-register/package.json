@@ -12,8 +12,8 @@
     "directory": "packages/babel-register"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "type": "commonjs",
-  "main": "./lib/index.cjs",
+  "type": "module",
+  "main": "./lib/index.js",
   "dependencies": {
     "@cspotcode/source-map-support": "^0.8.1",
     "cacache": "20.0.3",
@@ -37,7 +37,7 @@
   },
   "exports": {
     ".": {
-      "default": "./lib/index.cjs"
+      "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
   }

@@ -7,7 +7,7 @@ const { __filename, __dirname } = commonJS(import.meta.url);
 describe("@babel/register - caching", () => {
   let Cache;
   beforeAll(async () => {
-    Cache = (await import("../lib/worker/cache.mjs")).default;
+    Cache = (await import("../lib/worker/cache.js")).default;
 
     jest.useFakeTimers({
       doNotFake: ["nextTick", "setImmediate", "queueMicrotask", "setTimeout"],

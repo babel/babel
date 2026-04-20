@@ -1,6 +1,6 @@
-import { ACTIONS } from "../types.cts";
+import { ACTIONS } from "../types.ts";
 import { DEFAULT_EXTENSIONS } from "@babel/core";
-import { setOptions, transform, disableCache } from "./transform.mts";
+import { setOptions, transform, disableCache } from "./transform.ts";
 
 export default function handleMessage(action: ACTIONS, payload: any) {
   switch (action) {

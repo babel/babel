@@ -1,7 +1,8 @@
-import type { IClient, Options } from "./types.cts";
+import type { IClient, Options } from "./types.ts";
 
-import hook = require("./hook.cjs");
-import workerClient = require("./worker-client.cjs");
+import * as hook from "./hook.ts";
+import { WorkerClient } from "./worker-client.ts";
+import { isInRegisterWorker } from "./is-in-register-worker.ts";
 
 let client: IClient;
 let listener: undefined | ((signalOrCode: string | number) => void);
@@ -21,11 +22,11 @@ function register(opts?: Options) {
     process.on("SIGINT", listener);
     process.on("SIGTERM", listener);
   }
-  client ||= new workerClient.WorkerClient();
+  client ||= new WorkerClient();
   hook.register(client, opts);
 }
 
-function revert() {
+export function revert() {
   hook.revert();
   if (listener) {
     process.off("exit", listener);
@@ -35,12 +36,8 @@ function revert() {
   }
 }
 
-export = Object.assign(register, {
-  revert,
-  default: register,
-  __esModule: true,
-});
+export default register;
 
-if (!require("./is-in-register-worker.cjs").isInRegisterWorker) {
+if (!isInRegisterWorker) {
   register();
 }

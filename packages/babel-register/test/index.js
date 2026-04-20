@@ -87,7 +87,7 @@ describe("@babel/register", function () {
       });
     });
 
-    const { setupRegister } = buildTests(require.resolve("../lib/index.cjs"));
+    const { setupRegister } = buildTests(require.resolve("../lib/index.js"));
 
     it("works with mjs config files", () => {
       setupRegister({

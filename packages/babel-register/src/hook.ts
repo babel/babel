@@ -1,7 +1,7 @@
-import type { IClient, Options } from "./types.cts";
+import type { IClient, Options } from "./types";
 
-import pirates = require("pirates");
-const sourceMapSupport: typeof import("@cspotcode/source-map-support") = require("@cspotcode/source-map-support");
+import pirates from "pirates";
+import sourceMapSupport from "@cspotcode/source-map-support";
 let piratesRevert: () => void;
 const maps = Object.create(null);
 
@@ -59,4 +59,4 @@ function revert() {
   }
 }
 
-export = { register, revert };
+export { register, revert };
