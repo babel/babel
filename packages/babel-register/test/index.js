@@ -56,13 +56,15 @@ describe("@babel/register", function () {
       install() {
         sourceMapSupport = true;
       },
+      uninstall() {
+        sourceMapSupport = false;
+      },
     },
   };
 
   beforeEach(() => {
     currentHook = null;
     currentOptions = null;
-    sourceMapSupport = false;
   });
 
   let originalRequireCacheDescriptor;
@@ -179,6 +181,14 @@ describe("@babel/register", function () {
       currentHook("const a = 1;", testFile);
 
       expect(sourceMapSupport).toBe(true);
+    });
+
+    test("uninstalls source map when reverting", () => {
+      setupRegister();
+      currentHook("const a = 1;", testFile);
+      revertRegister();
+
+      expect(sourceMapSupport).toBe(false);
     });
 
     test("installs source map support when requested", () => {

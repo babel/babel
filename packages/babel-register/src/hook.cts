@@ -5,9 +5,10 @@ const sourceMapSupport: typeof import("@cspotcode/source-map-support") = require
 let piratesRevert: () => void;
 const maps = Object.create(null);
 
+let sourceMapSupportInstalled = false;
+
 function installSourceMapSupport() {
-  // @ts-expect-error assign to function
-  installSourceMapSupport = () => {};
+  if (sourceMapSupportInstalled) return;
 
   sourceMapSupport.install({
     handleUncaughtExceptions: false,
@@ -22,6 +23,8 @@ function installSourceMapSupport() {
       }
     },
   });
+
+  sourceMapSupportInstalled = true;
 }
 
 function compile(client: IClient, inputCode: string, filename: string) {
@@ -50,6 +53,10 @@ function register(client: IClient, opts: Options = {}) {
 
 function revert() {
   if (piratesRevert) piratesRevert();
+  if (sourceMapSupportInstalled) {
+    sourceMapSupport.uninstall();
+    sourceMapSupportInstalled = false;
+  }
 }
 
 export = { register, revert };
