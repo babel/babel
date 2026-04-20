@@ -8,12 +8,12 @@
     "eslint-plugin"
   ],
   "author": "The Babel Team (https://babel.dev/team)",
-  "main": "./lib/index.cjs",
+  "main": "./lib/index.js",
   "type": "module",
   "exports": {
     ".": {
-      "types": "./types.d.cts",
-      "default": "./lib/index.cjs"
+      "types": "./types.d.ts",
+      "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
   },

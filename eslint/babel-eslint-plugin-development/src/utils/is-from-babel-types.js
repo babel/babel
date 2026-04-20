@@ -1,8 +1,8 @@
-const isBabelPluginFactory = require("./is-babel-plugin-factory.cjs");
+import isBabelPluginFactory from "./is-babel-plugin-factory.js";
 
 // Check if a ReferenceOrigin (returned by ./get-reference-origin.js)
 // is a reference to a @babel/types export.
-module.exports = function isFromBabelTypes(
+export default function isFromBabelTypes(
   origin /*: ReferenceOrigin */,
   scope /*: Scope */,
 ) {
@@ -30,4 +30,4 @@ module.exports = function isFromBabelTypes(
   }
 
   return false;
-};
+}

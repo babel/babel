@@ -1,4 +1,4 @@
-import rule from "../../lib/rules/no-undefined-identifier.cjs";
+import rule from "../../lib/rules/no-undefined-identifier.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 const error =
