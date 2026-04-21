@@ -1779,6 +1779,26 @@ function transformClass(
       | t.ClassPrivateMethod
     )[] = [];
     path.get("body.body").forEach(element => {
+      if (
+        element.isStaticBlock() ||
+        (!element.isClassMethod() && element.node.static)
+      ) {
+        const replaceSupers = new ReplaceSupers({
+          constantSuper,
+          methodPath: element as NodePath<
+            // Any ClassAccessorProperty has been transpiled at this point
+            Exclude<
+              ClassDecoratableElement,
+              t.ClassAccessorProperty | t.ClassMethod
+            >
+          >,
+          objectRef: classIdLocal,
+          superRef: path.node.superClass,
+          file: state.file,
+          refToPreserve: classIdLocal,
+        });
+        replaceSupers.replace();
+      }
       // Static blocks cannot be compiled to "instance blocks", but we can inline
       // them as IIFEs in the next property.
       if (element.isStaticBlock()) {
@@ -1837,17 +1857,6 @@ function transformClass(
         // At this moment the element must not have decorators, so any private name
         // within the element must come from either params or body
         if (hasInstancePrivateAccess(element, instancePrivateNames)) {
-          const replaceSupers = new ReplaceSupers({
-            constantSuper,
-            methodPath: element,
-            objectRef: classIdLocal,
-            superRef: path.node.superClass,
-            file: state.file,
-            refToPreserve: classIdLocal,
-          });
-
-          replaceSupers.replace();
-
           const privateMethodDelegateId = memoiseExpression(
             createFunctionExpressionFromPrivateMethod(element.node),
             element.get("key.id").node.name,
