@@ -4,9 +4,9 @@ const rule = require("eslint/use-at-your-own-risk").builtinRules.get(
 );
 
 /**
- * Returns whether a node is under a decorator or not.
+ * Returns whether a node is an accessor field name.
  * @param  {ASTNode}  node CallExpression node
- * @returns {Boolean} Returns true if the node is under a decorator.
+ * @returns {Boolean} Returns true if the node is an accessor field name.
  */
 function isAccessorFieldName(node) {
   const parent = node.parent;
