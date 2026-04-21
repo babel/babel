@@ -1,0 +1,46 @@
+diff --git a/dist/index.es5.js b/dist/index.es5.js
+index 1cf872f21008cb6d0c7c15dc406abeead0f12752..bc90fd5ea0c3a307cf01c52618655a965a94ae69 100644
+--- a/dist/index.es5.js
++++ b/dist/index.es5.js
+@@ -221,7 +221,7 @@ class WalltimeBenchRunner extends BaseBenchRunner {
+   }
+   async runTaskAsync(task, uri) {
+     this.wrapTaskFunction(task, true);
+-    if (this.bench.opts.warmup) {
++    if (this.bench.warmup) {
+       await task.warmup();
+     }
+     await mongoMeasurement.start(uri);
+@@ -231,7 +231,7 @@ class WalltimeBenchRunner extends BaseBenchRunner {
+   }
+   runTaskSync(task, uri) {
+     this.wrapTaskFunction(task, false);
+-    if (this.bench.opts.warmup) {
++    if (this.bench.warmup) {
+       task.warmup();
+     }
+     this.wrapWithInstrumentHooks(() => task.runSync(), uri);
+@@ -263,7 +263,7 @@ class WalltimeBenchRunner extends BaseBenchRunner {
+       console.warn(`    \u26A0 No result data available for ${uri}`);
+       return;
+     }
+-    const warmupIterations = this.bench.opts.warmup ? this.bench.opts.warmupIterations ?? TINYBENCH_WARMUP_DEFAULT : 0;
++    const warmupIterations = this.bench.warmup ? this.bench.warmupIterations ?? TINYBENCH_WARMUP_DEFAULT : 0;
+     const stats = convertTinybenchResultToBenchmarkStats(
+       task.result,
+       warmupIterations
+@@ -272,11 +272,11 @@ class WalltimeBenchRunner extends BaseBenchRunner {
+       name: task.name,
+       uri,
+       config: {
+-        max_rounds: this.bench.opts.iterations ?? null,
+-        max_time_ns: this.bench.opts.time ? msToNs(this.bench.opts.time) : null,
++        max_rounds: this.bench.iterations ?? null,
++        max_time_ns: this.bench.time ? msToNs(this.bench.time) : null,
+         min_round_time_ns: null,
+         // tinybench does not have an option for this
+-        warmup_time_ns: this.bench.opts.warmup && this.bench.opts.warmupTime ? msToNs(this.bench.opts.warmupTime) : null
++        warmup_time_ns: this.bench.warmup && this.bench.warmupTime ? msToNs(this.bench.warmupTime) : null
+       },
+       stats
+     });
