@@ -183,7 +183,7 @@ describe("@babel/register", function () {
       expect(sourceMapSupport).toBe(true);
     });
 
-    test("uninstalls source map when reverting", () => {
+    test("uninstalls source map support when reverting", () => {
       setupRegister();
       currentHook("const a = 1;", testFile);
       revertRegister();
