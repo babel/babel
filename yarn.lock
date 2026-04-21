@@ -552,13 +552,11 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/eslint-parser": "workspace:^"
+    "@babel/plugin-proposal-async-do-expressions": "workspace:^"
     "@babel/plugin-proposal-decorators": "workspace:^"
     "@babel/plugin-proposal-do-expressions": "workspace:^"
     "@babel/plugin-proposal-pipeline-operator": "workspace:^"
     "@babel/plugin-syntax-export-default-from": "workspace:^"
-    "@babel/plugin-transform-class-properties": "workspace:^"
-    "@babel/plugin-transform-explicit-resource-management": "workspace:^"
-    "@babel/plugin-transform-private-methods": "workspace:^"
     "@babel/preset-env": "workspace:^"
     "@babel/preset-flow": "workspace:^"
     "@babel/preset-react": "workspace:^"
@@ -1512,7 +1510,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-async-do-expressions@workspace:packages/babel-plugin-proposal-async-do-expressions":
+"@babel/plugin-proposal-async-do-expressions@workspace:^, @babel/plugin-proposal-async-do-expressions@workspace:packages/babel-plugin-proposal-async-do-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-async-do-expressions@workspace:packages/babel-plugin-proposal-async-do-expressions"
   dependencies:
