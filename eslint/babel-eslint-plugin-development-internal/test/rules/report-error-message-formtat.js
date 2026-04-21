@@ -1,5 +1,7 @@
+import plugin from "../../lib/index.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
-import rule from "../../lib/rules/report-error-message-format.js";
+
+const rule = plugin.rules["report-error-message-format"];
 
 const ruleTester = new RuleTester();
 

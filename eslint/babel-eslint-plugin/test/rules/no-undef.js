@@ -1,5 +1,7 @@
-import rule from "../../lib/rules/no-undef.js";
+import plugin from "../../lib/index.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
+
+const rule = plugin.rules["no-undef"];
 
 const ruleTester = new RuleTester();
 ruleTester.run("@babel/no-undef", rule, {

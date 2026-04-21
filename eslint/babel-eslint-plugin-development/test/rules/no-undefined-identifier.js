@@ -1,5 +1,7 @@
-import rule from "../../lib/rules/no-undefined-identifier.js";
+import plugin from "../../lib/index.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
+
+const rule = plugin.rules["no-undefined-identifier"];
 
 const error =
   "Use t.buildUndefinedNode() to create an undefined identifier directly.";
