@@ -14,8 +14,7 @@ const testFileContent = fs.readFileSync(testFile, "utf-8");
 const testFileMjsContent = fs.readFileSync(testFileMjs, "utf-8");
 
 const piratesPath = require.resolve("pirates");
-const smsPath = require.resolve("source-map-support");
-const sms2Path = require.resolve("@cspotcode/source-map-support");
+const smsPath = require.resolve("@cspotcode/source-map-support");
 
 const defaultOptions = {
   exts: [".js", ".jsx", ".es6", ".es", ".mjs", ".cjs"],
@@ -26,15 +25,13 @@ function cleanCache() {
   try {
     fs.rmSync(testCacheFilename, { recursive: true, force: true });
   } catch (e) {
-    // It is convenient to always try to clear
+    // It is convenient to always try to clean
   }
 }
 
 function resetCache() {
   process.env.BABEL_CACHE_PATH = null;
 }
-
-const OLD_JEST_MOCKS = !!jest.doMock;
 
 describe("@babel/register", function () {
   let currentHook, currentOptions, sourceMapSupport;
@@ -68,45 +65,27 @@ describe("@babel/register", function () {
   });
 
   let originalRequireCacheDescriptor;
-  if (OLD_JEST_MOCKS) {
-    jest.doMock("pirates", () => mocks.pirates);
-    jest.doMock("source-map-support", () => mocks["source-map-support"]);
-    jest.doMock(
-      "@cspotcode/source-map-support",
-      () => mocks["source-map-support"],
+  beforeAll(() => {
+    originalRequireCacheDescriptor = Object.getOwnPropertyDescriptor(
+      Module,
+      "_cache",
     );
+  });
 
-    afterEach(() => {
-      jest.resetModules();
-    });
-  } else {
-    beforeAll(() => {
-      originalRequireCacheDescriptor = Object.getOwnPropertyDescriptor(
-        Module,
-        "_cache",
-      );
-    });
-
-    afterAll(() => {
-      Object.defineProperty(Module, "_cache", originalRequireCacheDescriptor);
-    });
-  }
+  afterAll(() => {
+    Object.defineProperty(Module, "_cache", originalRequireCacheDescriptor);
+  });
 
   describe("worker", () => {
-    if (!OLD_JEST_MOCKS) {
-      beforeEach(() => {
-        Object.defineProperty(Module, "_cache", {
-          ...originalRequireCacheDescriptor,
-          value: {
-            [piratesPath]: { exports: mocks.pirates },
-            [smsPath]: { exports: mocks["source-map-support"] },
-            [sms2Path]: {
-              exports: mocks["source-map-support"],
-            },
-          },
-        });
+    beforeEach(() => {
+      Object.defineProperty(Module, "_cache", {
+        ...originalRequireCacheDescriptor,
+        value: {
+          [piratesPath]: { exports: mocks.pirates },
+          [smsPath]: { exports: mocks["source-map-support"] },
+        },
       });
-    }
+    });
 
     const { setupRegister } = buildTests(require.resolve("../lib/index.cjs"));
 
@@ -140,7 +119,6 @@ describe("@babel/register", function () {
     function revertRegister() {
       if (babelRegister) {
         babelRegister.revert();
-        delete require.cache[registerFile];
         babelRegister = null;
       }
       cleanCache();
