@@ -1,11 +1,9 @@
-import type { IClient, Options } from "./types.cts";
-import types = require("./types.cts");
-import ACTIONS = types.ACTIONS;
+import type { IClient, Options } from "./types.ts";
+import { ACTIONS } from "./types.ts";
 
-import worker_threads = require("node:worker_threads");
-import path = require("node:path");
+import worker_threads from "node:worker_threads";
 
-const { markInRegisterWorker } = require("./is-in-register-worker.cjs");
+import { markInRegisterWorker } from "./is-in-register-worker.ts";
 
 class Client implements IClient {
   #send;
@@ -43,7 +41,7 @@ class Client implements IClient {
 // (which is done for each file) can be asynchronous
 class WorkerClient extends Client {
   #worker = new worker_threads.Worker(
-    path.resolve(__dirname, "./worker/index.mjs"),
+    new URL("./worker/index.js", import.meta.url),
     { env: markInRegisterWorker(process.env) },
   );
 
@@ -76,4 +74,4 @@ class WorkerClient extends Client {
   }
 }
 
-export = { WorkerClient };
+export { WorkerClient };

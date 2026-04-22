@@ -1,7 +1,7 @@
-const ruleComposer = require("../rule-composer.cjs");
-const rule = require("eslint/use-at-your-own-risk").builtinRules.get(
-  "no-undef",
-);
+import * as ruleComposer from "../rule-composer.js";
+// eslint-disable-next-line import/no-unresolved
+import { builtinRules } from "eslint/use-at-your-own-risk";
+const rule = builtinRules.get("no-undef");
 
 /**
  * Returns whether a node is an accessor field name.
@@ -17,7 +17,7 @@ function isAccessorFieldName(node) {
   );
 }
 
-module.exports = ruleComposer.filterReports(
+export default ruleComposer.filterReports(
   rule,
   problem => !isAccessorFieldName(problem.node),
 );

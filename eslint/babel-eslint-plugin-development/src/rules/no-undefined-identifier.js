@@ -1,5 +1,5 @@
-const getReferenceOrigin = require("../utils/get-reference-origin.cjs");
-const isFromBabelTypes = require("../utils/is-from-babel-types.cjs");
+import getReferenceOrigin from "../utils/get-reference-origin.js";
+import isFromBabelTypes from "../utils/is-from-babel-types.js";
 
 function firstArgumentIsUndefinedString(argumentsArray) {
   return (
@@ -9,7 +9,7 @@ function firstArgumentIsUndefinedString(argumentsArray) {
   );
 }
 
-module.exports = {
+export default {
   meta: {
     schema: [],
   },

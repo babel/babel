@@ -1,6 +1,6 @@
-import type { ACTIONS } from "../types.cts";
+import type { ACTIONS } from "../types.ts";
 
-import handleMessage from "./handle-message.mts";
+import handleMessage from "./handle-message.ts";
 
 import { parentPort, type MessagePort } from "node:worker_threads";
 

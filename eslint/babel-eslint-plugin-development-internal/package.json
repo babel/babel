@@ -2,7 +2,7 @@
   "name": "@babel/eslint-plugin-development-internal",
   "version": "8.0.0-rc.3",
   "description": "The Babel Team's ESLint custom rules plugin. Since it's internal, it might not respect semver.",
-  "main": "./lib/index.cjs",
+  "main": "./lib/index.js",
   "keywords": [
     "babel",
     "eslint",
@@ -25,8 +25,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./types.d.cts",
-      "default": "./lib/index.cjs"
+      "types": "./types.d.ts",
+      "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
   }

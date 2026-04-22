@@ -4,7 +4,7 @@ import path from "node:path";
 import fs from "node:fs";
 import crypto from "node:crypto";
 
-import Cache from "./cache.mts";
+import Cache from "./cache.ts";
 import { getEnv, loadOptionsAsync, transformAsync, version } from "@babel/core";
 
 const cache = new Cache();

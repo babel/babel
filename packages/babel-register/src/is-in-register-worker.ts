@@ -20,4 +20,4 @@ const markInRegisterWorker = (env: NodeJS.ProcessEnv) => ({
 });
 const isInRegisterWorker = process.env[envVarName] === envVarValue;
 
-export = { markInRegisterWorker, isInRegisterWorker };
+export { markInRegisterWorker, isInRegisterWorker };

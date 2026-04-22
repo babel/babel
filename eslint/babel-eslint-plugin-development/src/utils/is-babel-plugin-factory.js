@@ -1,7 +1,7 @@
-const getReferenceOrigin = require("./get-reference-origin.cjs");
-const getExportName = require("./get-export-name.cjs");
+import getReferenceOrigin from "./get-reference-origin.js";
+import getExportName from "./get-export-name.js";
 
-module.exports = function isBabelPluginFactory(node, scope) {
+export default function isBabelPluginFactory(node, scope) {
   const { parent } = node;
 
   if (parent.type === "CallExpression") {
@@ -21,4 +21,4 @@ module.exports = function isBabelPluginFactory(node, scope) {
   // export default function ({ types: t }) {}
   // module.exports = function ({ types: t }) {}
   return exportName === "default" || exportName === "module.exports";
-};
+}

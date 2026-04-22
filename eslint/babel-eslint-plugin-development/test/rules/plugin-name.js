@@ -1,4 +1,4 @@
-import rule from "../../lib/rules/plugin-name.cjs";
+import rule from "../../lib/rules/plugin-name.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
 const missingPluginError = "This file does not export a Babel plugin.";
