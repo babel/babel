@@ -360,6 +360,8 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           // required by babel-node
           "core-js/stable/index.js",
           "kexec",
+          // required by eslint-plugin
+          "eslint/use-at-your-own-risk",
         ];
 
         log(
@@ -835,6 +837,12 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
 
     ["babel-eslint-parser", ["./lib/worker/index.js"]],
   ]);
+  // Todo: convert these packages to TS
+  const jsPackages = new Set([
+    "babel-eslint-plugin",
+    "babel-eslint-plugin-development",
+    "babel-eslint-plugin-development-internal",
+  ]);
   const noBundle = new Set([
     // No need to bundle JSON files
     "babel-compat-data",
@@ -846,10 +854,6 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
     // Many entry points
     "babel-runtime",
     "babel-runtime-corejs3",
-    // todo: convert to ESM and bundle
-    "babel-eslint-plugin",
-    "babel-eslint-plugin-development",
-    "babel-eslint-plugin-development-internal",
     // Not meant to be consumed manually
     "babel-eslint-shared-fixtures",
     "babel-eslint-tests",
@@ -885,20 +889,21 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       throw new Error("Please specify the entry points for package: " + src);
     }
 
+    const inputs = entryPoints.map(lib => {
+      // Prefix `./` to make it explicitly a relative path, otherwise rollup will
+      // try to resolve `eslint/babel-eslint-parser` from node_modules
+      const input = "./" + path.join(src, lib.replace("/lib/", "/src/"));
+      if (jsPackages.has(packageName)) {
+        return input;
+      }
+      return input.replace(/(\.c)?js$/, "$1ts");
+    });
+
     yield {
       src,
       format: "esm",
       dest: "lib",
-      inputs: entryPoints.map(
-        lib =>
-          // Prefix `./` to make it explicitly a relative path, otherwise rollup will
-          // try to resolve `eslint/babel-eslint-parser` from node_modules
-          "./" +
-          path.join(
-            src,
-            lib.replace("/lib/", "/src/").replace(/(\.c)?js$/, "$1ts")
-          )
-      ),
+      inputs,
       pkgJSON,
     };
   }
