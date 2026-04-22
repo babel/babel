@@ -60,6 +60,7 @@ async function setOptions(opts: any) {
   delete opts.extensions;
 
   transformOpts = {
+    babelrc: true,
     ...opts,
     caller: {
       name: "@babel/register",

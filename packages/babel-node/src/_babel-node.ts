@@ -31,10 +31,9 @@ const babelOptions = {
   envName: opts.envName,
   rootMode: opts.rootMode,
 
-  // Commander will default the "--no-" arguments to true, but we want to
-  // leave them undefined so that @babel/core can handle the
-  // default-assignment logic on its own.
-  babelrc: opts.babelrc === true ? undefined : opts.babelrc,
+  // Commander will default the "--no-" arguments to true.
+  // We will use `true` to override the default value of `@babel/core`.
+  babelrc: opts.babelrc,
 };
 
 for (const key of Object.keys(babelOptions) as (keyof typeof babelOptions)[]) {

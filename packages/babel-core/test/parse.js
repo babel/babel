@@ -22,6 +22,7 @@ describe("parseSync", function () {
 
     const result = parseSync(input, {
       filename: fixture("input.js"),
+      babelrc: true,
       cwd: fixture(),
     });
     expect(JSON.parse(JSON.stringify(result))).toEqual(output);

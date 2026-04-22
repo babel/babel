@@ -212,10 +212,7 @@ export function* buildRootChain(
   let isIgnored = false;
   const fileChain = emptyChain();
   // resolve all .babelrc files
-  if (
-    (babelrc === true || babelrc === undefined) &&
-    typeof context.filename === "string"
-  ) {
+  if (babelrc === true && typeof context.filename === "string") {
     const pkgData = yield* findPackageData(context.filename);
 
     if (

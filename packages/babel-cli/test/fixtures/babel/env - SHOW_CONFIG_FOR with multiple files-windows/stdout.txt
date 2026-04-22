@@ -23,6 +23,7 @@ programmatic options from @babel/cli
     "<ROOTDIR>//packages//babel-plugin-transform-strict-mode//lib//index.js",
     "<ROOTDIR>//packages//babel-plugin-transform-modules-commonjs//lib//index.js"
   ],
+  "babelrc": true,
   "sourceFileName": "src/foo.js",
   "caller": {
     "name": "@babel/cli",
