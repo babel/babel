@@ -852,14 +852,15 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
     // Many entry points
     "babel-runtime",
     "babel-runtime-corejs3",
-    // Not meant to be consumed manually
-    "babel-eslint-shared-fixtures",
-    "babel-eslint-tests",
   ]);
   for (const src of packagesIterator(noBundle)) {
     const pkgJSON = JSON.parse(
       fs.readFileSync(new URL(`${src}/package.json`, import.meta.url), "utf-8")
     );
+    if (pkgJSON.private) {
+      // Skip private packages since they are not meant to be consumed by users
+      continue;
+    }
     const entryPoints = Array.from(
       getPackageExports(
         pkgJSON.exports,
