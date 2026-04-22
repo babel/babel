@@ -16,11 +16,31 @@ ruleTester.run("@babel/no-empty", rule, {
   invalid: [
     {
       code: "var x = do { if(foo) {} }",
-      errors: [{ message: "Empty block statement." }],
+      errors: [
+        {
+          message: "Empty block statement.",
+          suggestions: [
+            {
+              messageId: "suggestComment",
+              output: "var x = do { if(foo) { /* empty */ } }",
+            },
+          ],
+        },
+      ],
     },
     {
       code: "while (foo) {}",
-      errors: [{ message: "Empty block statement." }],
+      errors: [
+        {
+          message: "Empty block statement.",
+          suggestions: [
+            {
+              messageId: "suggestComment",
+              output: "while (foo) { /* empty */ }",
+            },
+          ],
+        },
+      ],
     },
   ],
 });
