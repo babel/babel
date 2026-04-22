@@ -834,7 +834,7 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       ["./lib/babel-helpers-in-memory.js", "./lib/exit-loader.cjs"],
     ],
     ["babel-node", ["./lib/babel-node.js", "./lib/_babel-node.js"]],
-
+    ["babel-register", ["./lib/worker/index.js"]],
     ["babel-eslint-parser", ["./lib/worker/index.js"]],
   ]);
   // Todo: convert these packages to TS
@@ -849,8 +849,6 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
     "babel-helper-globals",
     // babel-standalone is handled by rollup-babel-standalone task
     "babel-standalone",
-    // todo: convert to ESM and bundle babel-register
-    "babel-register",
     // Many entry points
     "babel-runtime",
     "babel-runtime-corejs3",
