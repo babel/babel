@@ -1,5 +1,4 @@
 import verifyAndAssertMessages from "../../helpers/verifyAndAssertMessages.js";
-import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 function verifyDecoratorsLegacyAndAssertMessages(
@@ -12,9 +11,11 @@ function verifyDecoratorsLegacyAndAssertMessages(
     parserOptions: {
       sourceType,
       babelOptions: {
-        configFile: path.resolve(
-          path.dirname(fileURLToPath(import.meta.url)),
-          "../../../../babel-eslint-shared-fixtures/config/babel.config.decorators-legacy.js",
+        configFile: fileURLToPath(
+          new URL(
+            "../../../../babel-eslint-shared-fixtures/config/babel.config.decorators-legacy.js",
+            import.meta.url,
+          ),
         ),
       },
     },
