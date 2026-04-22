@@ -1,5 +1,7 @@
-import rule from "../../lib/rules/plugin-name.js";
+import plugin from "../../lib/index.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
+
+const rule = plugin.rules["plugin-name"];
 
 const missingPluginError = "This file does not export a Babel plugin.";
 const missingNameError = "This Babel plugin doesn't have a 'name' property.";

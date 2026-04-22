@@ -1,5 +1,7 @@
-import rule from "../../lib/rules/no-deprecated-clone.js";
+import plugin from "../../lib/index.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
+
+const rule = plugin.rules["no-deprecated-clone"];
 
 const cloneError = "t.clone() is deprecated. Use t.cloneNode() instead.";
 const cloneDeepError =

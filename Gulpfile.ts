@@ -336,10 +336,8 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
         name,
         filename,
         envName = "rollup",
+        pkgJSON,
       }) => {
-        inputs = inputs.map(input => input.replaceAll("\\", "/"));
-
-        const pkgJSON = require("./" + src + "/package.json");
         const version = pkgJSON.version + versionSuffix;
         const {
           dependencies = {},
@@ -359,6 +357,11 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           /babel-plugin-dynamic-import-node\/utils/,
           // required by preset-env
           /@babel\/preset-modules\/.*/,
+          // required by babel-node
+          "core-js/stable/index.js",
+          "kexec",
+          // required by eslint-plugin
+          "eslint/use-at-your-own-risk",
         ];
 
         log(
@@ -368,10 +371,10 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           input: Object.fromEntries(
             inputs.map(inputName => [
               filename ||
-                // packages/babel-foo/src/bar/baz.ts -> bar/baz.js
+                // ./packages/babel-foo/src/bar/baz.ts -> bar/baz.js
                 inputName
                   .split("/")
-                  .slice(3)
+                  .slice(4)
                   .join("/")
                   .replace(/(\.[cm]?)ts$/, "$1js"),
               inputName,
@@ -410,7 +413,16 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                 ) {
                   return;
                 }
+                break;
               }
+              case "EMPTY_BUNDLE":
+                if (
+                  warning.names?.length === 1 &&
+                  warning.names[0] === "babel-helpers-in-memory.js"
+                ) {
+                  // babel-helpers-in-memory.js is an empty file for jest v8 coverage provider
+                  return;
+                }
             }
 
             // We use console.warn here since it prints more info than just "warn",
@@ -783,10 +795,10 @@ async function buildBabelParserDts() {
 }
 
 function* packagesIterator(exclude: Set<string>) {
-  for (const packageDir of ["packages", "codemods"]) {
+  for (const packageDir of ["packages", "codemods", "eslint"]) {
     for (const dir of fs.readdirSync(new URL(packageDir, import.meta.url))) {
       const src = `${packageDir}/${dir}`;
-      if (exclude.has(src)) continue;
+      if (exclude.has(dir)) continue;
       if (!fs.existsSync(new URL(`${src}/package.json`, import.meta.url))) {
         continue;
       }
@@ -814,46 +826,49 @@ function* getPackageExports(
 }
 
 function* libBundlesIterator(): IterableIterator<PackageInfo> {
-  const noBundle = new Set(
+  const extraPackagesEntries = new Map<string, string[]>([
+    ["babel-build-external-helpers", ["./lib/babel-build-external-helpers.js"]],
+    ["babel-cli", ["./lib/babel/index.js"]],
     [
-      // @rollup/plugin-commonjs will mess up with babel-helper-fixtures
-      "babel-helper-fixtures",
-      // babel-standalone is handled by rollup-babel-standalone task
-      "babel-standalone",
-      // todo: Rollup hangs on allowHashBang: true with babel-cli/src/babel/index.ts hashbang
-      "babel-cli",
-      "babel-build-external-helpers",
-      // todo: These package use #import conditions, that we want to leave unbundled.
-      // Eventually figure out how to bundle the rest.
-      "babel-register",
-      // @babel/node invokes internal lib/_babel-node.js
-      "babel-node",
-      // todo: test/helpers/define-helper requires internal lib/helpers access
-      "babel-helpers",
-      // rollup bug https://github.com/babel/babel/pull/16001
-      "babel-helper-builder-react-jsx",
-      // exit-loader.cjs
       "babel-helper-transform-fixture-test-runner",
-      // Many entry points
-      "babel-runtime",
-      "babel-runtime-corejs3",
-    ].map(n => `packages/${n}`)
-  );
+      ["./lib/babel-helpers-in-memory.js", "./lib/exit-loader.cjs"],
+    ],
+    ["babel-node", ["./lib/babel-node.js", "./lib/_babel-node.js"]],
+    ["babel-register", ["./lib/worker/index.js"]],
+    ["babel-eslint-parser", ["./lib/worker/index.js"]],
+  ]);
+  // Todo: convert these packages to TS
+  const jsPackages = new Set([
+    "babel-eslint-plugin",
+    "babel-eslint-plugin-development",
+    "babel-eslint-plugin-development-internal",
+  ]);
+  const noBundle = new Set([
+    // No need to bundle JSON files
+    "babel-compat-data",
+    "babel-helper-globals",
+    // babel-standalone is handled by rollup-babel-standalone task
+    "babel-standalone",
+    // Many entry points
+    "babel-runtime",
+    "babel-runtime-corejs3",
+  ]);
   for (const src of packagesIterator(noBundle)) {
     const pkgJSON = JSON.parse(
       fs.readFileSync(new URL(`${src}/package.json`, import.meta.url), "utf-8")
     );
-    if (pkgJSON.exports) {
-      const entryPoints = Array.from(
-        getPackageExports(
-          pkgJSON.exports,
-          new Set(["browser", "default"]),
-          /\.(?:js|mjs|cjs)$/
-        )
-      );
-      if (!entryPoints.length) {
-        continue;
-      }
+    if (pkgJSON.private) {
+      // Skip private packages since they are not meant to be consumed by users
+      continue;
+    }
+    const entryPoints = Array.from(
+      getPackageExports(
+        pkgJSON.exports,
+        new Set(["browser", "default"]),
+        /\.(?:js|mjs|cjs)$/
+      )
+    );
+    if (entryPoints.length) {
       if (pkgJSON.imports) {
         entryPoints.push(
           ...getPackageExports(
@@ -863,35 +878,33 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
           )
         );
       }
-
-      yield {
-        src,
-        format: "esm",
-        dest: "lib",
-        inputs: entryPoints.map(lib =>
-          path.join(
-            src,
-            lib.replace("/lib/", "/src/").replace(/(\.c)?js$/, "$1ts")
-          )
-        ),
-      };
-    } else if (pkgJSON.bin) {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      for (const binPath of Object.values(pkgJSON.bin) as string[]) {
-        const filename = binPath.slice(binPath.lastIndexOf("/") + 1);
-        const input =
-          src === "packages/babel-cli" && filename === "babel.js"
-            ? `${src}/src/babel/index.ts`
-            : `${src}/src/${filename.slice(0, -3) + ".ts"}`;
-        yield {
-          src,
-          format: "esm",
-          dest: "lib",
-          filename,
-          inputs: [input],
-        };
-      }
     }
+    const packageName = path.posix.basename(src);
+    if (extraPackagesEntries.has(packageName)) {
+      entryPoints.push(...extraPackagesEntries.get(packageName)!);
+    }
+
+    if (!entryPoints.length) {
+      throw new Error("Please specify the entry points for package: " + src);
+    }
+
+    const inputs = entryPoints.map(lib => {
+      // Prefix `./` to make it explicitly a relative path, otherwise rollup will
+      // try to resolve `eslint/babel-eslint-parser` from node_modules
+      const input = "./" + path.join(src, lib.replace("/lib/", "/src/"));
+      if (jsPackages.has(packageName)) {
+        return input;
+      }
+      return input.replace(/(\.c)?js$/, "$1ts");
+    });
+
+    yield {
+      src,
+      format: "esm",
+      dest: "lib",
+      inputs,
+      pkgJSON,
+    };
   }
 }
 
@@ -903,6 +916,7 @@ type PackageInfo = {
   name?: string;
   filename?: string;
   envName?: string;
+  pkgJSON: any;
 };
 
 const libBundles: PackageInfo[] = Array.from(libBundlesIterator());
@@ -911,31 +925,43 @@ const dtsBundles = Array.from(
   packagesIterator(
     new Set([
       // CLIs
-      "packages/babel-cli",
-      "packages/babel-build-external-helpers",
-      "packages/babel-node",
+      "babel-cli",
+      "babel-build-external-helpers",
+      "babel-node",
       // This will be just JSON
-      "packages/babel-compat-data",
-      "packages/babel-helper-globals",
+      "babel-compat-data",
+      "babel-helper-globals",
       // Not meant to be consumed manually
-      "packages/babel-runtime",
-      "packages/babel-runtime-corejs3",
+      "babel-runtime",
+      "babel-runtime-corejs3",
       // TODO: Add type definitions
-      "packages/babel-register",
+      "babel-register",
+
+      "babel-eslint-plugin",
+      "babel-eslint-plugin-development",
+      "babel-eslint-plugin-development-internal",
+      // Not meant to be consumed manually
+      "babel-eslint-shared-fixtures",
+      "babel-eslint-tests",
     ])
   )
 );
 
-const standaloneBundle = [
+const standaloneBundle: PackageInfo[] = [
   {
     src: "packages/babel-standalone",
     format: "umd" as const,
     name: "Babel",
     filename: "babel.js",
     dest: "",
-    version: babelVersion,
     envName: "standalone",
     inputs: [getIndexFromPackage("packages/babel-standalone")],
+    pkgJSON: JSON.parse(
+      fs.readFileSync(
+        new URL(`./packages/babel-standalone/package.json`, import.meta.url),
+        "utf-8"
+      )
+    ),
   },
 ];
 
