@@ -13,13 +13,12 @@ import type {
   ScopeManager as OriginalScopeManager,
 } from "eslint-scope";
 
-declare class ScopeDefinition extends OriginalScopeDefinition {
-  constructor(
+type ScopeDefinition = OriginalScopeDefinition &
+  (new (
     type: OriginalScopeDefinition["type"] | "TypeParameter",
     name: estree.Identifier,
     node: estree.Node,
-  );
-}
+  ) => ScopeDefinition);
 
 export type Options = Linter.ParserOptions & { babelOptions: InputOptions };
 export type BabelToken = tokenizerToken & {
@@ -115,7 +114,7 @@ declare class Referencer extends OriginalReferencer {
 }
 
 export type Scope = {
-  Definition: typeof ScopeDefinition;
+  Definition: ScopeDefinition;
   PatternVisitor: typeof PatternVisitor;
   Referencer: typeof Referencer;
   Scope: typeof ESLintScope;
