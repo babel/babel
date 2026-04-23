@@ -176,29 +176,12 @@ class Referencer extends OriginalReferencer {
     }
   }
 
-  ClassProperty(node: any) {
-    this._visitClassProperty(node);
-  }
-
-  ClassPrivateProperty(node: any) {
-    this._visitClassProperty(node);
-  }
-
   AccessorProperty(node: any) {
-    this._visitClassProperty(node);
-  }
-
-  ClassAccessorProperty(node: any) {
     this._visitClassProperty(node);
   }
 
   PropertyDefinition(node: any) {
     this._visitClassProperty(node);
-  }
-
-  // TODO: Update to visit type annotations when TypeScript/Flow support this syntax.
-  ClassPrivateMethod(node: any) {
-    super.MethodDefinition(node);
   }
 
   DeclareModule(node: any) {
@@ -215,11 +198,6 @@ class Referencer extends OriginalReferencer {
 
   DeclareClass(node: any) {
     this._visitDeclareX(node);
-  }
-
-  // visit OptionalMemberExpression as a MemberExpression.
-  OptionalMemberExpression(node: any) {
-    super.MemberExpression(node);
   }
 
   _visitClassProperty(node: any) {
