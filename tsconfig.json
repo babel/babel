@@ -299,6 +299,9 @@
       "path": "./packages/babel-plugin-transform-function-name"
     },
     {
+      "path": "./packages/babel-plugin-transform-import-meta"
+    },
+    {
       "path": "./packages/babel-plugin-transform-instanceof"
     },
     {
