@@ -4,12 +4,22 @@ import type { Token as tokenizerToken } from "../../../packages/babel-parser/src
 import type { ExportedTokenType } from "../../../packages/babel-parser/src/tokenizer/types";
 import type * as estree from "estree";
 import type {
+  Definition as OriginalScopeDefinition,
   PatternVisitor,
-  Reference,
-  ScopeManager,
   Variable,
-  Visitor,
-} from "@typescript-eslint/scope-manager";
+  Referencer as OriginalReferencer,
+  Reference,
+  Scope as OriginalESLintScope,
+  ScopeManager as OriginalScopeManager,
+} from "eslint-scope";
+
+declare class ScopeDefinition extends OriginalScopeDefinition {
+  constructor(
+    type: OriginalScopeDefinition["type"] | "TypeParameter",
+    name: estree.Identifier,
+    node: estree.Node,
+  );
+}
 
 export type Options = Linter.ParserOptions & { babelOptions: InputOptions };
 export type BabelToken = tokenizerToken & {
@@ -18,23 +28,6 @@ export type BabelToken = tokenizerToken & {
 export type { Comment } from "../../../packages/babel-parser/src/types";
 export type { ParseResult } from "../../../packages/babel-core/src/parser";
 export type { AST } from "eslint";
-
-declare class ScopeDefinition {
-  constructor(
-    type: string,
-    name: estree.Identifier,
-    node: estree.Node,
-    parent?: estree.Node,
-    index?: number,
-    kind?: string,
-  );
-  type: string;
-  name: estree.Identifier;
-  node: estree.Node;
-  parent?: estree.Node;
-  index?: number;
-  kind?: string;
-}
 
 declare enum ReferenceFlag {
   Read = 1,
@@ -47,27 +40,13 @@ interface ReferenceImplicitGlobal {
   ref?: Reference;
 }
 
-declare class ESLintScope {
-  declare type: string;
-  declare set: Map<string, Variable>;
-  declare taints: Map<string, boolean>;
-  declare dynamic: boolean;
-  declare block: estree.Node;
-  declare through: Reference[];
-  declare variables: Variable[];
-  declare references: Reference[];
-  declare variableScope: ESLintScope;
-  declare functionExpressionScope: boolean;
-  declare directCallToEvalScope: boolean;
-  declare thisFound: boolean;
-  declare upper: ESLintScope;
-  declare isStrict: boolean;
-  declare childScopes: ESLintScope[];
-  declare __declaredVariables: Map<estree.Node, Variable[]>;
-  declare __left: Reference[];
+declare class ESLintScope extends OriginalESLintScope {
+  variableScope: ESLintScope;
+  __declaredVariables: Map<estree.Node, Variable[]>;
+  __left: Reference[];
   constructor(
     scopeManager: ScopeManager,
-    type: string,
+    type: OriginalESLintScope["type"] | "type-parameters",
     upperScope: ESLintScope,
     block: estree.Node,
     isMethodDefinition: boolean,
@@ -117,47 +96,22 @@ declare class ESLintScope {
   __detectThis(): void;
 
   __isClosed(): boolean;
+}
 
-  resolve(ident: estree.Identifier): Reference | null;
-
-  isStatic(): boolean;
-
-  isArgumentsMaterialized(): boolean;
-
-  isThisMaterialized(): boolean;
-
-  isUsedName(name: any): boolean;
+declare class ScopeManager extends OriginalScopeManager {
+  __currentScope: ESLintScope;
+  __nestScope(scope: ESLintScope): ESLintScope;
+  __nestClassFieldInitializerScope(node: estree.Node): ESLintScope;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-declare class Referencer extends Visitor {
-  readonly scopeManager: ScopeManager & {
-    __currentScope: ESLintScope;
-    __nestScope(scope: ESLintScope): ESLintScope;
-    __nestClassFieldInitializerScope?(scope: ESLintScope): ESLintScope;
-  };
-  options: any;
+declare class Referencer extends OriginalReferencer {
+  readonly scopeManager: ScopeManager;
 
   constructor(options: any, scopeManager: ScopeManager);
 
   currentScope(): ESLintScope;
   currentScope(throwOnNull: true): ESLintScope | null;
-  close(node: estree.Node): void;
-  referencingDefaultValue(
-    pattern: estree.Identifier,
-    assignments: (estree.AssignmentExpression | estree.AssignmentPattern)[],
-    maybeImplicitGlobal: ReferenceImplicitGlobal | null,
-    init: boolean,
-  ): void;
-
-  visitProperty(node: estree.Property): void;
-  visitClass(node: estree.ClassDeclaration | estree.ClassExpression): void;
-  visitFunction(
-    node: estree.FunctionDeclaration | estree.FunctionExpression,
-  ): void;
-
-  MethodDefinition(node: estree.MethodDefinition): void;
-  MemberExpression(node: estree.MemberExpression): void;
 }
 
 export type Scope = {

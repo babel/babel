@@ -503,7 +503,6 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     "@types/estree": "npm:^1.0.5"
-    "@typescript-eslint/scope-manager": "npm:^8.55.0"
     dedent: "npm:^1.5.3"
     eslint: "npm:^10.0.0"
     eslint-scope: "npm:^9.1.0"
@@ -5920,7 +5919,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/scope-manager@npm:8.56.0, @typescript-eslint/scope-manager@npm:^8.55.0":
+"@typescript-eslint/scope-manager@npm:8.56.0":
   version: 8.56.0
   resolution: "@typescript-eslint/scope-manager@npm:8.56.0"
   dependencies:

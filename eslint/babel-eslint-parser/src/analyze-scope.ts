@@ -348,6 +348,7 @@ export default function analyzeScope(ast: any, parserOptions: any) {
     childVisitorKeys: t.VISITOR_KEYS,
   };
 
+  // @ts-expect-error upstream typing issue in the `fallback` property: (node: estree.Node) => readonly string[] is not assignable to type (node: estree.Node) => string[]
   const scopeManager = new ScopeManager(options);
   const referencer = new Referencer(options, scopeManager);
 
