@@ -1,7 +1,12 @@
-import getReferenceOrigin from "./get-reference-origin.js";
-import getExportName from "./get-export-name.js";
+import type { Rule, Scope } from "eslint";
+import type { Node } from "estree";
+import getReferenceOrigin from "./get-reference-origin.ts";
+import isDefaultExport from "./is-default-export.ts";
 
-export default function isBabelPluginFactory(node, scope) {
+export default function isBabelPluginFactory(
+  node: Node & Rule.NodeParentExtension,
+  scope: Scope.Scope,
+) {
   const { parent } = node;
 
   if (parent.type === "CallExpression") {
@@ -9,16 +14,13 @@ export default function isBabelPluginFactory(node, scope) {
 
     // Using "declare" from "@babel/helper-plugin-utils"
     return !!(
-      calleeOrigin &&
-      calleeOrigin.kind === "import" &&
+      calleeOrigin?.kind === "import" &&
       calleeOrigin.name === "declare" &&
       calleeOrigin.source === "@babel/helper-plugin-utils"
     );
   }
 
-  const exportName = getExportName(node);
-
   // export default function ({ types: t }) {}
   // module.exports = function ({ types: t }) {}
-  return exportName === "default" || exportName === "module.exports";
+  return isDefaultExport(parent);
 }

@@ -37,10 +37,12 @@
   },
   "homepage": "https://babel.dev/",
   "peerDependencies": {
+    "@babel/core": "workspace:^",
     "@babel/eslint-parser": "workspace:^",
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "devDependencies": {
+    "@babel/core": "workspace:^",
     "eslint": "^10.0.0"
   }
 }

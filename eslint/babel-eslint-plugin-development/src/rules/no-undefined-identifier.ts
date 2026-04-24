@@ -1,7 +1,11 @@
-import getReferenceOrigin from "../utils/get-reference-origin.js";
-import isFromBabelTypes from "../utils/is-from-babel-types.js";
+import type { Rule } from "eslint";
+import type { Expression, SpreadElement } from "estree";
+import getReferenceOrigin from "../utils/get-reference-origin.ts";
+import isFromBabelTypes from "../utils/is-from-babel-types.ts";
 
-function firstArgumentIsUndefinedString(argumentsArray) {
+function firstArgumentIsUndefinedString(
+  argumentsArray: (Expression | SpreadElement)[],
+): boolean {
   return (
     argumentsArray.length > 0 &&
     argumentsArray[0].type === "Literal" &&
@@ -20,7 +24,10 @@ export default {
         const scope = context.sourceCode.getScope(node);
 
         const origin = getReferenceOrigin(callee, scope);
-        if (!origin) return;
+        if (
+          !(origin && (origin.kind === "import" || origin.kind === "property"))
+        )
+          return;
 
         const { name } = origin;
         if (
@@ -28,12 +35,13 @@ export default {
           firstArgumentIsUndefinedString(node.arguments) &&
           isFromBabelTypes(origin, scope)
         ) {
-          context.report(
+          context.report({
             node,
-            "Use t.buildUndefinedNode() to create an undefined identifier directly.",
-          );
+            message:
+              "Use t.buildUndefinedNode() to create an undefined identifier directly.",
+          });
         }
       },
     };
   },
-};
+} satisfies Rule.RuleModule;

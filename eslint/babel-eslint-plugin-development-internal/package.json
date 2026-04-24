@@ -16,7 +16,6 @@
   },
   "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin-development-internal",
   "peerDependencies": {
-    "@babel/eslint-parser": "workspace:^",
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
-import newCap from "./rules/new-cap.js";
-import noUndef from "./rules/no-undef.js";
-import noUnusedExpressions from "./rules/no-unused-expressions.js";
+import newCap from "./rules/new-cap.ts";
+import noUndef from "./rules/no-undef.ts";
+import noUnusedExpressions from "./rules/no-unused-expressions.ts";
 
 const meta = {
   name: PACKAGE_JSON.name,

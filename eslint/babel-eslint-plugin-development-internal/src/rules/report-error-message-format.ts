@@ -1,3 +1,5 @@
+import type { Rule } from "eslint";
+import type { Literal, Property } from "estree";
 const messageId = "mustMatchPattern";
 
 const pattern = /(?:('|`)[^'`]*\1|[A-Z]).*[.?]$/s;
@@ -15,9 +17,9 @@ export default {
   create({ report }) {
     return {
       "CallExpression[callee.type='Identifier'][callee.name='makeErrorTemplates'] > ObjectExpression > Property[value.type='Literal']"(
-        node,
+        node: Property,
       ) {
-        const { value } = node;
+        const { value } = node as { value: Literal };
         if (typeof value.value === "string" && pattern.test(value.value)) {
           return;
         }
@@ -28,4 +30,4 @@ export default {
       },
     };
   },
-};
+} satisfies Rule.RuleModule;
