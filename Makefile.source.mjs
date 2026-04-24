@@ -369,7 +369,7 @@ function eslint(...extraArgs) {
   const chunks = [];
   // Linting everything at the same time needs too much memory and crashes
   // Do it in batches packages
-  for (let i = 0, chunkSize = 40; i < packagesPackages.length; i += chunkSize) {
+  for (let i = 0, chunkSize = 20; i < packagesPackages.length; i += chunkSize) {
     if (packagesPackages.length - i === 1) {
       // Only one package remaining
       chunks.push([`packages/${packagesPackages[i]}/**/*`]);
@@ -406,7 +406,7 @@ function eslint(...extraArgs) {
               undefined,
               true
             ),
-          { BABEL_ENV: "test" }
+          { BABEL_ENV: "test", NODE_OPTIONS: "--max-old-space-size=16384" }
         );
       } catch (e) {
         err = e;
@@ -505,8 +505,9 @@ function bootstrapParserTests(name, repoURL, subPaths) {
     "clone",
     "--filter=blob:none",
     "--sparse",
-    "--single-branch",
-    "--shallow-since='2 years ago'",
+    "--depth",
+    "1",
+    "--revision=" + getParserTestsCommit(name),
     repoURL,
     dir,
   ]);

@@ -1,4 +1,4 @@
-import type { PluginPass } from "@babel/core";
+import type { NodePath, PluginPass } from "@babel/core";
 import { types as t } from "@babel/core";
 
 export let newHelpersAvailable: (file: PluginPass) => boolean;
@@ -42,7 +42,7 @@ if (!process.env.BABEL_8_BREAKING) {
   };
 }
 
-export function isReference(path: any) {
+export function isReference(path: NodePath) {
   return (
     path.isReferenced() ||
     path.parentPath.isAssignmentExpression({ left: path.node })

@@ -31,7 +31,7 @@ export default declare(api => {
         >;
         if (!lhs.isOptionalMemberExpression()) return;
 
-        let ifNullish: t.Expression = path.scope.buildUndefinedNode();
+        let ifNullish: t.Expression = t.buildUndefinedNode();
         if (isParenthesized) {
           ifNullish = t.callExpression(
             state.addHelper("nullishReceiverError"),

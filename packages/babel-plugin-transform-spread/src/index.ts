@@ -170,7 +170,7 @@ export default declare((api, options: Options) => {
               "Please add '@babel/plugin-transform-classes' to your Babel configuration.",
           );
         }
-        let contextLiteral: t.Expression | t.Super = scope.buildUndefinedNode();
+        let contextLiteral: t.Expression | t.Super = t.buildUndefinedNode();
         node.arguments = [];
 
         let nodes: t.Expression[];

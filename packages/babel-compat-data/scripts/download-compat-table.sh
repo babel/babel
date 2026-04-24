@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-COMPAT_TABLE_COMMIT=00aa5f6f7d3c6e6ab84bd4e60bee99d3c6f8283a
+COMPAT_TABLE_COMMIT=8f4179ffb5e7a06a12739400fcd31b5a34ef7964
 GIT_HEAD=build/compat-table/.git/HEAD
 
 if [ -d "build/compat-table" ]; then
@@ -16,5 +16,4 @@ fi
 
 rm -rf build/compat-table
 mkdir -p build
-git clone --single-branch --shallow-since=2024-04-01 https://github.com/compat-table/compat-table.git build/compat-table
-cd build/compat-table && git checkout -q $COMPAT_TABLE_COMMIT
+git clone --depth 1 --revision=$COMPAT_TABLE_COMMIT https://github.com/compat-table/compat-table.git build/compat-table

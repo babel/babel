@@ -35,6 +35,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -76,6 +77,19 @@
     "node": "6",
     "deno": "1",
     "ios": "16.3",
+    "samsung": "5",
+    "opera_mobile": "36",
+    "electron": "0.37"
+  },
+  "bugfix/transform-safari-rest-destructuring-rhs-array": {
+    "chrome": "49",
+    "opera": "36",
+    "edge": "14",
+    "firefox": "34",
+    "safari": "14.1",
+    "node": "6",
+    "deno": "1",
+    "ios": "14.5",
     "samsung": "5",
     "opera_mobile": "36",
     "electron": "0.37"
@@ -171,6 +185,7 @@
     "deno": "1",
     "ios": "9",
     "samsung": "3.4",
+    "rhino": "1.9",
     "opera_mobile": "28",
     "electron": "0.21"
   },
@@ -178,6 +193,19 @@
     "chrome": "51",
     "opera": "38",
     "edge": "14",
+    "firefox": "53",
+    "safari": "10",
+    "node": "6.5",
+    "deno": "1",
+    "ios": "10",
+    "samsung": "5",
+    "opera_mobile": "41",
+    "electron": "1.2"
+  },
+  "transform-destructuring": {
+    "chrome": "51",
+    "opera": "38",
+    "edge": "15",
     "firefox": "53",
     "safari": "10",
     "node": "6.5",

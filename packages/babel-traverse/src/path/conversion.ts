@@ -37,6 +37,7 @@ import {
   exportNamedDeclaration,
   exportSpecifier,
   inherits,
+  buildUndefinedNode,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import template from "@babel/template";
@@ -351,7 +352,7 @@ function hoistFunctionEnvironment(
             unaryExpression("typeof", args()),
             stringLiteral("undefined"),
           ),
-          thisEnvFn.scope.buildUndefinedNode(),
+          buildUndefinedNode(),
           args(),
         );
       } else {

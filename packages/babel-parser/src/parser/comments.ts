@@ -178,6 +178,7 @@ export default class CommentsParser extends BaseParser {
             adjustInnerComments(node, node.properties, commentWS);
             break;
           case "CallExpression":
+          case "NewExpression":
           case "OptionalCallExpression":
             adjustInnerComments(node, node.arguments, commentWS);
             break;
@@ -194,6 +195,7 @@ export default class CommentsParser extends BaseParser {
           case "ObjectMethod":
           case "ClassMethod":
           case "ClassPrivateMethod":
+          case "TSTypeParameterDeclaration":
             adjustInnerComments(node, node.params, commentWS);
             break;
           case "ArrayExpression":
@@ -213,6 +215,9 @@ export default class CommentsParser extends BaseParser {
             break;
           case "TSEnumBody":
             adjustInnerComments(node, node.members, commentWS);
+            break;
+          case "TSInterfaceBody":
+            adjustInnerComments(node, node.body, commentWS);
             break;
           default: {
             if (!process.env.BABEL_8_BREAKING) {

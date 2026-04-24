@@ -1,4 +1,4 @@
-import type { NodePath, Scope, PluginPass, File } from "@babel/core";
+import type { NodePath, PluginPass, File } from "@babel/core";
 import { types as t } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
 
@@ -8,11 +8,7 @@ import {
   toRanges,
 } from "./util.ts";
 
-function buildFieldsReplacement(
-  fields: t.ClassProperty[],
-  scope: Scope,
-  file: File,
-) {
+function buildFieldsReplacement(fields: t.ClassProperty[], file: File) {
   return t.staticBlock(
     fields.map(field => {
       const key =
@@ -24,7 +20,7 @@ function buildFieldsReplacement(
         t.callExpression(file.addHelper("defineProperty"), [
           t.thisExpression(),
           key,
-          field.value || scope.buildUndefinedNode(),
+          field.value || t.buildUndefinedNode(),
         ]),
       );
     }),
@@ -55,7 +51,6 @@ export default declare(api => {
           startPath.replaceWith(
             buildFieldsReplacement(
               path.node.body.body.slice(start, end) as t.ClassProperty[],
-              path.scope,
               this.file,
             ),
           );

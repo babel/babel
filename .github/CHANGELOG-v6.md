@@ -2098,7 +2098,7 @@ Some small but very important additions in this release:
 
 ### Preset options ([babel/notes](https://github.com/babel/notes/blob/master/2016-07/july-31.md#preset-options-pr-3331))
 
-Initially, presets were supposed to be one-off sets of plugins that didn't have any configuration. If you wanted to do something different you would make your own presets. There are [> 600 presets](https://www.npmjs.com/search?q=babel-preset-) on npm now. We want to give users more flexibility in certain cases: like when you want to pass the same option to multiple presets or to remove a default plugin.
+Initially, presets were supposed to be one-off sets of plugins that didn't have any configuration. If you wanted to do something different you would make your own presets. There are [> 600 presets](https://npmx.dev/search?q=babel-preset) on npm now. We want to give users more flexibility in certain cases: like when you want to pass the same option to multiple presets or to remove a default plugin.
 
 ### `loose` and `modules` options for `babel-preset-es2015` ([#3331](https://github.com/babel/babel/pull/3331), [#3627](https://github.com/babel/babel/pull/3627))
 

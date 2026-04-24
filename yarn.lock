@@ -1391,6 +1391,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-bugfix-safari-rest-destructuring-rhs-array@workspace:^, @babel/plugin-bugfix-safari-rest-destructuring-rhs-array@workspace:packages/babel-plugin-bugfix-safari-rest-destructuring-rhs-array":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-bugfix-safari-rest-destructuring-rhs-array@workspace:packages/babel-plugin-bugfix-safari-rest-destructuring-rhs-array"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
+    "@babel/traverse": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@npm:^8.0.0-beta.3":
   version: 8.0.0-beta.3
   resolution: "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@npm:8.0.0-beta.3"
@@ -1624,6 +1638,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-import-source": "workspace:^"
+    "@babel/plugin-transform-json-modules": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.22.0
   languageName: unknown
@@ -3943,6 +3958,7 @@ __metadata:
     "@babel/plugin-bugfix-firefox-class-in-computed-class-key": "workspace:^"
     "@babel/plugin-bugfix-safari-class-field-initializer-scope": "workspace:^"
     "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression": "workspace:^"
+    "@babel/plugin-bugfix-safari-rest-destructuring-rhs-array": "workspace:^"
     "@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining": "workspace:^"
     "@babel/plugin-bugfix-v8-static-class-fields-redefine-readonly": "workspace:^"
     "@babel/plugin-proposal-private-property-in-object": "condition:BABEL_8_BREAKING ? : 7.21.0-placeholder-for-preset-env.2"
@@ -7004,11 +7020,11 @@ __metadata:
   linkType: hard
 
 "acorn@npm:^7.0.0":
-  version: 7.4.1
-  resolution: "acorn@npm:7.4.1"
+  version: 7.4.0
+  resolution: "acorn@npm:7.4.0"
   bin:
     acorn: bin/acorn
-  checksum: 10/8be2a40714756d713dfb62544128adce3b7102c6eb94bc312af196c2cc4af76e5b93079bd66b05e9ca31b35a9b0ce12171d16bc55f366cafdb794fdab9d753ec
+  checksum: 10/4e1ddc457482e542d56d91726b0e9fb22c92b05fb637af7db0f072bc373144984ab051b966e9d92472ccdb314b301f7f9aacd4c067b60398cc2537013e834c66
   languageName: node
   linkType: hard
 
@@ -9148,9 +9164,9 @@ __metadata:
   linkType: hard
 
 "deep-is@npm:^0.1.3":
-  version: 0.1.4
-  resolution: "deep-is@npm:0.1.4"
-  checksum: 10/ec12d074aef5ae5e81fa470b9317c313142c9e8e2afe3f8efa124db309720db96d1d222b82b84c834e5f87e7a614b44a4684b6683583118b87c833b3be40d4d8
+  version: 0.1.3
+  resolution: "deep-is@npm:0.1.3"
+  checksum: 10/dee1094e987a784a9a9c8549fc65eeca3422aef3bf2f9579f76c126085f280311d09273826c2f430d84fd09d64f6a578e5e7a4ac6ba1d50ea6cff0ddf605c025
   languageName: node
   linkType: hard
 
@@ -10937,7 +10953,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"function-bind@npm:^1.1.2":
+"function-bind@npm:^1.1.1, function-bind@npm:^1.1.2":
   version: 1.1.2
   resolution: "function-bind@npm:1.1.2"
   checksum: 10/185e20d20f10c8d661d59aac0f3b63b31132d492e1b11fcc2a93cb2c47257ebaee7407c38513efd2b35cafdf972d9beb2ea4593c1e0f3bf8f2744836928d7454
@@ -11493,9 +11509,11 @@ __metadata:
   linkType: hard
 
 "has@npm:^1.0.0":
-  version: 1.0.4
-  resolution: "has@npm:1.0.4"
-  checksum: 10/c245f332fe78c7b6b8753857240ac12b3286f995f656a33c77e0f5baab7d0157e6ddb1c34940ffd2bffc51f75ede50cd8b29ff65c13e336376aca8cf3df58043
+  version: 1.0.3
+  resolution: "has@npm:1.0.3"
+  dependencies:
+    function-bind: "npm:^1.1.1"
+  checksum: 10/a449f3185b1d165026e8d25f6a8c3390bd25c201ff4b8c1aaf948fc6a5fcfd6507310b8c00c13a3325795ea9791fcc3d79d61eafa313b5750438fc19183df57b
   languageName: node
   linkType: hard
 
