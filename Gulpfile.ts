@@ -838,7 +838,8 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
     ["babel-eslint-parser", ["./lib/worker/index.js"]],
   ]);
   const jsPackages = new Set([
-    // kept `jsPackages` for migration purposes such as babel/preset-modules
+    // kept `jsPackages` as-is. Pending migration of other js packages such as babel/preset-modules
+    "babel-preset-modules",
   ]);
   const noBundle = new Set([
     // No need to bundle JSON files
