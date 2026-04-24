@@ -129,7 +129,7 @@ const toValueString = (value, type = toType(value)) =>
         ? `${value}n`
         : Object.is(value, -0)
           ? "-0"
-          : value + "";
+          : JSON.stringify(value);
 
 const toExplanationString = ({ discrepancy, expected, actual, key }) =>
   discrepancy === "length"

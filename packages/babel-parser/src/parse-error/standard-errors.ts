@@ -53,7 +53,6 @@ export default {
   }: {
     kind: "await using" | "const" | "destructuring" | "using";
   }) => `Missing initializer in ${kind} declaration.`,
-  DecoratorAbstractMethod: "Decorators can't be used with an abstract method.",
   DecoratorArgumentsOutsideParentheses:
     "Decorator arguments must be moved inside parentheses: use '@(decorator(args))' instead of '@(decorator)(args)'.",
   DecoratorsBeforeAfterExport:
