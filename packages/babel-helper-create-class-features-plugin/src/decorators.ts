@@ -1365,14 +1365,7 @@ function transformClass(
       const isPrivate = key.type === "PrivateName";
 
       const kind = getElementKind(element);
-      if (kind === FIELD_IGNORED) {
-        if (hasDecorators) {
-          throw element.buildCodeFrameError(
-            "Class elements marked with 'declare' or 'abstract' cannot be decorated.",
-          );
-        }
-        continue;
-      }
+      if (kind === FIELD_IGNORED) continue;
 
       if (isPrivate && !isStatic) {
         if (hasDecorators) {
