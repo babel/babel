@@ -498,9 +498,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: Undone<N.DeclareVariable>,
     ): N.DeclareVariable {
       this.next();
-      node.id = this.flowParseTypeAnnotatableIdentifier(
-        /*allowPrimitiveOverride*/ true,
-      );
+      node.id = this.flowParseTypeAnnotatableIdentifier();
       this.scope.declareName(
         node.id.name,
         BindingFlag.TYPE_VAR,
@@ -797,16 +795,25 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       );
     }
 
-    flowParseRestrictedIdentifier(
+    flowParseRestrictedIdentifierName(
       liberal?: boolean,
       declaration?: boolean,
-    ): N.Identifier {
+    ): string {
       this.checkReservedType(
         this.state.value,
         this.state.startLoc,
         declaration,
       );
-      return this.parseIdentifier(liberal);
+      return this.parseIdentifierName(liberal);
+    }
+
+    flowParseRestrictedIdentifier(
+      liberal?: boolean,
+      declaration?: boolean,
+    ): N.Identifier {
+      const node = this.startNode<N.Identifier>();
+      const name = this.flowParseRestrictedIdentifierName(liberal, declaration);
+      return this.createIdentifier(node, name);
     }
 
     // Type aliases
@@ -875,17 +882,24 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     // Type annotations
 
+    flowParseTypeParameterBound(): N.TypeAnnotation | undefined {
+      if (this.match(tt.colon) || this.isContextual(tt._extends)) {
+        const node = this.startNode<N.TypeAnnotation>();
+        this.next();
+        node.typeAnnotation = this.flowParseType();
+        return this.finishNode(node, "TypeAnnotation");
+      }
+    }
+
     flowParseTypeParameter(requireDefault: boolean = false): N.TypeParameter {
       const nodeStartLoc = this.state.startLoc;
 
       const node = this.startNode<N.TypeParameter>();
-
       const variance = this.flowParseVariance();
 
-      const ident = this.flowParseTypeAnnotatableIdentifier();
-      node.name = ident.name;
+      node.name = this.flowParseRestrictedIdentifierName();
       node.variance = variance;
-      node.bound = ident.typeAnnotation as N.TypeAnnotation | null;
+      node.bound = this.flowParseTypeParameterBound();
 
       if (this.match(tt.eq)) {
         this.eat(tt.eq);
@@ -1913,17 +1927,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.finishNode(node, "TypeAnnotation");
     }
 
-    flowParseTypeAnnotatableIdentifier(
-      allowPrimitiveOverride?: boolean,
-    ): N.Identifier {
-      const ident = allowPrimitiveOverride
-        ? this.parseIdentifier()
-        : this.flowParseRestrictedIdentifier();
+    flowParseTypeAnnotatableIdentifier(): N.Identifier {
+      const node = this.startNode<N.Identifier>();
+      const name = this.parseIdentifierName();
       if (this.match(tt.colon)) {
-        ident.typeAnnotation = this.flowParseTypeAnnotation();
-        this.resetEndLocation(ident);
+        node.typeAnnotation = this.flowParseTypeAnnotation();
       }
-      return ident;
+      return this.createIdentifier(node, name);
     }
 
     typeCastToParameter(node: N.TypeCastExpression): N.Expression {

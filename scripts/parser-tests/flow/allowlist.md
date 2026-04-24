@@ -30,7 +30,7 @@
 - [types/reserved/function.js](../../../build/flow/src/parser/test/flow/types/reserved/function.js)
 - [types/typeof/with-targs-bad-newline.js](../../../build/flow/src/parser/test/flow/types/typeof/with-targs-bad-newline.js)
 
-## 96 valid programs produced a parsing error
+## 95 valid programs produced a parsing error
 
 - [ES6/modules/migrated_0020.js](../../../build/flow/src/parser/test/flow/ES6/modules/migrated_0020.js)
 - [JSX/jsx_type_args_implicit.js](../../../build/flow/src/parser/test/flow/JSX/jsx_type_args_implicit.js)
@@ -80,7 +80,6 @@
 - [ts_syntax/readonly_type.js](../../../build/flow/src/parser/test/flow/ts_syntax/readonly_type.js)
 - [ts_syntax/readonly_variance.js](../../../build/flow/src/parser/test/flow/ts_syntax/readonly_variance.js)
 - [ts_syntax/satisfies.js](../../../build/flow/src/parser/test/flow/ts_syntax/satisfies.js)
-- [ts_syntax/type_param_extends.js](../../../build/flow/src/parser/test/flow/ts_syntax/type_param_extends.js)
 - [type_guards/arrows.js](../../../build/flow/src/parser/test/flow/type_guards/arrows.js)
 - [type_guards/asserts_is.js](../../../build/flow/src/parser/test/flow/type_guards/asserts_is.js)
 - [type_guards/callback.js](../../../build/flow/src/parser/test/flow/type_guards/callback.js)
