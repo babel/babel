@@ -152,5 +152,10 @@ ruleTester.run("no-deprecated-clone", rule, {
       output: `import { declare } from "@babel/helper-plugin-utils"; declare(({ types }) => { types.cloneNode() });`,
       errors: [cloneDeepError],
     },
+    {
+      code: `import { "declare" as d } from "@babel/helper-plugin-utils"; d(({ types }) => { types.clone() });`,
+      output: `import { "declare" as d } from "@babel/helper-plugin-utils"; d(({ types }) => { types.cloneNode() });`,
+      errors: [cloneError],
+    },
   ],
 });

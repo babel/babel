@@ -37,7 +37,15 @@ ruleTester.run("plugin-name", rule, {
       errors: [missingPluginError],
     },
     {
+      code: `var exports = 0; module[exports] = function notAnExport() { return { name: "foo" }; }`,
+      errors: [missingPluginError],
+    },
+    {
       code: `export default function fn() { return {} }`,
+      errors: [missingNameError],
+    },
+    {
+      code: `export default function fn() { return { ...oldPlugin } }`,
       errors: [missingNameError],
     },
     {

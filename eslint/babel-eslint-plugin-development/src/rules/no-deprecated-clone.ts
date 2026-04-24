@@ -1,5 +1,6 @@
-import getReferenceOrigin from "../utils/get-reference-origin.js";
-import isFromBabelTypes from "../utils/is-from-babel-types.js";
+import type { Rule } from "eslint";
+import getReferenceOrigin from "../utils/get-reference-origin.ts";
+import isFromBabelTypes from "../utils/is-from-babel-types.ts";
 
 export default {
   meta: {
@@ -13,7 +14,10 @@ export default {
         const scope = context.sourceCode.getScope(node);
 
         const origin = getReferenceOrigin(callee, scope);
-        if (!origin) return;
+        if (
+          !(origin && (origin.kind === "import" || origin.kind === "property"))
+        )
+          return;
 
         const { name } = origin;
         if (
@@ -30,10 +34,11 @@ export default {
               if (isMemberExpression) {
                 return fixer.replaceText(id, "cloneNode");
               }
+              return null;
             },
           });
         }
       },
     };
   },
-};
+} satisfies Rule.RuleModule;

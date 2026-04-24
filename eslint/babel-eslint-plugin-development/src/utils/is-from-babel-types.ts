@@ -1,10 +1,12 @@
-import isBabelPluginFactory from "./is-babel-plugin-factory.js";
+import type { Scope } from "eslint";
+import type { ReferenceOrigin } from "./get-reference-origin.ts";
+import isBabelPluginFactory from "./is-babel-plugin-factory.ts";
 
 // Check if a ReferenceOrigin (returned by ./get-reference-origin.js)
 // is a reference to a @babel/types export.
 export default function isFromBabelTypes(
-  origin /*: ReferenceOrigin */,
-  scope /*: Scope */,
+  origin: ReferenceOrigin,
+  scope: Scope.Scope,
 ) {
   if (origin.kind === "import" && origin.source === "@babel/types") {
     // imported from @babel/types

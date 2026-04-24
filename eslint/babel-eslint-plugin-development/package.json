@@ -33,6 +33,9 @@
     "url": "https://github.com/babel/babel/issues"
   },
   "homepage": "https://babel.dev/",
+  "peerDependencies": {
+    "eslint": "^9.0.0 || ^10.0.0"
+  },
   "devDependencies": {
     "eslint": "^10.0.0"
   }
