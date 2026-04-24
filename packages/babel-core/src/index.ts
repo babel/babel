@@ -45,6 +45,7 @@ export {
   loadPartialConfig,
   loadPartialConfigAsync,
   loadPartialConfigSync,
+  defineConfig,
 } from "./config/index.ts";
 import { loadOptionsSync } from "./config/index.ts";
 import type {
