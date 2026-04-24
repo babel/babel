@@ -1,0 +1,65 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":46,"index":46}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":46,"index":46}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":46,"index":46}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start":7,"end":43,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":43,"index":43}},
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start":8,"end":24,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":24,"index":24}},
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start":10,"end":24,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":24,"index":24}},
+                "typeAnnotation": {
+                  "type": "StringTypeAnnotation",
+                  "start":18,"end":24,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":24,"index":24}}
+                }
+              }
+            },
+            {
+              "type": "TypeParameter",
+              "start":26,"end":42,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":42,"index":42}},
+              "name": "U",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start":28,"end":42,"loc":{"start":{"line":1,"column":28,"index":28},"end":{"line":1,"column":42,"index":42}},
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start":36,"end":42,"loc":{"start":{"line":1,"column":36,"index":36},"end":{"line":1,"column":42,"index":42}}
+                }
+              }
+            }
+          ]
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":44,"end":46,"loc":{"start":{"line":1,"column":44,"index":44},"end":{"line":1,"column":46,"index":46}},
+          "body": []
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
