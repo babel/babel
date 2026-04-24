@@ -884,22 +884,23 @@ export function splitExportDeclaration(
   return this;
 }
 
-const refersOuterBindingVisitor: Visitor<{
+const getRefersOuterBindingVisitor = (): Visitor<{
   needsRename: boolean;
   name: string;
-}> = explode({
-  "ReferencedIdentifier|BindingIdentifier"(path, state) {
-    // check if this node matches our function id
-    if (path.node.name !== state.name) return;
-    state.needsRename = true;
-    path.stop();
-  },
-  Scope(path, state) {
-    if (path.scope.hasOwnBinding(state.name)) {
-      path.skip();
-    }
-  },
-});
+}> =>
+  explode({
+    "ReferencedIdentifier|BindingIdentifier"(path, state) {
+      // check if this node matches our function id
+      if (path.node.name !== state.name) return;
+      state.needsRename = true;
+      path.stop();
+    },
+    Scope(path, state) {
+      if (path.scope.hasOwnBinding(state.name)) {
+        path.skip();
+      }
+    },
+  });
 
 export function ensureFunctionName<
   N extends t.FunctionExpression | t.ClassExpression,
@@ -956,7 +957,7 @@ export function ensureFunctionName<
       // bound function id
     }
   } else if (scope.parent!.hasBinding(name) || scope.hasGlobal(name)) {
-    this.traverse(refersOuterBindingVisitor, state);
+    this.traverse(getRefersOuterBindingVisitor(), state);
   }
 
   if (!state.needsRename) {
