@@ -5,7 +5,13 @@ import fs from "node:fs";
 import crypto from "node:crypto";
 
 import Cache from "./cache.ts";
-import { getEnv, loadOptionsAsync, transformAsync, version } from "@babel/core";
+import {
+  getEnv,
+  loadPartialConfigAsync,
+  loadOptionsAsync,
+  transformAsync,
+  version,
+} from "@babel/core";
 
 const cache = new Cache();
 
@@ -93,8 +99,12 @@ async function transform(input: string, filename: string) {
     filename,
   });
 
-  // Bail out ASAP if the file has been ignored.
-  if (opts === null) return null;
+  if (opts === null) {
+    // Bail out if the file has been ignored.
+    // This can only happen if the config changes between the isFileIgnored and
+    // the loadOptionsAsync call.
+    return null;
+  }
 
   const { cached, store } = await cacheLookup(opts, filename);
   if (cached) return cached;
@@ -109,8 +119,27 @@ async function transform(input: string, filename: string) {
   return await store({ code, map });
 }
 
+async function isFileIgnored(filename: string) {
+  const opts = await loadPartialConfigAsync({
+    ...cloneDeep(transformOpts),
+    filename,
+    showIgnoredFiles: true,
+    // @babel/register does not support ignore/only in config files,
+    // so we can skip checking those files
+    babelrc: false,
+    configFile: false,
+    browserslistConfigFile: false,
+    plugins: [],
+    presets: [],
+    targets: { browsers: undefined },
+  });
+
+  // Ignored via programmatic API.
+  return opts === null;
+}
+
 function disableCache() {
   return cache.disable();
 }
 
-export { setOptions, transform, disableCache };
+export { setOptions, transform, disableCache, isFileIgnored };

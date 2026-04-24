@@ -2,7 +2,7 @@ import { Module } from "node:module";
 import path from "node:path";
 import fs from "node:fs";
 import child from "node:child_process";
-import { commonJS } from "$repo-utils";
+import { commonJS, describeGte } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
 
@@ -15,11 +15,6 @@ const testFileMjsContent = fs.readFileSync(testFileMjs, "utf-8");
 
 const piratesPath = require.resolve("pirates");
 const smsPath = require.resolve("@cspotcode/source-map-support");
-
-const defaultOptions = {
-  exts: [".js", ".jsx", ".es6", ".es", ".mjs", ".cjs"],
-  ignoreNodeModules: false,
-};
 
 function cleanCache() {
   try {
@@ -142,7 +137,20 @@ describe("@babel/register", function () {
       setupRegister();
 
       expect(typeof currentHook).toBe("function");
-      expect(currentOptions).toEqual(defaultOptions);
+      expect(currentOptions).toMatchInlineSnapshot(`
+        Object {
+          "exts": Array [
+            ".js",
+            ".jsx",
+            ".es6",
+            ".es",
+            ".mjs",
+            ".cjs",
+          ],
+          "ignoreNodeModules": false,
+          "matcher": [Function],
+        }
+      `);
     });
 
     test("unregisters hook correctly", () => {
@@ -327,6 +335,35 @@ describe("@babel/register", function () {
       expect(proxyHandler.defineProperty).not.toHaveBeenCalled();
       expect(proxyHandler.deleteProperty).not.toHaveBeenCalled();
       expect(proxyHandler.set).not.toHaveBeenCalled();
+    });
+
+    describeGte("22.18.0")("hook skip ignored files", () => {
+      // We can't use the test runner because the mocked `pirates`
+      // does not support the `matcher` option.
+      test("via programmatic options ignored", async () => {
+        const entryFile =
+          require.resolve("./fixtures/ignore-programmatic/index.ts");
+        const output = await spawnNodeAsync(
+          [entryFile],
+          path.dirname(entryFile),
+        );
+        expect(output).toContain(path.join("ignored", "ignored-throw.ts"));
+        expect(output).toContain(
+          "SyntaxError: TypeScript enum is not supported in strip-only mode",
+        );
+      });
+      test("via programmatic options only", async () => {
+        const entryFile =
+          require.resolve("./fixtures/only-programmatic/index.ts");
+        const output = await spawnNodeAsync(
+          [entryFile],
+          path.dirname(entryFile),
+        );
+        expect(output).toContain(path.join("ignored", "ignored-throw.ts"));
+        expect(output).toContain(
+          "SyntaxError: TypeScript enum is not supported in strip-only mode",
+        );
+      });
     });
 
     return { setupRegister, revertRegister };

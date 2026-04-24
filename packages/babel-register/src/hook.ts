@@ -46,6 +46,9 @@ function register(client: IClient, opts: Options = {}) {
   piratesRevert = pirates.addHook(compile.bind(null, client), {
     exts: opts.extensions ?? client.getDefaultExtensions(),
     ignoreNodeModules: false,
+    matcher(filename) {
+      return !client.isFileIgnored(filename);
+    },
   });
 
   client.setOptions(opts);
