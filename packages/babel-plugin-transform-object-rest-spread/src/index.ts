@@ -425,7 +425,7 @@ export default declare((api, opts: Options) => {
         let idInRest = false;
 
         const IdentifierHandler = function (
-          path: NodePath<t.Identifier>,
+          path: NodePath<t.Identifier | t.JSXIdentifier>,
           functionScope: Scope,
         ) {
           const name = path.node.name;

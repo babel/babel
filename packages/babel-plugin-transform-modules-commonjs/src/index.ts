@@ -172,7 +172,7 @@ export default declare((api, options: Options) => {
       if (lazy) defineCommonJSHook(this.file, lazyImportsHook(lazy));
     },
 
-    visitor: {
+    visitor: api.traverse.explode({
       "CallExpression|ImportExpression"(
         this: PluginPass,
         path: NodePath<t.CallExpression | t.ImportExpression>,
@@ -287,6 +287,6 @@ export default declare((api, options: Options) => {
           });
         },
       },
-    },
+    }),
   };
 });

@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t } from "@babel/core";
-import type { PluginPass, NodePath, Scope, Visitor } from "@babel/core";
+import type { PluginPass, NodePath, Scope } from "@babel/core";
 import {
   buildDynamicImport,
   getModuleName,
@@ -174,80 +174,6 @@ export default declare<PluginState>((api, options: Options) => {
   const { systemGlobal = "System", allowTopLevelThis = false } = options;
   const reassignmentVisited = new WeakSet();
 
-  const reassignmentVisitor: Visitor<ReassignmentVisitorState> = {
-    "AssignmentExpression|UpdateExpression"(
-      path: NodePath<t.AssignmentExpression | t.UpdateExpression>,
-    ) {
-      if (reassignmentVisited.has(path.node)) return;
-      reassignmentVisited.add(path.node);
-
-      const arg = path.isAssignmentExpression()
-        ? path.get("left")
-        : path.get("argument");
-
-      if (arg.isObjectPattern() || arg.isArrayPattern()) {
-        const exprs: t.SequenceExpression["expressions"] = [path.node];
-        for (const name of Object.keys(arg.getBindingIdentifiers())) {
-          if (this.scope.getBinding(name) !== path.scope.getBinding(name)) {
-            return;
-          }
-          const exportedNames = this.exports[name];
-          if (!exportedNames) continue;
-          for (const exportedName of exportedNames) {
-            exprs.push(
-              this.buildCall(exportedName, t.identifier(name)).expression,
-            );
-          }
-        }
-        path.replaceWith(t.sequenceExpression(exprs));
-        return;
-      }
-
-      if (!arg.isIdentifier()) return;
-
-      const name = arg.node.name;
-
-      // redeclared in this scope
-      if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
-
-      const exportedNames = this.exports[name];
-      if (!exportedNames) return;
-
-      let node: t.Expression = path.node;
-
-      // if it is a non-prefix update expression (x++ etc)
-      // then we must replace with the expression (_export('x', x + 1), x++)
-      // in order to ensure the same update expression value
-      const isPostUpdateExpression = t.isUpdateExpression(node, {
-        prefix: false,
-      });
-      if (isPostUpdateExpression) {
-        node = t.binaryExpression(
-          // @ts-expect-error The operator of a post-update expression must be "++" | "--"
-          node.operator[0],
-          t.unaryExpression(
-            "+",
-            t.cloneNode(
-              // @ts-expect-error node is UpdateExpression
-              node.argument,
-            ),
-          ),
-          t.numericLiteral(1),
-        );
-      }
-
-      for (const exportedName of exportedNames) {
-        node = this.buildCall(exportedName, node).expression;
-      }
-
-      if (isPostUpdateExpression) {
-        node = t.sequenceExpression([node, path.node]);
-      }
-
-      path.replaceWith(node);
-    },
-  };
-
   return {
     name: "transform-modules-systemjs",
 
@@ -255,7 +181,7 @@ export default declare<PluginState>((api, options: Options) => {
       this.file.set("@babel/plugin-transform-modules-*", "systemjs");
     },
 
-    visitor: {
+    visitor: api.traverse.explode({
       "CallExpression|ImportExpression"(
         this: PluginPass & PluginState,
         path: NodePath<t.CallExpression | t.ImportExpression>,
@@ -285,7 +211,7 @@ export default declare<PluginState>((api, options: Options) => {
         );
       },
 
-      MetaProperty(path, state: PluginState) {
+      MetaProperty(path, state) {
         if (
           path.node.meta.name === "import" &&
           path.node.property.name === "meta"
@@ -649,11 +575,93 @@ export default declare<PluginState>((api, options: Options) => {
             );
           }
 
-          path.traverse(reassignmentVisitor, {
-            exports: exportMap,
-            buildCall: buildExportCall,
-            scope,
-          });
+          path.traverse(
+            {
+              "AssignmentExpression|UpdateExpression"(
+                path: NodePath<t.AssignmentExpression | t.UpdateExpression>,
+              ) {
+                if (reassignmentVisited.has(path.node)) return;
+                reassignmentVisited.add(path.node);
+
+                const arg = path.isAssignmentExpression()
+                  ? path.get("left")
+                  : path.get("argument");
+
+                if (arg.isObjectPattern() || arg.isArrayPattern()) {
+                  const exprs: t.SequenceExpression["expressions"] = [
+                    path.node,
+                  ];
+                  for (const name of Object.keys(arg.getBindingIdentifiers())) {
+                    if (
+                      this.scope.getBinding(name) !==
+                      path.scope.getBinding(name)
+                    ) {
+                      return;
+                    }
+                    const exportedNames = this.exports[name];
+                    if (!exportedNames) continue;
+                    for (const exportedName of exportedNames) {
+                      exprs.push(
+                        this.buildCall(exportedName, t.identifier(name))
+                          .expression,
+                      );
+                    }
+                  }
+                  path.replaceWith(t.sequenceExpression(exprs));
+                  return;
+                }
+
+                if (!arg.isIdentifier()) return;
+
+                const name = arg.node.name;
+
+                // redeclared in this scope
+                if (this.scope.getBinding(name) !== path.scope.getBinding(name))
+                  return;
+
+                const exportedNames = this.exports[name];
+                if (!exportedNames) return;
+
+                let node: t.Expression = path.node;
+
+                // if it is a non-prefix update expression (x++ etc)
+                // then we must replace with the expression (_export('x', x + 1), x++)
+                // in order to ensure the same update expression value
+                const isPostUpdateExpression = t.isUpdateExpression(node, {
+                  prefix: false,
+                });
+                if (isPostUpdateExpression) {
+                  node = t.binaryExpression(
+                    // @ts-expect-error The operator of a post-update expression must be "++" | "--"
+                    node.operator[0],
+                    t.unaryExpression(
+                      "+",
+                      t.cloneNode(
+                        // @ts-expect-error node is UpdateExpression
+                        node.argument,
+                      ),
+                    ),
+                    t.numericLiteral(1),
+                  );
+                }
+
+                for (const exportedName of exportedNames) {
+                  node = this.buildCall(exportedName, node).expression;
+                }
+
+                if (isPostUpdateExpression) {
+                  node = t.sequenceExpression([node, path.node]);
+                }
+
+                path.replaceWith(node);
+              },
+            },
+            {
+              exports: exportMap,
+              buildCall: buildExportCall,
+              scope,
+            } satisfies ReassignmentVisitorState,
+          );
 
           for (const path of removedPaths) {
             path.remove();
@@ -690,6 +698,6 @@ export default declare<PluginState>((api, options: Options) => {
           path.requeue(path.get("body.0"));
         },
       },
-    },
+    }),
   };
 });

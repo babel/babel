@@ -1,7 +1,7 @@
 import { template, types as t, type NodePath } from "@babel/core";
 
 import {
-  iifeVisitor,
+  getIIFEVisitor,
   collectShadowedParamsNames,
   buildScopeIIFE,
 } from "./shadow-utils.ts";
@@ -59,7 +59,7 @@ export default function convertFunctionParams(
   };
   if (shadowedParams.size === 0) {
     for (const param of params) {
-      if (!param.isIdentifier()) param.traverse(iifeVisitor, state);
+      if (!param.isIdentifier()) param.traverse(getIIFEVisitor(), state);
       if (state.needsOuterBinding) break;
     }
   }

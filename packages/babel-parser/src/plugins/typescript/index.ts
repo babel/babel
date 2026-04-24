@@ -795,14 +795,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     tsTryParseTypeParameters(
-      parseModifiers: (node: N.TSTypeParameter) => void,
+      parseModifiers: (node: Undone<N.TSTypeParameter>) => void,
     ): N.TSTypeParameterDeclaration | undefined | null {
       if (this.match(tt.lt)) {
         return this.tsParseTypeParameters(parseModifiers);
       }
     }
 
-    tsParseTypeParameters(parseModifiers: (node: N.TSTypeParameter) => void) {
+    tsParseTypeParameters(
+      parseModifiers: (node: Undone<N.TSTypeParameter>) => void,
+    ) {
       const node = this.startNode<N.TSTypeParameterDeclaration>();
 
       if (this.match(tt.lt) || this.match(tt.jsxTagStart)) {

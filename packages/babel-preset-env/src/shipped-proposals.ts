@@ -8,13 +8,11 @@ const proposalPlugins = new Set<string>([]);
 // Unlike proposalPlugins above, they are independent of compiler targets.
 const proposalSyntaxPlugins = [] as const;
 // use intermediary object to enforce alphabetical key order
-const pluginSyntaxObject = {};
-
-type PluginSyntaxObjectKeys = keyof typeof pluginSyntaxObject;
+const pluginSyntaxObject: Record<string, string> = {};
 
 const pluginSyntaxEntries = Object.keys(pluginSyntaxObject).map<
-  [PluginSyntaxObjectKeys, string | null]
->(function (key: PluginSyntaxObjectKeys) {
+  [string, string | null]
+>(function (key: string) {
   return [key, pluginSyntaxObject[key]];
 });
 

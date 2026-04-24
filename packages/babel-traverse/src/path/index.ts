@@ -400,7 +400,7 @@ interface NodePath<
     ? null
     : NonNullable<N>["type"],
   P extends t.Node = T extends null
-    ? never
+    ? t.Node
     : NonNullable<t.ParentMaps[NonNullable<T>]>,
 >
   extends

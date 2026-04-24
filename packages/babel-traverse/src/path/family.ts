@@ -40,7 +40,7 @@ function BreakCompletion(path: NodePath): Completion {
   return { type: BREAK_COMPLETION, path };
 }
 
-export function getOpposite(this: NodePath): NodePath | null {
+export function getOpposite(this: NodePath): NodePath<t.Node | null> | null {
   if (this.key === "left") {
     return this.getSibling("right");
   } else if (this.key === "right") {
@@ -299,7 +299,7 @@ export function getCompletionRecords(
 export function getSibling(
   this: NodePath<t.Node | null>,
   key: string | number,
-): NodePath {
+): NodePath<t.Node | null> {
   return NodePath.get({
     parentPath: this.parentPath,
     parent: this.parent,
@@ -309,17 +309,23 @@ export function getSibling(
   }).setContext(this.context);
 }
 
-export function getPrevSibling(this: NodePath<t.Node | null>): NodePath {
+export function getPrevSibling(
+  this: NodePath<t.Node | null>,
+): NodePath<t.Node | null> {
   // @ts-expect-error todo(flow->ts) this.key could be a string
   return this.getSibling(this.key - 1);
 }
 
-export function getNextSibling(this: NodePath<t.Node | null>): NodePath {
+export function getNextSibling(
+  this: NodePath<t.Node | null>,
+): NodePath<t.Node | null> {
   // @ts-expect-error todo(flow->ts) this.key could be a string
   return this.getSibling(this.key + 1);
 }
 
-export function getAllNextSiblings(this: NodePath<t.Node | null>): NodePath[] {
+export function getAllNextSiblings(
+  this: NodePath<t.Node | null>,
+): NodePath<t.Node | null>[] {
   // @ts-expect-error todo(flow->ts) this.key could be a string
   let _key: number = this.key;
   let sibling = this.getSibling(++_key);
@@ -331,7 +337,9 @@ export function getAllNextSiblings(this: NodePath<t.Node | null>): NodePath[] {
   return siblings;
 }
 
-export function getAllPrevSiblings(this: NodePath<t.Node | null>): NodePath[] {
+export function getAllPrevSiblings(
+  this: NodePath<t.Node | null>,
+): NodePath<t.Node | null>[] {
   // @ts-expect-error todo(flow->ts) this.key could be a string
   let _key: number = this.key;
   let sibling = this.getSibling(--_key);
@@ -438,7 +446,7 @@ export function _getKey<T extends t.Node>(
   this: NodePath<T>,
   key: keyof T & string,
   context?: TraversalContext,
-): NodePath | NodePath[] {
+): NodePath<t.Node | null> | NodePath<t.Node | null>[] {
   const node = this.node as T;
   const container = node[key];
 

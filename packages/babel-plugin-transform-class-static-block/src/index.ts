@@ -51,10 +51,10 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
       }
       return false;
     },
-    (classPath: NodePath<t.ClassExpression>, state, name) => {
+    (classPath, state, name) => {
       const nameNode = typeof name === "string" ? t.stringLiteral(name) : name;
 
-      classPath.get("body").unshiftContainer(
+      (classPath as NodePath<t.ClassExpression>).get("body").unshiftContainer(
         "body",
         t.staticBlock([
           template.statement.ast`
@@ -133,9 +133,13 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
             !parentPath.isStatement()
           );
           if (parentPath) {
-            namedEvaluationVisitor[parentPath.type]?.enter!.forEach(f =>
-              f.call(this, parentPath, this),
-            );
+            (
+              namedEvaluationVisitor[parentPath.type]?.enter as ((
+                this: any,
+                path: NodePath<t.Node>,
+                state: any,
+              ) => void)[]
+            ).forEach(f => f.call(this, parentPath, this));
           }
         }
 
