@@ -61,6 +61,8 @@ export default declare(api => {
         );
 
         wrapFunction(fnPath, state.addHelper("skipFirstGeneratorNext"));
+
+        fnPath.requeue();
       },
     },
   };
