@@ -42,7 +42,6 @@
     "@babel/core": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
     "@types/estree": "^1.0.5",
-    "@typescript-eslint/scope-manager": "^8.55.0",
     "dedent": "^1.5.3",
     "eslint": "^10.0.0",
     "typescript-eslint": "^8.55.0"

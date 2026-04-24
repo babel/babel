@@ -176,29 +176,12 @@ class Referencer extends OriginalReferencer {
     }
   }
 
-  ClassProperty(node: any) {
-    this._visitClassProperty(node);
-  }
-
-  ClassPrivateProperty(node: any) {
-    this._visitClassProperty(node);
-  }
-
   AccessorProperty(node: any) {
-    this._visitClassProperty(node);
-  }
-
-  ClassAccessorProperty(node: any) {
     this._visitClassProperty(node);
   }
 
   PropertyDefinition(node: any) {
     this._visitClassProperty(node);
-  }
-
-  // TODO: Update to visit type annotations when TypeScript/Flow support this syntax.
-  ClassPrivateMethod(node: any) {
-    super.MethodDefinition(node);
   }
 
   DeclareModule(node: any) {
@@ -217,11 +200,6 @@ class Referencer extends OriginalReferencer {
     this._visitDeclareX(node);
   }
 
-  // visit OptionalMemberExpression as a MemberExpression.
-  OptionalMemberExpression(node: any) {
-    super.MemberExpression(node);
-  }
-
   _visitClassProperty(node: any) {
     const { computed, key, typeAnnotation, decorators, value } = node;
 
@@ -230,21 +208,7 @@ class Referencer extends OriginalReferencer {
     this._visitTypeAnnotation(typeAnnotation);
 
     if (value) {
-      if (this.scopeManager.__nestClassFieldInitializerScope) {
-        this.scopeManager.__nestClassFieldInitializerScope(value);
-      } else {
-        // Given that ESLint 7 didn't have a "class field initializer" scope,
-        // we create a plain method scope. Semantics are the same.
-        this.scopeManager.__nestScope(
-          new Scope(
-            this.scopeManager,
-            "function",
-            this.scopeManager.__currentScope,
-            value,
-            true,
-          ),
-        );
-      }
+      this.scopeManager.__nestClassFieldInitializerScope(value);
       this.visit(value);
       this.close(value);
     }
@@ -384,6 +348,7 @@ export default function analyzeScope(ast: any, parserOptions: any) {
     childVisitorKeys: t.VISITOR_KEYS,
   };
 
+  // @ts-expect-error upstream typing issue in the `fallback` property: (node: estree.Node) => readonly string[] is not assignable to type (node: estree.Node) => string[]
   const scopeManager = new ScopeManager(options);
   const referencer = new Referencer(options, scopeManager);
 

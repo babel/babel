@@ -1,13 +1,17 @@
-const { RuleTester } = require("eslint");
+import { RuleTester } from "eslint";
+import babelESLintParser from "@babel/eslint-parser";
+import { fileURLToPath } from "node:url";
 
 const defaultConfig = {
   languageOptions: {
-    parser: require("@babel/eslint-parser"),
+    parser: babelESLintParser,
     parserOptions: {
       sourceType: "module",
       ecmaVersion: "latest",
       babelOptions: {
-        configFile: require.resolve("../config/babel.config.js"),
+        configFile: fileURLToPath(
+          new URL("../config/babel.config.js", import.meta.url)
+        ),
       },
     },
   },
@@ -15,4 +19,4 @@ const defaultConfig = {
 
 RuleTester.setDefaultConfig(defaultConfig);
 
-module.exports = RuleTester;
+export default RuleTester;

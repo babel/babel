@@ -6,17 +6,13 @@
   "dependencies": {
     "@babel/core": "workspace:^",
     "@babel/eslint-parser": "workspace:^",
-    "@babel/plugin-proposal-decorators": "workspace:^",
-    "@babel/plugin-proposal-do-expressions": "workspace:^",
-    "@babel/plugin-proposal-pipeline-operator": "workspace:^",
+    "@babel/plugin-syntax-async-do-expressions": "workspace:^",
+    "@babel/plugin-syntax-decorators": "workspace:^",
+    "@babel/plugin-syntax-do-expressions": "workspace:^",
     "@babel/plugin-syntax-export-default-from": "workspace:^",
-    "@babel/plugin-transform-class-properties": "workspace:^",
-    "@babel/plugin-transform-explicit-resource-management": "workspace:^",
-    "@babel/plugin-transform-private-methods": "workspace:^",
-    "@babel/preset-env": "workspace:^",
-    "@babel/preset-flow": "workspace:^",
-    "@babel/preset-react": "workspace:^",
+    "@babel/plugin-syntax-jsx": "workspace:^",
+    "@babel/plugin-syntax-pipeline-operator": "workspace:^",
     "eslint": "^10.0.0"
   },
-  "type": "commonjs"
+  "type": "module"
 }

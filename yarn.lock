@@ -503,7 +503,6 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     "@types/estree": "npm:^1.0.5"
-    "@typescript-eslint/scope-manager": "npm:^8.55.0"
     dedent: "npm:^1.5.3"
     eslint: "npm:^10.0.0"
     eslint-scope: "npm:^9.1.0"
@@ -552,16 +551,12 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/eslint-parser": "workspace:^"
-    "@babel/plugin-proposal-decorators": "workspace:^"
-    "@babel/plugin-proposal-do-expressions": "workspace:^"
-    "@babel/plugin-proposal-pipeline-operator": "workspace:^"
+    "@babel/plugin-syntax-async-do-expressions": "workspace:^"
+    "@babel/plugin-syntax-decorators": "workspace:^"
+    "@babel/plugin-syntax-do-expressions": "workspace:^"
     "@babel/plugin-syntax-export-default-from": "workspace:^"
-    "@babel/plugin-transform-class-properties": "workspace:^"
-    "@babel/plugin-transform-explicit-resource-management": "workspace:^"
-    "@babel/plugin-transform-private-methods": "workspace:^"
-    "@babel/preset-env": "workspace:^"
-    "@babel/preset-flow": "workspace:^"
-    "@babel/preset-react": "workspace:^"
+    "@babel/plugin-syntax-jsx": "workspace:^"
+    "@babel/plugin-syntax-pipeline-operator": "workspace:^"
     eslint: "npm:^10.0.0"
   languageName: unknown
   linkType: soft
@@ -1718,7 +1713,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions":
+"@babel/plugin-syntax-async-do-expressions@workspace:^, @babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-syntax-async-do-expressions@workspace:packages/babel-plugin-syntax-async-do-expressions"
   dependencies:
@@ -5924,7 +5919,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/scope-manager@npm:8.56.0, @typescript-eslint/scope-manager@npm:^8.55.0":
+"@typescript-eslint/scope-manager@npm:8.56.0":
   version: 8.56.0
   resolution: "@typescript-eslint/scope-manager@npm:8.56.0"
   dependencies:

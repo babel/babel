@@ -1,6 +1,5 @@
 import { Linter } from "eslint";
 import unpad from "dedent";
-import path from "node:path";
 import { fileURLToPath } from "node:url";
 import babelEslintParser from "@babel/eslint-parser";
 import globals from "globals";
@@ -24,9 +23,11 @@ export default function verifyAndAssertMessages(
       requireConfigFile: false,
       ...(overrideConfig && overrideConfig.parserOptions),
       babelOptions: {
-        configFile: path.resolve(
-          path.dirname(fileURLToPath(import.meta.url)),
-          "../../../babel-eslint-shared-fixtures/config/babel.config.js",
+        configFile: fileURLToPath(
+          new URL(
+            "../../../babel-eslint-shared-fixtures/config/babel.config.js",
+            import.meta.url,
+          ),
         ),
         ...(overrideConfig &&
           overrideConfig.parserOptions &&
