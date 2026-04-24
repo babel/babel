@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "version": "2023-11" }],
+    "syntax-typescript"
+  ],
+  "throws": "Class elements marked with 'declare' or 'abstract' cannot be decorated."
+}
