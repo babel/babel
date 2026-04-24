@@ -837,8 +837,9 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
     ["babel-register", ["./lib/worker/index.js"]],
     ["babel-eslint-parser", ["./lib/worker/index.js"]],
   ]);
-  // Todo: convert these packages to TS
-  const jsPackages = new Set(["babel-eslint-plugin-development-internal"]);
+  const jsPackages = new Set([
+    // kept `jsPackages` for migration purposes such as babel/preset-modules
+  ]);
   const noBundle = new Set([
     // No need to bundle JSON files
     "babel-compat-data",

@@ -35,6 +35,9 @@
       "path": "./eslint/babel-eslint-plugin-development"
     },
     {
+      "path": "./eslint/babel-eslint-plugin-development-internal"
+    },
+    {
       "path": "./packages/babel-build-external-helpers"
     },
     {

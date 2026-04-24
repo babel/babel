@@ -521,7 +521,6 @@ __metadata:
   dependencies:
     eslint: "npm:^10.0.0"
   peerDependencies:
-    "@babel/eslint-parser": "workspace:^"
     eslint: ^9.0.0 || ^10.0.0
   languageName: unknown
   linkType: soft
@@ -531,6 +530,8 @@ __metadata:
   resolution: "@babel/eslint-plugin-development@workspace:eslint/babel-eslint-plugin-development"
   dependencies:
     eslint: "npm:^10.0.0"
+  peerDependencies:
+    eslint: ^9.0.0 || ^10.0.0
   languageName: unknown
   linkType: soft
 
