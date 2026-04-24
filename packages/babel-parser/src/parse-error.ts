@@ -55,6 +55,7 @@ export type ParseErrorConstructor<ErrorDetails> = (
   loc: Position,
   pos: number,
   details: ErrorDetails,
+  filename: string | null | undefined,
 ) => ParseError;
 
 type ToMessage<ErrorDetails> = (self: ErrorDetails) => string;
@@ -87,6 +88,7 @@ function toParseErrorConstructor<ErrorDetails extends object>({
     loc: Position,
     pos: number,
     details: ErrorDetails,
+    filename: string | undefined,
   ) {
     const error = new SyntaxError() as ParseErrorGeneric<ErrorDetails>;
 
@@ -106,10 +108,15 @@ function toParseErrorConstructor<ErrorDetails extends object>({
     };
     defineHidden(error, "clone", function clone(overrides: Overrides = {}) {
       const { line, column, index = pos } = overrides.loc ?? loc;
-      return constructor(new Position(line, column), index, {
-        ...details,
-        ...overrides.details,
-      });
+      return constructor(
+        new Position(line, column),
+        index,
+        {
+          ...details,
+          ...overrides.details,
+        },
+        filename,
+      );
     });
 
     defineHidden(error, "details", details);
@@ -117,7 +124,9 @@ function toParseErrorConstructor<ErrorDetails extends object>({
     Object.defineProperty(error, "message", {
       configurable: true,
       get(this: ParseErrorGeneric<ErrorDetails>): string {
-        const message = `${toMessage(details)} (${loc.line}:${loc.column})`;
+        let pos = `${loc.line}:${loc.column}`;
+        if (filename) pos = `${filename}:${pos}`;
+        const message = `${toMessage(details)} (${pos})`;
         this.message = message;
         return message;
       },
