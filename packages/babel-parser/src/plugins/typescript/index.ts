@@ -3242,7 +3242,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         callParseClassMemberWithIsStatic();
       }
 
-      if (member.decorators && member.decorators.length > 0) {
+      if (
+        member.decorators &&
+        member.decorators.length > 0 &&
+        !this.hasPlugin("decorators-legacy")
+      ) {
         if (
           member.type === "TSAbstractMethodDefinition" ||
           member.type === "TSDeclareMethod"
