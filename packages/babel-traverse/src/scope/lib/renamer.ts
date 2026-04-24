@@ -1,67 +1,69 @@
 import type Binding from "../binding.ts";
 import * as t from "@babel/types";
-import type { NodePath, Visitor } from "../../index.ts";
+import type { NodePath, ExplodedVisitor } from "../../index.ts";
 import { traverseNode } from "../../traverse-node.ts";
 import { explode } from "../../visitors.ts";
 import { getAssignmentIdentifiers, type Identifier } from "@babel/types";
 
-const renameVisitor: Visitor<Renamer> = {
-  ReferencedIdentifier({ node }, state) {
-    if (node.name === state.oldName) {
-      node.name = state.newName;
-    }
-  },
-
-  Scope(path, state) {
-    if (
-      !path.scope.bindingIdentifierEquals(
-        state.oldName,
-        state.binding.identifier,
-      )
-    ) {
-      path.skip();
-      if (path.isMethod()) {
-        path.requeueComputedKeyAndDecorators();
+let renameVisitor: ExplodedVisitor<Renamer>;
+const getRenameVisitor = () =>
+  (renameVisitor ??= explode({
+    ReferencedIdentifier({ node }, state) {
+      if (node.name === state.oldName) {
+        node.name = state.newName;
       }
-      if (path.isSwitchStatement()) {
-        path.context.maybeQueue(path.get("discriminant"));
+    },
+
+    Scope(path, state) {
+      if (
+        !path.scope.bindingIdentifierEquals(
+          state.oldName,
+          state.binding.identifier,
+        )
+      ) {
+        path.skip();
+        if (path.isMethod()) {
+          path.requeueComputedKeyAndDecorators();
+        }
+        if (path.isSwitchStatement()) {
+          path.context.maybeQueue(path.get("discriminant"));
+        }
       }
-    }
-  },
+    },
 
-  ObjectProperty({ node, scope }, state) {
-    const { name } = node.key as Identifier;
-    if (
-      node.shorthand &&
-      // In destructuring the identifier is already renamed by the
-      // AssignmentExpression|Declaration|VariableDeclarator visitor,
-      // while in object literals it's renamed later by the
-      // ReferencedIdentifier visitor.
-      (name === state.oldName || name === state.newName) &&
-      // Ignore shadowed bindings
-      scope.getBindingIdentifier(name) === state.binding.identifier
+    ObjectProperty({ node, scope }, state) {
+      const { name } = node.key as Identifier;
+      if (
+        node.shorthand &&
+        // In destructuring the identifier is already renamed by the
+        // AssignmentExpression|Declaration|VariableDeclarator visitor,
+        // while in object literals it's renamed later by the
+        // ReferencedIdentifier visitor.
+        (name === state.oldName || name === state.newName) &&
+        // Ignore shadowed bindings
+        scope.getBindingIdentifier(name) === state.binding.identifier
+      ) {
+        node.shorthand = false;
+      }
+    },
+
+    "AssignmentExpression|Declaration|VariableDeclarator"(
+      path: NodePath<
+        t.AssignmentExpression | t.Declaration | t.VariableDeclarator
+      >,
+      state,
     ) {
-      node.shorthand = false;
-    }
-  },
+      if (path.isVariableDeclaration()) return;
+      const ids = path.isAssignmentExpression()
+        ? // See https://github.com/babel/babel/issues/16694
+          getAssignmentIdentifiers(path.node)
+        : path.getOuterBindingIdentifiers();
 
-  "AssignmentExpression|Declaration|VariableDeclarator"(
-    path: NodePath<
-      t.AssignmentExpression | t.Declaration | t.VariableDeclarator
-    >,
-    state,
-  ) {
-    if (path.isVariableDeclaration()) return;
-    const ids = path.isAssignmentExpression()
-      ? // See https://github.com/babel/babel/issues/16694
-        getAssignmentIdentifiers(path.node)
-      : path.getOuterBindingIdentifiers();
-
-    for (const name in ids) {
-      if (name === state.oldName) ids[name].name = state.newName;
-    }
-  },
-};
+      for (const name in ids) {
+        if (name === state.oldName) ids[name].name = state.newName;
+      }
+    },
+  }));
 
 export default class Renamer {
   constructor(binding: Binding, oldName: string, newName: string) {
@@ -172,7 +174,7 @@ export default class Renamer {
 
     traverseNode(
       blockToTraverse,
-      explode(renameVisitor),
+      getRenameVisitor(),
       scope,
       this,
       scope.path,

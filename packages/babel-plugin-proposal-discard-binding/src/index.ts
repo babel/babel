@@ -27,7 +27,7 @@ function validatePluginOptions(options: Options) {
 }
 
 export default declare(function (
-  { assertVersion, assumption },
+  { assertVersion, assumption, traverse },
   options: Options,
 ) {
   assertVersion(REQUIRED_VERSION("^7.27.0 || ^8.0.0"));
@@ -36,7 +36,7 @@ export default declare(function (
   return {
     name: "proposal-discard-binding",
     manipulateOptions: (_, p) => p.plugins.push(["discardBinding", options]),
-    visitor: {
+    visitor: traverse.explode({
       ExportNamedDeclaration(path) {
         const declarationPath = path.get("declaration");
         if (!declarationPath.isVariableDeclaration()) return;
@@ -99,6 +99,6 @@ export default declare(function (
           }
         }
       },
-    },
+    }),
   };
 });

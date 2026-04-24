@@ -40,7 +40,7 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 import template from "@babel/template";
-import { environmentVisitor } from "../visitors.ts";
+import { environmentVisitor, explode } from "../visitors.ts";
 import type NodePath from "./index.ts";
 import type { Visitor } from "../types.ts";
 import { setup } from "./context.ts";
@@ -887,11 +887,8 @@ export function splitExportDeclaration(
 const refersOuterBindingVisitor: Visitor<{
   needsRename: boolean;
   name: string;
-}> = {
-  "ReferencedIdentifier|BindingIdentifier"(
-    path: NodePath<t.Identifier>,
-    state,
-  ) {
+}> = explode({
+  "ReferencedIdentifier|BindingIdentifier"(path, state) {
     // check if this node matches our function id
     if (path.node.name !== state.name) return;
     state.needsRename = true;
@@ -902,7 +899,7 @@ const refersOuterBindingVisitor: Visitor<{
       path.skip();
     }
   },
-};
+});
 
 export function ensureFunctionName<
   N extends t.FunctionExpression | t.ClassExpression,

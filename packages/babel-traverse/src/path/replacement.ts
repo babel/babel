@@ -202,7 +202,7 @@ export function replaceWith(
   this.type = replacement.type;
 
   // potentially create new scope
-  setScope.call(this);
+  setScope.call(this as NodePath<t.Node>);
 
   // requeue for visiting
   this.requeue();

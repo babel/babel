@@ -8,7 +8,7 @@ import { VISITOR_KEYS } from "@babel/types";
 import { _call, popContext, pushContext, resync } from "./path/context.ts";
 
 function _visitPaths(
-  ctx: TraversalContext,
+  ctx: TraversalContext<any>,
   paths: NodePath<t.Node | null>[],
 ): boolean {
   // set queue
@@ -137,7 +137,7 @@ export function traverseNode<S = unknown>(
   const keys = VISITOR_KEYS[node.type];
   if (!keys?.length) return false;
 
-  const ctx = new TraversalContext(opts, state);
+  const ctx = new TraversalContext(opts, state!);
   if (visitSelf) {
     if (skipKeys?.[path!.parentKey]) return false;
     return _visitPaths(ctx, [path!]);
