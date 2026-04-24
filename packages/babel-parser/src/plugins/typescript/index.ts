@@ -95,6 +95,12 @@ export const TSErrorTemplates = {
     "Initializers are not allowed in ambient contexts.",
   DeclareFunctionHasImplementation:
     "An implementation cannot be declared in ambient contexts.",
+  DecoratorAbstractMethod: ({
+    kind,
+  }: {
+    kind: "abstract method" | "abstract field" | "declare field";
+  }) =>
+    `Decorators can't be used with ${kind.startsWith("a") ? "an" : "a"} ${kind}.`,
   DuplicateAccessibilityModifier: ({
     modifier,
   }: {
@@ -3234,6 +3240,28 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.tsInAmbientContext(callParseClassMemberWithIsStatic);
       } else {
         callParseClassMemberWithIsStatic();
+      }
+
+      if (member.decorators && member.decorators.length > 0) {
+        if (
+          member.type === "TSAbstractMethodDefinition" ||
+          member.type === "TSDeclareMethod"
+        ) {
+          this.raise(TSErrors.DecoratorAbstractMethod, member, {
+            kind: "abstract method",
+          });
+        } else if (
+          (member.type === "ClassProperty" && member.abstract) ||
+          (member.type === "ClassProperty" && member.declare) ||
+          member.type === "TSAbstractPropertyDefinition" ||
+          (member.type === "PropertyDefinition" && member.declare)
+        ) {
+          this.raise(TSErrors.DecoratorAbstractMethod, member, {
+            kind: member.declare
+              ? ("declare field" as const)
+              : ("abstract field" as const),
+          });
+        }
       }
     }
 

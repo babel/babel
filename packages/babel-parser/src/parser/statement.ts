@@ -1657,25 +1657,6 @@ export default abstract class StatementParser extends ExpressionParser {
       }
 
       this.parseClassMember(classBody, member, state);
-
-      if (member.decorators && member.decorators.length > 0) {
-        if (
-          this.hasPlugin("typescript") &&
-          (this.hasPlugin("estree")
-            ? // @ts-expect-error Fixme
-              member.type === "TSAbstractMethodDefinition"
-            : // @ts-expect-error Fixme
-              member.type === "TSDeclareMethod")
-        ) {
-          this.raise(Errors.DecoratorAbstractMethod, member);
-        }
-        if (
-          // @ts-expect-error Fixme
-          member.kind === "constructor"
-        ) {
-          this.raise(Errors.DecoratorConstructor, member);
-        }
-      }
     }
 
     this.state.strict = oldStrict;
@@ -1823,6 +1804,10 @@ export default abstract class StatementParser extends ExpressionParser {
       let allowsDirectSuper = false;
       if (isConstructor) {
         publicMethod.kind = "constructor";
+
+        if (publicMethod.decorators && publicMethod.decorators.length > 0) {
+          this.raise(Errors.DecoratorConstructor, member);
+        }
 
         // TypeScript allows multiple overloaded constructor declarations.
         if (state.hadConstructor && !this.hasPlugin("typescript")) {

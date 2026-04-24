@@ -130,7 +130,6 @@ type ErrorInfoCompressed = {
   DeclarationMissingInitializer: [
     { kind: "await using" | "const" | "destructuring" | "using" },
   ];
-  DecoratorAbstractMethod: [];
   DecoratorArgumentsOutsideParentheses: [];
   DecoratorsBeforeAfterExport: [];
   DecoratorConstructor: [];
@@ -289,6 +288,9 @@ type ErrorInfoCompressed = {
   DeclareAccessor: [{ kind: "get" | "set" }];
   DeclareClassFieldHasInitializer: [];
   DeclareFunctionHasImplementation: [];
+  DecoratorAbstractMethod: [
+    { kind: "abstract method" | "abstract field" | "declare field" },
+  ];
   DuplicateAccessibilityModifier: [{ modifier: Accessibility }];
   DuplicateModifier: [{ modifier: TsModifier }];
   EmptyHeritageClauseType: [{ token: "extends" | "implements" }];
