@@ -11,7 +11,7 @@ const {
   yieldExpression,
 } = t;
 
-const awaitVisitor = visitors.environmentVisitor<{ wrapAwait: t.Expression }>({
+const awaitVisitor = visitors.environmentVisitor<{ wrapAwait?: t.Expression }>({
   ArrowFunctionExpression(path) {
     path.skip();
   },

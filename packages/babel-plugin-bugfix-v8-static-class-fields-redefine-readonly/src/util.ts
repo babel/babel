@@ -48,7 +48,10 @@ const hasReferenceOrThisVisitor: Visitor<{ name?: string; ref: () => void }> = {
   FunctionParent(path, state) {
     if (path.isArrowFunctionExpression()) return;
     if (state.name && !path.scope.hasOwnBinding(state.name)) {
-      path.traverse(hasReferenceVisitor, state);
+      path.traverse(
+        hasReferenceVisitor,
+        state as { name: string; ref: () => void },
+      );
     }
     path.skip();
     if (path.isMethod()) {

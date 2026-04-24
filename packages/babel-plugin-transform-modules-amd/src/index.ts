@@ -78,7 +78,7 @@ export default declare<State>((api, options: Options) => {
       this.file.set("@babel/plugin-transform-modules-*", "amd");
     },
 
-    visitor: {
+    visitor: api.traverse.explode({
       "CallExpression|ImportExpression"(
         this: State & PluginPass,
         path: NodePath<t.CallExpression | t.ImportExpression>,
@@ -212,6 +212,6 @@ export default declare<State>((api, options: Options) => {
           );
         },
       },
-    },
+    }),
   };
 });

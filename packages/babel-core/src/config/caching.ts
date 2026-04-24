@@ -49,7 +49,7 @@ export function makeWeakCache<ArgT extends WeakKey, ResultT, SideChannel>(
 export function makeWeakCacheSync<ArgT extends WeakKey, ResultT, SideChannel>(
   handler: (arg: ArgT, cache?: CacheConfigurator<SideChannel>) => ResultT,
 ): (arg: ArgT, data?: SideChannel) => ResultT {
-  return synchronize<[ArgT, SideChannel], ResultT>(
+  return synchronize<[ArgT, SideChannel | undefined], ResultT>(
     makeWeakCache<ArgT, ResultT, SideChannel>(handler),
   );
 }
@@ -66,7 +66,7 @@ export function makeStrongCache<ArgT, ResultT, SideChannel>(
 export function makeStrongCacheSync<ArgT, ResultT, SideChannel>(
   handler: (arg: ArgT, cache?: CacheConfigurator<SideChannel>) => ResultT,
 ): (arg: ArgT, data?: SideChannel) => ResultT {
-  return synchronize<[ArgT, SideChannel], ResultT>(
+  return synchronize<[ArgT, SideChannel | undefined], ResultT>(
     makeStrongCache<ArgT, ResultT, SideChannel>(handler),
   );
 }
@@ -102,12 +102,15 @@ function makeCachedFunction<ArgT, ResultT, SideChannel>(
     arg: ArgT,
     cache: CacheConfigurator<SideChannel>,
   ) => Handler<ResultT> | ResultT,
-): (arg: ArgT, data: SideChannel) => Handler<ResultT> {
+): (arg: ArgT, data?: SideChannel) => Handler<ResultT> {
   const callCacheSync = new CallCache<ResultT>();
   const callCacheAsync = new CallCache<ResultT>();
   const futureCache = new CallCache<Lock<ResultT>>();
 
-  return function* cachedFunction(arg: ArgT, data: SideChannel) {
+  return function* cachedFunction(
+    arg: ArgT,
+    data: SideChannel = undefined as SideChannel,
+  ) {
     const asyncContext = yield* isAsync();
     const callCache = asyncContext ? callCacheAsync : callCacheSync;
 

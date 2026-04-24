@@ -15,13 +15,13 @@ export default declare((api, options: Options) => {
   return {
     name: "transform-optional-chaining",
     manipulateOptions: undefined,
-    visitor: {
+    visitor: api.traverse.explode({
       "OptionalCallExpression|OptionalMemberExpression"(
         path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
       ) {
         transform(path, { noDocumentAll, pureGetters });
       },
-    },
+    }),
   };
 });
 

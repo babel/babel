@@ -982,12 +982,12 @@ class Scope {
       const typeVisitors = scopeVisitor[path.type];
       if (typeVisitors) {
         for (const visit of typeVisitors.enter!) {
-          visit.call(state, path, state);
+          (visit as Function).call(state, path, state);
         }
       }
     }
 
-    traverseForScope(path, scopeVisitor, state);
+    traverseForScope(path, scopeVisitor as Visitor, state);
 
     this.crawling = false;
 

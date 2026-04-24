@@ -46,7 +46,7 @@ export default declare(api => {
       }
       generatorOpts.jsescOption.minimal ??= false;
     },
-    visitor: {
+    visitor: api.traverse.explode({
       Identifier(path) {
         const { node, key } = path;
         const { name } = node;
@@ -108,6 +108,6 @@ export default declare(api => {
 
         value.raw = replaceUnicodeEscapes(value.raw);
       },
-    },
+    }),
   };
 });

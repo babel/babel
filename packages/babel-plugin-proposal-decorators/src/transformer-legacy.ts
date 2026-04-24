@@ -54,21 +54,18 @@ function applyEnsureOrdering(
   path: NodePath<t.ClassExpression | t.ObjectExpression>,
 ) {
   // TODO: This should probably also hoist computed properties.
-  const decorators: t.Decorator[] = (
-    path.isClass()
+  const decorators = (
+    (path.isClass()
       ? [
           path,
           ...(path.get("body.body") as NodePath<ClassDecoratableElement>[]),
         ]
-      : path.get("properties")
+      : path.get("properties")) as NodePath<
+      t.ObjectMember | t.ClassExpression | ClassDecoratableElement
+    >[]
   ).reduce(
-    (
-      acc: t.Decorator[],
-      prop: NodePath<
-        t.ObjectMember | t.ClassExpression | ClassDecoratableElement
-      >,
-    ) => acc.concat(prop.node.decorators || []),
-    [],
+    (acc, prop) => acc.concat(prop.node.decorators || []),
+    [] as t.Decorator[],
   );
 
   const identDecorators = decorators.filter(

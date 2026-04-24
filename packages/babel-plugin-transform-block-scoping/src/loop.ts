@@ -104,64 +104,6 @@ interface CompletionsAndVarsState {
   loopNode: t.Loop;
 }
 
-const collectCompletionsAndVarsVisitor: Visitor<CompletionsAndVarsState> = {
-  Function(path) {
-    path.skip();
-  },
-  LabeledStatement: {
-    enter({ node }, state) {
-      state.labelsStack.push(node.label.name);
-    },
-    exit({ node }, state) {
-      const popped = state.labelsStack.pop();
-      if (popped !== node.label.name) {
-        throw new Error("Assertion failure. Please report this bug to Babel.");
-      }
-    },
-  },
-  Loop: {
-    enter(_, state) {
-      state.labellessContinueTargets++;
-      state.labellessBreakTargets++;
-    },
-    exit(_, state) {
-      state.labellessContinueTargets--;
-      state.labellessBreakTargets--;
-    },
-  },
-  SwitchStatement: {
-    enter(_, state) {
-      state.labellessBreakTargets++;
-    },
-    exit(_, state) {
-      state.labellessBreakTargets--;
-    },
-  },
-  "BreakStatement|ContinueStatement"(
-    path: NodePath<t.BreakStatement | t.ContinueStatement>,
-    state,
-  ) {
-    const { label } = path.node;
-    if (label) {
-      if (state.labelsStack.includes(label.name)) return;
-    } else if (
-      path.isBreakStatement()
-        ? state.labellessBreakTargets > 0
-        : state.labellessContinueTargets > 0
-    ) {
-      return;
-    }
-    state.breaksContinues.push(path);
-  },
-  ReturnStatement(path, state) {
-    state.returns.push(path);
-  },
-  VariableDeclaration(path, state) {
-    if (path.parent === state.loopNode && isVarInLoopHead(path)) return;
-    if (path.node.kind === "var") state.vars.push(path);
-  },
-};
-
 export function wrapLoopBody(
   loopPath: NodePath<t.Loop>,
   captured: string[],
@@ -177,7 +119,68 @@ export function wrapLoopBody(
     vars: [],
     loopNode,
   };
-  loopPath.traverse(collectCompletionsAndVarsVisitor, state);
+  loopPath.traverse(
+    {
+      Function(path) {
+        path.skip();
+      },
+      LabeledStatement: {
+        enter({ node }, state) {
+          state.labelsStack.push(node.label.name);
+        },
+        exit({ node }, state) {
+          const popped = state.labelsStack.pop();
+          if (popped !== node.label.name) {
+            throw new Error(
+              "Assertion failure. Please report this bug to Babel.",
+            );
+          }
+        },
+      },
+      Loop: {
+        enter(_, state) {
+          state.labellessContinueTargets++;
+          state.labellessBreakTargets++;
+        },
+        exit(_, state) {
+          state.labellessContinueTargets--;
+          state.labellessBreakTargets--;
+        },
+      },
+      SwitchStatement: {
+        enter(_, state) {
+          state.labellessBreakTargets++;
+        },
+        exit(_, state) {
+          state.labellessBreakTargets--;
+        },
+      },
+      "BreakStatement|ContinueStatement"(
+        path: NodePath<t.BreakStatement | t.ContinueStatement>,
+        state,
+      ) {
+        const { label } = path.node;
+        if (label) {
+          if (state.labelsStack.includes(label.name)) return;
+        } else if (
+          path.isBreakStatement()
+            ? state.labellessBreakTargets > 0
+            : state.labellessContinueTargets > 0
+        ) {
+          return;
+        }
+        state.breaksContinues.push(path);
+      },
+      ReturnStatement(path, state) {
+        state.returns.push(path);
+      },
+      VariableDeclaration(path, state) {
+        if (path.parent === state.loopNode && isVarInLoopHead(path)) return;
+        if (path.node.kind === "var") state.vars.push(path);
+      },
+    },
+    state,
+  );
 
   const callArgs = [];
   const closureParams = [];

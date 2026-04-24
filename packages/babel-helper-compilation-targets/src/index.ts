@@ -244,7 +244,7 @@ export default function getTargets(
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
   // These values offer defaults of the `browsers` field.
   if (esmodules && !browsers?.length) {
-    browsers = Object.keys(ESM_SUPPORT)
+    browsers = (Object.keys(ESM_SUPPORT) as (keyof typeof ESM_SUPPORT)[])
       .map(
         (browser: keyof typeof ESM_SUPPORT) =>
           `${browser} >= ${ESM_SUPPORT[browser]}`,

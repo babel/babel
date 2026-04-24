@@ -13,6 +13,7 @@ import type {
   ExplVisitNode,
   VisitNodeFunction,
   VisitPhase,
+  VisitorBase,
   VisitorProp,
 } from "./types.ts";
 
@@ -27,7 +28,7 @@ export type VisitWrapper<S = any> = (
 ) => VisitNodeFunction<S, Node>;
 
 export function isExplodedVisitor(
-  visitor: Visitor,
+  visitor: Visitor<any>,
 ): visitor is ExplodedVisitor {
   // @ts-expect-error _exploded is not defined on non-exploded Visitor
   return visitor?._exploded;
@@ -55,7 +56,7 @@ export { explode$1 as explode };
  *   visitors
  */
 function explode$1<S, T extends object>(visitor: {
-  [P in keyof T]: VisitorProp<any, P & string>;
+  [P in keyof T]: VisitorProp<S, P & string>;
 }): ExplodedVisitor<S>;
 function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S>;
 function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
@@ -106,6 +107,8 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
   // ensure enter/exit callbacks are arrays
   ensureCallbackArrays(visitor);
 
+  const visitorBase = visitor as VisitorBase<any>;
+
   // add type wrappers
   for (const nodeType of Object.keys(visitor)) {
     if (shouldIgnoreKey(nodeType)) continue;
@@ -113,21 +116,21 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
     if (!isVirtualType(nodeType)) continue;
 
     // wrap all the functions
-    const fns = visitor[nodeType]!;
+    const fns = visitorBase[nodeType]!;
     for (const type of Object.keys(fns)) {
       // @ts-expect-error normalised as VisitNodeObject
       fns[type] = wrapCheck(nodeType, fns[type]);
     }
 
     // clear it from the visitor
-    delete visitor[nodeType];
+    delete visitorBase[nodeType];
 
     const types = virtualTypes[nodeType];
     if (types !== null) {
       for (const type of types) {
         // @ts-expect-error Expression produces too complex union
-        visitor[type] ??= {};
-        mergePair(visitor[type], fns);
+        visitorBase[type] ??= {};
+        mergePair(visitorBase[type], fns);
       }
     } else {
       mergePair(visitor, fns);
@@ -158,11 +161,11 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
     delete visitor[nodeType];
 
     for (const alias of aliases) {
-      const existing = visitor[alias];
+      const existing = visitorBase[alias];
       if (existing) {
         mergePair(existing, fns);
       } else {
-        visitor[alias] = { ...fns };
+        visitorBase[alias] = { ...fns };
       }
     }
   }
@@ -176,7 +179,6 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
     );
   }
 
-  // @ts-expect-error explosion has been performed
   return visitor as ExplodedVisitor;
 }
 
@@ -186,7 +188,7 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
 // TODO: Just call it `verify` once https://github.com/Swatinem/rollup-plugin-dts/issues/307
 // is fixed.
 export { verify$1 as verify };
-function verify$1(visitor: Visitor) {
+function verify$1(visitor: Visitor<any>) {
   // @ts-expect-error _verified is not defined on non-verified Visitor.
   // TODO: unify _verified and _exploded.
   if (visitor._verified) return;
@@ -252,11 +254,11 @@ function validateVisitorMethods(
 export function merge<State>(
   visitors: Visitor<State>[],
 ): ExplodedVisitor<State>;
-export function merge(
-  visitors: Visitor<unknown>[],
-  states?: any[],
-  wrapper?: Function | null,
-): ExplodedVisitor<unknown>;
+export function merge<State>(
+  visitors: Visitor<State>[],
+  states?: State[],
+  wrapper?: VisitWrapper<State> | null,
+): ExplodedVisitor<State>;
 export function merge(
   visitors: any[],
   states: any[] = [],
@@ -281,7 +283,11 @@ export function merge(
 
       // if we have state or wrapper then overload the callbacks to take it
       if (state || wrapper) {
-        typeVisitor = wrapWithStateOrWrapper(typeVisitor, state, wrapper);
+        typeVisitor = wrapWithStateOrWrapper(
+          typeVisitor as ExplVisitNode<unknown, Node>,
+          state,
+          wrapper,
+        );
       }
 
       const nodeVisitor = (mergedVisitor[key] ||= {});
@@ -333,7 +339,7 @@ function wrapWithStateOrWrapper<State>(
   return newVisitor;
 }
 
-function ensureEntranceObjects(obj: Visitor) {
+function ensureEntranceObjects(obj: Visitor<any>) {
   for (const key of Object.keys(obj) as (keyof Visitor)[]) {
     if (shouldIgnoreKey(key)) continue;
 
@@ -345,7 +351,7 @@ function ensureEntranceObjects(obj: Visitor) {
   }
 }
 
-function ensureCallbackArrays(obj: Visitor) {
+function ensureCallbackArrays(obj: Visitor<any>) {
   if (obj.enter && !Array.isArray(obj.enter)) obj.enter = [obj.enter];
   if (obj.exit && !Array.isArray(obj.exit)) obj.exit = [obj.exit];
 }

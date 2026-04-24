@@ -163,7 +163,7 @@ export default abstract class ExpressionParser extends LValParser {
     const expr = this.parseExpression() as N.Expression & N.ParserOutput;
     if (!this.match(tt.eof)) {
       throw this.raise(Errors.ParseExpressionExpectsEOF, this.state.startLoc, {
-        unexpected: this.input.codePointAt(this.state.start),
+        unexpected: this.input.codePointAt(this.state.start)!,
       });
     }
     // Unlike parseTopLevel, we need to drain remaining commentStacks

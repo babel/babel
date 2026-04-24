@@ -3,6 +3,7 @@ import fs from "node:fs";
 import type { PluginItem } from "@babel/core";
 import {
   parseSync,
+  traverse,
   type InputOptions,
   type types as t,
   type NodePath,
@@ -479,7 +480,7 @@ function transformNamedBabelTypesImportToDestructuring({
 
 function pluginReplaceTSImportExtension() {
   return {
-    visitor: {
+    visitor: traverse.explode({
       "ImportDeclaration|ExportDeclaration"({
         node,
       }: NodePath<t.ImportDeclaration | t.ExportDeclaration>) {
@@ -495,7 +496,7 @@ function pluginReplaceTSImportExtension() {
         const { expression } = moduleReference;
         expression.value = expression.value.replace(/(\.[mc]?)ts$/, "$1js");
       },
-    },
+    }),
   } satisfies PluginObject;
 }
 

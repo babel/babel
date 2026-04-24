@@ -35,7 +35,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
       // transforms to:
       // (b, p1) => { var { #x: x } = p1 === undefined ? I : p1; body; }
       const firstPrivateIndex = path.node.params.findIndex(param =>
-        hasPrivateKeys(param),
+        hasPrivateKeys(param as t.FunctionParameter),
       );
       if (firstPrivateIndex === -1) return;
       // wrap function body within IIFE if any param is shadowed
