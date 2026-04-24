@@ -443,6 +443,9 @@
       "@babel/eslint-parser": [
         "./eslint/babel-eslint-parser/src"
       ],
+      "@babel/eslint-plugin": [
+        "./eslint/babel-eslint-plugin/src"
+      ],
       "@babel/plugin-codemod-object-assign-to-object-spread": [
         "./codemods/babel-plugin-codemod-object-assign-to-object-spread/src"
       ],

@@ -839,7 +839,6 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
   ]);
   // Todo: convert these packages to TS
   const jsPackages = new Set([
-    "babel-eslint-plugin",
     "babel-eslint-plugin-development",
     "babel-eslint-plugin-development-internal",
   ]);

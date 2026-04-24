@@ -538,8 +538,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-plugin@workspace:eslint/babel-eslint-plugin"
   dependencies:
+    "@babel/core": "workspace:^"
     eslint: "npm:^10.0.0"
   peerDependencies:
+    "@babel/core": "workspace:^"
     "@babel/eslint-parser": "workspace:^"
     eslint: ^9.0.0 || ^10.0.0
   languageName: unknown
