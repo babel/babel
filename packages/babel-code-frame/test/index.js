@@ -5,7 +5,7 @@ describe("@babel/code-frame", function () {
   test("basic usage", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(
-      codeFrameColumns(rawLines, { start: { line: 2, column: 16 } }),
+      codeFrameColumns(rawLines, { start: { line: 2, column: 15 } }),
     ).toEqual(
       [
         "  1 | class Foo {",
@@ -40,7 +40,7 @@ describe("@babel/code-frame", function () {
       "}",
     ].join("\n");
     expect(
-      codeFrameColumns(rawLines, { start: { line: 7, column: 2 } }),
+      codeFrameColumns(rawLines, { start: { line: 7, column: 1 } }),
     ).toEqual(
       [
         "   5 |  * @param b Number",
@@ -69,7 +69,7 @@ describe("@babel/code-frame", function () {
       "}",
     ].join("\n");
     expect(
-      codeFrameColumns(rawLines, { start: { line: 6, column: 2 } }),
+      codeFrameColumns(rawLines, { start: { line: 6, column: 1 } }),
     ).toEqual(
       [
         "  4 |  * @param a Number",
@@ -90,7 +90,7 @@ describe("@babel/code-frame", function () {
       "\t};",
     ].join("\n");
     expect(
-      codeFrameColumns(rawLines, { start: { line: 2, column: 25 } }),
+      codeFrameColumns(rawLines, { start: { line: 2, column: 24 } }),
     ).toEqual(
       [
         "  1 | \tclass Foo {",
@@ -118,7 +118,7 @@ describe("@babel/code-frame", function () {
     expect(
       codeFrameColumns(
         rawLines,
-        { start: { line: 7, column: 2 } },
+        { start: { line: 7, column: 1 } },
         { linesAbove: 1 },
       ),
     ).toEqual(
@@ -150,7 +150,7 @@ describe("@babel/code-frame", function () {
     expect(
       codeFrameColumns(
         rawLines,
-        { start: { line: 7, column: 2 } },
+        { start: { line: 7, column: 1 } },
         { linesBelow: 1 },
       ),
     ).toEqual(
@@ -181,7 +181,7 @@ describe("@babel/code-frame", function () {
     expect(
       codeFrameColumns(
         rawLines,
-        { start: { line: 7, column: 2 } },
+        { start: { line: 7, column: 1 } },
         { linesAbove: 1, linesBelow: 1 },
       ),
     ).toEqual(
@@ -242,7 +242,7 @@ describe("@babel/code-frame", function () {
   test("basic usage, new API", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(
-      codeFrameColumns(rawLines, { start: { line: 2, column: 16 } }),
+      codeFrameColumns(rawLines, { start: { line: 2, column: 15 } }),
     ).toEqual(
       [
         "  1 | class Foo {",
@@ -257,8 +257,8 @@ describe("@babel/code-frame", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(
       codeFrameColumns(rawLines, {
-        start: { line: 2, column: 3 },
-        end: { line: 2, column: 16 },
+        start: { line: 2, column: 2 },
+        end: { line: 2, column: 15 },
       }),
     ).toEqual(
       [
@@ -276,7 +276,7 @@ describe("@babel/code-frame", function () {
     );
     expect(
       codeFrameColumns(rawLines, {
-        start: { line: 2, column: 17 },
+        start: { line: 2, column: 16 },
         end: { line: 3, column: 3 },
       }),
     ).toEqual(
@@ -301,7 +301,7 @@ describe("@babel/code-frame", function () {
     ].join("\n");
     expect(
       codeFrameColumns(rawLines, {
-        start: { line: 2, column: 17 },
+        start: { line: 2, column: 16 },
         end: { line: 4, column: 3 },
       }),
     ).toEqual(
@@ -344,7 +344,7 @@ describe("@babel/code-frame", function () {
     expect(
       codeFrameColumns(
         rawLines,
-        { start: { line: 2, column: 16 } },
+        { start: { line: 2, column: 15 } },
         {
           message: "Missing {",
         },
@@ -391,7 +391,7 @@ describe("@babel/code-frame", function () {
       codeFrameColumns(
         rawLines,
         {
-          start: { line: 2, column: 17 },
+          start: { line: 2, column: 16 },
           end: { line: 4, column: 3 },
         },
         {
@@ -456,5 +456,29 @@ describe("@babel/code-frame", function () {
       "  101 | const a = 1;
       > 102 | const b = 1"
     `);
+  });
+
+  test("should handle 0-based columns from Babel AST locations", function () {
+    const code = 'x = "foobar";';
+    // "foobar" (with quotes) starts at column 4 (0-based), ends at column 12 (0-based exclusive)
+    const loc = {
+      start: { line: 1, column: 4 },
+      end: { line: 1, column: 12 },
+    };
+    const result = codeFrameColumns(code, loc);
+    // The underline should cover "foobar" (with quotes) starting at the correct position
+    expect(result).toEqual(
+      ['> 1 | x = "foobar";', "    |     ^^^^^^^^"].join("\n"),
+    );
+  });
+
+  test("should handle 0-based column 0", function () {
+    const code = '"foobar";';
+    const loc = {
+      start: { line: 1, column: 0 },
+      end: { line: 1, column: 8 },
+    };
+    const result = codeFrameColumns(code, loc);
+    expect(result).toEqual(['> 1 | "foobar";', "    | ^^^^^^^^"].join("\n"));
   });
 });
