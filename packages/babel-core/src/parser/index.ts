@@ -64,7 +64,7 @@ export default function* parser(
         {
           start: {
             line: loc.line,
-            column: loc.column + 1,
+            column: loc.column,
           },
         },
         {

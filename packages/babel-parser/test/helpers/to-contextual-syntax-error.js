@@ -11,8 +11,7 @@ export default function toContextualSyntaxError(
 
   const { startLine = 1, startColumn = 0 } = options || {};
   const line = error.loc.line - startLine + 1;
-  const column =
-    1 + (line === 1 ? error.loc.column - startColumn : error.loc.column);
+  const column = line === 1 ? error.loc.column - startColumn : error.loc.column;
   const frame = codeFrameColumns(
     source,
     { start: { line, column } },

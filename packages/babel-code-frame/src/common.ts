@@ -58,7 +58,7 @@ export function getMarkerLines(
 } {
   const startLoc: Location = {
     // @ts-expect-error default value
-    column: 0,
+    column: null,
     // @ts-expect-error default value
     line: -1,
     ...loc.start,
@@ -91,29 +91,32 @@ export function getMarkerLines(
     for (let i = 0; i <= lineDiff; i++) {
       const lineNumber = i + startLine;
 
-      if (!startColumn) {
+      if (startColumn == null) {
         markerLines[lineNumber] = true;
       } else if (i === 0) {
         const sourceLength = source[lineNumber - 1].length;
 
-        markerLines[lineNumber] = [startColumn, sourceLength - startColumn + 1];
+        markerLines[lineNumber] = [startColumn, sourceLength - startColumn];
       } else if (i === lineDiff) {
         markerLines[lineNumber] = [0, endColumn];
       } else {
-        const sourceLength = source[lineNumber - i].length;
+        const sourceLength = source[lineNumber - 1].length;
 
         markerLines[lineNumber] = [0, sourceLength];
       }
     }
   } else {
     if (startColumn === endColumn) {
-      if (startColumn) {
+      if (startColumn != null) {
         markerLines[startLine] = [startColumn, 0];
       } else {
         markerLines[startLine] = true;
       }
     } else {
-      markerLines[startLine] = [startColumn, endColumn - startColumn];
+      // Defensive: if either column is missing, normalize to avoid NaN.
+      const safeStart = startColumn ?? 0;
+      const safeEnd = endColumn ?? safeStart;
+      markerLines[startLine] = [safeStart, safeEnd - safeStart];
     }
   }
 
@@ -169,7 +172,7 @@ export function _codeFrameColumns(
         let markerLine = "";
         if (Array.isArray(hasMarker)) {
           const markerSpacing = line
-            .slice(0, Math.max(hasMarker[0] - 1, 0))
+            .slice(0, hasMarker[0])
             .replace(/[^\t]/g, " ");
           const numberOfMarkers = hasMarker[1] || 1;
 

@@ -99,7 +99,7 @@ export function replaceWithSourceString(
         codeFrameColumns(replacement, {
           start: {
             line: loc.line,
-            column: loc.column + 1,
+            column: loc.column,
           },
         });
       err.code = "BABEL_REPLACE_SOURCE_ERROR";
