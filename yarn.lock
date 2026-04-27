@@ -4117,6 +4117,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/plugin-transform-arrow-functions": "workspace:^"
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
+    "@babel/preset-typescript": "workspace:^"
     "@cspotcode/source-map-support": "condition:BABEL_8_BREAKING ? ^0.8.1 :"
     browserify: "npm:^16.5.2"
     clone-deep: "npm:^4.0.1"

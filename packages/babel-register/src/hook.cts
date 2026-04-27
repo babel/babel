@@ -83,6 +83,9 @@ function register(client: IClient, opts: Options = {}) {
     {
       exts: opts.extensions ?? client.getDefaultExtensions(),
       ignoreNodeModules: false,
+      matcher(filename: string) {
+        return !client.isFileIgnored(filename);
+      },
     },
   );
 

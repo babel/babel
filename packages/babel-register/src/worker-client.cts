@@ -30,6 +30,10 @@ class Client implements IClient {
   ): { code: string; map: object } | null {
     return this.#send(ACTIONS.TRANSFORM, { code, filename });
   }
+
+  isFileIgnored(filename: string): boolean {
+    return this.#send(ACTIONS.IS_FILE_IGNORED, filename);
+  }
 }
 
 // We need to run Babel in a worker because require hooks must
@@ -95,7 +99,11 @@ if (!process.env.BABEL_8_BREAKING) {
 
       super((action, payload) => {
         return LocalClient.#handleMessage(
-          action === ACTIONS.TRANSFORM ? ACTIONS.TRANSFORM_SYNC : action,
+          action === ACTIONS.TRANSFORM
+            ? ACTIONS.TRANSFORM_SYNC
+            : action === ACTIONS.IS_FILE_IGNORED
+              ? ACTIONS.IS_FILE_IGNORED_SYNC
+              : action,
           payload,
         );
       });
