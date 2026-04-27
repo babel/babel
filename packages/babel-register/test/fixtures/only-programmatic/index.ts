@@ -15,4 +15,12 @@ require("./loaded.ts");
 require("./ignored/ignored-pass.ts");
 
 // handled by node and should throw SyntaxError when loaded by node
-require("./ignored/ignored-throw.ts");
+try {
+  require("./ignored/ignored-throw.ts");
+} catch (e) {
+  if (e instanceof SyntaxError && e.message.includes("TypeScript enum is not supported in strip-only mode")) {
+    process.stdout.write("SyntaxError is thrown as expected from ignored-throw.ts");
+  } else {
+    throw e;
+  }
+}
