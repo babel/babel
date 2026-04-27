@@ -607,23 +607,25 @@ const ACCESSOR = 1;
 const METHOD = 2;
 const GETTER = 3;
 const SETTER = 4;
+const FIELD_IGNORED = 5; // TS `declare`/`abstract` fields
 
 const STATIC_OLD_VERSION = 5; // Before 2023-05
 const STATIC = 8; // 1 << 3
 const DECORATORS_HAVE_THIS = 16; // 1 << 4
 
-function getElementKind(element: NodePath<ClassDecoratableElement>): number {
-  switch (element.node.type) {
+function getElementKind({ node }: NodePath<ClassDecoratableElement>): number {
+  switch (node.type) {
     case "ClassProperty":
+      return node.declare || node.abstract ? FIELD_IGNORED : FIELD;
     case "ClassPrivateProperty":
       return FIELD;
     case "ClassAccessorProperty":
       return ACCESSOR;
     case "ClassMethod":
     case "ClassPrivateMethod":
-      if (element.node.kind === "get") {
+      if (node.kind === "get") {
         return GETTER;
-      } else if (element.node.kind === "set") {
+      } else if (node.kind === "set") {
         return SETTER;
       } else {
         return METHOD;
@@ -1458,6 +1460,7 @@ function transformClass(
       const isPrivate = key.type === "PrivateName";
 
       const kind = getElementKind(element);
+      if (kind === FIELD_IGNORED) continue;
 
       if (isPrivate && !isStatic) {
         if (hasDecorators) {
