@@ -333,6 +333,8 @@ maybeWriteFile(
           "*.mts",
           "*.ts",
           "scripts/**/*.ts",
+          "codemods/*/test/*.tst.ts",
+          "eslint/*/test/*.tst.ts",
           "packages/*/test/*.tst.ts",
         ],
         exclude: [],
