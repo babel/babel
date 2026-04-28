@@ -16,7 +16,7 @@ const rules = {
 const rulesConfig = {
   "new-cap": "off",
   "no-undef": "off",
-  "object-curly-spacing": "off",
+  "no-unused-expressions": "off",
 };
 
 export default { meta, rules, rulesConfig };
