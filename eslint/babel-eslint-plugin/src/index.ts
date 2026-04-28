@@ -2,6 +2,9 @@ import type { ESLint, Rule } from "eslint";
 import newCap from "./rules/new-cap.ts";
 import noUndef from "./rules/no-undef.ts";
 import noUnusedExpressions from "./rules/no-unused-expressions.ts";
+import * as recommendedConfig from "./configs/recommended.ts";
+import * as allConfig from "./configs/all.ts";
+import type { ESLint } from "eslint";
 
 const meta: ESLint.Plugin["meta"] = {
   name: PACKAGE_JSON.name,
@@ -22,5 +25,10 @@ const rulesConfig = {
   "no-unused-expressions": "off",
 };
 
+const configs = {
+  recommended: recommendedConfig,
+  all: allConfig,
+};
+
 // @ts-expect-error TODO(Babel 9): Remove rulesConfig in favor of configs
-export default { meta, rules, rulesConfig } satisfies ESLint.Plugin;
+export default { configs, meta, rules, rulesConfig } satisfies ESLint.Plugin;
