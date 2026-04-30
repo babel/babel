@@ -1,6 +1,9 @@
-import { createRequire } from "node:module";
 import path from "node:path";
+import { createRequire } from "node:module";
+import { loadPartialConfigSync } from "@babel/core";
 import type { WatchOptions, FSWatcher } from "chokidar";
+
+// micromatch is no longer needed since we use @babel/core's matching logic
 
 const fileToDeps = new Map<string, Set<string>>();
 const depToFiles = new Map<string, Set<string>>();
@@ -10,10 +13,45 @@ let watcher: FSWatcher;
 const watchQueue = new Set<string>();
 let hasStarted = false;
 
-export function enable({ enableGlobbing }: { enableGlobbing: boolean }) {
+export function enable({
+  enableGlobbing,
+  babelOptions,
+}: {
+  enableGlobbing: boolean;
+  babelOptions: any;
+}) {
+  if (watcher) {
+    void watcher.close();
+  }
+  fileToDeps.clear();
+  depToFiles.clear();
+  watchQueue.clear();
+  hasStarted = false;
+
   isWatchMode = true;
 
   const { FSWatcher } = requireChokidar();
+
+  const cache = new Map<string, boolean>();
+  const ignored = (watchedPath: string): boolean => {
+    const absPath = path.resolve(watchedPath);
+    const cached = cache.get(absPath);
+    if (cached !== undefined) return cached;
+
+    try {
+      const config = loadPartialConfigSync({
+        ...babelOptions,
+        filename: absPath,
+        showIgnoredFiles: true,
+      });
+      const isIgnored = !config || config.fileHandling === "ignored";
+      cache.set(absPath, isIgnored);
+      return isIgnored;
+    } catch (_) {
+      cache.set(absPath, false);
+      return false;
+    }
+  };
 
   const options: WatchOptions = {
     disableGlobbing: !enableGlobbing,
@@ -23,6 +61,7 @@ export function enable({ enableGlobbing }: { enableGlobbing: boolean }) {
       stabilityThreshold: 50,
       pollInterval: 10,
     },
+    ignored,
   };
   watcher = new FSWatcher(options);
 

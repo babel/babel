@@ -1,0 +1,5 @@
+{
+  "args": ["src", "ignored", "--out-dir", ".", "--watch", "--ignore", "ignored/**"],
+  "noBabelrc": true,
+  "noDefaultPlugins": true
+}

@@ -209,7 +209,7 @@ export default async function ({
 
   async function files(filenames: string[]): Promise<void> {
     if (cliOptions.watch) {
-      watcher.enable({ enableGlobbing: false });
+      watcher.enable({ enableGlobbing: false, babelOptions });
     }
 
     if (!cliOptions.skipInitialBuild) {

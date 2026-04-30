@@ -70,6 +70,7 @@ export type PrivPartialConfig = {
 
 export default function* loadPrivatePartialConfig(
   inputOpts: InputOptions | null | undefined,
+  showIgnoredFiles?: boolean,
 ): Handler<PrivPartialConfig | null> {
   if (
     inputOpts != null &&
@@ -108,6 +109,7 @@ export default function* loadPrivatePartialConfig(
     envName,
     caller,
     showConfig: showConfigPath === filename,
+    showIgnoredFiles,
   };
 
   const configChain = yield* buildRootChain(args, context);
@@ -169,7 +171,7 @@ export function* loadPartialConfig(
   }
 
   const result: PrivPartialConfig | undefined | null =
-    yield* loadPrivatePartialConfig(opts);
+    yield* loadPrivatePartialConfig(opts, showIgnoredFiles);
   if (!result) return null;
 
   const { options, babelrc, ignore, config, fileHandling, files } = result;

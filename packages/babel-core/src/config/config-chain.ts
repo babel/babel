@@ -50,6 +50,7 @@ export type ConfigChain = {
   presets: UnloadedDescriptor<PresetAPI>[];
   options: ConfigChainOptions[];
   files: Set<string>;
+  ignored?: boolean;
 };
 
 export type PresetInstance = {
@@ -66,6 +67,7 @@ export type ConfigContext = {
   envName: string;
   caller: CallerMetadata | undefined;
   showConfig: boolean;
+  showIgnoredFiles?: boolean;
 };
 
 /**
@@ -161,6 +163,7 @@ export function* buildRootChain(
     programmaticLogger,
   );
   if (!programmaticChain) return null;
+  let isIgnored = !!programmaticChain.ignored;
   const programmaticReport = yield* programmaticLogger.output();
 
   let configFile;
@@ -193,6 +196,7 @@ export function* buildRootChain(
       configFileLogger,
     );
     if (!result) return null;
+    if (result.ignored) isIgnored = true;
     configReport = yield* configFileLogger.output();
 
     // Allow config files to toggle `.babelrc` resolution on and off and
@@ -209,7 +213,6 @@ export function* buildRootChain(
   }
 
   let ignoreFile, babelrcFile;
-  let isIgnored = false;
   const fileChain = emptyChain();
   // resolve all .babelrc files
   if (
@@ -642,6 +645,15 @@ function makeChainWalker<
         }) => shouldIgnore(context, ignore, only, dirname),
       )
     ) {
+      if (context.showIgnoredFiles) {
+        return {
+          plugins: [],
+          presets: [],
+          options: [],
+          files: new Set(),
+          ignored: true,
+        };
+      }
       return null;
     }
 
