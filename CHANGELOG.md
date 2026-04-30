@@ -25,6 +25,30 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.3 (2026-04-30)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#17923](https://github.com/babel/babel/pull/17923) Support flow extends bound ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#17931](https://github.com/babel/babel/pull/17931) fix(decorators): replace super within all removed static elements ([@JLHwung](https://github.com/JLHwung))
+* `babel-register`
+  * [#17915](https://github.com/babel/babel/pull/17915) Fix thread synchronization issues in `@babel/register` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-compat-data`, `babel-plugin-bugfix-safari-rest-destructuring-rhs-array`, `babel-preset-env`
+  * [#17788](https://github.com/babel/babel/pull/17788) Add bugfix plugin for Safari array rest destructuring bug ([@JLHwung](https://github.com/JLHwung))
+
+#### :nail_care: Polish
+* `babel-parser`
+  * [#17782](https://github.com/babel/babel/pull/17782) Improve trailing comma comment handling ([@JLHwung](https://github.com/JLHwung))
+
+#### :memo: Documentation
+* [#17847](https://github.com/babel/babel/pull/17847) Replace npmjs.com links with npmx.dev ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-helper-import-to-platform-api`, `babel-plugin-proposal-import-wasm-source`, `babel-plugin-transform-json-modules`
+  * [#17818](https://github.com/babel/babel/pull/17818) Load async Wasm and JSON imports in parallel ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v7.29.2 (2026-03-16)
 
 #### :eyeglasses: Spec Compliance
