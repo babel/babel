@@ -30,7 +30,7 @@
     "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "exports": {

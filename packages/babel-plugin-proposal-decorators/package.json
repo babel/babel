@@ -36,7 +36,7 @@
     "object.getownpropertydescriptors": "^2.1.1"
   },
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "exports": {
     ".": {

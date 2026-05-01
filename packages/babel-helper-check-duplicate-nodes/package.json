@@ -28,7 +28,7 @@
   "license": "MIT",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-check-duplicate-nodes",
   "engines": {
-    "node": "^20.19.0 || >=22.12.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "dependencies": {
     "@babel/types": "workspace:^"
