@@ -2,7 +2,7 @@ import { Module } from "node:module";
 import path from "node:path";
 import fs from "node:fs";
 import child from "node:child_process";
-import { commonJS, describeGte } from "$repo-utils";
+import { commonJS } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
 
@@ -337,7 +337,7 @@ describe("@babel/register", function () {
       expect(proxyHandler.set).not.toHaveBeenCalled();
     });
 
-    describeGte("22.18.0")("hook skip ignored files", () => {
+    describe("hook skip ignored files", () => {
       // We can't use the test runner because the mocked `pirates`
       // does not support the `matcher` option.
       test("via programmatic options ignored", async () => {

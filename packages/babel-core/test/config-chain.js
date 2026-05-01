@@ -4,14 +4,10 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as babel from "../lib/index.js";
-import { itSatisfies, itNegate } from "$repo-utils";
 
 import getTargets from "@babel/helper-compilation-targets";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// "minNodeVersion": "22.0.0" <-- For Ctrl+F when dropping node 20
-const versionHasRequireESM = "^20.19.0 || >= 22.12.0";
 
 function fixture(...args) {
   return path.join(dirname, "fixtures", "config", ...args);
@@ -1130,41 +1126,22 @@ describe("buildConfigChain", function () {
         },
       );
 
-      itNegate(itSatisfies(versionHasRequireESM))(
-        "should not load babel.config.mjs synchronously",
-        async () => {
-          const { cwd, tmp, config } = await getTemp(
-            "babel-test-load-config-sync-babel.config.mjs",
-          );
-          const filename = tmp("src.js");
+      it("should load babel.config.mjs synchronously", async () => {
+        const { cwd, tmp, config } = await getTemp(
+          "babel-test-load-config-sync-babel.config.mjs",
+        );
+        const filename = tmp("src.js");
 
-          await config("babel.config.mjs");
+        await config("babel.config.mjs");
 
-          expect(() => loadOptionsSync({ filename, cwd })).toThrow(
-            /is only supported when running Babel asynchronously/,
-          );
-        },
-      );
-
-      itSatisfies(versionHasRequireESM)(
-        "should load babel.config.mjs synchronously",
-        async () => {
-          const { cwd, tmp, config } = await getTemp(
-            "babel-test-load-config-sync-babel.config.mjs",
-          );
-          const filename = tmp("src.js");
-
-          await config("babel.config.mjs");
-
-          expect(loadOptionsSync({ filename, cwd })).toEqual({
-            ...getDefaults(),
-            filename,
-            cwd,
-            root: cwd,
-            comments: true,
-          });
-        },
-      );
+        expect(loadOptionsSync({ filename, cwd })).toEqual({
+          ...getDefaults(),
+          filename,
+          cwd,
+          root: cwd,
+          comments: true,
+        });
+      });
 
       test.each([
         "babel.config.json",
@@ -1234,41 +1211,22 @@ describe("buildConfigChain", function () {
         });
       });
 
-      itNegate(itSatisfies(versionHasRequireESM))(
-        "should not load .babelrc.mjs synchronously",
-        async () => {
-          const { cwd, tmp, config } = await getTemp(
-            "babel-test-load-config-sync-.babelrc.mjs",
-          );
-          const filename = tmp("src.js");
+      it("should load .babelrc.mjs synchronously", async () => {
+        const { cwd, tmp, config } = await getTemp(
+          "babel-test-load-config-sync-.babelrc.mjs",
+        );
+        const filename = tmp("src.js");
 
-          await config(".babelrc.mjs");
+        await config(".babelrc.mjs");
 
-          expect(() => loadOptionsSync({ filename, cwd })).toThrow(
-            /is only supported when running Babel asynchronously/,
-          );
-        },
-      );
-
-      itSatisfies(versionHasRequireESM)(
-        "should load .babelrc.mjs synchronously",
-        async () => {
-          const { cwd, tmp, config } = await getTemp(
-            "babel-test-load-config-sync-.babelrc.mjs",
-          );
-          const filename = tmp("src.js");
-
-          await config(".babelrc.mjs");
-
-          expect(loadOptionsSync({ filename, cwd })).toEqual({
-            ...getDefaults(),
-            filename,
-            cwd,
-            root: cwd,
-            comments: true,
-          });
-        },
-      );
+        expect(loadOptionsSync({ filename, cwd })).toEqual({
+          ...getDefaults(),
+          filename,
+          cwd,
+          root: cwd,
+          comments: true,
+        });
+      });
 
       test.each(
         [

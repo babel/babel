@@ -73,7 +73,7 @@ gen_enforced_field(WorkspaceCwd, 'engines.node', '>=6.9.0') :-
   \+ atom_concat('@babel/eslint', _, WorkspaceIdent).
 
 % Enforces the engines.node field for '@babel/eslint*' workspaces
-gen_enforced_field(WorkspaceCwd, 'engines.node', "^20.19.0 || >=22.12.0") :-
+gen_enforced_field(WorkspaceCwd, 'engines.node', "^22.18.0 || >=24.11.0") :-
   \+ workspace_field(WorkspaceCwd, 'private', true),
   % Get the workspace name
   workspace_ident(WorkspaceCwd, WorkspaceIdent),
@@ -93,7 +93,7 @@ function enforceEnginesNodeForPublicUnsetForPrivate({ Yarn }) {
     ) {
       workspace.unset("engines.node");
     } else {
-      workspace.set("engines.node", "^20.19.0 || >=22.12.0");
+      workspace.set("engines.node", "^22.18.0 || >=24.11.0");
     }
   }
 }

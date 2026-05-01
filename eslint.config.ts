@@ -306,7 +306,7 @@ export default defineConfig([
     rules: {
       "n/no-unsupported-features/node-builtins": [
         "error",
-        { version: "20.19.0", ignores: ["module"] },
+        { version: "22.18.0 ", ignores: ["module"] },
       ],
       "import/no-unresolved": "error",
     },

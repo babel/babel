@@ -200,7 +200,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [24, 22, 20]
+        node-version: [24, 22]
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
