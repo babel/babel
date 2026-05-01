@@ -8,9 +8,6 @@ import { createDebug } from "obug";
 import { endHiddenCallStack } from "../../errors/rewrite-stack-trace.ts";
 import ConfigError from "../../errors/config-error.ts";
 
-import type { InputOptions } from "../index.ts";
-import { transformFileSync } from "../../transform-file.ts";
-
 const debug = createDebug("babel:config:loading:files:module-types");
 
 const require = createRequire(import.meta.url);
@@ -67,8 +64,6 @@ const SUPPORTED_EXTENSIONS = {
   ".cts": "cjs",
 } as const;
 
-const asyncModules = new Set();
-
 export default function* loadCodeDefault(
   filepath: string,
   loader: "require" | "auto",
@@ -91,50 +86,27 @@ export default function* loadCodeDefault(
   switch (pattern) {
     case "require cjs":
     case "auto cjs":
-      if (isTS) {
-        return ensureTsSupport(filepath, ext, () => loadCjsDefault(filepath));
-      } else {
-        return loadCjsDefault(filepath);
-      }
+      return loadCjsDefault(filepath);
 
     case "auto unknown":
     case "require unknown":
     case "require esm":
       try {
-        if (isTS) {
-          return ensureTsSupport(filepath, ext, () => loadCjsDefault(filepath));
-        } else {
-          return loadCjsDefault(filepath);
-        }
+        return loadCjsDefault(filepath);
       } catch (e) {
-        if (
-          e.code === "ERR_REQUIRE_ASYNC_MODULE" ||
-          // Node.js 13.0.0 throws ERR_REQUIRE_CYCLE_MODULE instead of
-          // ERR_REQUIRE_ASYNC_MODULE when requiring a module a second time
-          // https://github.com/nodejs/node/issues/55516
-          // This `asyncModules` won't catch all of such cases, but it will
-          // at least catch those caused by Babel trying to load a module twice.
-          (e.code === "ERR_REQUIRE_CYCLE_MODULE" && asyncModules.has(filepath))
-        ) {
-          asyncModules.add(filepath);
+        if (e.code === "ERR_REQUIRE_ASYNC_MODULE") {
           if (!(async ??= yield* isAsync())) {
             throw new ConfigError(tlaError, filepath);
           }
           // fall through: require() failed due to TLA
-        } else if (e.code === "ERR_REQUIRE_ESM") {
-          // fall through: require() failed due to ESM
         } else {
           throw e;
         }
       }
-    // fall through: require() failed due to ESM or TLA, try import()
+    // fall through: require() failed due to TLA, try import()
     case "auto esm":
       if (async ?? (yield* isAsync())) {
-        const promise = isTS
-          ? ensureTsSupport(filepath, ext, () => loadMjsFromPath(filepath))
-          : loadMjsFromPath(filepath);
-
-        return (yield* waitFor(promise)).default;
+        return (yield* waitFor(loadMjsFromPath(filepath))).default;
       }
       if (isTS) {
         throw new ConfigError(tsNotSupportedError(ext), filepath);
@@ -143,77 +115,5 @@ export default function* loadCodeDefault(
       }
     default:
       throw new Error("Internal Babel error: unreachable code.");
-  }
-}
-
-function ensureTsSupport<T>(
-  filepath: string,
-  ext: string,
-  callback: () => T,
-): T {
-  if (
-    process.features.typescript ||
-    require.extensions[".ts"] ||
-    require.extensions[".cts"] ||
-    require.extensions[".mts"]
-  ) {
-    return callback();
-  }
-
-  if (ext !== ".cts") {
-    throw new ConfigError(tsNotSupportedError(ext), filepath);
-  }
-
-  const opts: InputOptions = {
-    babelrc: false,
-    configFile: false,
-    sourceType: "unambiguous",
-    sourceMaps: "inline",
-    sourceFileName: path.basename(filepath),
-    presets: [
-      [
-        getTSPreset(filepath),
-        {
-          onlyRemoveTypeImports: true,
-          optimizeConstEnums: true,
-        },
-      ],
-    ],
-  };
-
-  let handler: NodeJS.RequireExtensions[""] = function (m, filename) {
-    // If we want to support `.ts`, `.d.ts` must be handled specially.
-    if (handler && filename.endsWith(".cts")) {
-      // @ts-expect-error Undocumented API
-      return m._compile(
-        transformFileSync(filename, {
-          ...opts,
-          filename,
-        })!.code,
-        filename,
-      );
-    }
-    return require.extensions[".js"](m, filename);
-  };
-  require.extensions[ext] = handler;
-
-  try {
-    return callback();
-  } finally {
-    if (require.extensions[ext] === handler) delete require.extensions[ext];
-    handler = undefined;
-  }
-}
-
-function getTSPreset(filepath: string) {
-  try {
-    return require("@babel/preset-typescript");
-  } catch (error) {
-    if (error.code !== "MODULE_NOT_FOUND") throw error;
-
-    const message =
-      "You appear to be using a .cts file as Babel configuration, but the `@babel/preset-typescript` package was not found: please install it!";
-
-    throw new ConfigError(message, filepath);
   }
 }
