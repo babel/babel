@@ -1,8 +1,15 @@
 {
   "type": "module",
   "main": "index.cjs",
+  "name": "$repo-utils",
+  "private": true,
   "exports": {
     ".": "./index.cjs",
     "./babel-top-level": "./babel.js"
+  },
+  "dependencies": {
+    "semver": "catalog:",
+    "@babel/core": "workspace:^",
+    "@babel/preset-typescript": "workspace:^"
   }
 }

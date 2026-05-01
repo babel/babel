@@ -111,7 +111,10 @@ export default defineConfig([
     },
     rules: {
       "n/no-process-exit": "error",
-      "import/no-extraneous-dependencies": "error",
+      "@babel/development-internal/no-extraneous-dependencies": [
+        "error",
+        { allowlist: ["charcodes"] },
+      ],
       "import/export": "error",
       "regexp/match-any": ["error", { allows: ["[^]", "dotAll"] }],
       "unicorn/prefer-set-has": "error",
@@ -251,20 +254,36 @@ export default defineConfig([
     files: sourceFiles("js,ts,cjs,mjs"),
     ignores: [
       // These are bundled
-      "packages/babel-parser/**/*.{js,ts}",
-      "packages/babel-standalone/**/*.{js,ts}",
+      "packages/babel-parser/src/**/*.{js,ts}",
+      "packages/babel-standalone/src/**/*.{js,ts}",
     ],
     rules: {
-      "import/no-extraneous-dependencies": [
+      "@babel/development-internal/no-extraneous-dependencies": [
         "error",
-        { includeTypes: true, devDependencies: false },
+        {
+          allowlist: ["charcodes"],
+          includeTypes: true,
+          devDependencies: false,
+        },
       ],
     },
   },
   {
     files: ["packages/*/test/*.tst.ts"],
     rules: {
-      "import/no-extraneous-dependencies": "off",
+      "@babel/development-internal/no-extraneous-dependencies": [
+        "error",
+        { allowlist: ["$repo-utils", "tstyche"] },
+      ],
+    },
+  },
+  {
+    files: ["packages/*/scripts/**/*.{js,ts}", "scripts/**/*.{js,cjs,mjs}"],
+    rules: {
+      "@babel/development-internal/no-extraneous-dependencies": [
+        "error",
+        { allowlist: ["$repo-utils"] },
+      ],
     },
   },
   {
@@ -297,7 +316,6 @@ export default defineConfig([
       "jest/no-test-callback": "off",
       "jest/valid-describe": "off",
       "import/extensions": ["error", "always"],
-      "import/no-extraneous-dependencies": "off",
       "no-restricted-imports": ["error", { patterns: ["**/src/**"] }],
     },
   },
@@ -308,15 +326,28 @@ export default defineConfig([
         "error",
         { version: "20.19.0", ignores: ["module"] },
       ],
+      "@babel/development-internal/no-extraneous-dependencies": [
+        "error",
+        {
+          allowlist: ["$repo-utils"],
+        },
+      ],
       "import/no-unresolved": "error",
     },
   },
   {
+    files: ["packages/babel-standalone/test/**/*.{js,ts}"],
+    rules: {
+      "@babel/development-internal/no-extraneous-dependencies": [
+        "error",
+        {
+          packageDir: "./packages/babel-standalone",
+        },
+      ],
+    },
+  },
+  {
     files: [...sourceFiles("js,ts,mjs"), ...testFiles, "test/**/*.js"],
-    ignores: [
-      // @babel/register is the require() hook, so it will always be CJS-based
-      "packages/babel-register/**/*.{js,ts}",
-    ],
     rules: {
       "no-restricted-globals": ["error", ...cjsGlobals],
       "no-restricted-imports": [
@@ -352,71 +383,10 @@ export default defineConfig([
       "comma-dangle": "off",
       "no-func-assign": "off",
       "prefer-spread": "off",
-      "import/no-extraneous-dependencies": "off",
       "import/no-unresolved": "off",
       "@typescript-eslint/prefer-includes": "off",
       "@typescript-eslint/prefer-optional-chain": "off",
       "unicorn/prefer-includes": "off",
-    },
-  },
-  {
-    files: ["packages/babel-helpers/scripts/**.{js,ts}"],
-    rules: {
-      "import/no-extraneous-dependencies": [
-        "error",
-        { packageDir: ["./packages/babel-helpers", "./"] },
-      ],
-    },
-  },
-  {
-    files: ["packages/babel-traverse/scripts/**/*.js"],
-    rules: {
-      "import/no-extraneous-dependencies": [
-        "error",
-        { packageDir: "./packages/babel-traverse" },
-      ],
-    },
-  },
-  {
-    files: ["packages/babel-types/scripts/**/*.ts"],
-    rules: {
-      "import/no-extraneous-dependencies": [
-        "error",
-        { packageDir: ["./packages/babel-types", "./"] },
-      ],
-    },
-  },
-  {
-    files: ["packages/babel-plugin-transform-runtime/scripts/**/*.js"],
-    rules: {
-      "import/no-extraneous-dependencies": [
-        "error",
-        { packageDir: "./packages/babel-plugin-transform-runtime" },
-      ],
-    },
-  },
-  {
-    files: ["packages/babel-preset-env/data/**/*.js"],
-    rules: {
-      "import/no-extraneous-dependencies": [
-        "error",
-        { packageDir: "./packages/babel-preset-env" },
-      ],
-    },
-  },
-  {
-    files: ["packages/babel-types/scripts/**/*.js"],
-    rules: {
-      "import/no-extraneous-dependencies": [
-        "error",
-        { packageDir: ["./packages/babel-types", "./"] },
-      ],
-    },
-  },
-  {
-    files: ["scripts/**/*.{js,cjs,mjs}"],
-    rules: {
-      "import/no-extraneous-dependencies": ["error", { packageDir: "./" }],
     },
   },
   {
