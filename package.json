@@ -18,7 +18,7 @@
     "test:runtime:bundlers": "node test/runtime-integration/bundlers.cjs",
     "test:runtime:node": "node test/runtime-integration/node.cjs"
   },
-  "packageManager": "yarn@4.10.3",
+  "packageManager": "yarn@4.14.1",
   "_": "The dependency on minimatch (npm:is-odd@*) is to avoid hoisting of the real minimatch, which causes type issues",
   "devDependencies": {
     "$repo-utils": "link:./scripts/repo-utils",
