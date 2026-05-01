@@ -467,6 +467,7 @@ __metadata:
     "@babel/helpers": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/plugin-syntax-flow": "workspace:^"
+    "@babel/plugin-syntax-jsx": "workspace:^"
     "@babel/plugin-transform-flow-strip-types": "workspace:^"
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
     "@babel/preset-env": "workspace:^"
@@ -519,8 +520,10 @@ __metadata:
   resolution: "@babel/eslint-plugin-development-internal@workspace:eslint/babel-eslint-plugin-development-internal"
   dependencies:
     eslint: "npm:^10.0.0"
+    eslint-plugin-import: "npm:^2.31.0"
   peerDependencies:
     eslint: ^9.0.0 || ^10.0.0
+    eslint-plugin-import: ^2.31.0
   languageName: unknown
   linkType: soft
 
@@ -534,7 +537,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/eslint-plugin@workspace:eslint/babel-eslint-plugin":
+"@babel/eslint-plugin@workspace:^, @babel/eslint-plugin@workspace:eslint/babel-eslint-plugin":
   version: 0.0.0-use.local
   resolution: "@babel/eslint-plugin@workspace:eslint/babel-eslint-plugin"
   dependencies:
@@ -557,6 +560,7 @@ __metadata:
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/plugin-syntax-do-expressions": "workspace:^"
     "@babel/plugin-syntax-export-default-from": "workspace:^"
+    "@babel/plugin-syntax-flow": "workspace:^"
     "@babel/plugin-syntax-jsx": "workspace:^"
     "@babel/plugin-syntax-pipeline-operator": "workspace:^"
     eslint: "npm:^10.0.0"
@@ -569,6 +573,8 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/eslint-parser": "workspace:^"
+    "@babel/eslint-plugin": "workspace:^"
+    "@babel/parser": "workspace:^"
     "@babel/plugin-proposal-decorators": "workspace:^"
     "@babel/plugin-proposal-do-expressions": "workspace:^"
     "@babel/preset-flow": "workspace:^"
@@ -1233,10 +1239,12 @@ __metadata:
   dependencies:
     "@babel/generator": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/template": "workspace:^"
     "@babel/types": "workspace:^"
     regenerator-runtime: "npm:^0.14.0"
+    terser: "catalog:dev"
   languageName: unknown
   linkType: soft
 
@@ -1306,6 +1314,7 @@ __metadata:
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/types": "workspace:^"
     charcodes: "npm:^0.2.0"
+    typescript: "catalog:dev"
   bin:
     parser: ./bin/babel-parser.js
   languageName: unknown
@@ -3357,6 +3366,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-create-regexp-features-plugin": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
     "@babel/core": "workspace:^"
@@ -7308,10 +7318,10 @@ __metadata:
     rollup-plugin-polyfill-node: "npm:^0.13.0"
     semver: "catalog:"
     shelljs: "npm:^0.8.5"
-    terser: "npm:^5.43.1"
+    terser: "catalog:dev"
     test262-stream: "npm:^1.4.0"
     tstyche: "npm:^6.2.0"
-    typescript: "npm:6.0.2"
+    typescript: "catalog:dev"
     typescript-eslint: "npm:8.56.0"
   languageName: unknown
   linkType: soft
