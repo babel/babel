@@ -122,6 +122,11 @@ export default defineConfig([
       "unicorn/prefer-node-protocol": "error",
       "unicorn/prefer-string-starts-ends-with": "error",
     },
+    settings: {
+      "import/resolver": {
+        node: { engines: true },
+      },
+    },
   },
   ...defineConfig({
     files: ["**/*.{ts,cts,mts}"],

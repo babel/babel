@@ -19,8 +19,6 @@ import {
 } from "./plugins-compat-data.ts";
 
 import type { CallerMetadata, PluginItem, PresetAPI } from "@babel/core";
-// upstream package missing the main field
-// eslint-disable-next-line import/no-unresolved
 import pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
 
 import getTargets, {
