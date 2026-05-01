@@ -254,8 +254,8 @@ export default defineConfig([
     files: sourceFiles("js,ts,cjs,mjs"),
     ignores: [
       // These are bundled
-      "packages/babel-parser/src/**/*.{js,ts}",
-      "packages/babel-standalone/src/**/*.{js,ts}",
+      "packages/babel-parser/**/*.{js,ts}",
+      "packages/babel-standalone/**/*.{js,ts}",
     ],
     rules: {
       "@babel/development-internal/no-extraneous-dependencies": [
