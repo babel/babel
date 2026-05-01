@@ -2,8 +2,6 @@ import type Printer from "../printer.ts";
 import { isFor, isIfStatement, isStatement, isVoidPattern } from "@babel/types";
 import type * as t from "@babel/types";
 
-// We inline this package
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 import { TokenContext } from "../node/index.ts";
 

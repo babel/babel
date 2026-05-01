@@ -57,6 +57,7 @@
   "devDependencies": {
     "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@babel/plugin-syntax-flow": "workspace:^",
+    "@babel/plugin-syntax-jsx": "workspace:^",
     "@babel/plugin-transform-flow-strip-types": "workspace:^",
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
     "@babel/preset-env": "workspace:^",

@@ -5,8 +5,6 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-// We inline this package
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 import { _shouldPrintDecoratorsBeforeExport } from "./expressions.ts";
 import { _tsPrintClassMemberModifiers } from "./typescript.ts";

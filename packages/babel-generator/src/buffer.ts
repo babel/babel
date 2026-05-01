@@ -1,8 +1,6 @@
 import type SourceMap from "./source-map.ts";
 import type { SourceLocation } from "@babel/types";
 
-// We inline this package
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charcodes from "charcodes";
 
 export type Loc = SourceLocation;

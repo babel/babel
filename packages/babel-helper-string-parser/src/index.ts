@@ -1,5 +1,3 @@
-// We inline this package
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 
 // The following character codes are forbidden from being

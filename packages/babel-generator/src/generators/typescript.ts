@@ -1,6 +1,5 @@
 import type Printer from "../printer.ts";
 import type * as t from "@babel/types";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 import { _functionHead, _param, _parameters } from "./methods.ts";
 import { _classMethodHead } from "./classes.ts";

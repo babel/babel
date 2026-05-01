@@ -85,10 +85,10 @@
     "rollup-plugin-polyfill-node": "^0.13.0",
     "semver": "catalog:",
     "shelljs": "^0.8.5",
-    "terser": "^5.43.1",
+    "terser": "catalog:dev",
     "test262-stream": "^1.4.0",
     "tstyche": "^6.2.0",
-    "typescript": "6.0.2",
+    "typescript": "catalog:dev",
     "typescript-eslint": "8.56.0"
   },
   "workspaces": [

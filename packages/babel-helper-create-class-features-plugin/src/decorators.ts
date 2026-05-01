@@ -18,8 +18,6 @@ export function hasDecorators(node: t.Class) {
   return hasOwnDecorators(node) || node.body.body.some(hasOwnDecorators);
 }
 
-// We inline this package
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 interface Options {
   /** @deprecated use `constantSuper` assumption instead. Only supported in 2021-12 version. */

@@ -21,8 +21,10 @@
   "devDependencies": {
     "@babel/generator": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@babel/parser": "workspace:^",
-    "regenerator-runtime": "^0.14.0"
+    "regenerator-runtime": "^0.14.0",
+    "terser": "catalog:dev"
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"

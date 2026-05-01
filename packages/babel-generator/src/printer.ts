@@ -22,8 +22,6 @@ import type SourceMap from "./source-map.ts";
 import type { TraceMap } from "@jridgewell/trace-mapping";
 import type { Token } from "@babel/parser";
 
-// We inline this package
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 
 const SCIENTIFIC_NOTATION = /e/i;

@@ -1,5 +1,3 @@
-// We inline this package
-
 /*
 Reason to disable eslint rules:
   - no-misleading-character-class: This rule is disabled because it will check if a combining mark (\p{M}) is following a base character. It is possible that an identifier char is not following a base character.
@@ -9,7 +7,6 @@ Reason to disable eslint rules:
 */
 
 /* eslint no-misleading-character-class: off, regexp/no-obscure-range: off, regexp/no-misleading-unicode-character: off, regexp/use-ignore-case: off */
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 
 // ## Character categories

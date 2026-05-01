@@ -1,5 +1,4 @@
 import { readFileSync, writeFileSync } from "node:fs";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import ts from "typescript";
 
 function extractErrorInfo(filename: string) {

@@ -1,7 +1,6 @@
 import type Printer from "../printer.ts";
 import type * as t from "@babel/types";
 import { isIdentifier, type ParentMaps } from "@babel/types";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 import { TokenContext } from "../node/index.ts";
 

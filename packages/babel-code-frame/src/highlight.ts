@@ -1,7 +1,5 @@
 import type { Token as JSToken, JSXToken } from "js-tokens";
 import jsTokens from "js-tokens";
-// We inline this package
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 
 import {

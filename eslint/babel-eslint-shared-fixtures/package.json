@@ -10,6 +10,7 @@
     "@babel/plugin-syntax-decorators": "workspace:^",
     "@babel/plugin-syntax-do-expressions": "workspace:^",
     "@babel/plugin-syntax-export-default-from": "workspace:^",
+    "@babel/plugin-syntax-flow": "workspace:^",
     "@babel/plugin-syntax-jsx": "workspace:^",
     "@babel/plugin-syntax-pipeline-operator": "workspace:^",
     "eslint": "^10.0.0"

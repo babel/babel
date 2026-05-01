@@ -1,9 +1,10 @@
 import { loadPartialConfigAsync } from "@babel/core";
 import type { InputOptions, NormalizedOptions } from "@babel/core";
 import type { Options } from "../types";
-import type { PartialConfig } from "../../../../packages/babel-core/src/config";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import type { ParserPlugin } from "@babel/parser";
+import type { PartialConfig } from "@babel/core";
+type ParserPlugin = NonNullable<
+  NonNullable<InputOptions["parserOpts"]>["plugins"]
+>[number];
 
 /**
  * Merge user supplied estree plugin options to default estree plugin options
