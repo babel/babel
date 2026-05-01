@@ -36,19 +36,20 @@ yarn install --no-immutable
 yarn info
 
 # Babel 8 related adjustments
-  sed -i "s/ts-expect-error//g" ./src/language-json/parse/json.js
+sed -i "s/ts-expect-error//g" ./src/language-json/parse/json.js
 
-  sed -i 's/"TupleExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
-  sed -i 's/"RecordExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
-  sed -i 's#TSImportType:#//#g' src/language-js/traverse/visitor-keys.evaluate.js
-  sed -i 's#ExportAllDeclaration:#//#g' src/language-js/traverse/visitor-keys.evaluate.js
-  sed -i 's#ImportDeclaration:#//#g' src/language-js/traverse/visitor-keys.evaluate.js
-  sed -i 's#TSDeclareMethod:#//#g' src/language-js/traverse/visitor-keys.evaluate.js
+sed -i 's/"TupleExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
+sed -i 's/"RecordExpression",//g' src/language-js/traverse/visitor-keys.evaluate.js
+sed -i 's#TSImportType:#//#g' src/language-js/traverse/visitor-keys.evaluate.js
+sed -i 's#ExportAllDeclaration:#//#g' src/language-js/traverse/visitor-keys.evaluate.js
+sed -i 's#ImportDeclaration:#//#g' src/language-js/traverse/visitor-keys.evaluate.js
+sed -i 's#TSDeclareMethod:#//#g' src/language-js/traverse/visitor-keys.evaluate.js
+sed -i 's/const allowedReasonCodesArray = \[/const allowedReasonCodesArray = ["DecoratorAbstractMethod",/g' src/language-js/parse/babel.js
 
-  rm tests/format/js/import-assertions/format.test.js
-  rm tests/format/js/import-assertions/bracket-spacing/format.test.js
+rm tests/format/js/import-assertions/format.test.js
+rm tests/format/js/import-assertions/bracket-spacing/format.test.js
 
-  rm tests/format/typescript/conformance/classes/constructorDeclarations/constructorParameters/constructorOverloadsWithDefaultValues.ts
+rm tests/format/typescript/conformance/classes/constructorDeclarations/constructorParameters/constructorOverloadsWithDefaultValues.ts
 
 # Test typings for @babel/parser
 yarn lint:typecheck
