@@ -1,6 +1,5 @@
 import * as ruleComposer from "../rule-composer.ts";
 import type { BabelESTreeNode } from "../types.ts";
-// eslint-disable-next-line import/no-unresolved
 import { builtinRules } from "eslint/use-at-your-own-risk";
 const rule = builtinRules.get("new-cap")!;
 

@@ -1,7 +1,5 @@
 import semver from "semver";
 
-// https://github.com/import-js/eslint-plugin-import/issues/1810
-// eslint-disable-next-line import/no-unresolved
 import pluginsCompatData from "@babel/compat-data/plugins" with { type: "json" };
 
 import type { Targets } from "./types.ts";
