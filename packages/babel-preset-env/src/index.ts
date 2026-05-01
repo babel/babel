@@ -19,6 +19,7 @@ import {
 } from "./plugins-compat-data.ts";
 
 import type { CallerMetadata, PluginItem, PresetAPI } from "@babel/core";
+
 import pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
 
 import getTargets, {
