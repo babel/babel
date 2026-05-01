@@ -16,10 +16,12 @@
   },
   "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin-development-internal",
   "peerDependencies": {
-    "eslint": "^9.0.0 || ^10.0.0"
+    "eslint": "^9.0.0 || ^10.0.0",
+    "eslint-plugin-import": "^2.31.0"
   },
   "devDependencies": {
-    "eslint": "^10.0.0"
+    "eslint": "^10.0.0",
+    "eslint-plugin-import": "^2.31.0"
   },
   "type": "module",
   "exports": {

@@ -1,4 +1,5 @@
 import type { ESLint } from "eslint";
+import noExtraneousDependencies from "./rules/no-extraneous-dependencies.ts";
 import reportErrorMessageFormat from "./rules/report-error-message-format.ts";
 
 const meta = {
@@ -7,6 +8,7 @@ const meta = {
 };
 
 const rules = {
+  "no-extraneous-dependencies": noExtraneousDependencies,
   "report-error-message-format": reportErrorMessageFormat,
 };
 
