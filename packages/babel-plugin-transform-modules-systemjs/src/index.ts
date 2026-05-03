@@ -140,7 +140,10 @@ function constructExportCall(
             "=",
             t.memberExpression(
               t.identifier(exportObj),
-              t.identifier(exportName),
+              stringSpecifiers.has(exportName)
+                ? t.stringLiteral(exportName)
+                : t.identifier(exportName),
+              stringSpecifiers.has(exportName),
             ),
             exportValue,
           ),
