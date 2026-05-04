@@ -2,13 +2,13 @@
 
 ## Adding a new plugin or polyfill to support (when approved in the next ECMAScript version)
 
-### Update [`plugin-features.js`](https://github.com/babel/babel/blob/main/packages/babel-compat-data/scripts/data/plugin-features.js)
+### Update [`plugin-features.mjs`](../babel-compat-data/scripts/data/plugin-features.mjs)
 
 *Example:*
 
 If you were going to add `**` which is in ES2016:
 
-Find the relevant entries on [compat-table](https://kangax.github.io/compat-table/es2016plus/#test-exponentiation_(**)_operator):
+Find the relevant entries on [compat-table](https://compat-table.github.io/compat-table/es2016plus/#test-exponentiation_(**)_operator):
 
 `exponentiation (**) operator`
 
@@ -61,7 +61,7 @@ If you want to transform a new built-in by `useBuiltIns: 'usage'`, add mapping t
 
 If you want to mark a new proposal as shipped, add it to [this list](https://github.com/babel/babel/blob/main/packages/babel-preset-env/polyfills/corejs3/shipped-proposals.js).
 
-### Update [`plugins.json`](https://github.com/babel/babel/blob/main/packages/babel-preset-env/data/plugins.json)
+### Update [`plugins.json`](../babel-compat-data/data/plugins.json)
 
 Until `compat-table` is a standalone npm module for data we are using the git commit in `packages/babel-compat-data/scripts/download-compat-table.sh`
 
@@ -72,7 +72,8 @@ So we update and then run `npm run build-data`. If there are no changes, then `p
 ## Tests
 
 ### Running tests
-See general [CONTRIBUTING.md](https://github.com/babel/babel/blob/main/CONTRIBUTING.md#running-lintingtests).
+
+See general [CONTRIBUTING.md](../../CONTRIBUTING.md#running-lintingtests).
 
 ### Writing tests
 
@@ -80,7 +81,7 @@ See general [CONTRIBUTING.md](https://github.com/babel/babel/blob/main/CONTRIBUT
 
 All the tests for `@babel/preset-env` exist in the `test/fixtures` folder. The
 test setup and conventions are exactly the same as testing a Babel plugin, so
-please read our [documentation on writing tests](https://github.com/babel/babel/blob/main/CONTRIBUTING.md#babel-plugin-x).
+please read our [documentation on writing tests](../../CONTRIBUTING.md#babel-plugin-x).
 
 #### Testing the `debug` option
 
