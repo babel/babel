@@ -43,6 +43,8 @@ Being able to cause the following through control of the elements that Babel doe
 
 The documented behavior of language features is defined by the corresponding specification (e.g. ECMA-262), by proposal changing the specification (e.g. proposals for new JavaScript features), or, when neither is available, by the behavior of other tools in the same space. Babel assumes that all built-ins defined by such specifications have not been modified.
 
+Babel's threat model does not consider availability loss or performance degradation in the system that Babel itself runs in to be a security issue. Users passing arbitrary code as input to Babel should take the appropriate measures to handle resource exhaustion caused by the transpilation process.
+
 #### Examples of what constitutes a vulnerability
 
 > **Data integrity loss in the system that Babel itself runs in**
