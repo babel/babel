@@ -17,7 +17,7 @@ Note that for each supported major version, we only guarantee security fixes for
 
 ## Reporting a Vulnerability
 
-To report a vulnerability please send an email with the details to security@babeljs.io. The vulnerability report must include a proof-of-concept of the exploit, or at least a few pointers that can help us assess the risk level.
+To report a vulnerability please send an email with the details to security@babeljs.io. The vulnerability report must include a proof-of-concept of the exploit, or at least a few pointers that can help us assess the risk level. The vulnerability report must be written in english.
 
 ### Disclosure process
 
