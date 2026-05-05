@@ -1,0 +1,107 @@
+{
+  "type": "File",
+  "start":0,"end":86,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":42,"index":86}},
+  "errors": [
+    "SyntaxError: The only valid meta property for import is import.meta. (1:20)",
+    "SyntaxError: The only valid meta property for import is import.meta. (3:20)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":86,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":42,"index":86}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":42,"index":42}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":41,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":41,"index":41}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":10,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":10,"index":10},"identifierName":"mod1"},
+              "name": "mod1"
+            },
+            "init": {
+              "type": "CallExpression",
+              "start":13,"end":41,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":41,"index":41}},
+              "callee": {
+                "type": "MetaProperty",
+                "start":13,"end":29,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":29,"index":29}},
+                "meta": {
+                  "type": "Identifier",
+                  "start":13,"end":19,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":19,"index":19},"identifierName":"import"},
+                  "name": "import"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start":20,"end":29,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":29,"index":29},"identifierName":"sync"},
+                  "name": "sync"
+                }
+              },
+              "arguments": [
+                {
+                  "type": "StringLiteral",
+                  "start":30,"end":40,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":40,"index":40}},
+                  "extra": {
+                    "rawValue": "./foo.js",
+                    "raw": "\"./foo.js\""
+                  },
+                  "value": "./foo.js"
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":44,"end":86,"loc":{"start":{"line":3,"column":0,"index":44},"end":{"line":3,"column":42,"index":86}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":50,"end":85,"loc":{"start":{"line":3,"column":6,"index":50},"end":{"line":3,"column":41,"index":85}},
+            "id": {
+              "type": "Identifier",
+              "start":50,"end":54,"loc":{"start":{"line":3,"column":6,"index":50},"end":{"line":3,"column":10,"index":54},"identifierName":"mod2"},
+              "name": "mod2"
+            },
+            "init": {
+              "type": "CallExpression",
+              "start":57,"end":85,"loc":{"start":{"line":3,"column":13,"index":57},"end":{"line":3,"column":41,"index":85}},
+              "callee": {
+                "type": "MetaProperty",
+                "start":57,"end":73,"loc":{"start":{"line":3,"column":13,"index":57},"end":{"line":3,"column":29,"index":73}},
+                "meta": {
+                  "type": "Identifier",
+                  "start":57,"end":63,"loc":{"start":{"line":3,"column":13,"index":57},"end":{"line":3,"column":19,"index":63},"identifierName":"import"},
+                  "name": "import"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start":64,"end":73,"loc":{"start":{"line":3,"column":20,"index":64},"end":{"line":3,"column":29,"index":73},"identifierName":"sync"},
+                  "name": "sync"
+                }
+              },
+              "arguments": [
+                {
+                  "type": "StringLiteral",
+                  "start":74,"end":84,"loc":{"start":{"line":3,"column":30,"index":74},"end":{"line":3,"column":40,"index":84}},
+                  "extra": {
+                    "rawValue": "./foo.js",
+                    "raw": "\"./foo.js\""
+                  },
+                  "value": "./foo.js"
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

@@ -11,6 +11,7 @@ export type Plugin =
   | "flowComments"
   | "functionBind"
   | "functionSent"
+  | "importSync"
   | "jsx"
   | "moduleBlocks"
   | "placeholders"

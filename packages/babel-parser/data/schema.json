@@ -198,6 +198,7 @@
               "flowComments",
               "functionBind",
               "functionSent",
+              "importSync",
               "jsx",
               "moduleBlocks",
               "partialApplication",

@@ -1,4 +1,6 @@
 {
   "sourceType": "unambiguous",
-  "plugins": ["flow"]
+  "plugins": [
+    "flow"
+  ]
 }
