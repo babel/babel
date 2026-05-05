@@ -26,8 +26,28 @@ export function Identifier(this: Printer, node: t.Identifier) {
   this.word(this.tokenMap ? lastRawIdentResult : node.name);
 }
 
-export function ArgumentPlaceholder(this: Printer) {
+export function ArgumentPlaceholder(
+  this: Printer,
+  node: t.ArgumentPlaceholder,
+) {
   this.token("?");
+  const jsescOpts = this.format.jsescOption;
+  const numberFormat = jsescOpts.numbers;
+  if (numberFormat) {
+    // Ensure the ordinal is printed as a decimal number
+    jsescOpts.numbers = "decimal";
+    try {
+      this.print(node.ordinal);
+    } finally {
+      jsescOpts.numbers = numberFormat;
+    }
+  } else {
+    this.print(node.ordinal);
+  }
+}
+
+export function RestPlaceholder(this: Printer) {
+  this.token("...");
 }
 
 export function RestElement(this: Printer, node: t.RestElement) {

@@ -236,6 +236,7 @@ import ModuleErrors from "./parse-error/module-errors.ts";
 import StandardErrors from "./parse-error/standard-errors.ts";
 import StrictModeErrors from "./parse-error/strict-mode-errors.ts";
 import ParseExpressionErrors from "./parse-error/parse-expression-errors.ts";
+import partialApplicationErrors from "./parse-error/partial-application-errors.ts";
 import PipelineOperatorErrors from "./parse-error/pipeline-operator-errors.ts";
 import FunctionBindErrors from "./parse-error/bind-operator-errors.ts";
 import type { TSErrorTemplates } from "./plugins/typescript/index.ts";
@@ -248,6 +249,7 @@ export const Errors = {
   ...ParseErrorEnum(StandardErrors),
   ...ParseErrorEnum(StrictModeErrors),
   ...ParseErrorEnum(ParseExpressionErrors),
+  ...ParseErrorEnum`partialApplication`(partialApplicationErrors),
   ...ParseErrorEnum`pipelineOperator`(PipelineOperatorErrors),
   ...ParseErrorEnum`functionBind`(FunctionBindErrors),
 };

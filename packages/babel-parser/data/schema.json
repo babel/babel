@@ -31,7 +31,7 @@
     "PartialApplicationPluginOptions": {
       "properties": {
         "version": {
-          "enum": ["2018-07"],
+          "enum": ["2018-07", "2021-10"],
           "type": "string"
         }
       },

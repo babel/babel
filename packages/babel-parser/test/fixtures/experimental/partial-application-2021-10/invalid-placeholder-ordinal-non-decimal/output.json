@@ -1,0 +1,184 @@
+{
+  "type": "File",
+  "start":0,"end":157,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":13,"column":1,"index":157}},
+  "errors": [
+    "SyntaxError: The argument placeholder ordinal must be a decimal integer literal, but got \".0\". (3:3)",
+    "SyntaxError: The argument placeholder ordinal must be a decimal integer literal, but got \"0b1\". (4:3)",
+    "SyntaxError: The argument placeholder ordinal must be a decimal integer literal, but got \"0o2\". (5:3)",
+    "SyntaxError: The argument placeholder ordinal must be a decimal integer literal, but got \"0x3\". (6:3)",
+    "SyntaxError: The argument placeholder ordinal must be a decimal integer literal, but got \"0.4\". (7:3)",
+    "SyntaxError: The argument placeholder ordinal must be a decimal integer literal, but got \"0e5\". (8:3)",
+    "SyntaxError: The argument placeholder ordinal must be a decimal integer literal, but got \"1.6\". (9:3)",
+    "SyntaxError: The argument placeholder ordinal must be a decimal integer literal, but got \"07\". (10:3)",
+    "SyntaxError: The argument placeholder ordinal must be a decimal integer literal, but got \"08\". (11:3)",
+    "SyntaxError: The argument placeholder ordinal must be a decimal integer literal, but got \"09\". (12:3)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":157,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":13,"column":1,"index":157}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":157,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":13,"column":1,"index":157}},
+        "expression": {
+          "type": "PartialCallExpression",
+          "start":0,"end":157,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":13,"column":1,"index":157}},
+          "callee": {
+            "type": "Identifier",
+            "start":0,"end":1,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":1,"index":1},"identifierName":"f"},
+            "name": "f"
+          },
+          "arguments": [
+            {
+              "type": "ArgumentPlaceholder",
+              "start":82,"end":85,"loc":{"start":{"line":3,"column":2,"index":82},"end":{"line":3,"column":5,"index":85}},
+              "ordinal": {
+                "type": "NumericLiteral",
+                "start":83,"end":85,"loc":{"start":{"line":3,"column":3,"index":83},"end":{"line":3,"column":5,"index":85}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": ".0"
+                },
+                "value": 0
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " Every placeholder listed below is invalid and the error is recoverable",
+                  "start":6,"end":79,"loc":{"start":{"line":2,"column":2,"index":6},"end":{"line":2,"column":75,"index":79}}
+                }
+              ]
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":89,"end":93,"loc":{"start":{"line":4,"column":2,"index":89},"end":{"line":4,"column":6,"index":93}},
+              "ordinal": {
+                "type": "NumericLiteral",
+                "start":90,"end":93,"loc":{"start":{"line":4,"column":3,"index":90},"end":{"line":4,"column":6,"index":93}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "0b1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":97,"end":101,"loc":{"start":{"line":5,"column":2,"index":97},"end":{"line":5,"column":6,"index":101}},
+              "ordinal": {
+                "type": "NumericLiteral",
+                "start":98,"end":101,"loc":{"start":{"line":5,"column":3,"index":98},"end":{"line":5,"column":6,"index":101}},
+                "extra": {
+                  "rawValue": 2,
+                  "raw": "0o2"
+                },
+                "value": 2
+              }
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":105,"end":109,"loc":{"start":{"line":6,"column":2,"index":105},"end":{"line":6,"column":6,"index":109}},
+              "ordinal": {
+                "type": "NumericLiteral",
+                "start":106,"end":109,"loc":{"start":{"line":6,"column":3,"index":106},"end":{"line":6,"column":6,"index":109}},
+                "extra": {
+                  "rawValue": 3,
+                  "raw": "0x3"
+                },
+                "value": 3
+              }
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":113,"end":117,"loc":{"start":{"line":7,"column":2,"index":113},"end":{"line":7,"column":6,"index":117}},
+              "ordinal": {
+                "type": "NumericLiteral",
+                "start":114,"end":117,"loc":{"start":{"line":7,"column":3,"index":114},"end":{"line":7,"column":6,"index":117}},
+                "extra": {
+                  "rawValue": 0.4,
+                  "raw": "0.4"
+                },
+                "value": 0.4
+              }
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":121,"end":125,"loc":{"start":{"line":8,"column":2,"index":121},"end":{"line":8,"column":6,"index":125}},
+              "ordinal": {
+                "type": "NumericLiteral",
+                "start":122,"end":125,"loc":{"start":{"line":8,"column":3,"index":122},"end":{"line":8,"column":6,"index":125}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0e5"
+                },
+                "value": 0
+              }
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":129,"end":133,"loc":{"start":{"line":9,"column":2,"index":129},"end":{"line":9,"column":6,"index":133}},
+              "ordinal": {
+                "type": "NumericLiteral",
+                "start":130,"end":133,"loc":{"start":{"line":9,"column":3,"index":130},"end":{"line":9,"column":6,"index":133}},
+                "extra": {
+                  "rawValue": 1.6,
+                  "raw": "1.6"
+                },
+                "value": 1.6
+              }
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":137,"end":140,"loc":{"start":{"line":10,"column":2,"index":137},"end":{"line":10,"column":5,"index":140}},
+              "ordinal": {
+                "type": "NumericLiteral",
+                "start":138,"end":140,"loc":{"start":{"line":10,"column":3,"index":138},"end":{"line":10,"column":5,"index":140}},
+                "extra": {
+                  "rawValue": 7,
+                  "raw": "07"
+                },
+                "value": 7
+              }
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":144,"end":147,"loc":{"start":{"line":11,"column":2,"index":144},"end":{"line":11,"column":5,"index":147}},
+              "ordinal": {
+                "type": "NumericLiteral",
+                "start":145,"end":147,"loc":{"start":{"line":11,"column":3,"index":145},"end":{"line":11,"column":5,"index":147}},
+                "extra": {
+                  "rawValue": 8,
+                  "raw": "08"
+                },
+                "value": 8
+              }
+            },
+            {
+              "type": "ArgumentPlaceholder",
+              "start":151,"end":154,"loc":{"start":{"line":12,"column":2,"index":151},"end":{"line":12,"column":5,"index":154}},
+              "ordinal": {
+                "type": "NumericLiteral",
+                "start":152,"end":154,"loc":{"start":{"line":12,"column":3,"index":152},"end":{"line":12,"column":5,"index":154}},
+                "extra": {
+                  "rawValue": 9,
+                  "raw": "09"
+                },
+                "value": 9
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Every placeholder listed below is invalid and the error is recoverable",
+      "start":6,"end":79,"loc":{"start":{"line":2,"column":2,"index":6},"end":{"line":2,"column":75,"index":79}}
+    }
+  ]
+}
