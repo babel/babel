@@ -5859,6 +5859,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cipher-base@npm:^1":
+  version: 1.0.3
+  resolution: "@types/cipher-base@npm:1.0.3"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10/95cd845b5e965514f404fb54155817c36e8be3220d8fb0c88b248a3828f4929f50eab7ca4a96c088665ae8f930b3e460f85cd7a9a11d691042805a150a8d058f
+  languageName: node
+  linkType: hard
+
 "@types/color-name@npm:^1.1.1":
   version: 1.1.1
   resolution: "@types/color-name@npm:1.1.1"
@@ -7473,6 +7482,7 @@ __metadata:
     "@rollup/plugin-node-resolve": "npm:^15.2.3"
     "@rollup/plugin-replace": "npm:^5.0.5"
     "@rollup/plugin-terser": "npm:^0.4.4"
+    "@types/cipher-base": "npm:^1"
     "@types/jest": "npm:^29.5.11"
     "@types/node": "npm:^25.0.3"
     "@types/shelljs": "npm:^0.10.0"
@@ -7480,6 +7490,7 @@ __metadata:
     babel-plugin-transform-charcodes: "npm:^0.2.1"
     c8: "npm:^10.0.0"
     charcodes: "npm:^0.2.0"
+    cipher-base: "npm:1.0.5"
     core-js: "catalog:"
     eslint: "npm:^10.0.0"
     eslint-config-prettier: "npm:^10.1.8"
@@ -8199,6 +8210,16 @@ __metadata:
   version: 4.2.0
   resolution: "ci-info@npm:4.2.0"
   checksum: 10/928d8457f3476ffc4a66dec93b9cdf1944d5e60dba69fbd6a0fc95b652386f6ef64857f6e32372533210ef6d8954634af2c7693d7c07778ee015f3629a5e0dd9
+  languageName: node
+  linkType: hard
+
+"cipher-base@npm:1.0.5":
+  version: 1.0.5
+  resolution: "cipher-base@npm:1.0.5"
+  dependencies:
+    inherits: "npm:^2.0.4"
+    safe-buffer: "npm:^5.2.1"
+  checksum: 10/c02321374758753d1ae5f524daa086db353328ac74bc85029ae1452bde2dd2cd71710f4f3a1873350816481fd49e9a36855d1ab94a443521235d77c813d15103
   languageName: node
   linkType: hard
 
