@@ -674,7 +674,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                 ascii_only: true,
               },
               maxWorkers: process.env.CIRCLECI ? 1 : undefined,
-            }),
+            } as any),
           ],
         });
       }
