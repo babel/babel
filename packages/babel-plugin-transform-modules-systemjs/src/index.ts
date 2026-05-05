@@ -103,15 +103,11 @@ function constructExportCall(
       const objectProperties = [];
       for (let i = 0; i < exportNames.length; i++) {
         const exportName = exportNames[i];
+        const exportNameNode = stringSpecifiers.has(exportName)
+          ? t.stringLiteral(exportName)
+          : t.identifier(exportName);
         const exportValue = exportValues[i];
-        objectProperties.push(
-          t.objectProperty(
-            stringSpecifiers.has(exportName)
-              ? t.stringLiteral(exportName)
-              : t.identifier(exportName),
-            exportValue,
-          ),
-        );
+        objectProperties.push(t.objectProperty(exportNameNode, exportValue));
       }
       statements.push(
         t.expressionStatement(
@@ -138,6 +134,10 @@ function constructExportCall(
 
     for (let i = 0; i < exportNames.length; i++) {
       const exportName = exportNames[i];
+      const computed = stringSpecifiers.has(exportName);
+      const exportNameNode = computed
+        ? t.stringLiteral(exportName)
+        : t.identifier(exportName);
       const exportValue = exportValues[i];
 
       statements.push(
@@ -146,7 +146,8 @@ function constructExportCall(
             "=",
             t.memberExpression(
               t.identifier(exportObj),
-              t.identifier(exportName),
+              exportNameNode,
+              computed,
             ),
             exportValue,
           ),
