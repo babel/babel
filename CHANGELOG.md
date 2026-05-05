@@ -25,6 +25,11 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.4 (2026-05-05)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-modules-systemjs`
+  * [#17974](https://github.com/babel/babel/pull/17974) [7.x backport]fix(systemjs): improve module string name support ([@JLHwung](https://github.com/JLHwung))
 ## v7.29.3 (2026-04-30)
 
 #### :eyeglasses: Spec Compliance
