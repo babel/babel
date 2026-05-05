@@ -43,7 +43,7 @@ Being able to cause the following through control of the elements that Babel doe
 
 The documented behavior of language features is defined by the corresponding specification (e.g. ECMA-262), by a proposal that changes the specification (e.g. proposals for new JavaScript features), or, when neither is available, by the behavior of other tools in the same space. Babel assumes that all built-ins defined by such specifications have not been modified.
 
-Babel's threat model does not consider availability loss or performance degradation in the system that Babel itself runs in to be a security issue. Users passing arbitrary code as input to Babel should take the appropriate measures to handle resource exhaustion caused by the transpilation process.
+Babel's threat model does not consider availability loss or performance degradation in the system that Babel itself runs in to be a security issue. Users passing arbitrary code as input to Babel should take the appropriate measures to handle resource exhaustion caused by the transpilation process, such as by running Babel in a separate Node.js worker than can be terminated independently from the rest of the application.
 
 #### Examples of what constitutes a vulnerability
 
@@ -64,6 +64,8 @@ Babel's threat model does not consider availability loss or performance degradat
 > **Availability loss due to passing excessively complex input to Babel**
 >
 > When using Babel to compile a 20 MB JavaScript file, the Node.js process becomes unresponsive for 30 seconds.
+>
+> When using Babel to parse JavaScirpt code with 1000 nested function calls (`fn(fn(fn(fn(...))))`), Node.js throws a `Maximum call stack size exceeded` error.
 
 > **Babel's output code calls a function that the input code did not call, due to a JavaScript built-in being patched**
 > 
