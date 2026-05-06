@@ -5859,15 +5859,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cipher-base@npm:^1":
-  version: 1.0.3
-  resolution: "@types/cipher-base@npm:1.0.3"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10/95cd845b5e965514f404fb54155817c36e8be3220d8fb0c88b248a3828f4929f50eab7ca4a96c088665ae8f930b3e460f85cd7a9a11d691042805a150a8d058f
-  languageName: node
-  linkType: hard
-
 "@types/color-name@npm:^1.1.1":
   version: 1.1.1
   resolution: "@types/color-name@npm:1.1.1"
@@ -7482,7 +7473,6 @@ __metadata:
     "@rollup/plugin-node-resolve": "npm:^15.2.3"
     "@rollup/plugin-replace": "npm:^5.0.5"
     "@rollup/plugin-terser": "npm:^0.4.4"
-    "@types/cipher-base": "npm:^1"
     "@types/jest": "npm:^29.5.11"
     "@types/node": "npm:^25.0.3"
     "@types/shelljs": "npm:^0.10.0"
@@ -7490,7 +7480,6 @@ __metadata:
     babel-plugin-transform-charcodes: "npm:^0.2.1"
     c8: "npm:^10.0.0"
     charcodes: "npm:^0.2.0"
-    cipher-base: "npm:1.0.5"
     core-js: "catalog:"
     eslint: "npm:^10.0.0"
     eslint-config-prettier: "npm:^10.1.8"
@@ -8213,23 +8202,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cipher-base@npm:1.0.5":
-  version: 1.0.5
-  resolution: "cipher-base@npm:1.0.5"
+"cipher-base@npm:^1.0.0, cipher-base@npm:^1.0.1, cipher-base@npm:^1.0.3":
+  version: 1.0.7
+  resolution: "cipher-base@npm:1.0.7"
   dependencies:
     inherits: "npm:^2.0.4"
     safe-buffer: "npm:^5.2.1"
-  checksum: 10/c02321374758753d1ae5f524daa086db353328ac74bc85029ae1452bde2dd2cd71710f4f3a1873350816481fd49e9a36855d1ab94a443521235d77c813d15103
-  languageName: node
-  linkType: hard
-
-"cipher-base@npm:^1.0.0, cipher-base@npm:^1.0.1, cipher-base@npm:^1.0.3":
-  version: 1.0.4
-  resolution: "cipher-base@npm:1.0.4"
-  dependencies:
-    inherits: "npm:^2.0.1"
-    safe-buffer: "npm:^5.0.1"
-  checksum: 10/3d5d6652ca499c3f7c5d7fdc2932a357ec1e5aa84f2ad766d850efd42e89753c97b795c3a104a8e7ae35b4e293f5363926913de3bf8181af37067d9d541ca0db
+    to-buffer: "npm:^1.2.2"
+  checksum: 10/9501d2241b7968aaae74fc3db1d6a69a804e0b14117a8fd5d811edf351fcd39a1807bfd98e090a799cfe98b183fbf2e01ebb57f1239080850db07b68dcd9ba02
   languageName: node
   linkType: hard
 
@@ -17178,7 +17158,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"to-buffer@npm:^1.2.0":
+"to-buffer@npm:^1.2.0, to-buffer@npm:^1.2.2":
   version: 1.2.2
   resolution: "to-buffer@npm:1.2.2"
   dependencies:
