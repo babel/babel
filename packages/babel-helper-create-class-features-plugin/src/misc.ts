@@ -86,9 +86,7 @@ export function injectInitialization(
       newConstructor.body.body.push(template.statement.ast`super(...args)`);
     }
 
-    [constructor] = path
-      .get("body")
-      .unshiftContainer("body", newConstructor) as NodePath<t.ClassMethod>[];
+    [constructor] = path.get("body").unshiftContainer("body", newConstructor);
   }
 
   if (renamer) {

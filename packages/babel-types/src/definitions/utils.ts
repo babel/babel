@@ -447,7 +447,7 @@ export default function defineType<T extends t.Node["type"]>(
   }
 
   if (opts.deprecatedAlias) {
-    DEPRECATED_KEYS[opts.deprecatedAlias] = type as NodeTypesWithoutComment;
+    DEPRECATED_KEYS[opts.deprecatedAlias] = type;
   }
 
   // ensure all field keys are represented in `fields`
@@ -481,7 +481,7 @@ export default function defineType<T extends t.Node["type"]>(
   ALIAS_KEYS[type as NodeTypesWithoutComment] = opts.aliases = aliases;
   aliases.forEach(alias => {
     FLIPPED_ALIAS_KEYS[alias] = FLIPPED_ALIAS_KEYS[alias] || [];
-    FLIPPED_ALIAS_KEYS[alias].push(type as NodeTypesWithoutComment);
+    FLIPPED_ALIAS_KEYS[alias].push(type);
   });
 
   if (opts.validate) {

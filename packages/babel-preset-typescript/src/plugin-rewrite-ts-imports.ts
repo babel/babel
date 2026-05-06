@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { types as t, NodePath, PluginPass, Visitor } from "@babel/core";
+import type { types as t, NodePath, PluginPass } from "@babel/core";
 
 export default declare(function ({ types: t }) {
   function maybeReplace(
@@ -63,6 +63,6 @@ export default declare(function ({ types: t }) {
       ImportExpression(path, state) {
         maybeReplace(path.node.source, path.get("source"), state);
       },
-    } as Visitor<PluginPass>,
+    },
   };
 });

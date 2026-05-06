@@ -230,9 +230,8 @@ const handler = {
       // here we use a function to wrap `parentIsOptionalCall` to get type
       // for parent, do not use it anywhere else
       // See https://github.com/microsoft/TypeScript/issues/10421
-      const isOptionalCall = (
-        parent: t.Node,
-      ): parent is t.OptionalCallExpression => parentIsOptionalCall;
+      const isOptionalCall = (_: t.Node): _ is t.OptionalCallExpression =>
+        parentIsOptionalCall;
       // if parentIsCall is true, it implies that node.extra.parenthesized is always true
       const parentIsCall = parentPath.isCallExpression({ callee: node });
       startingOptional.replaceWith(toNonOptional(startingOptional, baseRef));

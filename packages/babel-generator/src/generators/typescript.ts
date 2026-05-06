@@ -66,7 +66,7 @@ export function TSTypeParameter(this: Printer, node: t.TSTypeParameter) {
     this.space();
   }
 
-  this.word((node.name as unknown as t.Identifier).name);
+  this.word(node.name.name);
 
   if (node.constraint) {
     this.space();

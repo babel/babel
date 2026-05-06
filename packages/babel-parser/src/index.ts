@@ -93,7 +93,7 @@ export function parseExpression(
   if (parser.options.strictMode) {
     parser.state.strict = true;
   }
-  return parser.getExpression() as ParseResult<Expression>;
+  return parser.getExpression();
 }
 
 function generateExportedTokenTypes(

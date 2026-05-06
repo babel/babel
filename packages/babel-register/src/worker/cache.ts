@@ -76,9 +76,9 @@ export default class Cache {
     if (!integrity) return;
 
     try {
-      let cache = (await cacache.get.byDigest(this.cacheDir, integrity, {
+      let cache = await cacache.get.byDigest(this.cacheDir, integrity, {
         memoize: false,
-      })) as unknown as Buffer;
+      });
       cache = unzipSync(cache);
       const items = JSON.parse(cache.toString("utf8"));
       for (const item of items) {

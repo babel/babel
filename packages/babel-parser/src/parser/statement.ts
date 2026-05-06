@@ -386,11 +386,11 @@ export default abstract class StatementParser extends ExpressionParser {
       case tt._continue:
         return this.parseBreakContinueStatement(node, /* isBreak */ false);
       case tt._debugger:
-        return this.parseDebuggerStatement(node as Undone<N.DebuggerStatement>);
+        return this.parseDebuggerStatement(node);
       case tt._do:
-        return this.parseDoWhileStatement(node as Undone<N.DoWhileStatement>);
+        return this.parseDoWhileStatement(node);
       case tt._for:
-        return this.parseForStatement(node as Undone<N.ForStatement>);
+        return this.parseForStatement(node);
       case tt._function:
         if (this.lookaheadCharCode() === charCodes.dot) break;
         if (!allowFunctionDeclaration) {
@@ -404,7 +404,7 @@ export default abstract class StatementParser extends ExpressionParser {
           );
         }
         return this.parseFunctionStatement(
-          node as Undone<N.FunctionDeclaration>,
+          node,
           false,
           !allowDeclaration && allowFunctionDeclaration,
         );
@@ -419,15 +419,15 @@ export default abstract class StatementParser extends ExpressionParser {
         );
 
       case tt._if:
-        return this.parseIfStatement(node as Undone<N.IfStatement>);
+        return this.parseIfStatement(node);
       case tt._return:
-        return this.parseReturnStatement(node as Undone<N.ReturnStatement>);
+        return this.parseReturnStatement(node);
       case tt._switch:
-        return this.parseSwitchStatement(node as Undone<N.SwitchStatement>);
+        return this.parseSwitchStatement(node);
       case tt._throw:
-        return this.parseThrowStatement(node as Undone<N.ThrowStatement>);
+        return this.parseThrowStatement(node);
       case tt._try:
-        return this.parseTryStatement(node as Undone<N.TryStatement>);
+        return this.parseTryStatement(node);
 
       case tt._await:
         // [+Await] await [no LineTerminator here] using [no LineTerminator here] BindingList[+Using]
@@ -440,10 +440,7 @@ export default abstract class StatementParser extends ExpressionParser {
             this.raise(Errors.AwaitUsingNotInAsyncContext, node);
           }
           this.next(); // eat 'await'
-          return this.parseVarStatement(
-            node as Undone<N.VariableDeclaration>,
-            "await using",
-          );
+          return this.parseVarStatement(node, "await using");
         }
         break;
       case tt._using:
@@ -459,10 +456,7 @@ export default abstract class StatementParser extends ExpressionParser {
         } else if (!allowDeclaration) {
           this.raise(Errors.UnexpectedLexicalDeclaration, this.state.startLoc);
         }
-        return this.parseVarStatement(
-          node as Undone<N.VariableDeclaration>,
-          "using",
-        );
+        return this.parseVarStatement(node, "using");
       case tt._let: {
         if (this.state.containsEsc) {
           break;
@@ -490,19 +484,16 @@ export default abstract class StatementParser extends ExpressionParser {
       // fall through
       case tt._var: {
         const kind = this.state.value;
-        return this.parseVarStatement(
-          node as Undone<N.VariableDeclaration>,
-          kind,
-        );
+        return this.parseVarStatement(node, kind);
       }
       case tt._while:
-        return this.parseWhileStatement(node as Undone<N.WhileStatement>);
+        return this.parseWhileStatement(node);
       case tt._with:
-        return this.parseWithStatement(node as Undone<N.WithStatement>);
+        return this.parseWithStatement(node);
       case tt.braceL:
         return this.parseBlock();
       case tt.semi:
-        return this.parseEmptyStatement(node as Undone<N.EmptyStatement>);
+        return this.parseEmptyStatement(node);
       case tt._import: {
         const nextTokenCharCode = this.lookaheadCharCode();
         if (
@@ -525,16 +516,9 @@ export default abstract class StatementParser extends ExpressionParser {
 
         let result;
         if (startType === tt._import) {
-          result = this.parseImport(node as Undone<N.ImportDeclaration>);
+          result = this.parseImport(node);
         } else {
-          result = this.parseExport(
-            node as Undone<
-              | N.ExportAllDeclaration
-              | N.ExportDefaultDeclaration
-              | N.ExportNamedDeclaration
-            >,
-            decorators,
-          );
+          result = this.parseExport(node, decorators);
         }
 
         this.assertModuleNodeAllowed(result);
@@ -552,7 +536,7 @@ export default abstract class StatementParser extends ExpressionParser {
           }
           this.next(); // eat 'async'
           return this.parseFunctionStatement(
-            node as Undone<N.FunctionDeclaration>,
+            node,
             true,
             !allowDeclaration && allowFunctionDeclaration,
           );
@@ -573,18 +557,9 @@ export default abstract class StatementParser extends ExpressionParser {
       expr.type === "Identifier" &&
       this.eat(tt.colon)
     ) {
-      return this.parseLabeledStatement(
-        node as Undone<N.LabeledStatement>,
-        maybeName,
-        expr,
-        flags,
-      );
+      return this.parseLabeledStatement(node, maybeName, expr, flags);
     } else {
-      return this.parseExpressionStatement(
-        node as Undone<N.ExpressionStatement>,
-        expr,
-        decorators,
-      );
+      return this.parseExpressionStatement(node, expr, decorators);
     }
   }
 
@@ -821,7 +796,7 @@ export default abstract class StatementParser extends ExpressionParser {
       if (awaitAt !== null) {
         this.unexpected(awaitAt);
       }
-      return this.parseFor(node as Undone<N.ForStatement>, null);
+      return this.parseFor(node, null);
     }
 
     const startsWithLet = this.isContextual(tt._let);
@@ -866,7 +841,7 @@ export default abstract class StatementParser extends ExpressionParser {
         if (awaitAt !== null) {
           this.unexpected(awaitAt);
         }
-        return this.parseFor(node as Undone<N.ForStatement>, init);
+        return this.parseFor(node, init);
       }
     }
 
@@ -913,7 +888,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (awaitAt !== null) {
       this.unexpected(awaitAt);
     }
-    return this.parseFor(node as Undone<N.ForStatement>, init);
+    return this.parseFor(node, init);
   }
 
   // https://tc39.es/ecma262/#prod-HoistableDeclaration
@@ -2234,10 +2209,7 @@ export default abstract class StatementParser extends ExpressionParser {
       if (decorators) {
         throw this.raise(Errors.UnsupportedDecoratorExport, node);
       }
-      this.parseExportFrom(
-        node as Undone<N.ExportNamedDeclaration>,
-        isFromRequired,
-      );
+      this.parseExportFrom(node, isFromRequired);
     } else {
       hasDeclaration = this.maybeParseExportDeclaration(
         node as Undone<N.ExportNamedDeclaration>,
@@ -2277,8 +2249,8 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   eatExportStar(
-    node: Undone<N.Node>,
-  ): node is Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration> {
+    _: Undone<N.Node>,
+  ): _ is Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration> {
     return this.eat(tt.star);
   }
 
@@ -2376,14 +2348,14 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.match(tt._function)) {
       this.next();
       return this.parseFunction(
-        expr as Undone<N.FunctionDeclaration>,
+        expr,
         ParseFunctionFlag.Declaration | ParseFunctionFlag.NullableId,
       );
     } else if (this.isAsyncFunction()) {
       this.next(); // eat 'async'
       this.next(); // eat 'function'
       return this.parseFunction(
-        expr as Undone<N.FunctionDeclaration>,
+        expr,
         ParseFunctionFlag.Declaration |
           ParseFunctionFlag.NullableId |
           ParseFunctionFlag.Async,
@@ -2391,7 +2363,7 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     if (this.match(tt._class)) {
-      return this.parseClass(expr as Undone<N.ClassExpression>, true, true);
+      return this.parseClass(expr, true, true);
     }
 
     if (this.match(tt.at)) {

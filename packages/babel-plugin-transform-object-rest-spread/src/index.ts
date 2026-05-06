@@ -259,7 +259,7 @@ export default declare((api, opts: Options) => {
           const nestedPattern = property.get(
             "value",
           ) as NodePath<t.PatternLike>;
-          visitPattern(nestedPattern as NodePath<t.PatternLike | t.LVal>);
+          visitPattern(nestedPattern);
         }
       } else if (pattern.isArrayPattern()) {
         for (const element of pattern.get("elements")) {
@@ -274,13 +274,11 @@ export default declare((api, opts: Options) => {
           }
         }
       } else if (pattern.isAssignmentPattern()) {
-        visitPattern(pattern.get("left") as NodePath<t.PatternLike | t.LVal>);
+        visitPattern(pattern.get("left"));
       }
     }
 
-    visitPattern(
-      destructuringPattern as unknown as NodePath<t.PatternLike | t.LVal>,
-    );
+    visitPattern(destructuringPattern);
     return computedProperties;
   }
 

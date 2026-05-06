@@ -135,5 +135,5 @@ export function validatePluginObject(
     }
   });
 
-  return obj as any;
+  return obj;
 }

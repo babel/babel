@@ -26,7 +26,7 @@ import getTargets, {
   prettifyTargets,
   filterItems,
 } from "@babel/helper-compilation-targets";
-import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
+import type { Targets } from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins.ts";
 import { declarePreset } from "@babel/helper-plugin-utils";
 
@@ -167,7 +167,7 @@ function getLocalTargets(
 `);
   }
 
-  return getTargets(optionsTargets as InputTargets, {
+  return getTargets(optionsTargets, {
     ignoreBrowserslistConfig,
     configPath,
     browserslistEnv,

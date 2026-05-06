@@ -2907,7 +2907,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         return result;
       } else if (this.isContextual(tt._type)) {
         const maybeDefaultIdentifier = this.parseMaybeImportPhase(
-          node as Undone<N.ImportDeclaration>,
+          node,
           /* isExport */ false,
         );
         if (this.lookaheadCharCode() === charCodes.equalsTo) {

@@ -300,7 +300,7 @@ export default abstract class ExpressionParser extends LValParser {
 
       if (this.match(tt.eq)) {
         this.toAssignable(left, /* isLHS */ true);
-        node.left = left as N.Assignable;
+        node.left = left;
 
         const startIndex = startLoc.index;
         if (
@@ -1101,9 +1101,7 @@ export default abstract class ExpressionParser extends LValParser {
         this.next();
 
         if (this.match(tt.dot)) {
-          return this.parseImportMetaPropertyOrPhaseCall(
-            node as Undone<N.MetaProperty | N.ImportExpression>,
-          );
+          return this.parseImportMetaPropertyOrPhaseCall(node);
         }
 
         if (this.match(tt.parenL)) {
@@ -1963,7 +1961,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
     // Type cast from (N.Expression[] | N.TSType[]). parseTemplateSubstitution
     // returns consistent results.
-    node.expressions = substitutions as N.Expression[] | N.TSType[];
+    node.expressions = substitutions;
     node.quasis = quasis;
     return this.finishNode(node, "TemplateLiteral");
   }

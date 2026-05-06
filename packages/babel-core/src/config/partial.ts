@@ -117,7 +117,7 @@ export default function* loadPrivatePartialConfig(
     assumptions: {},
   };
   configChain.options.forEach(opts => {
-    mergeOptions(merged as any, opts);
+    mergeOptions(merged, opts);
   });
 
   const options: NormalizedOptions = {

@@ -7,7 +7,7 @@ describe("core", () => {
       plugins: [
         function (api) {
           expect(api).type.toHaveProperty("types");
-          return {} as any;
+          return {};
         },
       ],
     });

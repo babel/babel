@@ -83,10 +83,10 @@ export function ensureBlock(
     stringPath += ".body.0";
     if (this.isFunction()) {
       key = "argument";
-      statements.push(returnStatement(body.node as t.Expression));
+      statements.push(returnStatement(body.node));
     } else {
       key = "expression";
-      statements.push(expressionStatement(body.node as t.Expression));
+      statements.push(expressionStatement(body.node));
     }
   }
 
@@ -624,7 +624,7 @@ function standardizeSuperProperty(
 function hasSuperClass(thisEnvFn: NodePath<t.Function>) {
   return (
     thisEnvFn.isClassMethod() &&
-    !!(thisEnvFn.parentPath.parentPath.node as t.Class).superClass
+    !!thisEnvFn.parentPath.parentPath.node.superClass
   );
 }
 

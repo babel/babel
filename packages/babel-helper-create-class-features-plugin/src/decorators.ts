@@ -1055,24 +1055,15 @@ function transformClass(
       switch (elementNode.type) {
         case "ClassProperty":
           // @ts-expect-error todo: propertyVisitor.ClassProperty should be callable. Improve typings.
-          propertyVisitor.ClassProperty(
-            element as NodePath<t.ClassProperty>,
-            state,
-          );
+          propertyVisitor.ClassProperty(element, state);
           break;
         case "ClassPrivateProperty":
           // @ts-expect-error todo: propertyVisitor.ClassPrivateProperty should be callable. Improve typings.
-          propertyVisitor.ClassPrivateProperty(
-            element as NodePath<t.ClassPrivateProperty>,
-            state,
-          );
+          propertyVisitor.ClassPrivateProperty(element, state);
           break;
         case "ClassAccessorProperty":
           // @ts-expect-error todo: propertyVisitor.ClassAccessorProperty should be callable. Improve typings.
-          propertyVisitor.ClassAccessorProperty(
-            element as NodePath<t.ClassAccessorProperty>,
-            state,
-          );
+          propertyVisitor.ClassAccessorProperty(element, state);
           break;
         /* fallthrough */
         default:
@@ -1095,10 +1086,7 @@ function transformClass(
       );
     } else if (elementNode.type === "ClassAccessorProperty") {
       // @ts-expect-error todo: propertyVisitor.ClassAccessorProperty should be callable. Improve typings.
-      propertyVisitor.ClassAccessorProperty(
-        element as NodePath<t.ClassAccessorProperty>,
-        state,
-      );
+      propertyVisitor.ClassAccessorProperty(element, state);
       const { key, value, static: isStatic, computed } = elementNode;
 
       const newId = generateClassPrivateUid();
@@ -1396,7 +1384,7 @@ function transformClass(
         } else if (key.type === "Identifier") {
           nameExpr = t.stringLiteral(key.name);
         } else {
-          nameExpr = t.cloneNode(key as t.Expression);
+          nameExpr = t.cloneNode(key);
         }
 
         if (kind === ACCESSOR) {

@@ -46,7 +46,7 @@ export default function convertFunctionParams(
 
   const { node, scope } = path;
 
-  const body = [];
+  const body: t.Statement[] = [];
   const shadowedParams = new Set<string>();
 
   for (const param of params) {
@@ -158,7 +158,7 @@ export default function convertFunctionParams(
   if (generator || state.needsOuterBinding || shadowedParams.size > 0) {
     body.push(buildScopeIIFE(shadowedParams, path2.node.body));
 
-    path.set("body", t.blockStatement(body as t.Statement[]));
+    path.set("body", t.blockStatement(body));
 
     // We inject an arrow and then transform it to a normal function, to be
     // sure that we correctly handle this and arguments.

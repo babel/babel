@@ -169,7 +169,7 @@ export function normalizeCoreJSOption(
     rawVersion = corejs.version;
     proposals = Boolean(corejs.proposals);
   } else {
-    rawVersion = corejs as false | string | number | undefined | null;
+    rawVersion = corejs;
   }
 
   const version = rawVersion ? semver.coerce(String(rawVersion)) : false;

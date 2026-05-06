@@ -486,10 +486,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           node as Undone<N.DeclareInterface>,
         );
       } else if (this.match(tt._export)) {
-        return this.flowParseDeclareExportDeclaration(
-          node as Undone<N.DeclareExportDeclaration>,
-          insideModule,
-        );
+        return this.flowParseDeclareExportDeclaration(node, insideModule);
       }
       throw this.unexpected();
     }
@@ -629,19 +626,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           this.isContextual(tt._type) || // declare export type ...
           this.isContextual(tt._opaque) // declare export opaque type ...
         ) {
-          const result = this.parseExport(
-            node as Undone<N.ExportNamedDeclaration | N.ExportAllDeclaration>,
-            /* decorators */ null,
-          );
+          const result = this.parseExport(node, /* decorators */ null);
           if (result.type === "ExportNamedDeclaration") {
             (result as unknown as N.DeclareExportDeclaration).default = false;
             delete result.exportKind;
             return this.castNodeTo(result, "DeclareExportDeclaration");
           } else {
-            return this.castNodeTo(
-              result as N.ExportAllDeclaration,
-              "DeclareExportAllDeclaration",
-            );
+            return this.castNodeTo(result, "DeclareExportAllDeclaration");
           }
         }
       }
@@ -3733,6 +3724,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
               default:
                 members.defaultedMembers.push(
                   this.finishNode(
+                    // Without the type assertion, TS will throw
+                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                     memberNode as Undone<N.EnumDefaultedMember>,
                     "EnumDefaultedMember",
                   ),

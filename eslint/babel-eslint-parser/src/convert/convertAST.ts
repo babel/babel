@@ -135,7 +135,7 @@ const convertNodesVisitor = {
 };
 
 function convertNodes(ast: ParseResult, visitorKeys: Record<string, string[]>) {
-  traverse(ast as unknown as t.Program, visitorKeys, convertNodesVisitor);
+  traverse(ast, visitorKeys, convertNodesVisitor);
 }
 
 function convertProgramNode(ast: ParseResult) {

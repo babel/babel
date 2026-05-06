@@ -237,7 +237,7 @@ export function wrapLoopBody(
 
   const varNames: string[] = [];
   for (const varPath of state.vars) {
-    const assign = [];
+    const assign: t.Expression[] = [];
     for (const decl of varPath.node.declarations) {
       varNames.push(...Object.keys(t.getBindingIdentifiers(decl.id)));
       if (decl.init) {

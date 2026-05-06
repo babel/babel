@@ -501,10 +501,7 @@ export default (superClass: typeof Parser) =>
                 );
               } else {
                 children.push(
-                  this.jsxParseExpressionContainer(
-                    node as Undone<N.JSXExpressionContainer>,
-                    tc.j_expr,
-                  ),
+                  this.jsxParseExpressionContainer(node, tc.j_expr),
                 );
               }
 

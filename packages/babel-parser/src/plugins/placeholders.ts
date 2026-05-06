@@ -72,6 +72,8 @@ export default (superClass: typeof Parser) =>
       }
 
       placeholder.expectedNode = expectedNode;
+      // avoid TS2590: Expression produces a union type that is too complex to represent.
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       return placeholder as unknown as MaybePlaceholder<T>;
     }
 

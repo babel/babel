@@ -108,7 +108,7 @@ const specHandlers: SpecHandler = {
       return cloneNode(property);
     }
 
-    return stringLiteral((property as t.Identifier).name);
+    return stringLiteral(property.name);
   },
 
   get(this: Handler & SpecHandler, superMember: SuperMember) {

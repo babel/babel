@@ -69,7 +69,7 @@ function CallSite(filename: string): CallSite {
     getMethodName: () => undefined,
     getTypeName: () => undefined,
     toString: () => filename,
-  } as unknown as CallSite);
+  });
 }
 
 export function injectVirtualStackFrame(error: Error, filename: string) {

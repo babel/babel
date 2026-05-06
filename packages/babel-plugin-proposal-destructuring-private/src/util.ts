@@ -161,7 +161,7 @@ function buildAssignmentsFromPatternList(
     if (element.type === "RestElement") {
       newElements.push(restElement(tempId));
       // The argument of a RestElement within a BindingPattern must be either Identifier or BindingPattern
-      element = element.argument as t.Identifier | t.Pattern;
+      element = element.argument;
     } else {
       newElements.push(tempId);
     }
@@ -419,7 +419,7 @@ export function* transformPrivateKeyDestructuring(
           // Only the Rest receives the filtered object so that named properties are unaffected.
           yield {
             // The argument of an object rest element must be an Identifier
-            left: rest.argument as t.Identifier,
+            left: rest.argument,
             right: buildObjectExcludingKeys(
               restExcludingKeys,
               right,
@@ -435,7 +435,7 @@ export function* transformPrivateKeyDestructuring(
         const { properties } = left as t.ObjectPattern;
         if (properties.length === 1) {
           // The argument of an object rest element must be an Identifier
-          left = (properties[0] as t.RestElement).argument as t.Identifier;
+          left = (properties[0] as t.RestElement).argument;
         }
         yield {
           left: left as t.ObjectPattern,

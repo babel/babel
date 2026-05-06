@@ -65,8 +65,8 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
 
   // Handle deprecated 'blacklist' option: only error if 'denylist' is not also provided.
   // If both are present, 'denylist' takes precedence (supports Babel 7/8 cross-version compat).
-  if (Object.hasOwn(visitor as object, "blacklist")) {
-    if (!Object.hasOwn(visitor as object, "denylist")) {
+  if (Object.hasOwn(visitor, "blacklist")) {
+    if (!Object.hasOwn(visitor, "denylist")) {
       throw new Error(
         "The 'blacklist' visitor option has been renamed to 'denylist'. " +
           "Please update your configuration.",

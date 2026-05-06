@@ -257,6 +257,6 @@ export default declare((api, options: Options) => {
 
         path.replaceWith(replacement);
       },
-    } as Visitor,
+    },
   };
 });
