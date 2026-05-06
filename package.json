@@ -39,12 +39,12 @@
     "@babel/runtime": "8.0.0-rc.4",
     "@cspotcode/source-map-support": "^0.8.1",
     "@eslint/js": "^10.0.1",
-    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-babel": "^7.0.0",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-replace": "^5.0.5",
-    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-replace": "^6.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
     "@types/jest": "^29.5.11",
     "@types/node": "^25.0.3",
     "@types/shelljs": "^0.10.0",
@@ -110,14 +110,9 @@
     "@types/eslint-scope": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
     "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
-    "npm-run-path/unicorn-magic": "npm:unicorn-magic@0.4.0",
     "interpret@npm:^2.2.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
     "interpret@npm:^1.0.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
-    "interpret@npm:^3.1.1": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
-    "npm-run-path@npm:^2.0.0": "patch:npm-run-path@npm%3A6.0.0#~/.yarn/patches/npm-run-path-npm-6.0.0-606e0c0261.patch",
-    "npm-run-path@npm:^6.0.0": "patch:npm-run-path@npm%3A6.0.0#~/.yarn/patches/npm-run-path-npm-6.0.0-606e0c0261.patch",
-    "npm-run-path@npm:^5.1.0": "patch:npm-run-path@npm%3A6.0.0#~/.yarn/patches/npm-run-path-npm-6.0.0-606e0c0261.patch",
-    "npm-run-path@npm:^4.0.1": "patch:npm-run-path@npm%3A6.0.0#~/.yarn/patches/npm-run-path-npm-6.0.0-606e0c0261.patch"
+    "interpret@npm:^3.1.1": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch"
   },
   "engines": {
     "yarn": ">=1.4.0"
