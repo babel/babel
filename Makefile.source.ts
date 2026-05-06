@@ -343,6 +343,8 @@ function eslint(...extraArgs: string[]) {
   const eslintArgs = [
     "--format",
     "codeframe",
+    "--concurrency",
+    "auto",
     "--flag",
     "unstable_native_nodejs_ts_config",
     ...extraArgs.filter(Boolean),
@@ -374,10 +376,10 @@ function eslint(...extraArgs: string[]) {
   chunks.push(rest);
 
   if (process.env.ESLINT_GO_BRRRR) {
-    // Run as a single process. Needs a lot of memory (12GB).
+    // Run in a single process with workers. Needs a lot of memory (23GiB).
     env(() => yarn(["eslint", "packages", ...rest, ...eslintArgs]), {
       BABEL_ENV: "test",
-      NODE_OPTIONS: "--max-old-space-size=16384",
+      NODE_OPTIONS: "--max-old-space-size=8192",
     });
   } else {
     let err = null;
