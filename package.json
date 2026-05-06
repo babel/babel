@@ -110,9 +110,14 @@
     "@types/eslint-scope": "link:./nope",
     "@babel/parser/@babel/types": "workspace:*",
     "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
+    "npm-run-path/unicorn-magic": "npm:unicorn-magic@0.4.0",
     "interpret@npm:^2.2.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
     "interpret@npm:^1.0.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
-    "interpret@npm:^3.1.1": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch"
+    "interpret@npm:^3.1.1": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
+    "npm-run-path@npm:^2.0.0": "patch:npm-run-path@npm%3A6.0.0#~/.yarn/patches/npm-run-path-npm-6.0.0-606e0c0261.patch",
+    "npm-run-path@npm:^6.0.0": "patch:npm-run-path@npm%3A6.0.0#~/.yarn/patches/npm-run-path-npm-6.0.0-606e0c0261.patch",
+    "npm-run-path@npm:^5.1.0": "patch:npm-run-path@npm%3A6.0.0#~/.yarn/patches/npm-run-path-npm-6.0.0-606e0c0261.patch",
+    "npm-run-path@npm:^4.0.1": "patch:npm-run-path@npm%3A6.0.0#~/.yarn/patches/npm-run-path-npm-6.0.0-606e0c0261.patch"
   },
   "engines": {
     "yarn": ">=1.4.0"
