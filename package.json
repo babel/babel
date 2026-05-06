@@ -90,7 +90,7 @@
     "test262-stream": "^1.4.0",
     "tstyche": "^7.1.0",
     "typescript": "catalog:dev",
-    "typescript-eslint": "8.56.0"
+    "typescript-eslint": "8.59.2"
   },
   "workspaces": [
     "codemods/*",
