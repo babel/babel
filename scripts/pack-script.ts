@@ -4,6 +4,7 @@ import { rollup } from "rollup";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import { babel } from "@rollup/plugin-babel";
+import replace from "@rollup/plugin-replace";
 import terser from "@rollup/plugin-terser";
 import { commonJS } from "$repo-utils";
 import { createHash } from "node:crypto";
@@ -59,6 +60,15 @@ async function pack(
           ],
         ],
         targets: "maintained node versions",
+      }),
+      replace({
+        preventAssignment: true,
+        values: {
+          // handle require.main === module usage here
+          // https://github.com/shelljs/shelljs/blob/2809a872ead82da2d9fd0704dc3c1f690e2475f4/src/exec-child.js#L69
+          // we never execute shelljs/src/exec-child.js directly, so it should always be false
+          "require.main === module": "false",
+        },
       }),
       terser(),
     ],
