@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/dot-notation */
 
-import "shelljs/make.js";
 import path from "node:path";
 import mod from "node:module";
 import {
@@ -11,6 +10,10 @@ import {
   mkdirSync,
 } from "node:fs";
 import { execaSync } from "execa";
+const require = mod.createRequire(import.meta.url);
+// Load shelljs with require because the source code accesses `require.main`
+// https://github.com/shelljs/shelljs/blob/2809a872ead82da2d9fd0704dc3c1f690e2475f4/src/exec-child.js#L69
+require("shelljs/make.js");
 
 mod.enableCompileCache?.();
 
