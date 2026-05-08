@@ -466,6 +466,7 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
+    "@cspotcode/source-map-support": "npm:^0.8.1"
     "@jridgewell/trace-mapping": "npm:^0.3.28"
     "@types/convert-source-map": "npm:^2.0.0"
     "@types/gensync": "npm:^1.0.0"
