@@ -17,7 +17,7 @@ export default declare((api, options: Options) => {
   if ("loose" in options) {
     console.warn(
       "@babel/plugin-transform-spread: The 'loose' option has been deprecated, " +
-        "use the `iterableIsArray` assumption instead. (https://babeljs.io/assumptions).",
+        "use the `iterableIsArray` assumption instead (https://babeljs.io/assumptions).",
     );
   }
 

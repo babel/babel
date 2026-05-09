@@ -14,7 +14,7 @@ export default declare((api, options: Options) => {
   if ("loose" in options) {
     console.warn(
       "@babel/plugin-transform-parameters: The 'loose' option has been deprecated, " +
-        "use the `ignoreFunctionLength` assumption instead. (https://babeljs.io/assumptions).",
+        "use the `ignoreFunctionLength` assumption instead (https://babeljs.io/assumptions).",
     );
   }
 

@@ -22,7 +22,7 @@ export default declare((api, options: Options) => {
   if ("loose" in options) {
     console.warn(
       "@babel/plugin-transform-computed-properties: The 'loose' option has been deprecated, " +
-        "use the 'setComputedProperties' assumption instead. (https://babeljs.io/assumptions).",
+        "use the 'setComputedProperties' assumption instead (https://babeljs.io/assumptions).",
     );
   }
 

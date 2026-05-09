@@ -11,7 +11,7 @@ export default declare((api, options: Options) => {
   if ("spec" in options) {
     console.warn(
       "@babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, " +
-        "use the 'noNewArrows' assumption instead. (https://babeljs.io/assumptions).",
+        "use the 'noNewArrows: false' assumption instead (https://babeljs.io/assumptions).",
     );
   }
 

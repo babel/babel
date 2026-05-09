@@ -38,7 +38,7 @@ export default declare((api, options: Options) => {
   if ("loose" in options) {
     console.warn(
       "@babel/plugin-transform-destructuring: The 'loose' option has been deprecated, " +
-        "use the `iterableIsArray` and `objectRestNoSymbols` assumptions instead. (https://babeljs.io/assumptions).",
+        "use the `iterableIsArray` and `objectRestNoSymbols` assumptions instead (https://babeljs.io/assumptions).",
     );
   }
 

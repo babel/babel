@@ -67,7 +67,7 @@ export default declare<State>((api, options: Options) => {
   if ("loose" in options) {
     console.warn(
       "@babel/plugin-transform-modules-amd: The 'loose' option has been deprecated, " +
-        "use the `constantReexports` and `enumerableModuleMeta` assumptions instead. (https://babeljs.io/assumptions).",
+        "use the `constantReexports` and `enumerableModuleMeta` assumptions instead (https://babeljs.io/assumptions).",
     );
   }
 

@@ -38,7 +38,7 @@ export default declare((api, options: Options) => {
   if ("loose" in options) {
     console.warn(
       "@babel/plugin-transform-for-of: The 'loose' option has been deprecated, " +
-        "use the 'iterableIsArray' and 'skipForOfIteratorClosing' assumptions instead. (https://babeljs.io/assumptions).",
+        "use the 'iterableIsArray' and 'skipForOfIteratorClosing' assumptions instead (https://babeljs.io/assumptions).",
     );
   }
 

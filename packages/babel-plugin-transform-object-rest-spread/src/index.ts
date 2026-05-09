@@ -22,7 +22,7 @@ export default declare((api, opts: Options) => {
   if ("loose" in opts) {
     console.warn(
       "@babel/plugin-transform-object-rest-spread: The 'loose' option has been deprecated, " +
-        "use the `ignoreFunctionLength`, `objectRestNoSymbols`, `pureGetters`, and `setSpreadProperties` assumptions instead. (https://babeljs.io/assumptions).",
+        "use the `ignoreFunctionLength`, `objectRestNoSymbols`, `pureGetters`, and `setSpreadProperties` assumptions instead (https://babeljs.io/assumptions).",
     );
   }
 

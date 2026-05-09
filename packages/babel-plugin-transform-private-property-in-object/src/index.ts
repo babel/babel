@@ -20,7 +20,7 @@ export default declare((api, opt: Options) => {
   if ("loose" in opt) {
     console.warn(
       "@babel/plugin-transform-private-property-in-object: The 'loose' option has been deprecated, " +
-        "use the `privateFieldsAsProperties` or `privateFieldsAsSymbols`, and `setPublicClassFields` assumptions instead. (https://babeljs.io/assumptions).",
+        "use the `privateFieldsAsProperties` or `privateFieldsAsSymbols`, and `setPublicClassFields` assumptions instead (https://babeljs.io/assumptions).",
     );
   }
 
