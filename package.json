@@ -111,7 +111,8 @@
     "babel-plugin-polyfill-corejs2/@babel/compat-data": "workspace:*",
     "interpret@npm:^2.2.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
     "interpret@npm:^1.0.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
-    "interpret@npm:^3.1.1": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch"
+    "interpret@npm:^3.1.1": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
+    "c8/yargs": "patch:yargs@npm%3A18.0.0#~/.yarn/patches/yargs-npm-18.0.0-ec82bf7b61.patch"
   },
   "engines": {
     "yarn": ">=1.4.0"
