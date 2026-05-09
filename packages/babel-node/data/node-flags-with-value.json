@@ -1,6 +1,7 @@
 [
   "--allow-fs-read",
   "--allow-fs-write",
+  "--build-sea",
   "--build-snapshot-config",
   "--conditions",
   "--cpu-prof-dir",
@@ -61,6 +62,7 @@
   "--test-global-setup",
   "--test-isolation",
   "--test-name-pattern",
+  "--test-random-seed",
   "--test-reporter",
   "--test-reporter-destination",
   "--test-rerun-failures",
