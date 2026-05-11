@@ -7,7 +7,7 @@ import {
 } from "@babel/helper-create-class-features-plugin";
 
 export interface Options {
-  /** @deprecated Use the `privateFieldsAsProperties` or `privateFieldsAsSymbols`, and `setPublicClassFields` assumptions instead. */
+  /** @deprecated Use the `privateFieldsAsProperties`(or `privateFieldsAsSymbols`), and `setPublicClassFields` assumptions instead. */
   loose?: boolean;
 }
 
@@ -17,7 +17,7 @@ export default declare((api, options: Options) => {
   if ("loose" in options) {
     console.warn(
       "@babel/plugin-transform-private-methods: The 'loose' option has been deprecated, " +
-        "use the `privateFieldsAsProperties` or `privateFieldsAsSymbols`, and `setPublicClassFields` assumptions instead (https://babeljs.io/assumptions).",
+        "use the `privateFieldsAsProperties`(or `privateFieldsAsSymbols`), and `setPublicClassFields` assumptions instead (https://babeljs.io/assumptions).",
     );
   }
 

@@ -9,7 +9,7 @@ import annotateAsPure from "@babel/helper-annotate-as-pure";
 import type { NodePath, Scope, types as t } from "@babel/core";
 
 export interface Options {
-  /** @deprecated Use the `privateFieldsAsProperties` or `privateFieldsAsSymbols`, and `setPublicClassFields` assumptions instead. */
+  /** @deprecated Use the `privateFieldsAsProperties`(or `privateFieldsAsSymbols`), and `setPublicClassFields` assumptions instead. */
   loose?: boolean;
 }
 export default declare((api, opt: Options) => {
@@ -20,7 +20,7 @@ export default declare((api, opt: Options) => {
   if ("loose" in opt) {
     console.warn(
       "@babel/plugin-transform-private-property-in-object: The 'loose' option has been deprecated, " +
-        "use the `privateFieldsAsProperties` or `privateFieldsAsSymbols`, and `setPublicClassFields` assumptions instead (https://babeljs.io/assumptions).",
+        "use the `privateFieldsAsProperties`(or `privateFieldsAsSymbols`), and `setPublicClassFields` assumptions instead (https://babeljs.io/assumptions).",
     );
   }
 
