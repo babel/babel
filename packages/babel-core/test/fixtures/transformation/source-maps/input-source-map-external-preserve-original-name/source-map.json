@@ -1,0 +1,19 @@
+{
+  "version": 3,
+  "names": [
+    "marker",
+    "root",
+    "outer",
+    "test",
+    "root2",
+    "inner"
+  ],
+  "sources": [
+    "../../../node_modules/dep/index.js"
+  ],
+  "sourcesContent": [
+    "export const marker = \"react/jsx-runtime\";\nexport let root = { outer: 1 };\n\nexport function test() {\n  let root = { inner: 2 };\n  return root;\n}\n"
+  ],
+  "mappings": ";;;AAAO,IAAMA,SAAA,GAAS;AACf,IAAIC,OAAA,GAAO;EAAEC,KAAA,EAAO;AAAE;AAEtB,SAASC,QAAA,EAAO;EACrB,IAAIC,QAAA,GAAO;IAAEC,KAAA,EAAO;EAAE;EACtB,OAAOD,QAAA;AACT",
+  "ignoreList": []
+}
