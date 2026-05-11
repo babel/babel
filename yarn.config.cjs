@@ -245,21 +245,28 @@ function enforceExports({ Yarn }) {
     const packageName = workspace.pkg.ident;
     if (
       [
-        "@babel/compat-data",
-        "@babel/helper-globals",
-        "@babel/helper-plugin-test-runner", // TODO: Remove in Babel 8
-        "@babel/plugin-transform-react-jsx", // TODO: Remove in Babel 8
-        "@babel/standalone",
-        "@babel/types", // @babel/types has types exports
-        "@babel/register", // index.cjs
-        "@babel/code-frame", // browser.js
-        "@babel/node",
-        "@babel/build-external-helpers",
-        "@babel/cli",
+        "@babel/compat-data", // JSON library
+        "@babel/helper-globals", // JSON library
+        "@babel/standalone", // No index.js entry point
+        "@babel/node", // cli
+        "@babel/build-external-helpers", // cli
+        "@babel/cli", // cli
       ].includes(packageName) ||
-      packageName.startsWith("@babel/eslint-") ||
       packageName.startsWith("@babel/runtime")
     ) {
+      workspace.set("exports['./package.json']", "./package.json");
+      continue;
+    } else if (
+      [
+        "@babel/helper-plugin-test-runner", // Custom exports["."].esm
+        "@babel/plugin-transform-react-jsx", // Extra entry points
+        "@babel/code-frame", // Custom exports["."].browser
+      ].includes(packageName)
+    ) {
+      workspace.set("exports['.'].default", "./lib/index.js");
+      workspace.set("exports['.'].types", "./lib/index.d.ts");
+      workspace.set("exports['./package.json']", "./package.json");
+      workspace.unset("types");
       continue;
     }
 
@@ -270,6 +277,7 @@ function enforceExports({ Yarn }) {
       },
       "./package.json": "./package.json",
     });
+    workspace.unset("types");
   }
 }
 

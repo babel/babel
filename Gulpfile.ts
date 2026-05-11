@@ -943,13 +943,6 @@ const dtsBundles = Array.from(
       // Not meant to be consumed manually
       "babel-runtime",
       "babel-runtime-corejs3",
-      // TODO: Add type definitions
-      "babel-register",
-
-      "babel-eslint-plugin",
-      "babel-eslint-plugin-development",
-      "babel-eslint-plugin-development-internal",
-      // Not meant to be consumed manually
       "babel-eslint-shared-fixtures",
       "babel-eslint-tests",
     ])
