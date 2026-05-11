@@ -140,3 +140,27 @@ export function createConfigItem(
     );
   }
 }
+
+type ValidateItem<T> = T extends readonly [infer F, any, any?]
+  ? F extends (...args: any) => any
+    ? [F, Parameters<F>[1], string?]
+    : F extends { default: (...args: any) => any }
+      ? [F, Parameters<F["default"]>[1], string?]
+      : F extends string | object
+        ? [F, Record<string, any>, string?]
+        : never
+  : T extends readonly [infer F]
+    ? [F & (((...args: any) => any) | string | object)]
+    : T & (((...args: any) => any) | string | object);
+
+export function defineConfig<
+  const Plugins extends any[],
+  const Presets extends any[],
+>(
+  config: Omit<InputOptions, "plugins" | "presets"> & {
+    plugins?: Plugins & { [K in keyof Plugins]: ValidateItem<Plugins[K]> };
+    presets?: Presets & { [K in keyof Presets]: ValidateItem<Presets[K]> };
+  },
+): InputOptions {
+  return config;
+}
