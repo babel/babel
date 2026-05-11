@@ -119,8 +119,14 @@ export default class SourceMap {
           column: column!,
         });
 
-        // Prefer the original name from the input sourcemap when available.
-        if (originalMapping.name) {
+        // Prefer the original name from the input sourcemap when marking an
+        // identifier token at the same column, or when marking a related
+        // token such as `(` via identifierNamePos.
+        if (
+          originalMapping.name &&
+          (identifierNamePos ||
+            (identifierName != null && originalMapping.column === column))
+        ) {
           identifierName = originalMapping.name;
         } else if (identifierNamePos) {
           // Maybe we're marking a `(` and the input map already had a name attached there,
