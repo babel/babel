@@ -127,7 +127,7 @@ const aliasDescriptions = {
   Pattern:
     "A cover of [BindingPattern](https://tc39.es/ecma262/#prod-BindingPattern) except Identifiers.",
   PatternLike:
-    "A cover of [BindingPattern](https://tc39.es/ecma262/#prod-BindingPattern)s.",
+    "A cover of [AssignmentPattern](https://tc39.es/ecma262/#prod-AssignmentPattern) and [BindingPattern](https://tc39.es/ecma262/#prod-BindingPattern).",
   Private: "A cover of private class elements and private identifiers.",
   Property: "A cover of object properties and class properties.",
   Pureish:
