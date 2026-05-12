@@ -8,36 +8,51 @@ import TestRunner from "../utils/parser-test-runner.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const flowOptionsMapping = {
-  esproposal_decorators: "decorators-legacy",
-  intern_comments: false,
-  // We don't support these
-  components: false,
-};
-
-function getPlugins(test) {
+function convertFlowParserTestOptionsToBabelParserOptions(testOptions = {}) {
   const flowOptions = { all: true };
-  const testOptions = test.options ?? {};
 
-  const plugins =
-    testOptions.types !== false
-      ? [["flow", flowOptions], "flowComments", "jsx"]
-      : [];
+  const options = {
+    plugins: [["flow", flowOptions], "flowComments", "jsx"],
+  };
 
   for (const [option, enabled] of Object.entries(testOptions)) {
-    if (!enabled) {
-      const idx = plugins.indexOf(flowOptionsMapping[option]);
-      if (idx !== -1) plugins.splice(idx, 1);
-    } else if (option === "enums") {
-      flowOptions.enums = true;
-    } else if (!(option in flowOptionsMapping)) {
-      throw new Error("Parser options not mapped " + option);
-    } else if (flowOptionsMapping[option]) {
-      plugins.push(flowOptionsMapping[option]);
+    // https://github.com/facebook/flow/blob/8c1ea0b9e5eb69a8f0a6059ec15caad54ad77ba4/src/parser/test/run_tests.ml#L123
+    switch (option) {
+      case "components":
+        // we don't support this syntax
+        continue;
+      case "assert_operator":
+        // we don't support this syntax
+        continue;
+      case "enums":
+        flowOptions.enums = true;
+        continue;
+      case "pattern_matching":
+        // we don't support this syntax
+        continue;
+      case "records":
+        // we don't support this syntax
+        continue;
+      case "esproposal_decorators":
+        options.plugins.push("decorators-legacy");
+        continue;
+      case "types":
+        if (enabled === false) {
+          return [];
+        }
+        continue;
+      case "use_strict":
+        options.strictMode = enabled;
+        continue;
+      case "intern_comments":
+        // we don't support this syntax
+        continue;
+      default:
+        throw new Error("Unknown flow parser test option: " + option);
     }
   }
 
-  return plugins;
+  return options;
 }
 
 async function* readdirRecursive(root, dir = ".") {
@@ -95,7 +110,7 @@ const runner = new TestRunner({
         fileName: test.file,
         id: test.file,
         expectedError: !shouldSuccess,
-        plugins: getPlugins(test),
+        options: convertFlowParserTestOptionsToBabelParserOptions(test.options),
       };
     }
   },
@@ -104,7 +119,7 @@ const runner = new TestRunner({
     try {
       parser(test.contents, {
         sourceType: "module",
-        plugins: test.plugins,
+        ...test.options,
       });
     } catch (e) {
       // lets retry in script mode
@@ -112,7 +127,7 @@ const runner = new TestRunner({
         try {
           parser(test.contents, {
             sourceType: "script",
-            plugins: test.plugins,
+            ...test.options,
           });
           return;
         } catch {}
