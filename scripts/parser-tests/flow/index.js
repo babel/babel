@@ -38,7 +38,7 @@ function convertFlowParserTestOptionsToBabelParserOptions(testOptions = {}) {
         continue;
       case "types":
         if (enabled === false) {
-          return [];
+          options.plugins = [];
         }
         continue;
       case "use_strict":
