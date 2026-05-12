@@ -236,6 +236,7 @@ describe("options of all packages", () => {
       | "pragmaFrag"
       | "pure"
       | "runtime"
+      | "sourceSelf"
       | "throwIfNamespace"
     >();
     expect<ExtractOptionsKeys<typeof pluginTransformRuntime>>().type.toBe<
