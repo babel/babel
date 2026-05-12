@@ -10,7 +10,6 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const flowOptionsMapping = {
   esproposal_decorators: "decorators-legacy",
-  types: "flowComments",
   intern_comments: false,
   // We don't support these
   components: false,
@@ -18,12 +17,14 @@ const flowOptionsMapping = {
 
 function getPlugins(test) {
   const flowOptions = { all: true };
+  const testOptions = test.options ?? {};
 
-  const plugins = [["flow", flowOptions], "flowComments", "jsx"];
+  const plugins =
+    testOptions.types !== false
+      ? [["flow", flowOptions], "flowComments", "jsx"]
+      : [];
 
-  if (!test.options) return plugins;
-
-  for (const [option, enabled] of Object.entries(test.options)) {
+  for (const [option, enabled] of Object.entries(testOptions)) {
     if (!enabled) {
       const idx = plugins.indexOf(flowOptionsMapping[option]);
       if (idx !== -1) plugins.splice(idx, 1);
