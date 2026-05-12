@@ -122,7 +122,7 @@ const runner = new TestRunner({
         ...test.options,
       });
     } catch (e) {
-      // lets retry in script mode
+      // let's retry in script mode
       if (!test.expectedError) {
         try {
           parser(test.contents, {
