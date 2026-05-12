@@ -15,13 +15,7 @@ const mapValues = (obj, callback) =>
     Object.entries(obj).map(([key, value]) => [key, callback(value, key, obj)]),
   );
 const sortBy = (array, callback) =>
-  array.toSorted((a, b) => {
-    const aValue = callback(a);
-    const bValue = callback(b);
-    if (aValue < bValue) return -1;
-    if (aValue > bValue) return 1;
-    return 0;
-  });
+  array.toSorted((a, b) => Math.sign(callback(a) - callback(b)));
 
 // Reset node environment
 // Useful because ts-node installation necessarily must mutate the node environment.
