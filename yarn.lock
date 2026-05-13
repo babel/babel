@@ -355,13 +355,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/compat-data@npm:^8.0.0-rc.4":
-  version: 8.0.0-rc.4
-  resolution: "@babel/compat-data@npm:8.0.0-rc.4"
-  checksum: 10/7736832fd55df2389aa538ad458c7fb85ab776dd4d12bd6ef581d9dfc8bf6d59e81e246efc10556d6b17e52db502517bb84d32e0180f6366ea1621da230a54cd
-  languageName: node
-  linkType: hard
-
 "@babel/compat-data@npm:^8.0.0-rc.5":
   version: 8.0.0-rc.5
   resolution: "@babel/compat-data@npm:8.0.0-rc.5"
@@ -682,20 +675,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-compilation-targets@npm:^8.0.0-rc.3 <8.0.0":
-  version: 8.0.0-rc.4
-  resolution: "@babel/helper-compilation-targets@npm:8.0.0-rc.4"
-  dependencies:
-    "@babel/compat-data": "npm:^8.0.0-rc.4"
-    "@babel/helper-validator-option": "npm:^8.0.0-rc.4"
-    browserslist: "npm:^4.24.0"
-    lru-cache: "npm:^7.14.1"
-    semver: "npm:^7.7.3"
-  checksum: 10/4b549daf601228d4d0fb57d11de57179fa896df55b4cbfe9e038ba90c2f4cb551e40f21eedfc18f4c1a7bc19de08e7aedefe38b812fdfb54116cbae28ca81686
-  languageName: node
-  linkType: hard
-
-"@babel/helper-compilation-targets@npm:^8.0.0-rc.5":
+"@babel/helper-compilation-targets@npm:^8.0.0-rc.3 <8.0.0, @babel/helper-compilation-targets@npm:^8.0.0-rc.5":
   version: 8.0.0-rc.5
   resolution: "@babel/helper-compilation-targets@npm:8.0.0-rc.5"
   dependencies:
@@ -1011,16 +991,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-plugin-utils@npm:^8.0.0-rc.3 <8.0.0":
-  version: 8.0.0-rc.4
-  resolution: "@babel/helper-plugin-utils@npm:8.0.0-rc.4"
-  peerDependencies:
-    "@babel/core": ^8.0.0-rc.4
-  checksum: 10/de803798e150b651c80efb097f77b720a95c6526dee66429955211d6efecdbc1ab6e622dda5484a8d0df8289cc7d37fa20864d54e0c62075524021189f9f0720
-  languageName: node
-  linkType: hard
-
-"@babel/helper-plugin-utils@npm:^8.0.0-rc.5":
+"@babel/helper-plugin-utils@npm:^8.0.0-rc.3 <8.0.0, @babel/helper-plugin-utils@npm:^8.0.0-rc.5":
   version: 8.0.0-rc.5
   resolution: "@babel/helper-plugin-utils@npm:8.0.0-rc.5"
   peerDependencies:
@@ -1183,13 +1154,6 @@ __metadata:
   version: 7.27.1
   resolution: "@babel/helper-validator-option@npm:7.27.1"
   checksum: 10/db73e6a308092531c629ee5de7f0d04390835b21a263be2644276cb27da2384b64676cab9f22cd8d8dbd854c92b1d7d56fc8517cf0070c35d1c14a8c828b0903
-  languageName: node
-  linkType: hard
-
-"@babel/helper-validator-option@npm:^8.0.0-rc.4":
-  version: 8.0.0-rc.4
-  resolution: "@babel/helper-validator-option@npm:8.0.0-rc.4"
-  checksum: 10/efa5aa5cbdd750143b7ae602e263a1f65c693dc485c3817a919d5169cd97665b3fe2a191a0153069c7e176a926786bd248507d5d3f4cd50ef20a4a9bfe9c6a10
   languageName: node
   linkType: hard
 
