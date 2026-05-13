@@ -59,6 +59,7 @@
     "@types/gensync": "condition:BABEL_8_BREAKING ? ^1.0.0 :",
     "convert-source-map": "^2.0.0",
     "debug": "^4.1.0",
+    "find-up-simple": "^1.0.1",
     "gensync": "^1.0.0-beta.2",
     "json5": "^2.2.3",
     "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
