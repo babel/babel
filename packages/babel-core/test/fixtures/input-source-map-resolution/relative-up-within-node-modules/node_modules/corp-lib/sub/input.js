@@ -1,0 +1,6 @@
+var Msg = /*#__PURE__*/function (Msg) {
+  Msg["ThisMapShouldBeLoaded"] = "This map should be loaded";
+  return Msg;
+}(Msg || {});
+
+//# sourceMappingURL=../input.js.map
