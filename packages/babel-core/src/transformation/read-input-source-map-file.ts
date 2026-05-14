@@ -11,17 +11,26 @@ function getInputMapPath(
   root: string,
   inputMapURL: string,
 ): string | null {
-  const inputMapPath = path.resolve(path.dirname(filename), inputMapURL);
-  if (inputMapURL.includes("..")) {
+  const inputFileDir = path.dirname(filename);
+  const inputMapPath = path.resolve(inputFileDir, inputMapURL);
+  const relativeToInputFileDir = path.relative(inputFileDir, inputMapPath);
+
+  if (
+    relativeToInputFileDir.startsWith("..") ||
+    path.isAbsolute(relativeToInputFileDir)
+  ) {
     const inputPackageJSONPath = findUpSync("package.json", {
-      cwd: path.dirname(filename),
+      cwd: inputFileDir,
       stopAt: root,
     });
     const inputFileRoot = inputPackageJSONPath
       ? path.dirname(inputPackageJSONPath)
       : root;
     const relativeInputMapPath = path.relative(inputFileRoot, inputMapPath);
-    if (relativeInputMapPath.startsWith("..")) {
+    if (
+      relativeInputMapPath.startsWith("..") ||
+      path.isAbsolute(relativeInputMapPath)
+    ) {
       debug(
         `discarding input sourcemap "${inputMapPath}" outside of package root "${inputFileRoot}"`,
       );
