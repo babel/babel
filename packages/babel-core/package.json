@@ -41,9 +41,11 @@
     "./lib/config/files/index.js": "./lib/config/files/index-browser.js",
     "./lib/config/resolve-targets.js": "./lib/config/resolve-targets-browser.js",
     "./lib/transform-file.js": "./lib/transform-file-browser.js",
+    "./lib/transformation/read-input-source-map-file.js": "./lib/transformation/read-input-source-map-file-browser.js",
     "./src/config/files/index.ts": "./src/config/files/index-browser.ts",
     "./src/config/resolve-targets.ts": "./src/config/resolve-targets-browser.ts",
-    "./src/transform-file.ts": "./src/transform-file-browser.ts"
+    "./src/transform-file.ts": "./src/transform-file-browser.ts",
+    "./src/transformation/read-input-source-map-file.ts": "./src/transformation/read-input-source-map-file-browser.ts"
   },
   "dependencies": {
     "@babel/code-frame": "workspace:^",
