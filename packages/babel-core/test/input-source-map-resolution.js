@@ -364,6 +364,7 @@ describe("input source map resolution", function () {
             ├─ input.js
             ├─ package.json
             └─ sub
+               └─ mod.js
       "
     `);
 
