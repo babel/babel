@@ -3,6 +3,7 @@ import path from "node:path";
 import { findUpSync } from "find-up-simple";
 import { createDebug } from "obug";
 import convertSourceMap from "convert-source-map";
+import type { SourceMapConverter } from "convert-source-map";
 
 const debug = createDebug("babel:transform:file");
 
@@ -44,7 +45,7 @@ export default function readInputSourceMapFile(
   filename: string,
   root: string,
   inputMapURL: string,
-) {
+): SourceMapConverter | null {
   const inputMapPath = getInputMapPath(filename, root, inputMapURL);
   if (inputMapPath) {
     const inputMapContent = fs.readFileSync(inputMapPath, "utf8");

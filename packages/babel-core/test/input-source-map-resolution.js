@@ -342,6 +342,7 @@ describe("input source map resolution", function () {
 
     expectInputSourceMapIsPresentButNotApplied(result, inputFilePath);
   });
+
   it("should not resolve input source map across the package.json boundary using url not starting with ../", function () {
     const cwd = path.join(
       base,
