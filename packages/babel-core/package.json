@@ -114,6 +114,15 @@
       "browser": "./lib/transform-file-browser.js",
       "default": "./lib/transform-file.js"
     },
+    "#transformation/read-input-source-map-file": {
+      "babel-src": {
+        "browser": "./src/transformation/read-input-source-map-file-browser.ts",
+        "default": "./src/transformation/read-input-source-map-file.ts"
+      },
+      "types": "./lib/index.d.ts",
+      "browser": "./lib/transformation/read-input-source-map-file-browser.js",
+      "default": "./lib/transformation/read-input-source-map-file.js"
+    },
     "#hack-for-rollup-inlining-order-1": "./lib/errors/rewrite-stack-trace.js",
     "#hack-for-rollup-inlining-order-2": "./lib/config/caching.js"
   },

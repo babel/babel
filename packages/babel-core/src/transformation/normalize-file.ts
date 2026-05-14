@@ -1,5 +1,3 @@
-import fs from "node:fs";
-import path from "node:path";
 import { createDebug } from "obug";
 import type { Handler } from "gensync";
 import { file, traverseFast } from "@babel/types";
@@ -7,7 +5,8 @@ import type * as t from "@babel/types";
 import type { PluginPasses } from "../config/index.ts";
 import convertSourceMap from "convert-source-map";
 import type { SourceMapConverter as Converter } from "convert-source-map";
-import { findUpSync } from "find-up-simple";
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import readInputSourceMapFile from "#transformation/read-input-source-map-file";
 import File from "./file/file.ts";
 import parser from "../parser/index.ts";
 import cloneDeep from "./util/clone-deep.ts";
@@ -28,31 +27,6 @@ export type NormalizedFile = {
   ast: t.File;
   inputMap: Converter | null;
 };
-
-function getInputMapPath(
-  filename: string,
-  root: string,
-  inputMapURL: string,
-): string | null {
-  const inputMapPath = path.resolve(path.dirname(filename), inputMapURL);
-  if (inputMapURL.includes("..")) {
-    const inputPackageJSONPath = findUpSync("package.json", {
-      cwd: path.dirname(filename),
-      stopAt: root,
-    });
-    const inputFileRoot = inputPackageJSONPath
-      ? path.dirname(inputPackageJSONPath)
-      : root;
-    const relativeInputMapPath = path.relative(inputFileRoot, inputMapPath);
-    if (relativeInputMapPath.startsWith("..")) {
-      debug(
-        `discarding input sourcemap "${inputMapPath}" outside of package root "${inputFileRoot}"`,
-      );
-      return null;
-    }
-  }
-  return inputMapPath;
-}
 
 export default function* normalizeFile(
   pluginPasses: PluginPasses,
@@ -106,15 +80,11 @@ export default function* normalizeFile(
           // when `lastComment` is non-null, EXTERNAL_SOURCEMAP_REGEX must have matches
           const inputMapURL: string =
             EXTERNAL_SOURCEMAP_REGEX.exec(lastComment)![1];
-          const inputMapPath = getInputMapPath(
+          inputMap = readInputSourceMapFile(
             options.filename,
             options.root,
             inputMapURL,
           );
-          if (inputMapPath) {
-            const inputMapContent = fs.readFileSync(inputMapPath, "utf8");
-            inputMap = convertSourceMap.fromJSON(inputMapContent);
-          }
         } catch (err) {
           debug("discarding unknown file input sourcemap", err);
         }
