@@ -12,16 +12,16 @@ const EXTERNAL_SOURCEMAP_REGEX =
 
 function dirTreeDisplay(dirPath, indent = "") {
   let result = "";
-  const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+  const entries = fs.readdirSync(dirPath);
   for (let i = 0; i < entries.length; i++) {
     const entry = entries[i];
+    const entryPath = path.join(dirPath, entry);
+    // readdirSync { withFileTypes: true } does not follow symlinks
+    const stats = fs.lstatSync(entryPath);
     const isLast = i === entries.length - 1;
-    result += indent + (isLast ? "└─ " : "├─ ") + entry.name + "\n";
-    if (entry.isDirectory()) {
-      result += dirTreeDisplay(
-        path.join(dirPath, entry.name),
-        indent + (isLast ? "   " : "│  "),
-      );
+    result += indent + (isLast ? "└─ " : "├─ ") + entry + "\n";
+    if (stats.isDirectory()) {
+      result += dirTreeDisplay(entryPath, indent + (isLast ? "   " : "│  "));
     }
   }
   return result;
