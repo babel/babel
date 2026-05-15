@@ -1,5 +1,3 @@
-import fs from "node:fs";
-import path from "node:path";
 import buildDebug from "debug";
 import type { Handler } from "gensync";
 import { file, traverseFast } from "@babel/types";
@@ -7,7 +5,6 @@ import type * as t from "@babel/types";
 import type { PluginPasses } from "../config/index.ts";
 import convertSourceMap from "convert-source-map";
 import type { SourceMapConverter as Converter } from "convert-source-map";
-// eslint-disable-next-line import/no-unresolved, import/extensions
 import readInputSourceMapFile from "./read-input-source-map-file.ts";
 import File from "./file/file.ts";
 import parser from "../parser/index.ts";
@@ -85,7 +82,7 @@ export default function* normalizeFile(
         try {
           // when `lastComment` is non-null, EXTERNAL_SOURCEMAP_REGEX must have matches
           const inputMapURL: string =
-            EXTERNAL_SOURCEMAP_REGEX.exec(lastComment)![1];
+            EXTERNAL_SOURCEMAP_REGEX.exec(lastComment)[1];
           inputMap = readInputSourceMapFile(
             options.filename,
             options.root,
