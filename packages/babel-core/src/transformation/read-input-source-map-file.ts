@@ -1,11 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { findUpSync } from "find-up-simple";
-import { createDebug } from "obug";
+import buildDebug from "debug";
 import convertSourceMap from "convert-source-map";
 import type { SourceMapConverter } from "convert-source-map";
 
-const debug = createDebug("babel:transform:file");
+const debug = buildDebug("babel:transform:file");
 
 function getInputMapPath(
   filename: string,
