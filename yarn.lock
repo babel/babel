@@ -493,7 +493,6 @@ __metadata:
     "@types/semver": "npm:^5.4.0"
     convert-source-map: "npm:^2.0.0"
     debug: "npm:^4.1.0"
-    find-up-simple: "npm:^1.0.1"
     gensync: "npm:^1.0.0-beta.2"
     json5: "npm:^2.2.3"
     rimraf: "npm:^3.0.0"
@@ -11299,13 +11298,6 @@ __metadata:
     find-cache-dir-BABEL_8_BREAKING-false: "npm:find-cache-dir@^2.0.0"
     find-cache-dir-BABEL_8_BREAKING-true: "npm:find-cache-dir@^3.3.1"
   checksum: 10/2506157aaba136fc8947c9db4441358384a758209684fe993ba37eba970f31e98344d97d7b2c5e239655a38fb7c35cca05024cde411925d2c24c0d86344cffde
-  languageName: node
-  linkType: hard
-
-"find-up-simple@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "find-up-simple@npm:1.0.1"
-  checksum: 10/6e374bffda9f8425314eab47ef79752b6e77dcc95c0ad17d257aef48c32fe07bbc41bcafbd22941c25bb94fffaaaa8e178d928867d844c58100c7fe19ec82f72
   languageName: node
   linkType: hard
 

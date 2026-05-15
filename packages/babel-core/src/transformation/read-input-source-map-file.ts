@@ -1,11 +1,45 @@
 import fs from "node:fs";
 import path from "node:path";
-import { findUpSync } from "find-up-simple";
 import buildDebug from "debug";
 import convertSourceMap from "convert-source-map";
 import type { SourceMapConverter } from "convert-source-map";
 
 const debug = buildDebug("babel:transform:file");
+
+// Revised from https://github.com/sindresorhus/find-up-simple/blob/f10133c55dcbf36f84a246c6f1bbfed178dcb774/index.js#L36
+// for Node.js 6 compatibility
+function findUpSync(
+  name: string,
+  {
+    cwd,
+    stopAt,
+  }: {
+    cwd?: string;
+    stopAt?: string;
+  } = {},
+) {
+  let directory = path.resolve(cwd || "");
+  const { root } = path.parse(directory);
+  stopAt = path.resolve(directory, stopAt || root);
+  const isAbsoluteName = path.isAbsolute(name);
+
+  while (directory) {
+    const filePath = isAbsoluteName ? name : path.join(directory, name);
+
+    try {
+      const stats = fs.statSync(filePath);
+      if (stats.isFile()) {
+        return filePath;
+      }
+    } catch (_) {}
+
+    if (directory === stopAt || directory === root) {
+      break;
+    }
+
+    directory = path.dirname(directory);
+  }
+}
 
 function getInputMapPath(
   filename: string,
