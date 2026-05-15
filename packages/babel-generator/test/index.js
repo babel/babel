@@ -1543,7 +1543,7 @@ export const App = () => {
   });
 });
 
-const suites = fixtures(path.join(__dirname, "fixtures"));
+const suites = fixtures(new URL("./fixtures", import.meta.url));
 
 afterEach(() => {
   jest.restoreAllMocks();

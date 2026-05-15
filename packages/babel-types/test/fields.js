@@ -2,10 +2,6 @@ import * as t from "../lib/index.js";
 import { multiple as getFixtures } from "@babel/helper-fixtures";
 import { readFileSync } from "node:fs";
 import { inspect } from "node:util";
-import { commonJS } from "$repo-utils";
-import path from "node:path";
-
-const { __dirname } = commonJS(import.meta.url);
 
 const ignoredFields = {
   ArrowFunctionExpression: { id: true },
@@ -27,10 +23,9 @@ describe("NODE_FIELDS contains all fields, VISITOR_KEYS contains all AST nodes, 
   const reportedVisitorOrders = new Set();
   const { traverseFast, VISITOR_KEYS } = t;
 
-  const projectRoot = path.resolve(__dirname, "../../..");
-  const parserTestFixtureRoot = path.resolve(
-    projectRoot,
-    "./packages/babel-parser/test/fixtures",
+  const parserTestFixtureRoot = new URL(
+    "../../babel-parser/test/fixtures",
+    import.meta.url,
   );
   const fixtures = getFixtures(parserTestFixtureRoot);
   for (const name in fixtures) {

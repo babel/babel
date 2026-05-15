@@ -5,10 +5,11 @@ import { multiple as getFixtures } from "@babel/helper-fixtures";
 import unpad from "dedent";
 import { commonJS } from "$repo-utils";
 import { ESLint } from "eslint";
+import { pathToFileURL } from "node:url";
 
 const ESLINT_VERSION = parseInt(ESLint.version.split(".")[0], 10);
 
-const { require, __dirname } = commonJS(import.meta.url);
+const { require } = commonJS(import.meta.url);
 
 const PROPS_TO_REMOVE = [
   // typescript-eslint generates start/end in the loc object, while Babel generate both start/end and loc
@@ -379,48 +380,49 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
   });
 
   describe("babel-parser typescript tests without tokens", () => {
-    const projectRoot = path.resolve(__dirname, "../../..");
-    const parserTestFixtureRoot = path.resolve(
-      projectRoot,
-      "./packages/babel-parser/test/fixtures",
+    const parserTestFixtureRoot = new URL(
+      "../../../packages/babel-parser/test/fixtures",
+      import.meta.url,
     );
     const fixtures = getFixtures(parserTestFixtureRoot);
-    const FAILURES = new Set([
-      // ts-eslint/tsc does not support arrow generic in tsx mode
-      "typescript/arrow-function/async-await-null/input.ts",
-      "typescript/arrow-function/async-generic-after-await/input.ts",
-      "typescript/arrow-function/async-generic-tokens-true/input.ts",
-      "typescript/arrow-function/generic/input.ts",
-      "typescript/cast/arrow-in-parens/input.ts",
-      "typescript/cast/arrow-in-parens-with-parens-node/input.ts",
-      "typescript/regression/async-arrow-generic-9560/input.ts",
+    const FAILURES = new Set(
+      [
+        // ts-eslint/tsc does not support arrow generic in tsx mode
+        "typescript/arrow-function/async-await-null/input.ts",
+        "typescript/arrow-function/async-generic-after-await/input.ts",
+        "typescript/arrow-function/async-generic-tokens-true/input.ts",
+        "typescript/arrow-function/generic/input.ts",
+        "typescript/cast/arrow-in-parens/input.ts",
+        "typescript/cast/arrow-in-parens-with-parens-node/input.ts",
+        "typescript/regression/async-arrow-generic-9560/input.ts",
 
-      // different program range handling when the program starts/ends with a comment
-      // https://github.com/typescript-eslint/typescript-eslint/issues/11026
-      "typescript/cast/as/input.ts",
-      "typescript/export/internal-comments/input.ts",
-      "typescript/import/internal-comments/input.ts",
-      "typescript/type-alias/export/input.ts",
-      "typescript/types/type-literal/input.ts",
+        // different program range handling when the program starts/ends with a comment
+        // https://github.com/typescript-eslint/typescript-eslint/issues/11026
+        "typescript/cast/as/input.ts",
+        "typescript/export/internal-comments/input.ts",
+        "typescript/import/internal-comments/input.ts",
+        "typescript/type-alias/export/input.ts",
+        "typescript/types/type-literal/input.ts",
 
-      // ts-eslint/tsc does not support <const> in tsx mode
-      "typescript/cast/as-const/input.ts",
-      "typescript/types/const-type-parameters/input.ts",
+        // ts-eslint/tsc does not support <const> in tsx mode
+        "typescript/cast/as-const/input.ts",
+        "typescript/types/const-type-parameters/input.ts",
 
-      // ts-eslint/tsc does not support <T> cast in tsx mode
-      "typescript/cast/destructure-and-assign/input.ts",
-      "typescript/cast/for-of-lhs/input.ts",
-      "typescript/cast/need-parentheses/input.ts",
-      "typescript/cast/parenthesized-type-assertion-and-assign/input.ts",
-      "typescript/cast/type-assertion/input.ts",
-      "typescript/cast/type-assertion-after-operator/input.ts",
-      "typescript/cast/type-assertion-and-assign/input.ts",
-      "typescript/cast/type-assertion-before-operator/input.ts",
+        // ts-eslint/tsc does not support <T> cast in tsx mode
+        "typescript/cast/destructure-and-assign/input.ts",
+        "typescript/cast/for-of-lhs/input.ts",
+        "typescript/cast/need-parentheses/input.ts",
+        "typescript/cast/parenthesized-type-assertion-and-assign/input.ts",
+        "typescript/cast/type-assertion/input.ts",
+        "typescript/cast/type-assertion-after-operator/input.ts",
+        "typescript/cast/type-assertion-and-assign/input.ts",
+        "typescript/cast/type-assertion-before-operator/input.ts",
 
-      // ts-eslint/tsc does not support this example
-      "typescript/regression/nested-extends-in-arrow-type-param/input.ts",
-      "typescript/type-arguments-bit-shift-left-like/jsx-opening-element/input.tsx",
-    ]);
+        // ts-eslint/tsc does not support this example
+        "typescript/regression/nested-extends-in-arrow-type-param/input.ts",
+        "typescript/type-arguments-bit-shift-left-like/jsx-opening-element/input.tsx",
+      ].map(f => new URL(f, parserTestFixtureRoot + "/").href),
+    );
     for (const [name, testSuites] of Object.entries(fixtures)) {
       if (["typescript"].includes(name)) {
         for (const { tests } of testSuites) {
@@ -440,13 +442,7 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
             if (AST.errors) {
               continue;
             }
-            if (
-              FAILURES.has(
-                path
-                  .relative(parserTestFixtureRoot, test.actual.loc)
-                  .replaceAll("\\", "/"),
-              )
-            ) {
+            if (FAILURES.has(pathToFileURL(test.actual.loc).href)) {
               testFn(test.actual.loc + " should throw", () => {
                 const input = readFileSync(test.actual.loc, "utf-8");
                 expect(() =>
