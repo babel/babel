@@ -189,12 +189,13 @@ let sharedTestContext: vm.Context;
 export function runCodeInTestContext(
   code: string,
   opts: {
-    filename: string;
+    filename: string | URL;
     timeout?: number;
   },
   context = (sharedTestContext ??= createTestContext()),
 ) {
-  const filename = opts.filename;
+  const filename =
+    opts.filename instanceof URL ? fileURLToPath(opts.filename) : opts.filename;
   const dirname = path.dirname(filename);
   const moduleCache = contextModuleCache.get(context);
   const req = (id: string) =>
@@ -207,7 +208,7 @@ export function runCodeInTestContext(
 
   const oldCwd = process.cwd();
   try {
-    if (opts.filename) process.chdir(path.dirname(opts.filename));
+    if (filename) process.chdir(path.dirname(filename));
 
     // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
     // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
@@ -477,7 +478,7 @@ export type SuiteOptions = {
 };
 
 export default function (
-  fixturesLoc: string,
+  fixturesLoc: string | URL,
   name: string,
   suiteOpts: SuiteOptions = {},
   taskOpts: TaskOptions = {},
@@ -729,10 +730,11 @@ export function buildParallelProcessTests(name: string, tests: ProcessTest[]) {
 }
 
 export function buildProcessTests(
-  dir: string,
+  dir: string | URL,
   beforeHook: ProcessTestBeforeHook,
   afterHook?: ProcessTestAfterHook,
 ) {
+  if (dir instanceof URL) dir = fileURLToPath(dir);
   const tests: ProcessTest[] = [];
 
   fs.readdirSync(dir).forEach(function (suiteName) {

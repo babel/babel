@@ -7,7 +7,6 @@ import { commonJS } from "$repo-utils";
 
 const { __dirname } = commonJS(import.meta.url);
 
-const fixtureLoc = path.join(__dirname, "../fixtures");
 const rootDir = path.resolve(__dirname, "../../../..");
 
 const getPath = name => path.join(rootDir, "packages", name, "lib/index.js");
@@ -40,7 +39,7 @@ const normalizeOutput = function (str, cwd) {
 export const runParallel = buildParallelProcessTests(
   "babel-cli",
   buildProcessTests(
-    fixtureLoc,
+    new URL("../fixtures", import.meta.url),
     function (test) {
       test.binLoc = path.join(__dirname, "../../lib", test.suiteName);
       if (!test.opts.noDefaultPlugins) {

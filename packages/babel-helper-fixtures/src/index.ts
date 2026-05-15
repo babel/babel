@@ -456,7 +456,8 @@ export function resolveOptionPluginOrPreset(
   return options;
 }
 
-export default function get(entryLoc: string) {
+export default function get(entryLoc: string | URL) {
+  if (entryLoc instanceof URL) entryLoc = fileURLToPath(entryLoc);
   const suites: Suite[] = [];
 
   let rootOpts: TaskOptions = {};
@@ -492,7 +493,8 @@ export default function get(entryLoc: string) {
   return suites;
 }
 
-export function multiple(entryLoc: string, ignore?: string[]) {
+export function multiple(entryLoc: string | URL, ignore?: string[]) {
+  if (entryLoc instanceof URL) entryLoc = fileURLToPath(entryLoc);
   const categories: Record<string, Suite[]> = {};
 
   for (const name of fs.readdirSync(entryLoc)) {

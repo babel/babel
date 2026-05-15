@@ -8,12 +8,11 @@ import {
 
 const { require, __dirname } = commonJS(import.meta.url);
 
-const fixtureLoc = path.join(__dirname, "../fixtures");
 const binLoc = path.join(__dirname, "../../lib/babel-node");
 
 export const runParallel = buildParallelProcessTests(
   "babel-node",
-  buildProcessTests(fixtureLoc, function (test, tmpDir) {
+  buildProcessTests(new URL("../fixtures", import.meta.url), function (test, tmpDir) {
     test.binLoc = binLoc;
     test.opts.env = { ...test.opts.env, BABEL_DISABLE_CACHE: true };
     if (test.testName === "require") {
