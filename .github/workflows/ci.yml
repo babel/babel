@@ -19,7 +19,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: 'Check or update Yarn cache (fix w/ "yarn install")'
@@ -40,7 +40,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: 'Check for unmet constraints (fix w/ "yarn constraints --fix")'
@@ -99,7 +99,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -151,7 +151,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -176,7 +176,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -200,7 +200,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -229,14 +229,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [24, 22, 20, 18, 16, 14, 12, 10, 8, 6]
+        node-version: [25, 24, 22, 20, 18, 16, 14, 12, 10, 8, 6]
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
       - name: Use Node.js latest # Run yarn on latest node
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -308,7 +308,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -331,7 +331,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -358,7 +358,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
@@ -425,7 +425,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
@@ -472,7 +472,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -518,7 +518,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
       - name: Checkout test runner
         uses: actions/checkout@v6
@@ -555,7 +555,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           check-latest: true
       - name: Install
         run: yarn install
