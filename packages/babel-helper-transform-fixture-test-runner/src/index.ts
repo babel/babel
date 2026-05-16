@@ -597,7 +597,8 @@ export type ProcessTestAfterHook = (
 };
 
 // https://github.com/nodejs/node/issues/11422#issue-208189446
-const tmpDir = realpathSync(os.tmpdir());
+// https://github.com/libuv/libuv/issues/5010#issuecomment-4466710203
+const tmpDir = realpathSync.native(os.tmpdir());
 
 const readDir = function (loc: string, pathFilter: (arg0: string) => boolean) {
   const files: Record<string, string> = {};
