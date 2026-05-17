@@ -157,6 +157,13 @@ describe("evaluation", function () {
     expect(evalResult.confident).toBe(false);
   });
 
+  it("should deopt instead of crashing on maliciously crafted call expressions", function () {
+    // https://github.com/babel/babel/issues/17644
+    const path = getPath('String({ toString: "".toUpperCase })');
+    const evalResult = path.get("body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
   it("should evaluate global call expressions", function () {
     expect(
       getPath("isFinite(1);").get("body.0.expression").evaluate().value,

@@ -497,7 +497,12 @@ function _evaluate(path: NodePath, state: State): any {
       const args = path.get("arguments").map(arg => evaluateCached(arg, state));
       if (!state.confident) return;
 
-      return func.apply(context, args);
+      try {
+        return func.apply(context, args);
+      } catch {
+        deopt(path, state);
+        return;
+      }
     }
   }
 
