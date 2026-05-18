@@ -24,7 +24,7 @@
     "compiler"
   ],
   "dependencies": {
-    "@jridgewell/trace-mapping": "^0.3.28",
+    "@jridgewell/trace-mapping": "catalog:",
     "commander": "^14.0.2",
     "convert-source-map": "^2.0.0",
     "glob": "^13.0.0",
