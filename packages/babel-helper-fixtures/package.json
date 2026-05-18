@@ -15,7 +15,7 @@
   "homepage": "https://babel.dev/docs/en/next/babel-helper-fixtures",
   "main": "./lib/index.js",
   "dependencies": {
-    "@jridgewell/gen-mapping": "^0.3.12",
+    "@jridgewell/gen-mapping": "catalog:",
     "semver": "catalog:"
   },
   "devDependencies": {

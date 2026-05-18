@@ -21,8 +21,8 @@
   "dependencies": {
     "@babel/parser": "workspace:^",
     "@babel/types": "workspace:^",
-    "@jridgewell/gen-mapping": "^0.3.12",
-    "@jridgewell/trace-mapping": "^0.3.28",
+    "@jridgewell/gen-mapping": "catalog:",
+    "@jridgewell/trace-mapping": "catalog:",
     "@types/jsesc": "^2.5.0",
     "jsesc": "^3.0.2"
   },
@@ -30,7 +30,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
     "@babel/plugin-transform-typescript": "workspace:^",
-    "@jridgewell/sourcemap-codec": "^1.5.3",
+    "@jridgewell/sourcemap-codec": "catalog:dev",
     "charcodes": "^0.2.0"
   },
   "engines": {
