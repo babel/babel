@@ -191,6 +191,8 @@ export interface GeneratorOptions {
 
   inputSourceMap?: any;
 
+  sourceMapRanges?: boolean;
+
   /**
    * A root for all relative URLs in the source map.
    */

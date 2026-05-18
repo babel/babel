@@ -7,6 +7,7 @@
   "sourcesContent": [
     "(() => { return 42; })"
   ],
-  "mappings": "AAAC,MAAM;EAAE,OAAO,EAAE;AAAE,CAAC",
-  "ignoreList": []
+  "mappings": "AAAC,MAAM;EAAE,SAAS;AAAE,CAAC",
+  "ignoreList": [],
+  "rangeMappings": ";A;A"
 }
