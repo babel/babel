@@ -17,8 +17,12 @@ export function _getRawIdentifier(this: Printer, node: t.Identifier) {
 }
 
 export function Identifier(this: Printer, node: t.Identifier) {
-  if (this._buf._map) {
-    this.sourceIdentifierName(node.loc?.identifierName || node.name);
+  if (
+    this._buf._map &&
+    node.loc?.identifierName &&
+    node.loc.identifierName !== node.name
+  ) {
+    this.sourceIdentifierName(node.loc.identifierName);
   }
 
   this.word(this.tokenMap ? lastRawIdentResult : node.name);

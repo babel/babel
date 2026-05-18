@@ -648,7 +648,7 @@ describe("api", function () {
         column: 4,
       }),
     ).toEqual({
-      name: "Foo",
+      name: null,
       source: "stdout",
       line: 1,
       column: 6,

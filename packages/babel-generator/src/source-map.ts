@@ -101,6 +101,7 @@ export default class SourceMap {
 
   mark(
     generated: { line: number; column: number },
+    generatedIdentifierName: string | null,
     line?: number,
     column?: number,
     identifierName?: string | null,
@@ -151,6 +152,10 @@ export default class SourceMap {
           column: column!,
         };
       }
+    }
+
+    if (identifierName != null && identifierName === generatedIdentifierName) {
+      identifierName = null;
     }
 
     // @ts-expect-error FIXME: original cannot be InvalidOriginalMapping

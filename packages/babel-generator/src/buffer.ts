@@ -154,6 +154,7 @@ export default class Buffer {
         if (useSourcePos && sourcePos) {
           this._map.mark(
             position,
+            null,
             sourcePos.line,
             sourcePos.column,
             isSpace ? undefined : sourcePos.identifierName,
@@ -166,7 +167,7 @@ export default class Buffer {
             sourcePos.identifierNamePos = undefined;
           }
         } else {
-          this._map.mark(position);
+          this._map.mark(position, null);
         }
       }
 
@@ -224,6 +225,7 @@ export default class Buffer {
     if (hasMap && i !== 0) {
       this._map!.mark(
         position,
+        str,
         line,
         column,
         identifierName,
@@ -244,7 +246,15 @@ export default class Buffer {
       if (last < len && line !== undefined) {
         line++;
         if (hasMap) {
-          this._map!.mark(position, line, 0, undefined, undefined, filename);
+          this._map!.mark(
+            position,
+            str,
+            line,
+            0,
+            undefined,
+            undefined,
+            filename,
+          );
         }
       }
       i = str.indexOf("\n", last);
