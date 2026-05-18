@@ -41,9 +41,10 @@ describe("generation", function () {
     expect(generated.map).toMatchInlineSnapshot(`
       Object {
         "file": undefined,
-        "ignoreList": Array [],
+        "ignoreList": undefined,
         "mappings": "AAAA,SAAS,EAAE,CAAE,GAAG,EAAE;EAAE,OAAO,CAAC,GAAG,CAAC,GAAG,CAAC;AAAE;ACAtC,EAAE,CAAC,OAAO,CAAC",
         "names": Array [],
+        "rangeMappings": undefined,
         "sourceRoot": undefined,
         "sources": Array [
           "a.js",
@@ -328,7 +329,7 @@ describe("generation", function () {
       }",
         "decodedMap": Object {
           "file": undefined,
-          "ignoreList": Array [],
+          "ignoreList": undefined,
           "mappings": Array [
             Array [
               Array [
@@ -392,6 +393,7 @@ describe("generation", function () {
             "foo",
             "bar",
           ],
+          "rangeMappings": undefined,
           "sourceRoot": undefined,
           "sources": Array [
             "inline",
@@ -404,12 +406,13 @@ describe("generation", function () {
         },
         "map": Object {
           "file": undefined,
-          "ignoreList": Array [],
+          "ignoreList": undefined,
           "mappings": "AAAA,SAASA,IAAGA,CAAA,EAAG;EAAEC,IAAG;AAAE",
           "names": Array [
             "foo",
             "bar",
           ],
+          "rangeMappings": undefined,
           "sourceRoot": undefined,
           "sources": Array [
             "inline",
@@ -875,9 +878,10 @@ describe("generation", function () {
     ).toMatchInlineSnapshot(`
       Object {
         "file": undefined,
-        "ignoreList": Array [],
+        "ignoreList": undefined,
         "mappings": "AAAA,IAAI,CAAC,GAAG,SAAJ,CAAC",
         "names": Array [],
+        "rangeMappings": undefined,
         "sourceRoot": undefined,
         "sources": Array [
           "source-maps/arrow-function/input.js",
@@ -968,7 +972,7 @@ describe("generation", function () {
     expect(out.map).toMatchInlineSnapshot(`
       Object {
         "file": undefined,
-        "ignoreList": Array [],
+        "ignoreList": undefined,
         "mappings": "AACM,IAAIA,CAAC,GAAG,CAAC;AACT,IAAI,CAAC,GAAG,CAAC;AACT,SAASC,CAACA,CAAA,EAAG,CAAC;AACd,SAAS,CAAC,GAAG,CAAC;AACd,MAAM,CAAC,CAAC;EACN,CAACC,CAACC,CAAA,EAAG,CAAC;EACN,CAAC,CAAC,GAAG,CAAC;AACR",
         "names": Array [
           "a",
@@ -976,6 +980,7 @@ describe("generation", function () {
           "e",
           "#e",
         ],
+        "rangeMappings": undefined,
         "sourceRoot": undefined,
         "sources": Array [
           "input.js",

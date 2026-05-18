@@ -7,6 +7,5 @@
   "sourcesContent": [
     "import type {\n  RecordAndTuplePluginOptions,\n  PipelineOperatorPluginOptions,\n} from \"@babel/parser\";"
   ],
-  "mappings": "AAAA,cACE,2BAA2B,EAC3B,6BAA6B,QACxB,eAAe",
-  "ignoreList": []
+  "mappings": "AAAA,cACE,2BAA2B,EAC3B,6BAA6B,QACxB,eAAe"
 }

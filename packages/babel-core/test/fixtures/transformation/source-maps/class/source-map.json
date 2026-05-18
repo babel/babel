@@ -7,6 +7,5 @@
   "sourcesContent": [
     "class Test {\n  get bar() {\n    throw new Error(\"wow\");\n  }\n}\n\nvar test = new Test;\ntest.bar;"
   ],
-  "mappings": "IAAM,IAAI;EAAA;;EAAA;IAAA;EAAA;EAAA;IAAA;IAAA,KACR,YAAU;MACR,MAAM,IAAI,KAAK,CAAC,KAAK,CAAC;IACxB;EAAC;AAAA;AAGH,IAAI,IAAI,GAAG,IAAI,IAAI,CAAD,CAAC;AACnB,IAAI,CAAC,GAAG",
-  "ignoreList": []
+  "mappings": "IAAM,IAAI;EAAA;;EAAA;IAAA;EAAA;EAAA;IAAA;IAAA,KACR,YAAU;MACR,MAAM,IAAI,KAAK,CAAC,KAAK,CAAC;IACxB;EAAC;AAAA;AAGH,IAAI,IAAI,GAAG,IAAI,IAAI,CAAD,CAAC;AACnB,IAAI,CAAC,GAAG"
 }

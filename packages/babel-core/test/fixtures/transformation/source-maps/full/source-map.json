@@ -7,6 +7,5 @@
   "sourcesContent": [
     "arr.map(x => x * x);"
   ],
-  "mappings": "AAAA,GAAG,CAAC,GAAG,CAAC,WAAC;EAAA,OAAI,CAAC,GAAG,CAAC;AAAA,EAAC",
-  "ignoreList": []
+  "mappings": "AAAA,GAAG,CAAC,GAAG,CAAC,WAAC;EAAA,OAAI,CAAC,GAAG,CAAC;AAAA,EAAC"
 }
