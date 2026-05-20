@@ -469,7 +469,7 @@ __metadata:
     "@cspotcode/source-map-support": "npm:^0.8.1"
     "@jridgewell/trace-mapping": "catalog:"
     "@types/convert-source-map": "npm:^2.0.0"
-    "@types/gensync": "npm:^1.0.0"
+    "@types/gensync": "npm:^1.0.5"
     "@types/resolve": "npm:^1.3.2"
     "@types/semver": "npm:^5.4.0"
     convert-source-map: "npm:^2.0.0"
@@ -6040,7 +6040,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/gensync@npm:^1.0.0":
+"@types/gensync@npm:^1.0.0, @types/gensync@npm:^1.0.5":
   version: 1.0.5
   resolution: "@types/gensync@npm:1.0.5"
   checksum: 10/1b417012a1249c60d2a5d3a646c208710473f31ab91ee702d4a0bf742d4d20a04c4296efcf6f42b7c1b38536ff732c3aa00dd5afc8fa138c70d1905a0521a5c3
