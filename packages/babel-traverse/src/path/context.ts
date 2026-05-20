@@ -4,6 +4,7 @@ import { SHOULD_SKIP, SHOULD_STOP } from "./index.ts";
 import { _markRemoved } from "./removal.ts";
 import type TraversalContext from "../context.ts";
 import type NodePath from "./index.ts";
+import type { ExplodedVisitor, TraverseOptions } from "../types.ts";
 import * as t from "@babel/types";
 
 export function _call(this: NodePath, fns?: Function[]): boolean {
@@ -125,7 +126,7 @@ export function setContext<S = unknown>(
     this.context = context as TraversalContext;
     this.state = context.state;
     // Discard the S type parameter from context.opts
-    this.opts = context.opts;
+    this.opts = context.opts as TraverseOptions & ExplodedVisitor<unknown>;
   }
 
   setScope.call(this);
