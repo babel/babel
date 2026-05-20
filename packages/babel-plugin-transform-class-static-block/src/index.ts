@@ -138,7 +138,7 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
                 path: NodePath<t.Node>,
                 state: any,
               ) => void)[]
-            ).forEach(f => f.call(this, parentPath, this));
+            )?.forEach(f => f.call(this, parentPath, this));
           }
         }
 

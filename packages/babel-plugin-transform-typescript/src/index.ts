@@ -680,7 +680,7 @@ export default declare((api, opts: Options) => {
       TaggedTemplateExpression(path) {
         path.node.typeArguments = null;
       },
-    }) as Visitor<PluginPass>,
+    }) satisfies Visitor<PluginPass>,
   };
 
   function entityNameToExpr(node: t.TSEntityName): t.Expression {
