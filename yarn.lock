@@ -14998,10 +14998,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pirates@npm:^4.0.6, pirates@npm:^4.0.7":
+"pirates@git+https://github.com/Aditi-1400/pirates.git#commit=ac23adcc4c57843a4ac056a0a44f5c9581f5b37f":
   version: 4.0.7
-  resolution: "pirates@npm:4.0.7"
-  checksum: 10/2427f371366081ae42feb58214f04805d6b41d6b84d74480ebcc9e0ddbd7105a139f7c653daeaf83ad8a1a77214cf07f64178e76de048128fec501eab3305a96
+  resolution: "pirates@https://github.com/Aditi-1400/pirates.git#commit=ac23adcc4c57843a4ac056a0a44f5c9581f5b37f"
+  checksum: 10/968d3a05eecb86d7bab08b8dffa9731e9983b4498df449fee85a54d65345826c0b198b244bec051ee9d476be4f87e0a0f54ed9a591797b273a3f8018bea40def
   languageName: node
   linkType: hard
 
