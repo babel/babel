@@ -162,10 +162,10 @@ describe("@babel/core config ts-node integration", () => {
     });
 
     expect(config.options.targets).toMatchInlineSnapshot(`
-        Object {
-          "node": "12.0.0",
-        }
-      `);
+      {
+        "node": "12.0.0",
+      }
+    `);
 
     expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });

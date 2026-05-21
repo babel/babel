@@ -11,10 +11,10 @@ describe("@babel/core config with ts", () => {
     });
 
     expect(config.options.targets).toMatchInlineSnapshot(`
-        Object {
-          "node": "12.0.0",
-        }
-      `);
+      {
+        "node": "12.0.0",
+      }
+    `);
 
     expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });
@@ -28,7 +28,7 @@ describe("@babel/core config with ts", () => {
     });
 
     expect(config.options.targets).toMatchInlineSnapshot(`
-      Object {
+      {
         "node": "12.0.0",
       }
     `);
@@ -53,10 +53,10 @@ describe("@babel/core config with ts", () => {
     });
 
     expect(config.options.targets).toMatchInlineSnapshot(`
-        Object {
-          "node": "12.0.0",
-        }
-      `);
+      {
+        "node": "12.0.0",
+      }
+    `);
 
     expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });
@@ -70,10 +70,10 @@ describe("@babel/core config with ts", () => {
     });
 
     expect(config.options.targets).toMatchInlineSnapshot(`
-        Object {
-          "node": "12.0.0",
-        }
-      `);
+      {
+        "node": "12.0.0",
+      }
+    `);
 
     expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });
@@ -87,10 +87,10 @@ describe("@babel/core config with ts", () => {
     });
 
     expect(config.options.targets).toMatchInlineSnapshot(`
-        Object {
-          "node": "12.0.0",
-        }
-      `);
+      {
+        "node": "12.0.0",
+      }
+    `);
 
     expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });
@@ -104,10 +104,10 @@ describe("@babel/core config with ts", () => {
     });
 
     expect(config.options.targets).toMatchInlineSnapshot(`
-        Object {
-          "node": "12.0.0",
-        }
-      `);
+      {
+        "node": "12.0.0",
+      }
+    `);
 
     expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });
@@ -118,10 +118,10 @@ describe("@babel/core config with ts", () => {
     });
 
     expect(config.options.targets).toMatchInlineSnapshot(`
-        Object {
-          "node": "12.0.0",
-        }
-      `);
+      {
+        "node": "12.0.0",
+      }
+    `);
 
     expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });

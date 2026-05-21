@@ -226,7 +226,7 @@ describe("getTargets", () => {
 
     it("returns browsers supporting modules", () => {
       expect(baseESModulesTargets).toMatchInlineSnapshot(`
-        Object {
+        {
           "android": "61.0.0",
           "chrome": "61.0.0",
           "edge": "16.0.0",

@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`builders core templateElement should validate 1`] = `
-Object {
+{
   "tail": false,
   "type": "TemplateElement",
-  "value": Object {
+  "value": {
     "cooked": "foo",
     "raw": "foo",
   },
@@ -12,10 +12,10 @@ Object {
 `;
 
 exports[`builders core templateElement should validate 2`] = `
-Object {
+{
   "tail": false,
   "type": "TemplateElement",
-  "value": Object {
+  "value": {
     "cooked": "foo",
     "raw": "foo",
   },
@@ -38,34 +38,34 @@ Property raw expected type of string but got undefined"
 `;
 
 exports[`builders core templateElement should validate 6`] = `
-Object {
+{
   "tail": false,
   "type": "TemplateElement",
-  "value": Object {
+  "value": {
     "cooked": null,
-    "raw": "\\\\u",
+    "raw": "\\u",
   },
 }
 `;
 
 exports[`builders core templateElement should validate 7`] = `
-Object {
+{
   "tail": false,
   "type": "TemplateElement",
-  "value": Object {
+  "value": {
     "cooked": "B",
-    "raw": "\\\\x42",
+    "raw": "\\x42",
   },
 }
 `;
 
 exports[`builders core templateElement should validate 8`] = `
-Object {
+{
   "tail": false,
   "type": "TemplateElement",
-  "value": Object {
+  "value": {
     "cooked": "B",
-    "raw": "\\\\x42",
+    "raw": "\\x42",
   },
 }
 `;
@@ -75,13 +75,13 @@ exports[`builders core templateElement should validate 9`] = `"Invalid raw"`;
 exports[`builders core templateElement should validate 10`] = `"Invalid raw"`;
 
 exports[`builders core templateLiteral should validate 1`] = `
-Object {
-  "expressions": Array [],
-  "quasis": Array [
-    Object {
+{
+  "expressions": [],
+  "quasis": [
+    {
       "tail": false,
       "type": "TemplateElement",
-      "value": Object {
+      "value": {
         "cooked": "foo",
         "raw": "foo",
       },
@@ -92,26 +92,26 @@ Object {
 `;
 
 exports[`builders core templateLiteral should validate 2`] = `
-Object {
-  "expressions": Array [
-    Object {
+{
+  "expressions": [
+    {
       "type": "StringLiteral",
       "value": "baz",
     },
   ],
-  "quasis": Array [
-    Object {
+  "quasis": [
+    {
       "tail": false,
       "type": "TemplateElement",
-      "value": Object {
+      "value": {
         "cooked": "foo",
         "raw": "foo",
       },
     },
-    Object {
+    {
       "tail": false,
       "type": "TemplateElement",
-      "value": Object {
+      "value": {
         "cooked": "bar",
         "raw": "bar",
       },

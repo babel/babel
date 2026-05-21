@@ -81,7 +81,7 @@ describe("NodePath", () => {
         .filter(isAndAssertFilter);
 
       expect(keys).toMatchInlineSnapshot(`
-        Array [
+        [
           "_guessExecutionStatusRelativeTo",
           "addComment",
           "addComments",

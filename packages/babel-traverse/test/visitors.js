@@ -18,9 +18,9 @@ describe("visitors", () => {
       ]);
       traverse(ast, visitor);
       expect(visitor).toMatchInlineSnapshot(`
-        Object {
-          "ArrayExpression": Object {
-            "enter": Array [
+        {
+          "ArrayExpression": {
+            "enter": [
               [Function],
               [Function],
             ],
@@ -36,10 +36,10 @@ describe("visitors", () => {
       const visitor = visitors.merge([{ enter() {} }, { enter() {} }]);
       traverse(ast, visitor);
       expect(visitor).toMatchInlineSnapshot(`
-        Object {
+        {
           "_exploded": true,
           "_verified": true,
-          "enter": Array [
+          "enter": [
             [Function],
             [Function],
           ],
@@ -55,10 +55,10 @@ describe("visitors", () => {
       );
       traverse(ast, visitor);
       expect(visitor).toMatchInlineSnapshot(`
-        Object {
+        {
           "_exploded": true,
           "_verified": true,
-          "enter": Array [
+          "enter": [
             [Function],
             [Function],
           ],
@@ -75,10 +75,10 @@ describe("visitors", () => {
       );
       traverse(ast, visitor);
       expect(visitor).toMatchInlineSnapshot(`
-        Object {
+        {
           "_exploded": true,
           "_verified": true,
-          "enter": Array [
+          "enter": [
             [Function],
             [Function],
           ],

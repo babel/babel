@@ -24,9 +24,9 @@ describe("dummy", () => {
 describe("usage from cjs", () => {
   it("lazy plugin required", async () => {
     expect(await run("lazy-plugin-required.cjs")).toMatchInlineSnapshot(`
-      Object {
+      {
         "stderr": "",
-        "stdout": "\\"Replaced!\\";
+        "stdout": ""Replaced!";
       ",
       }
     `);
@@ -34,9 +34,9 @@ describe("usage from cjs", () => {
 
   it("lazy plugin as config string", async () => {
     expect(await run("lazy-plugin-as-string.cjs")).toMatchInlineSnapshot(`
-      Object {
+      {
         "stderr": "",
-        "stdout": "\\"Replaced!\\";
+        "stdout": ""Replaced!";
       ",
       }
     `);
@@ -44,9 +44,9 @@ describe("usage from cjs", () => {
 
   it("eager plugin required", async () => {
     expect(await run("eager-plugin-required.cjs")).toMatchInlineSnapshot(`
-      Object {
+      {
         "stderr": "",
-        "stdout": "\\"Replaced!\\";
+        "stdout": ""Replaced!";
       ",
       }
     `);
@@ -55,30 +55,30 @@ describe("usage from cjs", () => {
   it("eager plugin required after dynamic esm import", async () => {
     expect(await run("eager-plugin-required-after-dynamic-esm-import.cjs"))
       .toMatchInlineSnapshot(`
-        Object {
-          "stderr": "",
-          "stdout": "\\"Replaced!\\";
-        ",
-        }
-      `);
+      {
+        "stderr": "",
+        "stdout": ""Replaced!";
+      ",
+      }
+    `);
   });
 
   it("eager plugin required after static esm import", async () => {
     expect(await run("eager-plugin-required-after-static-esm-import.mjs"))
       .toMatchInlineSnapshot(`
-        Object {
-          "stderr": "",
-          "stdout": "\\"Replaced!\\";
-        ",
-        }
-      `);
+      {
+        "stderr": "",
+        "stdout": ""Replaced!";
+      ",
+      }
+    `);
   });
 
   it("eager plugin as config string", async () => {
     expect(await run("eager-plugin-as-string.cjs")).toMatchInlineSnapshot(`
-      Object {
+      {
         "stderr": "",
-        "stdout": "\\"Replaced!\\";
+        "stdout": ""Replaced!";
       ",
       }
     `);
@@ -86,7 +86,7 @@ describe("usage from cjs", () => {
 
   it("transformSync", async () => {
     expect(await run("transform-sync.cjs")).toMatchInlineSnapshot(`
-      Object {
+      {
         "stderr": "",
         "stdout": "REPLACE_ME;
       ",
@@ -97,23 +97,23 @@ describe("usage from cjs", () => {
   it("transformSync after dynamic esm import", async () => {
     expect(await run("transform-sync-after-dynamic-esm-import.cjs"))
       .toMatchInlineSnapshot(`
-        Object {
-          "stderr": "",
-          "stdout": "REPLACE_ME;
-        ",
-        }
-      `);
+      {
+        "stderr": "",
+        "stdout": "REPLACE_ME;
+      ",
+      }
+    `);
   });
 
   it("transformSync after static esm import", async () => {
     expect(await run("transform-sync-after-static-esm-import.mjs"))
       .toMatchInlineSnapshot(`
-        Object {
-          "stderr": "",
-          "stdout": "REPLACE_ME;
-        ",
-        }
-      `);
+      {
+        "stderr": "",
+        "stdout": "REPLACE_ME;
+      ",
+      }
+    `);
   });
 });
 
@@ -125,9 +125,9 @@ describe("sync loading of ESM plugins", () => {
         "--experimental-require-module",
       );
       expect(stdout).toMatchInlineSnapshot(`
-            "\\"Replaced!\\";
-            "
-        `);
+        ""Replaced!";
+        "
+      `);
     });
 
     it("top-level await", async () => {

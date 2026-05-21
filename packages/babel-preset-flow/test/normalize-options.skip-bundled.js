@@ -13,7 +13,7 @@ describe("normalize options", () => {
       expect(() =>
         normalizeOptions({ allowDeclareFields: true }),
       ).toThrowErrorMatchingInlineSnapshot(
-        `"@babel/preset-flow: Since Babel 8, \`declare property: A\` is always supported, and the \\"allowDeclareFields\\" option is no longer available. Please remove it from your config."`,
+        `"@babel/preset-flow: Since Babel 8, \`declare property: A\` is always supported, and the "allowDeclareFields" option is no longer available. Please remove it from your config."`,
       );
     });
     it.each(["all"])("should throw when `%p` is not a boolean", optionName => {
@@ -26,7 +26,7 @@ describe("normalize options", () => {
     });
     it("default values", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
-        Object {
+        {
           "all": undefined,
           "experimental_useHermesParser": undefined,
           "ignoreExtensions": undefined,
