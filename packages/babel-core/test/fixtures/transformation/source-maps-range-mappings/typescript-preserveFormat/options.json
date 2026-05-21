@@ -1,0 +1,13 @@
+{
+  "sourceType": "module",
+  "plugins": ["transform-typescript"],
+  "sourceMaps": true,
+  "parserOpts": {
+    "tokens": true
+  },
+  "generatorOpts": {
+    "retainLines": true,
+    "experimental_preserveFormat": true,
+    "sourceMapRanges": true
+  }
+}
