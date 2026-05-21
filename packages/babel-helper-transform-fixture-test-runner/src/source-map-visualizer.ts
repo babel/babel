@@ -8,6 +8,16 @@ const CONTEXT_SIZE = 4;
 const LOC_SIZE = 10;
 const CONTENT_SIZE = 15;
 
+function simpleCodeFramePoint(lines: string[], line: number, col: number) {
+  const start = Math.max(col - CONTEXT_SIZE, 0);
+  const end = Math.min(col + 1 + CONTEXT_SIZE, lines[line - 1].length);
+
+  const code = lines[line - 1].slice(start, end);
+  const loc = `(${line}:${col}) `.padStart(LOC_SIZE, " ");
+  return loc + code + "\n" + " ".repeat(col - start + loc.length) + "^";
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function simpleCodeFrameRange(
   lines: string[],
   line: number,
@@ -67,13 +77,17 @@ export default function visualize(output: string, map: any) {
       prev = mapping;
       return;
     }
+
+    // NOTE: This function has some logic to deal with mappings that cover a
+    // _range_, but currently Babel only supports point-to-point mappings.
+
     const original = {
       from: { line: prev.originalLine!, column: prev.originalColumn! },
-      to: { line: mapping.originalLine!, column: mapping.originalColumn! },
+      to: { line: prev.originalLine!, column: prev.originalColumn! + 1 },
     };
     const generated = {
       from: { line: prev.generatedLine, column: prev.generatedColumn },
-      to: { line: mapping.generatedLine, column: mapping.generatedColumn },
+      to: { line: prev.generatedLine, column: prev.generatedColumn + 1 },
     };
     if (original.from.line !== original.to.line) {
       original.to.line = original.from.line;
@@ -98,41 +112,26 @@ export default function visualize(output: string, map: any) {
     ranges.push({
       original: {
         from: { line: prev!.originalLine, column: prev!.originalColumn! },
-        to: { line: prev!.originalLine, column: Infinity },
+        to: { line: prev!.originalLine, column: prev!.originalColumn! + 1 },
       },
       generated: {
         from: { line: prev!.generatedLine, column: prev!.generatedColumn },
-        to: { line: prev!.generatedLine, column: Infinity },
+        to: { line: prev!.generatedLine, column: prev!.generatedColumn + 1 },
       },
       source: prev!.source!,
     });
   }
 
-  // Multiple generated ranges can map to the same original range. The previous
-  // loop would generate a 0-length original range, so replace its end with the
-  // end of the following range if possible.
-  for (let i = ranges.length - 1; i >= 0; i--) {
-    const { original } = ranges[i];
-    if (
-      original.from.column === original.to.column &&
-      original.to.column < ranges[i + 1].original.to.column
-    ) {
-      original.to.column = ranges[i + 1].original.to.column;
-    }
-  }
-
   const res = ranges.map(({ original, generated, source }) => {
-    const input = simpleCodeFrameRange(
+    const input = simpleCodeFramePoint(
       sourcesLines.get(source)!,
       original.from.line,
       original.from.column,
-      original.to.column,
     );
-    const output = simpleCodeFrameRange(
+    const output = simpleCodeFramePoint(
       outputLines,
       generated.from.line,
       generated.from.column,
-      generated.to.column,
     );
 
     return joinMultiline(
