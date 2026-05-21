@@ -4,7 +4,6 @@ import noUndef from "./rules/no-undef.ts";
 import noUnusedExpressions from "./rules/no-unused-expressions.ts";
 import * as recommendedConfig from "./configs/recommended.ts";
 import * as allConfig from "./configs/all.ts";
-import type { ESLint } from "eslint";
 
 const meta: ESLint.Plugin["meta"] = {
   name: PACKAGE_JSON.name,
