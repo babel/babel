@@ -1,86 +1,14 @@
- (1:0-27) import aDefault from "one"; <--    (3:0-4) var _one
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^
+ (1:0-27) import aDefault from "one"; <--   (3:0-62) var _one = babelHelpers.interopRequireDefault(require("one"));
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
- (1:0-27) import aDefault from "one"; <--    (3:4-8) var _one = b
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^
+ (2:0-29) import { aNamed } from "two"; <--   (4:0-26) var _two = require("two");
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
- (1:0-27) import aDefault from "one"; <--   (3:8-11) _one = babe
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^
+ (3:0-42) import { orig as anAliased } from "three"; <--   (5:0-30) var _three = require("three");
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
- (1:0-27) import aDefault from "one"; <--  (3:11-23) e = babelHelpers.int
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^
-
- (1:0-27) import aDefault from "one"; <--  (3:23-24) pers.inte
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^
-
- (1:0-27) import aDefault from "one"; <--  (3:24-45) ers.interopRequireDefault(req
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^
-
- (1:0-27) import aDefault from "one"; <--  (3:45-46) ault(requ
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^
-
- (1:0-27) import aDefault from "one"; <--  (3:46-53) ult(require("on
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^
-
- (1:0-27) import aDefault from "one"; <--  (3:53-62) uire("one"));
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^
-
- (2:0-29) import { aNamed } from "two"; <--    (4:0-4) var _two
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^
-
- (2:0-29) import { aNamed } from "two"; <--    (4:4-8) var _two = r
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^
-
- (2:0-29) import { aNamed } from "two"; <--   (4:8-11) _two = requ
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^
-
- (2:0-29) import { aNamed } from "two"; <--  (4:11-18) o = require("tw
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^
-
- (2:0-29) import { aNamed } from "two"; <--  (4:18-26) uire("two");
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^
-
- (3:0-42) import { orig as anAliased } from "three"; <--    (5:0-4) var _thr
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^
-
- (3:0-42) import { orig as anAliased } from "three"; <--   (5:4-10) var _three = r
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^
-
- (3:0-42) import { orig as anAliased } from "three"; <--  (5:10-13) hree = requ
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^
-
- (3:0-42) import { orig as anAliased } from "three"; <--  (5:13-20) e = require("th
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^
-
- (3:0-42) import { orig as anAliased } from "three"; <--  (5:20-30) uire("three");
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^
-
- (4:0-35) import * as aNamespace from "four"; <--    (6:0-4) var aNam
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^
-
- (4:0-35) import * as aNamespace from "four"; <--   (6:4-14) var aNamespace = b
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^
-
- (4:0-35) import * as aNamespace from "four"; <--  (6:14-17) pace = babe
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^
-
- (4:0-35) import * as aNamespace from "four"; <--  (6:17-29) e = babelHelpers.int
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^
-
- (4:0-35) import * as aNamespace from "four"; <--  (6:29-30) pers.inte
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^
-
- (4:0-35) import * as aNamespace from "four"; <--  (6:30-52) ers.interopRequireWildcard(req
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^
-
- (4:0-35) import * as aNamespace from "four"; <--  (6:52-53) card(requ
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^
-
- (4:0-35) import * as aNamespace from "four"; <--  (6:53-60) ard(require("fo
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^
-
- (4:0-35) import * as aNamespace from "four"; <--  (6:60-70) uire("four"));
-          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^
+ (4:0-35) import * as aNamespace from "four"; <--   (6:0-70) var aNamespace = babelHelpers.interopRequireWildcard(require("four"));
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   (6:0-7) console.log             <--    (7:0-7) console.log
           ^^^^^^^                                ^^^^^^^
@@ -115,8 +43,11 @@
 (7:11-12) .log(aNam               <--  (8:11-12) .log(_two
               ^                                      ^
 
-(7:12-18) log(aNamed);            <--  (8:12-23) log(_two.aNamed);
-              ^^^^^^                                 ^^^^^^^^^^^
+(7:12-18) log(aNamed);            <--  (8:12-17) log(_two.aNam
+              ^^^^^^                                 ^^^^^
+
+(7:12-18) log(aNamed);            <--  (8:17-23) two.aNamed);
+              ^^^^^^                                 ^^^^^^
 
 (7:18-19) amed);                  <--  (8:23-24) amed);
               ^                                      ^
@@ -211,8 +142,11 @@
 (12:12-18) log(aNamed());         <--  (12:12-16) log((0, _two
                ^^^^^^                                 ^^^^
 
-(12:12-18) log(aNamed());         <--  (12:16-27) (0, _two.aNamed)())
-               ^^^^^^                                 ^^^^^^^^^^^
+(12:12-18) log(aNamed());         <--  (12:16-21) (0, _two.aNam
+               ^^^^^^                                 ^^^^^
+
+(12:12-18) log(aNamed());         <--  (12:21-27) two.aNamed)())
+               ^^^^^^                                 ^^^^^^
 
 (12:18-19) amed());               <--  (12:27-29) amed)());
                ^                                      ^^

@@ -42,13 +42,8 @@ describe("generation", function () {
       Object {
         "file": undefined,
         "ignoreList": Array [],
-        "mappings": "AAAA,SAASA,EAAEA,CAAEC,GAAG,EAAE;EAAEC,OAAO,CAACC,GAAG,CAACF,GAAG,CAAC;AAAE;ACAtCD,EAAE,CAAC,OAAO,CAAC",
-        "names": Array [
-          "hi",
-          "msg",
-          "console",
-          "log",
-        ],
+        "mappings": "AAAA,SAAS,EAAE,CAAE,GAAG,EAAE;EAAE,OAAO,CAAC,GAAG,CAAC,GAAG,CAAC;AAAE;ACAtC,EAAE,CAAC,OAAO,CAAC",
+        "names": Array [],
         "sourceRoot": undefined,
         "sources": Array [
           "a.js",
@@ -83,7 +78,7 @@ describe("generation", function () {
             "column": 9,
             "line": 1,
           },
-          "name": "hi",
+          "name": undefined,
           "original": Object {
             "column": 9,
             "line": 1,
@@ -95,7 +90,7 @@ describe("generation", function () {
             "column": 11,
             "line": 1,
           },
-          "name": "hi",
+          "name": undefined,
           "original": Object {
             "column": 11,
             "line": 1,
@@ -107,7 +102,7 @@ describe("generation", function () {
             "column": 12,
             "line": 1,
           },
-          "name": "msg",
+          "name": undefined,
           "original": Object {
             "column": 13,
             "line": 1,
@@ -143,7 +138,7 @@ describe("generation", function () {
             "column": 2,
             "line": 2,
           },
-          "name": "console",
+          "name": undefined,
           "original": Object {
             "column": 20,
             "line": 1,
@@ -167,7 +162,7 @@ describe("generation", function () {
             "column": 10,
             "line": 2,
           },
-          "name": "log",
+          "name": undefined,
           "original": Object {
             "column": 28,
             "line": 1,
@@ -191,7 +186,7 @@ describe("generation", function () {
             "column": 14,
             "line": 2,
           },
-          "name": "msg",
+          "name": undefined,
           "original": Object {
             "column": 32,
             "line": 1,
@@ -239,7 +234,7 @@ describe("generation", function () {
             "column": 0,
             "line": 4,
           },
-          "name": "hi",
+          "name": undefined,
           "original": Object {
             "column": 0,
             "line": 1,
@@ -881,11 +876,8 @@ describe("generation", function () {
       Object {
         "file": undefined,
         "ignoreList": Array [],
-        "mappings": "AAAA,IAAIA,CAAC,GAAGC,CAAA,IAAAA,CAAA,GAAJA,CAAC",
-        "names": Array [
-          "t",
-          "x",
-        ],
+        "mappings": "AAAA,IAAI,CAAC,GAAG,SAAJ,CAAC",
+        "names": Array [],
         "sourceRoot": undefined,
         "sources": Array [
           "source-maps/arrow-function/input.js",
@@ -921,18 +913,6 @@ describe("generation", function () {
             "column": 0,
             "line": 1,
           },
-          "name": "a",
-          "original": Object {
-            "column": 0,
-            "line": 1,
-          },
-          "source": "input.js",
-        },
-        Object {
-          "generated": Object {
-            "column": 1,
-            "line": 1,
-          },
           "name": undefined,
           "original": Object {
             "column": 0,
@@ -950,6 +930,70 @@ describe("generation", function () {
           "source": undefined,
         },
       ]
+    `);
+  });
+
+  it("source maps should emit names for renamed identifiers", () => {
+    const input = `
+      let a = 1;
+      let b = 2;
+      function c() {}
+      function d() {}
+      class C {
+        #e() {};
+        #f() {};
+      }
+    `;
+    const ast = parse(input);
+    ast.program.body[0].declarations[0].id.name = "x";
+    ast.program.body[2].id.name = "y";
+    ast.program.body[4].body.body[0].key.id.name = "z";
+
+    const out = generate(
+      ast,
+      { sourceMaps: true, sourceFileName: "input.js" },
+      input,
+    );
+
+    expect(out.code).toMatchInlineSnapshot(`
+      "let x = 1;
+      let b = 2;
+      function y() {}
+      function d() {}
+      class C {
+        #z() {}
+        #f() {}
+      }"
+    `);
+    expect(out.map).toMatchInlineSnapshot(`
+      Object {
+        "file": undefined,
+        "ignoreList": Array [],
+        "mappings": "AACM,IAAIA,CAAC,GAAG,CAAC;AACT,IAAI,CAAC,GAAG,CAAC;AACT,SAASC,CAACA,CAAA,EAAG,CAAC;AACd,SAAS,CAAC,GAAG,CAAC;AACd,MAAM,CAAC,CAAC;EACN,CAACC,CAACC,CAAA,EAAG,CAAC;EACN,CAAC,CAAC,GAAG,CAAC;AACR",
+        "names": Array [
+          "a",
+          "c",
+          "e",
+          "#e",
+        ],
+        "sourceRoot": undefined,
+        "sources": Array [
+          "input.js",
+        ],
+        "sourcesContent": Array [
+          "
+            let a = 1;
+            let b = 2;
+            function c() {}
+            function d() {}
+            class C {
+              #e() {};
+              #f() {};
+            }
+          ",
+        ],
+        "version": 3,
+      }
     `);
   });
 });

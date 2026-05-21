@@ -278,6 +278,10 @@ export function _shouldPrintArrowParamsParens(
   return false;
 }
 
+function isRenamedIdentifier(id: t.Identifier) {
+  return !!id.loc?.identifierName && id.loc.identifierName !== id.name;
+}
+
 function _getFuncIdName(
   this: Printer,
   idNode: t.Expression | t.PrivateName,
@@ -310,23 +314,23 @@ function _getFuncIdName(
     }
   }
 
-  if (!id) return;
+  if (!id?.loc) return;
 
   let nameInfo;
 
   if (id.type === "Identifier") {
-    nameInfo = {
-      pos: id.loc?.start,
-      name: id.loc?.identifierName || id.name,
-    };
+    if (!isRenamedIdentifier(id)) return;
+    nameInfo = { pos: id.loc.start, name: id.loc.identifierName! };
   } else if (id.type === "PrivateName") {
+    if (!isRenamedIdentifier(id.id)) return;
     nameInfo = {
-      pos: id.loc?.start,
-      name: "#" + id.id.name,
+      pos: id.loc.start,
+      name: "#" + id.id.loc!.identifierName!,
     };
   } else if (id.type === "StringLiteral") {
+    // TODO: Return empty when not renamed
     nameInfo = {
-      pos: id.loc?.start,
+      pos: id.loc.start,
       name: id.value,
     };
   }
