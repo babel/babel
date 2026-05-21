@@ -17,6 +17,9 @@
       "@babel/compat-data/plugin-bugfixes": [
         "./packages/babel-compat-data/data/plugin-bugfixes.json"
       ],
+      "@babel/compat-data/package.json": [
+        "./packages/babel-compat-data/package.json"
+      ],
       "@babel/core": [
         "./packages/babel-core/src"
       ],
