@@ -33,6 +33,7 @@ export default class SourceMap {
 
   #mappingsBuffer0: Parameters<typeof maybeAddMapping>[1] | null = null;
   #mappingsBuffer1: Parameters<typeof maybeAddMapping>[1] | null = null;
+  #droppedMappingForRange = false;
 
   #allowRangeMappings: boolean;
 
@@ -225,14 +226,17 @@ export default class SourceMap {
       // Extend the open range: drop the old close, keep the new one as the
       // range close so the pair (buffer0, buffer1) still spans range candidate code.
       this.#mappingsBuffer1 = newMapping;
+      this.#droppedMappingForRange = true;
     } else {
       // Only the range-start segment carries the range marker; the next
-      // committed segment is the implicit range close.
-      this.#mappingsBuffer0.isRange = true;
+      // committed segment is the implicit range close. Only mark the mapping
+      // as range if it actually allowed us to drop other mappings.
+      if (this.#droppedMappingForRange) this.#mappingsBuffer0.isRange = true;
       maybeAddMapping(this._map, this.#mappingsBuffer0);
       maybeAddMapping(this._map, this.#mappingsBuffer1);
       this.#mappingsBuffer0 = newMapping;
       this.#mappingsBuffer1 = null;
+      this.#droppedMappingForRange = false;
     }
   }
 
