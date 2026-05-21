@@ -1,13 +1,10 @@
 import { expect, it, describe } from "tstyche";
-import type { Linter, Rule } from "eslint";
+import type { ESLint, Linter, Rule } from "eslint";
 import plugin from "../src/index.ts";
 
 describe("babel-eslint-plugin", () => {
   it("meta should be valid", () => {
-    expect(plugin.meta).type.toBeAssignableTo<{
-      name: string;
-      version: string;
-    }>();
+    expect(plugin.meta).type.toBeAssignableTo<ESLint.Plugin["meta"]>();
   });
   it("rules should be valid", () => {
     expect(plugin.rules).type.toBeAssignableTo<
