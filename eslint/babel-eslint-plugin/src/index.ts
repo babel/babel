@@ -11,7 +11,7 @@ const meta: ESLint.Plugin["meta"] = {
   version: PACKAGE_JSON.version,
 };
 
-type Rules = "new-cap" | "no-undef" | "no-unused-expressions";
+type Rules = "new-cap" | "no-empty" | "no-undef" | "no-unused-expressions";
 
 const rules: Record<Rules, Rule.RuleModule> = {
   "new-cap": newCap,
