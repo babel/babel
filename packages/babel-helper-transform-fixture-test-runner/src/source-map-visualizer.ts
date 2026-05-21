@@ -3,6 +3,7 @@ import {
   eachMapping,
   type EachMapping,
 } from "@jridgewell/trace-mapping";
+import { decodeRangeMappings } from "@jridgewell/sourcemap-codec";
 
 const CONTEXT_SIZE = 4;
 const LOC_SIZE = 10;
@@ -17,24 +18,24 @@ function simpleCodeFramePoint(lines: string[], line: number, col: number) {
   return loc + code + "\n" + " ".repeat(col - start + loc.length) + "^";
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function simpleCodeFrameRange(
   lines: string[],
-  line: number,
+  lineStart: number,
   colStart: number,
+  lineEnd: number,
   colEnd: number,
 ) {
-  colEnd = Math.min(colEnd, lines[line - 1].length);
+  colEnd = Math.min(colEnd, lines[lineStart - 1].length);
 
   const start = Math.max(colStart - CONTEXT_SIZE, 0);
-  const end = Math.min(colEnd + CONTEXT_SIZE, lines[line - 1].length);
+  const end = Math.min(colEnd + CONTEXT_SIZE, lines[lineStart - 1].length);
 
   const markerSize = colEnd - colStart;
   const marker = markerSize === 0 ? "><" : " " + "^".repeat(markerSize);
   const markerPadding = colStart - start - 1;
 
-  const code = lines[line - 1].slice(start, end);
-  const loc = `(${line}:${colStart}-${colEnd}) `.padStart(LOC_SIZE, " ");
+  const code = lines[lineStart - 1].slice(start, end);
+  const loc = `(${lineStart}:${colStart}-${colEnd}) `.padStart(LOC_SIZE, " ");
   return loc + code + "\n" + " ".repeat(markerPadding + loc.length) + marker;
 }
 
@@ -65,43 +66,79 @@ export default function visualize(output: string, map: any) {
   const outputLines = output.split("\n");
 
   type Pos = { line: number; column: number };
-  type Range = { from: Pos; to: Pos };
+  type Range = { from: Pos; to: Pos | null };
   const ranges: {
     original: Range;
     generated: Range;
     source: string;
   }[] = [];
   let prev: EachMapping | null = null;
+  let prevIsNewLine = false;
+  let index: number = 0;
+
+  const rangeMappings = map.rangeMappings
+    ? decodeRangeMappings(map.rangeMappings)
+    : null;
+
   eachMapping(new TraceMap(map), mapping => {
     if (prev === null) {
       prev = mapping;
+      prevIsNewLine = true;
       return;
+    }
+
+    if (prevIsNewLine) {
+      index = 0;
+    } else {
+      index++;
     }
 
     // NOTE: This function has some logic to deal with mappings that cover a
     // _range_, but currently Babel only supports point-to-point mappings.
 
-    const original = {
+    const original: Range = {
       from: { line: prev.originalLine!, column: prev.originalColumn! },
-      to: { line: prev.originalLine!, column: prev.originalColumn! + 1 },
+      to: null,
     };
-    const generated = {
+    const generated: Range = {
       from: { line: prev.generatedLine, column: prev.generatedColumn },
-      to: { line: prev.generatedLine, column: prev.generatedColumn + 1 },
+      to: null,
     };
-    if (original.from.line !== original.to.line) {
-      original.to.line = original.from.line;
-      original.to.column = Infinity;
-    } else if (original.to.column < original.from.column) {
-      original.to.column = original.from.column;
-    }
-    if (generated.from.line !== generated.to.line) {
-      generated.to.line = generated.from.line;
-      generated.to.column = Infinity;
-    } else if (generated.to.column < generated.from.column) {
-      generated.to.column = generated.from.column;
+
+    if (rangeMappings?.[prev.generatedLine - 1]?.includes(index)) {
+      original.to = {
+        line: mapping.originalLine!,
+        column: mapping.originalColumn!,
+      };
+      generated.to = {
+        line:
+          generated.from.line + (mapping.generatedLine - prev.generatedLine),
+        column: mapping.generatedColumn,
+      };
+      if (mapping.generatedLine === prev.generatedLine) {
+        generated.to.column =
+          generated.from.column +
+          (mapping.generatedColumn - prev.generatedColumn);
+      } else {
+        generated.to.column = mapping.generatedColumn;
+      }
+
+      if (original.from.line !== original.to.line) {
+        original.to.line = original.from.line;
+        original.to.column = Infinity;
+      } else if (original.to.column < original.from.column) {
+        original.to.column = original.from.column;
+      }
+      if (generated.from.line !== generated.to.line) {
+        generated.to.line = generated.from.line;
+        generated.to.column = Infinity;
+      } else if (generated.to.column < generated.from.column) {
+        generated.to.column = generated.from.column;
+      }
     }
     ranges.push({ original, generated, source: prev.source! });
+
+    prevIsNewLine = mapping.generatedLine !== prev?.generatedLine;
     prev = mapping;
   });
   // TODO(@nicolo-ribaudo): The "input source map complex" fixture in
@@ -112,27 +149,47 @@ export default function visualize(output: string, map: any) {
     ranges.push({
       original: {
         from: { line: prev!.originalLine, column: prev!.originalColumn! },
-        to: { line: prev!.originalLine, column: prev!.originalColumn! + 1 },
+        to: null,
       },
       generated: {
         from: { line: prev!.generatedLine, column: prev!.generatedColumn },
-        to: { line: prev!.generatedLine, column: prev!.generatedColumn + 1 },
+        to: null,
       },
       source: prev!.source!,
     });
   }
 
   const res = ranges.map(({ original, generated, source }) => {
-    const input = simpleCodeFramePoint(
-      sourcesLines.get(source)!,
-      original.from.line,
-      original.from.column,
-    );
-    const output = simpleCodeFramePoint(
-      outputLines,
-      generated.from.line,
-      generated.from.column,
-    );
+    let input;
+    let output;
+
+    if (original.to) {
+      input = simpleCodeFrameRange(
+        sourcesLines.get(source)!,
+        original.from.line,
+        original.from.column,
+        original.to.line,
+        original.to.column,
+      );
+      output = simpleCodeFrameRange(
+        outputLines,
+        generated.from.line,
+        generated.from.column,
+        generated.to!.line,
+        generated.to!.column,
+      );
+    } else {
+      input = simpleCodeFramePoint(
+        sourcesLines.get(source)!,
+        original.from.line,
+        original.from.column,
+      );
+      output = simpleCodeFramePoint(
+        outputLines,
+        generated.from.line,
+        generated.from.column,
+      );
+    }
 
     return joinMultiline(
       joinMultiline(

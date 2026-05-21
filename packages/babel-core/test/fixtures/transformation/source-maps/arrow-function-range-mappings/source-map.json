@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "names": [],
+  "sources": [
+    "source-maps/arrow-function-range-mappings/input.js"
+  ],
+  "sourcesContent": [
+    "var t = x => x * x;"
+  ],
+  "mappings": "AAAA,QAAQ,SAAJ,CAAC,CAAG,CAAC;EAAA,OAAI,KAAK",
+  "rangeMappings": "ACC;B"
+}
