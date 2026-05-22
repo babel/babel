@@ -171,7 +171,7 @@ export default declare((api, options: Options) => {
   return {
     name: "transform-react-constant-elements",
 
-    visitor: {
+    visitor: api.traverse.explode({
       "JSXElement|JSXFragment"(path: NodePath<t.JSXElement | t.JSXFragment>) {
         if (HOISTED.has(path.node)) return;
         let mutablePropsAllowed = false;
@@ -257,6 +257,6 @@ export default declare((api, options: Options) => {
 
         path.replaceWith(replacement);
       },
-    },
+    }),
   };
 });

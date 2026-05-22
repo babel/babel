@@ -46,7 +46,7 @@
     "@babel/template": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",
-    "@types/gensync": "^1.0.0",
+    "@types/gensync": "^1.0.5",
     "convert-source-map": "^2.0.0",
     "find-up-simple": "^1.0.1",
     "gensync": "^1.0.0-beta.2",

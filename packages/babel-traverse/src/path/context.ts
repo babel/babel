@@ -4,6 +4,7 @@ import { SHOULD_SKIP, SHOULD_STOP } from "./index.ts";
 import { _markRemoved } from "./removal.ts";
 import type TraversalContext from "../context.ts";
 import type NodePath from "./index.ts";
+import type { ExplodedVisitor, TraverseOptions } from "../types.ts";
 import * as t from "@babel/types";
 
 export function _call(this: NodePath, fns?: Function[]): boolean {
@@ -82,7 +83,7 @@ export function _forceSetScope(this: NodePath) {
   this.scope?.init();
 }
 
-export function setScope(this: NodePath) {
+export function setScope(this: NodePath<t.Node | null>) {
   if (this.opts?.noScope) return;
 
   let path = this.parentPath;
@@ -105,13 +106,14 @@ export function setScope(this: NodePath) {
     path = path.parentPath;
   }
 
+  // @ts-expect-error getScope does not accept NodePath<null> as this
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
   this.scope = this.getScope(target!);
   this.scope?.init();
 }
 
 export function setContext<S = unknown>(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   context?: TraversalContext<S>,
 ) {
   if (this.skipKeys != null) {
@@ -121,10 +123,10 @@ export function setContext<S = unknown>(
   this._traverseFlags = 0;
 
   if (context) {
-    this.context = context;
+    this.context = context as TraversalContext;
     this.state = context.state;
     // Discard the S type parameter from context.opts
-    this.opts = context.opts;
+    this.opts = context.opts as TraverseOptions & ExplodedVisitor<unknown>;
   }
 
   setScope.call(this);
@@ -138,7 +140,7 @@ export function setContext<S = unknown>(
  * for the new values.
  */
 
-export function resync(this: NodePath) {
+export function resync(this: NodePath<t.Node | null>) {
   if (this.removed) return;
 
   _resyncParent.call(this);
@@ -147,13 +149,13 @@ export function resync(this: NodePath) {
   //this._resyncRemoved();
 }
 
-export function _resyncParent(this: NodePath) {
+export function _resyncParent(this: NodePath<t.Node | null>) {
   if (this.parentPath) {
     this.parent = this.parentPath.node;
   }
 }
 
-export function _resyncKey(this: NodePath) {
+export function _resyncKey(this: NodePath<t.Node | null>) {
   if (!this.container) return;
 
   if (
@@ -188,7 +190,7 @@ export function _resyncKey(this: NodePath) {
   this.key = null;
 }
 
-export function _resyncList(this: NodePath) {
+export function _resyncList(this: NodePath<t.Node | null>) {
   if (!this.parent || !this.inList) return;
 
   const newContainer =
@@ -200,7 +202,7 @@ export function _resyncList(this: NodePath) {
   this.container = newContainer || null;
 }
 
-export function _resyncRemoved(this: NodePath) {
+export function _resyncRemoved(this: NodePath<t.Node | null>) {
   if (
     this.key == null ||
     !this.container ||
@@ -211,7 +213,7 @@ export function _resyncRemoved(this: NodePath) {
   }
 }
 
-export function popContext(this: NodePath) {
+export function popContext(this: NodePath<t.Node | null>) {
   this.contexts.pop();
   if (this.contexts.length > 0) {
     this.setContext(this.contexts[this.contexts.length - 1]);
@@ -220,16 +222,19 @@ export function popContext(this: NodePath) {
   }
 }
 
-export function pushContext(this: NodePath, context: TraversalContext) {
+export function pushContext(
+  this: NodePath<t.Node | null>,
+  context: TraversalContext,
+) {
   this.contexts.push(context);
   this.setContext(context);
 }
 
 export function setup(
   this: NodePath,
-  parentPath: NodePath | undefined,
+  parentPath: NodePath | undefined | null,
   container: t.Node | t.Node[],
-  listKey: string | undefined,
+  listKey: string | undefined | null,
   key: string | number,
 ) {
   this.listKey = listKey;
@@ -239,12 +244,12 @@ export function setup(
   setKey.call(this, key);
 }
 
-export function setKey(this: NodePath, key: string | number) {
+export function setKey(this: NodePath<t.Node | null>, key: string | number) {
   this.key = key;
   this.node =
     // @ts-expect-error this.key must present in this.container
     this.container[this.key];
-  this.type = this.node?.type;
+  this.type = this.node?.type ?? null;
 }
 
 export function requeue(this: NodePath<t.Node | null>, pathToQueue = this) {
@@ -279,7 +284,7 @@ export function requeueComputedKeyAndDecorators(
   }
 }
 
-export function _getQueueContexts(this: NodePath) {
+export function _getQueueContexts(this: NodePath<t.Node | null>) {
   let path = this;
   let contexts = this.contexts;
   while (!contexts.length) {

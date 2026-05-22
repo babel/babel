@@ -16,7 +16,7 @@ export function _params(
   this.print(node.typeParameters);
 
   if (idNode !== undefined || parentNode !== undefined) {
-    const nameInfo = _getFuncIdName.call(this, idNode, parentNode);
+    const nameInfo = _getFuncIdName.call(this, idNode!, parentNode!);
     if (nameInfo) {
       this.sourceIdentifierName(nameInfo.name, nameInfo.pos);
     }
@@ -284,10 +284,18 @@ function isRenamedIdentifier(id: t.Identifier) {
 
 function _getFuncIdName(
   this: Printer,
-  idNode: t.Expression | t.PrivateName,
-  parent: ParentsOf<t.Function | t.TSDeclareMethod | t.TSDeclareFunction>,
+  idNode?: t.Expression | t.PrivateName | null,
+  parent?: ParentsOf<
+    t.Function | t.TSDeclareMethod | t.TSDeclareFunction
+  > | null,
 ) {
-  let id: t.Expression | t.PrivateName | t.LVal | t.VoidPattern = idNode;
+  let id:
+    | t.Expression
+    | t.PrivateName
+    | t.LVal
+    | t.VoidPattern
+    | undefined
+    | null = idNode;
 
   if (!id && parent) {
     const parentType = parent.type;

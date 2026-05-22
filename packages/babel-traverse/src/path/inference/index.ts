@@ -52,7 +52,7 @@ const typeAnnotationInferringNodes = new WeakSet();
  * todo: split up this method
  */
 
-export function _getTypeAnnotation(this: NodePath): any {
+export function _getTypeAnnotation(this: NodePath<t.Node | null>): any {
   const node = this.node;
 
   if (!node) {

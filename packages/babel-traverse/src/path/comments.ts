@@ -23,8 +23,8 @@ export function shareCommentsWithSiblings(this: NodePath<t.Node | null>) {
 
   const prev = this.getSibling(this.key! - 1);
   const next = this.getSibling(this.key! + 1);
-  const hasPrev = Boolean(prev.node);
-  const hasNext = Boolean(next.node);
+  const hasPrev = !!prev.node;
+  const hasNext = !!next.node;
 
   if (hasPrev) {
     if (leading) {

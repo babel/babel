@@ -17,7 +17,7 @@ export default declare(api => {
   return {
     name: "transform-json-strings",
     manipulateOptions: undefined,
-    visitor: {
+    visitor: api.traverse.explode({
       "DirectiveLiteral|StringLiteral"({
         node,
       }: NodePath<t.DirectiveLiteral | t.StringLiteral>) {
@@ -26,6 +26,6 @@ export default declare(api => {
 
         extra.raw = (extra.raw as string).replace(regex, replace);
       },
-    },
+    }),
   };
 });

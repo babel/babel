@@ -148,8 +148,8 @@ const PRESET_DESCRIPTOR_CACHE = new WeakMap<
   WeakMap<object, UnloadedDescriptor<PresetAPI>[]>
 >();
 const createCachedPresetDescriptors = makeWeakCacheSync(
-  (items: PresetItem[], cache: CacheConfigurator<string>) => {
-    const dirname = cache.using(dir => dir);
+  (items: PresetItem[], cache?: CacheConfigurator<string>) => {
+    const dirname = cache!.using(dir => dir);
     return makeStrongCacheSync((alias: string) =>
       makeStrongCache(function* (
         passPerPreset: boolean,
@@ -176,8 +176,8 @@ const PLUGIN_DESCRIPTOR_CACHE = new WeakMap<
   WeakMap<object, UnloadedDescriptor<PluginAPI>[]>
 >();
 const createCachedPluginDescriptors = makeWeakCacheSync(
-  (items: PluginItem[], cache: CacheConfigurator<string>) => {
-    const dirname = cache.using(dir => dir);
+  (items: PluginItem[], cache?: CacheConfigurator<string>) => {
+    const dirname = cache!.using(dir => dir);
     return makeStrongCache(function* (
       alias: string,
     ): Handler<UnloadedDescriptor<PluginAPI>[]> {

@@ -11,7 +11,7 @@ export default pluginToggleBooleanFlag;
  * them in attributes by replacing them with <if true> || <if false>
  */
 function pluginToggleBooleanFlag(
-  { types: t, template }: PluginAPI,
+  { types: t, template, traverse }: PluginAPI,
   { name, value }: { name: string; value: boolean | null }
 ): PluginObject {
   if (typeof value !== "boolean" && value !== null) {
@@ -87,7 +87,7 @@ function pluginToggleBooleanFlag(
   }
 
   return {
-    visitor: {
+    visitor: traverse.explode({
       "IfStatement|ConditionalExpression"(
         path: NodePath<t.IfStatement | t.ConditionalExpression>
       ) {
@@ -219,6 +219,6 @@ function pluginToggleBooleanFlag(
           path.remove();
         }
       },
-    },
+    }),
   };
 }

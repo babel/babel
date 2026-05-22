@@ -6,227 +6,235 @@ import { Emitter } from "./emit.ts";
 import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod.ts";
 import * as util from "./util.ts";
 import type { NodePath, PluginPass, Visitor } from "@babel/core";
-import { types as t } from "@babel/core";
+import { types as t, traverse } from "@babel/core";
 
-export const getVisitor = (): Visitor<PluginPass> => ({
-  Method(path, state) {
-    const node = path.node;
-
-    if (!shouldRegenerate(node, state)) return;
-
-    const container = t.functionExpression(
-      null,
-      [],
-      t.cloneNode(node.body, false),
-      node.generator,
-      node.async,
-    );
-
-    path
-      .get("body")
-      .set("body", [t.returnStatement(t.callExpression(container, []))]);
-
-    // Regardless of whether or not the wrapped function is a an async method
-    // or generator the outer function should not be
-    node.async = false;
-    node.generator = false;
-
-    // Unwrap the wrapper IIFE's environment so super and this and such still work.
-    (
-      path.get("body.body.0.argument.callee") as NodePath<t.FunctionExpression>
-    ).unwrapFunctionEnvironment();
-  },
-  Function: {
-    exit(
-      path: NodePath<Exclude<t.Function, t.ArrowFunctionExpression>>,
-      state,
-    ) {
-      let node = path.node;
+export const getVisitor = (): Visitor<PluginPass> =>
+  traverse.explode({
+    Method(path, state) {
+      const node = path.node;
 
       if (!shouldRegenerate(node, state)) return;
 
-      // if this is an ObjectMethod, we need to convert it to an ObjectProperty
-      path = replaceShorthandObjectMethod(path) as any;
-      node = path.node;
-
-      const contextId = path.scope.generateUidIdentifier("context");
-      const argsId = path.scope.generateUidIdentifier("args");
-
-      path.ensureBlock();
-      const bodyBlockPath = path.get("body");
-
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      bodyBlockPath.traverse(functionSentVisitor, {
-        context: contextId,
-      });
-
-      const outerBody: any[] = [];
-      const innerBody: any[] = [];
-
-      bodyBlockPath.get("body").forEach(function (childPath: any) {
-        const node = childPath.node;
-        if (
-          t.isExpressionStatement(node) &&
-          t.isStringLiteral(node.expression)
-        ) {
-          // Babylon represents directives like "use strict" as elements
-          // of a bodyBlockPath.node.directives array, but they could just
-          // as easily be represented (by other parsers) as traditional
-          // string-literal-valued expression statements, so we need to
-          // handle that here. (#248)
-          outerBody.push(node);
-        } else if (node?._blockHoist != null) {
-          outerBody.push(node);
-        } else {
-          innerBody.push(node);
-        }
-      });
-
-      if (outerBody.length > 0) {
-        // Only replace the inner body if we actually hoisted any statements
-        // to the outer body.
-        bodyBlockPath.node.body = innerBody;
-      }
-
-      const outerFnExpr = getOuterFnExpr(
-        this,
-        path as NodePath<
-          Exclude<t.Function, t.ArrowFunctionExpression | t.Method>
-        >,
-      );
-      // Note that getOuterFnExpr has the side-effect of ensuring that the
-      // function has a name (so node.id will always be an Identifier), even
-      // if a temporary name has to be synthesized.
-      t.assertIdentifier(
-        (node as t.FunctionDeclaration | t.FunctionExpression).id,
+      const container = t.functionExpression(
+        null,
+        [],
+        t.cloneNode(node.body, false),
+        node.generator,
+        node.async,
       );
 
-      // Turn all declarations into vars, and replace the original
-      // declarations with equivalent assignment expressions.
-      const vars = hoist(
-        path as NodePath<t.FunctionDeclaration | t.FunctionExpression>,
-      );
+      path
+        .get("body")
+        .set("body", [t.returnStatement(t.callExpression(container, []))]);
 
-      const context = {
-        usesThis: false,
-        usesArguments: false,
-        getArgsId: () => t.cloneNode(argsId),
-      };
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      path.traverse(argumentsThisVisitor, context);
+      // Regardless of whether or not the wrapped function is a an async method
+      // or generator the outer function should not be
+      node.async = false;
+      node.generator = false;
 
-      if (context.usesArguments) {
-        vars.push(
-          t.variableDeclarator(t.cloneNode(argsId), t.identifier("arguments")),
-        );
-      }
-
-      const emitter = new Emitter(contextId, path.scope, vars, this);
-      emitter.explode(path.get("body"));
-
-      if (vars.length > 0) {
-        outerBody.push(t.variableDeclaration("var", vars));
-      }
-
-      const wrapArgs: any[] = [emitter.getContextFunction()];
-      const tryLocsList = emitter.getTryLocsList();
-
-      if (node.generator) {
-        wrapArgs.push(outerFnExpr);
-      } else if (context.usesThis || tryLocsList || node.async) {
-        // Async functions that are not generators don't care about the
-        // outer function because they don't need it to be marked and don't
-        // inherit from its .prototype.
-        wrapArgs.push(t.nullLiteral());
-      }
-      if (context.usesThis) {
-        wrapArgs.push(t.thisExpression());
-      } else if (tryLocsList || node.async) {
-        wrapArgs.push(t.nullLiteral());
-      }
-      if (tryLocsList) {
-        wrapArgs.push(tryLocsList);
-      } else if (node.async) {
-        wrapArgs.push(t.nullLiteral());
-      }
-
-      if (node.async) {
-        // Rename any locally declared "Promise" variable,
-        // to use the global one.
-        let currentScope = path.scope;
-        do {
-          if (currentScope.hasOwnBinding("Promise"))
-            currentScope.rename("Promise");
-        } while ((currentScope = currentScope.parent!));
-
-        wrapArgs.push(t.identifier("Promise"));
-      }
-
-      const wrapCall = t.callExpression(
-        !node.async
-          ? t.memberExpression(
-              t.callExpression(this.addHelper("regenerator"), []),
-              t.identifier("w"),
-            )
-          : node.generator
-            ? this.addHelper("regeneratorAsyncGen")
-            : this.addHelper("regeneratorAsync"),
-        wrapArgs,
-      );
-      outerBody.push(t.returnStatement(wrapCall));
-      node.body = t.blockStatement(outerBody);
-      // We injected a few new variable declarations (for every hoisted var),
-      // so we need to add them to the scope.
-      path.get("body.body").forEach((p: any) => p.scope.registerDeclaration(p));
-
-      const oldDirectives = bodyBlockPath.node.directives;
-      if (oldDirectives) {
-        // Babylon represents directives like "use strict" as elements of
-        // a bodyBlockPath.node.directives array. (#248)
-        node.body.directives = oldDirectives;
-      }
-
-      const wasGeneratorFunction = node.generator;
-      if (wasGeneratorFunction) {
-        node.generator = false;
-      }
-
-      if (node.async) {
-        node.async = false;
-      }
-
-      if (wasGeneratorFunction && t.isExpression(node)) {
-        path.replaceWith(
-          t.callExpression(
-            t.memberExpression(
-              t.callExpression(this.addHelper("regenerator"), []),
-              t.identifier("m"),
-            ),
-            [node],
-          ),
-        );
-        path.addComment("leading", "#__PURE__");
-      }
-
-      const insertedLocs = emitter.getInsertedLocs();
-
-      path.traverse({
-        NumericLiteral(path: any) {
-          if (!insertedLocs.has(path.node)) {
-            return;
-          }
-
-          path.replaceWith(t.numericLiteral(path.node.value));
-        },
-      });
-
-      // Generators are processed in 'exit' handlers so that regenerator only has to run on
-      // an ES5 AST, but that means traversal will not pick up newly inserted references
-      // to things like 'regeneratorRuntime'. To avoid this, we explicitly requeue.
-      path.requeue();
+      // Unwrap the wrapper IIFE's environment so super and this and such still work.
+      (
+        path.get(
+          "body.body.0.argument.callee",
+        ) as NodePath<t.FunctionExpression>
+      ).unwrapFunctionEnvironment();
     },
-  },
-});
+    Function: {
+      exit(_path, state) {
+        let path = _path as NodePath<
+          Exclude<t.Function, t.ArrowFunctionExpression>
+        >;
+        let node = path.node;
+
+        if (!shouldRegenerate(node, state)) return;
+
+        // if this is an ObjectMethod, we need to convert it to an ObjectProperty
+        path = replaceShorthandObjectMethod(path) as any;
+        node = path.node;
+
+        const contextId = path.scope.generateUidIdentifier("context");
+        const argsId = path.scope.generateUidIdentifier("args");
+
+        path.ensureBlock();
+        const bodyBlockPath = path.get("body");
+
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        bodyBlockPath.traverse(functionSentVisitor, {
+          context: contextId,
+        });
+
+        const outerBody: any[] = [];
+        const innerBody: any[] = [];
+
+        bodyBlockPath.get("body").forEach(function (childPath: any) {
+          const node = childPath.node;
+          if (
+            t.isExpressionStatement(node) &&
+            t.isStringLiteral(node.expression)
+          ) {
+            // Babylon represents directives like "use strict" as elements
+            // of a bodyBlockPath.node.directives array, but they could just
+            // as easily be represented (by other parsers) as traditional
+            // string-literal-valued expression statements, so we need to
+            // handle that here. (#248)
+            outerBody.push(node);
+          } else if (node?._blockHoist != null) {
+            outerBody.push(node);
+          } else {
+            innerBody.push(node);
+          }
+        });
+
+        if (outerBody.length > 0) {
+          // Only replace the inner body if we actually hoisted any statements
+          // to the outer body.
+          bodyBlockPath.node.body = innerBody;
+        }
+
+        const outerFnExpr = getOuterFnExpr(
+          this,
+          path as NodePath<
+            Exclude<t.Function, t.ArrowFunctionExpression | t.Method>
+          >,
+        );
+        // Note that getOuterFnExpr has the side-effect of ensuring that the
+        // function has a name (so node.id will always be an Identifier), even
+        // if a temporary name has to be synthesized.
+        t.assertIdentifier(
+          (node as t.FunctionDeclaration | t.FunctionExpression).id,
+        );
+
+        // Turn all declarations into vars, and replace the original
+        // declarations with equivalent assignment expressions.
+        const vars = hoist(
+          path as NodePath<t.FunctionDeclaration | t.FunctionExpression>,
+        );
+
+        const context = {
+          usesThis: false,
+          usesArguments: false,
+          getArgsId: () => t.cloneNode(argsId),
+        };
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        path.traverse(argumentsThisVisitor, context);
+
+        if (context.usesArguments) {
+          vars.push(
+            t.variableDeclarator(
+              t.cloneNode(argsId),
+              t.identifier("arguments"),
+            ),
+          );
+        }
+
+        const emitter = new Emitter(contextId, path.scope, vars, this);
+        emitter.explode(path.get("body"));
+
+        if (vars.length > 0) {
+          outerBody.push(t.variableDeclaration("var", vars));
+        }
+
+        const wrapArgs: any[] = [emitter.getContextFunction()];
+        const tryLocsList = emitter.getTryLocsList();
+
+        if (node.generator) {
+          wrapArgs.push(outerFnExpr);
+        } else if (context.usesThis || tryLocsList || node.async) {
+          // Async functions that are not generators don't care about the
+          // outer function because they don't need it to be marked and don't
+          // inherit from its .prototype.
+          wrapArgs.push(t.nullLiteral());
+        }
+        if (context.usesThis) {
+          wrapArgs.push(t.thisExpression());
+        } else if (tryLocsList || node.async) {
+          wrapArgs.push(t.nullLiteral());
+        }
+        if (tryLocsList) {
+          wrapArgs.push(tryLocsList);
+        } else if (node.async) {
+          wrapArgs.push(t.nullLiteral());
+        }
+
+        if (node.async) {
+          // Rename any locally declared "Promise" variable,
+          // to use the global one.
+          let currentScope = path.scope;
+          do {
+            if (currentScope.hasOwnBinding("Promise"))
+              currentScope.rename("Promise");
+          } while ((currentScope = currentScope.parent!));
+
+          wrapArgs.push(t.identifier("Promise"));
+        }
+
+        const wrapCall = t.callExpression(
+          !node.async
+            ? t.memberExpression(
+                t.callExpression(this.addHelper("regenerator"), []),
+                t.identifier("w"),
+              )
+            : node.generator
+              ? this.addHelper("regeneratorAsyncGen")
+              : this.addHelper("regeneratorAsync"),
+          wrapArgs,
+        );
+        outerBody.push(t.returnStatement(wrapCall));
+        node.body = t.blockStatement(outerBody);
+        // We injected a few new variable declarations (for every hoisted var),
+        // so we need to add them to the scope.
+        path
+          .get("body.body")
+          .forEach((p: any) => p.scope.registerDeclaration(p));
+
+        const oldDirectives = bodyBlockPath.node.directives;
+        if (oldDirectives) {
+          // Babylon represents directives like "use strict" as elements of
+          // a bodyBlockPath.node.directives array. (#248)
+          node.body.directives = oldDirectives;
+        }
+
+        const wasGeneratorFunction = node.generator;
+        if (wasGeneratorFunction) {
+          node.generator = false;
+        }
+
+        if (node.async) {
+          node.async = false;
+        }
+
+        if (wasGeneratorFunction && t.isExpression(node)) {
+          path.replaceWith(
+            t.callExpression(
+              t.memberExpression(
+                t.callExpression(this.addHelper("regenerator"), []),
+                t.identifier("m"),
+              ),
+              [node],
+            ),
+          );
+          path.addComment("leading", "#__PURE__");
+        }
+
+        const insertedLocs = emitter.getInsertedLocs();
+
+        path.traverse({
+          NumericLiteral(path: any) {
+            if (!insertedLocs.has(path.node)) {
+              return;
+            }
+
+            path.replaceWith(t.numericLiteral(path.node.value));
+          },
+        });
+
+        // Generators are processed in 'exit' handlers so that regenerator only has to run on
+        // an ES5 AST, but that means traversal will not pick up newly inserted references
+        // to things like 'regeneratorRuntime'. To avoid this, we explicitly requeue.
+        path.requeue();
+      },
+    },
+  });
 
 // Check if a node should be transformed by regenerator
 function shouldRegenerate(node: t.Function, state: any) {

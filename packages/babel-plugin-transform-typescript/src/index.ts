@@ -1,6 +1,12 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
-import type { PluginPass, types as t, Scope, NodePath } from "@babel/core";
+import type {
+  PluginPass,
+  types as t,
+  Scope,
+  NodePath,
+  Visitor,
+} from "@babel/core";
 import { injectInitialization } from "@babel/helper-create-class-features-plugin";
 import type { Options as SyntaxOptions } from "@babel/plugin-syntax-typescript";
 
@@ -99,7 +105,7 @@ type ExtraNodeProps = {
 export default declare((api, opts: Options) => {
   // `@babel/core` and `@babel/types` are bundled in some downstream libraries.
   // Ref: https://github.com/babel/babel/issues/15089
-  const { types: t, template } = api;
+  const { types: t, template, traverse } = api;
 
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
@@ -206,7 +212,7 @@ export default declare((api, opts: Options) => {
     name: "transform-typescript",
     inherits: syntaxTypeScript,
 
-    visitor: {
+    visitor: traverse.explode({
       //"Pattern" alias doesn't include Identifier or RestElement.
       Pattern: visitPattern,
       Identifier: visitPattern,
@@ -674,7 +680,7 @@ export default declare((api, opts: Options) => {
       TaggedTemplateExpression(path) {
         path.node.typeArguments = null;
       },
-    },
+    }) satisfies Visitor<PluginPass>,
   };
 
   function entityNameToExpr(node: t.TSEntityName): t.Expression {

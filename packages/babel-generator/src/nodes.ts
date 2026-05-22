@@ -23,7 +23,15 @@ for (const key of Object.keys(generatorFunctions).sort() as Exclude<
   `_${string}`
 >[]) {
   if (key.startsWith("_")) continue;
-  generatorInfosMap.set(key, [generatorFunctions[key], index++, undefined]);
+  generatorInfosMap.set(key, [
+    generatorFunctions[key] as (
+      this: Printer,
+      node: t.Node,
+      parent?: t.Node | null,
+    ) => void,
+    index++,
+    undefined,
+  ]);
 }
 
 export { generatorInfosMap };
