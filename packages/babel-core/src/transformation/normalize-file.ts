@@ -1,5 +1,3 @@
-import fs from "node:fs";
-import path from "node:path";
 import buildDebug from "debug";
 import type { Handler } from "gensync";
 import { file, traverseFast } from "@babel/types";
@@ -7,6 +5,7 @@ import type * as t from "@babel/types";
 import type { PluginPasses } from "../config/index.ts";
 import convertSourceMap from "convert-source-map";
 import type { SourceMapConverter as Converter } from "convert-source-map";
+import readInputSourceMapFile from "./read-input-source-map-file.ts";
 import File from "./file/file.ts";
 import parser from "../parser/index.ts";
 import cloneDeep from "./util/clone-deep.ts";
@@ -82,14 +81,13 @@ export default function* normalizeFile(
       if (typeof options.filename === "string" && lastComment) {
         try {
           // when `lastComment` is non-null, EXTERNAL_SOURCEMAP_REGEX must have matches
-          const match: [string, string] = EXTERNAL_SOURCEMAP_REGEX.exec(
-            lastComment,
-          ) as any;
-          const inputMapContent = fs.readFileSync(
-            path.resolve(path.dirname(options.filename), match[1]),
-            "utf8",
+          const inputMapURL: string =
+            EXTERNAL_SOURCEMAP_REGEX.exec(lastComment)[1];
+          inputMap = readInputSourceMapFile(
+            options.filename,
+            options.root,
+            inputMapURL,
           );
-          inputMap = convertSourceMap.fromJSON(inputMapContent);
         } catch (err) {
           debug("discarding unknown file input sourcemap", err);
         }

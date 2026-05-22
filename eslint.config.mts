@@ -2,7 +2,6 @@ import babelParser from "@babel/eslint-parser/experimental-worker";
 import globals from "globals";
 import js from "@eslint/js";
 import { defineConfig } from "eslint/config";
-// @ts-expect-error no types
 import pluginImport from "eslint-plugin-import";
 import pluginJest from "eslint-plugin-jest";
 import pluginN from "eslint-plugin-n";
