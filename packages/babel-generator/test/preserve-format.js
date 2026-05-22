@@ -148,6 +148,7 @@ describe("experimental_preserveFormat", () => {
       const out = babel.transformSync(input, {
         configFile: false,
         plugins: [pluginTransformTypeScript],
+        sourceMaps: true,
         parserOpts: {
           createParenthesizedExpressions: true,
           tokens: true,
@@ -159,6 +160,10 @@ describe("experimental_preserveFormat", () => {
       });
 
       expect(out.code.trimEnd()).toBe(expected.trimEnd());
+
+      expect(out.map.mappings).toMatchInlineSnapshot(
+        `";QACQ,MAAM,CAAC,GAAG,CAAC,CAAS;AAAA,kCACM,CAAU"`,
+      );
     });
 
     it("identifier renaming", () => {
