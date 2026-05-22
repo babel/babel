@@ -6,16 +6,19 @@ import {
 import { decodeRangeMappings } from "@jridgewell/sourcemap-codec";
 
 const CONTEXT_SIZE = 4;
-const LOC_SIZE = 10;
-const CONTENT_SIZE = 15;
+const FULL_CONTEXT_NEEDED_SIZE = 4;
+const LOC_SIZE = 12;
+const MAX_CONTENT_SIZE = 24;
 
 function simpleCodeFramePoint(lines: string[], line: number, col: number) {
   const start = Math.max(col - CONTEXT_SIZE, 0);
   const end = Math.min(col + 1 + CONTEXT_SIZE, lines[line - 1].length);
 
-  const code = lines[line - 1].slice(start, end);
-  const loc = `(${line}:${col}) `.padStart(LOC_SIZE, " ");
-  return loc + code + "\n" + " ".repeat(col - start + loc.length) + "^";
+  const code = lines[line - 1].slice(start, end).trimEnd();
+  const loc = `(${line}:${col})`.padStart(LOC_SIZE, " ");
+  return (
+    loc + " " + code + "\n" + " ".repeat(loc.length + 1 + (col - start)) + "^"
+  );
 }
 
 function simpleCodeFrameRange(
@@ -25,18 +28,60 @@ function simpleCodeFrameRange(
   lineEnd: number,
   colEnd: number,
 ) {
-  colEnd = Math.min(colEnd, lines[lineStart - 1].length);
+  const lastLineLength = lines[lineEnd - 1].length;
+  colEnd = Math.min(colEnd, lastLineLength);
 
-  const start = Math.max(colStart - CONTEXT_SIZE, 0);
-  const end = Math.min(colEnd + CONTEXT_SIZE, lines[lineStart - 1].length);
+  let inlineEnd = 0;
+  let joinedLines = lines[lineStart - 1];
+  for (let i = lineStart; i < lineEnd; i++) {
+    joinedLines += "⏎" + lines[i];
+    inlineEnd += lines[i - 1].length + 1;
+  }
+  inlineEnd += colEnd;
 
-  const markerSize = colEnd - colStart;
+  let codeStart = colStart;
+  let codeEnd = inlineEnd;
+  let markerPadding = 0;
+  let markerSize = codeEnd - codeStart;
+  let code;
+
+  const idealMinSize = FULL_CONTEXT_NEEDED_SIZE + 2 * CONTEXT_SIZE;
+
+  if (codeEnd - codeStart <= idealMinSize) {
+    const halfPadding = (idealMinSize - markerSize) / 2;
+
+    markerPadding = Math.min(codeStart, Math.ceil(halfPadding));
+    codeStart -= markerPadding;
+    codeEnd = Math.min(
+      joinedLines.length,
+      codeEnd + CONTEXT_SIZE,
+      codeEnd + (idealMinSize - markerSize - markerPadding),
+    );
+    code = joinedLines.slice(codeStart, codeEnd);
+  } else if (codeEnd - codeStart < MAX_CONTENT_SIZE) {
+    code = joinedLines.slice(codeStart, codeEnd);
+  } else {
+    const startSize = Math.floor(MAX_CONTENT_SIZE * 0.66);
+    const endSize = MAX_CONTENT_SIZE - startSize - 1;
+    code =
+      joinedLines.slice(codeStart, codeStart + startSize) +
+      "…" +
+      joinedLines.slice(codeEnd - endSize, codeEnd);
+    markerSize = MAX_CONTENT_SIZE;
+  }
+
+  // Avoid trailing spaces if they are not marked anyway
+  if (markerPadding + markerSize < codeEnd) code = code.trimEnd();
+
   const marker = markerSize === 0 ? "><" : " " + "^".repeat(markerSize);
-  const markerPadding = colStart - start - 1;
 
-  const code = lines[lineStart - 1].slice(start, end);
-  const loc = `(${lineStart}:${colStart}-${colEnd}) `.padStart(LOC_SIZE, " ");
-  return loc + code + "\n" + " ".repeat(markerPadding + loc.length) + marker;
+  const loc = `(${lineStart}:${colStart}-${lineEnd}:${colEnd})`.padStart(
+    LOC_SIZE,
+    " ",
+  );
+  return (
+    loc + " " + code + "\n" + " ".repeat(markerPadding + loc.length) + marker
+  );
 }
 
 function joinMultiline(left: string, right: string, leftLen?: number) {
@@ -123,17 +168,11 @@ export default function visualize(output: string, map: any) {
         generated.to.column = mapping.generatedColumn;
       }
 
-      if (original.from.line !== original.to.line) {
-        original.to.line = original.from.line;
-        original.to.column = Infinity;
-      } else if (original.to.column < original.from.column) {
+      if (
+        original.from.line === original.to.line &&
+        original.to.column < original.from.column
+      ) {
         original.to.column = original.from.column;
-      }
-      if (generated.from.line !== generated.to.line) {
-        generated.to.line = generated.from.line;
-        generated.to.column = Infinity;
-      } else if (generated.to.column < generated.from.column) {
-        generated.to.column = generated.from.column;
       }
     }
     ranges.push({ original, generated, source: prev.source! });
@@ -192,11 +231,7 @@ export default function visualize(output: string, map: any) {
     }
 
     return joinMultiline(
-      joinMultiline(
-        input,
-        " <--  ",
-        LOC_SIZE + CONTEXT_SIZE * 2 + CONTENT_SIZE,
-      ),
+      joinMultiline(input, " <--  ", LOC_SIZE + 1 + MAX_CONTENT_SIZE),
       output,
     );
   });
