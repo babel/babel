@@ -670,7 +670,8 @@ class Printer {
             // https://tc39.es/ecma262/#sec-white-space
             .replace(/[^\t\v\f\uFEFF\p{Space_Separator}]/gu, " ")
         : " ".repeat(spacesCount);
-      this._append(spaces, false);
+      this._buf.append(spaces, false, true);
+      this._buf.setSourcePosition(line, column);
       this.setLastChar(charCodes.space);
     }
   }

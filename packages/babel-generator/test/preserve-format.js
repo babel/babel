@@ -162,7 +162,7 @@ describe("experimental_preserveFormat", () => {
       expect(out.code.trimEnd()).toBe(expected.trimEnd());
 
       expect(out.map.mappings).toMatchInlineSnapshot(
-        `";QACQ,MAAM,CAAC,GAAG,CAAC,CAAS;AAAA,kCACM,CAAU"`,
+        `";QACQ,MAAM,EAAE,EAAE,CAAC,SAAS;kCACM,UAAU"`,
       );
     });
 
