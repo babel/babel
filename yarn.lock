@@ -291,7 +291,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
-    "@jridgewell/trace-mapping": "npm:^0.3.28"
+    "@jridgewell/trace-mapping": "catalog:"
     chokidar: "npm:^3.6.0"
     commander: "npm:^14.0.2"
     convert-source-map: "npm:^2.0.0"
@@ -467,12 +467,13 @@ __metadata:
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
     "@cspotcode/source-map-support": "npm:^0.8.1"
-    "@jridgewell/trace-mapping": "npm:^0.3.28"
+    "@jridgewell/trace-mapping": "catalog:"
     "@types/convert-source-map": "npm:^2.0.0"
-    "@types/gensync": "npm:^1.0.0"
+    "@types/gensync": "npm:^1.0.5"
     "@types/resolve": "npm:^1.3.2"
     "@types/semver": "npm:^5.4.0"
     convert-source-map: "npm:^2.0.0"
+    find-up-simple: "npm:^1.0.1"
     gensync: "npm:^1.0.0-beta.2"
     import-meta-resolve: "npm:^4.2.0"
     json5: "npm:^2.2.3"
@@ -615,9 +616,9 @@ __metadata:
     "@babel/parser": "workspace:^"
     "@babel/plugin-transform-typescript": "workspace:^"
     "@babel/types": "workspace:^"
-    "@jridgewell/gen-mapping": "npm:^0.3.12"
-    "@jridgewell/sourcemap-codec": "npm:^1.5.3"
-    "@jridgewell/trace-mapping": "npm:^0.3.28"
+    "@jridgewell/gen-mapping": "catalog:"
+    "@jridgewell/sourcemap-codec": "catalog:dev"
+    "@jridgewell/trace-mapping": "catalog:"
     "@types/jsesc": "npm:^2.5.0"
     charcodes: "npm:^0.2.0"
     jsesc: "npm:^3.0.2"
@@ -796,7 +797,7 @@ __metadata:
   resolution: "@babel/helper-fixtures@workspace:packages/babel-helper-fixtures"
   dependencies:
     "@babel/core": "workspace:^"
-    "@jridgewell/gen-mapping": "npm:^0.3.12"
+    "@jridgewell/gen-mapping": "catalog:"
     "@types/semver": "npm:^7.3.4"
     semver: "catalog:"
   peerDependencies:
@@ -1121,7 +1122,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
-    "@jridgewell/trace-mapping": "npm:^0.3.28"
+    "@jridgewell/trace-mapping": "catalog:"
     jest-diff: "npm:^30.0.0"
     lru-cache: "npm:^7.14.1"
     resolve: "npm:2.0.0-next.5"
@@ -6040,7 +6041,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/gensync@npm:^1.0.0":
+"@types/gensync@npm:^1.0.0, @types/gensync@npm:^1.0.5":
   version: 1.0.5
   resolution: "@types/gensync@npm:1.0.5"
   checksum: 10/1b417012a1249c60d2a5d3a646c208710473f31ab91ee702d4a0bf742d4d20a04c4296efcf6f42b7c1b38536ff732c3aa00dd5afc8fa138c70d1905a0521a5c3
@@ -10379,7 +10380,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-up-simple@npm:^1.0.0":
+"find-up-simple@npm:^1.0.0, find-up-simple@npm:^1.0.1":
   version: 1.0.1
   resolution: "find-up-simple@npm:1.0.1"
   checksum: 10/6e374bffda9f8425314eab47ef79752b6e77dcc95c0ad17d257aef48c32fe07bbc41bcafbd22941c25bb94fffaaaa8e178d928867d844c58100c7fe19ec82f72

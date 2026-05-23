@@ -1,7 +1,9 @@
 import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, NodePath, PluginPass } from "@babel/core";
+// eslint-disable-next-line @babel/development-internal/no-extraneous-dependencies -- only types are used
+import type { ExplodedVisitor } from "@babel/traverse";
 
-export default declare(function ({ types: t }) {
+export default declare(function ({ types: t, traverse }) {
   function maybeReplace(
     source: t.ArgumentPlaceholder | t.Expression | null | undefined,
     path: NodePath,
@@ -39,7 +41,7 @@ export default declare(function ({ types: t }) {
 
   return {
     name: "preset-typescript/plugin-rewrite-ts-imports",
-    visitor: {
+    visitor: traverse.explode({
       "ImportDeclaration|ExportAllDeclaration|ExportNamedDeclaration"(
         path: NodePath<
           | t.ImportDeclaration
@@ -63,6 +65,6 @@ export default declare(function ({ types: t }) {
       ImportExpression(path, state) {
         maybeReplace(path.node.source, path.get("source"), state);
       },
-    },
+    }) satisfies ExplodedVisitor<PluginPass>,
   };
 });

@@ -1,4 +1,4 @@
-import { types as t } from "@babel/core";
+import { types as t, traverse } from "@babel/core";
 import type { NodePath, Scope, Visitor } from "@babel/core";
 
 type State = {
@@ -6,27 +6,26 @@ type State = {
   scope: Scope;
 };
 
-export const iifeVisitor: Visitor<State> = {
-  "ReferencedIdentifier|BindingIdentifier"(
-    path: NodePath<t.Identifier>,
-    state,
-  ) {
-    const { scope, node } = path;
-    const { name } = node;
+let iifeVisitor: Visitor<State>;
+export const getIIFEVisitor: () => Visitor<State> = () =>
+  (iifeVisitor ??= traverse.explode({
+    "ReferencedIdentifier|BindingIdentifier"(path, state) {
+      const { scope, node } = path;
+      const { name } = node;
 
-    if (
-      name === "eval" ||
-      (scope.getBinding(name) === state.scope.parent!.getBinding(name) &&
-        state.scope.hasOwnBinding(name))
-    ) {
-      state.needsOuterBinding = true;
-      path.stop();
-    }
-  },
-  // type annotations don't use or introduce "real" bindings
-  "TypeAnnotation|TSTypeAnnotation|TypeParameterDeclaration|TSTypeParameterDeclaration":
-    (path: NodePath) => path.skip(),
-};
+      if (
+        name === "eval" ||
+        (scope.getBinding(name) === state.scope.parent!.getBinding(name) &&
+          state.scope.hasOwnBinding(name))
+      ) {
+        state.needsOuterBinding = true;
+        path.stop();
+      }
+    },
+    // type annotations don't use or introduce "real" bindings
+    "TypeAnnotation|TSTypeAnnotation|TypeParameterDeclaration|TSTypeParameterDeclaration":
+      (path: NodePath) => path.skip(),
+  }));
 
 export function collectShadowedParamsNames(
   param: NodePath<t.Function["params"][number]>,

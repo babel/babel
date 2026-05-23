@@ -12,7 +12,7 @@ export default declare(api => {
   return {
     name: "bugfix-v8-spread-parameters-in-optional-chaining",
 
-    visitor: {
+    visitor: api.traverse.explode({
       "OptionalCallExpression|OptionalMemberExpression"(
         path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
       ) {
@@ -20,6 +20,6 @@ export default declare(api => {
           transform(path, { noDocumentAll, pureGetters });
         }
       },
-    },
+    }),
   };
 });

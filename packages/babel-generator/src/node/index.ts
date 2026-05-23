@@ -34,7 +34,7 @@ export type NodeHandler<R> = (
 for (const type of Object.keys(parens) as (keyof typeof parens)[]) {
   const func = parens[type];
   if (generatorInfosMap.has(type)) {
-    generatorInfosMap.get(type)![2] = func;
+    generatorInfosMap.get(type)![2] = func as NodeHandler<boolean>;
   }
 }
 

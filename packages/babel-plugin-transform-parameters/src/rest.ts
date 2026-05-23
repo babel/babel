@@ -2,7 +2,7 @@ import { template, types as t } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/core";
 
 import {
-  iifeVisitor,
+  getIIFEVisitor,
   collectShadowedParamsNames,
   buildScopeIIFE,
 } from "./shadow-utils.ts";
@@ -309,7 +309,7 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
         needsOuterBinding: false,
         scope,
       };
-      restPath.traverse(iifeVisitor, state);
+      restPath.traverse(getIIFEVisitor(), state);
       needsIIFE = state.needsOuterBinding;
     }
 

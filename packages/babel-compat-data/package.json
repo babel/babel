@@ -16,7 +16,8 @@
     "./plugins": "./data/plugins.json",
     "./native-modules": "./data/native-modules.json",
     "./overlapping-plugins": "./data/overlapping-plugins.json",
-    "./plugin-bugfixes": "./data/plugin-bugfixes.json"
+    "./plugin-bugfixes": "./data/plugin-bugfixes.json",
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build-data": "./scripts/download-compat-table.sh && node ./scripts/build-data.mjs && node ./scripts/build-modules-support.mjs && node ./scripts/build-bugfixes-targets.mjs"

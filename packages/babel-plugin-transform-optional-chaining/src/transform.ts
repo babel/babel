@@ -264,7 +264,7 @@ export function transform(
       path.isOptionalMemberExpression()
     ) {
       // Ensure (a?.b)() has proper `this`
-      wrapLast = (replacement: t.MemberExpression) => {
+      wrapLast = ((replacement: t.MemberExpression) => {
         // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
         // object must not be Super as super?.foo is invalid
 
@@ -285,7 +285,7 @@ export function transform(
           t.memberExpression(replacement, t.identifier("bind")),
           [t.cloneNode(baseRef ?? object)],
         );
-      };
+      }) as (value: t.Expression) => t.Expression;
     }
 
     transformOptionalChain(

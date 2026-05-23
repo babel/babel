@@ -1,13 +1,15 @@
-import type { ESLint } from "eslint";
+import type { ESLint, Rule } from "eslint";
 import noExtraneousDependencies from "./rules/no-extraneous-dependencies.ts";
 import reportErrorMessageFormat from "./rules/report-error-message-format.ts";
 
-const meta = {
+const meta: ESLint.Plugin["meta"] = {
   name: PACKAGE_JSON.name,
   version: PACKAGE_JSON.version,
 };
 
-const rules = {
+type Rules = "no-extraneous-dependencies" | "report-error-message-format";
+
+const rules: Record<Rules, Rule.RuleModule> = {
   "no-extraneous-dependencies": noExtraneousDependencies,
   "report-error-message-format": reportErrorMessageFormat,
 };
