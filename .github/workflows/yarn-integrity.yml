@@ -2,6 +2,8 @@ name: PR Yarn integrity check
 on:
   pull_request:
     paths:
+      # Ensure packageManager field contains the correct yarn version and integrity hash.
+      - "package.json"
       - ".yarn/releases/*"
 
 jobs:
