@@ -1,0 +1,16 @@
+name: PR Yarn integrity check
+on:
+  pull_request:
+    paths:
+      - ".yarn/releases/*"
+
+jobs:
+  integrity:
+    name: Check Yarn integrity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Ensure yarn integrity
+        run: |
+          node ./scripts/ensure-yarn-version-integrity.ts
