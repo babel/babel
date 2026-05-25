@@ -111,7 +111,7 @@ jobs:
           BABEL_8_BREAKING: ''
 
       - name: Publish to npm (Babel 7)
-        run: yarn release-tool publish --yes
+        run: yarn release-tool publish --yes --provenance
 
       - name: Generate babel-types docs
         continue-on-error: true
