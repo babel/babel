@@ -21,6 +21,16 @@ jobs:
         with:
           node-version: latest
           check-latest: true
+          # Disable cache before yarn integrity check is passed. setup-node will invoke `yarn --version` if cache is true.
+          package-manager-cache: false
+      - name: Enforce yarn integrity
+        run: |
+          node ./scripts/enforce-yarn-version-integrity.ts
+      - name: Enable yarn cache
+        uses: actions/setup-node@v6
+        with:
+          node-version: latest
+          check-latest: true
           cache: "yarn"
       - name: 'Check or update Yarn cache (fix w/ "yarn install")'
         env:
