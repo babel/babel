@@ -104,9 +104,13 @@ export default class Buffer {
    * Add a string to the buffer that cannot be reverted.
    */
 
-  append(str: string, maybeNewline: boolean): void {
+  append(
+    str: string,
+    maybeNewline: boolean,
+    ignoreMapping: boolean = false,
+  ): void {
     this._flush();
-    this._append(str, maybeNewline);
+    this._append(str, maybeNewline, ignoreMapping);
   }
 
   appendChar(char: number): void {
@@ -178,7 +182,7 @@ export default class Buffer {
     }
   }
 
-  _append(str: string, maybeNewline: boolean): void {
+  _append(str: string, maybeNewline: boolean, ignoreMapping: boolean): void {
     const len = str.length;
     const position = this._position;
     const sourcePos = this._sourcePosition;
@@ -195,7 +199,7 @@ export default class Buffer {
       this._str += str;
     }
 
-    const hasMap = this._map !== null;
+    const hasMap = !ignoreMapping && this._map !== null;
 
     if (!maybeNewline && !hasMap) {
       position.column += len;
@@ -361,14 +365,20 @@ export default class Buffer {
     this._flush();
 
     const pos = loc[prop];
-    const target = this._sourcePosition;
-
     if (pos) {
-      target.line = pos.line;
-      // TODO: Fix https://github.com/babel/babel/issues/15712 in downstream
-      target.column = Math.max(pos.column + columnOffset, 0);
-      target.filename = loc.filename;
+      this.setSourcePosition(
+        pos.line,
+        // TODO: Fix https://github.com/babel/babel/issues/15712 in downstream
+        Math.max(pos.column + columnOffset, 0),
+      );
+      this._sourcePosition.filename = loc.filename;
     }
+  }
+
+  setSourcePosition(line: number, column: number): void {
+    const target = this._sourcePosition;
+    target.line = line;
+    target.column = column;
   }
 
   getCurrentColumn(): number {
