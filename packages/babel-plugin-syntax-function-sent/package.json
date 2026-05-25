@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-function-sent",
-  "version": "7.28.6",
+  "version": "7.29.7",
   "description": "Allow parsing of the function.sent meta property",
   "repository": {
     "type": "git",

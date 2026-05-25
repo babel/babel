@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-optimise-call-expression",
-  "version": "7.27.1",
+  "version": "7.29.7",
   "description": "Helper function to optimise call expression",
   "repository": {
     "type": "git",
