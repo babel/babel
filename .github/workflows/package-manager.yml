@@ -1,4 +1,4 @@
-name: PR Yarn integrity check
+name: Package Manager
 on:
   pull_request:
     paths:
@@ -7,12 +7,11 @@ on:
       - ".yarn/releases/*"
 
 jobs:
-  integrity:
-    name: Check Yarn integrity
+  yarn_integrity:
+    name: Ensure yarn integrity
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
-      - name: Ensure yarn integrity
-        run: |
+      - run: |
           node ./scripts/ensure-yarn-version-integrity.ts
