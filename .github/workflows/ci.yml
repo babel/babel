@@ -23,9 +23,19 @@ jobs:
           check-latest: true
           # Disable cache before yarn integrity check is passed. setup-node will invoke `yarn --version` if cache is true.
           package-manager-cache: false
-      - name: Enforce yarn integrity
+      - name: Check if yarn binary is changed
+        id: check-yarn-binary
+        if: github.event_name == 'pull_request'
         run: |
-          node ./scripts/enforce-yarn-version-integrity.ts
+          if git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -q ".yarn/releases"; then
+            echo "YARN_CHANGED=true" >> $GITHUB_OUTPUT
+          else
+            echo "YARN_CHANGED=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Ensure yarn integrity
+        if: github.event_name == 'pull_request' && steps.check-yarn-binary.outputs.YARN_CHANGED == 'true'
+        run: |
+          node ./scripts/ensure-yarn-version-integrity.ts
       - name: Enable yarn cache
         uses: actions/setup-node@v6
         with:
