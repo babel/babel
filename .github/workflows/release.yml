@@ -90,7 +90,7 @@ jobs:
         with:
           node-version: "25.6.1"
           check-latest: true
-          cache: "yarn"
+          package-manager-cache: false # Never use the cache in release builds to avoid cache poisoning.
       - name: Checkout the temporary branch
         if: needs.git-version.result == 'success'
         run: git checkout ${{ needs.git-version.outputs.branch }}
