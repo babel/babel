@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-private-methods",
-  "version": "8.0.0-rc.5",
+  "version": "8.0.0-rc.6",
   "description": "This plugin transforms private class methods",
   "repository": {
     "type": "git",
