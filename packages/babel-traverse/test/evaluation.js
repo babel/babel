@@ -157,13 +157,6 @@ describe("evaluation", function () {
     expect(evalResult.confident).toBe(false);
   });
 
-  it("should deopt instead of crashing on maliciously crafted call expressions", function () {
-    // https://github.com/babel/babel/issues/17644
-    const path = getPath('String({ toString: "".toUpperCase })');
-    const evalResult = path.get("body.0.expression").evaluate();
-    expect(evalResult.confident).toBe(false);
-  });
-
   it("should evaluate global call expressions", function () {
     expect(
       getPath("isFinite(1);").get("body.0.expression").evaluate().value,
@@ -473,6 +466,29 @@ describe("evaluation", function () {
     const evalResult = path.get("body.0.expression").evaluate();
     expect(evalResult.confident).toBe(true);
     expect(evalResult.value).toBe(1);
+  });
+
+  it("should not crash on {}.toString", function () {
+    const path = getPath(`String({ ["toString"]: "".toUpperCase });`);
+    const evalResult = path.get("body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should not crash on {}.toString 2", function () {
+    const path = getPath(`"" + { ["toString"]: "".toUpperCase };`);
+    const evalResult = path.get("body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+  });
+
+  it("should not crash on {}.toString 3", function () {
+    const path = getPath(
+      `"" == { ["toString"]: "".toUpperCase };
+      ({ ["toString"]: "".toUpperCase } == "");`,
+    );
+    const evalResult = path.get("body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+    const evalResult2 = path.get("body.1.expression").evaluate();
+    expect(evalResult2.confident).toBe(false);
   });
 
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");

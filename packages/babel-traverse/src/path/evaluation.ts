@@ -407,6 +407,14 @@ function _evaluate(path: NodePath, state: State): any {
       case "-":
         return left - right;
       case "+":
+        if (
+          typeof left === "string" &&
+          typeof right === "object" &&
+          Object.hasOwn(right, "toString")
+        ) {
+          deopt(path, state);
+          return;
+        }
         return left + right;
       case "/":
         return left / right;
@@ -425,6 +433,17 @@ function _evaluate(path: NodePath, state: State): any {
       case ">=":
         return left >= right;
       case "==":
+        if (
+          (typeof left === "object" &&
+            typeof right === "string" &&
+            Object.hasOwn(left, "toString")) ||
+          (typeof left === "string" &&
+            typeof right === "object" &&
+            Object.hasOwn(right, "toString"))
+        ) {
+          deopt(path, state);
+          return;
+        }
         return left == right; // eslint-disable-line eqeqeq
       case "!=":
         return left != right; // eslint-disable-line eqeqeq
@@ -497,12 +516,16 @@ function _evaluate(path: NodePath, state: State): any {
       const args = path.get("arguments").map(arg => evaluateCached(arg, state));
       if (!state.confident) return;
 
-      try {
-        return func.apply(context, args);
-      } catch {
+      if (
+        func === String &&
+        args.length > 0 &&
+        Object.hasOwn(args[0], "toString")
+      ) {
         deopt(path, state);
         return;
       }
+
+      return func.apply(context, args);
     }
   }
 
