@@ -25,6 +25,29 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.0-rc.6 (2026-05-25)
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#18011](https://github.com/babel/babel/pull/18011) Catchup source map position in preserveFormat ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#17999](https://github.com/babel/babel/pull/17999) fix: improve inputSourceMap URL handling ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-generator`
+  * [#17992](https://github.com/babel/babel/pull/17992) Preserve original identifier names from input sourcemaps ([@Andarist](https://github.com/Andarist))
+
+#### :house: Internal
+* `babel-core`
+  * [#17970](https://github.com/babel/babel/pull/17970) Always use native Node.js TS support for config files ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-compat-data`, `babel-register`
+  * [#17993](https://github.com/babel/babel/pull/17993) chore: use bundled dts for register and eslint-* ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-transform-fixture-test-runner`, `babel-node`
+  * [#17989](https://github.com/babel/babel/pull/17989) Test Node.js 26 on CI ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-build-external-helpers`, `babel-cli`, `babel-generator`, `babel-helper-fixtures`, `babel-helper-plugin-test-runner`, `babel-helper-transform-fixture-test-runner`, `babel-node`, `babel-parser`, `babel-plugin-transform-modules-systemjs`, `babel-types`
+  * [#18002](https://github.com/babel/babel/pull/18002) Add file URL support for test runners ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-explicit-resource-management`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-react-jsx`, `babel-traverse`
+  * [#18005](https://github.com/babel/babel/pull/18005) Do not emit source map names for identical names ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v8.0.0-rc.5 (2026-05-12)
 
 #### :eyeglasses: Spec Compliance
