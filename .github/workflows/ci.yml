@@ -27,7 +27,7 @@ jobs:
         id: check-yarn-binary
         if: github.event_name == 'pull_request'
         run: |
-          if git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -q ".yarn/releases"; then
+          if git diff --name-only ${{github.event.pull_request.base.sha}} --exit-code -- .yarn/releases; then
             echo "YARN_CHANGED=true" >> $GITHUB_OUTPUT
           else
             echo "YARN_CHANGED=false" >> $GITHUB_OUTPUT
