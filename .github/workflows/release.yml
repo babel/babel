@@ -133,7 +133,7 @@ jobs:
 
       # Remove --tag next when Babel 8 becomes stable
       - name: Publish to npm
-        run: yarn release-tool publish --yes --tag next
+        run: yarn release-tool publish --yes --provenance --tag next
 
       # Uncomment when Babel 8 becomes stable
       # - name: Generate babel-types docs
