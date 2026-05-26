@@ -128,6 +128,7 @@ function enqueue(cmd, args = []) {
           new Promise((resolve, reject) => {
             let stdout = "";
             let stderr = "";
+            // Each test file is run in a separate process to avoid interference between tests (e.g. shared.js exports writable Symbol).
             const cp = spawn(
               process.execPath,
               [
