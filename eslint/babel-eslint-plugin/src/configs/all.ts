@@ -1,4 +1,4 @@
-import type { SeverityString } from "../types";
+import type { SeverityString } from "../types.ts";
 
 export const name = "babel/eslint-plugin/all";
 export const rules: Record<string, SeverityString> = {

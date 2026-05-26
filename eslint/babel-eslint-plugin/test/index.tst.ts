@@ -17,11 +17,16 @@ describe("babel-eslint-plugin", () => {
     >();
   });
   it("configs can be used in a config array", () => {
-    const config = [plugin.configs.recommended, plugin.configs.all];
+    const config = [
+      { plugins: { babel: plugin } },
+      plugin.configs.recommended,
+      plugin.configs.all,
+    ];
     expect(config).type.toBeAssignableTo<Linter.Config[]>();
   });
   it("configs can be used in a config array with overrides", () => {
     const config = [
+      { plugins: { babel: plugin } },
       {
         ...plugin.configs.recommended,
         files: ["some-file.js"],
