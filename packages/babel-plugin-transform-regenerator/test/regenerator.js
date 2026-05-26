@@ -104,6 +104,8 @@ function convertOldHelper(es6File, es5File, callback) {
   });
 }
 
+const jestTaskQueue = [];
+
 function enqueue(cmd, args = []) {
   describe("regenerator", () => {
     if (typeof cmd === "function") {
@@ -118,44 +120,7 @@ function enqueue(cmd, args = []) {
           }),
         ));
     } else if (cmd === "jest") {
-      // Matches https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/.github/workflows/node.js.yml#L19
-      describe("jest", () => {
-        if (args.length !== 1) {
-          throw new Error("Expected exactly one test file argument");
-        }
-        const testFile = join(__dirname, args[0]);
-        it(`${args.join(" ")}`, () =>
-          new Promise((resolve, reject) => {
-            let stdout = "";
-            let stderr = "";
-            const cp = spawn(
-              process.execPath,
-              [
-                join(jestDir, "bin", "jest.js"),
-                "--config",
-                join(__dirname, "regenerator-fixtures", "jest.config.js"),
-                "--testMatch",
-                testFile,
-                "--",
-                testFile,
-              ],
-              { cwd: __dirname },
-            );
-            cp.stdout.on("data", chunk => {
-              stdout += chunk;
-            });
-            cp.stderr.on("data", chunk => {
-              stderr += chunk;
-            });
-            cp.on("exit", async err => {
-              if (err) {
-                reject(new Error(`STDOUT:\n${stdout}\nSTDERR:\n${stderr}`));
-              } else {
-                resolve();
-              }
-            });
-          }));
-      });
+      jestTaskQueue.push(args);
     } else {
       it(`${cmd} ${args.join(" ")}`, () =>
         new Promise((resolve, reject) => {
@@ -396,3 +361,42 @@ enqueue("jest", [
 enqueue("jest", ["./regenerator-fixtures/frozen-intrinsics.js"]);
 
 enqueue("jest", ["./regenerator-fixtures/tmp/no-symbol.es5.js"]);
+
+function consumeJestTaskQueue() {
+  describe("regenerator > jest", () => {
+    const testFiles = jestTaskQueue.flat().map(file => join(__dirname, file));
+    it(`${testFiles.join(" ")}`, () =>
+      new Promise((resolve, reject) => {
+        let stdout = "";
+        let stderr = "";
+        const cp = spawn(
+          process.execPath,
+          [
+            join(jestDir, "bin", "jest.js"),
+            "--config",
+            join(__dirname, "regenerator-fixtures", "jest.config.js"),
+            "--testMatch",
+            ...testFiles,
+            "--",
+            ...testFiles,
+          ],
+          { cwd: __dirname },
+        );
+        cp.stdout.on("data", chunk => {
+          stdout += chunk;
+        });
+        cp.stderr.on("data", chunk => {
+          stderr += chunk;
+        });
+        cp.on("exit", async err => {
+          if (err) {
+            reject(new Error(`STDOUT:\n${stdout}\nSTDERR:\n${stderr}`));
+          } else {
+            resolve();
+          }
+        });
+      }));
+  });
+}
+
+consumeJestTaskQueue();
