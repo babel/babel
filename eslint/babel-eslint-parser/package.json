@@ -43,6 +43,6 @@
     "@types/estree": "^1.0.5",
     "dedent": "^1.5.3",
     "eslint": "^10.0.0",
-    "typescript-eslint": "^8.55.0"
+    "typescript-eslint": "8.60.0"
   }
 }
