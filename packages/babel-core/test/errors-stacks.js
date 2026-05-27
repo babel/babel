@@ -216,8 +216,7 @@ describe("@babel/core errors", function () {
     `);
   });
 
-  // TODO: Enable it after https://github.com/babel/babel/pull/18005 is released.
-  it.skip("internal errors have the full stack trace", function () {
+  it("internal errors have the full stack trace", function () {
     expectError(() => {
       const { map } = Array.prototype;
       try {

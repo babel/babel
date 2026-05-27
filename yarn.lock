@@ -492,7 +492,7 @@ __metadata:
     eslint-scope: "npm:^9.1.0"
     eslint-visitor-keys: "npm:^5.0.0"
     semver: "catalog:"
-    typescript-eslint: "npm:^8.55.0"
+    typescript-eslint: "npm:8.60.0"
   peerDependencies:
     "@babel/core": "workspace:^"
     eslint: ^9.0.0 || ^10.0.0
@@ -17434,7 +17434,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript-eslint@npm:8.60.0, typescript-eslint@npm:^8.55.0":
+"typescript-eslint@npm:8.60.0":
   version: 8.60.0
   resolution: "typescript-eslint@npm:8.60.0"
   dependencies:
