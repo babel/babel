@@ -12,6 +12,7 @@ import visualizeSourceMap from "./source-map-visualizer.ts";
 import assert from "node:assert";
 import fs from "node:fs";
 import path from "node:path";
+import type vm from "node:vm";
 import { fileURLToPath } from "node:url";
 import { diff } from "jest-diff";
 
@@ -347,8 +348,19 @@ Actual Error: ${err.message}`,
 
 const require = createRequire(import.meta.url);
 const worker = require("./worker.cjs");
+if (!process.env.EXEC_TESTS_NODE) {
+  worker.setBabelHelpers(babel.buildExternalHelpers());
+}
+function runCodeInTestContext(
+  code: string,
+  opts: { filename: string | URL; timeout?: number },
+  context: vm.Context,
+) {
+  opts.filename =
+    opts.filename instanceof URL ? fileURLToPath(opts.filename) : opts.filename;
+  return worker.runCodeInTestContext(code, opts, context);
+}
 const createTestContext = worker.createTestContext;
-const runCodeInTestContext = worker.runCodeInTestContext;
 const runCode = worker.runCode;
 export { createTestContext, runCodeInTestContext, runCode };
 export { buildProcessTests, buildParallelProcessTests } from "./process.ts";

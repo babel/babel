@@ -4,7 +4,6 @@ import vm = require("vm");
 import LruCache = require("lru-cache");
 import path = require("path");
 import fs = require("fs");
-import url = require("url");
 
 const helpers = {
   assertNoOwnProperties: function assertNoOwnProperties(obj: object) {
@@ -26,6 +25,8 @@ const cachedScripts = new LruCache<
 >({ max: 100 });
 const contextModuleCache = new WeakMap();
 
+let babelHelpers: string;
+
 function createTestContext() {
   const context = vm.createContext(
     Object.assign({}, helpers, {
@@ -40,12 +41,6 @@ function createTestContext() {
   const moduleCache = Object.create(null);
   contextModuleCache.set(context, moduleCache);
 
-  const babelHelpers =
-    // @ts-expect-error read global
-    global.BABEL_HELPERS ||
-    (process.argv.includes("$BABEL_WORKER$")
-      ? fs.readFileSync(process.argv[3], "utf8")
-      : require("@babel/core").buildExternalHelpers());
   // Populate the "babelHelpers" global with Babel's helper utilities.
   runCacheableScriptInTestContext(
     path.join(__dirname, "babel-helpers-in-memory.js"),
@@ -140,15 +135,12 @@ let sharedTestContext: vm.Context;
 function runCodeInTestContext(
   code: string,
   opts: {
-    filename: string | URL;
+    filename: string;
     timeout?: number;
   },
   context = (sharedTestContext = sharedTestContext || createTestContext()),
 ) {
-  const filename =
-    opts.filename instanceof URL
-      ? url.fileURLToPath(opts.filename)
-      : opts.filename;
+  const filename = opts.filename;
   const dirname = path.dirname(filename);
   const moduleCache = contextModuleCache.get(context);
   const req = (id: string) =>
@@ -199,31 +191,41 @@ function isThenable<T = any>(val: any): val is PromiseLike<T> {
   );
 }
 
-if (process.argv.includes("$BABEL_WORKER$")) {
-  process.stdin.on("data", data => {
-    const { id, code, opts } = JSON.parse(data.toString());
+if (process.send) {
+  process.on("message", (data: any) => {
+    const { id, code, opts } = data;
+    if (id === -1) {
+      babelHelpers = code;
+      return;
+    }
     let error;
     try {
       const result = runCodeInTestContext(code, opts, createTestContext());
       if (isThenable(result)) {
         result.then(
-          () => process.stdout.write(JSON.stringify({ id })),
+          () => process.send!({ id }),
           e =>
-            process.stdout.write(
-              JSON.stringify({ id, error: { msg: e.message, stack: e.stack } }),
-            ),
+            process.send!({
+              id,
+              error: { msg: e.message, stack: e.stack },
+            }),
         );
         return;
       }
     } catch (e) {
       error = { msg: e.message, stack: e.stack };
     }
-    process.stdout.write(JSON.stringify({ id, error }));
+    process.send!({ id, error });
   });
+}
+
+function setBabelHelpers(code: string) {
+  babelHelpers = code;
 }
 
 export = {
   createTestContext,
   runCodeInTestContext,
   runCode,
+  setBabelHelpers,
 };

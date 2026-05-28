@@ -1,7 +1,6 @@
 import { spawn } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { writeFileSync } from "node:fs";
 import { buildExternalHelpers } from "@babel/core";
 import worker from "./worker.cts";
 import getNode from "get-node";
@@ -24,7 +23,6 @@ export async function runCodeMayInWorker(
   },
 ) {
   if (!EXEC_TESTS_NODE) {
-    (global as any).BABEL_HELPERS ??= buildExternalHelpers();
     const ctx = worker.createTestContext();
     return worker.runCodeInTestContext(code, opts, ctx);
   }
@@ -34,14 +32,9 @@ export async function runCodeMayInWorker(
   return new Promise((resolve, reject) => {
     if (!(global as any).worker) {
       const workerFile = path.join(dirname, "worker.cjs");
-      // Avoid data race when running tests in parallel
-      const helpersFile = path.join(dirname, `babel-helpers-${process.pid}.js`);
-      writeFileSync(helpersFile, buildExternalHelpers());
-      const worker = ((global as any).worker = spawn(nodePath, [
-        workerFile,
-        "$BABEL_WORKER$",
-        helpersFile,
-      ]));
+      const worker = ((global as any).worker = spawn(nodePath, [workerFile], {
+        stdio: ["pipe", "pipe", "pipe", "ipc"],
+      }));
       worker.unref();
       let stderr = "";
       worker.on("error", err => {
@@ -50,13 +43,12 @@ export async function runCodeMayInWorker(
       worker.on("exit", code => {
         throw new Error(`Worker exited with code ${code}, stderr: ${stderr}`);
       });
-      worker.stderr.on("data", data => {
+      worker.stderr!.on("data", data => {
         stderr += data;
       });
-      worker.stdout.on("data", data => {
-        data = data + "";
+      worker.on("message", (data: any) => {
         try {
-          const { id, error } = JSON.parse(data);
+          const { id, error } = data;
           if (error) {
             const e = new Error(error.msg);
             e.stack = error.stack;
@@ -65,12 +57,13 @@ export async function runCodeMayInWorker(
             tasks.get(id)![0]();
           }
         } catch {
-          throw new Error("Failed to parse worker response: " + data);
+          throw new Error("Failed to process worker response: " + data);
         }
       });
+      worker.send({ id: -1, code: buildExternalHelpers() });
     }
     id++;
     tasks.set(id, [resolve, reject]);
-    (globalThis as any).worker.stdin.write(JSON.stringify({ id, code, opts }));
+    (globalThis as any).worker.send({ id, code, opts });
   });
 }

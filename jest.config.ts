@@ -1,9 +1,18 @@
 import type { Config } from "jest";
-import { spawnSync } from "node:child_process";
+import { execaSync } from "execa";
 
 // Avoid multiple threads downloading concurrently during testing.
 if (process.env.EXEC_TESTS_NODE) {
-  spawnSync(`./node_modules/.bin/get-node ${process.env.EXEC_TESTS_NODE}`);
+  const res = execaSync(
+    "./node_modules/.bin/get-node",
+    [process.env.EXEC_TESTS_NODE],
+    {
+      stdio: "inherit",
+    }
+  );
+  if (res.exitCode !== 0) {
+    throw new Error(`get-node failed with exit code ${res.exitCode}`);
+  }
 }
 
 const isPublishBundle = process.env.IS_PUBLISH;
