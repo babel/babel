@@ -26,6 +26,8 @@ mkdir tmp && cd tmp
 npx -p @angular/cli ng new --defaults ngx --package-manager yarn --skip-git --skip-install
 cd ngx
 node "$dir"/utils/bump-babel-dependencies.js resolutions
+# Disable yarn minimal age gate because npx will fetch the latest version of Angular CLI
+echo "npmMinimalAgeGate: 0" >> .yarnrc.yml
 touch yarn.lock
 yarn set version stable
 export YARN_ENABLE_IMMUTABLE_INSTALLS=false
