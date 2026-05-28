@@ -457,10 +457,31 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                 VERSION: JSON.stringify(version),
               },
             }),
+            rollupBabel({
+              envName,
+              skipPreflightCheck: true,
+              babelHelpers: "bundled",
+              configFile: false,
+              babelrc: false,
+              extensions: [".cts"],
+              presets: [
+                [
+                  "@babel/preset-typescript",
+                  {
+                    onlyRemoveTypeImports: true,
+                    optimizeConstEnums: true,
+                  },
+                ],
+              ],
+              include: [
+                "packages/babel-helper-transform-fixture-test-runner/src/*.cts",
+              ],
+            }),
             rollupCommonJs({
+              extensions: [".js", ".cts"],
               include: [
                 // Bundle node_modules only when building standalone
-                buildStandalone ? /node_modules/ : "./node_modules/*/*.js",
+                buildStandalone ? /node_modules/ : "./node_modules/**/*.js",
                 "packages/babel-runtime/regenerator/**",
                 "packages/babel-runtime/helpers/*.js",
                 "packages/babel-preset-env/data/*.js",
@@ -468,7 +489,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                 "packages/babel-compat-data/*.js",
                 // Used by @babel/standalone
                 "packages/babel-compat-data/scripts/data/legacy-plugin-aliases.js",
-                "packages/*/src/**/*.cjs",
+                "packages/*/src/**/*.cts",
               ],
               dynamicRequireTargets: buildStandalone
                 ? [
@@ -493,9 +514,11 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
             }),
             rollupBabel({
               envName,
+              skipPreflightCheck: true,
               babelHelpers: "bundled",
               configFile: "./babel.config.ts",
-              extensions: [".ts", ".js", ".mjs", ".cjs"],
+              babelrc: false,
+              extensions: [".ts", ".mts", ".js", ".mjs", ".cjs"],
               ignore: ["packages/babel-runtime/helpers/*.js"],
             }),
             buildStandalone && {
@@ -844,7 +867,11 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
     ["babel-cli", ["./lib/babel/index.js"]],
     [
       "babel-helper-transform-fixture-test-runner",
-      ["./lib/babel-helpers-in-memory.js", "./lib/exit-loader.cjs"],
+      [
+        "./lib/babel-helpers-in-memory.js",
+        "./lib/exit-loader.cjs",
+        "./lib/worker.cjs",
+      ],
     ],
     ["babel-node", ["./lib/babel-node.js", "./lib/_babel-node.js"]],
     ["babel-register", ["./lib/worker/index.js"]],
@@ -899,7 +926,7 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       throw new Error("Please specify the entry points for package: " + src);
     }
 
-    const inputs = entryPoints.map(lib => {
+    let inputs = entryPoints.map(lib => {
       // Prefix `./` to make it explicitly a relative path, otherwise rollup will
       // try to resolve `eslint/babel-eslint-parser` from node_modules
       const input = "./" + path.join(src, lib.replace("/lib/", "/src/"));
@@ -909,6 +936,17 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
       return input.replace(/(\.c)?js$/, "$1ts");
     });
 
+    const ctsEntries = inputs.filter(e => e.endsWith(".cts"));
+    if (ctsEntries.length) {
+      yield {
+        src,
+        format: "cjs",
+        dest: "lib",
+        inputs: ctsEntries,
+        pkgJSON,
+      };
+      inputs = inputs.filter(e => !e.endsWith(".cts"));
+    }
     yield {
       src,
       format: "esm",

@@ -23,6 +23,4 @@ var replay = /*#__PURE__*/function () {
   }
   return replay;
 }();
-return expect(function () {
-  return replay();
-}).rejects.toThrow('@kira throw');
+return expect(replay()).rejects.toThrow('@kira throw');
