@@ -1,11 +1,11 @@
 import path from "node:path";
 import * as escope from "eslint-scope";
 import unpad from "dedent";
-import { parseForESLint as parseForESLintOriginal } from "../lib/index.js";
+import babelEslintParser from "../lib/index.js";
 import { commonJS } from "$repo-utils";
 
 function parseForESLint(code, options) {
-  return parseForESLintOriginal(code, {
+  return babelEslintParser.parseForESLint(code, {
     requireConfigFile: false,
     ...options,
     babelOptions: {
@@ -127,6 +127,17 @@ describe("Babel and Espree", () => {
           eslintScopeManager: true,
           eslintVisitorKeys: true,
           babelOptions: { filename: "test.js", ignore: [/./] },
+        });
+      expect(thunk).not.toThrow();
+    });
+
+    it("should not crash when `parser` is passed", () => {
+      const thunk = () =>
+        parseForESLint("`test`", {
+          eslintScopeManager: true,
+          eslintVisitorKeys: true,
+          babelOptions: BABEL_OPTIONS,
+          parser: babelEslintParser,
         });
       expect(thunk).not.toThrow();
     });
