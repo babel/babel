@@ -5,3 +5,5 @@ if (process.platform === "win32") {
   fixtures = fixtures.slice(1);
 }
 testRunner(fixtures, "define-helper");
+
+it("dummy", () => {});
