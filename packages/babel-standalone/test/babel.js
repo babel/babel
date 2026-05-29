@@ -11,7 +11,7 @@ describe("@babel/standalone", () => {
   describe("export packages", () => {
     it("list", () => {
       expect(Object.keys(Babel.packages)).toMatchInlineSnapshot(`
-        Array [
+        [
           "generator",
           "parser",
           "template",
@@ -264,7 +264,7 @@ describe("@babel/standalone", () => {
       }).code;
 
       expect(output).toMatchInlineSnapshot(`
-        "import \\"core-js/modules/es.array.includes.js\\";
+        "import "core-js/modules/es.array.includes.js";
         [].includes(2);"
       `);
     });
@@ -361,7 +361,7 @@ describe("@babel/standalone", () => {
           targets: { chrome: 113 },
           presets: [["env", { modules: false }]],
         }).code,
-      ).toMatchInlineSnapshot(`"/[\\\\w--[b]]/v;"`);
+      ).toMatchInlineSnapshot(`"/[\\w--[b]]/v;"`);
     });
   });
 });

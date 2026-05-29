@@ -15,9 +15,9 @@ describe("builders", function () {
             t.unaryExpression("-", t.bigIntLiteral(BigInt("123456789"))),
           ),
         ).toMatchInlineSnapshot(`
-          Object {
-            "literal": Object {
-              "argument": Object {
+          {
+            "literal": {
+              "argument": {
                 "type": "BigIntLiteral",
                 "value": 123456789n,
               },

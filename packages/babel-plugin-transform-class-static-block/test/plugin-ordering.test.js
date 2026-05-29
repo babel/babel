@@ -29,7 +29,7 @@ describe("plugin ordering", () => {
       class Foo {}
       _Foo = Foo;
       _Foo.foo = _Foo.bar;
-      babelHelpers.defineProperty(Foo, \\"bar\\", 42);"
+      babelHelpers.defineProperty(Foo, "bar", 42);"
     `);
   });
 });

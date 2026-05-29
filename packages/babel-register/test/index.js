@@ -138,8 +138,8 @@ describe("@babel/register", function () {
 
       expect(typeof currentHook).toBe("function");
       expect(currentOptions).toMatchInlineSnapshot(`
-        Object {
-          "exts": Array [
+        {
+          "exts": [
             ".js",
             ".jsx",
             ".es6",

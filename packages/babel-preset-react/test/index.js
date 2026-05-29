@@ -32,8 +32,8 @@ describe("react preset", () => {
         envName: "development",
       }).code,
     ).toMatchInlineSnapshot(`
-      "import { jsxDEV as _jsxDEV } from \\"react/jsx-dev-runtime\\";
-      /*#__PURE__*/_jsxDEV(\\"a\\", {}, void 0, false);"
+      "import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+      /*#__PURE__*/_jsxDEV("a", {}, void 0, false);"
     `);
 
     expect(
@@ -43,8 +43,8 @@ describe("react preset", () => {
         envName: "production",
       }).code,
     ).toMatchInlineSnapshot(`
-      "import { jsx as _jsx } from \\"react/jsx-runtime\\";
-      /*#__PURE__*/_jsx(\\"a\\", {});"
+      "import { jsx as _jsx } from "react/jsx-runtime";
+      /*#__PURE__*/_jsx("a", {});"
     `);
   });
 });

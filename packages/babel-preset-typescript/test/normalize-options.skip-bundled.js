@@ -38,7 +38,7 @@ describe("normalize options", () => {
     });
     it("default values", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
-        Object {
+        {
           "allowNamespaces": true,
           "disallowAmbiguousJSXLike": false,
           "ignoreExtensions": false,

@@ -60,16 +60,16 @@ describe("options", () => {
       it("false", () => {
         expect(parse(CODE, { locations: false })).toMatchInlineSnapshot(`
           Node {
-            "comments": Array [],
+            "comments": [],
             "end": 19,
-            "errors": Array [],
+            "errors": [],
             "program": Node {
-              "body": Array [
+              "body": [
                 Node {
                   "async": false,
                   "body": Node {
-                    "body": Array [],
-                    "directives": Array [],
+                    "body": [],
+                    "directives": [],
                     "end": 19,
                     "start": 17,
                     "type": "BlockStatement",
@@ -82,7 +82,7 @@ describe("options", () => {
                     "start": 9,
                     "type": "Identifier",
                   },
-                  "params": Array [
+                  "params": [
                     Node {
                       "end": 12,
                       "name": "x",
@@ -100,7 +100,7 @@ describe("options", () => {
                   "type": "FunctionDeclaration",
                 },
               ],
-              "directives": Array [],
+              "directives": [],
               "end": 19,
               "interpreter": null,
               "sourceType": "script",
@@ -115,9 +115,9 @@ describe("options", () => {
       it("packed", () => {
         expect(parse(CODE, { locations: "packed" })).toMatchInlineSnapshot(`
           Node {
-            "comments": Array [],
+            "comments": [],
             "end": 19,
-            "errors": Array [],
+            "errors": [],
             "locData": Uint32Array [
               1,
               0,
@@ -161,12 +161,12 @@ describe("options", () => {
               0,
             ],
             "program": Node {
-              "body": Array [
+              "body": [
                 Node {
                   "async": false,
                   "body": Node {
-                    "body": Array [],
-                    "directives": Array [],
+                    "body": [],
+                    "directives": [],
                     "end": 19,
                     "start": 17,
                     "type": "BlockStatement",
@@ -179,7 +179,7 @@ describe("options", () => {
                     "start": 9,
                     "type": "Identifier",
                   },
-                  "params": Array [
+                  "params": [
                     Node {
                       "end": 12,
                       "name": "x",
@@ -197,7 +197,7 @@ describe("options", () => {
                   "type": "FunctionDeclaration",
                 },
               ],
-              "directives": Array [],
+              "directives": [],
               "end": 19,
               "interpreter": null,
               "sourceType": "script",

@@ -60,8 +60,8 @@ describe("removal", function () {
     });
 
     expect(ast.program.body[0].leadingComments).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "end": 28,
           "loc": SourceLocation {
             "end": Position {
@@ -81,7 +81,7 @@ describe("removal", function () {
           "type": "CommentLine",
           "value": " update-tsconfig-file",
         },
-        Object {
+        {
           "end": 105,
           "loc": SourceLocation {
             "end": Position {
@@ -101,7 +101,7 @@ describe("removal", function () {
           "type": "CommentLine",
           "value": " const updateTSConfig = require('../update-tsconfig')",
         },
-        Object {
+        {
           "end": 186,
           "loc": SourceLocation {
             "end": Position {

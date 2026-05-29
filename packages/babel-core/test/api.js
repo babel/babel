@@ -879,7 +879,7 @@ describe("api", function () {
           "(function (global) {
             var babelHelpers = global.babelHelpers = {};
             function _get() {
-              return babelHelpers.get = _get = \\"undefined\\" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
+              return babelHelpers.get = _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
                 var p = babelHelpers.superPropBase(e, t);
                 if (p) {
                   var n = Object.getOwnPropertyDescriptor(p, t);
@@ -888,7 +888,7 @@ describe("api", function () {
               }, _get.apply(null, arguments);
             }
             babelHelpers.get = _get;
-          })(typeof global === \\"undefined\\" ? self : global);"
+          })(typeof global === "undefined" ? self : global);"
         `);
       });
 
@@ -896,9 +896,9 @@ describe("api", function () {
         const script = babel.buildExternalHelpers(["get"], "umd");
         expect(script).toMatchInlineSnapshot(`
           "(function (root, factory) {
-            if (typeof define === \\"function\\" && define.amd) {
-              define([\\"exports\\"], factory);
-            } else if (typeof exports === \\"object\\") {
+            if (typeof define === "function" && define.amd) {
+              define(["exports"], factory);
+            } else if (typeof exports === "object") {
               factory(exports);
             } else {
               factory(root.babelHelpers = {});
@@ -906,7 +906,7 @@ describe("api", function () {
           })(this, function (global) {
             var babelHelpers = global;
             function _get() {
-              return babelHelpers.get = _get = \\"undefined\\" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
+              return babelHelpers.get = _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
                 var p = babelHelpers.superPropBase(e, t);
                 if (p) {
                   var n = Object.getOwnPropertyDescriptor(p, t);
@@ -924,7 +924,7 @@ describe("api", function () {
         expect(script).toMatchInlineSnapshot(`
           "var babelHelpers = {};
           function _get() {
-            return babelHelpers.get = _get = \\"undefined\\" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
+            return babelHelpers.get = _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
               var p = babelHelpers.superPropBase(e, t);
               if (p) {
                 var n = Object.getOwnPropertyDescriptor(p, t);
@@ -942,7 +942,7 @@ describe("api", function () {
         expect(script).toMatchInlineSnapshot(`
           "export { _get as get };
           function _get() {
-            return _get = \\"undefined\\" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
+            return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
               var p = _superPropBase(e, t);
               if (p) {
                 var n = Object.getOwnPropertyDescriptor(p, t);
