@@ -201,11 +201,10 @@ function readEscapedChar(
       }
     // fall through
     case charCodes.lineFeed:
-      lineStart = pos;
-      ++curLine;
-    // fall through
     case charCodes.lineSeparator:
     case charCodes.paragraphSeparator:
+      lineStart = pos;
+      ++curLine;
       return res("");
     case charCodes.digit8:
     case charCodes.digit9:
