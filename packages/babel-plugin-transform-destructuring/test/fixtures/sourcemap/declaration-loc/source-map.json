@@ -7,6 +7,5 @@
   "sourcesContent": [
     "const fn = (arg) => {\n  var [x, y] = arg;\n}"
   ],
-  "mappings": "AAAA,MAAM,EAAE,GAAI,GAAG,IAAK;EAClB,sCAAa,GAAG;IAAX,CAAC;IAAE,CAAC;AACX,CAAC",
-  "ignoreList": []
+  "mappings": "AAAA,MAAM,EAAE,GAAI,GAAG,IAAK;EAClB,sCAAa,GAAG;IAAX,CAAC;IAAE,CAAC;AACX,CAAC"
 }

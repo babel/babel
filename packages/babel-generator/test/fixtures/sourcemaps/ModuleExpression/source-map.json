@@ -7,6 +7,5 @@
   "sourcesContent": [
     "const m = module { export const foo = \"foo\" };\nmodule {\n  foo;\n  bar;\n};\nfoo(module {});"
   ],
-  "mappings": "AAAA,MAAM,CAAC,GAAG;EAAS,OAAO,MAAM,GAAG,GAAG,KAAK;AAAC,CAAC;AAC7C;EACE,GAAG;EACH,GAAG;AACL,CAAC;AACD,GAAG,CAAC,QAAQ,CAAC,CAAC",
-  "ignoreList": []
+  "mappings": "AAAA,MAAM,CAAC,GAAG;EAAS,OAAO,MAAM,GAAG,GAAG,KAAK;AAAC,CAAC;AAC7C;EACE,GAAG;EACH,GAAG;AACL,CAAC;AACD,GAAG,CAAC,QAAQ,CAAC,CAAC"
 }

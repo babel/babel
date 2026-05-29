@@ -29,27 +29,27 @@ export default class SourceMap {
   private _rawMappings: Mapping[] | undefined;
   private _sourceFileName: string | undefined;
 
-  // Any real line is > 0, so init to 0 is fine.
-  private _lastGenLine = 0;
-  private _lastSourceLine = 0;
-
-  // Source columns can be 0, but we only check in unison with sourceLine, which
-  // inits to an impossible value. So init to 0 is fine.
-  private _lastSourceColumn = 0;
-
   public _inputMap: TraceMap | null = null;
+
+  #mappingsBuffer0: Parameters<typeof maybeAddMapping>[1] | null = null;
+  #mappingsBuffer1: Parameters<typeof maybeAddMapping>[1] | null = null;
+  #droppedMappingForRange = false;
+
+  #allowRangeMappings: boolean;
 
   constructor(
     opts: {
       sourceFileName?: string;
       sourceRoot?: string;
       inputSourceMap?: SourceMapInput;
+      sourceMapRanges?: boolean;
     },
     code: string | Record<string, string> | null | undefined,
   ) {
     const map = (this._map = new GenMapping({ sourceRoot: opts.sourceRoot }));
     this._sourceFileName = opts.sourceFileName?.replace(/\\/g, "/");
     this._rawMappings = undefined;
+    this.#allowRangeMappings = opts.sourceMapRanges ?? false;
 
     if (opts.inputSourceMap) {
       this._inputMap = new TraceMap(opts.inputSourceMap);
@@ -83,14 +83,17 @@ export default class SourceMap {
    * Get the sourcemap.
    */
   get(): EncodedSourceMap {
+    this.#flushBuffer();
     return toEncodedMap(this._map);
   }
 
   getDecoded(): DecodedSourceMap {
+    this.#flushBuffer();
     return toDecodedMap(this._map);
   }
 
   getRawMappings(): Mapping[] {
+    this.#flushBuffer();
     return (this._rawMappings ||= allMappings(this._map));
   }
 
@@ -135,7 +138,7 @@ export default class SourceMap {
           // or we're marking an identifier, etc.
           // We're trying to mark a `(` (as that's the only thing that provides
           // an identifierNamePos currently), and we the AST had an identifier attached.
-          // Lookup it's original name.
+          // Lookup its original name.
           const originalIdentifierMapping = originalPositionFor(
             this._inputMap,
             identifierNamePos,
@@ -158,12 +161,125 @@ export default class SourceMap {
       identifierName = null;
     }
 
-    // @ts-expect-error FIXME: original cannot be InvalidOriginalMapping
-    maybeAddMapping(this._map, {
-      name: identifierName,
-      generated,
+    if (this.#allowRangeMappings) {
+      const prev = this.#mappingsBuffer1 ?? this.#mappingsBuffer0;
+      // Drop marks whose source position matches the most recent buffered
+      // mark: they would just be skipped by gen-mapping's redundancy check
+      // anyway, and keeping them here breaks the range detection for
+      // sequences like `x + y`, where the printer emits the same source
+      // column for the operator and surrounding spaces.
+      const prevOriginal = prev?.original;
+      if (
+        prevOriginal &&
+        prev.source === originalMapping?.source &&
+        prevOriginal.line === originalMapping.line &&
+        prevOriginal.column === originalMapping.column
+      ) {
+        return;
+      }
+    }
+
+    const newMapping = {
+      name: identifierName ?? null,
+      generated: { line: generated.line, column: generated.column },
       source: originalMapping?.source,
       original: originalMapping,
-    });
+      isRange: false,
+    } as Parameters<typeof maybeAddMapping>[1];
+
+    // Named mappings never participate in range collapsing: a range erases
+    // per-segment names, so a name has to land on a real, standalone segment.
+    // Flush whatever is buffered and write the named mapping straight through.
+    if (newMapping.name !== null) {
+      this.#flushBuffer();
+      maybeAddMapping(this._map, newMapping);
+      return;
+    }
+
+    // We keep up to two mappings buffered before committing them to the
+    // underlying map. This lets us detect consecutive range candidate mappings and
+    // collapse them into a single range mapping: buffer0 is the candidate
+    // "range start", buffer1 (when present) is the candidate "range close",
+    // and any subsequent range candidate mapping replaces buffer1 to extend the range.
+    if (this.#mappingsBuffer0 === null) {
+      this.#mappingsBuffer0 = newMapping;
+      return;
+    }
+
+    if (this.#mappingsBuffer1 === null) {
+      if (
+        this.#allowRangeMappings &&
+        SourceMap.#isRangeCandidate(this.#mappingsBuffer0, newMapping)
+      ) {
+        this.#mappingsBuffer1 = newMapping;
+      } else {
+        maybeAddMapping(this._map, this.#mappingsBuffer0);
+        this.#mappingsBuffer0 = newMapping;
+      }
+      return;
+    }
+
+    if (
+      this.#allowRangeMappings &&
+      SourceMap.#isRangeCandidate(this.#mappingsBuffer1, newMapping)
+    ) {
+      // Extend the open range: drop the old close, keep the new one as the
+      // range close so the pair (buffer0, buffer1) still spans range candidate code.
+      this.#mappingsBuffer1 = newMapping;
+      this.#droppedMappingForRange = true;
+    } else {
+      // Only the range-start segment carries the range marker; the next
+      // committed segment is the implicit range close. Only mark the mapping
+      // as range if it actually allowed us to drop other mappings.
+      if (this.#droppedMappingForRange) this.#mappingsBuffer0.isRange = true;
+      maybeAddMapping(this._map, this.#mappingsBuffer0);
+      maybeAddMapping(this._map, this.#mappingsBuffer1);
+      this.#mappingsBuffer0 = newMapping;
+      this.#mappingsBuffer1 = null;
+      this.#droppedMappingForRange = false;
+    }
+  }
+
+  #flushBuffer() {
+    const buf0 = this.#mappingsBuffer0;
+    const buf1 = this.#mappingsBuffer1;
+    if (buf0 !== null) {
+      if (buf1 !== null) buf0.isRange = true;
+      maybeAddMapping(this._map, buf0 as any);
+      this.#mappingsBuffer0 = null;
+    }
+    if (buf1 !== null) {
+      maybeAddMapping(this._map, buf1);
+      this.#mappingsBuffer1 = null;
+    }
+  }
+
+  static #isRangeCandidate(
+    prev: Parameters<typeof maybeAddMapping>[1],
+    next: Parameters<typeof maybeAddMapping>[1],
+  ): boolean {
+    const prevOriginal = prev.original;
+    const nextOriginal = next.original;
+    if (!prevOriginal || !nextOriginal) return false;
+    if (prev.source !== next.source) return false;
+
+    const generatedLineDelta = next.generated.line - prev.generated.line;
+    const generatedColumnDelta =
+      generatedLineDelta === 0
+        ? next.generated.column - prev.generated.column
+        : next.generated.column;
+
+    const originalLineDelta = nextOriginal.line - prevOriginal.line;
+    const originalColumnDelta =
+      originalLineDelta === 0
+        ? nextOriginal.column - prevOriginal.column
+        : nextOriginal.column;
+
+    return (
+      generatedLineDelta >= 0 &&
+      originalColumnDelta >= 0 &&
+      generatedLineDelta === originalLineDelta &&
+      generatedColumnDelta === originalColumnDelta
+    );
   }
 }

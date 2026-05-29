@@ -7,6 +7,5 @@
   "sourcesContent": [
     "var t = x => x * x;"
   ],
-  "mappings": "AAAA,IAAI,CAAC,GAAG,SAAJ,CAAC,CAAG,CAAC;EAAA,OAAI,CAAC,GAAG,CAAC;AAAA",
-  "ignoreList": []
+  "mappings": "AAAA,IAAI,CAAC,GAAG,SAAJ,CAAC,CAAG,CAAC;EAAA,OAAI,CAAC,GAAG,CAAC;AAAA"
 }

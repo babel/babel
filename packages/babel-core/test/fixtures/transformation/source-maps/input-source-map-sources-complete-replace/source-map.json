@@ -11,6 +11,5 @@
     "foo(1);\nfunction foo(bar) {\n    throw new Error('Intentional.');\n}\n//# sourceMappingURL=input.js.map",
     "<bar />"
   ],
-  "mappings": "AAAA,KAAI",
-  "ignoreList": []
+  "mappings": "AAAA,KAAI"
 }
