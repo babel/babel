@@ -469,7 +469,7 @@ __metadata:
     "@types/resolve": "npm:^1.3.2"
     "@types/semver": "npm:^5.4.0"
     convert-source-map: "npm:^2.0.0"
-    find-up-simple: "npm:^1.0.1"
+    empathic: "npm:^2.0.1"
     gensync: "npm:^1.0.0-beta.2"
     import-meta-resolve: "npm:^4.2.0"
     json5: "npm:^2.2.3"
@@ -3842,7 +3842,7 @@ __metadata:
     "@types/cacache": "npm:^20.0.0"
     cacache: "npm:20.0.3"
     clone-deep: "npm:^4.0.1"
-    find-cache-directory: "npm:^6.0.0"
+    empathic: "npm:^2.0.1"
     pirates: "npm:^4.0.6"
   peerDependencies:
     "@babel/core": "workspace:^"
@@ -8541,13 +8541,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"common-path-prefix@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "common-path-prefix@npm:3.0.0"
-  checksum: 10/09c180e8d8495d42990d617f4d4b7522b5da20f6b236afe310192d401d1da8147a7835ae1ea37797ba0c2238ef3d06f3492151591451df34539fdb4b2630f2b3
-  languageName: node
-  linkType: hard
-
 "commondir@npm:^1.0.1":
   version: 1.0.1
   resolution: "commondir@npm:1.0.1"
@@ -9180,6 +9173,13 @@ __metadata:
   version: 3.0.0
   resolution: "emojis-list@npm:3.0.0"
   checksum: 10/114f47d6d45612621497d2b1556c8f142c35332a591780a54e863e42d281e72d6c7d7c419f2e419319d4eb7f6ebf1db82d9744905d90f275db20d06a763b5e19
+  languageName: node
+  linkType: hard
+
+"empathic@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "empathic@npm:2.0.1"
+  checksum: 10/c5a37b78926e722c38779e5026342350098771fa1cacb52cb808e5329896ab39abb88cd2f1374671d6e5c98aa24cba2534f00da2938d04f11de1a2d012ee75c3
   languageName: node
   linkType: hard
 
@@ -10372,17 +10372,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"find-cache-directory@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "find-cache-directory@npm:6.0.0"
-  dependencies:
-    common-path-prefix: "npm:^3.0.0"
-    pkg-dir: "npm:^8.0.0"
-  checksum: 10/d0864b74ac556e21b1b4dc09d37f0b85ba8620f8cecc08727e8b2348e94828595d7368095deb79e804234629db56900c0f953beecf3cf2373e615fb809cc2033
-  languageName: node
-  linkType: hard
-
-"find-up-simple@npm:^1.0.0, find-up-simple@npm:^1.0.1":
+"find-up-simple@npm:^1.0.1":
   version: 1.0.1
   resolution: "find-up-simple@npm:1.0.1"
   checksum: 10/6e374bffda9f8425314eab47ef79752b6e77dcc95c0ad17d257aef48c32fe07bbc41bcafbd22941c25bb94fffaaaa8e178d928867d844c58100c7fe19ec82f72
@@ -14685,15 +14675,6 @@ __metadata:
   dependencies:
     find-up: "npm:^4.0.0"
   checksum: 10/9863e3f35132bf99ae1636d31ff1e1e3501251d480336edb1c211133c8d58906bed80f154a1d723652df1fda91e01c7442c2eeaf9dc83157c7ae89087e43c8d6
-  languageName: node
-  linkType: hard
-
-"pkg-dir@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "pkg-dir@npm:8.0.0"
-  dependencies:
-    find-up-simple: "npm:^1.0.0"
-  checksum: 10/e589abebd1b76cbc3669a45df64f63cc1b041fd3a6588b45d4c692207df126f2a67478a804e5beeb729e75efea06cd405fb84445c879e7af346ba46a4a30b1ff
   languageName: node
   linkType: hard
 
