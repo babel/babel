@@ -80,6 +80,8 @@ type ModuleMetadata = {
   exports: any[];
 };
 
+const protoKey = "__proto__";
+
 function constructExportCall(
   path: NodePath<t.Program>,
   exportIdent: t.Identifier,
@@ -103,11 +105,15 @@ function constructExportCall(
       const objectProperties = [];
       for (let i = 0; i < exportNames.length; i++) {
         const exportName = exportNames[i];
-        const exportNameNode = stringSpecifiers.has(exportName)
-          ? t.stringLiteral(exportName)
-          : t.identifier(exportName);
+        const computed = exportName === protoKey;
+        const exportNameNode =
+          stringSpecifiers.has(exportName) || computed
+            ? t.stringLiteral(exportName)
+            : t.identifier(exportName);
         const exportValue = exportValues[i];
-        objectProperties.push(t.objectProperty(exportNameNode, exportValue));
+        objectProperties.push(
+          t.objectProperty(exportNameNode, exportValue, computed),
+        );
       }
       statements.push(
         t.expressionStatement(
@@ -120,7 +126,12 @@ function constructExportCall(
 
     statements.push(
       t.variableDeclaration("var", [
-        t.variableDeclarator(t.identifier(exportObj), t.objectExpression([])),
+        t.variableDeclarator(
+          t.identifier(exportObj),
+          t.objectExpression([
+            t.objectProperty(t.identifier(protoKey), t.nullLiteral()),
+          ]),
+        ),
       ]),
     );
 
