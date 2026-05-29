@@ -31,7 +31,9 @@
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/traverse": "workspace:^",
-    "babel-plugin-polyfill-es-shims": "^1.0.0-rc.2"
+    "array.prototype.concat": "^1.0.2",
+    "babel-plugin-polyfill-es-shims": "^1.0.0-rc.2",
+    "object.getownpropertydescriptors": "^2.1.1"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"

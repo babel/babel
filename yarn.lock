@@ -1496,7 +1496,9 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/traverse": "workspace:^"
+    array.prototype.concat: "npm:^1.0.2"
     babel-plugin-polyfill-es-shims: "npm:^1.0.0-rc.2"
+    object.getownpropertydescriptors: "npm:^2.1.1"
   peerDependencies:
     "@babel/core": "workspace:^"
   languageName: unknown
@@ -7233,6 +7235,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"array.prototype.concat@npm:^1.0.2":
+  version: 1.0.6
+  resolution: "array.prototype.concat@npm:1.0.6"
+  dependencies:
+    call-bind: "npm:^1.0.7"
+    define-properties: "npm:^1.2.1"
+    es-abstract: "npm:^1.23.2"
+    es-constants: "npm:^1.0.1"
+    es-errors: "npm:^1.3.0"
+    es-object-atoms: "npm:^1.0.0"
+    is-string: "npm:^1.0.7"
+  checksum: 10/f133d0ef58e4cc4dfa5baef431b0fe805569c6804218d234220c9bdf6a5a5e72ae0ac7bf25c81517826786e97dd5102cb391fc13c51d212eb18a51c3b37900fb
+  languageName: node
+  linkType: hard
+
 "array.prototype.findlastindex@npm:^1.2.6":
   version: 1.2.6
   resolution: "array.prototype.findlastindex@npm:1.2.6"
@@ -7269,6 +7286,22 @@ __metadata:
     es-abstract: "npm:^1.23.5"
     es-shim-unscopables: "npm:^1.0.2"
   checksum: 10/473534573aa4b37b1d80705d0ce642f5933cccf5617c9f3e8a56686e9815ba93d469138e86a1f25d2fe8af999c3d24f54d703ec1fc2db2e6778d46d0f4ac951e
+  languageName: node
+  linkType: hard
+
+"array.prototype.reduce@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "array.prototype.reduce@npm:1.0.8"
+  dependencies:
+    call-bind: "npm:^1.0.8"
+    call-bound: "npm:^1.0.4"
+    define-properties: "npm:^1.2.1"
+    es-abstract: "npm:^1.23.9"
+    es-array-method-boxes-properly: "npm:^1.0.0"
+    es-errors: "npm:^1.3.0"
+    es-object-atoms: "npm:^1.1.1"
+    is-string: "npm:^1.1.1"
+  checksum: 10/63f4af812f6322fcf1961c348a33a4d2504dbea26d0bde614e43708d02bcdbdb729d225bad69392e8c168803333f0438d6870eb579194a7f2e94fb471fa518bb
   languageName: node
   linkType: hard
 
@@ -8092,7 +8125,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"call-bind@npm:^1.0.7, call-bind@npm:^1.0.8, call-bind@npm:^1.0.9":
+"call-bind@npm:^1.0.2, call-bind@npm:^1.0.7, call-bind@npm:^1.0.8, call-bind@npm:^1.0.9":
   version: 1.0.9
   resolution: "call-bind@npm:1.0.9"
   dependencies:
@@ -8912,7 +8945,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"define-properties@npm:^1.2.1":
+"define-properties@npm:^1.2.0, define-properties@npm:^1.2.1":
   version: 1.2.1
   resolution: "define-properties@npm:1.2.1"
   dependencies:
@@ -9301,6 +9334,23 @@ __metadata:
     unbox-primitive: "npm:^1.1.0"
     which-typed-array: "npm:^1.1.19"
   checksum: 10/e2c97263d87b7faf65102d887074af421db7e48cd92b8b3cd308216cdd2547b647e8f61bf51429bdb13adc463bb7f421989544cbfd2e7f7469ef7a69ae8a4205
+  languageName: node
+  linkType: hard
+
+"es-array-method-boxes-properly@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "es-array-method-boxes-properly@npm:1.0.0"
+  checksum: 10/27a8a21acf20f3f51f69dce8e643f151e380bffe569e95dc933b9ded9fcd89a765ee21b5229c93f9206c93f87395c6b75f80be8ac8c08a7ceb8771e1822ff1fb
+  languageName: node
+  linkType: hard
+
+"es-constants@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "es-constants@npm:1.0.1"
+  dependencies:
+    call-bind: "npm:^1.0.2"
+    define-properties: "npm:^1.2.0"
+  checksum: 10/b69bce861d45b159a2bb906e155d3ccb950ecfd54efb0863385de0c19fb13a8b0269ac44255a1d34bd30a6b5132c4f29094d6ea3b936b979a49861fd62370fc5
   languageName: node
   linkType: hard
 
@@ -11870,7 +11920,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-string@npm:^1.1.1":
+"is-string@npm:^1.0.7, is-string@npm:^1.1.1":
   version: 1.1.1
   resolution: "is-string@npm:1.1.1"
   dependencies:
@@ -13943,6 +13993,21 @@ __metadata:
     es-abstract: "npm:^1.23.2"
     es-object-atoms: "npm:^1.0.0"
   checksum: 10/5b2e80f7af1778b885e3d06aeb335dcc86965e39464671adb7167ab06ac3b0f5dd2e637a90d8ebd7426d69c6f135a4753ba3dd7d0fe2a7030cf718dcb910fd92
+  languageName: node
+  linkType: hard
+
+"object.getownpropertydescriptors@npm:^2.1.1":
+  version: 2.1.9
+  resolution: "object.getownpropertydescriptors@npm:2.1.9"
+  dependencies:
+    array.prototype.reduce: "npm:^1.0.8"
+    call-bind: "npm:^1.0.8"
+    define-properties: "npm:^1.2.1"
+    es-abstract: "npm:^1.24.0"
+    es-object-atoms: "npm:^1.1.1"
+    gopd: "npm:^1.2.0"
+    safe-array-concat: "npm:^1.1.3"
+  checksum: 10/e80dfbf8fcf9b4883db4738b669c184f1e0faea0c20cf01f610b5a022382f5b54d07fb3e3000e74a6d83b4019173a576ce666500e46d01e959245fac9ae05753
   languageName: node
   linkType: hard
 
