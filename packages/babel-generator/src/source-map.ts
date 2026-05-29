@@ -158,8 +158,8 @@ export default class SourceMap {
       identifierName = null;
     }
 
-    // @ts-expect-error FIXME: original cannot be InvalidOriginalMapping
-    maybeAddMapping(this._map, {
+    // original cannot be InvalidOriginalMapping
+    (maybeAddMapping as any)(this._map, {
       name: identifierName,
       generated,
       source: originalMapping?.source,
