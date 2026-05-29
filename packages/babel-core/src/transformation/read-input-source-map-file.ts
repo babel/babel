@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { findUpSync } from "find-up-simple";
+import { up as findPackageUp } from "empathic/package";
 import { createDebug } from "obug";
 import convertSourceMap from "convert-source-map";
 import type { SourceMapConverter } from "convert-source-map";
@@ -20,9 +20,9 @@ function getInputMapPath(
     relativeToInputFileDir.startsWith("..") ||
     path.isAbsolute(relativeToInputFileDir)
   ) {
-    const inputPackageJSONPath = findUpSync("package.json", {
+    const inputPackageJSONPath = findPackageUp({
       cwd: inputFileDir,
-      stopAt: root,
+      last: root,
     });
     const inputFileRoot = inputPackageJSONPath
       ? path.dirname(inputPackageJSONPath)
