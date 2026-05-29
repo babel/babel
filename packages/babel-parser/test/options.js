@@ -211,4 +211,22 @@ describe("options", () => {
       });
     });
   });
+
+  describe("ranges", () => {
+    it("adds ranges to comments", () => {
+      const ast = parse("a// line\n/* block */b", { ranges: true });
+
+      expect(
+        ast.comments.map(({ type, start, end, range }) => ({
+          type,
+          start,
+          end,
+          range,
+        })),
+      ).toEqual([
+        { type: "CommentLine", start: 1, end: 8, range: [1, 8] },
+        { type: "CommentBlock", start: 9, end: 20, range: [9, 20] },
+      ]);
+    });
+  });
 });

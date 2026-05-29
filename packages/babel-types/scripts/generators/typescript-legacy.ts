@@ -17,6 +17,7 @@ interface BaseComment {
   value: string;
   start: number;
   end: number;
+  range?: [number, number];
   loc: SourceLocation;
   type: "CommentBlock" | "CommentLine";
 }

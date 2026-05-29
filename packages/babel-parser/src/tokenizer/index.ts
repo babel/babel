@@ -354,14 +354,19 @@ export default abstract class Tokenizer extends CommentsParser {
     if (this.isLookahead) return;
     /*:: invariant(startLoc) */
 
+    const startOffset = this.sourceToOffsetPos(start);
+    const endOffset = this.sourceToOffsetPos(end + commentEnd.length);
     const comment: N.CommentBlock = {
       type: "CommentBlock",
       value: this.input.slice(start + 2, end),
-      start: this.sourceToOffsetPos(start),
-      end: this.sourceToOffsetPos(end + commentEnd.length),
+      start: startOffset,
+      end: endOffset,
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       loc: new SourceLocation(startLoc!, this.state.curPosition()),
     };
+    if (this.optionFlags & OptionFlags.Ranges) {
+      comment.range = [startOffset, endOffset];
+    }
     if (this.optionFlags & OptionFlags.Tokens) this.pushToken(comment);
     return comment;
   }
@@ -384,14 +389,19 @@ export default abstract class Tokenizer extends CommentsParser {
     const end = this.state.pos;
     const value = this.input.slice(start + startSkip, end);
 
+    const startOffset = this.sourceToOffsetPos(start);
+    const endOffset = this.sourceToOffsetPos(end);
     const comment: N.CommentLine = {
       type: "CommentLine",
       value,
-      start: this.sourceToOffsetPos(start),
-      end: this.sourceToOffsetPos(end),
+      start: startOffset,
+      end: endOffset,
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       loc: new SourceLocation(startLoc!, this.state.curPosition()),
     };
+    if (this.optionFlags & OptionFlags.Ranges) {
+      comment.range = [startOffset, endOffset];
+    }
     if (this.optionFlags & OptionFlags.Tokens) this.pushToken(comment);
     return comment;
   }

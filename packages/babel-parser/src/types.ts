@@ -10,6 +10,7 @@ interface CommentBase {
   value: string;
   start?: number | undefined;
   end?: number | undefined;
+  range?: [number, number] | undefined;
   loc?: SourceLocation | undefined;
 }
 

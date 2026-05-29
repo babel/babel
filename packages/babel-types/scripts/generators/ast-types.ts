@@ -59,6 +59,7 @@ interface BaseComment {
   value: string;
   start?: number;
   end?: number;
+  range?: [number, number];
   loc?: SourceLocation;
   // generator will skip the comment if ignore is true
   ignore?: boolean;

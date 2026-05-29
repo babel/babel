@@ -13,6 +13,7 @@ declare class ${NODE_PREFIX}Comment {
   value: string;
   start: number;
   end: number;
+  range?: [number, number];
   loc: ${NODE_PREFIX}SourceLocation;
 }
 
