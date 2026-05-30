@@ -688,10 +688,9 @@ __metadata:
     "@babel/compat-data": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
-    "@types/lru-cache": "npm:^5.1.1"
     "@types/semver": "npm:^5.5.0"
     browserslist: "npm:^4.24.0"
-    lru-cache: "npm:^7.14.1"
+    lru-cache: "npm:^11.0.0"
     semver: "catalog:"
   languageName: unknown
   linkType: soft
@@ -1115,7 +1114,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@jridgewell/trace-mapping": "catalog:"
     jest-diff: "npm:^30.0.0"
-    lru-cache: "npm:^7.14.1"
+    lru-cache: "npm:^11.0.0"
     resolve: "npm:2.0.0-next.5"
   languageName: unknown
   linkType: soft
@@ -6093,13 +6092,6 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: 10/4e5aed58cabb2bbf6f725da13421aa50a49abb6bc17bfab6c31b8774b073fa7b50d557c61f961a09a85f6056151190f8ac95f13f5b48136ba5841f7d4484ec56
-  languageName: node
-  linkType: hard
-
-"@types/lru-cache@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "@types/lru-cache@npm:5.1.1"
-  checksum: 10/0afadefc983306684a8ef95b6337a0d9e3f687e7e89e1f1f3f2e1ce3fbab5b018bb84cf277d781f871175a2c8f0176762b69e58b6f4296ee1b816cea94d5ef06
   languageName: node
   linkType: hard
 

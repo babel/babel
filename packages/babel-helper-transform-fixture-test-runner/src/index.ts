@@ -19,7 +19,7 @@ import assert from "node:assert";
 import fs, { readFileSync, realpathSync } from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
-import LruCache from "lru-cache";
+import { LRUCache } from "lru-cache";
 import { fileURLToPath } from "node:url";
 import { diff } from "jest-diff";
 import type { ChildProcess } from "node:child_process";
@@ -41,7 +41,7 @@ type Module = {
 
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
 
-const cachedScripts = new LruCache<
+const cachedScripts = new LRUCache<
   string,
   { code: string; cachedData?: Buffer }
 >({ max: 10 });
