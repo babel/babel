@@ -81,11 +81,6 @@ export class Token {
 }
 
 export let locDataCache: Uint32Array | undefined;
-export function resetLocData() {
-  const data = locDataCache;
-  locDataCache = undefined;
-  return data;
-}
 
 // ## Tokenizer
 
@@ -105,18 +100,12 @@ export default abstract class Tokenizer extends CommentsParser {
     this.isLookahead = false;
 
     if (process.env.IS_PUBLISH) {
-      if (
-        !locDataCache ||
-        locDataCache.length < (this.length + 1) * 2 ||
-        options.locations === "packed"
-      ) {
+      if (!locDataCache || locDataCache.length < (this.length + 1) * 2) {
         locDataCache = new Uint32Array((this.length + 1) * 2);
       }
     } else {
       locDataCache = new Uint32Array((this.length + 1) * 2);
-      if (options.locations !== "packed") {
-        locDataCache.fill(4294967295);
-      }
+      locDataCache.fill(4294967295);
     }
 
     this.locData = locDataCache;
