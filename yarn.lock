@@ -255,6 +255,7 @@ __metadata:
   resolution: "@babel/build-external-helpers@workspace:packages/babel-build-external-helpers"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^"
     commander: "npm:^14.0.2"
   peerDependencies:
     "@babel/core": "workspace:^"
