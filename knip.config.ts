@@ -66,6 +66,9 @@ for (let pkg of pkgs) {
   if (globSync(`${pkg}/test/batch-test-runner/*.js`).length) {
     entry.push("test/batch-test-runner/*.js");
   }
+  if (globSync(`${pkg}/test/helpers/*.js`).length) {
+    entry.push("test/helpers/*.js");
+  }
   if (globSync(`${pkg}/scripts/*`).length) {
     entry.push("scripts/**/*");
   }

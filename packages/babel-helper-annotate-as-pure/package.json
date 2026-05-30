@@ -16,9 +16,6 @@
   "dependencies": {
     "@babel/types": "workspace:^"
   },
-  "devDependencies": {
-    "@babel/traverse": "workspace:^"
-  },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"
   },

@@ -1,11 +1,8 @@
 // Always use the latest available version of Unicode!
 // https://tc39.github.io/ecma262/#sec-conformance
-import packageJson from "../package.json" with { type: "json" };
+import unicodePackageJson from "@unicode/unicode-17.0.0/package.json" with { type: "json" };
 
-const unicodePackageNamePrefix = "@unicode/unicode-";
-const unicodePackageName = Object.keys(packageJson.devDependencies).find(name =>
-  name.startsWith(unicodePackageNamePrefix)
-);
+const unicodePackageName = unicodePackageJson.name;
 
 const start = (
   await import(`${unicodePackageName}/Binary_Property/ID_Start/code-points.js`)

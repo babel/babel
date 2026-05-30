@@ -20,10 +20,8 @@
   "peerDependencies": {
     "@babel/core": "workspace:^"
   },
-  "TODO": "The @babel/traverse dependency is only needed for the NodePath TS type. We can consider exporting it from @babel/core.",
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:^"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"
