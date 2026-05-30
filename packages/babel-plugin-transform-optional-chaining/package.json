@@ -26,8 +26,7 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/plugin-transform-block-scoping": "workspace:^",
-    "@babel/traverse": "workspace:^"
+    "@babel/plugin-transform-block-scoping": "workspace:^"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"

@@ -27,9 +27,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/plugin-transform-class-properties": "workspace:^",
-    "@babel/plugin-transform-class-static-block": "workspace:^",
-    "@babel/traverse": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/plugin-transform-class-static-block": "workspace:^"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-destructuring-private",
   "engines": {

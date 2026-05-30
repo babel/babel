@@ -17,8 +17,7 @@
     "@babel/helper-annotate-as-pure": "workspace:^"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@babel/traverse": "workspace:^"
+    "@babel/core": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "workspace:^"

@@ -35,6 +35,7 @@
     "babel-plugin-polyfill-regenerator": "^1.0.0-rc.2",
     "mocha": "^10.0.0",
     "recast": "^0.23.3",
+    "regenerator-runtime": "^0.14.1",
     "uglify-js": "^3.14.0"
   },
   "engines": {
