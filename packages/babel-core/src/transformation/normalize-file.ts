@@ -1,6 +1,5 @@
-import { createDebug } from "obug";
 import type { Handler } from "gensync";
-import { file, traverseFast } from "@babel/types";
+import { file } from "@babel/types";
 import type * as t from "@babel/types";
 import type { PluginPasses } from "../config/index.ts";
 import convertSourceMap from "convert-source-map";
@@ -12,11 +11,10 @@ import parser from "../parser/index.ts";
 import cloneDeep from "./util/clone-deep.ts";
 import type { ResolvedOptions } from "../config/validation/options.ts";
 
-const debug = createDebug("babel:transform:file");
-
 // These regexps are copied from the convert-source-map package,
 // but without // or /* at the beginning of the comment.
 
+const SOURCEMAP_REGEX = /^[@#]\s+sourceMappingURL=.*$/;
 const INLINE_SOURCEMAP_REGEX =
   /^[@#]\s+sourceMappingURL=data:(?:application|text)\/json;(?:charset[:=]\S+?;)?base64,.*$/;
 const EXTERNAL_SOURCEMAP_REGEX =
@@ -51,7 +49,7 @@ export default function* normalizeFile(
   }
 
   let inputMap = null;
-  if (options.inputSourceMap !== false) {
+  if (options.sourceMaps && options.inputSourceMap !== false) {
     // If an explicit object is passed in, it overrides the processing of
     // source maps that may be in the file itself.
     if (typeof options.inputSourceMap === "object") {
@@ -59,37 +57,42 @@ export default function* normalizeFile(
     }
 
     if (!inputMap) {
-      const lastComment = extractComments(INLINE_SOURCEMAP_REGEX, ast);
-      if (lastComment) {
-        try {
-          inputMap = convertSourceMap.fromComment("//" + lastComment);
-        } catch (err) {
-          console.warn(
-            "discarding unknown inline input sourcemap",
-            options.filename,
-            err,
-          );
-        }
+      let comment = extractComment(ast.program);
+      for (let i = ast.program.body.length - 1; !comment && i >= 0; i--) {
+        const node = ast.program.body[i];
+        comment = extractComment(node);
       }
-    }
 
-    if (!inputMap) {
-      const lastComment = extractComments(EXTERNAL_SOURCEMAP_REGEX, ast);
-      if (typeof options.filename === "string" && lastComment) {
-        try {
-          // when `lastComment` is non-null, EXTERNAL_SOURCEMAP_REGEX must have matches
-          const inputMapURL: string =
-            EXTERNAL_SOURCEMAP_REGEX.exec(lastComment)![1];
-          inputMap = readInputSourceMapFile(
-            options.filename,
-            options.root,
-            inputMapURL,
-          );
-        } catch (err) {
-          debug("discarding unknown file input sourcemap", err);
+      if (comment) {
+        if (INLINE_SOURCEMAP_REGEX.test(comment)) {
+          try {
+            inputMap = convertSourceMap.fromComment("//" + comment);
+          } catch (err) {
+            console.warn(
+              "discarding unknown inline input sourcemap",
+              options.filename,
+              err,
+            );
+          }
+        } else if (
+          typeof options.filename === "string" &&
+          EXTERNAL_SOURCEMAP_REGEX.test(comment)
+        ) {
+          try {
+            // when `lastComment` is non-null, EXTERNAL_SOURCEMAP_REGEX must have matches
+            const inputMapURL: string =
+              EXTERNAL_SOURCEMAP_REGEX.exec(comment)![1];
+            inputMap = readInputSourceMapFile(
+              options.filename,
+              options.root,
+              inputMapURL,
+            );
+          } catch (err) {
+            console.warn("discarding unknown file input sourcemap", err);
+          }
+        } else {
+          console.warn("discarding un-loadable file input sourcemap");
         }
-      } else if (lastComment) {
-        debug("discarding un-loadable file input sourcemap");
       }
     }
   }
@@ -101,41 +104,32 @@ export default function* normalizeFile(
   });
 }
 
-function extractCommentsFromList(
-  regex: RegExp,
+function extractCommentFromList(
   comments: t.Comment[] | undefined | null,
-  lastComment: string | null,
-): [t.Comment[] | undefined | null, string | null] {
-  if (comments) {
-    comments = comments.filter(({ value }) => {
-      if (regex.test(value)) {
-        lastComment = value;
-        return false;
-      }
-      return true;
-    });
+): string | null {
+  if (comments == null || comments.length === 0) return null;
+  for (let i = comments.length - 1; i >= 0; i--) {
+    const comment = comments[i];
+    if (SOURCEMAP_REGEX.test(comment.value)) {
+      comments.splice(i, 1);
+      return comment.value;
+    }
   }
-  return [comments, lastComment];
+  return null;
 }
 
-function extractComments(regex: RegExp, ast: t.Node): string | null {
-  let lastComment: string | null = null;
-  traverseFast(ast, node => {
-    [node.leadingComments, lastComment] = extractCommentsFromList(
-      regex,
-      node.leadingComments,
-      lastComment,
-    );
-    [node.innerComments, lastComment] = extractCommentsFromList(
-      regex,
-      node.innerComments,
-      lastComment,
-    );
-    [node.trailingComments, lastComment] = extractCommentsFromList(
-      regex,
-      node.trailingComments,
-      lastComment,
-    );
-  });
-  return lastComment;
+function extractComment(ast: t.Node): string | null {
+  if (ast.trailingComments) {
+    const comment = extractCommentFromList(ast.trailingComments);
+    if (comment) return comment;
+  }
+  if (ast.innerComments) {
+    const comment = extractCommentFromList(ast.innerComments);
+    if (comment) return comment;
+  }
+  if (ast.leadingComments) {
+    const comment = extractCommentFromList(ast.leadingComments);
+    if (comment) return comment;
+  }
+  return null;
 }
