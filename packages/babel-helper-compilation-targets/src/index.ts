@@ -1,7 +1,7 @@
 import browserslist from "browserslist";
 import { findSuggestion } from "@babel/helper-validator-option";
 import browserModulesData from "@babel/compat-data/native-modules" with { type: "json" };
-import LruCache from "lru-cache";
+import { LRUCache } from "lru-cache";
 
 import {
   semverify,
@@ -174,11 +174,11 @@ function resolveTargets(queries: Browsers, env?: string): Targets {
   return getLowestVersions(resolved);
 }
 
-const targetsCache = new LruCache({ max: 64 });
+const targetsCache = new LRUCache<string, Targets>({ max: 64 });
 
 function resolveTargetsCached(queries: Browsers, env?: string): Targets {
   const cacheKey = typeof queries === "string" ? queries : queries.join() + env;
-  let cached = targetsCache.get(cacheKey) as Targets | undefined;
+  let cached = targetsCache.get(cacheKey);
   if (!cached) {
     cached = resolveTargets(queries, env);
     targetsCache.set(cacheKey, cached);
