@@ -470,20 +470,22 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                 "packages/babel-compat-data/scripts/data/legacy-plugin-aliases.js",
                 "packages/*/src/**/*.cjs",
               ],
-              dynamicRequireTargets: [
-                // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
-                path
-                  .relative(
-                    monorepoRoot,
-                    resolveChain(
-                      import.meta.url,
-                      "./packages/babel-helper-create-regexp-features-plugin",
-                      "regexpu-core",
-                      "regenerate-unicode-properties"
-                    )
-                  )
-                  .replace(/\\/g, "/") + "/**/*.js", // Must be posix path in rollup 3
-              ],
+              dynamicRequireTargets: buildStandalone
+                ? [
+                    // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
+                    path
+                      .relative(
+                        monorepoRoot,
+                        resolveChain(
+                          import.meta.url,
+                          "./packages/babel-helper-create-regexp-features-plugin",
+                          "regexpu-core",
+                          "regenerate-unicode-properties"
+                        )
+                      )
+                      .replace(/\\/g, "/") + "/**/*.js", // Must be posix path in rollup 3
+                  ]
+                : undefined,
               // Never delegate to the native require()
               ignoreDynamicRequires: false,
               // Align with the Node.js behavior
