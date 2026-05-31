@@ -3,7 +3,6 @@ import { getOptions, OptionFlags } from "../options.ts";
 import StatementParser from "./statement.ts";
 import ScopeHandler from "../util/scope.ts";
 import type { ParserOptions, ParseResult, File } from "@babel/parser";
-import { resetLocData } from "../tokenizer/index.ts";
 
 export type PluginsMap = Map<string, Record<string, any>>;
 
@@ -88,10 +87,6 @@ export default class Parser extends StatementParser {
     result.errors = this.state.errors;
     // @ts-expect-error todo: check if comments exist when `options.attachComment` is false
     result.comments.length = this.state.commentsLen;
-    if (this.options.locations === "packed") {
-      // @ts-expect-error "locData" does not exist on type "File"
-      result.locData = resetLocData();
-    }
     return result;
   }
 }
