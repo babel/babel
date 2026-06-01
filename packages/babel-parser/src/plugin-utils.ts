@@ -1,11 +1,10 @@
-import type Parser from "./parser/index.ts";
 import type { PluginConfig } from "./typings.d.ts";
 
 export type Plugin = PluginConfig;
 
-export type MixinPlugin = (
-  superClass: new (...args: any) => Parser,
-) => new (...args: any) => Parser;
+type MixinPlugin = (
+  superClass: new (...args: any) => any,
+) => new (...args: any) => any;
 
 const PIPELINE_PROPOSALS = ["fsharp", "hack"];
 const TOPIC_TOKENS = ["^^", "@@", "^", "%", "#"];
@@ -148,7 +147,7 @@ import placeholders from "./plugins/placeholders.ts";
 import v8intrinsic from "./plugins/v8intrinsic.ts";
 
 // NOTE: order is important. estree must come first; placeholders must come last.
-export const mixinPlugins = {
+export const mixinPlugins: Record<string, MixinPlugin> = {
   estree,
   jsx,
   flow,

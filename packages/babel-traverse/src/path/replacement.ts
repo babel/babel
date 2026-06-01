@@ -46,13 +46,10 @@ import { resync, setScope } from "./context.ts";
  *  - Insert the provided nodes after the current node.
  *  - Remove the current node.
  */
-
-import type { NodeOrNodeList, NodePaths } from "./index.ts";
-
-export function replaceWithMultiple<Nodes extends NodeOrNodeList<t.Node>>(
+export function replaceWithMultiple<Node extends t.Node>(
   this: NodePath<t.Node | null>,
-  nodes: Nodes,
-): NodePaths<Nodes> {
+  nodes: Node | Node[],
+): NodePath<Node>[] {
   resync.call(this);
 
   const verifiedNodes = _verifyNodeList.call(this, nodes);

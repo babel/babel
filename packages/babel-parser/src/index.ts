@@ -152,7 +152,6 @@ function getParserClass(
   if (!cls) {
     cls = Parser;
     for (const plugin of pluginList) {
-      // @ts-expect-error todo(flow->ts)
       cls = mixinPlugins[plugin](cls);
     }
     parserClassCache.set(key, cls);

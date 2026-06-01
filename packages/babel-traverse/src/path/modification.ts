@@ -23,21 +23,15 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 import type Scope from "../scope/index.ts";
-import type {
-  NodeList,
-  NodeOrNodeList,
-  NodeListType,
-  NodePaths,
-} from "./index.ts";
 
 /**
  * Insert the provided nodes before the current one.
  */
 
-export function insertBefore<Nodes extends NodeOrNodeList<t.Node>>(
+export function insertBefore<Node extends t.Node>(
   this: NodePath<t.Node | null>,
-  nodes_: Nodes,
-): NodePaths<Nodes> {
+  nodes_: Node | Node[],
+): NodePath<Node>[] {
   _assertUnremoved.call(this);
 
   const nodes = _verifyNodeList.call(this, nodes_);
@@ -57,7 +51,7 @@ export function insertBefore<Nodes extends NodeOrNodeList<t.Node>>(
     isExportNamedDeclaration(parent) ||
     (parentPath.isExportDefaultDeclaration() && this.isDeclaration())
   ) {
-    return parentPath.insertBefore(nodes as Nodes);
+    return parentPath.insertBefore(nodes) as NodePath<Node>[];
   } else if (
     (this.isNodeType("Expression") && !this.isJSXElement()) ||
     (parentPath.isForStatement() && this.key === "init")
@@ -66,7 +60,7 @@ export function insertBefore<Nodes extends NodeOrNodeList<t.Node>>(
     // @ts-expect-error todo(flow->ts): check that nodes is an array of statements
     return this.replaceExpressionWithStatements(nodes);
   } else if (Array.isArray(this.container)) {
-    return _containerInsertBefore.call(this, nodes) as NodePaths<Nodes>;
+    return _containerInsertBefore.call(this, nodes) as NodePath<Node>[];
   } else if (this.isStatementOrBlock()) {
     const node = this.node as t.Statement;
     const shouldInsertCurrentNode =
@@ -80,7 +74,7 @@ export function insertBefore<Nodes extends NodeOrNodeList<t.Node>>(
     return blockPath.unshiftContainer(
       "body",
       nodes as t.Statement[],
-    ) as NodePaths<Nodes>;
+    ) as NodePath<Node>[];
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
@@ -89,24 +83,24 @@ export function insertBefore<Nodes extends NodeOrNodeList<t.Node>>(
   }
 }
 
-export function _containerInsert<Nodes extends NodeList<t.Node>>(
+export function _containerInsert<Node extends t.Node | null>(
   this: NodePath<t.Node | null>,
   from: number,
-  nodes: Nodes,
-): NodePaths<Nodes> {
+  nodes: Node[],
+): NodePath<Node>[] {
   updateSiblingKeys.call(this, from, nodes.length);
 
-  const paths: NodePath<t.Node | null>[] = [];
+  const paths: NodePath<Node>[] = [];
 
   // @ts-expect-error todo(flow->ts): this.container could be a NodePath
   this.container.splice(from, 0, ...nodes);
   for (let i = 0; i < nodes.length; i++) {
     const to = from + i;
-    const path = this.getSibling(to);
+    const path = this.getSibling(to) as NodePath<Node>;
     paths.push(path);
 
-    if (this.context?.queue) {
-      pushContext.call(path, this.context);
+    if (path.context?.queue) {
+      pushContext.call(path, path.context);
     }
   }
 
@@ -121,29 +115,29 @@ export function _containerInsert<Nodes extends NodeList<t.Node>>(
     }
   }
 
-  return paths as NodePaths<Nodes>;
+  return paths;
 }
 
-export function _containerInsertBefore<Nodes extends NodeList<t.Node>>(
+export function _containerInsertBefore<Node extends t.Node | null>(
   this: NodePath<t.Node | null>,
-  nodes: Nodes,
-): NodePaths<Nodes> {
+  nodes: Node[],
+): NodePath<Node>[] {
   return _containerInsert.call(
     this,
     this.key as number,
     nodes,
-  ) as NodePaths<Nodes>;
+  ) as NodePath<Node>[];
 }
 
-export function _containerInsertAfter<Nodes extends NodeList<t.Node>>(
+export function _containerInsertAfter<Node extends t.Node | null>(
   this: NodePath<t.Node | null>,
-  nodes: Nodes,
-): NodePaths<Nodes> {
+  nodes: Node[],
+): NodePath<Node>[] {
   return _containerInsert.call(
     this,
     (this.key as number) + 1,
     nodes,
-  ) as NodePaths<Nodes>;
+  ) as NodePath<Node>[];
 }
 
 const last = <T>(arr: T[]) => arr[arr.length - 1];
@@ -181,10 +175,10 @@ function isAlmostConstantAssignment(
  * expression, ensure that the completion record is correct by pushing the current node.
  */
 
-export function insertAfter<Nodes extends NodeOrNodeList<t.Node>>(
+export function insertAfter<Node extends t.Node>(
   this: NodePath<t.Node | null>,
-  nodes_: Nodes,
-): NodePaths<Nodes> {
+  nodes_: Node | Node[],
+): NodePath<Node>[] {
   _assertUnremoved.call(this);
 
   if (this.isSequenceExpression()) {
@@ -212,7 +206,7 @@ export function insertAfter<Nodes extends NodeOrNodeList<t.Node>>(
         return isExpression(node) ? expressionStatement(node) : node;
       }),
       // todo: this cast is unsound, we wrap some expression nodes in expressionStatement but never unwrap them in the return values.
-    ) as NodePaths<Nodes>;
+    ) as NodePath<Node>[];
   } else if (
     (this.isNodeType("Expression") &&
       !this.isJSXElement() &&
@@ -233,7 +227,7 @@ export function insertAfter<Nodes extends NodeOrNodeList<t.Node>>(
         ).insertAfter(nodes);
         // todo: this cast is unsound, we wrap nodes in the IIFE but never unwrap them in the return values.
         // consider just returning the insertAfter result.
-        return [self] as NodePaths<Nodes>;
+        return [self] as NodePath<Node>[];
       }
 
       if (isHiddenInSequenceExpression(self)) {
@@ -271,7 +265,7 @@ export function insertAfter<Nodes extends NodeOrNodeList<t.Node>>(
     // @ts-expect-error todo(flow->ts): check that nodes is an array of statements
     return this.replaceExpressionWithStatements(nodes);
   } else if (Array.isArray(this.container)) {
-    return _containerInsertAfter.call(this, nodes) as NodePaths<Nodes>;
+    return _containerInsertAfter.call(this, nodes) as NodePath<Node>[];
   } else if (this.isStatementOrBlock()) {
     const node = this.node as t.Statement;
     const shouldInsertCurrentNode =
@@ -285,7 +279,7 @@ export function insertAfter<Nodes extends NodeOrNodeList<t.Node>>(
     return blockPath.pushContainer(
       "body",
       nodes as t.Statement[],
-    ) as NodePaths<Nodes>;
+    ) as NodePath<Node>[];
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
@@ -360,11 +354,13 @@ type NodeKeyOfArrays<N extends t.Node> = {
   [P in string & keyof N]-?: N[P] extends (t.Node | null)[] ? P : never;
 }[string & keyof N];
 
+type ElementOf<T> = T extends (infer U extends t.Node)[] ? U : never;
+
 export function unshiftContainer<
   N extends t.Node,
   K extends NodeKeyOfArrays<N>,
-  Nodes extends NodeOrNodeList<NodeListType<N, K>>,
->(this: NodePath<N>, listKey: K, nodes: Nodes): NodePaths<Nodes> {
+  Node extends ElementOf<N[K]>,
+>(this: NodePath<N>, listKey: K, nodes: Node | Node[]): NodePath<Node>[] {
   _assertUnremoved.call(this);
 
   const verifiedNodes = _verifyNodeList.call(this, nodes);
@@ -380,14 +376,14 @@ export function unshiftContainer<
     key: 0,
   }).setContext(this.context);
 
-  return _containerInsertBefore.call(path, verifiedNodes) as NodePaths<Nodes>;
+  return _containerInsertBefore.call(path, verifiedNodes) as NodePath<Node>[];
 }
 
 export function pushContainer<
   N extends t.Node,
   K extends NodeKeyOfArrays<N>,
-  Nodes extends NodeOrNodeList<NodeListType<N, K>>,
->(this: NodePath<N>, listKey: K, nodes: Nodes): NodePaths<Nodes> {
+  Node extends ElementOf<N[K]>,
+>(this: NodePath<N>, listKey: K, nodes: Node | Node[]): NodePath<Node>[] {
   _assertUnremoved.call(this);
 
   const verifiedNodes = _verifyNodeList.call(this, nodes);
@@ -404,5 +400,5 @@ export function pushContainer<
     key: container.length,
   }).setContext(this.context);
 
-  return path.replaceWithMultiple(verifiedNodes) as NodePaths<Nodes>;
+  return path.replaceWithMultiple(verifiedNodes) as NodePath<Node>[];
 }

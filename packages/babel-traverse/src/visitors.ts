@@ -339,13 +339,13 @@ function wrapWithStateOrWrapper<State>(
   return newVisitor;
 }
 
-function ensureEntranceObjects(obj: Visitor<any>) {
-  for (const key of Object.keys(obj) as (keyof Visitor)[]) {
+// Use `any` here to make type checking faster.
+function ensureEntranceObjects(obj: any) {
+  for (const key of Object.keys(obj)) {
     if (shouldIgnoreKey(key)) continue;
 
     const fns = obj[key];
     if (typeof fns === "function") {
-      // @ts-expect-error: Expression produces a union type that is too complex to represent.
       obj[key] = { enter: fns };
     }
   }
