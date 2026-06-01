@@ -61,6 +61,7 @@
   "--test-global-setup",
   "--test-isolation",
   "--test-name-pattern",
+  "--test-random-seed",
   "--test-reporter",
   "--test-reporter-destination",
   "--test-rerun-failures",
