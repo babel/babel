@@ -12,7 +12,7 @@ import {
   mkdirSync,
   readFileSync,
 } from "node:fs";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import { spawn } from "node:child_process";
 import { transformSync } from "@babel/core";
 import checkDuplicatedNodes from "@babel/helper-check-duplicate-nodes";
@@ -27,10 +27,9 @@ import pluginTransformBlockScoping from "@babel/plugin-transform-block-scoping";
 import pluginTransformArrowFunctions from "@babel/plugin-transform-arrow-functions";
 import pluginTransformParameters from "@babel/plugin-transform-parameters";
 import pluginProposalFunctionSent from "@babel/plugin-proposal-function-sent";
+import * as jest from "jest";
 
-const { require, __dirname } = commonJS(import.meta.url);
-
-const jestDir = dirname(require.resolve("jest/package.json"));
+const { __dirname } = commonJS(import.meta.url);
 
 // https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/packages/preset/index.js#L9
 const regeneratorPreset = [
@@ -120,42 +119,24 @@ function enqueue(cmd, args = []) {
     } else if (cmd === "jest") {
       // Matches https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/.github/workflows/node.js.yml#L19
       describe("jest", () => {
-        if (args.length !== 1) {
-          throw new Error("Expected exactly one test file argument");
-        }
-        const testFile = join(__dirname, args[0]);
-        it(`${args.join(" ")}`, () =>
-          new Promise((resolve, reject) => {
-            let stdout = "";
-            let stderr = "";
+        const testFiles = args.map(file => join(__dirname, file));
+        it(`${args.join(" ")}`, async () => {
+          const options = {
+            projects: [join(__dirname, "regenerator-fixtures")],
+            config: join(__dirname, "regenerator-fixtures", "jest.config.js"),
+            testMatch: testFiles,
+            testPathPattern: testFiles,
+          };
+          try {
             // Each test file is run in a separate process to avoid interference between tests (e.g. shared.js exports writable Symbol).
-            const cp = spawn(
-              process.execPath,
-              [
-                join(jestDir, "bin", "jest.js"),
-                "--config",
-                join(__dirname, "regenerator-fixtures", "jest.config.js"),
-                "--testMatch",
-                testFile,
-                "--",
-                testFile,
-              ],
-              { cwd: __dirname },
-            );
-            cp.stdout.on("data", chunk => {
-              stdout += chunk;
-            });
-            cp.stderr.on("data", chunk => {
-              stderr += chunk;
-            });
-            cp.on("exit", async err => {
-              if (err) {
-                reject(new Error(`STDOUT:\n${stdout}\nSTDERR:\n${stderr}`));
-              } else {
-                resolve();
-              }
-            });
-          }));
+            const { results } = await jest.runCLI(options, options.projects);
+            if (!results.success) {
+              throw new Error("Jest tests failed");
+            }
+          } catch (err) {
+            throw new Error("Jest tests failed", { cause: err });
+          }
+        });
       });
     } else {
       it(`${cmd} ${args.join(" ")}`, () =>

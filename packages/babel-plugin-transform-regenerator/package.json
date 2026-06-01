@@ -33,6 +33,7 @@
     "@babel/plugin-transform-parameters": "workspace:^",
     "@babel/plugin-transform-runtime": "workspace:^",
     "babel-plugin-polyfill-regenerator": "^1.0.0-rc.2",
+    "jest": "^30.1.1",
     "recast": "^0.23.3",
     "uglify-js": "^3.14.0"
   },
