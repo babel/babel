@@ -103,9 +103,12 @@ function enforceEnginesNodeForPublicUnsetForPrivate({ Yarn }) {
 
       if (workspace.ident === "@babel/parser") continue;
       if (workspace.ident?.startsWith("@babel/eslint")) {
-        workspace.set("engines.node", "^10.13.0 || ^12.13.0 || >=14.0.0");
+        workspace.set(
+          "engines.node",
+          "^10.13.0 || ^12.13.0 || >=14.0.0 < 26.0.0 || ^26.0.0"
+        );
       } else {
-        workspace.set("engines.node", ">=6.9.0");
+        workspace.set("engines.node", ">=6.9.0 < 26.0.0 || ^26.0.0");
       }
     }
   }
