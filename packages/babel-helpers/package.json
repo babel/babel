@@ -25,7 +25,7 @@
     "regenerator-runtime": "^0.14.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=6.9.0 < 26.0.0 || ^26.0.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [

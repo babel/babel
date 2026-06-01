@@ -15,7 +15,7 @@
   },
   "main": "./lib/index.js",
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=6.9.0 < 26.0.0 || ^26.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^"

@@ -30,7 +30,7 @@
     "@types/fs-readdir-recursive": "^1.1.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=6.9.0 < 26.0.0 || ^26.0.0"
   },
   "conditions": {
     "BABEL_8_BREAKING": [

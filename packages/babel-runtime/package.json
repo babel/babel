@@ -1101,7 +1101,7 @@
     "./regenerator/": "./regenerator/"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=6.9.0 < 26.0.0 || ^26.0.0"
   },
   "type": "commonjs",
   "conditions": {

@@ -45,7 +45,7 @@
     "babel-plugin-polyfill-corejs3": "^0.14.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">=6.9.0 < 26.0.0 || ^26.0.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
   "type": "module",
