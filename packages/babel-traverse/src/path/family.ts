@@ -598,7 +598,8 @@ function getBindingIdentifierPaths(
     if (keys) {
       for (let i = 0; i < keys.length; i++) {
         const key = keys[i];
-        const child = id.get(key);
+        // Use string to make type checking faster.
+        const child = id.get(key as string);
         if (Array.isArray(child)) {
           search.push(...child);
         } else if (child.node) {

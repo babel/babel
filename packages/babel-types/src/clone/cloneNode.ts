@@ -42,7 +42,7 @@ export default function cloneNode<T extends t.Node | undefined | null>(
   withoutLoc: boolean = false,
 ): T {
   if (!node) return node;
-  return cloneNodeInternal(node, deep, withoutLoc, new Map());
+  return cloneNodeInternal(node as T, deep, withoutLoc, new Map());
 }
 
 function cloneNodeInternal<T extends t.Node | undefined | null>(

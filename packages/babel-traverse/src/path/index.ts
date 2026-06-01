@@ -42,21 +42,6 @@ declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.
   NodePath_Final<t.Node>
 >;
 
-export type NodePaths<T extends t.Node | t.Node[]> = T extends t.Node[]
-  ? { [K in keyof T]: NodePath_Final<Extract<T[K], t.Node>> }
-  : T extends t.Node
-    ? [NodePath_Final<T>]
-    : never;
-
-export type NodeListType<N, K extends keyof N> = N[K] extends (infer P extends
-  t.Node)[]
-  ? P
-  : never;
-
-export type NodeOrNodeList<T extends t.Node> = T | NodeList<T>;
-
-export type NodeList<T extends t.Node> = T[] | [T, ...T[]];
-
 const NodePath_Final = class NodePath {
   constructor(hub: HubInterface | undefined, parent: t.Node) {
     this.parent = parent;
