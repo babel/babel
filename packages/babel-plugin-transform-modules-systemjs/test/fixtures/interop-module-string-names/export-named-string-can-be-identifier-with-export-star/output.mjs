@@ -4,7 +4,9 @@ System.register(["./other.mjs"], function (_export, _context) {
   var foo, bar;
   return {
     setters: [function (_otherMjs) {
-      var _exportObj = {};
+      var _exportObj = {
+        __proto__: null
+      };
       for (var _key in _otherMjs) {
         if (_key !== "default" && _key !== "__esModule") _exportObj[_key] = _otherMjs[_key];
       }
