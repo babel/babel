@@ -38,15 +38,28 @@ for (const type of Object.keys(parens) as (keyof typeof parens)[]) {
   }
 }
 
-function isOrHasLeadingCallExpression(node: t.Node): boolean {
-  switch (node.type) {
-    case "CallExpression":
-    case "ImportExpression":
-      return true;
-    case "MemberExpression":
-      return isOrHasLeadingCallExpression(node.object);
+function newCalleeNeedsParens(node: t.Node): boolean {
+  let current: t.Node = node;
+  while (true) {
+    switch (current.type) {
+      case "CallExpression":
+      case "ImportExpression":
+      case "OptionalCallExpression":
+      case "OptionalMemberExpression":
+        return true;
+      case "MemberExpression":
+        current = current.object;
+        break;
+      case "TaggedTemplateExpression":
+        current = current.tag;
+        break;
+      case "TSNonNullExpression":
+        current = current.expression;
+        break;
+      default:
+        return false;
+    }
   }
-  return false;
 }
 
 export function parentNeedsParens(
@@ -57,12 +70,7 @@ export function parentNeedsParens(
   switch (parentId) {
     case __node("NewExpression"):
       if (parent.callee === node) {
-        if (
-          isOrHasLeadingCallExpression(node) ||
-          node.type === "OptionalCallExpression" ||
-          node.type === "OptionalMemberExpression"
-        )
-          return true;
+        return newCalleeNeedsParens(node);
       }
       break;
     case __node("Decorator"):
