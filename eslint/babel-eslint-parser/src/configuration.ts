@@ -7,6 +7,8 @@ export default function normalizeESLintConfig(options: any) {
     ecmaVersion = "latest",
     sourceType = "module",
     requireConfigFile = true,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    parser,
     ...otherOptions
   } = options;
 
