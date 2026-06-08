@@ -3,7 +3,7 @@ name: E2E tests
 on:
   push:
     branches:
-      - main
+      - 7.x
   pull_request:
 
 permissions:
