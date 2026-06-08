@@ -25,6 +25,8 @@ cd tmp/vue-cli || exit
 export YARN_IGNORE_PATH=1
 
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
+# Add yargs: ^18.0.0 to package.json#resolutions for Node.js 26 and above. yargs@17 is used by lerna exec
+sed -i 's/"resolutions": {/"resolutions": {\n    "yargs": "\^18.0.0",/' package.json
 yarn install --ignore-engines # Remove --ignore-engines when vue-cli upgrades their lockfile to eslint-import-resolver-webpack@0.13.2
 node "$PWD"/../../utils/bump-babel-dependencies.js resolutions
 yarn lerna exec -- node "$PWD"/../../utils/bump-babel-dependencies.js resolutions
