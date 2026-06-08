@@ -32,7 +32,7 @@ import pluginProposalFunctionSent from "@babel/plugin-proposal-function-sent";
 
 const { require, __dirname } = commonJS(import.meta.url);
 
-const mochaDir = dirname(require.resolve("mocha"));
+const jestDir = dirname(require.resolve("jest/package.json"));
 
 // https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/packages/preset/index.js#L9
 const regeneratorPreset = [
@@ -119,23 +119,28 @@ function enqueue(cmd, args = []) {
             }
           }),
         ));
-    } else if (cmd === "mocha") {
+    } else if (cmd === "jest") {
       // Matches https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/.github/workflows/node.js.yml#L19
-      describeGte("12.0.0")("mocha", () => {
+      describeGte("12.0.0")("jest", () => {
+        if (args.length !== 1) {
+          throw new Error("Expected exactly one test file argument");
+        }
+        const testFile = join(__dirname, args[0]);
         it(`${args.join(" ")}`, () =>
           new Promise((resolve, reject) => {
             let stdout = "";
             let stderr = "";
+            // Each test file is run in a separate process to avoid interference between tests (e.g. shared.js exports writable Symbol).
             const cp = spawn(
               process.execPath,
               [
-                join(mochaDir, "bin", "mocha.js"),
-                // https://github.com/nodejs/node/pull/58588#issuecomment-2961692890
-                "--timeout",
-                "10000",
-                "--reporter",
-                "spec",
-                ...args,
+                join(jestDir, "bin", "jest.js"),
+                "--config",
+                join(__dirname, "regenerator-fixtures", "jest.config.js"),
+                "--testMatch",
+                testFile,
+                "--",
+                testFile,
               ],
               { cwd: __dirname },
             );
@@ -374,23 +379,23 @@ enqueue(convert, [
   "./regenerator-fixtures/tmp/replaceWith-falsy.es5.js",
 ]);
 
-enqueue("mocha", ["./regenerator-fixtures/tmp/tests.es5.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/tests.es5-old.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/tests-node4.es5.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/non-native.es5.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/async.es5.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/async.es5-old.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/async-custom-promise.es5.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/regression.es5.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tests.transform.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/class.regenerator.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/tests.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/tests.es5-old.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/tests-node4.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/non-native.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/async.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/async.es5-old.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/async-custom-promise.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/regression.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tests.transform.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/class.regenerator.js"]);
 
-enqueue("mocha", ["./regenerator-fixtures/tests-node4.es6.js"]);
+enqueue("jest", ["./regenerator-fixtures/tests-node4.es6.js"]);
 
-enqueue("mocha", [
+enqueue("jest", [
   "./regenerator-fixtures/non-writable-tostringtag-property.js",
 ]);
 
-enqueue("mocha", ["./regenerator-fixtures/frozen-intrinsics.js"]);
+enqueue("jest", ["./regenerator-fixtures/frozen-intrinsics.js"]);
 
-enqueue("mocha", ["./regenerator-fixtures/tmp/no-symbol.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/no-symbol.es5.js"]);

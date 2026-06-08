@@ -167,7 +167,7 @@ describe("uglifyjs dead code removal", function () {
   });
 });
 
-context("functions", function () {
+describe("functions", function () {
   function marksCorrectly(marked, varName) {
     // marked should be a VariableDeclarator
     n.VariableDeclarator.assert(marked);
