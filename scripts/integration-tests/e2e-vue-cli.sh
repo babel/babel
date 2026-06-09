@@ -28,6 +28,8 @@ startLocalRegistry "$PWD"/../../verdaccio-config.yml
 # Add yargs: ^18.0.0 to package.json#resolutions for Node.js 26 and above. yargs@17 is used by lerna exec
 sed -i 's/"resolutions": {/"resolutions": {\n    "yargs": "\^18.0.0",/' package.json
 yarn install --ignore-engines # Remove --ignore-engines when vue-cli upgrades their lockfile to eslint-import-resolver-webpack@0.13.2
+# Workaround https://github.com/max-mapper/extract-zip/issues/154
+unzip -o "$PWD"/node_modules/puppeteer/.local-chromium/download-linux-637110.zip -d "$PWD"/node_modules/puppeteer/.local-chromium/linux-637110
 node "$PWD"/../../utils/bump-babel-dependencies.js resolutions
 yarn lerna exec -- node "$PWD"/../../utils/bump-babel-dependencies.js resolutions
 yarn install --ignore-engines # Remove --ignore-engines when vue-cli upgrades their lockfile to eslint-import-resolver-webpack@0.13.2
