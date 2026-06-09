@@ -1,6 +1,7 @@
 [
   "--allow-fs-read",
   "--allow-fs-write",
+  "--build-sea",
   "--build-snapshot-config",
   "--conditions",
   "--cpu-prof-dir",

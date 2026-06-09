@@ -1,0 +1,36 @@
+diff --git a/index.mjs b/index.mjs
+index d65a6f446f48bcce71674425d25f31a867fee6e5..b306dc2a33832664088cf60164f26ad20aa42229 100644
+--- a/index.mjs
++++ b/index.mjs
+@@ -8,3 +8,31 @@ const Yargs = YargsFactory(esmPlatformShim);
+ export default Yargs;
+ 
+ export {Yargs as 'module.exports'};
++
++/*================================================================*\
++|                Inspided by yarg@17's build/index.cjs             |
++\*================================================================*/
++
++import { hideBin } from './helpers/helpers.mjs';
++
++const processArgv = Yargs(hideBin(process.argv));
++
++defineGetter(Yargs, 'argv', () => processArgv.argv);
++defineGetter(Yargs, '$0', () => processArgv.$0);
++defineGetter(Yargs, 'parsed', () => processArgv.parsed);
++[
++  ...Object.keys(processArgv),
++  ...Object.getOwnPropertyNames(processArgv.constructor.prototype),
++].forEach(key => {
++  if (!Object.hasOwn(Yargs, key) && typeof processArgv[key] === 'function') {
++    Yargs[key] = processArgv[key].bind(processArgv);
++  }
++});
++
++function defineGetter(obj, key, getter) {
++  Object.defineProperty(obj, key, {
++    configurable: true,
++    enumerable: true,
++    get: getter,
++  });
++}

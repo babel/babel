@@ -20,7 +20,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v6
         with:
-          node-version: "25.6.1"
+          node-version: latest
           cache: "yarn"
       - name: Build
         run: make prepublish
