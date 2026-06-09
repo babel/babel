@@ -4,11 +4,6 @@ const semver = require("semver");
 
 // Disable browserslist old data warning for 7.x branch
 process.env.BROWSERSLIST_IGNORE_OLD_DATA = "1";
-// Workaround for https://github.com/libuv/libuv/issues/5010#issuecomment-4466710203
-if (process.platform === "win32" && process.env.CI === "true") {
-  process.env.TMP = process.env.TEMP =
-    "C:\\Users\\runneradmin\\AppData\\Local\\Temp";
-}
 
 const nodeVersion = process.versions.node;
 const supportsESMAndJestLightRunner = semver.satisfies(
