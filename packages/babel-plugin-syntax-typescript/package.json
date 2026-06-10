@@ -8,6 +8,9 @@
     "directory": "packages/babel-plugin-syntax-typescript"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-syntax-typescript",
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
