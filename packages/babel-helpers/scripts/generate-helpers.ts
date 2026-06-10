@@ -8,7 +8,7 @@ import { gzipSync } from "node:zlib";
 import {
   getHelperMetadata,
   stringifyMetadata,
-} from "./build-helper-metadata.js";
+} from "./build-helper-metadata.ts";
 
 const HELPERS_FOLDER = new URL("../src/helpers", import.meta.url);
 const IGNORED_FILES = new Set(["package.json", "tsconfig.json"]);

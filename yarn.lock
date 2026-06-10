@@ -1207,6 +1207,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helpers@workspace:packages/babel-helpers"
   dependencies:
+    "@babel/core": "workspace:^"
     "@babel/generator": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
