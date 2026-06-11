@@ -10,7 +10,7 @@ const unicodePackageName = Object.keys(packageJson.devDependencies).find(name =>
 
 const start = (
   await import(`${unicodePackageName}/Binary_Property/ID_Start/code-points.js`)
-).default.filter(function (ch) {
+).default.filter(function (ch: number) {
   return ch > 0x7f;
 });
 let last = -1;
@@ -18,29 +18,24 @@ const cont = (
   await import(
     `${unicodePackageName}/Binary_Property/ID_Continue/code-points.js`
   )
-).default.filter(function (ch) {
+).default.filter(function (ch: number) {
   return ch > 0x7f && search(start, ch, last + 1) === -1;
 });
 
-function search(arr, ch, starting) {
+function search(arr: number[], ch: number, starting: number) {
   for (let i = starting; arr[i] <= ch && i < arr.length; last = i++) {
     if (arr[i] === ch) return i;
   }
   return -1;
 }
 
-function pad(str, width) {
-  while (str.length < width) str = "0" + str;
-  return str;
-}
-
-function esc(code) {
+function esc(code: number) {
   const hex = code.toString(16);
-  if (hex.length <= 2) return "\\x" + pad(hex, 2);
-  else return "\\u" + pad(hex, 4);
+  if (hex.length <= 2) return "\\x" + hex.padStart(2, "0");
+  else return "\\u" + hex.padStart(4, "0");
 }
 
-function generate(chars) {
+function generate(chars: number[]) {
   const supplementary = [];
   let re = "";
   for (let i = 0, at = 0x10000; i < chars.length; i++) {
