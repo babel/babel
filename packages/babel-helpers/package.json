@@ -19,11 +19,11 @@
     "@babel/types": "workspace:^"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
     "@babel/generator": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@babel/parser": "workspace:^",
+    "@babel/traverse": "workspace:^",
     "regenerator-runtime": "^0.14.0",
     "terser": "catalog:dev"
   },

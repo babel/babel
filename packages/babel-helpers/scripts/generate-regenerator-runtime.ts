@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { createRequire } from "node:module";
+import type * as t from "@babel/types";
 
 const [parse, generate] = await Promise.all([
   import("@babel/parser").then(ns => ns.parse),
@@ -13,7 +13,7 @@ const [parse, generate] = await Promise.all([
 });
 
 const REGENERATOR_RUNTIME_IN_FILE = fs.readFileSync(
-  createRequire(import.meta.url).resolve("regenerator-runtime"),
+  import.meta.resolve("regenerator-runtime"),
   "utf8"
 );
 
@@ -34,7 +34,11 @@ const COPYRIGHT = `/*! regenerator-runtime -- Copyright (c) 2014-present, Facebo
 export default function generateRegeneratorRuntimeHelper() {
   const ast = parse(REGENERATOR_RUNTIME_IN_FILE, { sourceType: "script" });
 
-  const factoryFunction = ast.program.body[0].declarations[0].init.callee;
+  const factoryFunction = (
+    (ast.program.body[0] as t.VariableDeclaration).declarations[0]
+      .init as t.CallExpression
+  ).callee as t.FunctionExpression;
+  // @ts-expect-error Manipulating the AST
   factoryFunction.type = "FunctionDeclaration";
   factoryFunction.id = { type: "Identifier", name: "_regeneratorRuntime" };
   factoryFunction.params = [];
@@ -54,8 +58,10 @@ export default function generateRegeneratorRuntimeHelper() {
   return HEADER + code;
 }
 
-function stmts(code) {
-  return parse(`function _() { ${code} }`, {
-    sourceType: "script",
-  }).program.body[0].body.body;
+function stmts(code: string) {
+  return (
+    parse(`function _() { ${code} }`, {
+      sourceType: "script",
+    }).program.body[0] as t.FunctionDeclaration
+  ).body.body;
 }

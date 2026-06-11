@@ -2,7 +2,7 @@ import path from "node:path";
 import template from "@babel/template";
 import helpers from "../../lib/helpers-generated.js";
 
-import { getHelperMetadata } from "../../scripts/build-helper-metadata.js";
+import { getHelperMetadata } from "../../scripts/build-helper-metadata.ts";
 
 function getHelperId(baseURL, name) {
   const testName = path.basename(new URL(".", baseURL).pathname);
