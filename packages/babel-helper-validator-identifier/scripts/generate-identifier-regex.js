@@ -1,3 +1,4 @@
+import fs from "node:fs";
 // Always use the latest available version of Unicode!
 // https://tc39.github.io/ecma262/#sec-conformance
 import packageJson from "../package.json" with { type: "json" };
@@ -40,7 +41,7 @@ function esc(code) {
 }
 
 function generate(chars) {
-  const astral = [];
+  const supplementary = [];
   let re = "";
   for (let i = 0, at = 0x10000; i < chars.length; i++) {
     const from = chars[i];
@@ -54,27 +55,29 @@ function generate(chars) {
       else if (from + 1 === to) re += esc(from) + esc(to);
       else re += esc(from) + "-" + esc(to);
     } else {
-      astral.push(from - at, to - from);
+      supplementary.push(from - at, to - from);
       at = to;
     }
   }
-  return { nonASCII: re, astral: astral };
+  return { bmp: re, supplementary };
 }
 
 const startData = generate(start);
 const contData = generate(cont);
 
-console.log("/* prettier-ignore */");
-console.log(
-  'const nonASCIIidentifierStartChars = "' + startData.nonASCII + '";'
+fs.writeFileSync(
+  new URL("../data/bmp-identifier-start.json", import.meta.url),
+  JSON.stringify(startData.bmp)
 );
-console.log("/* prettier-ignore */");
-console.log('const nonASCIIidentifierChars = "' + contData.nonASCII + '";');
-console.log("/* prettier-ignore */");
-console.log(
-  "const astralIdentifierStartCodes = " + JSON.stringify(startData.astral) + ";"
+fs.writeFileSync(
+  new URL("../data/bmp-identifier-continue.json", import.meta.url),
+  JSON.stringify(contData.bmp)
 );
-console.log("/* prettier-ignore */");
-console.log(
-  "const astralIdentifierCodes = " + JSON.stringify(contData.astral) + ";"
+fs.writeFileSync(
+  new URL("../data/supplementary-identifier-start.json", import.meta.url),
+  JSON.stringify(startData.supplementary)
+);
+fs.writeFileSync(
+  new URL("../data/supplementary-identifier-continue.json", import.meta.url),
+  JSON.stringify(contData.supplementary)
 );

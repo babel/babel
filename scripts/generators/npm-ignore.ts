@@ -13,6 +13,7 @@ const commonIgnore = [
 
 const extraIgnore: Record<string, string[]> = {
   "babel-compat-data": ["build"],
+  "babel-helper-validator-identifier": ["data"],
   "babel-node": ["data"],
   "babel-plugin-proposal-decorators": ["CONTRIB.md"],
 };
