@@ -8,6 +8,9 @@
     "directory": "packages/babel-plugin-transform-block-scoped-functions"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-block-scoped-functions",
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
