@@ -33,6 +33,9 @@
     "@babel/types": "workspace:^"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-typescript",
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"
   },
