@@ -7,6 +7,9 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-plugin-transform-optional-chaining"
   },
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-optional-chaining",
   "license": "MIT",
   "publishConfig": {

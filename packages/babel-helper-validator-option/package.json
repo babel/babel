@@ -7,6 +7,9 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-validator-option"
   },
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"

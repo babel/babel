@@ -18,6 +18,9 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-check-duplicate-nodes"
   },
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
   "publishConfig": {
     "access": "public"
   },

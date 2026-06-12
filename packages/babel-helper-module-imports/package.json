@@ -13,6 +13,9 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-module-imports"
   },
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/traverse": "workspace:^",

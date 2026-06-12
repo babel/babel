@@ -13,6 +13,9 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-transform-fixture-test-runner"
   },
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/code-frame": "workspace:^",

@@ -9,6 +9,9 @@
     "url": "https://github.com/babel/babel.git",
     "directory": "packages/babel-helper-globals"
   },
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
   "publishConfig": {
     "access": "public"
   },
