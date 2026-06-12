@@ -1,3 +1,4 @@
+import fs from "node:fs";
 // Always use the latest available version of Unicode!
 // https://tc39.github.io/ecma262/#sec-conformance
 import packageJson from "../package.json" with { type: "json" };
@@ -9,7 +10,7 @@ const unicodePackageName = Object.keys(packageJson.devDependencies).find(name =>
 
 const start = (
   await import(`${unicodePackageName}/Binary_Property/ID_Start/code-points.js`)
-).default.filter(function (ch) {
+).default.filter(function (ch: number) {
   return ch > 0x7f;
 });
 let last = -1;
@@ -17,30 +18,25 @@ const cont = (
   await import(
     `${unicodePackageName}/Binary_Property/ID_Continue/code-points.js`
   )
-).default.filter(function (ch) {
+).default.filter(function (ch: number) {
   return ch > 0x7f && search(start, ch, last + 1) === -1;
 });
 
-function search(arr, ch, starting) {
+function search(arr: number[], ch: number, starting: number) {
   for (let i = starting; arr[i] <= ch && i < arr.length; last = i++) {
     if (arr[i] === ch) return i;
   }
   return -1;
 }
 
-function pad(str, width) {
-  while (str.length < width) str = "0" + str;
-  return str;
-}
-
-function esc(code) {
+function esc(code: number) {
   const hex = code.toString(16);
-  if (hex.length <= 2) return "\\x" + pad(hex, 2);
-  else return "\\u" + pad(hex, 4);
+  if (hex.length <= 2) return "\\x" + hex.padStart(2, "0");
+  else return "\\u" + hex.padStart(4, "0");
 }
 
-function generate(chars) {
-  const astral = [];
+function generate(chars: number[]) {
+  const supplementary = [];
   let re = "";
   for (let i = 0, at = 0x10000; i < chars.length; i++) {
     const from = chars[i];
@@ -54,27 +50,29 @@ function generate(chars) {
       else if (from + 1 === to) re += esc(from) + esc(to);
       else re += esc(from) + "-" + esc(to);
     } else {
-      astral.push(from - at, to - from);
+      supplementary.push(from - at, to - from);
       at = to;
     }
   }
-  return { nonASCII: re, astral: astral };
+  return { bmp: re, supplementary };
 }
 
 const startData = generate(start);
 const contData = generate(cont);
 
-console.log("/* prettier-ignore */");
-console.log(
-  'const nonASCIIidentifierStartChars = "' + startData.nonASCII + '";'
+fs.writeFileSync(
+  new URL("../data/bmp-identifier-start.json", import.meta.url),
+  JSON.stringify(startData.bmp)
 );
-console.log("/* prettier-ignore */");
-console.log('const nonASCIIidentifierChars = "' + contData.nonASCII + '";');
-console.log("/* prettier-ignore */");
-console.log(
-  "const astralIdentifierStartCodes = " + JSON.stringify(startData.astral) + ";"
+fs.writeFileSync(
+  new URL("../data/bmp-identifier-continue.json", import.meta.url),
+  JSON.stringify(contData.bmp)
 );
-console.log("/* prettier-ignore */");
-console.log(
-  "const astralIdentifierCodes = " + JSON.stringify(contData.astral) + ";"
+fs.writeFileSync(
+  new URL("../data/supplementary-identifier-start.json", import.meta.url),
+  JSON.stringify(startData.supplementary)
+);
+fs.writeFileSync(
+  new URL("../data/supplementary-identifier-continue.json", import.meta.url),
+  JSON.stringify(contData.supplementary)
 );
