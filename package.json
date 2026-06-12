@@ -144,5 +144,13 @@
       "PR: Revert :leftwards_arrow_with_hook:": ":leftwards_arrow_with_hook: Revert",
       "PR: Output optimization :microscope:": ":microscope: Output optimization"
     }
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/owner/repo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
   }
 }
