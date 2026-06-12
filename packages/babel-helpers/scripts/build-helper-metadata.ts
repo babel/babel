@@ -1,38 +1,42 @@
 // NOTE: This file must be compatible with old Node.js versions, since it runs
 // during testing.
 
-/**
- * @typedef {Object} HelperMetadata
- * @property {string[]} globals
- * @property {{ [name: string]: string[] }} locals
- * @property {{ [name: string]: string[] }} dependencies
- * @property {string[]} exportBindingAssignments
- * @property {string} exportName
- */
+import type { NodePath, Visitor } from "@babel/traverse";
+import type * as t from "@babel/types";
+
+type HelperMetadata = {
+  globals: string[];
+  locals: Record<string, string[]>;
+  dependencies: Record<string, string[]>;
+  exportBindingAssignments: string[];
+  exportName: string;
+  internal: boolean;
+};
 
 /**
  * Given a file AST for a given helper, get a bunch of metadata about it so that Babel can quickly render
  * the helper is whatever context it is needed in.
- *
- * @param {typeof import("@babel/core")} babel
- *
- * @returns {HelperMetadata}
  */
-export function getHelperMetadata(babel, code, helperName, internal = false) {
-  const globals = new Set();
+export function getHelperMetadata(
+  babel: any,
+  code: string,
+  helperName: string,
+  internal = false
+): [string, HelperMetadata] {
+  const globals = new Set<string>();
   // Maps imported identifier name -> helper name
   const dependenciesBindings = new Map();
 
-  let exportName;
-  const exportBindingAssignments = [];
+  let exportName: string | null = null;
+  const exportBindingAssignments: string[] = [];
   // helper name -> reference paths
   const dependencies = new Map();
   // local variable name -> reference paths
   const locals = new Map();
 
-  const spansToRemove = [];
+  const spansToRemove: [start: number, end: number][] = [];
 
-  const validateDefaultExport = decl => {
+  const validateDefaultExport = (decl: NodePath) => {
     if (exportName) {
       throw new Error(
         `Helpers can have only one default export (in ${helperName})`
@@ -46,8 +50,7 @@ export function getHelperMetadata(babel, code, helperName, internal = false) {
     }
   };
 
-  /** @type {import("@babel/traverse").Visitor} */
-  const dependencyVisitor = {
+  const dependencyVisitor: Visitor = {
     Program(path) {
       for (const child of path.get("body")) {
         if (child.isImportDeclaration()) {
@@ -64,7 +67,7 @@ export function getHelperMetadata(babel, code, helperName, internal = false) {
             child.node.source.value
           );
           dependencies.set(child.node.source.value, []);
-          spansToRemove.push([child.node.start, child.node.end]);
+          spansToRemove.push([child.node.start!, child.node.end!]);
           child.remove();
         }
       }
@@ -73,27 +76,28 @@ export function getHelperMetadata(babel, code, helperName, internal = false) {
           const decl = child.get("declaration");
           validateDefaultExport(decl);
 
-          exportName = decl.node.id.name;
-          spansToRemove.push([child.node.start, decl.node.start]);
+          exportName = (decl as NodePath<t.FunctionDeclaration>).node.id!.name;
+          spansToRemove.push([child.node.start!, decl.node.start!]);
           child.replaceWith(decl.node);
         } else if (
           child.isExportNamedDeclaration() &&
           child.node.specifiers.length === 1 &&
           child.get("specifiers.0.exported").isIdentifier({ name: "default" })
         ) {
-          const { name } = child.node.specifiers[0].local;
+          const { name } = (child.node.specifiers[0] as t.ExportSpecifier)
+            .local;
 
-          validateDefaultExport(child.scope.getBinding(name).path);
+          validateDefaultExport(child.scope.getBinding(name)!.path);
 
           exportName = name;
-          spansToRemove.push([child.node.start, child.node.end]);
+          spansToRemove.push([child.node.start!, child.node.end!]);
           child.remove();
         } else if (
           process.env.IS_BABEL_OLD_E2E &&
           child.isExportNamedDeclaration() &&
           child.node.specifiers.length === 0
         ) {
-          spansToRemove.push([child.node.start, child.node.end]);
+          spansToRemove.push([child.node.start!, child.node.end!]);
           child.remove();
         } else if (
           child.isExportAllDeclaration() ||
@@ -140,7 +144,8 @@ export function getHelperMetadata(babel, code, helperName, internal = false) {
     AssignmentExpression(child) {
       const left = child.get("left");
 
-      if (!(exportName in left.getBindingIdentifiers())) return;
+      if (exportName == null || !(exportName in left.getBindingIdentifiers()))
+        return;
 
       if (!left.isIdentifier()) {
         throw new Error(
@@ -150,7 +155,7 @@ export function getHelperMetadata(babel, code, helperName, internal = false) {
 
       const binding = child.scope.getBinding(exportName);
 
-      if (binding && binding.scope.path.isProgram()) {
+      if (binding?.scope.path.isProgram()) {
         exportBindingAssignments.push(makePath(child));
       }
     },
@@ -180,13 +185,13 @@ export function getHelperMetadata(babel, code, helperName, internal = false) {
       locals: Object.fromEntries(locals),
       dependencies: Object.fromEntries(dependencies),
       exportBindingAssignments,
-      exportName,
+      exportName: exportName,
       internal,
     },
   ];
 }
 
-function makePath(path) {
+function makePath(path: NodePath) {
   const parts = [];
 
   for (; path.parentPath; path = path.parentPath) {
@@ -197,7 +202,7 @@ function makePath(path) {
   return parts.reverse().join(".");
 }
 
-export function stringifyMetadata(metadata) {
+export function stringifyMetadata(metadata: HelperMetadata) {
   return `\
     {
       globals: ${JSON.stringify(metadata.globals)},

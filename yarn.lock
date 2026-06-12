@@ -1212,6 +1212,7 @@ __metadata:
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/template": "workspace:^"
+    "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
     regenerator-runtime: "npm:^0.14.0"
     terser: "catalog:dev"

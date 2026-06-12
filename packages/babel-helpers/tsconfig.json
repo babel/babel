@@ -17,6 +17,9 @@
     },
     {
       "path": "../../packages/babel-types"
+    },
+    {
+      "path": "../../packages/babel-traverse"
     }
   ]
 }

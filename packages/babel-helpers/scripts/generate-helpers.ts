@@ -2,13 +2,15 @@ import fs from "node:fs";
 import { join } from "node:path";
 import { URL, fileURLToPath } from "node:url";
 import { minify } from "terser";
+// @ts-expect-error No types for $repo-utils/babel-top-level
 import { babel, presetTypescript } from "$repo-utils/babel-top-level";
 import { gzipSync } from "node:zlib";
+import type { Visitor } from "@babel/traverse";
 
 import {
   getHelperMetadata,
   stringifyMetadata,
-} from "./build-helper-metadata.js";
+} from "./build-helper-metadata.ts";
 
 const HELPERS_FOLDER = new URL("../src/helpers", import.meta.url);
 const IGNORED_FILES = new Set(["package.json", "tsconfig.json"]);
@@ -22,22 +24,22 @@ const IGNORED_FILES = new Set(["package.json", "tsconfig.json"]);
  * @param {string[]} noMangleFns A list of function names that should not be mangled
  * @returns
  */
-function BabelPluginProcessHelpersFactory(mangleFns, noMangleFns) {
+function BabelPluginProcessHelpersFactory(
+  mangleFns: boolean,
+  noMangleFns: string[]
+) {
   /**
    * @param {import("@babel/core").PluginAPI} api
    * @returns {import("@babel/core").PluginObject}
    */
   return function BabelPluginProcessHelpers() {
-    /**
-     * @type {import("@babel/core").PluginObject}
-     */
     const pluginObj = {
       pre: undefined,
       post: undefined,
       visitor: {
         ImportDeclaration(path) {
           const source = path.node.source;
-          source.value = source.value.replace(/(^\.\/|\.ts$)/g, "");
+          source.value = source.value.replaceAll(/^\.\/|\.ts$/g, "");
         },
         FunctionDeclaration: mangleFns
           ? path => {
@@ -46,12 +48,12 @@ function BabelPluginProcessHelpersFactory(mangleFns, noMangleFns) {
                   c.value.includes("@no-mangle")
                 )
               ) {
-                const name = path.node.id.name;
+                const name = path.node.id?.name;
                 if (name) noMangleFns.push(name);
               }
             }
           : () => {},
-      },
+      } satisfies Visitor,
     };
     return pluginObj;
   };
@@ -109,18 +111,17 @@ const helpers: Record<string, Helper> = {
     }
 
     let code = await fs.promises.readFile(filePath, "utf8");
-    const minVersionMatch = code.match(
-      /^\s*\/\*\s*@minVersion\s+(?<minVersion>\S+)\s*\*\/\s*$/m
-    );
+    const minVersionMatch =
+      /^\s*\/\*\s*@minVersion\s+(?<minVersion>\S+)\s*\*\/\s*$/m.exec(code);
     if (!minVersionMatch) {
       throw new Error(`@minVersion number missing in ${filePath}`);
     }
-    const { minVersion } = minVersionMatch.groups;
+    const { minVersion } = minVersionMatch.groups!;
 
     const internal = code.includes("@internal");
     const onlyBabel8 = code.includes("@onlyBabel8");
     const mangleFns = code.includes("@mangleFns");
-    const noMangleFns = [];
+    const noMangleFns: string[] = [];
 
     code = babel.transformSync(code, {
       configFile: false,
@@ -156,7 +157,7 @@ const helpers: Record<string, Helper> = {
           unsafe_proto: true,
         },
       })
-    ).code;
+    ).code!;
 
     let metadata;
     // eslint-disable-next-line prefer-const
