@@ -1,6 +1,9 @@
 {
   "name": "@babel/plugin-transform-modules-commonjs",
   "version": "8.0.0-rc.6",
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
   "description": "This plugin transforms ES2015 modules to CommonJS",
   "repository": {
     "type": "git",
