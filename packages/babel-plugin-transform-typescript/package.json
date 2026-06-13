@@ -1,6 +1,9 @@
 {
   "name": "@babel/plugin-transform-typescript",
   "version": "8.0.0-rc.6",
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
   "description": "Transform TypeScript into ES.next",
   "repository": {
     "type": "git",
