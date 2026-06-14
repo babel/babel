@@ -57,11 +57,12 @@ export default function* normalizeFile(
     }
 
     if (!inputMap) {
-      let comment = extractComment(ast.program);
-      for (let i = ast.program.body.length - 1; !comment && i >= 0; i--) {
-        const node = ast.program.body[i];
-        comment = extractComment(node);
-      }
+      const body = ast.program.body;
+      const comment = extractCommentFromList(
+        body.length > 0
+          ? body[body.length - 1].trailingComments
+          : ast.program.innerComments,
+      );
 
       if (comment) {
         if (INLINE_SOURCEMAP_REGEX.test(comment)) {
@@ -114,22 +115,6 @@ function extractCommentFromList(
       comments.splice(i, 1);
       return comment.value;
     }
-  }
-  return null;
-}
-
-function extractComment(ast: t.Node): string | null {
-  if (ast.trailingComments) {
-    const comment = extractCommentFromList(ast.trailingComments);
-    if (comment) return comment;
-  }
-  if (ast.innerComments) {
-    const comment = extractCommentFromList(ast.innerComments);
-    if (comment) return comment;
-  }
-  if (ast.leadingComments) {
-    const comment = extractCommentFromList(ast.leadingComments);
-    if (comment) return comment;
   }
   return null;
 }
