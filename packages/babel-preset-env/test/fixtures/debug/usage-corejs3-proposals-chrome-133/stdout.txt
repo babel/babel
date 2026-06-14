@@ -10,8 +10,6 @@ Using modules transform: auto
 Using plugins:
   transform-explicit-resource-management { chrome < 141 }
   transform-export-namespace-from { }
-  transform-modules-commonjs
-  transform-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {
