@@ -178,18 +178,15 @@ function getLocalTargets(
 }
 
 function supportsStaticESM(caller: CallerMetadata | undefined) {
-  // TODO(Babel 9): Fallback to true
-  return !!caller?.supportsStaticESM;
+  return caller?.supportsStaticESM ?? true;
 }
 
 function supportsDynamicImport(caller: CallerMetadata | undefined) {
-  // TODO(Babel 9): Fallback to true
-  return !!caller?.supportsDynamicImport;
+  return caller?.supportsDynamicImport ?? true;
 }
 
 function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
-  // TODO(Babel 9): Fallback to null
-  return !!caller?.supportsExportNamespaceFrom;
+  return caller?.supportsExportNamespaceFrom ?? null;
 }
 
 export default declarePreset((api, opts: Options) => {
@@ -269,7 +266,7 @@ export default declarePreset((api, opts: Options) => {
   if (
     !exclude.plugins.has("transform-export-namespace-from") &&
     (optionsModules === "auto"
-      ? !api.caller(supportsExportNamespaceFrom)
+      ? (api.caller(supportsExportNamespaceFrom) ?? !modules)
       : !!modules)
   ) {
     include.plugins.add("transform-export-namespace-from");
