@@ -265,9 +265,8 @@ export default declarePreset((api, opts: Options) => {
   // but we should not have a one-off special case for this plugin.
   if (
     !exclude.plugins.has("transform-export-namespace-from") &&
-    (optionsModules === "auto"
-      ? (api.caller(supportsExportNamespaceFrom) ?? !modules)
-      : !!modules)
+    (modules !== false ||
+      (optionsModules === "auto" && !api.caller(supportsExportNamespaceFrom)))
   ) {
     include.plugins.add("transform-export-namespace-from");
   }
