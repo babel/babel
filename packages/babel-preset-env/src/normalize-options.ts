@@ -125,8 +125,8 @@ export const validateModulesOption = (
     `The 'modules' option must be one of \n` +
       ` - 'false' to indicate no module processing\n` +
       ` - a specific module type: 'commonjs', 'amd', 'umd', 'systemjs'` +
-      ` - 'auto' (default) which will automatically select 'false' if the current\n` +
-      `   process is known to support ES module syntax, or "commonjs" otherwise\n`,
+      ` - 'auto' (default) which will automatically select 'commonjs' if the current\n` +
+      `   process is known to *not* support ES module syntax, or 'false' otherwise\n`,
   );
 
   return modulesOpt;

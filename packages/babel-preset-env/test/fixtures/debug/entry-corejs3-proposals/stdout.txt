@@ -54,8 +54,6 @@ Using plugins:
   transform-property-literals { ie < 9 }
   transform-reserved-words { ie < 9 }
   transform-export-namespace-from { ie }
-  transform-modules-commonjs
-  transform-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

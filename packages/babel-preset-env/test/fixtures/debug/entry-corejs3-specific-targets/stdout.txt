@@ -56,8 +56,6 @@ Using plugins:
   transform-new-target { edge < 14, ie, ios < 10, safari < 10 }
   transform-regenerator { firefox < 53, ie, ios < 10, safari < 10 }
   transform-export-namespace-from { chrome < 72, edge < 79, firefox < 80, ie, ios < 14.5, safari < 14.1 }
-  transform-modules-commonjs
-  transform-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

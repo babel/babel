@@ -36,7 +36,5 @@ Using plugins:
   transform-block-scoping { firefox < 53 }
   transform-export-namespace-from { firefox < 80, node < 13.2.0 }
   bugfix/transform-async-arrows-in-class { node < 7.6 }
-  transform-modules-commonjs
-  transform-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

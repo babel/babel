@@ -39,8 +39,6 @@ Using plugins:
   transform-typeof-symbol { electron < 0.37 }
   transform-regenerator { electron < 1.1 }
   transform-export-namespace-from { electron < 5.0 }
-  transform-modules-commonjs
-  transform-dynamic-import
 corejs3: `DEBUG` option
 
 Using targets: {

@@ -38,7 +38,5 @@ Using plugins:
   transform-block-scoping { firefox < 53 }
   transform-regenerator { firefox < 53 }
   transform-export-namespace-from { firefox < 80 }
-  transform-modules-commonjs
-  transform-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

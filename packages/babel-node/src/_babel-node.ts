@@ -20,6 +20,9 @@ const opts = program.opts();
 const babelOptions = {
   caller: {
     name: "@babel/node",
+    supportsStaticESM: false,
+    supportsDynamicImport: false,
+    supportsExportNamespaceFrom: false,
   },
   extensions: opts.extensions,
   ignore: opts.ignore,

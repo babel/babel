@@ -178,18 +178,15 @@ function getLocalTargets(
 }
 
 function supportsStaticESM(caller: CallerMetadata | undefined) {
-  // TODO(Babel 9): Fallback to true
-  return !!caller?.supportsStaticESM;
+  return caller?.supportsStaticESM ?? true;
 }
 
 function supportsDynamicImport(caller: CallerMetadata | undefined) {
-  // TODO(Babel 9): Fallback to true
-  return !!caller?.supportsDynamicImport;
+  return caller?.supportsDynamicImport ?? true;
 }
 
 function supportsExportNamespaceFrom(caller: CallerMetadata | undefined) {
-  // TODO(Babel 9): Fallback to null
-  return !!caller?.supportsExportNamespaceFrom;
+  return caller?.supportsExportNamespaceFrom ?? null;
 }
 
 export default declarePreset((api, opts: Options) => {
@@ -268,9 +265,8 @@ export default declarePreset((api, opts: Options) => {
   // but we should not have a one-off special case for this plugin.
   if (
     !exclude.plugins.has("transform-export-namespace-from") &&
-    (optionsModules === "auto"
-      ? !api.caller(supportsExportNamespaceFrom)
-      : !!modules)
+    (modules !== false ||
+      (optionsModules === "auto" && !api.caller(supportsExportNamespaceFrom)))
   ) {
     include.plugins.add("transform-export-namespace-from");
   }
