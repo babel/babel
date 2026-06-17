@@ -32,7 +32,7 @@
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
     "@babel/plugin-transform-parameters": "workspace:^",
     "@babel/plugin-transform-runtime": "workspace:^",
-    "babel-plugin-polyfill-regenerator": "^1.0.0-rc.2",
+    "babel-plugin-polyfill-regenerator": "^1.0.0",
     "jest": "^30.4.2",
     "recast": "^0.23.3",
     "uglify-js": "^3.14.0"
