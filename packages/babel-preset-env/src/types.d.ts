@@ -23,7 +23,6 @@ export type PluginListOption = PluginListItem[];
 
 export type Options = {
   configPath?: string;
-  corejs?: CorejsOption;
   debug?: boolean;
   exclude?: PluginListOption;
   forceAllTransforms?: boolean;
@@ -34,7 +33,6 @@ export type Options = {
   targets?: {
     esmodules?: boolean;
   } & InputTargets;
-  useBuiltIns?: BuiltInsOption;
   browserslistEnv?: string;
 };
 

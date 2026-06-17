@@ -207,9 +207,15 @@ export default function normalizeOptions(opts: Partial<Options>) {
 
   v.validateTopLevelOptions(opts, TopLevelOptions);
 
-  const useBuiltIns = validateUseBuiltInsOption(opts.useBuiltIns);
+  if ((opts as any).useBuiltIns) {
+    throw new Error(
+      "The 'useBuiltIns' option has been removed. Please use babel-plugin-polyfill-corejs3 instead.",
+    );
+  }
 
-  const corejs = normalizeCoreJSOption(opts.corejs, useBuiltIns);
+  // TODO: Remove
+  const useBuiltIns = validateUseBuiltInsOption(false);
+  const corejs = normalizeCoreJSOption(null, useBuiltIns);
 
   const include = expandIncludesAndExcludes(
     opts.include,
