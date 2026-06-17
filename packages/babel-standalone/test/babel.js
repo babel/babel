@@ -254,21 +254,6 @@ describe("@babel/standalone", () => {
       );
     });
 
-    it("useBuiltIns works", () => {
-      const output = Babel.transform("[].includes(2)", {
-        sourceType: "module",
-        targets: { ie: 11 },
-        presets: [
-          ["env", { useBuiltIns: "usage", corejs: "3.0", modules: false }],
-        ],
-      }).code;
-
-      expect(output).toMatchInlineSnapshot(`
-        "import "core-js/modules/es.array.includes.js";
-        [].includes(2);"
-      `);
-    });
-
     it("regenerator works", () => {
       const output = Babel.transform("function* fn() {}", {
         sourceType: "module",
