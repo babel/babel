@@ -30,10 +30,40 @@ describe("isIdentifierName", function () {
     expect(isIdentifierName("x\uDB40\uDDD5")).toBe(true);
   });
   it("supports Unicode 17.0", () => {
+    // BMP ID_Start
     expect(isIdentifierName("\u{0c5c}")).toBe(true);
+    expect(isIdentifierName("_\u{0c5c}")).toBe(true);
+    // BMP ID_Continue
+    expect(isIdentifierName("_\u{1acf}")).toBe(true);
+
+    // SMP ID_Start
+    expect(isIdentifierName("\u{10940}")).toBe(true);
+    expect(isIdentifierName("_\u{10940}")).toBe(true);
+
+    // SMP ID_Continue
+    expect(isIdentifierName("_\u{10efa}")).toBe(true);
+
+    // UTF16 encoding of U+10940 = D802 DD40
+    expect(isIdentifierName("\uD802")).toBe(false);
+    expect(isIdentifierName("_\uDD40")).toBe(false);
   });
   it("supports Unicode 16.0", () => {
+    // BMP ID_Start
+    expect(isIdentifierName("\u{1c89}")).toBe(true);
+    expect(isIdentifierName("_\u{1c89}")).toBe(true);
+    // BMP ID_Continue
+    expect(isIdentifierName("_\u{0897}")).toBe(true);
+
+    // SMP ID_Start
     expect(isIdentifierName("\u{105c0}")).toBe(true);
+    expect(isIdentifierName("_\u{105c0}")).toBe(true);
+
+    // SMP ID_Continue
+    expect(isIdentifierName("_\u{10d40}")).toBe(true);
+
+    // UTF16 encoding of U+105c0 = D801 DDC0
+    expect(isIdentifierName("\uD801")).toBe(false);
+    expect(isIdentifierName("_\uDDC0")).toBe(false);
   });
   it("supports Unicode 15.1", () => {
     expect(isIdentifierName("\u{2ebf0}")).toBe(true);
