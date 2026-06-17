@@ -2,47 +2,50 @@ import fs from "node:fs";
 // Always use the latest available version of Unicode!
 // https://tc39.github.io/ecma262/#sec-conformance
 import packageJson from "../package.json" with { type: "json" };
+import regenerate from "regenerate";
 
 const unicodePackageNamePrefix = "@unicode/unicode-";
 const unicodePackageName = Object.keys(packageJson.devDependencies).find(name =>
   name.startsWith(unicodePackageNamePrefix)
 );
 
-const start = (
-  await import(`${unicodePackageName}/Binary_Property/ID_Start/code-points.js`)
-).default.filter(function (ch: number) {
-  return ch > 0x7f;
-});
-let last = -1;
-const cont = (
-  await import(
-    `${unicodePackageName}/Binary_Property/ID_Continue/code-points.js`
-  )
-).default.filter(function (ch: number) {
-  return ch > 0x7f && search(start, ch, last + 1) === -1;
-});
+type UnicodeRange = {
+  readonly begin: number;
+  readonly end: number;
+};
 
-function search(arr: number[], ch: number, starting: number) {
-  for (let i = starting; arr[i] <= ch && i < arr.length; last = i++) {
-    if (arr[i] === ch) return i;
-  }
-  return -1;
+const start = (
+  await import(`${unicodePackageName}/Binary_Property/ID_Start/ranges.js`)
+).default;
+const cont = (
+  await import(`${unicodePackageName}/Binary_Property/ID_Continue/ranges.js`)
+).default;
+
+function rangesToRegenerate(ranges: readonly UnicodeRange[]): regenerate {
+  return ranges.reduce(
+    (set: regenerate, { begin, end }: UnicodeRange) =>
+      set.addRange(begin, end - 1),
+    regenerate()
+  );
 }
+
+const startSet = rangesToRegenerate(start).removeRange(0, 0x7f);
+const contSetWithoutStart = rangesToRegenerate(cont)
+  .removeRange(0, 0x7f)
+  .remove(startSet);
 
 function esc(code: number) {
   return "\\u" + code.toString(16).padStart(4, "0");
 }
 
-function generate(chars: number[]) {
+function generate(regenerateSet: regenerate) {
   const supplementary = [];
   let re = "";
-  for (let i = 0, at = 0x10000; i < chars.length; i++) {
-    const from = chars[i];
-    let to = from;
-    while (i < chars.length - 1 && chars[i + 1] === to + 1) {
-      i++;
-      to++;
-    }
+  // @ts-expect-error access internal data property
+  const ranges = regenerateSet.data;
+  for (let i = 0, at = 0x10000; i < ranges.length; i += 2) {
+    const from = ranges[i],
+      to = ranges[i + 1] - 1;
     if (to <= 0xffff) {
       if (from === to) re += esc(from);
       else if (from + 1 === to) re += esc(from) + esc(to);
@@ -55,8 +58,8 @@ function generate(chars: number[]) {
   return { bmp: re, supplementary };
 }
 
-const startData = generate(start);
-const contData = generate(cont);
+const startData = generate(startSet);
+const contData = generate(contSetWithoutStart);
 
 fs.writeFileSync(
   new URL("../data/bmp-identifier-start.json", import.meta.url),

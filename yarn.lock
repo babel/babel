@@ -1137,8 +1137,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-validator-identifier@workspace:packages/babel-helper-validator-identifier"
   dependencies:
+    "@types/regenerate": "npm:^1.4.0"
     "@unicode/unicode-17.0.0": "npm:^1.6.10"
     charcodes: "npm:^0.2.0"
+    regenerate: "npm:^1.4.0"
   languageName: unknown
   linkType: soft
 
@@ -6124,6 +6126,13 @@ __metadata:
   version: 2.4.4
   resolution: "@types/normalize-package-data@npm:2.4.4"
   checksum: 10/65dff72b543997b7be8b0265eca7ace0e34b75c3e5fee31de11179d08fa7124a7a5587265d53d0409532ecb7f7fba662c2012807963e1f9b059653ec2c83ee05
+  languageName: node
+  linkType: hard
+
+"@types/regenerate@npm:^1.4.0":
+  version: 1.4.3
+  resolution: "@types/regenerate@npm:1.4.3"
+  checksum: 10/66c972d0788a0a843b4fc7619a6218ef78483aaa5068b93a230a58435a77e0c71c400b639db9b96c341ca4706fe0cb4a92b686777dd0a9f6dcd556baa4bb674c
   languageName: node
   linkType: hard
 
@@ -15076,7 +15085,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerate@npm:^1.4.2":
+"regenerate@npm:^1.4.0, regenerate@npm:^1.4.2":
   version: 1.4.2
   resolution: "regenerate@npm:1.4.2"
   checksum: 10/dc6c95ae4b3ba6adbd7687cafac260eee4640318c7a95239d5ce847d9b9263979758389e862fe9c93d633b5792ea4ada5708df75885dc5aa05a309fa18140a87
