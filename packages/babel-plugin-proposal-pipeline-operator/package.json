@@ -21,7 +21,7 @@
     "@babel/plugin-syntax-pipeline-operator": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "workspace:^"
+    "@babel/core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

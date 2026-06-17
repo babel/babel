@@ -24,7 +24,7 @@
     "@babel/plugin-transform-react-pure-annotations": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "workspace:^"
+    "@babel/core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
