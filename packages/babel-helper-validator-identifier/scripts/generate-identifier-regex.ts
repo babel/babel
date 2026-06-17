@@ -30,9 +30,7 @@ function search(arr: number[], ch: number, starting: number) {
 }
 
 function esc(code: number) {
-  const hex = code.toString(16);
-  if (hex.length <= 2) return "\\x" + hex.padStart(2, "0");
-  else return "\\u" + hex.padStart(4, "0");
+  return "\\u" + code.toString(16).padStart(4, "0");
 }
 
 function generate(chars: number[]) {
@@ -62,11 +60,11 @@ const contData = generate(cont);
 
 fs.writeFileSync(
   new URL("../data/bmp-identifier-start.json", import.meta.url),
-  JSON.stringify(startData.bmp)
+  `"${startData.bmp}"`
 );
 fs.writeFileSync(
   new URL("../data/bmp-identifier-continue.json", import.meta.url),
-  JSON.stringify(contData.bmp)
+  `"${contData.bmp}"`
 );
 fs.writeFileSync(
   new URL("../data/supplementary-identifier-start.json", import.meta.url),
