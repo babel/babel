@@ -49,12 +49,12 @@ async function pack(
         babelHelpers: "bundled",
         exclude: ["node_modules/core-js/**"],
         parserOpts: { sourceType: "module" },
-        presets: [
-          "@babel/preset-typescript",
+        presets: ["@babel/preset-typescript", "@babel/preset-env"],
+        plugins: [
           [
-            "@babel/preset-env",
+            "babel-plugin-polyfill-corejs3",
             {
-              useBuiltIns: "usage",
+              method: "usage-global",
               corejs: require("core-js/package.json").version,
             },
           ],
