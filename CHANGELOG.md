@@ -25,6 +25,11 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.1 (2026-06-17)
+
+#### :boom: Breaking Change
+* `babel-core`, `babel-plugin-transform-object-rest-spread`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-standalone`
+  * [#18079](https://github.com/babel/babel/pull/18079) Actually remove `preset-env`'s `useBuiltIns` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v8.0.0 (2026-06-16)
 
 #### :eyeglasses: Spec Compliance
