@@ -4,5 +4,8 @@ export function describeIsIdentifierCharTests(isIdentifierCharImpl) {
     it("returns false if provided codepoint is NaN", function () {
       expect(isIdentifierCharImpl(NaN)).toBe(false);
     });
+    it("returns false if provided codepoint is larger than 0x10FFFF", function () {
+      expect(isIdentifierCharImpl(0x110000)).toBe(false);
+    });
   });
 }

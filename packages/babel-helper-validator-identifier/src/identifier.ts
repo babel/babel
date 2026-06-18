@@ -33,6 +33,7 @@ export function isIdentifierStart(code: number): boolean {
   }
   return (
     !isNaN(code) &&
+    code <= 0x10ffff &&
     (bmpIdentifierStart.test(String.fromCodePoint(code)) ||
       isInSupplementarySet(code, supplementaryIdentifierStartCodes))
   );
@@ -52,6 +53,7 @@ export function isIdentifierChar(code: number): boolean {
   }
   return (
     !isNaN(code) &&
+    code <= 0x10ffff &&
     (bmpIdentifier.test(String.fromCodePoint(code)) ||
       isInSupplementarySet(code, supplementaryIdentifierStartCodes) ||
       isInSupplementarySet(code, supplementaryIdentifierCodes))
