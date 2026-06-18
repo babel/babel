@@ -25,8 +25,9 @@
         "browser": "./src/identifier-browser.ts",
         "default": "./src/identifier.ts"
       },
-      "browser": "./src/identifier-browser.ts",
-      "default": "./src/identifier.ts"
+      "types": "./lib/identifier.d.ts",
+      "browser": "./lib/identifier-browser.js",
+      "default": "./lib/identifier.js"
     }
   },
   "devDependencies": {
