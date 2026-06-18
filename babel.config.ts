@@ -12,6 +12,7 @@ import {
   type ConfigAPI,
 } from "@babel/core";
 import packageJson from "./package.json" with { type: "json" };
+import babelCorePackageJson from "./packages/babel-core/package.json" with { type: "json" };
 import pluginToggleBooleanFlag from "./scripts/babel-plugin-toggle-boolean-flag/plugin.ts";
 import pluginBitDecorator from "./scripts/babel-plugin-bit-decorator/plugin.ts";
 import pluginTransformNodeProtocolImport from "./scripts/babel-plugin-transform-node-protocol-import/plugin.ts";
@@ -237,9 +238,12 @@ export default function (api: ConfigAPI) {
                 if (!process.env.IS_PUBLISH || env === "standalone") {
                   if (bool(process.env.BABEL_9_BREAKING)) {
                     // Match packages/babel-core/src/index.ts
-                    return packageJson.version.replace(/0*$/, "999999999");
+                    return babelCorePackageJson.version.replace(
+                      /0*$/,
+                      "999999999"
+                    );
                   }
-                  return packageJson.version;
+                  return babelCorePackageJson.version;
                 }
                 if (packageJson.version.includes("-")) {
                   // for pre-releases
