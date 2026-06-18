@@ -32,8 +32,9 @@ export function isIdentifierStart(code: number): boolean {
     return code >= 0xaa && bmpIdentifierStart.test(String.fromCharCode(code));
   }
   return (
-    bmpIdentifierStart.test(String.fromCodePoint(code)) ||
-    isInSupplementarySet(code, supplementaryIdentifierStartCodes)
+    !isNaN(code) &&
+    (bmpIdentifierStart.test(String.fromCodePoint(code)) ||
+      isInSupplementarySet(code, supplementaryIdentifierStartCodes))
   );
 }
 
@@ -50,9 +51,10 @@ export function isIdentifierChar(code: number): boolean {
     return code >= 0xaa && bmpIdentifier.test(String.fromCharCode(code));
   }
   return (
-    bmpIdentifier.test(String.fromCodePoint(code)) ||
-    isInSupplementarySet(code, supplementaryIdentifierStartCodes) ||
-    isInSupplementarySet(code, supplementaryIdentifierCodes)
+    !isNaN(code) &&
+    (bmpIdentifier.test(String.fromCodePoint(code)) ||
+      isInSupplementarySet(code, supplementaryIdentifierStartCodes) ||
+      isInSupplementarySet(code, supplementaryIdentifierCodes))
   );
 }
 
