@@ -1,4 +1,4 @@
-import { isIdentifierName } from "../lib/index.js";
+import { isIdentifierName } from "../lib/identifier-browser.js";
 
 import { describeIsIdentifierNameTests } from "./helpers/describe-is-identifier-name-tests.js";
 
