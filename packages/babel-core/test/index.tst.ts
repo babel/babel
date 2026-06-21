@@ -254,7 +254,6 @@ describe("options of all packages", () => {
       | "optimizeConstEnums"
       | "disallowAmbiguousJSXLike"
       | "dts"
-      | "isTSX"
     >();
     expect<
       ExtractOptionsKeys<typeof pluginTransformUnicodePropertyRegex>
