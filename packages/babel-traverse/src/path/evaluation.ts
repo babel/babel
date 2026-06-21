@@ -410,6 +410,7 @@ function _evaluate(path: NodePath, state: State): any {
         if (
           typeof left === "string" &&
           typeof right === "object" &&
+          right !== null &&
           Object.hasOwn(right, "toString")
         ) {
           deopt(path, state);
@@ -436,9 +437,11 @@ function _evaluate(path: NodePath, state: State): any {
         if (
           (typeof left === "object" &&
             typeof right === "string" &&
+            left !== null &&
             Object.hasOwn(left, "toString")) ||
           (typeof left === "string" &&
             typeof right === "object" &&
+            right !== null &&
             Object.hasOwn(right, "toString"))
         ) {
           deopt(path, state);
@@ -519,6 +522,7 @@ function _evaluate(path: NodePath, state: State): any {
       if (
         func === String &&
         args.length > 0 &&
+        args[0] != null &&
         Object.hasOwn(args[0], "toString")
       ) {
         deopt(path, state);
