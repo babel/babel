@@ -39,17 +39,17 @@ describe("generation", function () {
     const generated = generate(combinedAst, { sourceMaps: true }, sources);
 
     expect(generated.map).toMatchInlineSnapshot(`
-      Object {
+      {
         "file": undefined,
-        "ignoreList": Array [],
+        "ignoreList": [],
         "mappings": "AAAA,SAAS,EAAE,CAAE,GAAG,EAAE;EAAE,OAAO,CAAC,GAAG,CAAC,GAAG,CAAC;AAAE;ACAtC,EAAE,CAAC,OAAO,CAAC",
-        "names": Array [],
+        "names": [],
         "sourceRoot": undefined,
-        "sources": Array [
+        "sources": [
           "a.js",
           "b.js",
         ],
-        "sourcesContent": Array [
+        "sourcesContent": [
           "function hi (msg) { console.log(msg); }
       ",
           "hi('hello');
@@ -60,230 +60,230 @@ describe("generation", function () {
     `);
 
     expect(generated.rawMappings).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "generated": Object {
+      [
+        {
+          "generated": {
             "column": 0,
             "line": 1,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 0,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 9,
             "line": 1,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 9,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 11,
             "line": 1,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 11,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 12,
             "line": 1,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 13,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 15,
             "line": 1,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 16,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 17,
             "line": 1,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 18,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 2,
             "line": 2,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 20,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 9,
             "line": 2,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 27,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 10,
             "line": 2,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 28,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 13,
             "line": 2,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 31,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 14,
             "line": 2,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 32,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 17,
             "line": 2,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 35,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 18,
             "line": 2,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 36,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 0,
             "line": 3,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 38,
             "line": 1,
           },
           "source": "a.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 0,
             "line": 4,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 0,
             "line": 1,
           },
           "source": "b.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 2,
             "line": 4,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 2,
             "line": 1,
           },
           "source": "b.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 3,
             "line": 4,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 3,
             "line": 1,
           },
           "source": "b.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 10,
             "line": 4,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 10,
             "line": 1,
           },
           "source": "b.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 11,
             "line": 4,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 11,
             "line": 1,
           },
@@ -322,65 +322,65 @@ describe("generation", function () {
     );
 
     expect(generated).toMatchInlineSnapshot(`
-      Object {
+      {
         "code": "function foo2() {
         bar2;
       }",
-        "decodedMap": Object {
+        "decodedMap": {
           "file": undefined,
-          "ignoreList": Array [],
-          "mappings": Array [
-            Array [
-              Array [
+          "ignoreList": [],
+          "mappings": [
+            [
+              [
                 0,
                 0,
                 0,
                 0,
               ],
-              Array [
+              [
                 9,
                 0,
                 0,
                 9,
                 0,
               ],
-              Array [
+              [
                 13,
                 0,
                 0,
                 12,
                 0,
               ],
-              Array [
+              [
                 14,
                 0,
                 0,
                 12,
               ],
-              Array [
+              [
                 16,
                 0,
                 0,
                 15,
               ],
             ],
-            Array [
-              Array [
+            [
+              [
                 2,
                 0,
                 0,
                 17,
                 1,
               ],
-              Array [
+              [
                 6,
                 0,
                 0,
                 20,
               ],
             ],
-            Array [
-              Array [
+            [
+              [
                 0,
                 0,
                 0,
@@ -388,130 +388,130 @@ describe("generation", function () {
               ],
             ],
           ],
-          "names": Array [
+          "names": [
             "foo",
             "bar",
           ],
           "sourceRoot": undefined,
-          "sources": Array [
+          "sources": [
             "inline",
           ],
-          "sourcesContent": Array [
+          "sourcesContent": [
             "function foo() { bar; }
       ",
           ],
           "version": 3,
         },
-        "map": Object {
+        "map": {
           "file": undefined,
-          "ignoreList": Array [],
+          "ignoreList": [],
           "mappings": "AAAA,SAASA,IAAGA,CAAA,EAAG;EAAEC,IAAG;AAAE",
-          "names": Array [
+          "names": [
             "foo",
             "bar",
           ],
           "sourceRoot": undefined,
-          "sources": Array [
+          "sources": [
             "inline",
           ],
-          "sourcesContent": Array [
+          "sourcesContent": [
             "function foo() { bar; }
       ",
           ],
           "version": 3,
         },
-        "rawMappings": Array [
-          Object {
-            "generated": Object {
+        "rawMappings": [
+          {
+            "generated": {
               "column": 0,
               "line": 1,
             },
             "name": undefined,
-            "original": Object {
+            "original": {
               "column": 0,
               "line": 1,
             },
             "source": "inline",
           },
-          Object {
-            "generated": Object {
+          {
+            "generated": {
               "column": 9,
               "line": 1,
             },
             "name": "foo",
-            "original": Object {
+            "original": {
               "column": 9,
               "line": 1,
             },
             "source": "inline",
           },
-          Object {
-            "generated": Object {
+          {
+            "generated": {
               "column": 13,
               "line": 1,
             },
             "name": "foo",
-            "original": Object {
+            "original": {
               "column": 12,
               "line": 1,
             },
             "source": "inline",
           },
-          Object {
-            "generated": Object {
+          {
+            "generated": {
               "column": 14,
               "line": 1,
             },
             "name": undefined,
-            "original": Object {
+            "original": {
               "column": 12,
               "line": 1,
             },
             "source": "inline",
           },
-          Object {
-            "generated": Object {
+          {
+            "generated": {
               "column": 16,
               "line": 1,
             },
             "name": undefined,
-            "original": Object {
+            "original": {
               "column": 15,
               "line": 1,
             },
             "source": "inline",
           },
-          Object {
-            "generated": Object {
+          {
+            "generated": {
               "column": 2,
               "line": 2,
             },
             "name": "bar",
-            "original": Object {
+            "original": {
               "column": 17,
               "line": 1,
             },
             "source": "inline",
           },
-          Object {
-            "generated": Object {
+          {
+            "generated": {
               "column": 6,
               "line": 2,
             },
             "name": undefined,
-            "original": Object {
+            "original": {
               "column": 20,
               "line": 1,
             },
             "source": "inline",
           },
-          Object {
-            "generated": Object {
+          {
+            "generated": {
               "column": 0,
               "line": 3,
             },
             "name": undefined,
-            "original": Object {
+            "original": {
               "column": 22,
               "line": 1,
             },
@@ -673,10 +673,10 @@ describe("generation", function () {
     }
 
     expect(generate(ast).code).toMatchInlineSnapshot(`
-      "import { Attribute, AttributeSDKType } from \\"../../base/v1beta1/attribute\\";
-      import { Rpc } from \\"../../../helpers\\";
-      import * as _m0 from \\"protobufjs/minimal\\";
-      import { MsgSignProviderAttributes, MsgSignProviderAttributesSDKType, MsgSignProviderAttributesResponse, MsgSignProviderAttributesResponseSDKType, MsgDeleteProviderAttributes, MsgDeleteProviderAttributesSDKType, MsgDeleteProviderAttributesResponse, MsgDeleteProviderAttributesResponseSDKType } from \\"./audit\\";
+      "import { Attribute, AttributeSDKType } from "../../base/v1beta1/attribute";
+      import { Rpc } from "../../../helpers";
+      import * as _m0 from "protobufjs/minimal";
+      import { MsgSignProviderAttributes, MsgSignProviderAttributesSDKType, MsgSignProviderAttributesResponse, MsgSignProviderAttributesResponseSDKType, MsgDeleteProviderAttributes, MsgDeleteProviderAttributesSDKType, MsgDeleteProviderAttributesResponse, MsgDeleteProviderAttributesResponseSDKType } from "./audit";
       /** Msg defines the provider Msg service */
       export interface Msg {
         /** SignProviderAttributes defines a method that signs provider attributes */
@@ -692,13 +692,13 @@ describe("generation", function () {
         /* SignProviderAttributes defines a method that signs provider attributes */
         signProviderAttributes = async (request: MsgSignProviderAttributes): Promise<MsgSignProviderAttributesResponse> => {
           const data = MsgSignProviderAttributes.encode(request).finish();
-          const promise = this.rpc.request(\\"akash.audit.v1beta1.Msg\\", \\"SignProviderAttributes\\", data);
+          const promise = this.rpc.request("akash.audit.v1beta1.Msg", "SignProviderAttributes", data);
           return promise.then(data => MsgSignProviderAttributesResponse.decode(new _m0.Reader(data)));
         };
         /* DeleteProviderAttributes defines a method that deletes provider attributes */
         deleteProviderAttributes = async (request: MsgDeleteProviderAttributes): Promise<MsgDeleteProviderAttributesResponse> => {
           const data = MsgDeleteProviderAttributes.encode(request).finish();
-          const promise = this.rpc.request(\\"akash.audit.v1beta1.Msg\\", \\"DeleteProviderAttributes\\", data);
+          const promise = this.rpc.request("akash.audit.v1beta1.Msg", "DeleteProviderAttributes", data);
           return promise.then(data => MsgDeleteProviderAttributesResponse.decode(new _m0.Reader(data)));
         };
       }"
@@ -741,15 +741,15 @@ describe("generation", function () {
 
     expect(generate(ast).code).toMatchInlineSnapshot(`
       "(function (_templateFactory) {
-        \\"use strict\\";
+        "use strict";
 
         const template = (0, _templateFactory.createTemplateFactory)(
         /*{{somevalue}}*/
         {
-          \\"id\\": null,
-          \\"block\\": \\"[[[1,[34,0]]],[],false,[\\\\\\"somevalue\\\\\\"]]\\",
-          \\"moduleName\\": \\"(unknown template module)\\",
-          \\"isStrictMode\\": false
+          "id": null,
+          "block": "[[[1,[34,0]]],[],false,[\\"somevalue\\"]]",
+          "moduleName": "(unknown template module)",
+          "isStrictMode": false
         });
       });
       const template = (0, _templateFactory.createTemplateFactory)(
@@ -757,10 +757,10 @@ describe("generation", function () {
                 {{somevalue}}
               */
       {
-        \\"id\\": null,
-        \\"block\\": \\"[[[1,[34,0]]],[],false,[\\\\\\"somevalue\\\\\\"]]\\",
-        \\"moduleName\\": \\"(unknown template module)\\",
-        \\"isStrictMode\\": false
+        "id": null,
+        "block": "[[[1,[34,0]]],[],false,[\\"somevalue\\"]]",
+        "moduleName": "(unknown template module)",
+        "isStrictMode": false
       });"
     `);
   });
@@ -834,15 +834,15 @@ describe("generation", function () {
 
     expect(generate(ast2).code).toMatchInlineSnapshot(`
       "(function (_templateFactory) {
-        \\"use strict\\";
+        "use strict";
 
         const template = (0, _templateFactory.createTemplateFactory)(
         /*{{somevalue}}*/
         {
-          \\"id\\": null,
-          \\"block\\": \\"[[[1,[34,0]]],[],false,[\\\\\\"somevalue\\\\\\"]]\\",
-          \\"moduleName\\": \\"(unknown template module)\\",
-          \\"isStrictMode\\": false
+          "id": null,
+          "block": "[[[1,[34,0]]],[],false,[\\"somevalue\\"]]",
+          "moduleName": "(unknown template module)",
+          "isStrictMode": false
         });
       });
       const template = (0, _templateFactory.createTemplateFactory)(
@@ -850,10 +850,10 @@ describe("generation", function () {
         {{somevalue}}
       */
       {
-        \\"id\\": null,
-        \\"block\\": \\"[[[1,[34,0]]],[],false,[\\\\\\"somevalue\\\\\\"]]\\",
-        \\"moduleName\\": \\"(unknown template module)\\",
-        \\"isStrictMode\\": false
+        "id": null,
+        "block": "[[[1,[34,0]]],[],false,[\\"somevalue\\"]]",
+        "moduleName": "(unknown template module)",
+        "isStrictMode": false
       });"
     `);
   });
@@ -873,16 +873,16 @@ describe("generation", function () {
         },
       }).map,
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "file": undefined,
-        "ignoreList": Array [],
+        "ignoreList": [],
         "mappings": "AAAA,IAAI,CAAC,GAAG,SAAJ,CAAC",
-        "names": Array [],
+        "names": [],
         "sourceRoot": undefined,
-        "sources": Array [
+        "sources": [
           "source-maps/arrow-function/input.js",
         ],
-        "sourcesContent": Array [
+        "sourcesContent": [
           undefined,
         ],
         "version": 3,
@@ -907,21 +907,21 @@ describe("generation", function () {
         },
       }).rawMappings,
     ).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "generated": Object {
+      [
+        {
+          "generated": {
             "column": 0,
             "line": 1,
           },
           "name": undefined,
-          "original": Object {
+          "original": {
             "column": 0,
             "line": 1,
           },
           "source": "input.js",
         },
-        Object {
-          "generated": Object {
+        {
+          "generated": {
             "column": 2,
             "line": 1,
           },
@@ -966,21 +966,21 @@ describe("generation", function () {
       }"
     `);
     expect(out.map).toMatchInlineSnapshot(`
-      Object {
+      {
         "file": undefined,
-        "ignoreList": Array [],
+        "ignoreList": [],
         "mappings": "AACM,IAAIA,CAAC,GAAG,CAAC;AACT,IAAI,CAAC,GAAG,CAAC;AACT,SAASC,CAACA,CAAA,EAAG,CAAC;AACd,SAAS,CAAC,GAAG,CAAC;AACd,MAAM,CAAC,CAAC;EACN,CAACC,CAACC,CAAA,EAAG,CAAC;EACN,CAAC,CAAC,GAAG,CAAC;AACR",
-        "names": Array [
+        "names": [
           "a",
           "c",
           "e",
           "#e",
         ],
         "sourceRoot": undefined,
-        "sources": Array [
+        "sources": [
           "input.js",
         ],
-        "sourcesContent": Array [
+        "sourcesContent": [
           "
             let a = 1;
             let b = 2;

@@ -2,7 +2,7 @@
   "name": "@babel/plugin-transform-regenerator",
   "author": "The Babel Team (https://babel.dev/team)",
   "description": "Explode async and generator functions into a state machine.",
-  "version": "8.0.0-rc.6",
+  "version": "8.0.2",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-regenerator",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "access": "public"
   },
   "peerDependencies": {
-    "@babel/core": "workspace:^"
+    "@babel/core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
@@ -32,8 +32,8 @@
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
     "@babel/plugin-transform-parameters": "workspace:^",
     "@babel/plugin-transform-runtime": "workspace:^",
-    "babel-plugin-polyfill-regenerator": "^1.0.0-rc.2",
-    "mocha": "^10.0.0",
+    "babel-plugin-polyfill-regenerator": "^1.0.0",
+    "jest": "^30.4.2",
     "recast": "^0.23.3",
     "uglify-js": "^3.14.0"
   },

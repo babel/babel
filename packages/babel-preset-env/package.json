@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-env",
-  "version": "8.0.0-rc.6",
+  "version": "8.0.2",
   "description": "A Babel preset for each environment.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-preset-env",
@@ -77,13 +77,13 @@
     "@babel/plugin-transform-unicode-property-regex": "workspace:^",
     "@babel/plugin-transform-unicode-regex": "workspace:^",
     "@babel/plugin-transform-unicode-sets-regex": "workspace:^",
-    "@babel/preset-modules": "0.1.6-no-external-plugins",
+    "@babel/preset-modules": "^0.2.0",
     "babel-plugin-polyfill-corejs3": "catalog:",
     "core-js-compat": "catalog:",
     "semver": "catalog:"
   },
   "peerDependencies": {
-    "@babel/core": "workspace:^"
+    "@babel/core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

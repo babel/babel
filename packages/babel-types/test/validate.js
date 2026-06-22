@@ -51,7 +51,7 @@ describe("validate", () => {
       expect(() => {
         t.blockStatement([t.cloneNode(ast)]);
       }).toThrowErrorMatchingInlineSnapshot(
-        `"Property id of VariableDeclarator expected node to be of a type [\\"Identifier\\",\\"Placeholder\\"] but instead got \\"ObjectPattern\\""`,
+        `"Property id of VariableDeclarator expected node to be of a type ["Identifier","Placeholder"] but instead got "ObjectPattern""`,
       );
     });
 

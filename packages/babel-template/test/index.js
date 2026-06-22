@@ -38,10 +38,10 @@ describe("@babel/template", function () {
 
   it("should allow yield outside generator function by default", function () {
     expect(template.ast("yield 1")).toMatchInlineSnapshot(`
-      Object {
-        "expression": Object {
-          "argument": Object {
-            "extra": Object {
+      {
+        "expression": {
+          "argument": {
+            "extra": {
               "raw": "1",
               "rawValue": 1,
             },
@@ -333,20 +333,20 @@ describe("@babel/template", function () {
         $$$$BABEL_TPL$0;
       `;
       expect(result).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "attributes": Array [],
+        [
+          {
+            "attributes": [],
             "declaration": null,
             "loc": undefined,
             "source": null,
-            "specifiers": Array [
-              Object {
-                "exported": Object {
+            "specifiers": [
+              {
+                "exported": {
                   "name": "x",
                   "type": "Identifier",
                 },
                 "loc": undefined,
-                "local": Object {
+                "local": {
                   "name": "x",
                   "type": "Identifier",
                 },
@@ -355,8 +355,8 @@ describe("@babel/template", function () {
             ],
             "type": "ExportNamedDeclaration",
           },
-          Object {
-            "expression": Object {
+          {
+            "expression": {
               "loc": undefined,
               "name": "$$$$BABEL_TPL$0",
               "type": "Identifier",
@@ -592,7 +592,7 @@ describe("@babel/template", function () {
       ];
 
       expect(outputs.map(ast => generator(ast).code)).toMatchInlineSnapshot(`
-        Array [
+        [
           "const greeting: string = 'Hello';",
           "var {}: string = x;",
           "class X {
@@ -623,7 +623,7 @@ describe("@babel/template", function () {
       ];
 
       expect(outputs.map(ast => generator(ast).code)).toMatchInlineSnapshot(`
-        Array [
+        [
           "const x: string = 'Hello';",
           "var {}: string = x;",
         ]

@@ -190,7 +190,7 @@ describe("@babel/core errors", function () {
         root: fixture("invalid-option"),
       });
     }).toMatchInlineSnapshot(`
-      "Error: .sourceType must be \\"module\\", \\"commonjs\\", \\"script\\", \\"unambiguous\\", or undefined
+      "Error: .sourceType must be "module", "commonjs", "script", "unambiguous", or undefined
           at <CWD>/packages/babel-core/test/fixtures/errors/invalid-option/babel.config.json
           at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
@@ -207,7 +207,7 @@ describe("@babel/core errors", function () {
         sourceType: "foo",
       }),
     ).toMatchInlineSnapshot(`
-      "Error: .sourceType must be \\"module\\", \\"commonjs\\", \\"script\\", \\"unambiguous\\", or undefined
+      "Error: .sourceType must be "module", "commonjs", "script", "unambiguous", or undefined
           at Module.parseSync (<CWD>/packages/babel-core/src/parse.ts:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
           at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
@@ -216,8 +216,7 @@ describe("@babel/core errors", function () {
     `);
   });
 
-  // TODO: Enable it after https://github.com/babel/babel/pull/18005 is released.
-  it.skip("internal errors have the full stack trace", function () {
+  it("internal errors have the full stack trace", function () {
     expectError(() => {
       const { map } = Array.prototype;
       try {

@@ -58,7 +58,7 @@ const shouldSkip = semver.lt(process.version, "18.0.0");
       });
 
       expect(config.options.targets).toMatchInlineSnapshot(`
-        Object {
+        {
           "node": "12.0.0",
         }
       `);

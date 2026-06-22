@@ -5,7 +5,6 @@ const isPublishBundle = process.env.IS_PUBLISH;
 export default {
   runner: "jest-light-runner",
 
-  snapshotFormat: { escapeString: true, printBasicPrototype: true },
   coverageProvider: "v8",
   coverageReporters: ["lcov", "text"],
   collectCoverageFrom: [
@@ -49,12 +48,6 @@ export default {
       : []),
   ],
   testEnvironment: "node",
-  transformIgnorePatterns: [
-    "/node_modules/",
-    "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
-    "/test/(fixtures|tmp|__data__)/",
-    "<rootDir>/(packages|codemods|eslint)/[^/]+/lib/",
-  ],
   modulePathIgnorePatterns: [
     "/test/fixtures/",
     "/test/tmp/",

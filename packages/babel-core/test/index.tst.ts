@@ -58,7 +58,6 @@ describe("options of all packages", () => {
   it("presets", () => {
     expect<ExtractOptionsKeys<typeof presetEnv>>().type.toBe<
       | "configPath"
-      | "corejs"
       | "debug"
       | "exclude"
       | "forceAllTransforms"
@@ -67,7 +66,6 @@ describe("options of all packages", () => {
       | "modules"
       | "shippedProposals"
       | "targets"
-      | "useBuiltIns"
       | "browserslistEnv"
     >();
     expect<ExtractOptionsKeys<typeof presetReact>>().type.toBe<
@@ -256,7 +254,6 @@ describe("options of all packages", () => {
       | "optimizeConstEnums"
       | "disallowAmbiguousJSXLike"
       | "dts"
-      | "isTSX"
     >();
     expect<
       ExtractOptionsKeys<typeof pluginTransformUnicodePropertyRegex>

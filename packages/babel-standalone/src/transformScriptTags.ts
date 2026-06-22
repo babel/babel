@@ -65,7 +65,7 @@ function buildBabelOptions(
   if (!presets) {
     if (script.type === "module") {
       presets = [
-        "react",
+        ["react", { runtime: "classic" }],
         [
           "env",
           {
@@ -74,7 +74,7 @@ function buildBabelOptions(
         ],
       ];
     } else {
-      presets = ["react", "env"];
+      presets = [["react", { runtime: "classic" }], "env"];
     }
   }
 

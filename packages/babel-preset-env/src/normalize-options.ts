@@ -125,8 +125,8 @@ export const validateModulesOption = (
     `The 'modules' option must be one of \n` +
       ` - 'false' to indicate no module processing\n` +
       ` - a specific module type: 'commonjs', 'amd', 'umd', 'systemjs'` +
-      ` - 'auto' (default) which will automatically select 'false' if the current\n` +
-      `   process is known to support ES module syntax, or "commonjs" otherwise\n`,
+      ` - 'auto' (default) which will automatically select 'commonjs' if the current\n` +
+      `   process is known to *not* support ES module syntax, or 'false' otherwise\n`,
   );
 
   return modulesOpt;
@@ -214,9 +214,15 @@ export default function normalizeOptions(opts: Options): Omit<
 
   v.validateTopLevelOptions(opts, TopLevelOptions);
 
-  const useBuiltIns = validateUseBuiltInsOption(opts.useBuiltIns);
+  if ((opts as any).useBuiltIns) {
+    throw new Error(
+      "The 'useBuiltIns' option has been removed. Please use babel-plugin-polyfill-corejs3 instead.",
+    );
+  }
 
-  const corejs = normalizeCoreJSOption(opts.corejs, useBuiltIns);
+  // TODO: Remove
+  const useBuiltIns = validateUseBuiltInsOption(false);
+  const corejs = normalizeCoreJSOption(null, useBuiltIns);
 
   const include = expandIncludesAndExcludes(
     opts.include,

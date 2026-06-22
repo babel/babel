@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-plugin",
-  "version": "8.0.0-rc.6",
+  "version": "8.0.1",
   "description": "Companion rules for @babel/eslint-parser",
   "main": "./lib/index.js",
   "type": "module",
@@ -36,7 +36,7 @@
   },
   "homepage": "https://babel.dev/",
   "peerDependencies": {
-    "@babel/core": "workspace:^",
+    "@babel/core": "^8.0.0",
     "@babel/eslint-parser": "workspace:^",
     "eslint": "^9.0.0 || ^10.0.0"
   },

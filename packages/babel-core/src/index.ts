@@ -1,5 +1,5 @@
 export const version = process.env.BABEL_9_BREAKING
-  ? PACKAGE_JSON.version + "999999999"
+  ? PACKAGE_JSON.version.replace(/0*$/, "999999999")
   : PACKAGE_JSON.version;
 
 export { default as File } from "./transformation/file/file.ts";

@@ -35,10 +35,10 @@ describe("'importInterop'", () => {
 
     expect(transform(code, importInterop)).toMatchInlineSnapshot(`
       "(function (global, factory) {
-        if (typeof define === \\"function\\" && define.amd) {
-          define([\\"a\\", \\"b\\", \\"c\\"], factory);
-        } else if (typeof exports !== \\"undefined\\") {
-          factory(require(\\"a\\"), require(\\"b\\"), require(\\"c\\"));
+        if (typeof define === "function" && define.amd) {
+          define(["a", "b", "c"], factory);
+        } else if (typeof exports !== "undefined") {
+          factory(require("a"), require("b"), require("c"));
         } else {
           var mod = {
             exports: {}
@@ -46,8 +46,8 @@ describe("'importInterop'", () => {
           factory(global.a, global.b, global.c);
           global.unknown = mod.exports;
         }
-      })(typeof globalThis !== \\"undefined\\" ? globalThis : typeof self !== \\"undefined\\" ? self : this, function (_a, _b, _c) {
-        \\"use strict\\";
+      })(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function (_a, _b, _c) {
+        "use strict";
 
         _a = babelHelpers.interopRequireDefault(_a);
         (0, _a.default)();

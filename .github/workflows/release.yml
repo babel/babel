@@ -10,12 +10,12 @@ on:
         # force ourselves to always create them locally.
         description: ⚠️ This workflow can only automatically release patch versions, or Babel 8 pre-releases
         required: true
-        default: prerelease
+        default: patch
         type: choice
         options:
           - prerelease
-          - "8.0.0-beta.4"
-          - "8.0.0-rc.1"
+          - patch
+          - "8.0.0"
 
 permissions:
   contents: read
@@ -32,7 +32,7 @@ jobs:
       - name: This release will publish the following packages
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            yarn release-tool version --dry --all ${{ github.event.inputs.version }}
+            yarn release-tool version --dry ${{ github.event.inputs.version }}
           else
             git diff --name-only HEAD^..HEAD
           fi;
@@ -78,7 +78,7 @@ jobs:
       - name: Create new version
         run: |
           make new-version-checklist
-          yarn release-tool version -f @babel/standalone --all --yes ${{ github.event.inputs.version }}
+          yarn release-tool version -f @babel/standalone --yes ${{ github.event.inputs.version }}
 
       - name: Compute temporary branch name
         id: branch-name
@@ -131,11 +131,10 @@ jobs:
           # Remove once `chalk` is bumped to 4.0.
           FORCE_COLOR: true
 
-      # Remove --tag next when Babel 8 becomes stable
       - name: Publish to npm
-        run: yarn release-tool publish --yes --provenance --tag next
+        run: yarn release-tool publish --yes --provenance
 
-      # Uncomment when Babel 8 becomes stable
+      # Uncomment when Babel 8 becomes stable and the website migrated to Babel 8
       # - name: Generate babel-types docs
       #   continue-on-error: true
       #   run: |

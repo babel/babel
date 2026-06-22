@@ -1,6 +1,6 @@
 {
   "name": "@babel/helpers",
-  "version": "8.0.0-rc.6",
+  "version": "8.0.0",
   "description": "Collection of helper functions used by Babel transforms.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helpers",
@@ -23,6 +23,7 @@
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@babel/parser": "workspace:^",
+    "@babel/traverse": "workspace:^",
     "regenerator-runtime": "^0.14.0",
     "terser": "catalog:dev"
   },

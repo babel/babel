@@ -8,12 +8,10 @@ currently being supported with security updates.
 | Version  | Supported          |
 | -------- | ------------------ |
 | 8.x      | :white_check_mark: |
-| 7.x      | :white_check_mark: [^1] |
+| 7.x      | :hourglass_flowing_sand: (until 2027-06-30)  |
 | 6.x      | :x:                |
 
 Note that for each supported major version, we only guarantee security fixes for the last minor version. This means that if, for example, the last released version is 7.16.4 we will only release security fixes as 7.16.5 and not for 7.15.x or older. This is because upgrading from a minor to another should be as easy as updating to a new patch version.
-
-[^1]: Babel 7.x will receive security updates for 1 year after the first stable release of Babel 8.0.0. The exact date of such release is not known yet.
 
 ## Reporting a Vulnerability
 

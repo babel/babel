@@ -3,28 +3,28 @@
 exports[`checkDuplicateNodes should throw on duplicate AST nodes within different parent 1`] = `
 "Do not reuse nodes. Use \`t.cloneNode\` (or \`t.clone\`/\`t.cloneDeep\` if using babel@6) to copy them.
 {
-  \\"type\\": \\"Identifier\\",
-  \\"name\\": \\"ref\\"
+  "type": "Identifier",
+  "name": "ref"
 }
 Parent:
 [
   {
-    \\"type\\": \\"VariableDeclarator\\",
-    \\"id\\": {
-      \\"type\\": \\"Identifier\\",
-      \\"name\\": \\"ref\\"
+    "type": "VariableDeclarator",
+    "id": {
+      "type": "Identifier",
+      "name": "ref"
     },
-    \\"init\\": null
+    "init": null
   },
   {
-    \\"type\\": \\"AssignmentExpression\\",
-    \\"operator\\": \\"=\\",
-    \\"left\\": {
-      \\"type\\": \\"Identifier\\",
-      \\"name\\": \\"ref\\"
+    "type": "AssignmentExpression",
+    "operator": "=",
+    "left": {
+      "type": "Identifier",
+      "name": "ref"
     },
-    \\"right\\": {
-      \\"type\\": \\"NullLiteral\\"
+    "right": {
+      "type": "NullLiteral"
     }
   }
 ]"
@@ -33,31 +33,31 @@ Parent:
 exports[`checkDuplicateNodes should throw on duplicate AST nodes within same parent 1`] = `
 "Do not reuse nodes. Use \`t.cloneNode\` (or \`t.clone\`/\`t.cloneDeep\` if using babel@6) to copy them.
 {
-  \\"type\\": \\"Identifier\\",
-  \\"name\\": \\"ref\\"
+  "type": "Identifier",
+  "name": "ref"
 }
 Parent:
 [
   {
-    \\"type\\": \\"VariableDeclarator\\",
-    \\"id\\": {
-      \\"type\\": \\"Identifier\\",
-      \\"name\\": \\"ref\\"
+    "type": "VariableDeclarator",
+    "id": {
+      "type": "Identifier",
+      "name": "ref"
     },
-    \\"init\\": {
-      \\"type\\": \\"Identifier\\",
-      \\"name\\": \\"ref\\"
+    "init": {
+      "type": "Identifier",
+      "name": "ref"
     }
   },
   {
-    \\"type\\": \\"VariableDeclarator\\",
-    \\"id\\": {
-      \\"type\\": \\"Identifier\\",
-      \\"name\\": \\"ref\\"
+    "type": "VariableDeclarator",
+    "id": {
+      "type": "Identifier",
+      "name": "ref"
     },
-    \\"init\\": {
-      \\"type\\": \\"Identifier\\",
-      \\"name\\": \\"ref\\"
+    "init": {
+      "type": "Identifier",
+      "name": "ref"
     }
   }
 ]"

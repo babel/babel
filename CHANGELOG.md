@@ -25,6 +25,51 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.2 (2026-06-18)
+
+#### :bug: Bug Fix
+* Other
+  * [#18083](https://github.com/babel/babel/pull/18083) Use the `@babel/core` version when asserting version in `@babel/standalone` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-helper-validator-identifier`
+  * [#18075](https://github.com/babel/babel/pull/18075) fix(identifier): avoid double escaping slash ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-plugin-proposal-decorators`, `babel-plugin-transform-regenerator`, `babel-preset-env`
+  * [#18081](https://github.com/babel/babel/pull/18081) Update `@babel/preset-modules` and polyfill packages ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+## v8.0.1 (2026-06-17)
+
+#### :boom: Breaking Change
+* `babel-core`, `babel-plugin-transform-object-rest-spread`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-standalone`
+  * [#18079](https://github.com/babel/babel/pull/18079) Actually remove `preset-env`'s `useBuiltIns` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+## v8.0.0 (2026-06-16)
+
+#### :eyeglasses: Spec Compliance
+* `babel-core`
+  * [#18039](https://github.com/babel/babel/pull/18039) perf: Only extract source map comments at the end of the file ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :boom: Breaking Change
+* `babel-cli`, `babel-node`, `babel-plugin-proposal-decorators`, `babel-plugin-transform-classes`, `babel-plugin-transform-function-name`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-object-rest-spread`, `babel-plugin-transform-parameters`, `babel-plugin-transform-react-constant-elements`, `babel-plugin-transform-regenerator`, `babel-preset-env`, `babel-register`
+  * [#18069](https://github.com/babel/babel/pull/18069) Fallback to assuming ESM support with `modules: auto` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-runtime`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#18036](https://github.com/babel/babel/pull/18036) Remove corejs exports for `@babe/runtime-corejs3` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-parser`
+  * [#18034](https://github.com/babel/babel/pull/18034) Remove `locations: "packed"` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#18046](https://github.com/babel/babel/pull/18046) fix(generator): improve new callee parens check ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-modules-systemjs`
+  * [#18032](https://github.com/babel/babel/pull/18032) fix(systemjs): support __proto__ as an export name ([@JLHwung](https://github.com/JLHwung))
+
+#### :memo: Documentation
+* [#18070](https://github.com/babel/babel/pull/18070) Add EOL date for Babel 7 (end of June 2027) to SECURITY.md ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* [#18018](https://github.com/babel/babel/pull/18018) ci: enforce yarn integrity ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-core`
+  * [#18039](https://github.com/babel/babel/pull/18039) perf: Only extract source map comments at the end of the file ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v8.0.0-rc.6 (2026-05-25)
 
 #### :bug: Bug Fix

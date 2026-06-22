@@ -36,7 +36,5 @@ Using plugins:
   transform-block-scoping { chrome < 50 }
   transform-regenerator { chrome < 50 }
   transform-export-namespace-from { chrome < 72 }
-  transform-modules-commonjs
-  transform-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

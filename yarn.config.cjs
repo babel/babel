@@ -232,6 +232,14 @@ function enforceBabelCoreVersionFor78Compat({ Yarn }, version) {
   }
 }
 
+function enforceBabelCorePeerDependencyVersion({ Yarn }) {
+  for (const workspace of Yarn.workspaces()) {
+    if (workspace.pkg.peerDependencies.has("@babel/core")) {
+      workspace.set("peerDependencies['@babel/core']", "^8.0.0");
+    }
+  }
+}
+
 /**
  * @type {import('@yarnpkg/types').Yarn.Config}
  */
@@ -253,5 +261,6 @@ module.exports = {
     } else {
       enforceBabelCoreNotInDeps(ctx);
     }
+    enforceBabelCorePeerDependencyVersion(ctx);
   },
 };

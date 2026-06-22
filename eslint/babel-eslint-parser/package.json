@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-parser",
-  "version": "8.0.0-rc.6",
+  "version": "8.0.1",
   "description": "ESLint parser that allows for linting of experimental syntax transformed by Babel",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
@@ -29,7 +29,7 @@
     "./package.json": "./package.json"
   },
   "peerDependencies": {
-    "@babel/core": "workspace:^",
+    "@babel/core": "^8.0.0",
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "dependencies": {
@@ -43,6 +43,6 @@
     "@types/estree": "^1.0.5",
     "dedent": "^1.5.3",
     "eslint": "^10.0.0",
-    "typescript-eslint": "^8.55.0"
+    "typescript-eslint": "8.60.0"
   }
 }

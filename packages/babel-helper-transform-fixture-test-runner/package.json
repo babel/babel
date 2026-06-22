@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-transform-fixture-test-runner",
-  "version": "8.0.0-rc.6",
+  "version": "8.0.0",
   "description": "Transform test runner for @babel/helper-fixtures module",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-helper-transform-fixture-test-runner",
@@ -21,7 +21,7 @@
     "@babel/helper-fixtures": "workspace:^",
     "@jridgewell/trace-mapping": "catalog:",
     "jest-diff": "^30.0.0",
-    "lru-cache": "^7.14.1",
+    "lru-cache": "^11.0.0",
     "resolve": "2.0.0-next.5"
   },
   "engines": {

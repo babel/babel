@@ -2,6 +2,6 @@
   "assumptions": {
     "setPublicClassFields": true
   },
-  "presets": [["env", { "targets": { "browsers": "ie 6" } }]],
+  "presets": [["env", { "targets": { "browsers": "ie 6" }, "modules": "commonjs" }]],
   "plugins": [["proposal-decorators", { "version": "legacy" }]]
 }

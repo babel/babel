@@ -34,8 +34,8 @@ describe("'importInterop'", () => {
     };
 
     expect(transform(code, importInterop)).toMatchInlineSnapshot(`
-      "define([\\"a\\", \\"b\\", \\"c\\"], function (_a, _b, _c) {
-        \\"use strict\\";
+      "define(["a", "b", "c"], function (_a, _b, _c) {
+        "use strict";
 
         _a = babelHelpers.interopRequireDefault(_a);
         (0, _a.default)();

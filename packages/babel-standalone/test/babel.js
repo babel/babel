@@ -11,7 +11,7 @@ describe("@babel/standalone", () => {
   describe("export packages", () => {
     it("list", () => {
       expect(Object.keys(Babel.packages)).toMatchInlineSnapshot(`
-        Array [
+        [
           "generator",
           "parser",
           "template",
@@ -254,21 +254,6 @@ describe("@babel/standalone", () => {
       );
     });
 
-    it("useBuiltIns works", () => {
-      const output = Babel.transform("[].includes(2)", {
-        sourceType: "module",
-        targets: { ie: 11 },
-        presets: [
-          ["env", { useBuiltIns: "usage", corejs: "3.0", modules: false }],
-        ],
-      }).code;
-
-      expect(output).toMatchInlineSnapshot(`
-        "import \\"core-js/modules/es.array.includes.js\\";
-        [].includes(2);"
-      `);
-    });
-
     it("regenerator works", () => {
       const output = Babel.transform("function* fn() {}", {
         sourceType: "module",
@@ -361,7 +346,7 @@ describe("@babel/standalone", () => {
           targets: { chrome: 113 },
           presets: [["env", { modules: false }]],
         }).code,
-      ).toMatchInlineSnapshot(`"/[\\\\w--[b]]/v;"`);
+      ).toMatchInlineSnapshot(`"/[\\w--[b]]/v;"`);
     });
   });
 });

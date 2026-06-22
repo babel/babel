@@ -1,13 +1,13 @@
 import path from "node:path";
 import fs from "node:fs";
-import { createRequire } from "node:module";
 import * as helpers from "@babel/helpers";
 import { transformFromAstSync, template, types as t } from "@babel/core";
 import { fileURLToPath } from "node:url";
 
 // @ts-expect-error Can not find typings for the built JS file
 import transformRuntime from "../lib/index.js";
-import corejs3Definitions from "./runtime-corejs3-definitions.ts";
+
+import runtimePackageJson from "@babel/runtime/package.json" with { type: "json" };
 
 import presetEnv from "@babel/preset-env";
 import polyfillCorejs3 from "babel-plugin-polyfill-corejs3";
@@ -15,9 +15,6 @@ import polyfillCorejs3 from "babel-plugin-polyfill-corejs3";
 import type { PluginObject, PluginAPI, InputOptions } from "@babel/core";
 
 type PluginItem = NonNullable<InputOptions["plugins"]>[0];
-
-const require = createRequire(import.meta.url);
-const runtimeVersion = require("@babel/runtime/package.json").version;
 
 const importTemplate = template.statement({ sourceType: "module" })(`
   import ID from "SOURCE";
@@ -32,7 +29,12 @@ function outputFile(filePath: string, data: string) {
 }
 
 function corejsVersion(pkgName: string, depName: string) {
-  return require(`../../${pkgName}/package.json`).dependencies[depName];
+  return JSON.parse(
+    fs.readFileSync(
+      new URL(`../../${pkgName}/package.json`, import.meta.url),
+      "utf-8"
+    )
+  ).dependencies[depName];
 }
 
 writeHelpers("@babel/runtime");
@@ -46,96 +48,6 @@ writeHelpers("@babel/runtime-corejs3", {
     },
   ],
 });
-
-writeCoreJS({
-  corejs: 3,
-  proposals: false,
-  definitions: corejs3Definitions,
-  paths: [],
-  corejsRoot: "core-js-pure/stable",
-});
-writeCoreJS({
-  corejs: 3,
-  proposals: true,
-  definitions: corejs3Definitions,
-  paths: ["is-iterable", "get-iterator", "get-iterator-method"],
-  corejsRoot: "core-js-pure/features",
-});
-
-type CoreJSDefinitionItem = { stable: boolean; path: string };
-type CoreJSDefinitions = {
-  BuiltIns: Record<string, CoreJSDefinitionItem>;
-  StaticProperties: Record<string, Record<string, CoreJSDefinitionItem>>;
-  InstanceProperties?: Record<string, CoreJSDefinitionItem>;
-};
-
-function writeCoreJS({
-  corejs,
-  proposals,
-  definitions: { BuiltIns, StaticProperties, InstanceProperties },
-  paths,
-  corejsRoot,
-}: {
-  corejs: 2 | 3;
-  proposals: boolean;
-  definitions: CoreJSDefinitions;
-  paths: string[];
-  corejsRoot: string;
-}) {
-  const pkgDirname = getRuntimeRoot(`@babel/runtime-corejs${corejs}`);
-
-  Object.keys(BuiltIns).forEach(name => {
-    const { stable, path } = BuiltIns[name];
-    if (stable || proposals) paths.push(path);
-  });
-
-  Object.keys(StaticProperties).forEach(builtin => {
-    const props = StaticProperties[builtin];
-    Object.keys(props).forEach(name => {
-      const { stable, path } = props[name];
-      if (stable || proposals) paths.push(path);
-    });
-  });
-
-  if (InstanceProperties) {
-    Object.keys(InstanceProperties).forEach(name => {
-      const { stable, path } = InstanceProperties[name];
-      if (stable || proposals) paths.push(`instance/${path}`);
-    });
-  }
-
-  const runtimeRoot = proposals ? "core-js" : "core-js-stable";
-  paths.forEach(function (corejsPath) {
-    outputFile(
-      path.join(pkgDirname, runtimeRoot, `${corejsPath}.js`),
-      `module.exports = require("${corejsRoot}/${corejsPath}");`
-    );
-  });
-
-  writeCorejsExports(pkgDirname, runtimeRoot, paths);
-}
-
-function writeCorejsExports(
-  pkgDirname: string,
-  runtimeRoot: string,
-  paths: string[]
-) {
-  const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
-  const pkgJson = require(pkgJsonPath);
-  const exports = pkgJson.exports;
-  // Export `./core-js/` so `import "@babel/runtime-corejs3/core-js/some-feature.js"` works
-  // Node < 17
-  exports[`./${runtimeRoot}/`] = `./${runtimeRoot}/`;
-  // Node >= 17
-  exports[`./${runtimeRoot}/*.js`] = `./${runtimeRoot}/*.js`;
-  for (const corejsPath of paths) {
-    // Export `./core-js/some-feature` so `import "@babel/runtime-corejs3/core-js/some-feature"` also works
-    const corejsExportPath = `./${runtimeRoot}/${corejsPath}`;
-    exports[corejsExportPath] = corejsExportPath + ".js";
-  }
-  pkgJson.exports = exports;
-  outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
-}
 
 function writeHelperFile(
   runtimeName: string,
@@ -229,11 +141,10 @@ function writeHelperExports(
   helperSubExports: HelperSubExports
 ) {
   const pkgDirname = getRuntimeRoot(runtimeName);
-  const pkgJsonPath = require.resolve(`${pkgDirname}/package.json`);
-  const pkgJson = require(pkgJsonPath);
+  const pkgJsonPath = path.join(pkgDirname, "package.json");
+  const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
   pkgJson.exports = {
     ...helperSubExports,
-    "./package": "./package.json",
     "./package.json": "./package.json",
   };
   outputFile(pkgJsonPath, JSON.stringify(pkgJson, undefined, 2) + "\n");
@@ -302,7 +213,7 @@ function buildHelper(
     presets: [[presetEnv, { modules: false }]],
     plugins: [
       polyfillProvider,
-      [transformRuntime, { version: runtimeVersion }],
+      [transformRuntime, { version: runtimePackageJson.version }],
       [runtimeRewritePlugin, { runtimeName, helperName }],
       esm ? null : addDefaultCJSExport,
     ].filter(Boolean) as PluginItem[],

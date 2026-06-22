@@ -22,14 +22,10 @@ describe("@babel/standalone", () => {
   });
 
   it("should not contain extra require() calls", () => {
-    // When the number of `require(` calls changes, make sure that none of
-    // them is an actual CommonJS require call. The bundle must be self-contained.
-
     const requireCount =
       babelStandaloneSource.split(/(?<![."])require\(/g).length - 1;
 
-    // 6 vs 13 depends on the build configuration
-    expect([6, 13]).toContain(requireCount);
+    expect(requireCount).toBe(4);
   });
 
   // https://github.com/babel/babel/issues/14301

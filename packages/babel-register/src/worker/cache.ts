@@ -1,7 +1,7 @@
 import path from "node:path";
 import fs from "node:fs";
 import os from "node:os";
-import findCacheDirectory from "find-cache-directory";
+import { cache as findCacheDirectory } from "empathic/package";
 import cacache from "cacache";
 import { gzipSync, unzipSync } from "node:zlib";
 
@@ -11,7 +11,7 @@ export default class Cache {
   enabled = false;
   cacheDir =
     process.env.BABEL_CACHE_PATH ||
-    findCacheDirectory({ name: "@babel/register" }) ||
+    findCacheDirectory("@babel/register") ||
     path.join(os.tmpdir() || os.homedir(), `.babel-register`);
   batched: { key: string; data: unknown }[] = [];
   batchedSize = 0;

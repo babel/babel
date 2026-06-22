@@ -105,4 +105,30 @@ describe("transformScriptTags", () => {
       });
     });
   });
+  it("should use `runtime: 'classic'` for react", () => {
+    const dom = new JSDOM(
+      `<!DOCTYPE html><head><script>${standaloneSource}</script><script type="text/babel">try{const domNode = document.getElementById('app');const root = ReactDOM.createRoot(domNode);root.render(<h1>Develop. Preview. Ship.</h1>)}catch{}</script></head>`,
+      { runScripts: "dangerously" },
+    );
+    return new Promise((resolve, reject) => {
+      dom.window.addEventListener("DOMContentLoaded", () => {
+        try {
+          const transformedScriptElement =
+            dom.window.document.head.children.item(2);
+          expect(transformedScriptElement.getAttribute("type")).toBeNull();
+          expect(transformedScriptElement.innerHTML).toMatchInlineSnapshot(`
+            "try {
+              var domNode = document.getElementById('app');
+              var root = ReactDOM.createRoot(domNode);
+              root.render(/*#__PURE__*/React.createElement("h1", null, "Develop. Preview. Ship."));
+            } catch (_unused) {}
+            //# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiSW5saW5lIEJhYmVsIHNjcmlwdCJdLCJzb3VyY2VzQ29udGVudCI6WyJ0cnl7Y29uc3QgZG9tTm9kZSA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdhcHAnKTtjb25zdCByb290ID0gUmVhY3RET00uY3JlYXRlUm9vdChkb21Ob2RlKTtyb290LnJlbmRlcig8aDE+RGV2ZWxvcC4gUHJldmlldy4gU2hpcC48L2gxPil9Y2F0Y2h7fSJdLCJtYXBwaW5ncyI6IkFBQUEsSUFBRztFQUFDLElBQU0sT0FBTyxHQUFHLFFBQVEsQ0FBQyxjQUFjLENBQUMsS0FBSyxDQUFDO0VBQUMsSUFBTSxJQUFJLEdBQUcsUUFBUSxDQUFDLFVBQVUsQ0FBQyxPQUFPLENBQUM7RUFBQyxJQUFJLENBQUMsTUFBTSxjQUFDLGdDQUFJLHlCQUEyQixDQUFDLENBQUM7QUFBQSxDQUFDLGlCQUFLLENBQUMiLCJpZ25vcmVMaXN0IjpbXX0="
+          `);
+          resolve();
+        } catch (err) {
+          reject(err);
+        }
+      });
+    });
+  });
 });

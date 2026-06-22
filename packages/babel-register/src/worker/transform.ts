@@ -69,6 +69,9 @@ async function setOptions(opts: any) {
     ...opts,
     caller: {
       name: "@babel/register",
+      supportsStaticESM: false,
+      supportsDynamicImport: false,
+      supportsExportNamespaceFrom: false,
       ...(opts.caller || {}),
     },
   };

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-json-modules",
-  "version": "8.0.0-rc.6",
+  "version": "8.0.1",
   "description": "Transform json modules imports (`import '...' with { type: 'json' }`) to work in browsers and Node.js.",
   "repository": {
     "type": "git",
@@ -36,7 +36,7 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "workspace:^"
+    "@babel/core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

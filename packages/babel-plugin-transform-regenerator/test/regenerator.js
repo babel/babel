@@ -12,7 +12,7 @@ import {
   mkdirSync,
   readFileSync,
 } from "node:fs";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import { spawn } from "node:child_process";
 import { transformSync } from "@babel/core";
 import checkDuplicatedNodes from "@babel/helper-check-duplicate-nodes";
@@ -27,10 +27,9 @@ import pluginTransformBlockScoping from "@babel/plugin-transform-block-scoping";
 import pluginTransformArrowFunctions from "@babel/plugin-transform-arrow-functions";
 import pluginTransformParameters from "@babel/plugin-transform-parameters";
 import pluginProposalFunctionSent from "@babel/plugin-proposal-function-sent";
+import * as jest from "jest";
 
-const { require, __dirname } = commonJS(import.meta.url);
-
-const mochaDir = dirname(require.resolve("mocha"));
+const { __dirname } = commonJS(import.meta.url);
 
 // https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/packages/preset/index.js#L9
 const regeneratorPreset = [
@@ -117,40 +116,27 @@ function enqueue(cmd, args = []) {
             }
           }),
         ));
-    } else if (cmd === "mocha") {
+    } else if (cmd === "jest") {
       // Matches https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/.github/workflows/node.js.yml#L19
-      describe("mocha", () => {
-        it(`${args.join(" ")}`, () =>
-          new Promise((resolve, reject) => {
-            let stdout = "";
-            let stderr = "";
-            const cp = spawn(
-              process.execPath,
-              [
-                join(mochaDir, "bin", "mocha.js"),
-                // https://github.com/nodejs/node/pull/58588#issuecomment-2961692890
-                "--timeout",
-                "10000",
-                "--reporter",
-                "spec",
-                ...args,
-              ],
-              { cwd: __dirname },
-            );
-            cp.stdout.on("data", chunk => {
-              stdout += chunk;
-            });
-            cp.stderr.on("data", chunk => {
-              stderr += chunk;
-            });
-            cp.on("exit", async err => {
-              if (err) {
-                reject(new Error(`STDOUT:\n${stdout}\nSTDERR:\n${stderr}`));
-              } else {
-                resolve();
-              }
-            });
-          }));
+      describe("jest", () => {
+        const testFiles = args.map(file => join(__dirname, file));
+        it(`${args.join(" ")}`, async () => {
+          const options = {
+            projects: [join(__dirname, "regenerator-fixtures")],
+            config: join(__dirname, "regenerator-fixtures", "jest.config.js"),
+            testMatch: testFiles,
+            testPathPattern: testFiles,
+          };
+          try {
+            // Each test file is run in a separate process to avoid interference between tests (e.g. shared.js exports writable Symbol).
+            const { results } = await jest.runCLI(options, options.projects);
+            if (!results.success) {
+              throw new Error("Jest tests failed");
+            }
+          } catch (err) {
+            throw new Error("Jest tests failed", { cause: err });
+          }
+        });
       });
     } else {
       it(`${cmd} ${args.join(" ")}`, () =>
@@ -372,23 +358,23 @@ enqueue(convert, [
   "./regenerator-fixtures/tmp/replaceWith-falsy.es5.js",
 ]);
 
-enqueue("mocha", ["./regenerator-fixtures/tmp/tests.es5.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/tests.es5-old.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/tests-node4.es5.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/non-native.es5.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/async.es5.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/async.es5-old.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/async-custom-promise.es5.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/regression.es5.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tests.transform.js"]);
-enqueue("mocha", ["./regenerator-fixtures/tmp/class.regenerator.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/tests.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/tests.es5-old.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/tests-node4.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/non-native.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/async.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/async.es5-old.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/async-custom-promise.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/regression.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tests.transform.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/class.regenerator.js"]);
 
-enqueue("mocha", ["./regenerator-fixtures/tests-node4.es6.js"]);
+enqueue("jest", ["./regenerator-fixtures/tests-node4.es6.js"]);
 
-enqueue("mocha", [
+enqueue("jest", [
   "./regenerator-fixtures/non-writable-tostringtag-property.js",
 ]);
 
-enqueue("mocha", ["./regenerator-fixtures/frozen-intrinsics.js"]);
+enqueue("jest", ["./regenerator-fixtures/frozen-intrinsics.js"]);
 
-enqueue("mocha", ["./regenerator-fixtures/tmp/no-symbol.es5.js"]);
+enqueue("jest", ["./regenerator-fixtures/tmp/no-symbol.es5.js"]);

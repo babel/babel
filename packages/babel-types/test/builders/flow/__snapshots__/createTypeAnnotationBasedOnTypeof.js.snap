@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`builders flow createTypeAnnotationBasedOnTypeof bigint is valid 1`] = `
-Object {
+{
   "type": "AnyTypeAnnotation",
 }
 `;
 
 exports[`builders flow createTypeAnnotationBasedOnTypeof function is valid 1`] = `
-Object {
-  "id": Object {
+{
+  "id": {
     "name": "Function",
     "type": "Identifier",
   },
@@ -18,14 +18,14 @@ Object {
 `;
 
 exports[`builders flow createTypeAnnotationBasedOnTypeof number is valid 1`] = `
-Object {
+{
   "type": "NumberTypeAnnotation",
 }
 `;
 
 exports[`builders flow createTypeAnnotationBasedOnTypeof object is valid 1`] = `
-Object {
-  "id": Object {
+{
+  "id": {
     "name": "Object",
     "type": "Identifier",
   },
@@ -35,14 +35,14 @@ Object {
 `;
 
 exports[`builders flow createTypeAnnotationBasedOnTypeof string is valid 1`] = `
-Object {
+{
   "type": "StringTypeAnnotation",
 }
 `;
 
 exports[`builders flow createTypeAnnotationBasedOnTypeof symbol is valid 1`] = `
-Object {
-  "id": Object {
+{
+  "id": {
     "name": "Symbol",
     "type": "Identifier",
   },
@@ -52,13 +52,13 @@ Object {
 `;
 
 exports[`builders flow createTypeAnnotationBasedOnTypeof true is valid 1`] = `
-Object {
+{
   "type": "BooleanTypeAnnotation",
 }
 `;
 
 exports[`builders flow createTypeAnnotationBasedOnTypeof undefined is valid 1`] = `
-Object {
+{
   "type": "VoidTypeAnnotation",
 }
 `;

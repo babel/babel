@@ -55,6 +55,9 @@ const packageTypingDependencies = (
     ),
   ]);
   switch (pkgName) {
+    case "@babel/helpers":
+      dependencies.add("@babel/traverse");
+      break;
     case "@babel/standalone":
       Object.keys(pkgJSON.devDependencies ?? {}).forEach(dep =>
         dependencies.add(dep)

@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-compilation-targets",
-  "version": "8.0.0-rc.6",
+  "version": "8.0.0",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "description": "Helper functions on Babel compilation targets",
@@ -28,12 +28,11 @@
     "@babel/compat-data": "workspace:^",
     "@babel/helper-validator-option": "workspace:^",
     "browserslist": "^4.24.0",
-    "lru-cache": "^7.14.1",
+    "lru-cache": "^11.0.0",
     "semver": "catalog:"
   },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "workspace:^",
-    "@types/lru-cache": "^5.1.1",
     "@types/semver": "^5.5.0"
   },
   "engines": {

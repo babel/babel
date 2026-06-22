@@ -152,7 +152,7 @@ describe("assumptions", () => {
       });
 
       expect(code).toMatchInlineSnapshot(`
-        "\\"use strict\\";
+        ""use strict";
 
         exports.__esModule = true;
         exports.foo = void 0;
