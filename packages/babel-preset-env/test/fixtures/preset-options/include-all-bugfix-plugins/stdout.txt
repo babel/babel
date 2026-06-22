@@ -20,5 +20,3 @@ Using plugins:
   bugfix/transform-safari-rest-destructuring-rhs-array { }
   bugfix/transform-tagged-template-caching { }
   bugfix/transform-v8-spread-parameters-in-optional-chaining { }
-
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
