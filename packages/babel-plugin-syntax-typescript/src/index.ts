@@ -3,7 +3,6 @@ import { declare } from "@babel/helper-plugin-utils";
 export interface Options {
   disallowAmbiguousJSXLike?: boolean;
   dts?: boolean;
-  isTSX?: boolean;
 }
 
 export default declare((api, opts: Options) => {
