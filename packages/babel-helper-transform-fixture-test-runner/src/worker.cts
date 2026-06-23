@@ -1,7 +1,8 @@
 import expect = require("expect-24");
 import resolve = require("resolve");
 import vm = require("vm");
-import LruCache = require("lru-cache");
+// @ts-expect-error no types
+import LruCache = require("lru-cache-5");
 import path = require("path");
 import fs = require("fs");
 
