@@ -23,11 +23,8 @@
     "expect-24": "npm:expect@^24.9.0",
     "get-node": "^15.0.4",
     "jest-diff": "^30.0.0",
-    "lru-cache": "^5.1.1",
+    "lru-cache-5": "npm:lru-cache@^5.1.1",
     "resolve": "2.0.0-next.5"
-  },
-  "devDependencies": {
-    "@types/lru-cache": "^5.1.1"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"
