@@ -145,6 +145,7 @@ export default defineConfig([
           allowDefaultProject: [
             "scripts/repo-utils/index.d.cts",
             "eslint/*/types.d.*",
+            "packages/babel-standalone/types.d.ts",
           ],
         },
       },

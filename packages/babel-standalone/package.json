@@ -7,7 +7,8 @@
     "./babel.js",
     "./babel.js.map",
     "./babel.min.js",
-    "./babel.min.js.map"
+    "./babel.min.js.map",
+    "./types.d.ts"
   ],
   "devDependencies": {
     "@babel/core": "workspace:^",
@@ -136,9 +137,18 @@
     "node": "^22.18.0 || >=24.11.0"
   },
   "exports": {
-    ".": "./babel.js",
-    "./babel.js": "./babel.js",
-    "./babel.min.js": "./babel.min.js",
+    ".": {
+      "types": "./types.d.ts",
+      "default": "./lib/babel.js"
+    },
+    "./babel.js": {
+      "types": "./types.d.ts",
+      "default": "./lib/babel.js"
+    },
+    "./babel.min.js": {
+      "types": "./types.d.ts",
+      "default": "./lib/babel.min.js"
+    },
     "./package.json": "./package.json"
   },
   "type": "commonjs"
