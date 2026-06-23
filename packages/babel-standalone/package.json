@@ -3,6 +3,7 @@
   "version": "8.0.2",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "./babel.js",
+  "types": "./types.d.ts",
   "files": [
     "./babel.js",
     "./babel.js.map",
