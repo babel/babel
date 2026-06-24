@@ -3077,16 +3077,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       for (const declarator of declaration.declarations) {
         const { id, init, definite } = declarator;
-        if (!init) {
-          // @ts-expect-error typeAnnotation is not defined on VoidPattern
-          if (definite && !id.typeAnnotation) {
+        if (definite) {
+          if (init) {
+            this.raise(TSErrors.DeclaratorDefiniteAssertionWithInitializer, id);
+            // @ts-expect-error typeAnnotation is not defined on VoidPattern
+          } else if (!id.typeAnnotation) {
             this.raise(
               TSErrors.DeclaratorDefiniteAssertionRequiresTypeAnnotation,
               id,
             );
           }
-        } else if (definite) {
-          this.raise(TSErrors.DeclaratorDefiniteAssertionWithInitializer, id);
         }
 
         if (isAmbientContext && init) {
