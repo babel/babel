@@ -252,7 +252,7 @@ export default declarePreset((api, opts: Options) => {
   removeUnnecessaryItems(pluginNames, overlappingPlugins);
 
   const plugins = Array.from(pluginNames).map((pluginName): PluginItem => {
-    return getPlugin(pluginName);
+    return [getPlugin(pluginName), { useBuiltIns: false }];
   });
 
   if (debug) {
