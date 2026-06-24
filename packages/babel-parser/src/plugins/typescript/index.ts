@@ -3564,6 +3564,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       const type = this.tsTryParseTypeAnnotation();
       if (type) node.typeAnnotation = type;
+      if (node.definite) {
+        if (this.match(tt.eq)) {
+          this.raise(TSErrors.DeclaratorDefiniteAssertionWithInitializer, node);
+        } else if (!type) {
+          this.raise(
+            TSErrors.DeclaratorDefiniteAssertionRequiresTypeAnnotation,
+            node,
+          );
+        }
+      }
     }
 
     parseClassProperty(node: Undone<N.ClassProperty>): N.ClassProperty {
