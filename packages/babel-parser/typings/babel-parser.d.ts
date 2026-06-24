@@ -285,6 +285,8 @@ type ErrorInfoCompressed = {
   ClassMethodHasReadonly: [];
   ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference: [];
   ConstructorHasTypeParameters: [];
+  DeclaratorDefiniteAssertionRequiresTypeAnnotation: [];
+  DeclaratorDefiniteAssertionWithInitializer: [];
   DeclareAccessor: [{ kind: "get" | "set" }];
   DeclareClassFieldHasInitializer: [];
   DeclareFunctionHasImplementation: [];
