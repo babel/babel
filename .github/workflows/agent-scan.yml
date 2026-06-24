@@ -29,4 +29,4 @@ jobs:
           cache-path: ".agentscan-cache"
           github-token: ${{ secrets.GITHUB_TOKEN }}
           skip-comment-on-organic: true
-          skip-members: "nicolo-ribaudo,JLHwung,liuxingbaoyu,babel-bot"
+          skip-members: "nicolo-ribaudo,JLHwung,liuxingbaoyu,babel-bot,fisker"
