@@ -21,9 +21,8 @@ import rollupReplace from "@rollup/plugin-replace";
 import rollupTerser from "@rollup/plugin-terser";
 import rollupDts from "rollup-plugin-dts";
 import { Worker as JestWorker } from "jest-worker";
-import { Glob } from "glob";
-import { patchErrorInfo } from "./packages/babel-parser/scripts/build-error-info.ts";
 
+import { patchErrorInfo } from "./packages/babel-parser/scripts/build-error-info.ts";
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.ts";
 import rollupStandaloneInternals from "./scripts/rollup-plugin-standalone-internals.ts";
 import rollupDependencyCondition from "./scripts/rollup-plugin-dependency-condition.ts";
@@ -33,6 +32,7 @@ import { log } from "./scripts/utils/logger.ts";
 import { commonJS } from "$repo-utils";
 
 import type { NodePath, PluginItem, types } from "@babel/core";
+import { glob } from "node:fs/promises";
 
 const { require, __dirname: monorepoRoot } = commonJS(import.meta.url);
 
@@ -169,12 +169,12 @@ async function applyBabelToSource(
   }).then(res => formatCode(res!.code!, filename));
 }
 
-function applyBabelToGlob(glob: any, options: any) {
+async function applyBabelToGlob(glob: any, options: any) {
   const promises = [];
 
   const ac = new AbortController();
 
-  for (const file of glob) {
+  for await (const file of glob) {
     promises.push(
       fs.promises
         .readFile(file, "utf-8")
@@ -189,7 +189,7 @@ function applyBabelToGlob(glob: any, options: any) {
     );
   }
 
-  return Promise.all(promises).catch(err => {
+  return await Promise.all(promises).catch(err => {
     ac.abort();
     throw err;
   });
@@ -275,9 +275,8 @@ function createWorker(useWorker: boolean): any {
 
 async function buildBabel(useWorker: boolean, ignore: PackageInfo[] = []) {
   const worker = await createWorker(useWorker);
-  const files = new Glob(defaultSourcesGlob, {
-    ignore: ignore.map(p => `${p.src}/**`),
-    posix: true,
+  const files = glob(defaultSourcesGlob, {
+    exclude: ignore.map(p => `${p.src}/**`),
   });
 
   const promises = [];
@@ -1010,7 +1009,7 @@ gulp.task("generate-runtime-helpers", async () => {
 gulp.task("generate-standalone", () => generateStandalone());
 
 gulp.task("materialize-babel-8-src", () =>
-  applyBabelToGlob(new Glob(defaultSourcesGlob, { posix: true }), {
+  applyBabelToGlob(glob(defaultSourcesGlob), {
     plugins: [
       [
         babelPluginToggleBooleanFlag,
@@ -1046,8 +1045,8 @@ gulp.task("materialize-babel-8-src", () =>
 
 gulp.task("materialize-babel-8-tests", () =>
   applyBabelToGlob(
-    new Glob(`${defaultPackagesGlob}/test/**/{*.js,*.cjs,*.mjs}`, {
-      ignore: [
+    glob(`${defaultPackagesGlob}/test/**/{*.js,*.cjs,*.mjs}`, {
+      exclude: [
         `**/test/fixtures/**`,
         `**/test/regenerator-fixtures/**`,
         `**/test/tmp/**`,

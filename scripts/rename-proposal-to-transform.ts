@@ -2,8 +2,8 @@
 
 import path from "node:path";
 import fs from "node:fs";
-import { Glob } from "glob";
 import { execSync } from "node:child_process";
+import { glob } from "node:fs/promises";
 
 if (process.argv.length < 3) {
   throw new Error(
@@ -108,7 +108,7 @@ await globRename([
  * @param {string | string[]} pattern - The glob pattern to match files.
  */
 async function globRename(pattern: string | string[]) {
-  for await (const filename of new Glob(pattern, {})) {
+  for await (const filename of glob(pattern, {})) {
     const oldContents = fs.readFileSync(filename, "utf8");
     const newContents = oldContents.replaceAll(oldName, newName);
     if (oldContents !== newContents) {

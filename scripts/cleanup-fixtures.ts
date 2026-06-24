@@ -1,24 +1,26 @@
-import { glob } from "glob";
 import { repoRoot } from "$repo-utils";
-import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  globSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import path from "node:path";
 
 const hasCategories = ["babel-parser"];
 
-const fixtures = glob
-  .sync("./@(codemods|packages|eslint)/*/test/fixtures/", {
-    cwd: repoRoot,
-    absolute: true,
-  })
+const fixtures = globSync("./@(codemods|packages|eslint)/*/test/fixtures/", {
+  cwd: repoRoot,
+})
   .map(fixture => {
     if (
       hasCategories.some(name =>
         fixture.replace(/\\/g, "/").includes(`packages/${name}/`)
       )
     ) {
-      return glob.sync("*/", {
+      return globSync("*/", {
         cwd: fixture,
-        absolute: true,
       });
     }
     return fixture;
@@ -32,9 +34,8 @@ for (const fixture of fixtures) {
     ? JSON.parse(readFileSync(optionsPath, "utf-8"))
     : null;
 
-  const suites = glob.sync("*/", {
+  const suites = globSync("*/", {
     cwd: fixture,
-    absolute: true,
   });
 
   for (const suite of suites) {
@@ -45,9 +46,8 @@ for (const fixture of fixtures) {
       : fixtureOptions;
 
     if (suiteOptions) {
-      const tests = glob.sync("*/", {
+      const tests = globSync("*/", {
         cwd: suite,
-        absolute: true,
       });
 
       for (const test of tests) {

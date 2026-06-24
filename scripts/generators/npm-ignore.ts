@@ -1,6 +1,11 @@
-import { glob } from "glob";
 import { repoRoot } from "$repo-utils";
-import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  globSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import path from "node:path";
 
 const commonIgnore = [
@@ -18,14 +23,11 @@ const extraIgnore: Record<string, string[]> = {
   "babel-plugin-proposal-decorators": ["CONTRIB.md"],
 };
 
-const packages = glob
-  .sync("./@(codemods|packages|eslint)/*", {
-    cwd: repoRoot,
-    absolute: true,
-  })
-  .filter(packageDir => {
-    return existsSync(path.join(packageDir, "package.json"));
-  });
+const packages = globSync("./@(codemods|packages|eslint)/*", {
+  cwd: repoRoot,
+}).filter(packageDir => {
+  return existsSync(path.join(packageDir, "package.json"));
+});
 
 for (const packageDir of packages) {
   const packageJson = JSON.parse(
