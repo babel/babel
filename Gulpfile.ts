@@ -21,8 +21,8 @@ import rollupReplace from "@rollup/plugin-replace";
 import rollupTerser from "@rollup/plugin-terser";
 import rollupDts from "rollup-plugin-dts";
 import { Worker as JestWorker } from "jest-worker";
-
 import { patchErrorInfo } from "./packages/babel-parser/scripts/build-error-info.ts";
+
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.ts";
 import rollupStandaloneInternals from "./scripts/rollup-plugin-standalone-internals.ts";
 import rollupDependencyCondition from "./scripts/rollup-plugin-dependency-condition.ts";
@@ -32,7 +32,6 @@ import { log } from "./scripts/utils/logger.ts";
 import { commonJS } from "$repo-utils";
 
 import type { NodePath, PluginItem, types } from "@babel/core";
-import { glob } from "node:fs/promises";
 
 const { require, __dirname: monorepoRoot } = commonJS(import.meta.url);
 
@@ -41,6 +40,11 @@ const defaultSourcesGlob = [
   `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts,!(*.d).cts,!(*.d).mts}`,
   "!./packages/babel-helpers/src/helpers/*",
 ];
+const defaultSources = fs
+  .globSync(defaultSourcesGlob[0], {
+    exclude: ["./packages/babel-helpers/src/helpers/*"],
+  })
+  .map(file => file.replaceAll("\\", "/"));
 
 const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
@@ -169,12 +173,12 @@ async function applyBabelToSource(
   }).then(res => formatCode(res!.code!, filename));
 }
 
-async function applyBabelToGlob(glob: any, options: any) {
+function applyBabelToGlob(glob: any, options: any) {
   const promises = [];
 
   const ac = new AbortController();
 
-  for await (const file of glob) {
+  for (const file of glob) {
     promises.push(
       fs.promises
         .readFile(file, "utf-8")
@@ -189,7 +193,7 @@ async function applyBabelToGlob(glob: any, options: any) {
     );
   }
 
-  return await Promise.all(promises).catch(err => {
+  return Promise.all(promises).catch(err => {
     ac.abort();
     throw err;
   });
@@ -275,12 +279,12 @@ function createWorker(useWorker: boolean): any {
 
 async function buildBabel(useWorker: boolean, ignore: PackageInfo[] = []) {
   const worker = await createWorker(useWorker);
-  const files = glob(defaultSourcesGlob, {
-    exclude: ignore.map(p => `${p.src}/**`),
-  });
-
   const promises = [];
-  for await (const file of files) {
+  for (const file of defaultSources) {
+    if (ignore.some(pkg => file.startsWith(`${pkg.src}/`))) {
+      continue;
+    }
+
     // @example ./packages/babel-parser/src/index.js
     const dest = "./" + mapSrcToLib(file);
     promises.push(
@@ -1009,7 +1013,7 @@ gulp.task("generate-runtime-helpers", async () => {
 gulp.task("generate-standalone", () => generateStandalone());
 
 gulp.task("materialize-babel-8-src", () =>
-  applyBabelToGlob(glob(defaultSourcesGlob), {
+  applyBabelToGlob(defaultSources, {
     plugins: [
       [
         babelPluginToggleBooleanFlag,
@@ -1045,7 +1049,7 @@ gulp.task("materialize-babel-8-src", () =>
 
 gulp.task("materialize-babel-8-tests", () =>
   applyBabelToGlob(
-    glob(`${defaultPackagesGlob}/test/**/{*.js,*.cjs,*.mjs}`, {
+    fs.globSync(`${defaultPackagesGlob}/test/**/{*.js,*.cjs,*.mjs}`, {
       exclude: [
         `**/test/fixtures/**`,
         `**/test/regenerator-fixtures/**`,

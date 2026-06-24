@@ -25,7 +25,8 @@ const fixtures = globSync("./@(codemods|packages|eslint)/*/test/fixtures/", {
     }
     return fixture;
   })
-  .flat();
+  .flat()
+  .map(fixture => path.join(repoRoot, fixture));
 
 for (const fixture of fixtures) {
   const optionsPath = path.join(fixture, "options.json");
@@ -36,7 +37,7 @@ for (const fixture of fixtures) {
 
   const suites = globSync("*/", {
     cwd: fixture,
-  });
+  }).map(suite => path.join(fixture, suite));
 
   for (const suite of suites) {
     const optionsPath = path.join(suite, "options.json");
@@ -48,7 +49,7 @@ for (const fixture of fixtures) {
     if (suiteOptions) {
       const tests = globSync("*/", {
         cwd: suite,
-      });
+      }).map(test => path.join(suite, test));
 
       for (const test of tests) {
         const optionsPath = path.join(test, "options.json");
