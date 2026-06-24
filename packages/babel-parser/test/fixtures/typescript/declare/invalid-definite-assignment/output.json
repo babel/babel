@@ -1,13 +1,23 @@
 {
   "type": "File",
-  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+  "start":0,"end":160,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":160}},
   "errors": [
     "SyntaxError: Declarations with initializers cannot also have definite assignment assertions. (1:12)",
-    "SyntaxError: Initializers are not allowed in ambient contexts. (1:25)"
+    "SyntaxError: Initializers are not allowed in ambient contexts. (1:25)",
+    "SyntaxError: Declarations with initializers cannot also have definite assignment assertions. (2:12)",
+    "SyntaxError: Initializers are not allowed in ambient contexts. (2:25)",
+    "SyntaxError: Declarations with initializers cannot also have definite assignment assertions. (3:14)",
+    "SyntaxError: Initializers are not allowed in ambient contexts. (3:27)",
+    "SyntaxError: 'declare' modifier cannot appear on a using declaration. (5:10)",
+    "SyntaxError: Declarations with initializers cannot also have definite assignment assertions. (5:16)",
+    "SyntaxError: Initializers are not allowed in ambient contexts. (5:29)",
+    "SyntaxError: 'declare' modifier cannot appear on an await using declaration. (6:10)",
+    "SyntaxError: Declarations with initializers cannot also have definite assignment assertions. (6:22)",
+    "SyntaxError: Initializers are not allowed in ambient contexts. (6:36)"
   ],
   "program": {
     "type": "Program",
-    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+    "start":0,"end":160,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":160}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -21,8 +31,8 @@
             "start":12,"end":26,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":26,"index":26}},
             "id": {
               "type": "Identifier",
-              "start":12,"end":22,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":22,"index":22},"identifierName":"x"},
-              "name": "x",
+              "start":12,"end":22,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":22,"index":22},"identifierName":"w"},
+              "name": "w",
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start":14,"end":22,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":22,"index":22}},
@@ -44,7 +54,154 @@
             }
           }
         ],
+        "kind": "var"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":28,"end":55,"loc":{"start":{"line":2,"column":0,"index":28},"end":{"line":2,"column":27,"index":55}},
+        "declare": true,
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":40,"end":54,"loc":{"start":{"line":2,"column":12,"index":40},"end":{"line":2,"column":26,"index":54}},
+            "id": {
+              "type": "Identifier",
+              "start":40,"end":50,"loc":{"start":{"line":2,"column":12,"index":40},"end":{"line":2,"column":22,"index":50},"identifierName":"x"},
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":42,"end":50,"loc":{"start":{"line":2,"column":14,"index":42},"end":{"line":2,"column":22,"index":50}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":44,"end":50,"loc":{"start":{"line":2,"column":16,"index":44},"end":{"line":2,"column":22,"index":50}}
+                }
+              }
+            },
+            "definite": true,
+            "init": {
+              "type": "NumericLiteral",
+              "start":53,"end":54,"loc":{"start":{"line":2,"column":25,"index":53},"end":{"line":2,"column":26,"index":54}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
         "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":56,"end":85,"loc":{"start":{"line":3,"column":0,"index":56},"end":{"line":3,"column":29,"index":85}},
+        "declare": true,
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":70,"end":84,"loc":{"start":{"line":3,"column":14,"index":70},"end":{"line":3,"column":28,"index":84}},
+            "id": {
+              "type": "Identifier",
+              "start":70,"end":80,"loc":{"start":{"line":3,"column":14,"index":70},"end":{"line":3,"column":24,"index":80},"identifierName":"y"},
+              "name": "y",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":72,"end":80,"loc":{"start":{"line":3,"column":16,"index":72},"end":{"line":3,"column":24,"index":80}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":74,"end":80,"loc":{"start":{"line":3,"column":18,"index":74},"end":{"line":3,"column":24,"index":80}}
+                }
+              }
+            },
+            "definite": true,
+            "init": {
+              "type": "NumericLiteral",
+              "start":83,"end":84,"loc":{"start":{"line":3,"column":27,"index":83},"end":{"line":3,"column":28,"index":84}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "BlockStatement",
+        "start":86,"end":160,"loc":{"start":{"line":4,"column":0,"index":86},"end":{"line":7,"column":1,"index":160}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":90,"end":119,"loc":{"start":{"line":5,"column":2,"index":90},"end":{"line":5,"column":31,"index":119}},
+            "declare": true,
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":104,"end":118,"loc":{"start":{"line":5,"column":16,"index":104},"end":{"line":5,"column":30,"index":118}},
+                "id": {
+                  "type": "Identifier",
+                  "start":104,"end":114,"loc":{"start":{"line":5,"column":16,"index":104},"end":{"line":5,"column":26,"index":114},"identifierName":"z"},
+                  "name": "z",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":106,"end":114,"loc":{"start":{"line":5,"column":18,"index":106},"end":{"line":5,"column":26,"index":114}},
+                    "typeAnnotation": {
+                      "type": "TSNumberKeyword",
+                      "start":108,"end":114,"loc":{"start":{"line":5,"column":20,"index":108},"end":{"line":5,"column":26,"index":114}}
+                    }
+                  }
+                },
+                "definite": true,
+                "init": {
+                  "type": "NumericLiteral",
+                  "start":117,"end":118,"loc":{"start":{"line":5,"column":29,"index":117},"end":{"line":5,"column":30,"index":118}},
+                  "extra": {
+                    "rawValue": 1,
+                    "raw": "1"
+                  },
+                  "value": 1
+                }
+              }
+            ],
+            "kind": "using"
+          },
+          {
+            "type": "VariableDeclaration",
+            "start":122,"end":158,"loc":{"start":{"line":6,"column":2,"index":122},"end":{"line":6,"column":38,"index":158}},
+            "declare": true,
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":142,"end":157,"loc":{"start":{"line":6,"column":22,"index":142},"end":{"line":6,"column":37,"index":157}},
+                "id": {
+                  "type": "Identifier",
+                  "start":142,"end":153,"loc":{"start":{"line":6,"column":22,"index":142},"end":{"line":6,"column":33,"index":153},"identifierName":"za"},
+                  "name": "za",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":145,"end":153,"loc":{"start":{"line":6,"column":25,"index":145},"end":{"line":6,"column":33,"index":153}},
+                    "typeAnnotation": {
+                      "type": "TSNumberKeyword",
+                      "start":147,"end":153,"loc":{"start":{"line":6,"column":27,"index":147},"end":{"line":6,"column":33,"index":153}}
+                    }
+                  }
+                },
+                "definite": true,
+                "init": {
+                  "type": "NumericLiteral",
+                  "start":156,"end":157,"loc":{"start":{"line":6,"column":36,"index":156},"end":{"line":6,"column":37,"index":157}},
+                  "extra": {
+                    "rawValue": 1,
+                    "raw": "1"
+                  },
+                  "value": 1
+                }
+              }
+            ],
+            "kind": "await using"
+          }
+        ],
+        "directives": []
       }
     ],
     "directives": [],
