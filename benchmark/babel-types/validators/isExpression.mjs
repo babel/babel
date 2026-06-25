@@ -134,64 +134,80 @@ function isExpressionSwitch(node) {
   return false;
 }
 
-function isExpressionIncludes(node) {
+const typesArray = [
+  "ArrayExpression",
+  "AssignmentExpression",
+  "BinaryExpression",
+  "CallExpression",
+  "ConditionalExpression",
+  "FunctionExpression",
+  "Identifier",
+  "StringLiteral",
+  "NumericLiteral",
+  "NullLiteral",
+  "BooleanLiteral",
+  "RegExpLiteral",
+  "LogicalExpression",
+  "MemberExpression",
+  "NewExpression",
+  "ObjectExpression",
+  "SequenceExpression",
+  "ParenthesizedExpression",
+  "ThisExpression",
+  "UnaryExpression",
+  "UpdateExpression",
+  "ArrowFunctionExpression",
+  "ClassExpression",
+  "MetaProperty",
+  "Super",
+  "TaggedTemplateExpression",
+  "TemplateLiteral",
+  "YieldExpression",
+  "AwaitExpression",
+  "Import",
+  "BigIntLiteral",
+  "OptionalMemberExpression",
+  "OptionalCallExpression",
+  "TypeCastExpression",
+  "JSXElement",
+  "JSXFragment",
+  "BindExpression",
+  "DoExpression",
+  "RecordExpression",
+  "TupleExpression",
+  "DecimalLiteral",
+  "ModuleExpression",
+  "TopicReference",
+  "PipelineTopicExpression",
+  "PipelineBareFunction",
+  "PipelinePrimaryTopicReference",
+  "TSInstantiationExpression",
+  "TSAsExpression",
+  "TSSatisfiesExpression",
+  "TSTypeAssertion",
+  "TSNonNullExpression",
+];
+
+function isExpressionArrayIncludes(node) {
   if (!node) return false;
 
   const nodeType = node.type;
   return (
-    [
-      "ArrayExpression",
-      "AssignmentExpression",
-      "BinaryExpression",
-      "CallExpression",
-      "ConditionalExpression",
-      "FunctionExpression",
-      "Identifier",
-      "StringLiteral",
-      "NumericLiteral",
-      "NullLiteral",
-      "BooleanLiteral",
-      "RegExpLiteral",
-      "LogicalExpression",
-      "MemberExpression",
-      "NewExpression",
-      "ObjectExpression",
-      "SequenceExpression",
-      "ParenthesizedExpression",
-      "ThisExpression",
-      "UnaryExpression",
-      "UpdateExpression",
-      "ArrowFunctionExpression",
-      "ClassExpression",
-      "MetaProperty",
-      "Super",
-      "TaggedTemplateExpression",
-      "TemplateLiteral",
-      "YieldExpression",
-      "AwaitExpression",
-      "Import",
-      "BigIntLiteral",
-      "OptionalMemberExpression",
-      "OptionalCallExpression",
-      "TypeCastExpression",
-      "JSXElement",
-      "JSXFragment",
-      "BindExpression",
-      "DoExpression",
-      "RecordExpression",
-      "TupleExpression",
-      "DecimalLiteral",
-      "ModuleExpression",
-      "TopicReference",
-      "PipelineTopicExpression",
-      "PipelineBareFunction",
-      "PipelinePrimaryTopicReference",
-      "TSInstantiationExpression",
-      "TSAsExpression",
-      "TSSatisfiesExpression",
-      "TSTypeAssertion",
-      "TSNonNullExpression",
-    ].includes(nodeType) ||
+    typesArray.includes(nodeType) ||
+    (nodeType === "Placeholder" &&
+      ("Expression" === node.expectedNode ||
+        "Identifier" === node.expectedNode ||
+        "StringLiteral" === node.expectedNode))
+  );
+}
+
+const typesSet = new Set(typesArray);
+function isExpressionSetHas(node) {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  return (
+    typesSet.has(nodeType) ||
     (nodeType === "Placeholder" &&
       ("Expression" === node.expectedNode ||
         "Identifier" === node.expectedNode ||
@@ -209,6 +225,7 @@ function benchCases(name, func) {
 
 benchCases("if", isExpressionIf);
 benchCases("switch", isExpressionSwitch);
-benchCases("includes", isExpressionIncludes);
+benchCases("Array#includes()", isExpressionArrayIncludes);
+benchCases("Set#has()", isExpressionSetHas);
 
 suite.on("cycle", report).run();
