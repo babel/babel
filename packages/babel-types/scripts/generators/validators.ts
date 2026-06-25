@@ -73,13 +73,10 @@ function addIsHelper(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
     `
       : `
-  return (
-    node?.type === ${targetType} &&
-    (opts == null || shallowEqual(node, opts))
-  );
+  return node?.type === ${targetType} && shallowEqualN(node, opts);
   `,
     "}",
     "",
@@ -94,7 +91,7 @@ export default function generateValidators() {
 
   /* eslint-disable no-fallthrough */
 
-import shallowEqual from "../../utils/shallowEqual.ts";
+import shallowEqualN from "../../utils/shallowEqualN.ts";
 import type * as t from "../../index.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
 
