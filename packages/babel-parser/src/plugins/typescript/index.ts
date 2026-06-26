@@ -101,6 +101,8 @@ export const TSErrorTemplates = {
     kind: "abstract method" | "abstract field" | "declare field";
   }) =>
     `Decorators can't be used with ${kind.startsWith("a") ? "an" : "a"} ${kind}.`,
+  DefiniteAssertionWithoutTypeAnnotation:
+    "A definite assignment assertion '!' requires a type annotation.",
   DuplicateAccessibilityModifier: ({
     modifier,
   }: {
@@ -3754,6 +3756,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.eat(tt.bang)
       ) {
         decl.definite = true;
+        if (!this.match(tt.colon)) {
+          this.raise(
+            TSErrors.DefiniteAssertionWithoutTypeAnnotation,
+            // lastTokStartLoc is the `!` token position
+            this.state.lastTokStartLoc ?? decl.id,
+          );
+        }
       }
 
       const type = this.tsTryParseTypeAnnotation();

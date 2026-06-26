@@ -291,6 +291,7 @@ type ErrorInfoCompressed = {
   DecoratorAbstractMethod: [
     { kind: "abstract method" | "abstract field" | "declare field" },
   ];
+  DefiniteAssertionWithoutTypeAnnotation: [];
   DuplicateAccessibilityModifier: [{ modifier: Accessibility }];
   DuplicateModifier: [{ modifier: TsModifier }];
   EmptyHeritageClauseType: [{ token: "extends" | "implements" }];
