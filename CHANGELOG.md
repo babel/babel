@@ -25,6 +25,13 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.3 (2026-06-27)
+
+#### :bug: Bug Fix
+* `babel-core`, `babel-plugin-syntax-typescript`
+  * [#18089](https://github.com/babel/babel/pull/18089) fix: Remove `isTSX` from `babel-plugin-syntax-typescript` types ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-standalone`
+  * [#18086](https://github.com/babel/babel/pull/18086) fix: Use `runtime: 'classic'` in the browser for React ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v8.0.2 (2026-06-18)
 
 #### :bug: Bug Fix
