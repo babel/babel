@@ -1,6 +1,7 @@
 // This file contains methods responsible for dealing with/retrieving children or siblings.
 
 import type TraversalContext from "../context.ts";
+import { mayCloneContext } from "./context.ts";
 import NodePath from "./index.ts";
 import {
   getAssignmentIdentifiers as _getAssignmentIdentifiers,
@@ -453,21 +454,27 @@ export function _getKey<T extends t.Node>(
   if (Array.isArray(container)) {
     // requested a container so give them all the paths
     return container.map((_, i) => {
-      return NodePath.get({
-        listKey: key,
-        parentPath: this,
-        parent: node,
-        container: container,
-        key: i,
-      }).setContext(context);
+      return mayCloneContext(
+        NodePath.get({
+          listKey: key,
+          parentPath: this,
+          parent: node,
+          container: container,
+          key: i,
+        }),
+        context,
+      );
     });
   } else {
-    return NodePath.get({
-      parentPath: this,
-      parent: node,
-      container: node,
-      key: key,
-    }).setContext(context);
+    return mayCloneContext(
+      NodePath.get({
+        parentPath: this,
+        parent: node,
+        container: node,
+        key: key,
+      }),
+      context,
+    );
   }
 }
 
