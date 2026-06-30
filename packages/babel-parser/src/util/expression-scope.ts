@@ -1,6 +1,8 @@
 import { Errors, type ParseErrorConstructor } from "../parse-error.ts";
 import type { Node } from "../types.ts";
 import type Tokenizer from "../tokenizer/index.ts";
+import type { Undone } from "../parser/node.ts";
+import type { Position } from "./location.ts";
 
 /**
  * @module util/expression-scope
@@ -81,7 +83,10 @@ type ArrowHeadParsingDeclarationError =
   | typeof Errors.AwaitBindingIdentifier;
 
 class ArrowHeadParsingScope extends ExpressionScope {
-  declarationErrors = new Map<number, ParseErrorConstructor<object>>();
+  declarationErrors = new Map<
+    Position | Undone<Node>,
+    ParseErrorConstructor<object>
+  >();
   constructor(
     type:
       | ExpressionScopeType.kMaybeArrowParameterDeclaration
@@ -91,15 +96,18 @@ class ArrowHeadParsingScope extends ExpressionScope {
   }
   recordDeclarationError(
     ParsingErrorClass: ParseErrorConstructor<object>,
-    index: number,
+    at: Position | Undone<Node>,
   ) {
-    this.declarationErrors.set(index, ParsingErrorClass);
+    this.declarationErrors.set(at, ParsingErrorClass);
   }
-  clearDeclarationError(index: number) {
-    this.declarationErrors.delete(index);
+  clearDeclarationError(at: Position | Undone<Node>) {
+    this.declarationErrors.delete(at);
   }
   iterateErrors(
-    iterator: (a: ArrowHeadParsingDeclarationError, b: number) => void,
+    iterator: (
+      a: ArrowHeadParsingDeclarationError,
+      b: Position | Undone<Node>,
+    ) => void,
   ) {
     this.declarationErrors.forEach(iterator);
   }
@@ -129,7 +137,7 @@ export default class ExpressionScopeHandler {
    */
   recordParameterInitializerError(
     toParseError: ArrowHeadParsingParameterInitializerError,
-    loc: number,
+    loc: Position | Undone<Node>,
   ): void {
     const { stack } = this;
     let i = stack.length - 1;
@@ -171,11 +179,10 @@ export default class ExpressionScopeHandler {
   ): void {
     const { stack } = this;
     const scope: ExpressionScope = stack[stack.length - 1];
-    const origin = node.start!;
     if (scope.isCertainlyParameterDeclaration()) {
-      this.parser.raise(error, origin);
+      this.parser.raise(error, node);
     } else if (scope.canBeArrowParameterDeclaration()) {
-      scope.recordDeclarationError(error, origin);
+      scope.recordDeclarationError(error, node);
     } else {
       return;
     }
@@ -187,7 +194,7 @@ export default class ExpressionScopeHandler {
    * Errors will be recorded to any ancestry MaybeAsyncArrowParameterDeclaration
    * scope until an Expression scope is seen.
    */
-  recordAsyncArrowParametersError(at: number): void {
+  recordAsyncArrowParametersError(at: Position | Undone<Node>): void {
     const { stack } = this;
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];

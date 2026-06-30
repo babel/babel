@@ -166,10 +166,7 @@ export default abstract class LValParser extends NodeUtils {
       case "ObjectProperty": {
         const { key, value } = node;
         if (this.isPrivateName(key)) {
-          this.classScope.usePrivateName(
-            this.getPrivateNameSV(key),
-            key.start!,
-          );
+          this.classScope.usePrivateName(this.getPrivateNameSV(key), key);
         }
         this.toAssignable(value, isLHS);
         break;
@@ -760,7 +757,7 @@ export default abstract class LValParser extends NodeUtils {
 
     if (isOptionalMemberExpression || type === "MemberExpression") {
       if (isOptionalMemberExpression) {
-        this.expectPlugin("optionalChainingAssign", expression.start);
+        this.expectPlugin("optionalChainingAssign", expression);
         if (ancestor.type !== "AssignmentExpression") {
           this.raise(Errors.InvalidLhsOptionalChaining, expression, {
             ancestor,
@@ -888,7 +885,7 @@ export default abstract class LValParser extends NodeUtils {
   }
 
   declareNameFromIdentifier(identifier: Identifier, binding: BindingFlag) {
-    this.scope.declareName(identifier.name, binding, identifier.start!);
+    this.scope.declareName(identifier.name, binding, identifier);
   }
 
   checkToRestConversion(node: Node, allowPattern: boolean): void {

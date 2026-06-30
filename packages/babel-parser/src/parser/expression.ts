@@ -131,7 +131,7 @@ export default abstract class ExpressionParser extends LValParser {
           // Store the first redefinition's position, otherwise ignore because
           // we are parsing ambiguous pattern
           if (refExpressionErrors.doubleProtoLoc === null) {
-            refExpressionErrors.doubleProtoLoc = this.getLoc(key.start!);
+            refExpressionErrors.doubleProtoLoc = key;
           }
         } else {
           this.raise(Errors.DuplicateProto, key);
@@ -301,7 +301,7 @@ export default abstract class ExpressionParser extends LValParser {
         const startIndex = startLoc.index;
         if (
           refExpressionErrors.doubleProtoLoc != null &&
-          refExpressionErrors.doubleProtoLoc.index >= startIndex
+          refExpressionErrors.doubleProtoLoc.start! >= startIndex
         ) {
           refExpressionErrors.doubleProtoLoc = null; // reset because double __proto__ is valid in assignment expression
         }
@@ -2228,7 +2228,7 @@ export default abstract class ExpressionParser extends LValParser {
       //   IdentifierReference
       //   CoverInitializedName
       // Note: `{ eval } = {}` will be checked in `checkLVal` later.
-      this.checkReservedWord(prop.key.name, prop.key.start!, true, false);
+      this.checkReservedWord(prop.key.name, prop.key, true, false);
 
       if (isPattern) {
         prop.value = this.parseMaybeDefault(
@@ -2752,7 +2752,7 @@ export default abstract class ExpressionParser extends LValParser {
   parseIdentifierName(liberal?: boolean): string {
     let name: string;
 
-    const { start, type } = this.state;
+    const { startLoc, type } = this.state;
 
     if (tokenIsKeywordOrIdentifier(type)) {
       name = this.state.value;
@@ -2769,12 +2769,7 @@ export default abstract class ExpressionParser extends LValParser {
         this.replaceToken(tt.name);
       }
     } else {
-      this.checkReservedWord(
-        name!,
-        this.sourceToOffsetPos(start),
-        tokenIsKeyword,
-        false,
-      );
+      this.checkReservedWord(name!, startLoc, tokenIsKeyword, false);
     }
 
     this.next();
@@ -2784,7 +2779,7 @@ export default abstract class ExpressionParser extends LValParser {
 
   checkReservedWord(
     word: string,
-    startLoc: number,
+    at: Position | Undone<N.Node>,
     checkKeywords: boolean,
     isBinding: boolean,
   ): void {
@@ -2799,7 +2794,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     if (checkKeywords && isKeyword(word)) {
-      this.raise(Errors.UnexpectedKeyword, startLoc, {
+      this.raise(Errors.UnexpectedKeyword, at, {
         keyword: word,
       });
       return;
@@ -2812,30 +2807,30 @@ export default abstract class ExpressionParser extends LValParser {
         : isStrictReservedWord;
 
     if (reservedTest(word, this.inModule)) {
-      this.raise(Errors.UnexpectedReservedWord, startLoc, {
+      this.raise(Errors.UnexpectedReservedWord, at, {
         reservedWord: word,
       });
       return;
     } else if (word === "yield") {
       if (this.prodParam.hasYield) {
-        this.raise(Errors.YieldBindingIdentifier, startLoc);
+        this.raise(Errors.YieldBindingIdentifier, at);
         return;
       }
     } else if (word === "await") {
       if (this.prodParam.hasAwait) {
-        this.raise(Errors.AwaitBindingIdentifier, startLoc);
+        this.raise(Errors.AwaitBindingIdentifier, at);
         return;
       }
 
       if (this.scope.inStaticBlock) {
-        this.raise(Errors.AwaitBindingIdentifierInStaticBlock, startLoc);
+        this.raise(Errors.AwaitBindingIdentifierInStaticBlock, at);
         return;
       }
 
-      this.expressionScope.recordAsyncArrowParametersError(startLoc);
+      this.expressionScope.recordAsyncArrowParametersError(at);
     } else if (word === "arguments") {
       if (this.scope.inClassAndNotInNonArrowFunction) {
-        this.raise(Errors.ArgumentsInClass, startLoc);
+        this.raise(Errors.ArgumentsInClass, at);
         return;
       }
     }
@@ -2860,13 +2855,12 @@ export default abstract class ExpressionParser extends LValParser {
     startLoc: Position,
     soloAwait?: boolean,
   ): N.AwaitExpression {
-    const startIndex = startLoc.index;
     this.setLoc(startLoc);
     const node = this.startNodeAt<N.AwaitExpression>(startLoc);
 
     this.expressionScope.recordParameterInitializerError(
       Errors.AwaitExpressionFormalParameter,
-      startIndex,
+      startLoc,
     );
 
     if (this.eat(tt.star)) {
@@ -2920,7 +2914,7 @@ export default abstract class ExpressionParser extends LValParser {
 
     this.expressionScope.recordParameterInitializerError(
       Errors.YieldInParameter,
-      startLoc.index,
+      startLoc,
     );
 
     let delegating = false;

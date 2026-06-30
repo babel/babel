@@ -1534,7 +1534,7 @@ export default abstract class StatementParser extends ExpressionParser {
           : BindingFlag.TYPE_LEXICAL
         : BindingFlag.TYPE_FUNCTION,
       // @ts-expect-error Fixme: id is not defined in ArrowFunctionExpression
-      node.id.start,
+      node.id,
     );
   }
 
@@ -1980,7 +1980,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.classScope.declarePrivateName(
       this.getPrivateNameSV(node.key),
       ClassElementType.OTHER,
-      node.key.start!,
+      node.key,
     );
   }
 
@@ -2003,7 +2003,7 @@ export default abstract class StatementParser extends ExpressionParser {
       this.classScope.declarePrivateName(
         this.getPrivateNameSV(node.key as N.PrivateName),
         ClassElementType.OTHER,
-        node.key.start!,
+        node.key,
       );
     }
   }
@@ -2068,7 +2068,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.classScope.declarePrivateName(
       this.getPrivateNameSV(node.key as N.PrivateName),
       kind,
-      node.key.start!,
+      node.key,
     );
   }
 
@@ -2264,7 +2264,7 @@ export default abstract class StatementParser extends ExpressionParser {
   ): node is Undone<N.ExportNamedDeclaration> {
     if (maybeDefaultIdentifier || this.isExportDefaultSpecifier()) {
       // export defaultObj ...
-      this.expectPlugin("exportDefaultFrom", maybeDefaultIdentifier?.start);
+      this.expectPlugin("exportDefaultFrom", maybeDefaultIdentifier);
       const id = maybeDefaultIdentifier || this.parseIdentifier(true);
       const specifier = this.startNodeAtNode<N.ExportDefaultSpecifier>(id);
       specifier.exported = id;
@@ -2550,7 +2550,7 @@ export default abstract class StatementParser extends ExpressionParser {
               });
             } else {
               // check for keywords used as local names
-              this.checkReservedWord(local.name, local.start, true, false);
+              this.checkReservedWord(local.name, local, true, false);
               // check if export is defined
               this.scope.checkLocalExport(local);
             }
@@ -2712,7 +2712,7 @@ export default abstract class StatementParser extends ExpressionParser {
     node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
     isExport: boolean,
     phase: string | null,
-    loc?: number,
+    loc?: Undone<N.Node>,
   ): void {
     if (isExport) {
       if (!process.env.IS_PUBLISH) {
@@ -2786,7 +2786,7 @@ export default abstract class StatementParser extends ExpressionParser {
         node as Undone<N.ImportDeclaration>,
         isExport,
         phaseIdentifierName,
-        phaseIdentifier.start!,
+        phaseIdentifier,
       );
       return null;
     } else {
@@ -3094,7 +3094,7 @@ export default abstract class StatementParser extends ExpressionParser {
       }
       this.checkReservedWord(
         (imported as N.Identifier).name,
-        specifier.start!,
+        specifier,
         true,
         true,
       );
