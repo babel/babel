@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { ChokidarOptions, FSWatcher } from "chokidar";
+import { type ChokidarOptions, FSWatcher } from "chokidar";
 
 const fileToDeps = new Map<string, Set<string>>();
 const depToFiles = new Map<string, Set<string>>();
@@ -9,10 +9,8 @@ let watcher: FSWatcher;
 const watchQueue = new Set<string>();
 let hasStarted = false;
 
-export async function enable() {
+export function enable() {
   isWatchMode = true;
-
-  const { FSWatcher } = await importChokidar();
 
   const options: ChokidarOptions = {
     persistent: true,
@@ -143,16 +141,4 @@ function unwatchFile(filename: string) {
     removeFileDependency(filename, dep);
   }
   fileToDeps.delete(filename);
-}
-
-async function importChokidar() {
-  try {
-    return await import("chokidar");
-  } catch (err) {
-    console.error(
-      "The optional dependency chokidar failed to install and is required for " +
-        "--watch. Chokidar is likely not supported on your platform.",
-    );
-    throw err;
-  }
 }

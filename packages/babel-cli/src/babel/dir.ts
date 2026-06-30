@@ -153,7 +153,7 @@ export default async function ({
     startTime = null;
   }, 100);
 
-  if (cliOptions.watch) await watcher.enable();
+  if (cliOptions.watch) watcher.enable();
 
   if (!cliOptions.skipInitialBuild) {
     if (cliOptions.deleteDirOnStart) {

@@ -209,7 +209,7 @@ export default async function ({
 
   async function files(filenames: string[]): Promise<void> {
     if (cliOptions.watch) {
-      await watcher.enable();
+      watcher.enable();
     }
 
     if (!cliOptions.skipInitialBuild) {
