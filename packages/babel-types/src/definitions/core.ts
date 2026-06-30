@@ -2104,6 +2104,11 @@ defineType("ImportExpression", {
       default: null,
       validate: assertOneOf("source", "defer"),
     },
+    // https://github.com/tc39/proposal-import-sync
+    sync: {
+      optional: true,
+      validate: assertValueType("boolean"),
+    },
     source: {
       validate: assertNodeType("Expression"),
     },
