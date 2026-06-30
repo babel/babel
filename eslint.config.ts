@@ -270,7 +270,11 @@ export default defineConfig([
     },
   },
   {
-    files: ["packages/*/test/*.tst.ts"],
+    files: [
+      "codemods/*/test/*.tst.ts",
+      "eslint/*/test/*.tst.ts",
+      "packages/*/test/*.tst.ts",
+    ],
     rules: {
       "@babel/development-internal/no-extraneous-dependencies": [
         "error",
