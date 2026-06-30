@@ -78,8 +78,6 @@
     "@babel/plugin-transform-unicode-regex": "workspace:^",
     "@babel/plugin-transform-unicode-sets-regex": "workspace:^",
     "@babel/preset-modules": "^0.2.0",
-    "babel-plugin-polyfill-corejs3": "catalog:",
-    "core-js-compat": "catalog:",
     "semver": "catalog:"
   },
   "peerDependencies": {

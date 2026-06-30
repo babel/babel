@@ -30,5 +30,3 @@ Using plugins:
   transform-export-namespace-from { edge < 79 }
   bugfix/transform-edge-default-parameters { edge < 18 }
   bugfix/transform-edge-function-name { edge < 79 }
-
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

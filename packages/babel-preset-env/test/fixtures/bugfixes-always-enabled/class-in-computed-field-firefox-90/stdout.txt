@@ -15,5 +15,3 @@ Using plugins:
   bugfix/transform-firefox-class-in-computed-class-key { firefox < 126 }
   transform-class-static-block { firefox < 93 }
   transform-export-namespace-from { }
-
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

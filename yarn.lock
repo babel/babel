@@ -3751,8 +3751,6 @@ __metadata:
     "@babel/plugin-transform-unicode-sets-regex": "workspace:^"
     "@babel/preset-modules": "npm:^0.2.0"
     "@babel/traverse": "workspace:^"
-    babel-plugin-polyfill-corejs3: "catalog:"
-    core-js-compat: "catalog:"
     semver: "catalog:"
   peerDependencies:
     "@babel/core": ^8.0.0
