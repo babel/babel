@@ -1137,8 +1137,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-validator-identifier@workspace:packages/babel-helper-validator-identifier"
   dependencies:
-    "@unicode/unicode-17.0.0": "npm:^1.6.10"
+    "@types/regenerate": "npm:^1.4.0"
+    "@unicode/unicode-16.0.0": "npm:^1.6.17"
+    "@unicode/unicode-17.0.0": "npm:^1.6.17"
     charcodes: "npm:^0.2.0"
+    regenerate: "npm:^1.4.0"
   languageName: unknown
   linkType: soft
 
@@ -6127,6 +6130,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/regenerate@npm:^1.4.0":
+  version: 1.4.3
+  resolution: "@types/regenerate@npm:1.4.3"
+  checksum: 10/66c972d0788a0a843b4fc7619a6218ef78483aaa5068b93a230a58435a77e0c71c400b639db9b96c341ca4706fe0cb4a92b686777dd0a9f6dcd556baa4bb674c
+  languageName: node
+  linkType: hard
+
 "@types/resolve@npm:1.20.2":
   version: 1.20.2
   resolution: "@types/resolve@npm:1.20.2"
@@ -6337,10 +6347,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@unicode/unicode-17.0.0@npm:^1.6.10":
-  version: 1.6.16
-  resolution: "@unicode/unicode-17.0.0@npm:1.6.16"
-  checksum: 10/0a619c8ca4e2fd90e3aad7e783cf89ce2bc5b1873c90c5a6d6ebf5d0d2c0382a519d855a15daa56a3c214dface795e4e23418ffe0f25b19562454b9c24bb0b77
+"@unicode/unicode-16.0.0@npm:^1.6.17":
+  version: 1.6.17
+  resolution: "@unicode/unicode-16.0.0@npm:1.6.17"
+  checksum: 10/dae9d06d3c9de3f29b068ad6481c810ea4a73baf244f4d5c47ed2d66b577cc9a67583a0cb8e244b0eaf699cedc174961d5ce816368f658cb96d0684f514c05eb
+  languageName: node
+  linkType: hard
+
+"@unicode/unicode-17.0.0@npm:^1.6.17":
+  version: 1.6.17
+  resolution: "@unicode/unicode-17.0.0@npm:1.6.17"
+  checksum: 10/ca7817c57fdc3f3f791f65c7abd2dfa3105e50e2d8018e0afe20185597abb3e1a96147ea9518c49ecb49482776c16babe81667d2ecac54a4122225cb66aad060
   languageName: node
   linkType: hard
 
@@ -15066,7 +15083,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerate@npm:^1.4.2":
+"regenerate@npm:^1.4.0, regenerate@npm:^1.4.2":
   version: 1.4.2
   resolution: "regenerate@npm:1.4.2"
   checksum: 10/dc6c95ae4b3ba6adbd7687cafac260eee4640318c7a95239d5ce847d9b9263979758389e862fe9c93d633b5792ea4ada5708df75885dc5aa05a309fa18140a87

@@ -1,5 +1,4 @@
 package.json
-packages/babel-helper-validator-identifier/data
 packages/babel-preset-env/data
 packages/babel-compat-data/data
 packages/babel-compat-data/scripts/data/overlapping-plugins.js

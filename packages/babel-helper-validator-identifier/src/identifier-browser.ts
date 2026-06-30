@@ -4,7 +4,7 @@ import {
   bmpIdentifierStart,
   supplementaryIdentifierCodes,
   supplementaryIdentifierStartCodes,
-} from "./identifier-regex.ts";
+} from "./identifier-regex-browser.ts";
 
 // This has a complexity linear to the value of the code. The
 // assumption is that looking up supplementary identifier characters is
@@ -31,12 +31,7 @@ export function isIdentifierStart(code: number): boolean {
   if (code <= 0xffff) {
     return code >= 0xaa && bmpIdentifierStart.test(String.fromCharCode(code));
   }
-  return (
-    !isNaN(code) &&
-    code <= 0x10ffff &&
-    (bmpIdentifierStart.test(String.fromCodePoint(code)) ||
-      isInSupplementarySet(code, supplementaryIdentifierStartCodes))
-  );
+  return isInSupplementarySet(code, supplementaryIdentifierStartCodes);
 }
 
 // Test whether a given character is part of an identifier.
@@ -52,11 +47,8 @@ export function isIdentifierChar(code: number): boolean {
     return code >= 0xaa && bmpIdentifier.test(String.fromCharCode(code));
   }
   return (
-    !isNaN(code) &&
-    code <= 0x10ffff &&
-    (bmpIdentifier.test(String.fromCodePoint(code)) ||
-      isInSupplementarySet(code, supplementaryIdentifierStartCodes) ||
-      isInSupplementarySet(code, supplementaryIdentifierCodes))
+    isInSupplementarySet(code, supplementaryIdentifierStartCodes) ||
+    isInSupplementarySet(code, supplementaryIdentifierCodes)
   );
 }
 
