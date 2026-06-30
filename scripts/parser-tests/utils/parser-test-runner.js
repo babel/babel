@@ -32,11 +32,13 @@ class TestRunner {
     shouldUpdate,
     getTests,
     parse = this.parse,
+    fileLinkBase = testDir,
   }) {
     this.testDir = testDir;
     this.allowlist = allowlist;
     this.logInterval = logInterval;
     this.shouldUpdate = shouldUpdate;
+    this.fileLinkBase = fileLinkBase;
     this.getTests = getTests;
     this.parse = parse;
   }
@@ -90,8 +92,8 @@ class TestRunner {
     return /^- \[(.+?)\]/.exec(line)?.[1];
   }
 
-  static createAllowlistEntry(test, relativeTestDir) {
-    return `- [${test.id}](${path.join(relativeTestDir, test.fileName)})`;
+  static createAllowlistEntry(test, relativeFileLinkBase) {
+    return `- [${test.id}](${path.join(relativeFileLinkBase, test.fileName)})`;
   }
 
   async getAllowlist() {
@@ -138,18 +140,18 @@ class TestRunner {
       }
     }
 
-    const relativeTestDir = path.relative(
+    const relativeFileLinkBase = path.relative(
       path.dirname(this.allowlist),
-      this.testDir
+      this.fileLinkBase
     );
     invalidWithoutError = invalidWithoutError.concat(
       summary.disallowed.falsePositive.map(test =>
-        TestRunner.createAllowlistEntry(test, relativeTestDir)
+        TestRunner.createAllowlistEntry(test, relativeFileLinkBase)
       )
     );
     validWithError = validWithError.concat(
       summary.disallowed.falseNegative.map(test =>
-        TestRunner.createAllowlistEntry(test, relativeTestDir)
+        TestRunner.createAllowlistEntry(test, relativeFileLinkBase)
       )
     );
 

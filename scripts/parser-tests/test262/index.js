@@ -71,6 +71,9 @@ const shouldUpdate = process.argv.includes("--update-allowlist");
 
 const runner = new TestRunner({
   testDir: path.join(dirname, "../../../build/test262").replace(/\\/g, "/"),
+  fileLinkBase: path
+    .join(dirname, "../../../build/test262/test")
+    .replace(/\\/g, "/"),
   allowlist: path.join(dirname, "allowlist.md"),
   logInterval: 500,
   shouldUpdate: shouldUpdate,
