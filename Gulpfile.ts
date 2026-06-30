@@ -21,7 +21,6 @@ import rollupReplace from "@rollup/plugin-replace";
 import rollupTerser from "@rollup/plugin-terser";
 import rollupDts from "rollup-plugin-dts";
 import { Worker as JestWorker } from "jest-worker";
-import { Glob } from "glob";
 import { patchErrorInfo } from "./packages/babel-parser/scripts/build-error-info.ts";
 
 import rollupBabelSource from "./scripts/rollup-plugin-babel-source.ts";
@@ -41,6 +40,11 @@ const defaultSourcesGlob = [
   `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts,!(*.d).cts,!(*.d).mts}`,
   "!./packages/babel-helpers/src/helpers/*",
 ];
+const defaultSources = fs
+  .globSync(defaultSourcesGlob[0], {
+    exclude: ["./packages/babel-helpers/src/helpers/*"],
+  })
+  .map(file => file.replaceAll("\\", "/"));
 
 const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
@@ -275,13 +279,12 @@ function createWorker(useWorker: boolean): any {
 
 async function buildBabel(useWorker: boolean, ignore: PackageInfo[] = []) {
   const worker = await createWorker(useWorker);
-  const files = new Glob(defaultSourcesGlob, {
-    ignore: ignore.map(p => `${p.src}/**`),
-    posix: true,
-  });
-
   const promises = [];
-  for await (const file of files) {
+  for (const file of defaultSources) {
+    if (ignore.some(pkg => file.startsWith(`${pkg.src}/`))) {
+      continue;
+    }
+
     // @example ./packages/babel-parser/src/index.js
     const dest = "./" + mapSrcToLib(file);
     promises.push(
@@ -1010,7 +1013,7 @@ gulp.task("generate-runtime-helpers", async () => {
 gulp.task("generate-standalone", () => generateStandalone());
 
 gulp.task("materialize-babel-8-src", () =>
-  applyBabelToGlob(new Glob(defaultSourcesGlob, { posix: true }), {
+  applyBabelToGlob(defaultSources, {
     plugins: [
       [
         babelPluginToggleBooleanFlag,
@@ -1046,8 +1049,8 @@ gulp.task("materialize-babel-8-src", () =>
 
 gulp.task("materialize-babel-8-tests", () =>
   applyBabelToGlob(
-    new Glob(`${defaultPackagesGlob}/test/**/{*.js,*.cjs,*.mjs}`, {
-      ignore: [
+    fs.globSync(`${defaultPackagesGlob}/test/**/{*.js,*.cjs,*.mjs}`, {
+      exclude: [
         `**/test/fixtures/**`,
         `**/test/regenerator-fixtures/**`,
         `**/test/tmp/**`,

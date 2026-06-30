@@ -12,8 +12,8 @@ import cp from "node:child_process";
 import os from "node:os";
 
 import JSON5 from "json5";
-import { glob } from "glob";
 import { setTimeout } from "node:timers/promises";
+import { glob } from "node:fs/promises";
 
 const tscPath = require.resolve("typescript/lib/tsc.js");
 
@@ -211,8 +211,8 @@ const pool = new Pool({
           .map(
             file => `${project}/${file.slice(0, -3)}*.d.ts`.replace(/\\/g, "/") // glob doesn't support \ on Windows
           );
-        const files = await glob(globPatterns);
-        for (const file of files) {
+        const files = glob(globPatterns);
+        for await (const file of files) {
           const out = joinPath(
             process.cwd(),
             "dts",
