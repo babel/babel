@@ -31,7 +31,7 @@
     "slash": "^5.1.0"
   },
   "optionalDependencies": {
-    "chokidar": "^3.6.0"
+    "chokidar": "^5.0.0"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0"
