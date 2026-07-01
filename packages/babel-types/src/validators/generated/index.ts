@@ -5,7 +5,7 @@
 
 /* eslint-disable no-fallthrough */
 
-import shallowEqual from "../../utils/shallowEqual.ts";
+import shallowEqualN from "../../utils/shallowEqualN.ts";
 import type * as t from "../../index.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
 
@@ -28,11 +28,7 @@ export function isArrayExpression<Opts extends Options<t.ArrayExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ArrayExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ArrayExpression" && shallowEqualN(node, opts);
 }
 export function isAssignmentExpression(
   node: t.Node | null | undefined,
@@ -46,11 +42,7 @@ export function isAssignmentExpression<
 export function isAssignmentExpression<
   Opts extends Options<t.AssignmentExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "AssignmentExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "AssignmentExpression" && shallowEqualN(node, opts);
 }
 export function isBinaryExpression(
   node: t.Node | null | undefined,
@@ -63,11 +55,7 @@ export function isBinaryExpression<Opts extends Options<t.BinaryExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "BinaryExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "BinaryExpression" && shallowEqualN(node, opts);
 }
 export function isInterpreterDirective(
   node: t.Node | null | undefined,
@@ -81,11 +69,7 @@ export function isInterpreterDirective<
 export function isInterpreterDirective<
   Opts extends Options<t.InterpreterDirective>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "InterpreterDirective") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "InterpreterDirective" && shallowEqualN(node, opts);
 }
 export function isDirective(
   node: t.Node | null | undefined,
@@ -98,11 +82,7 @@ export function isDirective<Opts extends Options<t.Directive>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "Directive") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "Directive" && shallowEqualN(node, opts);
 }
 export function isDirectiveLiteral(
   node: t.Node | null | undefined,
@@ -115,11 +95,7 @@ export function isDirectiveLiteral<Opts extends Options<t.DirectiveLiteral>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DirectiveLiteral") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DirectiveLiteral" && shallowEqualN(node, opts);
 }
 export function isBlockStatement(
   node: t.Node | null | undefined,
@@ -132,11 +108,7 @@ export function isBlockStatement<Opts extends Options<t.BlockStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "BlockStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "BlockStatement" && shallowEqualN(node, opts);
 }
 export function isBreakStatement(
   node: t.Node | null | undefined,
@@ -149,11 +121,7 @@ export function isBreakStatement<Opts extends Options<t.BreakStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "BreakStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "BreakStatement" && shallowEqualN(node, opts);
 }
 export function isCallExpression(
   node: t.Node | null | undefined,
@@ -166,11 +134,7 @@ export function isCallExpression<Opts extends Options<t.CallExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "CallExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "CallExpression" && shallowEqualN(node, opts);
 }
 export function isCatchClause(
   node: t.Node | null | undefined,
@@ -183,11 +147,7 @@ export function isCatchClause<Opts extends Options<t.CatchClause>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "CatchClause") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "CatchClause" && shallowEqualN(node, opts);
 }
 export function isConditionalExpression(
   node: t.Node | null | undefined,
@@ -201,11 +161,7 @@ export function isConditionalExpression<
 export function isConditionalExpression<
   Opts extends Options<t.ConditionalExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ConditionalExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ConditionalExpression" && shallowEqualN(node, opts);
 }
 export function isContinueStatement(
   node: t.Node | null | undefined,
@@ -218,11 +174,7 @@ export function isContinueStatement<Opts extends Options<t.ContinueStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ContinueStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ContinueStatement" && shallowEqualN(node, opts);
 }
 export function isDebuggerStatement(
   node: t.Node | null | undefined,
@@ -235,11 +187,7 @@ export function isDebuggerStatement<Opts extends Options<t.DebuggerStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DebuggerStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DebuggerStatement" && shallowEqualN(node, opts);
 }
 export function isDoWhileStatement(
   node: t.Node | null | undefined,
@@ -252,11 +200,7 @@ export function isDoWhileStatement<Opts extends Options<t.DoWhileStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DoWhileStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DoWhileStatement" && shallowEqualN(node, opts);
 }
 export function isEmptyStatement(
   node: t.Node | null | undefined,
@@ -269,11 +213,7 @@ export function isEmptyStatement<Opts extends Options<t.EmptyStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "EmptyStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "EmptyStatement" && shallowEqualN(node, opts);
 }
 export function isExpressionStatement(
   node: t.Node | null | undefined,
@@ -287,11 +227,7 @@ export function isExpressionStatement<
 export function isExpressionStatement<
   Opts extends Options<t.ExpressionStatement>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ExpressionStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ExpressionStatement" && shallowEqualN(node, opts);
 }
 export function isFile(node: t.Node | null | undefined): node is t.File;
 export function isFile<Opts extends Options<t.File>>(
@@ -302,11 +238,7 @@ export function isFile<Opts extends Options<t.File>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "File") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "File" && shallowEqualN(node, opts);
 }
 export function isForInStatement(
   node: t.Node | null | undefined,
@@ -319,11 +251,7 @@ export function isForInStatement<Opts extends Options<t.ForInStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ForInStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ForInStatement" && shallowEqualN(node, opts);
 }
 export function isForStatement(
   node: t.Node | null | undefined,
@@ -336,11 +264,7 @@ export function isForStatement<Opts extends Options<t.ForStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ForStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ForStatement" && shallowEqualN(node, opts);
 }
 export function isFunctionDeclaration(
   node: t.Node | null | undefined,
@@ -354,11 +278,7 @@ export function isFunctionDeclaration<
 export function isFunctionDeclaration<
   Opts extends Options<t.FunctionDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "FunctionDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "FunctionDeclaration" && shallowEqualN(node, opts);
 }
 export function isFunctionExpression(
   node: t.Node | null | undefined,
@@ -372,11 +292,7 @@ export function isFunctionExpression<
 export function isFunctionExpression<
   Opts extends Options<t.FunctionExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "FunctionExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "FunctionExpression" && shallowEqualN(node, opts);
 }
 export function isIdentifier(
   node: t.Node | null | undefined,
@@ -389,11 +305,7 @@ export function isIdentifier<Opts extends Options<t.Identifier>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "Identifier") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "Identifier" && shallowEqualN(node, opts);
 }
 export function isIfStatement(
   node: t.Node | null | undefined,
@@ -406,11 +318,7 @@ export function isIfStatement<Opts extends Options<t.IfStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "IfStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "IfStatement" && shallowEqualN(node, opts);
 }
 export function isLabeledStatement(
   node: t.Node | null | undefined,
@@ -423,11 +331,7 @@ export function isLabeledStatement<Opts extends Options<t.LabeledStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "LabeledStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "LabeledStatement" && shallowEqualN(node, opts);
 }
 export function isStringLiteral(
   node: t.Node | null | undefined,
@@ -440,11 +344,7 @@ export function isStringLiteral<Opts extends Options<t.StringLiteral>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "StringLiteral") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "StringLiteral" && shallowEqualN(node, opts);
 }
 export function isNumericLiteral(
   node: t.Node | null | undefined,
@@ -457,11 +357,7 @@ export function isNumericLiteral<Opts extends Options<t.NumericLiteral>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "NumericLiteral") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "NumericLiteral" && shallowEqualN(node, opts);
 }
 export function isNullLiteral(
   node: t.Node | null | undefined,
@@ -474,11 +370,7 @@ export function isNullLiteral<Opts extends Options<t.NullLiteral>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "NullLiteral") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "NullLiteral" && shallowEqualN(node, opts);
 }
 export function isBooleanLiteral(
   node: t.Node | null | undefined,
@@ -491,11 +383,7 @@ export function isBooleanLiteral<Opts extends Options<t.BooleanLiteral>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "BooleanLiteral") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "BooleanLiteral" && shallowEqualN(node, opts);
 }
 export function isRegExpLiteral(
   node: t.Node | null | undefined,
@@ -508,11 +396,7 @@ export function isRegExpLiteral<Opts extends Options<t.RegExpLiteral>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "RegExpLiteral") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "RegExpLiteral" && shallowEqualN(node, opts);
 }
 export function isLogicalExpression(
   node: t.Node | null | undefined,
@@ -525,11 +409,7 @@ export function isLogicalExpression<Opts extends Options<t.LogicalExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "LogicalExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "LogicalExpression" && shallowEqualN(node, opts);
 }
 export function isMemberExpression(
   node: t.Node | null | undefined,
@@ -542,11 +422,7 @@ export function isMemberExpression<Opts extends Options<t.MemberExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "MemberExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "MemberExpression" && shallowEqualN(node, opts);
 }
 export function isNewExpression(
   node: t.Node | null | undefined,
@@ -559,11 +435,7 @@ export function isNewExpression<Opts extends Options<t.NewExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "NewExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "NewExpression" && shallowEqualN(node, opts);
 }
 export function isProgram(node: t.Node | null | undefined): node is t.Program;
 export function isProgram<Opts extends Options<t.Program>>(
@@ -574,11 +446,7 @@ export function isProgram<Opts extends Options<t.Program>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "Program") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "Program" && shallowEqualN(node, opts);
 }
 export function isObjectExpression(
   node: t.Node | null | undefined,
@@ -591,11 +459,7 @@ export function isObjectExpression<Opts extends Options<t.ObjectExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ObjectExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ObjectExpression" && shallowEqualN(node, opts);
 }
 export function isObjectMethod(
   node: t.Node | null | undefined,
@@ -608,11 +472,7 @@ export function isObjectMethod<Opts extends Options<t.ObjectMethod>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ObjectMethod") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ObjectMethod" && shallowEqualN(node, opts);
 }
 export function isObjectProperty(
   node: t.Node | null | undefined,
@@ -625,11 +485,7 @@ export function isObjectProperty<Opts extends Options<t.ObjectProperty>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ObjectProperty") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ObjectProperty" && shallowEqualN(node, opts);
 }
 export function isRestElement(
   node: t.Node | null | undefined,
@@ -642,11 +498,7 @@ export function isRestElement<Opts extends Options<t.RestElement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "RestElement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "RestElement" && shallowEqualN(node, opts);
 }
 export function isReturnStatement(
   node: t.Node | null | undefined,
@@ -659,11 +511,7 @@ export function isReturnStatement<Opts extends Options<t.ReturnStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ReturnStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ReturnStatement" && shallowEqualN(node, opts);
 }
 export function isSequenceExpression(
   node: t.Node | null | undefined,
@@ -677,11 +525,7 @@ export function isSequenceExpression<
 export function isSequenceExpression<
   Opts extends Options<t.SequenceExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "SequenceExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "SequenceExpression" && shallowEqualN(node, opts);
 }
 export function isParenthesizedExpression(
   node: t.Node | null | undefined,
@@ -695,11 +539,7 @@ export function isParenthesizedExpression<
 export function isParenthesizedExpression<
   Opts extends Options<t.ParenthesizedExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ParenthesizedExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ParenthesizedExpression" && shallowEqualN(node, opts);
 }
 export function isSwitchCase(
   node: t.Node | null | undefined,
@@ -712,11 +552,7 @@ export function isSwitchCase<Opts extends Options<t.SwitchCase>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "SwitchCase") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "SwitchCase" && shallowEqualN(node, opts);
 }
 export function isSwitchStatement(
   node: t.Node | null | undefined,
@@ -729,11 +565,7 @@ export function isSwitchStatement<Opts extends Options<t.SwitchStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "SwitchStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "SwitchStatement" && shallowEqualN(node, opts);
 }
 export function isThisExpression(
   node: t.Node | null | undefined,
@@ -746,11 +578,7 @@ export function isThisExpression<Opts extends Options<t.ThisExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ThisExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ThisExpression" && shallowEqualN(node, opts);
 }
 export function isThrowStatement(
   node: t.Node | null | undefined,
@@ -763,11 +591,7 @@ export function isThrowStatement<Opts extends Options<t.ThrowStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ThrowStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ThrowStatement" && shallowEqualN(node, opts);
 }
 export function isTryStatement(
   node: t.Node | null | undefined,
@@ -780,11 +604,7 @@ export function isTryStatement<Opts extends Options<t.TryStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TryStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TryStatement" && shallowEqualN(node, opts);
 }
 export function isUnaryExpression(
   node: t.Node | null | undefined,
@@ -797,11 +617,7 @@ export function isUnaryExpression<Opts extends Options<t.UnaryExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "UnaryExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "UnaryExpression" && shallowEqualN(node, opts);
 }
 export function isUpdateExpression(
   node: t.Node | null | undefined,
@@ -814,11 +630,7 @@ export function isUpdateExpression<Opts extends Options<t.UpdateExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "UpdateExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "UpdateExpression" && shallowEqualN(node, opts);
 }
 export function isVariableDeclaration(
   node: t.Node | null | undefined,
@@ -832,11 +644,7 @@ export function isVariableDeclaration<
 export function isVariableDeclaration<
   Opts extends Options<t.VariableDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "VariableDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "VariableDeclaration" && shallowEqualN(node, opts);
 }
 export function isVariableDeclarator(
   node: t.Node | null | undefined,
@@ -850,11 +658,7 @@ export function isVariableDeclarator<
 export function isVariableDeclarator<
   Opts extends Options<t.VariableDeclarator>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "VariableDeclarator") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "VariableDeclarator" && shallowEqualN(node, opts);
 }
 export function isWhileStatement(
   node: t.Node | null | undefined,
@@ -867,11 +671,7 @@ export function isWhileStatement<Opts extends Options<t.WhileStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "WhileStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "WhileStatement" && shallowEqualN(node, opts);
 }
 export function isWithStatement(
   node: t.Node | null | undefined,
@@ -884,11 +684,7 @@ export function isWithStatement<Opts extends Options<t.WithStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "WithStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "WithStatement" && shallowEqualN(node, opts);
 }
 export function isAssignmentPattern(
   node: t.Node | null | undefined,
@@ -901,11 +697,7 @@ export function isAssignmentPattern<Opts extends Options<t.AssignmentPattern>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "AssignmentPattern") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "AssignmentPattern" && shallowEqualN(node, opts);
 }
 export function isArrayPattern(
   node: t.Node | null | undefined,
@@ -918,11 +710,7 @@ export function isArrayPattern<Opts extends Options<t.ArrayPattern>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ArrayPattern") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ArrayPattern" && shallowEqualN(node, opts);
 }
 export function isArrowFunctionExpression(
   node: t.Node | null | undefined,
@@ -936,11 +724,7 @@ export function isArrowFunctionExpression<
 export function isArrowFunctionExpression<
   Opts extends Options<t.ArrowFunctionExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ArrowFunctionExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ArrowFunctionExpression" && shallowEqualN(node, opts);
 }
 export function isClassBody(
   node: t.Node | null | undefined,
@@ -953,11 +737,7 @@ export function isClassBody<Opts extends Options<t.ClassBody>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ClassBody") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ClassBody" && shallowEqualN(node, opts);
 }
 export function isClassExpression(
   node: t.Node | null | undefined,
@@ -970,11 +750,7 @@ export function isClassExpression<Opts extends Options<t.ClassExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ClassExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ClassExpression" && shallowEqualN(node, opts);
 }
 export function isClassDeclaration(
   node: t.Node | null | undefined,
@@ -987,11 +763,7 @@ export function isClassDeclaration<Opts extends Options<t.ClassDeclaration>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ClassDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ClassDeclaration" && shallowEqualN(node, opts);
 }
 export function isExportAllDeclaration(
   node: t.Node | null | undefined,
@@ -1005,11 +777,7 @@ export function isExportAllDeclaration<
 export function isExportAllDeclaration<
   Opts extends Options<t.ExportAllDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ExportAllDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ExportAllDeclaration" && shallowEqualN(node, opts);
 }
 export function isExportDefaultDeclaration(
   node: t.Node | null | undefined,
@@ -1023,11 +791,7 @@ export function isExportDefaultDeclaration<
 export function isExportDefaultDeclaration<
   Opts extends Options<t.ExportDefaultDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ExportDefaultDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ExportDefaultDeclaration" && shallowEqualN(node, opts);
 }
 export function isExportNamedDeclaration(
   node: t.Node | null | undefined,
@@ -1041,11 +805,7 @@ export function isExportNamedDeclaration<
 export function isExportNamedDeclaration<
   Opts extends Options<t.ExportNamedDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ExportNamedDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ExportNamedDeclaration" && shallowEqualN(node, opts);
 }
 export function isExportSpecifier(
   node: t.Node | null | undefined,
@@ -1058,11 +818,7 @@ export function isExportSpecifier<Opts extends Options<t.ExportSpecifier>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ExportSpecifier") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ExportSpecifier" && shallowEqualN(node, opts);
 }
 export function isForOfStatement(
   node: t.Node | null | undefined,
@@ -1075,11 +831,7 @@ export function isForOfStatement<Opts extends Options<t.ForOfStatement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ForOfStatement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ForOfStatement" && shallowEqualN(node, opts);
 }
 export function isImportDeclaration(
   node: t.Node | null | undefined,
@@ -1092,11 +844,7 @@ export function isImportDeclaration<Opts extends Options<t.ImportDeclaration>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ImportDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ImportDeclaration" && shallowEqualN(node, opts);
 }
 export function isImportDefaultSpecifier(
   node: t.Node | null | undefined,
@@ -1110,11 +858,7 @@ export function isImportDefaultSpecifier<
 export function isImportDefaultSpecifier<
   Opts extends Options<t.ImportDefaultSpecifier>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ImportDefaultSpecifier") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ImportDefaultSpecifier" && shallowEqualN(node, opts);
 }
 export function isImportNamespaceSpecifier(
   node: t.Node | null | undefined,
@@ -1128,11 +872,7 @@ export function isImportNamespaceSpecifier<
 export function isImportNamespaceSpecifier<
   Opts extends Options<t.ImportNamespaceSpecifier>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ImportNamespaceSpecifier") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ImportNamespaceSpecifier" && shallowEqualN(node, opts);
 }
 export function isImportSpecifier(
   node: t.Node | null | undefined,
@@ -1145,11 +885,7 @@ export function isImportSpecifier<Opts extends Options<t.ImportSpecifier>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ImportSpecifier") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ImportSpecifier" && shallowEqualN(node, opts);
 }
 export function isMetaProperty(
   node: t.Node | null | undefined,
@@ -1162,11 +898,7 @@ export function isMetaProperty<Opts extends Options<t.MetaProperty>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "MetaProperty") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "MetaProperty" && shallowEqualN(node, opts);
 }
 export function isClassMethod(
   node: t.Node | null | undefined,
@@ -1179,11 +911,7 @@ export function isClassMethod<Opts extends Options<t.ClassMethod>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ClassMethod") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ClassMethod" && shallowEqualN(node, opts);
 }
 export function isObjectPattern(
   node: t.Node | null | undefined,
@@ -1196,11 +924,7 @@ export function isObjectPattern<Opts extends Options<t.ObjectPattern>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ObjectPattern") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ObjectPattern" && shallowEqualN(node, opts);
 }
 export function isSpreadElement(
   node: t.Node | null | undefined,
@@ -1213,11 +937,7 @@ export function isSpreadElement<Opts extends Options<t.SpreadElement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "SpreadElement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "SpreadElement" && shallowEqualN(node, opts);
 }
 export function isSuper(node: t.Node | null | undefined): node is t.Super;
 export function isSuper<Opts extends Options<t.Super>>(
@@ -1228,11 +948,7 @@ export function isSuper<Opts extends Options<t.Super>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "Super") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "Super" && shallowEqualN(node, opts);
 }
 export function isTaggedTemplateExpression(
   node: t.Node | null | undefined,
@@ -1246,11 +962,7 @@ export function isTaggedTemplateExpression<
 export function isTaggedTemplateExpression<
   Opts extends Options<t.TaggedTemplateExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TaggedTemplateExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TaggedTemplateExpression" && shallowEqualN(node, opts);
 }
 export function isTemplateElement(
   node: t.Node | null | undefined,
@@ -1263,11 +975,7 @@ export function isTemplateElement<Opts extends Options<t.TemplateElement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TemplateElement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TemplateElement" && shallowEqualN(node, opts);
 }
 export function isTemplateLiteral(
   node: t.Node | null | undefined,
@@ -1280,11 +988,7 @@ export function isTemplateLiteral<Opts extends Options<t.TemplateLiteral>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TemplateLiteral") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TemplateLiteral" && shallowEqualN(node, opts);
 }
 export function isYieldExpression(
   node: t.Node | null | undefined,
@@ -1297,11 +1001,7 @@ export function isYieldExpression<Opts extends Options<t.YieldExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "YieldExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "YieldExpression" && shallowEqualN(node, opts);
 }
 export function isAwaitExpression(
   node: t.Node | null | undefined,
@@ -1314,11 +1014,7 @@ export function isAwaitExpression<Opts extends Options<t.AwaitExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "AwaitExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "AwaitExpression" && shallowEqualN(node, opts);
 }
 export function isImportExpression(
   node: t.Node | null | undefined,
@@ -1331,11 +1027,7 @@ export function isImportExpression<Opts extends Options<t.ImportExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ImportExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ImportExpression" && shallowEqualN(node, opts);
 }
 export function isImport(node: t.Node | null | undefined): node is t.Import;
 export function isImport<Opts extends Options<t.Import>>(
@@ -1346,11 +1038,7 @@ export function isImport<Opts extends Options<t.Import>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "Import") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "Import" && shallowEqualN(node, opts);
 }
 export function isBigIntLiteral(
   node: t.Node | null | undefined,
@@ -1363,11 +1051,7 @@ export function isBigIntLiteral<Opts extends Options<t.BigIntLiteral>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "BigIntLiteral") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "BigIntLiteral" && shallowEqualN(node, opts);
 }
 export function isExportNamespaceSpecifier(
   node: t.Node | null | undefined,
@@ -1381,11 +1065,7 @@ export function isExportNamespaceSpecifier<
 export function isExportNamespaceSpecifier<
   Opts extends Options<t.ExportNamespaceSpecifier>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ExportNamespaceSpecifier") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ExportNamespaceSpecifier" && shallowEqualN(node, opts);
 }
 export function isOptionalMemberExpression(
   node: t.Node | null | undefined,
@@ -1399,11 +1079,7 @@ export function isOptionalMemberExpression<
 export function isOptionalMemberExpression<
   Opts extends Options<t.OptionalMemberExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "OptionalMemberExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "OptionalMemberExpression" && shallowEqualN(node, opts);
 }
 export function isOptionalCallExpression(
   node: t.Node | null | undefined,
@@ -1417,11 +1093,7 @@ export function isOptionalCallExpression<
 export function isOptionalCallExpression<
   Opts extends Options<t.OptionalCallExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "OptionalCallExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "OptionalCallExpression" && shallowEqualN(node, opts);
 }
 export function isClassProperty(
   node: t.Node | null | undefined,
@@ -1434,11 +1106,7 @@ export function isClassProperty<Opts extends Options<t.ClassProperty>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ClassProperty") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ClassProperty" && shallowEqualN(node, opts);
 }
 export function isClassPrivateProperty(
   node: t.Node | null | undefined,
@@ -1452,11 +1120,7 @@ export function isClassPrivateProperty<
 export function isClassPrivateProperty<
   Opts extends Options<t.ClassPrivateProperty>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ClassPrivateProperty") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ClassPrivateProperty" && shallowEqualN(node, opts);
 }
 export function isClassPrivateMethod(
   node: t.Node | null | undefined,
@@ -1470,11 +1134,7 @@ export function isClassPrivateMethod<
 export function isClassPrivateMethod<
   Opts extends Options<t.ClassPrivateMethod>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ClassPrivateMethod") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ClassPrivateMethod" && shallowEqualN(node, opts);
 }
 export function isPrivateName(
   node: t.Node | null | undefined,
@@ -1487,11 +1147,7 @@ export function isPrivateName<Opts extends Options<t.PrivateName>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "PrivateName") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "PrivateName" && shallowEqualN(node, opts);
 }
 export function isStaticBlock(
   node: t.Node | null | undefined,
@@ -1504,11 +1160,7 @@ export function isStaticBlock<Opts extends Options<t.StaticBlock>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "StaticBlock") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "StaticBlock" && shallowEqualN(node, opts);
 }
 export function isImportAttribute(
   node: t.Node | null | undefined,
@@ -1521,11 +1173,7 @@ export function isImportAttribute<Opts extends Options<t.ImportAttribute>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ImportAttribute") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ImportAttribute" && shallowEqualN(node, opts);
 }
 export function isAnyTypeAnnotation(
   node: t.Node | null | undefined,
@@ -1538,11 +1186,7 @@ export function isAnyTypeAnnotation<Opts extends Options<t.AnyTypeAnnotation>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "AnyTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "AnyTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isArrayTypeAnnotation(
   node: t.Node | null | undefined,
@@ -1556,11 +1200,7 @@ export function isArrayTypeAnnotation<
 export function isArrayTypeAnnotation<
   Opts extends Options<t.ArrayTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ArrayTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ArrayTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isBooleanTypeAnnotation(
   node: t.Node | null | undefined,
@@ -1574,11 +1214,7 @@ export function isBooleanTypeAnnotation<
 export function isBooleanTypeAnnotation<
   Opts extends Options<t.BooleanTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "BooleanTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "BooleanTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isBooleanLiteralTypeAnnotation(
   node: t.Node | null | undefined,
@@ -1592,11 +1228,9 @@ export function isBooleanLiteralTypeAnnotation<
 export function isBooleanLiteralTypeAnnotation<
   Opts extends Options<t.BooleanLiteralTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "BooleanLiteralTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "BooleanLiteralTypeAnnotation" && shallowEqualN(node, opts)
+  );
 }
 export function isNullLiteralTypeAnnotation(
   node: t.Node | null | undefined,
@@ -1610,11 +1244,9 @@ export function isNullLiteralTypeAnnotation<
 export function isNullLiteralTypeAnnotation<
   Opts extends Options<t.NullLiteralTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "NullLiteralTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "NullLiteralTypeAnnotation" && shallowEqualN(node, opts)
+  );
 }
 export function isClassImplements(
   node: t.Node | null | undefined,
@@ -1627,11 +1259,7 @@ export function isClassImplements<Opts extends Options<t.ClassImplements>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ClassImplements") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ClassImplements" && shallowEqualN(node, opts);
 }
 export function isDeclareClass(
   node: t.Node | null | undefined,
@@ -1644,11 +1272,7 @@ export function isDeclareClass<Opts extends Options<t.DeclareClass>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DeclareClass") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DeclareClass" && shallowEqualN(node, opts);
 }
 export function isDeclareFunction(
   node: t.Node | null | undefined,
@@ -1661,11 +1285,7 @@ export function isDeclareFunction<Opts extends Options<t.DeclareFunction>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DeclareFunction") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DeclareFunction" && shallowEqualN(node, opts);
 }
 export function isDeclareInterface(
   node: t.Node | null | undefined,
@@ -1678,11 +1298,7 @@ export function isDeclareInterface<Opts extends Options<t.DeclareInterface>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DeclareInterface") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DeclareInterface" && shallowEqualN(node, opts);
 }
 export function isDeclareModule(
   node: t.Node | null | undefined,
@@ -1695,11 +1311,7 @@ export function isDeclareModule<Opts extends Options<t.DeclareModule>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DeclareModule") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DeclareModule" && shallowEqualN(node, opts);
 }
 export function isDeclareModuleExports(
   node: t.Node | null | undefined,
@@ -1713,11 +1325,7 @@ export function isDeclareModuleExports<
 export function isDeclareModuleExports<
   Opts extends Options<t.DeclareModuleExports>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DeclareModuleExports") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DeclareModuleExports" && shallowEqualN(node, opts);
 }
 export function isDeclareTypeAlias(
   node: t.Node | null | undefined,
@@ -1730,11 +1338,7 @@ export function isDeclareTypeAlias<Opts extends Options<t.DeclareTypeAlias>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DeclareTypeAlias") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DeclareTypeAlias" && shallowEqualN(node, opts);
 }
 export function isDeclareOpaqueType(
   node: t.Node | null | undefined,
@@ -1747,11 +1351,7 @@ export function isDeclareOpaqueType<Opts extends Options<t.DeclareOpaqueType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DeclareOpaqueType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DeclareOpaqueType" && shallowEqualN(node, opts);
 }
 export function isDeclareVariable(
   node: t.Node | null | undefined,
@@ -1764,11 +1364,7 @@ export function isDeclareVariable<Opts extends Options<t.DeclareVariable>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DeclareVariable") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DeclareVariable" && shallowEqualN(node, opts);
 }
 export function isDeclareExportDeclaration(
   node: t.Node | null | undefined,
@@ -1782,11 +1378,7 @@ export function isDeclareExportDeclaration<
 export function isDeclareExportDeclaration<
   Opts extends Options<t.DeclareExportDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DeclareExportDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DeclareExportDeclaration" && shallowEqualN(node, opts);
 }
 export function isDeclareExportAllDeclaration(
   node: t.Node | null | undefined,
@@ -1800,11 +1392,9 @@ export function isDeclareExportAllDeclaration<
 export function isDeclareExportAllDeclaration<
   Opts extends Options<t.DeclareExportAllDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DeclareExportAllDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "DeclareExportAllDeclaration" && shallowEqualN(node, opts)
+  );
 }
 export function isDeclaredPredicate(
   node: t.Node | null | undefined,
@@ -1817,11 +1407,7 @@ export function isDeclaredPredicate<Opts extends Options<t.DeclaredPredicate>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DeclaredPredicate") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DeclaredPredicate" && shallowEqualN(node, opts);
 }
 export function isExistsTypeAnnotation(
   node: t.Node | null | undefined,
@@ -1835,11 +1421,7 @@ export function isExistsTypeAnnotation<
 export function isExistsTypeAnnotation<
   Opts extends Options<t.ExistsTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ExistsTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ExistsTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isFunctionTypeAnnotation(
   node: t.Node | null | undefined,
@@ -1853,11 +1435,7 @@ export function isFunctionTypeAnnotation<
 export function isFunctionTypeAnnotation<
   Opts extends Options<t.FunctionTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "FunctionTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "FunctionTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isFunctionTypeParam(
   node: t.Node | null | undefined,
@@ -1870,11 +1448,7 @@ export function isFunctionTypeParam<Opts extends Options<t.FunctionTypeParam>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "FunctionTypeParam") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "FunctionTypeParam" && shallowEqualN(node, opts);
 }
 export function isGenericTypeAnnotation(
   node: t.Node | null | undefined,
@@ -1888,11 +1462,7 @@ export function isGenericTypeAnnotation<
 export function isGenericTypeAnnotation<
   Opts extends Options<t.GenericTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "GenericTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "GenericTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isInferredPredicate(
   node: t.Node | null | undefined,
@@ -1905,11 +1475,7 @@ export function isInferredPredicate<Opts extends Options<t.InferredPredicate>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "InferredPredicate") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "InferredPredicate" && shallowEqualN(node, opts);
 }
 export function isInterfaceExtends(
   node: t.Node | null | undefined,
@@ -1922,11 +1488,7 @@ export function isInterfaceExtends<Opts extends Options<t.InterfaceExtends>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "InterfaceExtends") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "InterfaceExtends" && shallowEqualN(node, opts);
 }
 export function isInterfaceDeclaration(
   node: t.Node | null | undefined,
@@ -1940,11 +1502,7 @@ export function isInterfaceDeclaration<
 export function isInterfaceDeclaration<
   Opts extends Options<t.InterfaceDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "InterfaceDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "InterfaceDeclaration" && shallowEqualN(node, opts);
 }
 export function isInterfaceTypeAnnotation(
   node: t.Node | null | undefined,
@@ -1958,11 +1516,7 @@ export function isInterfaceTypeAnnotation<
 export function isInterfaceTypeAnnotation<
   Opts extends Options<t.InterfaceTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "InterfaceTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "InterfaceTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isIntersectionTypeAnnotation(
   node: t.Node | null | undefined,
@@ -1976,11 +1530,9 @@ export function isIntersectionTypeAnnotation<
 export function isIntersectionTypeAnnotation<
   Opts extends Options<t.IntersectionTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "IntersectionTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "IntersectionTypeAnnotation" && shallowEqualN(node, opts)
+  );
 }
 export function isMixedTypeAnnotation(
   node: t.Node | null | undefined,
@@ -1994,11 +1546,7 @@ export function isMixedTypeAnnotation<
 export function isMixedTypeAnnotation<
   Opts extends Options<t.MixedTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "MixedTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "MixedTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isEmptyTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2012,11 +1560,7 @@ export function isEmptyTypeAnnotation<
 export function isEmptyTypeAnnotation<
   Opts extends Options<t.EmptyTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "EmptyTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "EmptyTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isNullableTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2030,11 +1574,7 @@ export function isNullableTypeAnnotation<
 export function isNullableTypeAnnotation<
   Opts extends Options<t.NullableTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "NullableTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "NullableTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isNumberLiteralTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2048,11 +1588,9 @@ export function isNumberLiteralTypeAnnotation<
 export function isNumberLiteralTypeAnnotation<
   Opts extends Options<t.NumberLiteralTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "NumberLiteralTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "NumberLiteralTypeAnnotation" && shallowEqualN(node, opts)
+  );
 }
 export function isBigIntLiteralTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2066,11 +1604,9 @@ export function isBigIntLiteralTypeAnnotation<
 export function isBigIntLiteralTypeAnnotation<
   Opts extends Options<t.BigIntLiteralTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "BigIntLiteralTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "BigIntLiteralTypeAnnotation" && shallowEqualN(node, opts)
+  );
 }
 export function isNumberTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2084,11 +1620,7 @@ export function isNumberTypeAnnotation<
 export function isNumberTypeAnnotation<
   Opts extends Options<t.NumberTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "NumberTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "NumberTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isObjectTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2102,11 +1634,7 @@ export function isObjectTypeAnnotation<
 export function isObjectTypeAnnotation<
   Opts extends Options<t.ObjectTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ObjectTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ObjectTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isObjectTypeInternalSlot(
   node: t.Node | null | undefined,
@@ -2120,11 +1648,7 @@ export function isObjectTypeInternalSlot<
 export function isObjectTypeInternalSlot<
   Opts extends Options<t.ObjectTypeInternalSlot>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ObjectTypeInternalSlot") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ObjectTypeInternalSlot" && shallowEqualN(node, opts);
 }
 export function isObjectTypeCallProperty(
   node: t.Node | null | undefined,
@@ -2138,11 +1662,7 @@ export function isObjectTypeCallProperty<
 export function isObjectTypeCallProperty<
   Opts extends Options<t.ObjectTypeCallProperty>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ObjectTypeCallProperty") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ObjectTypeCallProperty" && shallowEqualN(node, opts);
 }
 export function isObjectTypeIndexer(
   node: t.Node | null | undefined,
@@ -2155,11 +1675,7 @@ export function isObjectTypeIndexer<Opts extends Options<t.ObjectTypeIndexer>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ObjectTypeIndexer") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ObjectTypeIndexer" && shallowEqualN(node, opts);
 }
 export function isObjectTypeProperty(
   node: t.Node | null | undefined,
@@ -2173,11 +1689,7 @@ export function isObjectTypeProperty<
 export function isObjectTypeProperty<
   Opts extends Options<t.ObjectTypeProperty>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ObjectTypeProperty") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ObjectTypeProperty" && shallowEqualN(node, opts);
 }
 export function isObjectTypeSpreadProperty(
   node: t.Node | null | undefined,
@@ -2191,11 +1703,7 @@ export function isObjectTypeSpreadProperty<
 export function isObjectTypeSpreadProperty<
   Opts extends Options<t.ObjectTypeSpreadProperty>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ObjectTypeSpreadProperty") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ObjectTypeSpreadProperty" && shallowEqualN(node, opts);
 }
 export function isOpaqueType(
   node: t.Node | null | undefined,
@@ -2208,11 +1716,7 @@ export function isOpaqueType<Opts extends Options<t.OpaqueType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "OpaqueType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "OpaqueType" && shallowEqualN(node, opts);
 }
 export function isQualifiedTypeIdentifier(
   node: t.Node | null | undefined,
@@ -2226,11 +1730,7 @@ export function isQualifiedTypeIdentifier<
 export function isQualifiedTypeIdentifier<
   Opts extends Options<t.QualifiedTypeIdentifier>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "QualifiedTypeIdentifier") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "QualifiedTypeIdentifier" && shallowEqualN(node, opts);
 }
 export function isStringLiteralTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2244,11 +1744,9 @@ export function isStringLiteralTypeAnnotation<
 export function isStringLiteralTypeAnnotation<
   Opts extends Options<t.StringLiteralTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "StringLiteralTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "StringLiteralTypeAnnotation" && shallowEqualN(node, opts)
+  );
 }
 export function isStringTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2262,11 +1760,7 @@ export function isStringTypeAnnotation<
 export function isStringTypeAnnotation<
   Opts extends Options<t.StringTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "StringTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "StringTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isSymbolTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2280,11 +1774,7 @@ export function isSymbolTypeAnnotation<
 export function isSymbolTypeAnnotation<
   Opts extends Options<t.SymbolTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "SymbolTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "SymbolTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isThisTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2298,11 +1788,7 @@ export function isThisTypeAnnotation<
 export function isThisTypeAnnotation<
   Opts extends Options<t.ThisTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ThisTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ThisTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isTupleTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2316,11 +1802,7 @@ export function isTupleTypeAnnotation<
 export function isTupleTypeAnnotation<
   Opts extends Options<t.TupleTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TupleTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TupleTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isTypeofTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2334,11 +1816,7 @@ export function isTypeofTypeAnnotation<
 export function isTypeofTypeAnnotation<
   Opts extends Options<t.TypeofTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TypeofTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TypeofTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isTypeAlias(
   node: t.Node | null | undefined,
@@ -2351,11 +1829,7 @@ export function isTypeAlias<Opts extends Options<t.TypeAlias>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TypeAlias") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TypeAlias" && shallowEqualN(node, opts);
 }
 export function isTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2368,11 +1842,7 @@ export function isTypeAnnotation<Opts extends Options<t.TypeAnnotation>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isTypeCastExpression(
   node: t.Node | null | undefined,
@@ -2386,11 +1856,7 @@ export function isTypeCastExpression<
 export function isTypeCastExpression<
   Opts extends Options<t.TypeCastExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TypeCastExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TypeCastExpression" && shallowEqualN(node, opts);
 }
 export function isTypeParameter(
   node: t.Node | null | undefined,
@@ -2403,11 +1869,7 @@ export function isTypeParameter<Opts extends Options<t.TypeParameter>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TypeParameter") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TypeParameter" && shallowEqualN(node, opts);
 }
 export function isTypeParameterDeclaration(
   node: t.Node | null | undefined,
@@ -2421,11 +1883,7 @@ export function isTypeParameterDeclaration<
 export function isTypeParameterDeclaration<
   Opts extends Options<t.TypeParameterDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TypeParameterDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TypeParameterDeclaration" && shallowEqualN(node, opts);
 }
 export function isTypeParameterInstantiation(
   node: t.Node | null | undefined,
@@ -2439,11 +1897,9 @@ export function isTypeParameterInstantiation<
 export function isTypeParameterInstantiation<
   Opts extends Options<t.TypeParameterInstantiation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TypeParameterInstantiation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "TypeParameterInstantiation" && shallowEqualN(node, opts)
+  );
 }
 export function isUnionTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2457,11 +1913,7 @@ export function isUnionTypeAnnotation<
 export function isUnionTypeAnnotation<
   Opts extends Options<t.UnionTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "UnionTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "UnionTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isVariance(node: t.Node | null | undefined): node is t.Variance;
 export function isVariance<Opts extends Options<t.Variance>>(
@@ -2472,11 +1924,7 @@ export function isVariance<Opts extends Options<t.Variance>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "Variance") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "Variance" && shallowEqualN(node, opts);
 }
 export function isVoidTypeAnnotation(
   node: t.Node | null | undefined,
@@ -2490,11 +1938,7 @@ export function isVoidTypeAnnotation<
 export function isVoidTypeAnnotation<
   Opts extends Options<t.VoidTypeAnnotation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "VoidTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "VoidTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isEnumDeclaration(
   node: t.Node | null | undefined,
@@ -2507,11 +1951,7 @@ export function isEnumDeclaration<Opts extends Options<t.EnumDeclaration>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "EnumDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "EnumDeclaration" && shallowEqualN(node, opts);
 }
 export function isEnumBooleanBody(
   node: t.Node | null | undefined,
@@ -2524,11 +1964,7 @@ export function isEnumBooleanBody<Opts extends Options<t.EnumBooleanBody>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "EnumBooleanBody") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "EnumBooleanBody" && shallowEqualN(node, opts);
 }
 export function isEnumNumberBody(
   node: t.Node | null | undefined,
@@ -2541,11 +1977,7 @@ export function isEnumNumberBody<Opts extends Options<t.EnumNumberBody>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "EnumNumberBody") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "EnumNumberBody" && shallowEqualN(node, opts);
 }
 export function isEnumStringBody(
   node: t.Node | null | undefined,
@@ -2558,11 +1990,7 @@ export function isEnumStringBody<Opts extends Options<t.EnumStringBody>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "EnumStringBody") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "EnumStringBody" && shallowEqualN(node, opts);
 }
 export function isEnumSymbolBody(
   node: t.Node | null | undefined,
@@ -2575,11 +2003,7 @@ export function isEnumSymbolBody<Opts extends Options<t.EnumSymbolBody>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "EnumSymbolBody") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "EnumSymbolBody" && shallowEqualN(node, opts);
 }
 export function isEnumBooleanMember(
   node: t.Node | null | undefined,
@@ -2592,11 +2016,7 @@ export function isEnumBooleanMember<Opts extends Options<t.EnumBooleanMember>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "EnumBooleanMember") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "EnumBooleanMember" && shallowEqualN(node, opts);
 }
 export function isEnumNumberMember(
   node: t.Node | null | undefined,
@@ -2609,11 +2029,7 @@ export function isEnumNumberMember<Opts extends Options<t.EnumNumberMember>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "EnumNumberMember") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "EnumNumberMember" && shallowEqualN(node, opts);
 }
 export function isEnumStringMember(
   node: t.Node | null | undefined,
@@ -2626,11 +2042,7 @@ export function isEnumStringMember<Opts extends Options<t.EnumStringMember>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "EnumStringMember") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "EnumStringMember" && shallowEqualN(node, opts);
 }
 export function isEnumDefaultedMember(
   node: t.Node | null | undefined,
@@ -2644,11 +2056,7 @@ export function isEnumDefaultedMember<
 export function isEnumDefaultedMember<
   Opts extends Options<t.EnumDefaultedMember>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "EnumDefaultedMember") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "EnumDefaultedMember" && shallowEqualN(node, opts);
 }
 export function isIndexedAccessType(
   node: t.Node | null | undefined,
@@ -2661,11 +2069,7 @@ export function isIndexedAccessType<Opts extends Options<t.IndexedAccessType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "IndexedAccessType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "IndexedAccessType" && shallowEqualN(node, opts);
 }
 export function isOptionalIndexedAccessType(
   node: t.Node | null | undefined,
@@ -2679,11 +2083,9 @@ export function isOptionalIndexedAccessType<
 export function isOptionalIndexedAccessType<
   Opts extends Options<t.OptionalIndexedAccessType>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "OptionalIndexedAccessType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "OptionalIndexedAccessType" && shallowEqualN(node, opts)
+  );
 }
 export function isJSXAttribute(
   node: t.Node | null | undefined,
@@ -2696,11 +2098,7 @@ export function isJSXAttribute<Opts extends Options<t.JSXAttribute>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXAttribute") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXAttribute" && shallowEqualN(node, opts);
 }
 export function isJSXClosingElement(
   node: t.Node | null | undefined,
@@ -2713,11 +2111,7 @@ export function isJSXClosingElement<Opts extends Options<t.JSXClosingElement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXClosingElement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXClosingElement" && shallowEqualN(node, opts);
 }
 export function isJSXElement(
   node: t.Node | null | undefined,
@@ -2730,11 +2124,7 @@ export function isJSXElement<Opts extends Options<t.JSXElement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXElement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXElement" && shallowEqualN(node, opts);
 }
 export function isJSXEmptyExpression(
   node: t.Node | null | undefined,
@@ -2748,11 +2138,7 @@ export function isJSXEmptyExpression<
 export function isJSXEmptyExpression<
   Opts extends Options<t.JSXEmptyExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXEmptyExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXEmptyExpression" && shallowEqualN(node, opts);
 }
 export function isJSXExpressionContainer(
   node: t.Node | null | undefined,
@@ -2766,11 +2152,7 @@ export function isJSXExpressionContainer<
 export function isJSXExpressionContainer<
   Opts extends Options<t.JSXExpressionContainer>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXExpressionContainer") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXExpressionContainer" && shallowEqualN(node, opts);
 }
 export function isJSXSpreadChild(
   node: t.Node | null | undefined,
@@ -2783,11 +2165,7 @@ export function isJSXSpreadChild<Opts extends Options<t.JSXSpreadChild>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXSpreadChild") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXSpreadChild" && shallowEqualN(node, opts);
 }
 export function isJSXIdentifier(
   node: t.Node | null | undefined,
@@ -2800,11 +2178,7 @@ export function isJSXIdentifier<Opts extends Options<t.JSXIdentifier>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXIdentifier") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXIdentifier" && shallowEqualN(node, opts);
 }
 export function isJSXMemberExpression(
   node: t.Node | null | undefined,
@@ -2818,11 +2192,7 @@ export function isJSXMemberExpression<
 export function isJSXMemberExpression<
   Opts extends Options<t.JSXMemberExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXMemberExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXMemberExpression" && shallowEqualN(node, opts);
 }
 export function isJSXNamespacedName(
   node: t.Node | null | undefined,
@@ -2835,11 +2205,7 @@ export function isJSXNamespacedName<Opts extends Options<t.JSXNamespacedName>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXNamespacedName") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXNamespacedName" && shallowEqualN(node, opts);
 }
 export function isJSXOpeningElement(
   node: t.Node | null | undefined,
@@ -2852,11 +2218,7 @@ export function isJSXOpeningElement<Opts extends Options<t.JSXOpeningElement>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXOpeningElement") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXOpeningElement" && shallowEqualN(node, opts);
 }
 export function isJSXSpreadAttribute(
   node: t.Node | null | undefined,
@@ -2870,11 +2232,7 @@ export function isJSXSpreadAttribute<
 export function isJSXSpreadAttribute<
   Opts extends Options<t.JSXSpreadAttribute>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXSpreadAttribute") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXSpreadAttribute" && shallowEqualN(node, opts);
 }
 export function isJSXText(node: t.Node | null | undefined): node is t.JSXText;
 export function isJSXText<Opts extends Options<t.JSXText>>(
@@ -2885,11 +2243,7 @@ export function isJSXText<Opts extends Options<t.JSXText>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXText") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXText" && shallowEqualN(node, opts);
 }
 export function isJSXFragment(
   node: t.Node | null | undefined,
@@ -2902,11 +2256,7 @@ export function isJSXFragment<Opts extends Options<t.JSXFragment>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXFragment") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXFragment" && shallowEqualN(node, opts);
 }
 export function isJSXOpeningFragment(
   node: t.Node | null | undefined,
@@ -2920,11 +2270,7 @@ export function isJSXOpeningFragment<
 export function isJSXOpeningFragment<
   Opts extends Options<t.JSXOpeningFragment>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXOpeningFragment") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXOpeningFragment" && shallowEqualN(node, opts);
 }
 export function isJSXClosingFragment(
   node: t.Node | null | undefined,
@@ -2938,11 +2284,7 @@ export function isJSXClosingFragment<
 export function isJSXClosingFragment<
   Opts extends Options<t.JSXClosingFragment>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "JSXClosingFragment") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "JSXClosingFragment" && shallowEqualN(node, opts);
 }
 export function isPlaceholder(
   node: t.Node | null | undefined,
@@ -2955,11 +2297,7 @@ export function isPlaceholder<Opts extends Options<t.Placeholder>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "Placeholder") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "Placeholder" && shallowEqualN(node, opts);
 }
 export function isV8IntrinsicIdentifier(
   node: t.Node | null | undefined,
@@ -2973,11 +2311,7 @@ export function isV8IntrinsicIdentifier<
 export function isV8IntrinsicIdentifier<
   Opts extends Options<t.V8IntrinsicIdentifier>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "V8IntrinsicIdentifier") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "V8IntrinsicIdentifier" && shallowEqualN(node, opts);
 }
 export function isArgumentPlaceholder(
   node: t.Node | null | undefined,
@@ -2991,11 +2325,7 @@ export function isArgumentPlaceholder<
 export function isArgumentPlaceholder<
   Opts extends Options<t.ArgumentPlaceholder>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ArgumentPlaceholder") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ArgumentPlaceholder" && shallowEqualN(node, opts);
 }
 export function isBindExpression(
   node: t.Node | null | undefined,
@@ -3008,11 +2338,7 @@ export function isBindExpression<Opts extends Options<t.BindExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "BindExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "BindExpression" && shallowEqualN(node, opts);
 }
 export function isClassAccessorProperty(
   node: t.Node | null | undefined,
@@ -3026,11 +2352,7 @@ export function isClassAccessorProperty<
 export function isClassAccessorProperty<
   Opts extends Options<t.ClassAccessorProperty>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ClassAccessorProperty") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ClassAccessorProperty" && shallowEqualN(node, opts);
 }
 export function isDecorator(
   node: t.Node | null | undefined,
@@ -3043,11 +2365,7 @@ export function isDecorator<Opts extends Options<t.Decorator>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "Decorator") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "Decorator" && shallowEqualN(node, opts);
 }
 export function isDoExpression(
   node: t.Node | null | undefined,
@@ -3060,11 +2378,7 @@ export function isDoExpression<Opts extends Options<t.DoExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "DoExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "DoExpression" && shallowEqualN(node, opts);
 }
 export function isExportDefaultSpecifier(
   node: t.Node | null | undefined,
@@ -3078,11 +2392,7 @@ export function isExportDefaultSpecifier<
 export function isExportDefaultSpecifier<
   Opts extends Options<t.ExportDefaultSpecifier>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ExportDefaultSpecifier") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ExportDefaultSpecifier" && shallowEqualN(node, opts);
 }
 export function isModuleExpression(
   node: t.Node | null | undefined,
@@ -3095,11 +2405,7 @@ export function isModuleExpression<Opts extends Options<t.ModuleExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "ModuleExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "ModuleExpression" && shallowEqualN(node, opts);
 }
 export function isTopicReference(
   node: t.Node | null | undefined,
@@ -3112,11 +2418,7 @@ export function isTopicReference<Opts extends Options<t.TopicReference>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TopicReference") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TopicReference" && shallowEqualN(node, opts);
 }
 export function isVoidPattern(
   node: t.Node | null | undefined,
@@ -3129,11 +2431,7 @@ export function isVoidPattern<Opts extends Options<t.VoidPattern>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "VoidPattern") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "VoidPattern" && shallowEqualN(node, opts);
 }
 export function isTSParameterProperty(
   node: t.Node | null | undefined,
@@ -3147,11 +2445,7 @@ export function isTSParameterProperty<
 export function isTSParameterProperty<
   Opts extends Options<t.TSParameterProperty>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSParameterProperty") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSParameterProperty" && shallowEqualN(node, opts);
 }
 export function isTSDeclareFunction(
   node: t.Node | null | undefined,
@@ -3164,11 +2458,7 @@ export function isTSDeclareFunction<Opts extends Options<t.TSDeclareFunction>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSDeclareFunction") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSDeclareFunction" && shallowEqualN(node, opts);
 }
 export function isTSDeclareMethod(
   node: t.Node | null | undefined,
@@ -3181,11 +2471,7 @@ export function isTSDeclareMethod<Opts extends Options<t.TSDeclareMethod>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSDeclareMethod") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSDeclareMethod" && shallowEqualN(node, opts);
 }
 export function isTSQualifiedName(
   node: t.Node | null | undefined,
@@ -3198,11 +2484,7 @@ export function isTSQualifiedName<Opts extends Options<t.TSQualifiedName>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSQualifiedName") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSQualifiedName" && shallowEqualN(node, opts);
 }
 export function isTSCallSignatureDeclaration(
   node: t.Node | null | undefined,
@@ -3216,11 +2498,9 @@ export function isTSCallSignatureDeclaration<
 export function isTSCallSignatureDeclaration<
   Opts extends Options<t.TSCallSignatureDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSCallSignatureDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "TSCallSignatureDeclaration" && shallowEqualN(node, opts)
+  );
 }
 export function isTSConstructSignatureDeclaration(
   node: t.Node | null | undefined,
@@ -3234,11 +2514,10 @@ export function isTSConstructSignatureDeclaration<
 export function isTSConstructSignatureDeclaration<
   Opts extends Options<t.TSConstructSignatureDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSConstructSignatureDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "TSConstructSignatureDeclaration" &&
+    shallowEqualN(node, opts)
+  );
 }
 export function isTSPropertySignature(
   node: t.Node | null | undefined,
@@ -3252,11 +2531,7 @@ export function isTSPropertySignature<
 export function isTSPropertySignature<
   Opts extends Options<t.TSPropertySignature>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSPropertySignature") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSPropertySignature" && shallowEqualN(node, opts);
 }
 export function isTSMethodSignature(
   node: t.Node | null | undefined,
@@ -3269,11 +2544,7 @@ export function isTSMethodSignature<Opts extends Options<t.TSMethodSignature>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSMethodSignature") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSMethodSignature" && shallowEqualN(node, opts);
 }
 export function isTSIndexSignature(
   node: t.Node | null | undefined,
@@ -3286,11 +2557,7 @@ export function isTSIndexSignature<Opts extends Options<t.TSIndexSignature>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSIndexSignature") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSIndexSignature" && shallowEqualN(node, opts);
 }
 export function isTSAnyKeyword(
   node: t.Node | null | undefined,
@@ -3303,11 +2570,7 @@ export function isTSAnyKeyword<Opts extends Options<t.TSAnyKeyword>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSAnyKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSAnyKeyword" && shallowEqualN(node, opts);
 }
 export function isTSBooleanKeyword(
   node: t.Node | null | undefined,
@@ -3320,11 +2583,7 @@ export function isTSBooleanKeyword<Opts extends Options<t.TSBooleanKeyword>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSBooleanKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSBooleanKeyword" && shallowEqualN(node, opts);
 }
 export function isTSBigIntKeyword(
   node: t.Node | null | undefined,
@@ -3337,11 +2596,7 @@ export function isTSBigIntKeyword<Opts extends Options<t.TSBigIntKeyword>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSBigIntKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSBigIntKeyword" && shallowEqualN(node, opts);
 }
 export function isTSIntrinsicKeyword(
   node: t.Node | null | undefined,
@@ -3355,11 +2610,7 @@ export function isTSIntrinsicKeyword<
 export function isTSIntrinsicKeyword<
   Opts extends Options<t.TSIntrinsicKeyword>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSIntrinsicKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSIntrinsicKeyword" && shallowEqualN(node, opts);
 }
 export function isTSNeverKeyword(
   node: t.Node | null | undefined,
@@ -3372,11 +2623,7 @@ export function isTSNeverKeyword<Opts extends Options<t.TSNeverKeyword>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSNeverKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSNeverKeyword" && shallowEqualN(node, opts);
 }
 export function isTSNullKeyword(
   node: t.Node | null | undefined,
@@ -3389,11 +2636,7 @@ export function isTSNullKeyword<Opts extends Options<t.TSNullKeyword>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSNullKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSNullKeyword" && shallowEqualN(node, opts);
 }
 export function isTSNumberKeyword(
   node: t.Node | null | undefined,
@@ -3406,11 +2649,7 @@ export function isTSNumberKeyword<Opts extends Options<t.TSNumberKeyword>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSNumberKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSNumberKeyword" && shallowEqualN(node, opts);
 }
 export function isTSObjectKeyword(
   node: t.Node | null | undefined,
@@ -3423,11 +2662,7 @@ export function isTSObjectKeyword<Opts extends Options<t.TSObjectKeyword>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSObjectKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSObjectKeyword" && shallowEqualN(node, opts);
 }
 export function isTSStringKeyword(
   node: t.Node | null | undefined,
@@ -3440,11 +2675,7 @@ export function isTSStringKeyword<Opts extends Options<t.TSStringKeyword>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSStringKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSStringKeyword" && shallowEqualN(node, opts);
 }
 export function isTSSymbolKeyword(
   node: t.Node | null | undefined,
@@ -3457,11 +2688,7 @@ export function isTSSymbolKeyword<Opts extends Options<t.TSSymbolKeyword>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSSymbolKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSSymbolKeyword" && shallowEqualN(node, opts);
 }
 export function isTSUndefinedKeyword(
   node: t.Node | null | undefined,
@@ -3475,11 +2702,7 @@ export function isTSUndefinedKeyword<
 export function isTSUndefinedKeyword<
   Opts extends Options<t.TSUndefinedKeyword>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSUndefinedKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSUndefinedKeyword" && shallowEqualN(node, opts);
 }
 export function isTSUnknownKeyword(
   node: t.Node | null | undefined,
@@ -3492,11 +2715,7 @@ export function isTSUnknownKeyword<Opts extends Options<t.TSUnknownKeyword>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSUnknownKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSUnknownKeyword" && shallowEqualN(node, opts);
 }
 export function isTSVoidKeyword(
   node: t.Node | null | undefined,
@@ -3509,11 +2728,7 @@ export function isTSVoidKeyword<Opts extends Options<t.TSVoidKeyword>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSVoidKeyword") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSVoidKeyword" && shallowEqualN(node, opts);
 }
 export function isTSThisType(
   node: t.Node | null | undefined,
@@ -3526,11 +2741,7 @@ export function isTSThisType<Opts extends Options<t.TSThisType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSThisType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSThisType" && shallowEqualN(node, opts);
 }
 export function isTSFunctionType(
   node: t.Node | null | undefined,
@@ -3543,11 +2754,7 @@ export function isTSFunctionType<Opts extends Options<t.TSFunctionType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSFunctionType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSFunctionType" && shallowEqualN(node, opts);
 }
 export function isTSConstructorType(
   node: t.Node | null | undefined,
@@ -3560,11 +2767,7 @@ export function isTSConstructorType<Opts extends Options<t.TSConstructorType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSConstructorType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSConstructorType" && shallowEqualN(node, opts);
 }
 export function isTSTypeReference(
   node: t.Node | null | undefined,
@@ -3577,11 +2780,7 @@ export function isTSTypeReference<Opts extends Options<t.TSTypeReference>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTypeReference") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSTypeReference" && shallowEqualN(node, opts);
 }
 export function isTSTypePredicate(
   node: t.Node | null | undefined,
@@ -3594,11 +2793,7 @@ export function isTSTypePredicate<Opts extends Options<t.TSTypePredicate>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTypePredicate") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSTypePredicate" && shallowEqualN(node, opts);
 }
 export function isTSTypeQuery(
   node: t.Node | null | undefined,
@@ -3611,11 +2806,7 @@ export function isTSTypeQuery<Opts extends Options<t.TSTypeQuery>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTypeQuery") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSTypeQuery" && shallowEqualN(node, opts);
 }
 export function isTSTypeLiteral(
   node: t.Node | null | undefined,
@@ -3628,11 +2819,7 @@ export function isTSTypeLiteral<Opts extends Options<t.TSTypeLiteral>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTypeLiteral") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSTypeLiteral" && shallowEqualN(node, opts);
 }
 export function isTSArrayType(
   node: t.Node | null | undefined,
@@ -3645,11 +2832,7 @@ export function isTSArrayType<Opts extends Options<t.TSArrayType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSArrayType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSArrayType" && shallowEqualN(node, opts);
 }
 export function isTSTupleType(
   node: t.Node | null | undefined,
@@ -3662,11 +2845,7 @@ export function isTSTupleType<Opts extends Options<t.TSTupleType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTupleType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSTupleType" && shallowEqualN(node, opts);
 }
 export function isTSOptionalType(
   node: t.Node | null | undefined,
@@ -3679,11 +2858,7 @@ export function isTSOptionalType<Opts extends Options<t.TSOptionalType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSOptionalType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSOptionalType" && shallowEqualN(node, opts);
 }
 export function isTSRestType(
   node: t.Node | null | undefined,
@@ -3696,11 +2871,7 @@ export function isTSRestType<Opts extends Options<t.TSRestType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSRestType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSRestType" && shallowEqualN(node, opts);
 }
 export function isTSNamedTupleMember(
   node: t.Node | null | undefined,
@@ -3714,11 +2885,7 @@ export function isTSNamedTupleMember<
 export function isTSNamedTupleMember<
   Opts extends Options<t.TSNamedTupleMember>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSNamedTupleMember") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSNamedTupleMember" && shallowEqualN(node, opts);
 }
 export function isTSUnionType(
   node: t.Node | null | undefined,
@@ -3731,11 +2898,7 @@ export function isTSUnionType<Opts extends Options<t.TSUnionType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSUnionType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSUnionType" && shallowEqualN(node, opts);
 }
 export function isTSIntersectionType(
   node: t.Node | null | undefined,
@@ -3749,11 +2912,7 @@ export function isTSIntersectionType<
 export function isTSIntersectionType<
   Opts extends Options<t.TSIntersectionType>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSIntersectionType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSIntersectionType" && shallowEqualN(node, opts);
 }
 export function isTSConditionalType(
   node: t.Node | null | undefined,
@@ -3766,11 +2925,7 @@ export function isTSConditionalType<Opts extends Options<t.TSConditionalType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSConditionalType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSConditionalType" && shallowEqualN(node, opts);
 }
 export function isTSInferType(
   node: t.Node | null | undefined,
@@ -3783,11 +2938,7 @@ export function isTSInferType<Opts extends Options<t.TSInferType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSInferType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSInferType" && shallowEqualN(node, opts);
 }
 export function isTSParenthesizedType(
   node: t.Node | null | undefined,
@@ -3801,11 +2952,7 @@ export function isTSParenthesizedType<
 export function isTSParenthesizedType<
   Opts extends Options<t.TSParenthesizedType>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSParenthesizedType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSParenthesizedType" && shallowEqualN(node, opts);
 }
 export function isTSTypeOperator(
   node: t.Node | null | undefined,
@@ -3818,11 +2965,7 @@ export function isTSTypeOperator<Opts extends Options<t.TSTypeOperator>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTypeOperator") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSTypeOperator" && shallowEqualN(node, opts);
 }
 export function isTSIndexedAccessType(
   node: t.Node | null | undefined,
@@ -3836,11 +2979,7 @@ export function isTSIndexedAccessType<
 export function isTSIndexedAccessType<
   Opts extends Options<t.TSIndexedAccessType>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSIndexedAccessType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSIndexedAccessType" && shallowEqualN(node, opts);
 }
 export function isTSMappedType(
   node: t.Node | null | undefined,
@@ -3853,11 +2992,7 @@ export function isTSMappedType<Opts extends Options<t.TSMappedType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSMappedType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSMappedType" && shallowEqualN(node, opts);
 }
 export function isTSTemplateLiteralType(
   node: t.Node | null | undefined,
@@ -3871,11 +3006,7 @@ export function isTSTemplateLiteralType<
 export function isTSTemplateLiteralType<
   Opts extends Options<t.TSTemplateLiteralType>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTemplateLiteralType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSTemplateLiteralType" && shallowEqualN(node, opts);
 }
 export function isTSLiteralType(
   node: t.Node | null | undefined,
@@ -3888,11 +3019,7 @@ export function isTSLiteralType<Opts extends Options<t.TSLiteralType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSLiteralType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSLiteralType" && shallowEqualN(node, opts);
 }
 export function isTSClassImplements(
   node: t.Node | null | undefined,
@@ -3905,11 +3032,7 @@ export function isTSClassImplements<Opts extends Options<t.TSClassImplements>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSClassImplements") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSClassImplements" && shallowEqualN(node, opts);
 }
 export function isTSInterfaceHeritage(
   node: t.Node | null | undefined,
@@ -3923,11 +3046,7 @@ export function isTSInterfaceHeritage<
 export function isTSInterfaceHeritage<
   Opts extends Options<t.TSInterfaceHeritage>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSInterfaceHeritage") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSInterfaceHeritage" && shallowEqualN(node, opts);
 }
 export function isTSInterfaceDeclaration(
   node: t.Node | null | undefined,
@@ -3941,11 +3060,7 @@ export function isTSInterfaceDeclaration<
 export function isTSInterfaceDeclaration<
   Opts extends Options<t.TSInterfaceDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSInterfaceDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSInterfaceDeclaration" && shallowEqualN(node, opts);
 }
 export function isTSInterfaceBody(
   node: t.Node | null | undefined,
@@ -3958,11 +3073,7 @@ export function isTSInterfaceBody<Opts extends Options<t.TSInterfaceBody>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSInterfaceBody") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSInterfaceBody" && shallowEqualN(node, opts);
 }
 export function isTSTypeAliasDeclaration(
   node: t.Node | null | undefined,
@@ -3976,11 +3087,7 @@ export function isTSTypeAliasDeclaration<
 export function isTSTypeAliasDeclaration<
   Opts extends Options<t.TSTypeAliasDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTypeAliasDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSTypeAliasDeclaration" && shallowEqualN(node, opts);
 }
 export function isTSInstantiationExpression(
   node: t.Node | null | undefined,
@@ -3994,11 +3101,9 @@ export function isTSInstantiationExpression<
 export function isTSInstantiationExpression<
   Opts extends Options<t.TSInstantiationExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSInstantiationExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "TSInstantiationExpression" && shallowEqualN(node, opts)
+  );
 }
 export function isTSAsExpression(
   node: t.Node | null | undefined,
@@ -4011,11 +3116,7 @@ export function isTSAsExpression<Opts extends Options<t.TSAsExpression>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSAsExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSAsExpression" && shallowEqualN(node, opts);
 }
 export function isTSSatisfiesExpression(
   node: t.Node | null | undefined,
@@ -4029,11 +3130,7 @@ export function isTSSatisfiesExpression<
 export function isTSSatisfiesExpression<
   Opts extends Options<t.TSSatisfiesExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSSatisfiesExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSSatisfiesExpression" && shallowEqualN(node, opts);
 }
 export function isTSTypeAssertion(
   node: t.Node | null | undefined,
@@ -4046,11 +3143,7 @@ export function isTSTypeAssertion<Opts extends Options<t.TSTypeAssertion>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTypeAssertion") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSTypeAssertion" && shallowEqualN(node, opts);
 }
 export function isTSEnumBody(
   node: t.Node | null | undefined,
@@ -4063,11 +3156,7 @@ export function isTSEnumBody<Opts extends Options<t.TSEnumBody>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSEnumBody") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSEnumBody" && shallowEqualN(node, opts);
 }
 export function isTSEnumDeclaration(
   node: t.Node | null | undefined,
@@ -4080,11 +3169,7 @@ export function isTSEnumDeclaration<Opts extends Options<t.TSEnumDeclaration>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSEnumDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSEnumDeclaration" && shallowEqualN(node, opts);
 }
 export function isTSEnumMember(
   node: t.Node | null | undefined,
@@ -4097,11 +3182,7 @@ export function isTSEnumMember<Opts extends Options<t.TSEnumMember>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSEnumMember") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSEnumMember" && shallowEqualN(node, opts);
 }
 export function isTSModuleDeclaration(
   node: t.Node | null | undefined,
@@ -4115,11 +3196,7 @@ export function isTSModuleDeclaration<
 export function isTSModuleDeclaration<
   Opts extends Options<t.TSModuleDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSModuleDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSModuleDeclaration" && shallowEqualN(node, opts);
 }
 export function isTSModuleBlock(
   node: t.Node | null | undefined,
@@ -4132,11 +3209,7 @@ export function isTSModuleBlock<Opts extends Options<t.TSModuleBlock>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSModuleBlock") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSModuleBlock" && shallowEqualN(node, opts);
 }
 export function isTSImportType(
   node: t.Node | null | undefined,
@@ -4149,11 +3222,7 @@ export function isTSImportType<Opts extends Options<t.TSImportType>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSImportType") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSImportType" && shallowEqualN(node, opts);
 }
 export function isTSImportEqualsDeclaration(
   node: t.Node | null | undefined,
@@ -4167,11 +3236,9 @@ export function isTSImportEqualsDeclaration<
 export function isTSImportEqualsDeclaration<
   Opts extends Options<t.TSImportEqualsDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSImportEqualsDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "TSImportEqualsDeclaration" && shallowEqualN(node, opts)
+  );
 }
 export function isTSExternalModuleReference(
   node: t.Node | null | undefined,
@@ -4185,11 +3252,9 @@ export function isTSExternalModuleReference<
 export function isTSExternalModuleReference<
   Opts extends Options<t.TSExternalModuleReference>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSExternalModuleReference") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "TSExternalModuleReference" && shallowEqualN(node, opts)
+  );
 }
 export function isTSNonNullExpression(
   node: t.Node | null | undefined,
@@ -4203,11 +3268,7 @@ export function isTSNonNullExpression<
 export function isTSNonNullExpression<
   Opts extends Options<t.TSNonNullExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSNonNullExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSNonNullExpression" && shallowEqualN(node, opts);
 }
 export function isTSExportAssignment(
   node: t.Node | null | undefined,
@@ -4221,11 +3282,7 @@ export function isTSExportAssignment<
 export function isTSExportAssignment<
   Opts extends Options<t.TSExportAssignment>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSExportAssignment") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSExportAssignment" && shallowEqualN(node, opts);
 }
 export function isTSNamespaceExportDeclaration(
   node: t.Node | null | undefined,
@@ -4239,11 +3296,9 @@ export function isTSNamespaceExportDeclaration<
 export function isTSNamespaceExportDeclaration<
   Opts extends Options<t.TSNamespaceExportDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSNamespaceExportDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "TSNamespaceExportDeclaration" && shallowEqualN(node, opts)
+  );
 }
 export function isTSTypeAnnotation(
   node: t.Node | null | undefined,
@@ -4256,11 +3311,7 @@ export function isTSTypeAnnotation<Opts extends Options<t.TSTypeAnnotation>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTypeAnnotation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSTypeAnnotation" && shallowEqualN(node, opts);
 }
 export function isTSTypeParameterInstantiation(
   node: t.Node | null | undefined,
@@ -4274,11 +3325,9 @@ export function isTSTypeParameterInstantiation<
 export function isTSTypeParameterInstantiation<
   Opts extends Options<t.TSTypeParameterInstantiation>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTypeParameterInstantiation") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "TSTypeParameterInstantiation" && shallowEqualN(node, opts)
+  );
 }
 export function isTSTypeParameterDeclaration(
   node: t.Node | null | undefined,
@@ -4292,11 +3341,9 @@ export function isTSTypeParameterDeclaration<
 export function isTSTypeParameterDeclaration<
   Opts extends Options<t.TSTypeParameterDeclaration>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTypeParameterDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return (
+    node?.type === "TSTypeParameterDeclaration" && shallowEqualN(node, opts)
+  );
 }
 export function isTSTypeParameter(
   node: t.Node | null | undefined,
@@ -4309,11 +3356,7 @@ export function isTSTypeParameter<Opts extends Options<t.TSTypeParameter>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "TSTypeParameter") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "TSTypeParameter" && shallowEqualN(node, opts);
 }
 export function isStandardized(
   node: t.Node | null | undefined,
@@ -4433,7 +3476,7 @@ export function isStandardized<Opts extends Options<t.Standardized>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isExpression(
   node: t.Node | null | undefined,
@@ -4508,7 +3551,7 @@ export function isExpression<Opts extends Options<t.Expression>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isBinary(node: t.Node | null | undefined): node is t.Binary;
 export function isBinary<Opts extends Options<t.Binary>>(
@@ -4529,7 +3572,7 @@ export function isBinary<Opts extends Options<t.Binary>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isScopable(node: t.Node | null | undefined): node is t.Scopable;
 export function isScopable<Opts extends Options<t.Scopable>>(
@@ -4569,7 +3612,7 @@ export function isScopable<Opts extends Options<t.Scopable>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isBlockParent(
   node: t.Node | null | undefined,
@@ -4609,7 +3652,7 @@ export function isBlockParent<Opts extends Options<t.BlockParent>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isBlock(node: t.Node | null | undefined): node is t.Block;
 export function isBlock<Opts extends Options<t.Block>>(
@@ -4633,7 +3676,7 @@ export function isBlock<Opts extends Options<t.Block>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isStatement(
   node: t.Node | null | undefined,
@@ -4711,7 +3754,7 @@ export function isStatement<Opts extends Options<t.Statement>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isTerminatorless(
   node: t.Node | null | undefined,
@@ -4738,7 +3781,7 @@ export function isTerminatorless<Opts extends Options<t.Terminatorless>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isCompletionStatement(
   node: t.Node | null | undefined,
@@ -4764,7 +3807,7 @@ export function isCompletionStatement<
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isConditional(
   node: t.Node | null | undefined,
@@ -4787,7 +3830,7 @@ export function isConditional<Opts extends Options<t.Conditional>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isLoop(node: t.Node | null | undefined): node is t.Loop;
 export function isLoop<Opts extends Options<t.Loop>>(
@@ -4811,7 +3854,7 @@ export function isLoop<Opts extends Options<t.Loop>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isWhile(node: t.Node | null | undefined): node is t.While;
 export function isWhile<Opts extends Options<t.While>>(
@@ -4832,7 +3875,7 @@ export function isWhile<Opts extends Options<t.While>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isExpressionWrapper(
   node: t.Node | null | undefined,
@@ -4856,7 +3899,7 @@ export function isExpressionWrapper<Opts extends Options<t.ExpressionWrapper>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isFor(node: t.Node | null | undefined): node is t.For;
 export function isFor<Opts extends Options<t.For>>(
@@ -4878,7 +3921,7 @@ export function isFor<Opts extends Options<t.For>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isForXStatement(
   node: t.Node | null | undefined,
@@ -4901,7 +3944,7 @@ export function isForXStatement<Opts extends Options<t.ForXStatement>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isFunction(node: t.Node | null | undefined): node is t.Function;
 export function isFunction<Opts extends Options<t.Function>>(
@@ -4926,7 +3969,7 @@ export function isFunction<Opts extends Options<t.Function>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isFunctionParent(
   node: t.Node | null | undefined,
@@ -4955,7 +3998,7 @@ export function isFunctionParent<Opts extends Options<t.FunctionParent>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isPureish(node: t.Node | null | undefined): node is t.Pureish;
 export function isPureish<Opts extends Options<t.Pureish>>(
@@ -4985,7 +4028,7 @@ export function isPureish<Opts extends Options<t.Pureish>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isDeclaration(
   node: t.Node | null | undefined,
@@ -5035,7 +4078,7 @@ export function isDeclaration<Opts extends Options<t.Declaration>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isFunctionParameter(
   node: t.Node | null | undefined,
@@ -5064,7 +4107,7 @@ export function isFunctionParameter<Opts extends Options<t.FunctionParameter>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isPatternLike(
   node: t.Node | null | undefined,
@@ -5105,7 +4148,7 @@ export function isPatternLike<Opts extends Options<t.PatternLike>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isLVal(node: t.Node | null | undefined): node is t.LVal;
 export function isLVal<Opts extends Options<t.LVal>>(
@@ -5141,7 +4184,7 @@ export function isLVal<Opts extends Options<t.LVal>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isTSEntityName(
   node: t.Node | null | undefined,
@@ -5167,7 +4210,7 @@ export function isTSEntityName<Opts extends Options<t.TSEntityName>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isLiteral(node: t.Node | null | undefined): node is t.Literal;
 export function isLiteral<Opts extends Options<t.Literal>>(
@@ -5195,7 +4238,7 @@ export function isLiteral<Opts extends Options<t.Literal>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isImmutable(
   node: t.Node | null | undefined,
@@ -5233,7 +4276,7 @@ export function isImmutable<Opts extends Options<t.Immutable>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isUserWhitespacable(
   node: t.Node | null | undefined,
@@ -5261,7 +4304,7 @@ export function isUserWhitespacable<Opts extends Options<t.UserWhitespacable>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isMethod(node: t.Node | null | undefined): node is t.Method;
 export function isMethod<Opts extends Options<t.Method>>(
@@ -5283,7 +4326,7 @@ export function isMethod<Opts extends Options<t.Method>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isObjectMember(
   node: t.Node | null | undefined,
@@ -5306,7 +4349,7 @@ export function isObjectMember<Opts extends Options<t.ObjectMember>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isProperty(node: t.Node | null | undefined): node is t.Property;
 export function isProperty<Opts extends Options<t.Property>>(
@@ -5329,7 +4372,7 @@ export function isProperty<Opts extends Options<t.Property>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isUnaryLike(
   node: t.Node | null | undefined,
@@ -5352,7 +4395,7 @@ export function isUnaryLike<Opts extends Options<t.UnaryLike>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isPattern(node: t.Node | null | undefined): node is t.Pattern;
 export function isPattern<Opts extends Options<t.Pattern>>(
@@ -5377,7 +4420,7 @@ export function isPattern<Opts extends Options<t.Pattern>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isClass(node: t.Node | null | undefined): node is t.Class;
 export function isClass<Opts extends Options<t.Class>>(
@@ -5398,7 +4441,7 @@ export function isClass<Opts extends Options<t.Class>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isImportOrExportDeclaration(
   node: t.Node | null | undefined,
@@ -5424,7 +4467,7 @@ export function isImportOrExportDeclaration<
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isExportDeclaration(
   node: t.Node | null | undefined,
@@ -5448,7 +4491,7 @@ export function isExportDeclaration<Opts extends Options<t.ExportDeclaration>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isModuleSpecifier(
   node: t.Node | null | undefined,
@@ -5475,7 +4518,7 @@ export function isModuleSpecifier<Opts extends Options<t.ModuleSpecifier>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isPrivate(node: t.Node | null | undefined): node is t.Private;
 export function isPrivate<Opts extends Options<t.Private>>(
@@ -5497,7 +4540,7 @@ export function isPrivate<Opts extends Options<t.Private>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isFlow(node: t.Node | null | undefined): node is t.Flow;
 export function isFlow<Opts extends Options<t.Flow>>(
@@ -5582,7 +4625,7 @@ export function isFlow<Opts extends Options<t.Flow>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isFlowType(node: t.Node | null | undefined): node is t.FlowType;
 export function isFlowType<Opts extends Options<t.FlowType>>(
@@ -5628,7 +4671,7 @@ export function isFlowType<Opts extends Options<t.FlowType>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isFlowBaseAnnotation(
   node: t.Node | null | undefined,
@@ -5660,7 +4703,7 @@ export function isFlowBaseAnnotation<
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isFlowDeclaration(
   node: t.Node | null | undefined,
@@ -5694,7 +4737,7 @@ export function isFlowDeclaration<Opts extends Options<t.FlowDeclaration>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isFlowPredicate(
   node: t.Node | null | undefined,
@@ -5717,7 +4760,7 @@ export function isFlowPredicate<Opts extends Options<t.FlowPredicate>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isEnumBody(node: t.Node | null | undefined): node is t.EnumBody;
 export function isEnumBody<Opts extends Options<t.EnumBody>>(
@@ -5740,7 +4783,7 @@ export function isEnumBody<Opts extends Options<t.EnumBody>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isEnumMember(
   node: t.Node | null | undefined,
@@ -5765,7 +4808,7 @@ export function isEnumMember<Opts extends Options<t.EnumMember>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isJSX(node: t.Node | null | undefined): node is t.JSX;
 export function isJSX<Opts extends Options<t.JSX>>(
@@ -5799,7 +4842,7 @@ export function isJSX<Opts extends Options<t.JSX>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isMiscellaneous(
   node: t.Node | null | undefined,
@@ -5822,7 +4865,7 @@ export function isMiscellaneous<Opts extends Options<t.Miscellaneous>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isAccessor(node: t.Node | null | undefined): node is t.Accessor;
 export function isAccessor<Opts extends Options<t.Accessor>>(
@@ -5842,7 +4885,7 @@ export function isAccessor<Opts extends Options<t.Accessor>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isTypeScript(
   node: t.Node | null | undefined,
@@ -5931,7 +4974,7 @@ export function isTypeScript<Opts extends Options<t.TypeScript>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isTSTypeElement(
   node: t.Node | null | undefined,
@@ -5957,7 +5000,7 @@ export function isTSTypeElement<Opts extends Options<t.TSTypeElement>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isTSType(node: t.Node | null | undefined): node is t.TSType;
 export function isTSType<Opts extends Options<t.TSType>>(
@@ -6013,7 +5056,7 @@ export function isTSType<Opts extends Options<t.TSType>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 export function isTSBaseType(
   node: t.Node | null | undefined,
@@ -6050,7 +5093,7 @@ export function isTSBaseType<Opts extends Options<t.TSBaseType>>(
       return false;
   }
 
-  return opts == null || shallowEqual(node, opts);
+  return shallowEqualN(node, opts);
 }
 /**
  * @deprecated Use `isNumericLiteral`
@@ -6065,11 +5108,8 @@ export function isNumberLiteral<Opts extends Options<t.NumberLiteral>>(
   opts?: Opts | null,
 ): boolean {
   deprecationWarning("isNumberLiteral", "isNumericLiteral");
-  if (!node) return false;
 
-  if (node.type !== "NumberLiteral") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "NumberLiteral" && shallowEqualN(node, opts);
 }
 /**
  * @deprecated Use `isRegExpLiteral`
@@ -6084,11 +5124,8 @@ export function isRegexLiteral<Opts extends Options<t.RegexLiteral>>(
   opts?: Opts | null,
 ): boolean {
   deprecationWarning("isRegexLiteral", "isRegExpLiteral");
-  if (!node) return false;
 
-  if (node.type !== "RegexLiteral") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "RegexLiteral" && shallowEqualN(node, opts);
 }
 /**
  * @deprecated Use `isRestElement`
@@ -6103,11 +5140,8 @@ export function isRestProperty<Opts extends Options<t.RestProperty>>(
   opts?: Opts | null,
 ): boolean {
   deprecationWarning("isRestProperty", "isRestElement");
-  if (!node) return false;
 
-  if (node.type !== "RestProperty") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "RestProperty" && shallowEqualN(node, opts);
 }
 /**
  * @deprecated Use `isSpreadElement`
@@ -6122,11 +5156,8 @@ export function isSpreadProperty<Opts extends Options<t.SpreadProperty>>(
   opts?: Opts | null,
 ): boolean {
   deprecationWarning("isSpreadProperty", "isSpreadElement");
-  if (!node) return false;
 
-  if (node.type !== "SpreadProperty") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return node?.type === "SpreadProperty" && shallowEqualN(node, opts);
 }
 /**
  * @deprecated Use `isImportOrExportDeclaration`

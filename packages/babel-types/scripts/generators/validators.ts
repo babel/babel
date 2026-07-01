@@ -61,24 +61,25 @@ function addIsHelper(
     // Signature overload to avoid issues like https://github.com/babel/babel/pull/17503#discussion_r2325598609
     `export function is${type}(node: t.Node | null | undefined): ${result};`,
     `export function is${type}<Opts extends Options<t.${type}>>(node: t.Node | null | undefined, opts?: Opts | null): ${resultWithOpts};`,
-    `export function is${type}<Opts extends Options<t.${type}>>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-    ${deprecatedWarning || ""}
-    if (!node) return false;
+    `export function is${type}<Opts extends Options<t.${type}>>(node: t.Node | null | undefined, opts?: Opts | null): boolean {`,
+    deprecatedWarning || "",
+    cases
+      ? `
+  if (!node) return false;
 
-    ${
-      cases
-        ? `
-          switch(node.type){
-            ${cases}
-            default:
-              return false;
-          }`
-        : `if (node.type !== ${targetType}) return false;`
-    }
-
-    return opts == null || shallowEqual(node, opts);
+  switch(node.type){
+    ${cases}
+    default:
+      return false;
   }
+
+  return shallowEqualN(node, opts);
+    `
+      : `
+  return node?.type === ${targetType} && shallowEqualN(node, opts);
   `,
+    "}",
+    "",
   ].join("\n");
 }
 
@@ -90,7 +91,7 @@ export default function generateValidators() {
 
   /* eslint-disable no-fallthrough */
 
-import shallowEqual from "../../utils/shallowEqual.ts";
+import shallowEqualN from "../../utils/shallowEqualN.ts";
 import type * as t from "../../index.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
 
