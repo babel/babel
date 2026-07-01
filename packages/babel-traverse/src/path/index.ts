@@ -76,7 +76,6 @@ const NodePath_Final = class NodePath {
   declare context: TraversalContext;
   declare scope: Scope;
 
-  contexts: TraversalContext[] = [];
   state: any = null;
   declare opts: TraverseOptions & ExplodedVisitor;
 
