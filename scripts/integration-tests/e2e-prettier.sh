@@ -51,6 +51,9 @@ rm tests/format/js/import-assertions/bracket-spacing/format.test.js
 
 rm tests/format/typescript/conformance/classes/constructorDeclarations/constructorParameters/constructorOverloadsWithDefaultValues.ts
 
+# https://github.com/babel/babel/pull/18100
+rm -r tests/format/typescript/definite
+
 # Test typings for @babel/parser
 yarn lint:typecheck
 

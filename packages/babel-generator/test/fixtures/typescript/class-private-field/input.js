@@ -1,6 +1,6 @@
 class A {
   readonly #foo;
   static readonly #bar: string;
-  #baz!;
+  #baz!: string;
   #asd?: string;
 }

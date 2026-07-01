@@ -89,6 +89,10 @@ export const TSErrorTemplates = {
     "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.",
   ConstructorHasTypeParameters:
     "Type parameters cannot appear on a constructor declaration.",
+  DeclaratorDefiniteAssertionRequiresTypeAnnotation:
+    "Declarations with definite assignment assertions must also have type annotations.",
+  DeclaratorDefiniteAssertionWithInitializer:
+    "Declarations with initializers cannot also have definite assignment assertions.",
   DeclareAccessor: ({ kind }: { kind: "get" | "set" }) =>
     `'declare' is not allowed in ${kind}ters.`,
   DeclareClassFieldHasInitializer:
@@ -3057,10 +3061,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         allowMissingInitializer || isAmbientContext,
       );
 
-      if (!isAmbientContext) return declaration;
-
       // If node.declare is true, the error has already been raised in tsTryParseDeclare.
-      if (!node.declare && (kind === "using" || kind === "await using")) {
+      if (
+        isAmbientContext &&
+        !node.declare &&
+        (kind === "using" || kind === "await using")
+      ) {
         this.raiseOverwrite(
           TSErrors.UsingDeclarationInAmbientContext,
           node,
@@ -3069,21 +3075,33 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         return declaration;
       }
 
-      for (const { id, init } of declaration.declarations) {
-        // Empty initializer is the easy case that we want.
-        if (!init) continue;
+      for (const declarator of declaration.declarations) {
+        const { id, init, definite } = declarator;
+        if (definite) {
+          if (init) {
+            this.raise(TSErrors.DeclaratorDefiniteAssertionWithInitializer, id);
+            // @ts-expect-error typeAnnotation is not defined on VoidPattern
+          } else if (!id.typeAnnotation) {
+            this.raise(
+              TSErrors.DeclaratorDefiniteAssertionRequiresTypeAnnotation,
+              id,
+            );
+          }
+        }
 
-        // var and let aren't ever allowed initializers.
-        // @ts-expect-error typeAnnotation is not defined on VoidPattern
-        if (kind === "var" || kind === "let" || !!id.typeAnnotation) {
-          this.raise(TSErrors.InitializerNotAllowedInAmbientContext, init);
-        } else if (
-          !isValidAmbientConstInitializer(init, this.hasPlugin("estree"))
-        ) {
-          this.raise(
-            TSErrors.ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference,
-            init,
-          );
+        if (isAmbientContext && init) {
+          // var and let aren't ever allowed initializers.
+          // @ts-expect-error typeAnnotation is not defined on VoidPattern
+          if (kind === "var" || kind === "let" || !!id.typeAnnotation) {
+            this.raise(TSErrors.InitializerNotAllowedInAmbientContext, init);
+          } else if (
+            !isValidAmbientConstInitializer(init, this.hasPlugin("estree"))
+          ) {
+            this.raise(
+              TSErrors.ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference,
+              init,
+            );
+          }
         }
       }
 
@@ -3546,6 +3564,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       const type = this.tsTryParseTypeAnnotation();
       if (type) node.typeAnnotation = type;
+      if (node.definite) {
+        if (this.match(tt.eq)) {
+          this.raise(TSErrors.DeclaratorDefiniteAssertionWithInitializer, node);
+        } else if (!type) {
+          this.raise(
+            TSErrors.DeclaratorDefiniteAssertionRequiresTypeAnnotation,
+            node,
+          );
+        }
+      }
     }
 
     parseClassProperty(node: Undone<N.ClassProperty>): N.ClassProperty {

@@ -1,3 +1,3 @@
 class A {
-  x!;
+  x!: number;
 }
