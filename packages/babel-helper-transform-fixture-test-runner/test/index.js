@@ -1,10 +1,15 @@
-import { runCodeInTestContext } from "../lib/index.js";
+import {
+  runCodeInTestContext,
+  createTestContext,
+  runCode,
+} from "../lib/index.js";
 import { fileURLToPath } from "node:url";
 
 const filename = fileURLToPath(import.meta.url);
 
 describe("helper-transform-fixture-test-runner", function () {
   it("should not execute code in Node's global context", function () {
+    const ctx = createTestContext();
     try {
       global.foo = "outer";
       runCodeInTestContext(
@@ -15,6 +20,7 @@ describe("helper-transform-fixture-test-runner", function () {
         {
           filename: `${filename}.fake1`,
         },
+        ctx,
       );
 
       expect(global.foo).toBe("outer");
@@ -25,6 +31,7 @@ describe("helper-transform-fixture-test-runner", function () {
         {
           filename: `${filename}.fake2`,
         },
+        ctx,
       );
     } finally {
       delete global.foo;
@@ -35,6 +42,7 @@ describe("helper-transform-fixture-test-runner", function () {
         {
           filename: `${filename}.fake3`,
         },
+        ctx,
       );
     }
   });
@@ -45,7 +53,7 @@ describe("helper-transform-fixture-test-runner", function () {
     };
     let err;
     try {
-      runCodeInTestContext(`throw new Error()`, opts);
+      runCode(`throw new Error()`, opts);
     } catch (error) {
       err = error;
     }
@@ -54,7 +62,7 @@ describe("helper-transform-fixture-test-runner", function () {
 
   it("should stop when infinite loop", () => {
     expect(() => {
-      runCodeInTestContext(`while (true) {}`, {
+      runCode(`while (true) {}`, {
         filename: `${filename}.fake5`,
         timeout: 500,
       });

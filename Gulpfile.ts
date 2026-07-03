@@ -842,10 +842,6 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
   const extraPackagesEntries = new Map<string, string[]>([
     ["babel-build-external-helpers", ["./lib/babel-build-external-helpers.js"]],
     ["babel-cli", ["./lib/babel/index.js"]],
-    [
-      "babel-helper-transform-fixture-test-runner",
-      ["./lib/babel-helpers-in-memory.js", "./lib/exit-loader.cjs"],
-    ],
     ["babel-node", ["./lib/babel-node.js", "./lib/_babel-node.js"]],
     ["babel-register", ["./lib/worker/index.js"]],
     ["babel-eslint-parser", ["./lib/worker/index.js"]],
@@ -863,6 +859,8 @@ function* libBundlesIterator(): IterableIterator<PackageInfo> {
     // Many entry points
     "babel-runtime",
     "babel-runtime-corejs3",
+    // Rollup handles `worker.cts` very cumbersomely
+    "babel-helper-transform-fixture-test-runner",
   ]);
   for (const src of packagesIterator(noBundle)) {
     const pkgJSON = JSON.parse(
