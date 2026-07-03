@@ -2,15 +2,15 @@
 
 Using targets:
 {
-  "android": "143",
+  "android": "148",
   "chrome": "109",
-  "edge": "142",
+  "edge": "147",
   "firefox": "140",
   "ios": "18.5",
-  "opera": "124",
+  "opera": "127",
   "opera_mobile": "80",
-  "safari": "26.1",
-  "samsung": "28"
+  "safari": "26.3",
+  "samsung": "29"
 }
 
 Using modules transform: auto
