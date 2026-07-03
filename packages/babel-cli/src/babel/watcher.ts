@@ -1,6 +1,5 @@
-import { createRequire } from "node:module";
 import path from "node:path";
-import type { WatchOptions, FSWatcher } from "chokidar";
+import { type ChokidarOptions, FSWatcher } from "chokidar";
 
 const fileToDeps = new Map<string, Set<string>>();
 const depToFiles = new Map<string, Set<string>>();
@@ -10,13 +9,10 @@ let watcher: FSWatcher;
 const watchQueue = new Set<string>();
 let hasStarted = false;
 
-export function enable({ enableGlobbing }: { enableGlobbing: boolean }) {
+export function enable() {
   isWatchMode = true;
 
-  const { FSWatcher } = requireChokidar();
-
-  const options: WatchOptions = {
-    disableGlobbing: !enableGlobbing,
+  const options: ChokidarOptions = {
     persistent: true,
     ignoreInitial: true,
     awaitWriteFinish: {
@@ -145,18 +141,4 @@ function unwatchFile(filename: string) {
     removeFileDependency(filename, dep);
   }
   fileToDeps.delete(filename);
-}
-
-function requireChokidar(): any {
-  const require = createRequire(import.meta.url);
-
-  try {
-    return require("chokidar");
-  } catch (err) {
-    console.error(
-      "The optional dependency chokidar failed to install and is required for " +
-        "--watch. Chokidar is likely not supported on your platform.",
-    );
-    throw err;
-  }
 }
