@@ -360,8 +360,19 @@ function _evaluate(path: NodePath, state: State): any {
         return;
       }
       value = value.value;
-      // @ts-expect-error key is any type
-      obj[key] = value;
+      if (prop.node.computed && key === "__proto__") {
+        // A computed `{ ["__proto__"]: value }` defines an own property and
+        // does not set the prototype, unlike `{ __proto__: value }`.
+        Object.defineProperty(obj, key, {
+          value,
+          configurable: true,
+          enumerable: true,
+          writable: true,
+        });
+      } else {
+        // @ts-expect-error key is any type
+        obj[key] = value;
+      }
     }
     return obj;
   }

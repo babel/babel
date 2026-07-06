@@ -468,6 +468,28 @@ describe("evaluation", function () {
     expect(evalResult.value).toBe(1);
   });
 
+  it("should evaluate a computed __proto__ key as an own property", function () {
+    const computed = getPath("({ ['__proto__']: { polluted: true } });")
+      .get("body.0.expression")
+      .evaluate();
+    expect(computed.confident).toBe(true);
+    expect(Object.getPrototypeOf(computed.value)).toBe(Object.prototype);
+    expect(Object.hasOwn(computed.value, "__proto__")).toBe(true);
+    expect(computed.value.polluted).toBeUndefined();
+  });
+
+  it("should evaluate a plain __proto__ key as a prototype", function () {
+    for (const code of [
+      "({ __proto__: { polluted: true } });",
+      "({ '__proto__': { polluted: true } });",
+    ]) {
+      const evalResult = getPath(code).get("body.0.expression").evaluate();
+      expect(evalResult.confident).toBe(true);
+      expect(Object.hasOwn(evalResult.value, "__proto__")).toBe(false);
+      expect(evalResult.value.polluted).toBe(true);
+    }
+  });
+
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
