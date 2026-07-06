@@ -1,0 +1,97 @@
+{
+  "type": "File",
+  "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":55}},
+  "errors": [
+    "SyntaxError: Declarations with definite assignment assertions must also have type annotations. (2:2)",
+    "SyntaxError: Declarations with definite assignment assertions must also have type annotations. (3:2)",
+    "SyntaxError: Declarations with definite assignment assertions must also have type annotations. (4:2)",
+    "SyntaxError: Declarations with definite assignment assertions must also have type annotations. (5:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":55}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":55}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":55,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":6,"column":1,"index":55}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":12,"end":15,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":5,"index":15}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":12,"end":13,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":3,"index":13},"identifierName":"x"},
+                "name": "x"
+              },
+              "computed": false,
+              "definite": true,
+              "value": null
+            },
+            {
+              "type": "ClassPrivateProperty",
+              "start":18,"end":22,"loc":{"start":{"line":3,"column":2,"index":18},"end":{"line":3,"column":6,"index":22}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":18,"end":20,"loc":{"start":{"line":3,"column":2,"index":18},"end":{"line":3,"column":4,"index":20}},
+                "id": {
+                  "type": "Identifier",
+                  "start":19,"end":20,"loc":{"start":{"line":3,"column":3,"index":19},"end":{"line":3,"column":4,"index":20},"identifierName":"x"},
+                  "name": "x"
+                }
+              },
+              "definite": true,
+              "value": null
+            },
+            {
+              "type": "ClassAccessorProperty",
+              "start":25,"end":37,"loc":{"start":{"line":4,"column":2,"index":25},"end":{"line":4,"column":14,"index":37}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":34,"end":35,"loc":{"start":{"line":4,"column":11,"index":34},"end":{"line":4,"column":12,"index":35},"identifierName":"a"},
+                "name": "a"
+              },
+              "computed": false,
+              "definite": true,
+              "value": null
+            },
+            {
+              "type": "ClassAccessorProperty",
+              "start":40,"end":53,"loc":{"start":{"line":5,"column":2,"index":40},"end":{"line":5,"column":15,"index":53}},
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start":49,"end":51,"loc":{"start":{"line":5,"column":11,"index":49},"end":{"line":5,"column":13,"index":51}},
+                "id": {
+                  "type": "Identifier",
+                  "start":50,"end":51,"loc":{"start":{"line":5,"column":12,"index":50},"end":{"line":5,"column":13,"index":51},"identifierName":"a"},
+                  "name": "a"
+                }
+              },
+              "computed": false,
+              "definite": true,
+              "value": null
+            }
+          ]
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

@@ -2,6 +2,7 @@
   "type": "File",
   "start":0,"end":239,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":15,"column":1,"index":239}},
   "errors": [
+    "SyntaxError: Declarations with definite assignment assertions must also have type annotations. (5:2)",
     "SyntaxError: An 'accessor' property cannot be declared optional. (7:2)"
   ],
   "program": {

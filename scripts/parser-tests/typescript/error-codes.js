@@ -93,6 +93,8 @@ export default [
   "TS1247", // A type literal property cannot have an initializer.
   "TS1248", // A class member cannot have the 'const' keyword.
   "TS1260", // Keywords cannot contain escape characters.
+  "TS1263", // Declarations with initializers cannot also have definite assignment assertions.
+  "TS1264", // Declarations with definite assignment assertions must also have type annotations.
   "TS1308", // 'await' expression is only allowed within an async function.
   "TS1312", // '=' can only be used in an object literal property inside a destructuring assignment.
   "TS1317", // A parameter property cannot be declared using a rest parameter.
