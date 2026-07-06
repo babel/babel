@@ -116,6 +116,7 @@ export const TSErrorTemplates = {
   // https://github.com/microsoft/TypeScript/blob/main/src/compiler/types.ts#L2915
   EmptyHeritageClauseType: ({ token }: { token: "extends" | "implements" }) =>
     `'${token}' list cannot be empty.`,
+  EmptyNamespaceName: "Namespace must be given a name.",
   EmptyTypeArguments: "Type argument list cannot be empty.",
   EmptyTypeParameters: "Type parameter list cannot be empty.",
   ExpectedAmbientAfterExportDeclare:
@@ -173,6 +174,8 @@ export const TSErrorTemplates = {
     orderedModifiers: [TsModifier, TsModifier];
   }) =>
     `'${orderedModifiers[0]}' modifier must precede '${orderedModifiers[1]}' modifier.`,
+  InvalidNamespaceName: (value: string | number) =>
+    `Namespace name cannot be '${value}'.`,
   InvalidPropertyAccessAfterInstantiationExpression:
     "Invalid property access after an instantiation expression. " +
     "You can either wrap the instantiation expression in parentheses, or delete the type arguments.",
@@ -2096,7 +2099,22 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.id = this.parseIdentifier();
       } else {
         node.kind = "module";
-        node.id = super.parseStringLiteral(this.state.value);
+        const { type, value } = this.state;
+        if (type === tt.string) {
+          node.id = super.parseStringLiteral(value);
+        } else if (tokenIsIdentifier(type)) {
+          this.raise(
+            TSErrors.InlineModuleDeclarationMustUseString,
+            this.state.startLoc,
+          );
+          node.id = this.tsParseEntityName(tsParseEntityNameFlags.NONE);
+        } else if (type === tt.braceL) {
+          this.raise(TSErrors.EmptyNamespaceName, this.state.startLoc);
+        } else {
+          this.raise(TSErrors.InvalidNamespaceName, this.state.startLoc, value);
+          // @ts-expect-error Parse as an expression atom to recover from the error
+          node.id = super.parseExprAtom();
+        }
       }
       if (this.match(tt.braceL)) {
         if (!isGlobal) {

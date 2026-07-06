@@ -32,7 +32,7 @@
 - [umdNamespaceMergedWithGlobalAugmentationIsNotCircular.ts](../../../build/typescript/tests/cases/compiler/umdNamespaceMergedWithGlobalAugmentationIsNotCircular.ts) <!-- TS checks duplicate identifiers across related files, but babel-parser handles them separately -->
 - [uniqueSymbolJs.ts](../../../build/typescript/tests/cases/compiler/uniqueSymbolJs.ts) <!-- JSDoc syntax error. babel-parser does not parse JSDoc comments -->
 
-## 49 valid programs produced a parsing error
+## 47 valid programs produced a parsing error
 
 - [anyDeclare.ts](../../../build/typescript/tests/cases/compiler/anyDeclare.ts)
 - [augmentedTypesClass2a.ts](../../../build/typescript/tests/cases/compiler/augmentedTypesClass2a.ts)
@@ -64,7 +64,6 @@
 - [funClodule.ts](../../../build/typescript/tests/cases/compiler/funClodule.ts)
 - [functionCall15.ts](../../../build/typescript/tests/cases/compiler/functionCall15.ts)
 - [importAndVariableDeclarationConflict3.ts](../../../build/typescript/tests/cases/compiler/importAndVariableDeclarationConflict3.ts)
-- [importAssertionNonstring.ts](../../../build/typescript/tests/cases/compiler/importAssertionNonstring.ts)
 - [importDeclWithDeclareModifierInAmbientContext.ts](../../../build/typescript/tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts)
 - [jsFileCompilationBindDuplicateIdentifier.ts](../../../build/typescript/tests/cases/compiler/jsFileCompilationBindDuplicateIdentifier.ts)
 - [jsFileCompilationWithoutJsExtensions.ts](../../../build/typescript/tests/cases/compiler/jsFileCompilationWithoutJsExtensions.ts)
@@ -73,7 +72,6 @@
 - [letDeclarations-validContexts.ts](../../../build/typescript/tests/cases/compiler/letDeclarations-validContexts.ts)
 - [mismatchedClassConstructorVariable.ts](../../../build/typescript/tests/cases/compiler/mismatchedClassConstructorVariable.ts)
 - [moduleDuplicateIdentifiers.ts](../../../build/typescript/tests/cases/compiler/moduleDuplicateIdentifiers.ts)
-- [moduleKeywordDeprecated.ts](../../../build/typescript/tests/cases/compiler/moduleKeywordDeprecated.ts)
 - [modulePreserve2.ts](../../../build/typescript/tests/cases/compiler/modulePreserve2.ts)
 - [moduleSharesNameWithImportDeclarationInsideIt3.ts](../../../build/typescript/tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt3.ts)
 - [moduleSharesNameWithImportDeclarationInsideIt5.ts](../../../build/typescript/tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt5.ts)
