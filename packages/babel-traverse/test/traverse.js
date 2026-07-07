@@ -407,6 +407,28 @@ describe("traverse", function () {
         result,
       );
     });
+
+    it("#18121: `replaceWith` in `Visitor#exit` should not stop traversal", function () {
+      const ast = parse("const a = 1;");
+      const log = [];
+      traverse(ast.program, {
+        exit(path) {
+          log.push(path.getPathLocation());
+          if (path.type === "Identifier" && path.node.name === "a") {
+            path.replaceWith(t.identifier("b"));
+          }
+        },
+      });
+      expect(log).toMatchInlineSnapshot(`
+        [
+          "body[0].declarations[0].id",
+          "body[0].declarations[0].id",
+          "body[0].declarations[0].init",
+          "body[0].declarations[0]",
+          "body[0]",
+        ]
+      `);
+    });
   });
   describe("path.stop()", () => {
     it("should stop the traversal when a grand child is stopped", () => {
