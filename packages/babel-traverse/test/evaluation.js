@@ -488,6 +488,21 @@ describe("evaluation", function () {
       expect(Object.hasOwn(evalResult.value, "__proto__")).toBe(false);
       expect(evalResult.value.polluted).toBe(true);
     }
+
+    const nullProto = getPath("({ __proto__: null });")
+      .get("body.0.expression")
+      .evaluate();
+    expect(nullProto.confident).toBe(true);
+    expect(Object.getPrototypeOf(nullProto.value)).toBe(null);
+  });
+
+  it("should ignore a plain __proto__ key with a primitive value", function () {
+    const evalResult = getPath("({ __proto__: 5 });")
+      .get("body.0.expression")
+      .evaluate();
+    expect(evalResult.confident).toBe(true);
+    expect(Object.getPrototypeOf(evalResult.value)).toBe(Object.prototype);
+    expect(Object.hasOwn(evalResult.value, "__proto__")).toBe(false);
   });
 
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
