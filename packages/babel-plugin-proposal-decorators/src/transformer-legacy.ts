@@ -2,6 +2,11 @@
 
 import { template, types as t } from "@babel/core";
 import type { NodePath, Visitor, PluginPass } from "@babel/core";
+import {
+  FEATURES,
+  hasFeature,
+  injectInitialization,
+} from "@babel/helper-create-class-features-plugin";
 
 const buildClassDecorator = template.statement(`
   DECORATOR(CLASS_REF = INNER) || CLASS_REF;
@@ -172,6 +177,17 @@ function applyTargetDecorators(
     path.isClass() ? "class" : "obj",
   );
 
+  // When the class-properties transform is enabled it lowers every field of the
+  // class, so we keep delegating decorated instance fields to it (via the
+  // `_initializerWarningHelper` marker) to preserve the existing output and
+  // field initialization order. When it is not enabled — e.g. when targeting an
+  // engine with native class fields — we lower only the decorated fields into
+  // the constructor ourselves and leave undecorated members untouched, instead
+  // of emitting a helper that throws at runtime.
+  const lowerDecoratedFields = !hasFeature(state.file, FEATURES.fields);
+  const instanceFieldInitializers: t.ExpressionStatement[] = [];
+  const decoratedInstanceFields = new Set<t.Node>();
+
   const exprs = decoratedProps.reduce(function (acc, node) {
     let decorators: t.Decorator[] = [];
     if (node.decorators != null) {
@@ -215,12 +231,32 @@ function applyTargetDecorators(
           )
         : t.nullLiteral();
 
-      node.value = t.callExpression(
-        state.addHelper("initializerWarningHelper"),
-        [descriptor, t.thisExpression()],
-      );
+      if (lowerDecoratedFields) {
+        // Initialize the decorated field from the constructor. This keeps the
+        // field's descriptor semantics (including decorators that install a
+        // getter/setter) while letting undecorated members stay as native
+        // class syntax.
+        instanceFieldInitializers.push(
+          t.expressionStatement(
+            t.callExpression(state.addHelper("initializerDefineProperty"), [
+              t.thisExpression(),
+              t.cloneNode(property),
+              t.cloneNode(descriptor),
+              t.thisExpression(),
+            ]),
+          ),
+        );
+        decoratedInstanceFields.add(node);
+      } else {
+        // Leave a marker for the class-properties transform to pick up while
+        // lowering the whole class, preserving the existing output.
+        node.value = t.callExpression(
+          state.addHelper("initializerWarningHelper"),
+          [descriptor, t.thisExpression()],
+        );
 
-      WARNING_CALLS.add(node.value);
+        WARNING_CALLS.add(node.value);
+      }
 
       acc.push(
         t.assignmentExpression(
@@ -273,6 +309,22 @@ function applyTargetDecorators(
 
     return acc;
   }, [] as t.Expression[]);
+
+  if (path.isClass() && instanceFieldInitializers.length > 0) {
+    for (const element of path.get("body.body")) {
+      if (decoratedInstanceFields.has(element.node)) {
+        element.remove();
+      }
+    }
+
+    const constructor = path
+      .get("body.body")
+      .find(element => element.isClassMethod({ kind: "constructor" })) as
+      | NodePath<t.ClassMethod>
+      | undefined;
+
+    injectInitialization(path, constructor, instanceFieldInitializers);
+  }
 
   return t.sequenceExpression([
     t.assignmentExpression("=", t.cloneNode(name), path.node),

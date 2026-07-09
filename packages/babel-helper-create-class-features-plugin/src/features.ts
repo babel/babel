@@ -74,7 +74,7 @@ configuration:
 See https://babeljs.io/docs/configuration#print-effective-configs for more info.`;
 }
 
-function hasFeature(file: File, feature: number) {
+export function hasFeature(file: File, feature: number) {
   return !!(file.get(featuresKey) & feature);
 }
 

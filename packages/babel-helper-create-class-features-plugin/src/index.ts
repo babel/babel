@@ -20,6 +20,7 @@ import { injectInitialization, extractComputedKeys } from "./misc.ts";
 import {
   enableFeature,
   FEATURES,
+  hasFeature,
   isLoose,
   shouldTransform,
 } from "./features.ts";
@@ -28,6 +29,7 @@ import { assertFieldTransformed } from "./typescript.ts";
 export {
   FEATURES,
   enableFeature,
+  hasFeature,
   injectInitialization,
   buildCheckInRHS,
   buildNamedEvaluationVisitor,
