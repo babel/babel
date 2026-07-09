@@ -25,6 +25,21 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.4 (2026-07-09)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`, `babel-plugin-transform-typescript`
+  * [#18120](https://github.com/babel/babel/pull/18120) fix(parser): disallow `declare module M {}` ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`, `babel-plugin-transform-typescript`
+  * [#18100](https://github.com/babel/babel/pull/18100) fix(parser): forbid let x! and let x! = ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-traverse`
+  * [#18122](https://github.com/babel/babel/pull/18122) fix: `replaceWith` in `Visitor#exit` should not stop traversal ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :house: Internal
+* `babel-helper-validator-identifier`
+  * [#18084](https://github.com/babel/babel/pull/18084) refactor: Shrink validator identifier size ([@JLHwung](https://github.com/JLHwung))
 ## v8.0.3 (2026-06-27)
 
 #### :bug: Bug Fix
