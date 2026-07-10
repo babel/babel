@@ -1,13 +1,13 @@
-// The decorated field is initialized while undecorated public fields, private
-// fields and private methods are left as native class syntax.
+// The decorated field is initialized while undecorated public fields, a private
+// field declared before it and private methods are left as native class syntax.
 function dec(target, name, descriptor) {
   descriptor.enumerable = true;
 }
 
 class Example {
+  #privateField = 30;
   @dec decorated = 10;
   undecorated = 20;
-  #privateField = 30;
 
   readPrivate() {
     return this.#privateField;

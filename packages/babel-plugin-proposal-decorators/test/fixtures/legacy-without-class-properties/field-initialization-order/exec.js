@@ -1,7 +1,8 @@
 // Instance field initializers must run in source order even when decorated and
 // undecorated fields are mixed. The decorated field is lowered into the
-// constructor, so the undecorated public and private fields that follow it are
-// relocated there too instead of running early as native class fields.
+// constructor, so the undecorated public fields that follow it are relocated
+// there too instead of running early as native class fields. A private field
+// *before* the first decorated one keeps its native position.
 const order = [];
 
 function dec(target, name, descriptor) {
@@ -14,17 +15,18 @@ function dec(target, name, descriptor) {
 
 class Example {
   a = order.push("a");
+  #pre = order.push("pre");
   @dec b = 1;
   c = order.push("c");
-  #d = order.push("d");
+  d = order.push("d");
 
-  readD() {
-    return this.#d;
+  readPre() {
+    return this.#pre;
   }
 }
 
 const inst = new Example();
 
-expect(order).toEqual(["a", "b", "c", "d"]);
+expect(order).toEqual(["a", "pre", "b", "c", "d"]);
 expect(inst.b).toBe(1);
-expect(inst.readD()).toBe(4);
+expect(inst.readPre()).toBe(2);

@@ -178,9 +178,17 @@ function isInstanceField(node: t.Node): node is ClassInstanceField {
  * constructor without changing the observable initialization order. Because a
  * native field initializer always runs before the constructor body, every
  * instance field that appears after the first decorated one must also be
- * relocatable. A computed key is evaluated at class-definition time, so
- * relocating such a field would move its key evaluation into the constructor;
- * in that case we keep the class-properties handshake instead.
+ * relocatable:
+ *
+ *  - A computed key is evaluated at class-definition time, so relocating such a
+ *    field would move its key evaluation into the constructor.
+ *  - A private field installs its brand with the native class element, before
+ *    the constructor body — so a relocated earlier initializer that reaches the
+ *    private name (e.g. through a method) would observe it too early instead of
+ *    throwing. Its brand can't be deferred without the full private-field
+ *    lowering that only the class-properties transform performs.
+ *
+ * In either case we keep the class-properties handshake instead.
  */
 function canLowerInstanceFields(path: NodePath<t.Class>) {
   let sawDecoratedField = false;
@@ -188,7 +196,11 @@ function canLowerInstanceFields(path: NodePath<t.Class>) {
     if (!isInstanceField(node)) continue;
     if (t.isClassProperty(node) && node.decorators?.length) {
       sawDecoratedField = true;
-    } else if (sawDecoratedField && t.isClassProperty(node) && node.computed) {
+    } else if (
+      sawDecoratedField &&
+      (t.isClassPrivateProperty(node) ||
+        (t.isClassProperty(node) && node.computed))
+    ) {
       return false;
     }
   }
@@ -196,10 +208,13 @@ function canLowerInstanceFields(path: NodePath<t.Class>) {
 }
 
 /**
- * Relocates the decorated field initializers — and every instance field that
- * follows the first decorated one — into the constructor, in source order, so
- * their initializers keep running in the original order. Fields before the
- * first decorated one, methods and static members stay as native class syntax.
+ * Relocates the decorated field initializers — and every undecorated public
+ * instance field that follows the first decorated one — into the constructor,
+ * in source order, so their initializers keep running in the original order.
+ * Fields before the first decorated one, methods and static members stay as
+ * native class syntax. A private field or computed key after the first
+ * decorated field makes the class take the class-properties handshake instead
+ * (see `canLowerInstanceFields`), so only public fields reach this point.
  */
 function lowerInstanceFields(
   path: NodePath<t.ClassExpression>,
@@ -225,38 +240,25 @@ function lowerInstanceFields(
       continue;
     }
 
-    if (!isInstanceField(node)) continue;
+    // Only undecorated public instance fields are relocated here: a private
+    // field after the first decorated one makes the class fall back to the
+    // class-properties handshake (see `canLowerInstanceFields`), because its
+    // brand would otherwise be installed before the constructor body.
+    if (!t.isClassProperty(node, { static: false })) continue;
 
-    if (t.isClassPrivateProperty(node)) {
-      // Keep the private field declaration so the private name stays defined,
-      // but move its initializer into the constructor.
-      if (node.value != null) {
-        initializers.push(
-          t.expressionStatement(
-            t.assignmentExpression(
-              "=",
-              t.memberExpression(t.thisExpression(), t.cloneNode(node.key)),
-              node.value,
-            ),
-          ),
-        );
-        node.value = null;
-      }
-    } else {
-      // Undecorated public field: relocate it with the same `defineProperty`
-      // semantics the class-properties transform uses for public fields.
-      const { key, computed } = node;
-      initializers.push(
-        t.expressionStatement(
-          t.callExpression(state.addHelper("defineProperty"), [
-            t.thisExpression(),
-            computed || t.isLiteral(key) ? key : t.stringLiteral(key.name),
-            node.value || t.buildUndefinedNode(),
-          ]),
-        ),
-      );
-      toRemove.push(element as NodePath<ClassDecoratableElement>);
-    }
+    // Relocate it with the same `defineProperty` semantics the class-properties
+    // transform uses for public fields.
+    const { key, computed } = node;
+    initializers.push(
+      t.expressionStatement(
+        t.callExpression(state.addHelper("defineProperty"), [
+          t.thisExpression(),
+          computed || t.isLiteral(key) ? key : t.stringLiteral(key.name),
+          node.value || t.buildUndefinedNode(),
+        ]),
+      ),
+    );
+    toRemove.push(element as NodePath<ClassDecoratableElement>);
   }
 
   for (const element of toRemove) element.remove();
@@ -293,9 +295,12 @@ function applyTargetDecorators(
   // A native (undecorated) field initializer always runs before the constructor
   // body, so a decorated field lowered into the constructor would run *after*
   // any undecorated field that follows it in source order. To keep the original
-  // initialization order we therefore also relocate every instance field that
-  // appears after the first decorated one into the constructor (see
-  // `lowerInstanceFields`); when that isn't possible we fall back to the marker.
+  // initialization order we therefore also relocate every undecorated public
+  // field that appears after the first decorated one into the constructor (see
+  // `lowerInstanceFields`). A private field or computed key after the first
+  // decorated field can't be relocated without changing observable behavior
+  // (a private brand is installed before the constructor body), so such classes
+  // fall back to the marker instead (see `canLowerInstanceFields`).
   const lowerDecoratedFields =
     !hasFeature(state.file, FEATURES.fields) &&
     (!path.isClass() || canLowerInstanceFields(path));
