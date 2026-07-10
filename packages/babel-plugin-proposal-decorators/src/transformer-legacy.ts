@@ -165,6 +165,111 @@ function applyObjectDecorators(
   );
 }
 
+type ClassInstanceField = t.ClassProperty | t.ClassPrivateProperty;
+
+function isInstanceField(node: t.Node): node is ClassInstanceField {
+  return (
+    (t.isClassProperty(node) || t.isClassPrivateProperty(node)) && !node.static
+  );
+}
+
+/**
+ * Determines whether the decorated instance fields can be lowered into the
+ * constructor without changing the observable initialization order. Because a
+ * native field initializer always runs before the constructor body, every
+ * instance field that appears after the first decorated one must also be
+ * relocatable. A computed key is evaluated at class-definition time, so
+ * relocating such a field would move its key evaluation into the constructor;
+ * in that case we keep the class-properties handshake instead.
+ */
+function canLowerInstanceFields(path: NodePath<t.Class>) {
+  let sawDecoratedField = false;
+  for (const node of path.node.body.body) {
+    if (!isInstanceField(node)) continue;
+    if (t.isClassProperty(node) && node.decorators?.length) {
+      sawDecoratedField = true;
+    } else if (sawDecoratedField && t.isClassProperty(node) && node.computed) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Relocates the decorated field initializers — and every instance field that
+ * follows the first decorated one — into the constructor, in source order, so
+ * their initializers keep running in the original order. Fields before the
+ * first decorated one, methods and static members stay as native class syntax.
+ */
+function lowerInstanceFields(
+  path: NodePath<t.ClassExpression>,
+  state: PluginPass,
+  decoratedFieldInitializers: Map<t.Node, t.ExpressionStatement>,
+) {
+  const elements = path.get("body.body");
+  const firstDecorated = elements.findIndex(element =>
+    decoratedFieldInitializers.has(element.node),
+  );
+
+  const initializers: t.ExpressionStatement[] = [];
+  const toRemove: NodePath<ClassDecoratableElement>[] = [];
+
+  for (let i = firstDecorated; i < elements.length; i++) {
+    const element = elements[i];
+    const node = element.node;
+
+    const decoratedInitializer = decoratedFieldInitializers.get(node);
+    if (decoratedInitializer) {
+      initializers.push(decoratedInitializer);
+      toRemove.push(element as NodePath<ClassDecoratableElement>);
+      continue;
+    }
+
+    if (!isInstanceField(node)) continue;
+
+    if (t.isClassPrivateProperty(node)) {
+      // Keep the private field declaration so the private name stays defined,
+      // but move its initializer into the constructor.
+      if (node.value != null) {
+        initializers.push(
+          t.expressionStatement(
+            t.assignmentExpression(
+              "=",
+              t.memberExpression(t.thisExpression(), t.cloneNode(node.key)),
+              node.value,
+            ),
+          ),
+        );
+        node.value = null;
+      }
+    } else {
+      // Undecorated public field: relocate it with the same `defineProperty`
+      // semantics the class-properties transform uses for public fields.
+      const { key, computed } = node;
+      initializers.push(
+        t.expressionStatement(
+          t.callExpression(state.addHelper("defineProperty"), [
+            t.thisExpression(),
+            computed || t.isLiteral(key) ? key : t.stringLiteral(key.name),
+            node.value || t.buildUndefinedNode(),
+          ]),
+        ),
+      );
+      toRemove.push(element as NodePath<ClassDecoratableElement>);
+    }
+  }
+
+  for (const element of toRemove) element.remove();
+
+  const constructor = path
+    .get("body.body")
+    .find(element => element.isClassMethod({ kind: "constructor" })) as
+    | NodePath<t.ClassMethod>
+    | undefined;
+
+  injectInitialization(path, constructor, initializers);
+}
+
 /**
  * A helper to pull out property decorators into a sequence expression.
  */
@@ -181,12 +286,24 @@ function applyTargetDecorators(
   // class, so we keep delegating decorated instance fields to it (via the
   // `_initializerWarningHelper` marker) to preserve the existing output and
   // field initialization order. When it is not enabled — e.g. when targeting an
-  // engine with native class fields — we lower only the decorated fields into
-  // the constructor ourselves and leave undecorated members untouched, instead
-  // of emitting a helper that throws at runtime.
-  const lowerDecoratedFields = !hasFeature(state.file, FEATURES.fields);
-  const instanceFieldInitializers: t.ExpressionStatement[] = [];
-  const decoratedInstanceFields = new Set<t.Node>();
+  // engine with native class fields — we lower the decorated fields into the
+  // constructor ourselves and leave the other members as native class syntax,
+  // instead of emitting a helper that throws at runtime.
+  //
+  // A native (undecorated) field initializer always runs before the constructor
+  // body, so a decorated field lowered into the constructor would run *after*
+  // any undecorated field that follows it in source order. To keep the original
+  // initialization order we therefore also relocate every instance field that
+  // appears after the first decorated one into the constructor (see
+  // `lowerInstanceFields`); when that isn't possible we fall back to the marker.
+  const lowerDecoratedFields =
+    !hasFeature(state.file, FEATURES.fields) &&
+    (!path.isClass() || canLowerInstanceFields(path));
+
+  // Maps each decorated instance field to the statement that initializes it in
+  // the constructor, so the decorated and trailing undecorated fields can be
+  // spliced in together in source order.
+  const decoratedFieldInitializers = new Map<t.Node, t.ExpressionStatement>();
 
   const exprs = decoratedProps.reduce(function (acc, node) {
     let decorators: t.Decorator[] = [];
@@ -234,9 +351,10 @@ function applyTargetDecorators(
       if (lowerDecoratedFields) {
         // Initialize the decorated field from the constructor. This keeps the
         // field's descriptor semantics (including decorators that install a
-        // getter/setter) while letting undecorated members stay as native
-        // class syntax.
-        instanceFieldInitializers.push(
+        // getter/setter) rather than emitting a marker that throws when the
+        // class-properties transform is not there to replace it.
+        decoratedFieldInitializers.set(
+          node,
           t.expressionStatement(
             t.callExpression(state.addHelper("initializerDefineProperty"), [
               t.thisExpression(),
@@ -246,7 +364,6 @@ function applyTargetDecorators(
             ]),
           ),
         );
-        decoratedInstanceFields.add(node);
       } else {
         // Leave a marker for the class-properties transform to pick up while
         // lowering the whole class, preserving the existing output.
@@ -310,20 +427,8 @@ function applyTargetDecorators(
     return acc;
   }, [] as t.Expression[]);
 
-  if (path.isClass() && instanceFieldInitializers.length > 0) {
-    for (const element of path.get("body.body")) {
-      if (decoratedInstanceFields.has(element.node)) {
-        element.remove();
-      }
-    }
-
-    const constructor = path
-      .get("body.body")
-      .find(element => element.isClassMethod({ kind: "constructor" })) as
-      | NodePath<t.ClassMethod>
-      | undefined;
-
-    injectInitialization(path, constructor, instanceFieldInitializers);
+  if (path.isClass() && decoratedFieldInitializers.size > 0) {
+    lowerInstanceFields(path, state, decoratedFieldInitializers);
   }
 
   return t.sequenceExpression([

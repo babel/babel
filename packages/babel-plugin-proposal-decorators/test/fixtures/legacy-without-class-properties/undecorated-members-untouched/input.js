@@ -1,5 +1,4 @@
 class Example {
-  @dec decorated = 1;
   undecorated = 2;
   #privateField = 3;
   static staticUndecorated = 4;
@@ -7,4 +6,5 @@ class Example {
   #privateMethod() {
     return this.#privateField;
   }
+  @dec decorated = 1;
 }
