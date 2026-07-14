@@ -730,9 +730,16 @@ export function buildParallelProcessTests(name: string, tests: ProcessTest[]) {
   };
 }
 
-const rootDir = path.resolve(dirname, "../../..");
+const rootUrl = new URL("../../..", import.meta.url);
 function resolveRootDirToken(arg: string) {
-  return arg.replace("<rootDir>", rootDir);
+  if (arg.startsWith("<rootDir>")) {
+    if (process.platform === "win32") {
+      return arg.replace("<rootDir>", rootUrl.href.slice(0, -1));
+    } else {
+      return arg.replace("<rootDir>", fileURLToPath(rootUrl));
+    }
+  }
+  return arg;
 }
 
 export function buildProcessTests(
