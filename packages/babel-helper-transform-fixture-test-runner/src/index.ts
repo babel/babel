@@ -731,15 +731,10 @@ export function buildParallelProcessTests(name: string, tests: ProcessTest[]) {
 }
 
 const rootUrl = new URL("../../..", import.meta.url);
-function resolveRootDirToken(arg: string) {
-  if (arg.startsWith("<rootDir>")) {
-    if (process.platform === "win32") {
-      return arg.replace("<rootDir>", rootUrl.href.slice(0, -1));
-    } else {
-      return arg.replace("<rootDir>", fileURLToPath(rootUrl));
-    }
-  }
-  return arg;
+function resolveRootDirOrRootUrlToken(arg: string) {
+  return arg
+    .replace("<rootDir>", fileURLToPath(rootUrl))
+    .replace("<rootUrl>", rootUrl.href.slice(0, -1));
 }
 
 export function buildProcessTests(
@@ -864,7 +859,9 @@ export function buildProcessTests(
               args.push(test.binLoc);
             }
 
-            args = args.concat(opts.args).map(arg => resolveRootDirToken(arg));
+            args = args
+              .concat(opts.args)
+              .map(arg => resolveRootDirOrRootUrlToken(arg));
             const env = {
               ...process.env,
               FORCE_COLOR: "false",
