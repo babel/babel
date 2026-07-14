@@ -1,5 +1,3 @@
-/*:: declare var invariant; */
-
 import type { OptionsWithDefaults } from "../options.ts";
 import { OptionFlags } from "../options.ts";
 import {
@@ -99,7 +97,56 @@ export default abstract class Tokenizer extends CommentsParser {
     this.comments = [];
     this.isLookahead = false;
 
-    if (this.optionFlags & OptionFlags.Locations) {
+    let optionFlags = 0;
+    if (options.allowAwaitOutsideFunction) {
+      optionFlags |= OptionFlags.AllowAwaitOutsideFunction;
+    }
+    if (options.allowReturnOutsideFunction) {
+      optionFlags |= OptionFlags.AllowReturnOutsideFunction;
+    }
+    if (options.allowImportExportEverywhere) {
+      optionFlags |= OptionFlags.AllowImportExportEverywhere;
+    }
+    if (options.allowSuperOutsideMethod) {
+      optionFlags |= OptionFlags.AllowSuperOutsideMethod;
+    }
+    if (options.allowUndeclaredExports) {
+      optionFlags |= OptionFlags.AllowUndeclaredExports;
+    }
+    if (options.allowNewTargetOutsideFunction) {
+      optionFlags |= OptionFlags.AllowNewTargetOutsideFunction;
+    }
+    if (options.allowYieldOutsideFunction) {
+      optionFlags |= OptionFlags.AllowYieldOutsideFunction;
+    }
+    if (options.ranges) {
+      optionFlags |= OptionFlags.Ranges;
+    }
+    if (options.locations === true) {
+      optionFlags |= OptionFlags.Locations;
+    }
+    if (options.tokens) {
+      optionFlags |= OptionFlags.Tokens;
+    }
+    if (options.createImportExpressions) {
+      optionFlags |= OptionFlags.CreateImportExpressions;
+    }
+    if (options.createParenthesizedExpressions) {
+      optionFlags |= OptionFlags.CreateParenthesizedExpressions;
+    }
+    if (options.errorRecovery) {
+      optionFlags |= OptionFlags.ErrorRecovery;
+    }
+    if (options.attachComment) {
+      optionFlags |= OptionFlags.AttachComment;
+    }
+    if (options.annexB) {
+      optionFlags |= OptionFlags.AnnexB;
+    }
+
+    this.optionFlags = optionFlags;
+
+    if (optionFlags & OptionFlags.Locations) {
       return;
     }
 
