@@ -761,7 +761,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
-    checkReservedType(word: string, startLoc: Position, declaration?: boolean) {
+    checkReservedType(
+      word: string,
+      startLoc: Position | Undone<N.Node>,
+      declaration?: boolean,
+    ) {
       if (!reservedTypes.has(word)) return;
 
       this.raise(
@@ -2664,7 +2668,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       isAsync: boolean,
     ): void {
       if ((method as any).variance) {
-        this.unexpected((method as any).variance.start);
+        this.unexpected((method as any).variance);
       }
       delete (method as any).variance;
       if (this.match(tt.lt)) {
