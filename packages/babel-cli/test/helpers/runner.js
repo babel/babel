@@ -11,7 +11,7 @@ const rootDir = path.resolve(__dirname, "../../../..");
 
 const getPath = name => path.join(rootDir, "packages", name, "lib/index.js");
 
-const presetLocs = [getPath("babel-preset-react")];
+const presetLocs = ["babel-preset-react"].map(getPath).join(",");
 
 const pluginLocs = [
   "babel-plugin-transform-arrow-functions",
