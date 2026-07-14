@@ -40,11 +40,13 @@ const defaultSourcesGlob = [
   `${defaultPackagesGlob}/src/**/{*.js,*.cjs,!(*.d).ts,!(*.d).cts,!(*.d).mts}`,
   "!./packages/babel-helpers/src/helpers/*",
 ];
-const defaultSources = fs
-  .globSync(defaultSourcesGlob[0], {
-    exclude: ["./packages/babel-helpers/src/helpers/*"],
-  })
-  .map(file => file.replaceAll("\\", "/"));
+function globDefaultSources() {
+  return fs
+    .globSync(defaultSourcesGlob[0], {
+      exclude: ["./packages/babel-helpers/src/helpers/*"],
+    })
+    .map(file => file.replaceAll("\\", "/"));
+}
 
 const babelStandalonePluginConfigGlob =
   "./packages/babel-standalone/scripts/pluginConfig.json";
@@ -280,7 +282,7 @@ function createWorker(useWorker: boolean): any {
 async function buildBabel(useWorker: boolean, ignore: PackageInfo[] = []) {
   const worker = await createWorker(useWorker);
   const promises = [];
-  for (const file of defaultSources) {
+  for (const file of globDefaultSources()) {
     if (ignore.some(pkg => file.startsWith(`${pkg.src}/`))) {
       continue;
     }
@@ -1013,7 +1015,7 @@ gulp.task("generate-runtime-helpers", async () => {
 gulp.task("generate-standalone", () => generateStandalone());
 
 gulp.task("materialize-babel-8-src", () =>
-  applyBabelToGlob(defaultSources, {
+  applyBabelToGlob(globDefaultSources(), {
     plugins: [
       [
         babelPluginToggleBooleanFlag,
