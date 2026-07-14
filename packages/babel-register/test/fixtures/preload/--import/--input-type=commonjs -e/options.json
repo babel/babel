@@ -1,0 +1,4 @@
+{
+  "args": ["--import", "<rootDir>/packages/babel-register/lib/index.js", "--input-type=commonjs", "-e", "console.log(0)"],
+  "stdout": "0"
+}

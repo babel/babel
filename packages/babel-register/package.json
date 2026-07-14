@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
+    "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@babel/plugin-transform-arrow-functions": "workspace:^",
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
     "@babel/preset-typescript": "workspace:^",
