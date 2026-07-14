@@ -13,6 +13,7 @@ const hasCategories = ["babel-parser"];
 const fixtures = globSync("./@(codemods|packages|eslint)/*/test/fixtures/", {
   cwd: repoRoot,
 })
+  .map(fixture => path.join(repoRoot, fixture))
   .map(fixture => {
     if (
       hasCategories.some(name =>
@@ -21,13 +22,11 @@ const fixtures = globSync("./@(codemods|packages|eslint)/*/test/fixtures/", {
     ) {
       return globSync("*/", {
         cwd: fixture,
-      });
+      }).map(v => path.join(fixture, v));
     }
     return fixture;
   })
-  .flat()
-  .map(fixture => path.join(repoRoot, fixture));
-
+  .flat();
 for (const fixture of fixtures) {
   const optionsPath = path.join(fixture, "options.json");
 
