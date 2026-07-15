@@ -7,6 +7,7 @@ import {
   getUsageInBody,
   isVarInLoopHead,
   moveCapturingTestAndUpdateIntoBody,
+  isVarInForStatementInit,
   wrapLoopBody,
 } from "./loop.ts";
 import { validateUsage } from "./validation.ts";
@@ -231,10 +232,13 @@ function transformBlockScopedVariable(
     binding.kind = "var";
   }
 
-  if (
-    (isInLoop(path) && !isVarInLoopHead(path)) ||
-    dynamicTDZNames.length > 0
-  ) {
+  const isLoopBodyDeclaration = isInLoop(path) && !isVarInLoopHead(path);
+  const isNestedForStatementInit =
+    isVarInForStatementInit(path) && isInLoop(path.parentPath);
+  const shouldInitLoopDeclaration =
+    isLoopBodyDeclaration || isNestedForStatementInit;
+
+  if (shouldInitLoopDeclaration || dynamicTDZNames.length > 0) {
     for (const decl of path.node.declarations) {
       // We explicitly add `void 0` to cases like
       //  for (;;) { let a; }
