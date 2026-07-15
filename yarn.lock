@@ -1682,6 +1682,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-proposal-text-modules@workspace:packages/babel-plugin-proposal-text-modules":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-text-modules@workspace:packages/babel-plugin-proposal-text-modules"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-import-to-platform-api": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    babel-plugin-polyfill-corejs3: "catalog:"
+  peerDependencies:
+    "@babel/core": ^8.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-throw-expressions@workspace:^, @babel/plugin-proposal-throw-expressions@workspace:packages/babel-plugin-proposal-throw-expressions":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-throw-expressions@workspace:packages/babel-plugin-proposal-throw-expressions"
