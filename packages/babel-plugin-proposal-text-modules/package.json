@@ -30,8 +30,7 @@
     "stage-3"
   ],
   "dependencies": {
-    "@babel/helper-import-to-platform-api": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-import-to-platform-api": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0"

@@ -852,6 +852,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-compilation-targets": "workspace:^"
     "@babel/helper-module-imports": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
     "@babel/core": ^8.0.0
@@ -1689,7 +1690,6 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-import-to-platform-api": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
     babel-plugin-polyfill-corejs3: "catalog:"
   peerDependencies:
     "@babel/core": ^8.0.0
@@ -2655,7 +2655,6 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-import-to-platform-api": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
     babel-plugin-polyfill-corejs3: "catalog:"
   peerDependencies:
     "@babel/core": ^8.0.0
