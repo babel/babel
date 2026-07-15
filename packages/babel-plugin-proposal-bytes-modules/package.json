@@ -41,7 +41,7 @@
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
-    "babel-plugin-polyfill-corejs3": "^0.14.0"
+    "babel-plugin-polyfill-corejs3": "catalog:"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"
