@@ -1,0 +1,3 @@
+{
+  "targets": { "firefox": "110", "node": "20.0" }
+}

@@ -1,0 +1,2 @@
+const [j, j2] = await Promise.all([typeof process === "object" && process.versions?.node ? import("fs").then(fs => fs.promises.readFile(new URL(import.meta.resolve("./x")))).then(String) : fetch(import.meta.resolve("./x")).then(r => r.text()), typeof process === "object" && process.versions?.node ? import("fs").then(fs => fs.promises.readFile(new URL(import.meta.resolve("./x3")))).then(String) : fetch(import.meta.resolve("./x3")).then(r => r.text())]);
+someBody;

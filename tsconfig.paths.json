@@ -161,6 +161,9 @@
       "@babel/plugin-proposal-pipeline-operator": [
         "./packages/babel-plugin-proposal-pipeline-operator/src"
       ],
+      "@babel/plugin-proposal-text-modules": [
+        "./packages/babel-plugin-proposal-text-modules/src"
+      ],
       "@babel/plugin-proposal-throw-expressions": [
         "./packages/babel-plugin-proposal-throw-expressions/src"
       ],
