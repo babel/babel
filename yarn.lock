@@ -3302,7 +3302,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-regenerator@npm:^8.0.0-rc.3":
+"@babel/plugin-transform-regenerator@npm:^8.0.0-rc.3, @babel/plugin-transform-regenerator@npm:^8.0.1":
   version: 8.0.2
   resolution: "@babel/plugin-transform-regenerator@npm:8.0.2"
   dependencies:
@@ -3310,17 +3310,6 @@ __metadata:
   peerDependencies:
     "@babel/core": ^8.0.0
   checksum: 10/81b865156ef174acad44fb589f4cc01f912148a907dfa9a30a6669504e9218c40ad7bee98b33149d3a9a1dc2b5659405765bc07598ae41084b9f5258322ac153
-  languageName: node
-  linkType: hard
-
-"@babel/plugin-transform-regenerator@npm:^8.0.1":
-  version: 8.0.1
-  resolution: "@babel/plugin-transform-regenerator@npm:8.0.1"
-  dependencies:
-    "@babel/helper-plugin-utils": "npm:^8.0.1"
-  peerDependencies:
-    "@babel/core": ^8.0.0
-  checksum: 10/21f0170b70f3256f6f27970b86b9e81ec9268fb73b51e97d569eeae6509cf76fdbe85daee0af4f5869fe5e07fd7a0ac7ac7e43fb82bae7140ba743627e924064
   languageName: node
   linkType: hard
 
