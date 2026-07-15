@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, File } from "@babel/core";
 import {
   importToPlatformApi,
-  buildParallelStaticImports,
+  injectParallelStaticImports,
   type Pieces,
   type Builders,
 } from "@babel/helper-import-to-platform-api";
@@ -62,7 +62,7 @@ export default declare(api => {
         const data = [];
         for (const decl of path.get("body")) {
           if (!decl.isImportDeclaration()) continue;
-          const attributes = decl.node.attributes || undefined;
+          const attributes = decl.node.attributes ?? [];
           if (!hasTypeBytes(attributes)) continue;
 
           if (decl.node.phase != null) {
@@ -109,8 +109,7 @@ export default declare(api => {
         }
         if (data.length === 0) return;
 
-        const decl = buildParallelStaticImports(data, helper.needsAwait);
-        if (decl) path.unshiftContainer("body", decl);
+        injectParallelStaticImports(path, data, helper.needsAwait);
       },
     },
   };
