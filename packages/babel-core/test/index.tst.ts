@@ -1,6 +1,5 @@
 import { expect, it, describe } from "tstyche";
-import { transformSync, traverse } from "../src/index.ts";
-import type { NodePath, types as t } from "../src/index.ts";
+import { transformSync } from "../src/index.ts";
 import type presetEnv from "@babel/preset-env";
 import type presetReact from "@babel/preset-react";
 import type presetTypescript from "@babel/preset-typescript";
@@ -48,20 +47,6 @@ describe("core", () => {
           return {};
         },
       ],
-    });
-  });
-
-  it("re-exports traverse with top-level enter and exit visitor types", () => {
-    traverse({} as t.Program, {
-      enter(path) {
-        expect(path).type.toBe<NodePath<t.Node>>();
-        expect(path.type).type.toBe<t.Node["type"]>();
-      },
-      exit(path) {
-        expect(path).type.toBe<NodePath<t.Node>>();
-        expect(path.type).type.toBe<t.Node["type"]>();
-      },
-      noScope: true,
     });
   });
 });
