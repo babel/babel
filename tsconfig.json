@@ -194,6 +194,9 @@
       "path": "./packages/babel-plugin-proposal-pipeline-operator"
     },
     {
+      "path": "./packages/babel-plugin-proposal-text-modules"
+    },
+    {
       "path": "./packages/babel-plugin-proposal-throw-expressions"
     },
     {
