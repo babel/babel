@@ -4,6 +4,8 @@ import { addNamed } from "@babel/helper-module-imports";
 
 import getSupport from "./platforms-support.ts";
 
+export { buildImportTypeAsDefaultPlugin } from "./plugin-x-modules.ts";
+
 function imp(file: File, name: string, module: string) {
   return addNamed(file.path, name, module, { importedType: "es6" });
 }
