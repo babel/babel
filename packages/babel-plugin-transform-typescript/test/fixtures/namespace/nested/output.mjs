@@ -19,8 +19,7 @@ class A {}
       H[H["J"] = 13] = "J";
       H[H["K"] = 17] = "K";
       return H;
-    }({});
-    _D.H = H;
+    }(_D.H || (_D.H = {}));
   })(D || (D = _A.D || (_A.D = {})));
   class F {}
   (function (_F) {

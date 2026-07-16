@@ -40,7 +40,24 @@ export default function transpileEnum(
       const isSeen = seen(parentPath);
 
       let init: t.Expression = t.objectExpression([]);
-      if (isSeen || isGlobal) {
+      // When an enum is exported from a namespace, the namespace transform
+      // emits `_N.E = E;` right after the enum. Initialize the enum from that
+      // member (`_N.E || (_N.E = {})`) and drop the redundant assignment, so
+      // that re-opened namespaces merge into the same object instead of
+      // resetting it to a fresh one (which would drop earlier members).
+      const namespaceMember = getNamespaceMember(path, name, t);
+      if (namespaceMember) {
+        init = t.logicalExpression(
+          "||",
+          t.cloneNode(namespaceMember.member),
+          t.assignmentExpression(
+            "=",
+            t.cloneNode(namespaceMember.member),
+            init,
+          ),
+        );
+        namespaceMember.assignment.remove();
+      } else if (isSeen || isGlobal) {
         init = t.logicalExpression("||", t.cloneNode(fill.ID), init);
       }
       const enumIIFE = buildEnumWrapper({ ...fill, INIT: init });
@@ -82,6 +99,55 @@ export default function transpileEnum(
       return false;
     }
   }
+}
+
+/**
+ * Detect an enum that lives inside a namespace IIFE and is followed by the
+ * `_N.E = E;` assignment inserted by the namespace transform, e.g.
+ *
+ *   (function (_N) {
+ *     enum E { ... }       // <- `path`
+ *     _N.E = E;            // <- returned as `assignment`
+ *   })(...);
+ *
+ * Returns the `_N.E` member expression (as `member`) and the path of the
+ * assignment statement, or `null` when the enum is not exported this way.
+ */
+function getNamespaceMember(
+  path: NodePath<t.TSEnumDeclaration>,
+  name: string,
+  t: t,
+): { member: t.MemberExpression; assignment: NodePath } | null {
+  const { parentPath } = path;
+  if (!parentPath.isBlockStatement() || typeof path.key !== "number") {
+    return null;
+  }
+  // The block must be the body of the namespace IIFE `(function (_N) { … })`.
+  const fnPath = parentPath.parentPath;
+  if (!fnPath.isFunctionExpression() || fnPath.node.params.length !== 1) {
+    return null;
+  }
+  const param = fnPath.node.params[0];
+  if (!t.isIdentifier(param)) return null;
+
+  const assignment = path.getSibling(path.key + 1);
+  const stmt = assignment.node;
+  if (
+    !t.isExpressionStatement(stmt) ||
+    !t.isAssignmentExpression(stmt.expression, { operator: "=" })
+  ) {
+    return null;
+  }
+  const { left, right } = stmt.expression;
+  if (
+    t.isMemberExpression(left, { computed: false }) &&
+    t.isIdentifier(left.object, { name: param.name }) &&
+    t.isIdentifier(left.property, { name }) &&
+    t.isIdentifier(right, { name })
+  ) {
+    return { member: left, assignment };
+  }
+  return null;
 }
 
 const buildStringAssignment = template.statement(`
