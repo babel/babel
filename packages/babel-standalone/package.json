@@ -11,10 +11,12 @@
     "./babel.min.js.map",
     "./types.d.ts"
   ],
-  "devDependencies": {
+  "dependencies": {
     "@babel/core": "workspace:^",
     "@babel/generator": "workspace:^",
-    "@babel/parser": "workspace:^",
+    "@babel/parser": "workspace:^"
+  },
+  "devDependencies": {
     "@babel/plugin-external-helpers": "workspace:^",
     "@babel/plugin-proposal-decorators": "workspace:^",
     "@babel/plugin-proposal-destructuring-private": "workspace:^",

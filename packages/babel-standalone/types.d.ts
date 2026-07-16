@@ -6,12 +6,12 @@ import type {
   transformFromAstSync,
   transformFromAstAsync as transformFromAstAsync$1,
   FileResult,
+  types,
+  template,
+  traverse,
 } from "@babel/core";
 import * as generator from "@babel/generator";
 import * as parser from "@babel/parser";
-import * as template from "@babel/template";
-import * as traverse from "@babel/traverse";
-import * as types from "@babel/types";
 
 declare namespace Babel {
   namespace packages {

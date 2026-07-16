@@ -154,6 +154,8 @@ function enforceBabelCoreNotInDeps({ Yarn }) {
         "@babel/eslint-shared-fixtures",
         "@babel/eslint-tests",
         "@babel/helper-transform-fixture-test-runner",
+        // only used for TS types
+        "@babel/standalone",
       ].includes(workspace.ident)
     ) {
       continue;
