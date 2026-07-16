@@ -7,6 +7,5 @@
   "sourcesContent": [
     "var foo = () => 4;"
   ],
-  "mappings": "AAAA,UAAU,Y;SAAM,C;CAAC",
-  "ignoreList": []
+  "mappings": "AAAA,UAAU,Y;SAAM,C;CAAC"
 }
