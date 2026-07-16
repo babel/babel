@@ -3,16 +3,20 @@
   "version": "8.0.4",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "./babel.js",
+  "types": "./types.d.ts",
   "files": [
     "./babel.js",
     "./babel.js.map",
     "./babel.min.js",
-    "./babel.min.js.map"
+    "./babel.min.js.map",
+    "./types.d.ts"
   ],
-  "devDependencies": {
+  "dependencies": {
     "@babel/core": "workspace:^",
     "@babel/generator": "workspace:^",
-    "@babel/parser": "workspace:^",
+    "@babel/parser": "workspace:^"
+  },
+  "devDependencies": {
     "@babel/plugin-external-helpers": "workspace:^",
     "@babel/plugin-proposal-decorators": "workspace:^",
     "@babel/plugin-proposal-destructuring-private": "workspace:^",
@@ -136,9 +140,18 @@
     "node": "^22.18.0 || >=24.11.0"
   },
   "exports": {
-    ".": "./babel.js",
-    "./babel.js": "./babel.js",
-    "./babel.min.js": "./babel.min.js",
+    ".": {
+      "types": "./types.d.ts",
+      "default": "./babel.js"
+    },
+    "./babel.js": {
+      "types": "./types.d.ts",
+      "default": "./babel.js"
+    },
+    "./babel.min.js": {
+      "types": "./types.d.ts",
+      "default": "./babel.min.js"
+    },
     "./package.json": "./package.json"
   },
   "type": "commonjs"

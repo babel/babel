@@ -320,6 +320,9 @@ function buildTSConfig(
       ...(pkgs.some(p => p.name === "@babel/register")
         ? ["./src/**/*.mts"]
         : []),
+      ...(pkgs.some(p => p.name === "@babel/standalone")
+        ? ["./types.d.ts"]
+        : []),
       hasScripts && "./scripts/**/*.ts",
       "../../lib/globals.d.ts",
       "../../scripts/repo-utils/*.d.ts",
