@@ -7,5 +7,6 @@
   "sourcesContent": [
     "before;\nusing x = fn();\ndoSomethingWith(x);\nafter;"
   ],
-  "mappings": ";;EAAA,MAAM;EACN,IAAM,CAAC,eAAG,EAAE,CAAC,CAAC;EACd,eAAe,CAAC,CAAC,CAAC;EAClB,KAAK;AAAC;EAAA;AAAA;EAAA;AAAA"
+  "mappings": ";;EAAA,MAAM;EACN,IAAM,CAAC,eAAG,EAAE,CAAC,CAAC;EACd,eAAe,CAAC,CAAC,CAAC;EAClB,KAAK;AAAC;EAAA;AAAA;EAAA;AAAA",
+  "ignoreList": []
 }

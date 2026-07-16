@@ -7,5 +7,6 @@
   "sourcesContent": [
     "#!env node\n\nconsole.log(\"Hello, world!\");"
   ],
-  "mappings": "AAAA;AAEA,OAAO,CAAC,GAAG,CAAC,eAAe,CAAC"
+  "mappings": "AAAA;AAEA,OAAO,CAAC,GAAG,CAAC,eAAe,CAAC",
+  "ignoreList": []
 }

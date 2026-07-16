@@ -7,5 +7,6 @@
   "sourcesContent": [
     "let a = `a${b}c`;"
   ],
-  "mappings": "AAAA,IAAI,CAAC,GAAG,IAAI,CAAC,GAAG"
+  "mappings": "AAAA,IAAI,CAAC,GAAG,IAAI,CAAC,GAAG",
+  "ignoreList": []
 }

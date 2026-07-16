@@ -1,1 +1,1 @@
-{"version":3,"file":"foo.js","names":[],"sources":["../src/foo.js"],"sourcesContent":["arr.map(x => x * MULTIPLIER);"],"mappings":";;AAAA,GAAG,CAAC,GAAG,CAAC,WAAC;EAAA,OAAI,CAAC,GAAG,UAAU;AAAA,EAAC"}
+{"version":3,"file":"foo.js","names":[],"sources":["../src/foo.js"],"sourcesContent":["arr.map(x => x * MULTIPLIER);"],"mappings":";;AAAA,GAAG,CAAC,GAAG,CAAC,WAAC;EAAA,OAAI,CAAC,GAAG,UAAU;AAAA,EAAC","ignoreList":[]}

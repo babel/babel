@@ -83,11 +83,17 @@ export default class SourceMap {
    * Get the sourcemap.
    */
   get(): EncodedSourceMap {
-    return toEncodedMap(this._map);
+    const encoded = toEncodedMap(this._map);
+    // TODO(Babel 9): Remove this fallback.
+    encoded.ignoreList ??= [];
+    return encoded;
   }
 
   getDecoded(): DecodedSourceMap {
-    return toDecodedMap(this._map);
+    const decoded = toDecodedMap(this._map);
+    // TODO(Babel 9): Remove this fallback.
+    decoded.ignoreList ??= [];
+    return decoded;
   }
 
   getRawMappings(): Mapping[] {

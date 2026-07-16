@@ -7,5 +7,6 @@
   "sourcesContent": [
     "for (using x of it) {\n  doSomethingWith(x);\n}"
   ],
-  "mappings": "AAAA,KAAK,MAAM,EAAC,IAAI,EAAE,EAAE;EAAA;EAAA,MAAT,CAAC;EACV,eAAe,CAAC,CAAC,CAAC;AAAC;EAAA;AAAA;EAAA;AAAA"
+  "mappings": "AAAA,KAAK,MAAM,EAAC,IAAI,EAAE,EAAE;EAAA;EAAA,MAAT,CAAC;EACV,eAAe,CAAC,CAAC,CAAC;AAAC;EAAA;AAAA;EAAA;AAAA",
+  "ignoreList": []
 }

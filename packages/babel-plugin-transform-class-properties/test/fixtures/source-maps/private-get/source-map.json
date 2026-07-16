@@ -7,5 +7,6 @@
   "sourcesContent": [
     "class A {\n  #field;\n\n  get #getter() {}\n\n  #method() {}\n\n  method() {\n    this.#field;\n    this.#getter;\n    this.#method;\n\n    inExpr(this.#field);\n  }\n}"
   ],
-  "mappings": ";;AAAA,MAAM,CAAC,CAAC;EAAA;IAAA;IACN,mDAAM;EAAC;EAMP,MAAM,GAAG;IACP,mCAAK,MAAM,EAAX,IAAU,CAAC;IACX,8CAAI,EAAC,WAAM,CAAC;IACZ,4CAAI,EAAC,OAAM,CAAC;IAEZ,MAAM,CAAC,mCAAK,MAAM,EAAX,IAAU,CAAC,CAAC;EACrB;AACF;AAAC,4BAXe,CAAC;AAAC,mBAEN,CAAC"
+  "mappings": ";;AAAA,MAAM,CAAC,CAAC;EAAA;IAAA;IACN,mDAAM;EAAC;EAMP,MAAM,GAAG;IACP,mCAAK,MAAM,EAAX,IAAU,CAAC;IACX,8CAAI,EAAC,WAAM,CAAC;IACZ,4CAAI,EAAC,OAAM,CAAC;IAEZ,MAAM,CAAC,mCAAK,MAAM,EAAX,IAAU,CAAC,CAAC;EACrB;AACF;AAAC,4BAXe,CAAC;AAAC,mBAEN,CAAC",
+  "ignoreList": []
 }

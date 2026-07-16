@@ -7,5 +7,6 @@
   "sourcesContent": [
     "function fn() {\n  var inner = () => {\n    console.log(this);\n  };\n}"
   ],
-  "mappings": "AAAA,SAAS,EAAE,GAAG;EAAA;EACZ,IAAI,KAAK,GAAG,YAAM;IAChB,OAAO,CAAC,GAAG,CAAC,KAAI,CAAC;EACnB,CAAC;AACH"
+  "mappings": "AAAA,SAAS,EAAE,GAAG;EAAA;EACZ,IAAI,KAAK,GAAG,YAAM;IAChB,OAAO,CAAC,GAAG,CAAC,KAAI,CAAC;EACnB,CAAC;AACH",
+  "ignoreList": []
 }

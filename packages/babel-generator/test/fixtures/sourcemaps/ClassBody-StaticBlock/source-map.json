@@ -7,5 +7,6 @@
   "sourcesContent": [
     "class Foo {\n  static {}\n}\n\nclass A1 {\n  static{\n    foo;\n  }\n}\n\nclass A2 {\n  static {\n    foo;bar;\n  }\n}"
   ],
-  "mappings": "AAAA,MAAM,GAAG,CAAC;EACR;AACF;AAEA,MAAM,EAAE,CAAC;EACP;IACE,GAAG;EACL;AACF;AAEA,MAAM,EAAE,CAAC;EACP;IACE,GAAG;IAAC,GAAG;EACT;AACF"
+  "mappings": "AAAA,MAAM,GAAG,CAAC;EACR;AACF;AAEA,MAAM,EAAE,CAAC;EACP;IACE,GAAG;EACL;AACF;AAEA,MAAM,EAAE,CAAC;EACP;IACE,GAAG;IAAC,GAAG;EACT;AACF",
+  "ignoreList": []
 }

@@ -11,5 +11,6 @@
   "sourcesContent": [
     "import foo from \"foo\";\nimport { default as foo2 } from \"foo\";\nimport { foo3 } from \"foo\";\nimport * as foo4 from \"foo\";\n\nfoo;\nfoo2;\nfoo3;\nfoo3();\nfoo3``;\nfoo3?.();"
   ],
-  "mappings": ";;AAAA;AAAsB;AAKtBA,YAAG;AACHC,YAAI;AACJC,KAAA,IAAI;AACJ,IAAAA,KAAA,IAAI,EAAC,CAAC;AACN,IAAAA,KAAA,IAAI,GAAE;AACN,IAAAA,KAAA,IAAI,IAAG,CAAC"
+  "mappings": ";;AAAA;AAAsB;AAKtBA,YAAG;AACHC,YAAI;AACJC,KAAA,IAAI;AACJ,IAAAA,KAAA,IAAI,EAAC,CAAC;AACN,IAAAA,KAAA,IAAI,GAAE;AACN,IAAAA,KAAA,IAAI,IAAG,CAAC",
+  "ignoreList": []
 }

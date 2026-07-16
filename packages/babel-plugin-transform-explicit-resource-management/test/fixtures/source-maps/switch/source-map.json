@@ -7,5 +7,6 @@
   "sourcesContent": [
     "function f() {\n  switch (v) {\n    case 0:\n      {\n        using x = 0;\n      }\n      break;\n    default:\n      {\n        using y = 1;\n      }\n      break;\n  };\n}"
   ],
-  "mappings": "AAAA,SAAS,CAAC,GAAG;EACX,QAAQ,CAAC;IACP,KAAK,CAAC;MACJ;QAAA;QACE,MAAM,CAAC,eAAG,CAAC;MAAC;QAAA;MAAA;QAAA;MAAA;MAEd;IACF;MACE;QAAA;QACE,MAAM,CAAC,gBAAG,CAAC;MAAC;QAAA;MAAA;QAAA;MAAA;MAEd;EACJ;EAAC;AACH"
+  "mappings": "AAAA,SAAS,CAAC,GAAG;EACX,QAAQ,CAAC;IACP,KAAK,CAAC;MACJ;QAAA;QACE,MAAM,CAAC,eAAG,CAAC;MAAC;QAAA;MAAA;QAAA;MAAA;MAEd;IACF;MACE;QAAA;QACE,MAAM,CAAC,gBAAG,CAAC;MAAC;QAAA;MAAA;QAAA;MAAA;MAEd;EACJ;EAAC;AACH",
+  "ignoreList": []
 }

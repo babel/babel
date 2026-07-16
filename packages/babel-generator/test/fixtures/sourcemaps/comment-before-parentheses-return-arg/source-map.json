@@ -7,5 +7,6 @@
   "sourcesContent": [
     "function assertElement(assertFn, shouldBeElement, opt_message) {\n  return /** @type {!Ele\tment} */ (\n\t  assertType_(\n\t    assertFn,\n\t\t  shouldBeElement,\n\t\t  isElement(shouldBeElement),\n\t\t  'Element expected',\n\t\t  opt_message\n\t  )\n\t);\n}\n\nconst slot = /** @type {!HTMLSlotElement} */ (e.target);\n\nassertElement(\n  /** @type {Element} */ (el),\n);"
   ],
-  "mappings": "AAAA,SAAS,aAAa,CAAC,QAAQ,EAAE,eAAe,EAAE,WAAW,EAAE;EAC7D,QAAO;IACN,WAAW;MACT,QAAQ;MACT,eAAe;MACf,SAAS,CAAC,eAAe,CAAC;MAC1B,kBAAkB;MAClB;IACD,CAAC;;AAEJ;;AAEA,MAAM,IAAI,GAAG,+BAAiC,CAAC,CAAC,MAAO;;AAEvD,aAAa;EACX,sBAAwB;AAC1B,CAAC"
+  "mappings": "AAAA,SAAS,aAAa,CAAC,QAAQ,EAAE,eAAe,EAAE,WAAW,EAAE;EAC7D,QAAO;IACN,WAAW;MACT,QAAQ;MACT,eAAe;MACf,SAAS,CAAC,eAAe,CAAC;MAC1B,kBAAkB;MAClB;IACD,CAAC;;AAEJ;;AAEA,MAAM,IAAI,GAAG,+BAAiC,CAAC,CAAC,MAAO;;AAEvD,aAAa;EACX,sBAAwB;AAC1B,CAAC",
+  "ignoreList": []
 }

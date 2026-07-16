@@ -41,7 +41,7 @@ describe("generation", function () {
     expect(generated.map).toMatchInlineSnapshot(`
       {
         "file": undefined,
-        "ignoreList": undefined,
+        "ignoreList": [],
         "mappings": "AAAA,SAAS,EAAE,CAAE,GAAG,EAAE;EAAE,OAAO,CAAC,GAAG,CAAC,GAAG,CAAC;AAAE;ACAtC,EAAE,CAAC,OAAO,CAAC",
         "names": [],
         "rangeMappings": undefined,
@@ -329,7 +329,7 @@ describe("generation", function () {
       }",
         "decodedMap": {
           "file": undefined,
-          "ignoreList": undefined,
+          "ignoreList": [],
           "mappings": [
             [
               [
@@ -406,7 +406,7 @@ describe("generation", function () {
         },
         "map": {
           "file": undefined,
-          "ignoreList": undefined,
+          "ignoreList": [],
           "mappings": "AAAA,SAASA,IAAGA,CAAA,EAAG;EAAEC,IAAG;AAAE",
           "names": [
             "foo",
@@ -878,7 +878,7 @@ describe("generation", function () {
     ).toMatchInlineSnapshot(`
       {
         "file": undefined,
-        "ignoreList": undefined,
+        "ignoreList": [],
         "mappings": "AAAA,IAAI,CAAC,GAAG,SAAJ,CAAC",
         "names": [],
         "rangeMappings": undefined,
@@ -972,7 +972,7 @@ describe("generation", function () {
     expect(out.map).toMatchInlineSnapshot(`
       {
         "file": undefined,
-        "ignoreList": undefined,
+        "ignoreList": [],
         "mappings": "AACM,IAAIA,CAAC,GAAG,CAAC;AACT,IAAI,CAAC,GAAG,CAAC;AACT,SAASC,CAACA,CAAA,EAAG,CAAC;AACd,SAAS,CAAC,GAAG,CAAC;AACd,MAAM,CAAC,CAAC;EACN,CAACC,CAACC,CAAA,EAAG,CAAC;EACN,CAAC,CAAC,GAAG,CAAC;AACR",
         "names": [
           "a",

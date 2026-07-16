@@ -13,5 +13,6 @@
     "<bar />",
     "baz();"
   ],
-  "mappings": "AAAA,KAAI;AAAJ,KAAG"
+  "mappings": "AAAA,KAAI;AAAJ,KAAG",
+  "ignoreList": []
 }
