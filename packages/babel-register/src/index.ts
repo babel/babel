@@ -14,8 +14,10 @@ function register(opts?: Options) {
       hasClosed = true;
       client.close();
       if (typeof signalOrCode !== "number") {
-        // eslint-disable-next-line n/no-process-exit
-        process.exit(0);
+        if (process.listenerCount(signalOrCode) === 1) {
+          process.off(signalOrCode, listener);
+          process.kill(process.pid, signalOrCode);
+        }
       }
     };
     process.on("exit", listener);
