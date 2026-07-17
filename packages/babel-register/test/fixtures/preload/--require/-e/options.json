@@ -1,0 +1,4 @@
+{
+  "args": ["--require", "<rootDir>/packages/babel-register/lib/index.js", "-e", "console.log(0)"],
+  "stdout": "0"
+}

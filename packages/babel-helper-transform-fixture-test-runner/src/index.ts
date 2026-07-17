@@ -730,6 +730,13 @@ export function buildParallelProcessTests(name: string, tests: ProcessTest[]) {
   };
 }
 
+const rootUrl = new URL("../../..", import.meta.url);
+function resolveRootDirOrRootUrlToken(arg: string) {
+  return arg
+    .replace("<rootDir>", fileURLToPath(rootUrl))
+    .replace("<rootUrl>", rootUrl.href.slice(0, -1));
+}
+
 export function buildProcessTests(
   dir: string | URL,
   beforeHook: ProcessTestBeforeHook,
@@ -844,19 +851,17 @@ export function buildProcessTests(
           try {
             beforeHook(test, tmpLoc);
 
-            if (test.binLoc === undefined) {
-              throw new Error("test.binLoc is undefined");
+            let args = [];
+            if (opts.executor) {
+              args.push("--require", path.join(dirname, "./exit-loader.cjs"));
+            }
+            if (test.binLoc) {
+              args.push(test.binLoc);
             }
 
-            let args = opts.executor
-              ? [
-                  "--require",
-                  path.join(dirname, "./exit-loader.cjs"),
-                  test.binLoc,
-                ]
-              : [test.binLoc];
-
-            args = args.concat(opts.args);
+            args = args
+              .concat(opts.args)
+              .map(arg => resolveRootDirOrRootUrlToken(arg));
             const env = {
               ...process.env,
               FORCE_COLOR: "false",
