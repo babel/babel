@@ -560,6 +560,7 @@ __metadata:
     "@babel/plugin-proposal-do-expressions": "workspace:^"
     "@babel/preset-flow": "workspace:^"
     "@babel/preset-react": "workspace:^"
+    "@eslint/js": "npm:^10.0.1"
     dedent: "npm:^1.5.3"
     eslint: "npm:^10.0.0"
     eslint-plugin-import: "npm:^2.31.0"
