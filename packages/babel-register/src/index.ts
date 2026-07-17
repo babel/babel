@@ -15,7 +15,9 @@ function register(opts?: Options) {
       client.close();
       if (typeof signalOrCode !== "number") {
         if (process.listenerCount(signalOrCode) === 1) {
-          process.off(signalOrCode, listener!);
+          process.off("exit", listener!);
+          process.off("SIGINT", listener!);
+          process.off("SIGTERM", listener!);
           process.kill(process.pid, signalOrCode);
         }
       }
