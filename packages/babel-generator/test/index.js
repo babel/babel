@@ -44,6 +44,7 @@ describe("generation", function () {
         "ignoreList": [],
         "mappings": "AAAA,SAAS,EAAE,CAAE,GAAG,EAAE;EAAE,OAAO,CAAC,GAAG,CAAC,GAAG,CAAC;AAAE;ACAtC,EAAE,CAAC,OAAO,CAAC",
         "names": [],
+        "rangeMappings": undefined,
         "sourceRoot": undefined,
         "sources": [
           "a.js",
@@ -392,6 +393,7 @@ describe("generation", function () {
             "foo",
             "bar",
           ],
+          "rangeMappings": undefined,
           "sourceRoot": undefined,
           "sources": [
             "inline",
@@ -410,6 +412,7 @@ describe("generation", function () {
             "foo",
             "bar",
           ],
+          "rangeMappings": undefined,
           "sourceRoot": undefined,
           "sources": [
             "inline",
@@ -878,6 +881,7 @@ describe("generation", function () {
         "ignoreList": [],
         "mappings": "AAAA,IAAI,CAAC,GAAG,SAAJ,CAAC",
         "names": [],
+        "rangeMappings": undefined,
         "sourceRoot": undefined,
         "sources": [
           "source-maps/arrow-function/input.js",
@@ -976,6 +980,7 @@ describe("generation", function () {
           "e",
           "#e",
         ],
+        "rangeMappings": undefined,
         "sourceRoot": undefined,
         "sources": [
           "input.js",
