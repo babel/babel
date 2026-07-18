@@ -2860,7 +2860,7 @@ export default abstract class ExpressionParser extends LValParser {
 
     this.expressionScope.recordParameterInitializerError(
       Errors.AwaitExpressionFormalParameter,
-      startLoc,
+      node,
     );
 
     if (this.eat(tt.star)) {
@@ -2914,7 +2914,7 @@ export default abstract class ExpressionParser extends LValParser {
 
     this.expressionScope.recordParameterInitializerError(
       Errors.YieldInParameter,
-      startLoc,
+      node,
     );
 
     let delegating = false;
