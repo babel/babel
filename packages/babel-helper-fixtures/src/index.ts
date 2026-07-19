@@ -79,7 +79,12 @@ function tryResolve(module: string) {
 
 function loadOptions(loc: string): TaskOptions {
   const options = require(loc);
-  if (isModuleNamespaceObject(options) && Object.hasOwn(options, "default")) {
+  if (isModuleNamespaceObject(options)) {
+    if (!Object.hasOwn(options, "default")) {
+      throw new Error(
+        `Fixture options must export a default export when using ES modules: ${loc}`,
+      );
+    }
     return options.default;
   }
   return options;

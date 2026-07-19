@@ -27,4 +27,14 @@ describe("options loading", () => {
       });
     },
   );
+
+  it.each([
+    "root-esm-named-only",
+    "suite-esm-named-only",
+    "task-esm-named-only",
+  ])("rejects ESM options without a default export at %s", name => {
+    expect(() => getOptions(name)).toThrow(
+      /Fixture options must export a default export when using ES modules:/,
+    );
+  });
 });
