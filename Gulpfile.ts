@@ -353,20 +353,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           ...Object.keys(dependencies),
           ...Object.keys(peerDependencies),
           ...Object.keys(imports),
-          // @babel/compat-data sub exports
-          /@babel\/compat-data\/.*/,
-          // @babel/helper-globals sub exports
-          /@babel\/helper-globals\/.*/,
-          // Ideally they should be constructed from package.json exports
-          // required by modules-commonjs
-          /babel-plugin-dynamic-import-node\/utils/,
-          // required by preset-env
-          /@babel\/preset-modules\/.*/,
-          // required by babel-node
-          "core-js/stable/index.js",
           "kexec",
-          // required by eslint-plugin
-          "eslint/use-at-your-own-risk",
         ];
 
         log(
@@ -386,7 +373,11 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
               inputName,
             ])
           ),
-          external: buildStandalone ? [] : external,
+          external: buildStandalone
+            ? []
+            : (id: string) => {
+                return external.some(v => id === v || id.startsWith(v + "/"));
+              },
           // all node modules are resolved as if they were placed in the n_m folder of package root
           preserveSymlinks: true,
           onwarn(warning, warn) {
