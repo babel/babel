@@ -5,11 +5,12 @@ import NodePath from "./path/index.ts";
 import type Scope from "./scope/index.ts";
 import type * as t from "@babel/types";
 import { VISITOR_KEYS } from "@babel/types";
-import { _call, popContext, pushContext, resync } from "./path/context.ts";
+import { _call, resync } from "./path/context.ts";
 
 function _visitPaths(
   ctx: TraversalContext<any>,
   paths: NodePath<t.Node | null>[],
+  keepFlags?: boolean,
 ): boolean {
   // set queue
   ctx.queue = paths;
@@ -19,21 +20,17 @@ function _visitPaths(
   let stop = false;
   let visitIndex = 0;
 
+  const len = paths.length;
+
   for (; visitIndex < paths.length; ) {
     const path = paths[visitIndex];
     visitIndex++;
 
     resync.call(path);
 
-    if (
-      path.contexts.length === 0 ||
-      path.contexts[path.contexts.length - 1] !== ctx
-    ) {
-      // The context might already have been pushed when this path was inserted and queued.
-      // If we always re-pushed here, we could get duplicates and risk leaving contexts
-      // on the stack after the traversal has completed, which could break things.
-      pushContext.call(path, ctx);
-    }
+    const oldContext = path.context;
+
+    path.setContext(ctx, keepFlags || visitIndex > len);
 
     // this path no longer belongs to the tree
     if (path.key === null) continue;
@@ -43,22 +40,17 @@ function _visitPaths(
     if (visited.has(node)) continue;
     if (node) visited.add(node);
 
-    if (_visit(ctx, path)) {
-      stop = true;
-      break;
-    }
+    stop = _visit(ctx, path);
 
-    if (ctx.priorityQueue.length) {
-      stop = _visitPaths(ctx, ctx.priorityQueue);
+    if (!stop && ctx.priorityQueue.length) {
+      stop = _visitPaths(ctx, ctx.priorityQueue, true);
       ctx.priorityQueue = [];
       ctx.queue = paths;
-      if (stop) break;
     }
-  }
 
-  // pop contexts
-  for (let i = 0; i < visitIndex; i++) {
-    popContext.call(paths[i]);
+    path.setContext(undefined);
+    path.context = oldContext;
+    if (stop) break;
   }
 
   // clear queue

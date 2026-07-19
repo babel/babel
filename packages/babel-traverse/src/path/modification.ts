@@ -2,7 +2,7 @@
 
 import { getCachedPaths } from "../cache.ts";
 import NodePath from "./index.ts";
-import { _getQueueContexts, pushContext, setScope } from "./context.ts";
+import { _getQueueContext, mayCloneContext, setScope } from "./context.ts";
 import { _assertUnremoved } from "./removal.ts";
 import {
   arrowFunctionExpression,
@@ -104,21 +104,15 @@ export function _containerInsert<Nodes extends NodeList<t.Node>>(
     const to = from + i;
     const path = this.getSibling(to);
     paths.push(path);
-
-    if (this.context?.queue) {
-      pushContext.call(path, this.context);
-    }
   }
 
-  const contexts = _getQueueContexts.call(this);
+  const context = _getQueueContext.call(this);
 
   for (const path of paths) {
     setScope.call(path);
     path.debug("Inserted.");
 
-    for (const context of contexts) {
-      context.maybeQueue(path, true);
-    }
+    context?.maybeQueue(path, true);
   }
 
   return paths as NodePaths<Nodes>;
@@ -372,13 +366,16 @@ export function unshiftContainer<
   // get the first path and insert our nodes before it, if it doesn't exist then it
   // doesn't matter, our nodes will be inserted anyway
   const container = (this.node as N)[listKey] as t.Node[];
-  const path = NodePath.get({
-    parentPath: this,
-    parent: this.node,
-    container,
-    listKey,
-    key: 0,
-  }).setContext(this.context);
+  const path = mayCloneContext(
+    NodePath.get({
+      parentPath: this,
+      parent: this.node,
+      container,
+      listKey,
+      key: 0,
+    }),
+    this.context,
+  );
 
   return _containerInsertBefore.call(path, verifiedNodes) as NodePaths<Nodes>;
 }

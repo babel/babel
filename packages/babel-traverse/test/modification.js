@@ -344,51 +344,45 @@ describe("modification", function () {
           "var _temp;\nexport default (_temp = fn(), x, _temp);",
         );
       });
+    });
 
-      it("edge case for babel-plugin-jest-hoist", function () {
-        let varsHoistPoint;
-        let i = 0;
-        const logs = [[], []];
-        traverse(parse(`{a;}`), {
-          BlockStatement(path) {
-            [varsHoistPoint] = path.unshiftContainer(
-              "body",
-              t.emptyStatement(),
-            );
-            path.traverse({
-              Identifier(path) {
-                if (i++ >= 5) {
-                  return;
-                }
-                logs[0].push(path.node.name);
-                varsHoistPoint.insertBefore(t.identifier("b"));
-              },
-            });
-          },
-        });
-        i = 0;
-        traverse(parse(`{a;}`), {
-          BlockStatement(path) {
-            [varsHoistPoint] = path.unshiftContainer(
-              "body",
-              t.emptyStatement(),
-            );
-            path.traverse({
-              enter() {},
-              Identifier(path) {
-                if (i++ >= 5) {
-                  return;
-                }
-                logs[1].push(path.node.name);
-                varsHoistPoint.insertBefore(t.identifier("b"));
-              },
-            });
-          },
-        });
-
-        expect(logs[0]).toEqual(["a", "b", "b", "b", "b"]);
-        expect(logs[1]).toEqual(["a", "b", "b", "b", "b"]);
+    it("edge case for babel-plugin-jest-hoist", function () {
+      let varsHoistPoint;
+      let i = 0;
+      const logs = [[], []];
+      traverse(parse(`{a;}`), {
+        BlockStatement(path) {
+          [varsHoistPoint] = path.unshiftContainer("body", t.emptyStatement());
+          path.traverse({
+            Identifier(path) {
+              if (i++ >= 5) {
+                return;
+              }
+              logs[0].push(path.node.name);
+              varsHoistPoint.insertBefore(t.identifier("b"));
+            },
+          });
+        },
       });
+      i = 0;
+      traverse(parse(`{a;}`), {
+        BlockStatement(path) {
+          [varsHoistPoint] = path.unshiftContainer("body", t.emptyStatement());
+          path.traverse({
+            enter() {},
+            Identifier(path) {
+              if (i++ >= 5) {
+                return;
+              }
+              logs[1].push(path.node.name);
+              varsHoistPoint.insertBefore(t.identifier("b"));
+            },
+          });
+        },
+      });
+
+      expect(logs[0]).toEqual(["a"]);
+      expect(logs[1]).toEqual(["a"]);
     });
   });
 });
