@@ -17651,10 +17651,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"verkit@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "verkit@npm:0.1.0"
-  checksum: 10/5f9fc7191c049a2294b160b6e1424cf5b06eb473dfd88a5887b0351dd902e29dd6e56ecf457fc834ce19669252510669fdf85e60c99099258bd6e401b310e3b6
+"verkit@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "verkit@npm:0.3.0"
+  checksum: 10/94f81b9916bd3ec2dc44659e5a1aaebe2541242207e9fb85374cd88da7739241b7cc9966e0122adfa17df014900ded62d3b0a47d72a6badd8f6049baa2662a36
   languageName: node
   linkType: hard
 
