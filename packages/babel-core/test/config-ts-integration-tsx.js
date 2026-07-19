@@ -1,6 +1,6 @@
 import { loadPartialConfigSync } from "../lib/index.js";
 import path from "node:path";
-import semver from "semver";
+import { isLess } from "verkit";
 import { commonJS } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
@@ -8,7 +8,7 @@ const { __dirname, require } = commonJS(import.meta.url);
 // We skip older versions of node testing for two reasons.
 // 1. tsx and ts don't support the old version of node.
 // 2. In the old version of node, jest has been registered in `require.extensions`, which will cause babel to disable the transforming as expected.
-const shouldSkip = semver.lt(process.version, "18.0.0");
+const shouldSkip = isLess(process.version, "18.0.0");
 
 (shouldSkip ? describe : describe.skip)(
   "@babel/core config with ts [dummy]",

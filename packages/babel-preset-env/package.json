@@ -80,7 +80,7 @@
     "@babel/preset-modules": "^0.2.0",
     "babel-plugin-polyfill-corejs3": "catalog:",
     "core-js-compat": "catalog:",
-    "semver": "catalog:"
+    "verkit": "catalog:"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0"

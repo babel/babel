@@ -1,4 +1,4 @@
-import semver from "semver";
+import { parse } from "verkit";
 import { unreleasedLabels } from "./targets.ts";
 import type { Targets, Target } from "./types.d.ts";
 
@@ -7,7 +7,7 @@ export function prettifyVersion(version: string) {
     return version;
   }
 
-  const { major, minor, patch } = semver.parse(version)!;
+  const { major, minor, patch } = parse(version);
 
   const parts = [major];
 

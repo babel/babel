@@ -1,4 +1,4 @@
-import semver from "semver";
+import { isGreater, isValid } from "verkit";
 
 import pluginsCompatData from "@babel/compat-data/plugins" with { type: "json" };
 
@@ -39,14 +39,14 @@ export function targetsSupported(target: Targets, support: Targets) {
       return true;
     }
 
-    if (!semver.valid(lowestTargetedVersion.toString())) {
+    if (!isValid(lowestTargetedVersion.toString())) {
       throw new Error(
         `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". ` +
           "Versions must be in semver format (major.minor.patch)",
       );
     }
 
-    return semver.gt(
+    return isGreater(
       semverify(lowestImplementedVersion),
       lowestTargetedVersion.toString(),
     );

@@ -29,11 +29,10 @@
     "@babel/helper-validator-option": "workspace:^",
     "browserslist": "^4.24.0",
     "lru-cache": "^11.0.0",
-    "semver": "catalog:"
+    "verkit": "catalog:"
   },
   "devDependencies": {
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@types/semver": "^5.5.0"
+    "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"
