@@ -4,7 +4,7 @@ export const enum ACTIONS {
   TRANSFORM = "TRANSFORM",
   TRANSFORM_SYNC = "TRANSFORM_SYNC",
   IS_FILE_IGNORED = "IS_FILE_IGNORED",
-  CLOSE = "CLOSE",
+  SAVE = "SAVE",
 }
 
 export type Options = {
@@ -19,5 +19,5 @@ export interface IClient {
     filename: string,
   ): { code: string; map: object } | null;
   isFileIgnored(filename: string): boolean;
-  close(): void;
+  save(): void;
 }

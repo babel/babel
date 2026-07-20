@@ -5,26 +5,26 @@ import { WorkerClient } from "./worker-client.ts";
 import { isInRegisterWorker } from "./is-in-register-worker.ts";
 
 let client: IClient;
-let listener: undefined | ((signalOrCode: string | number) => void);
+let isListening = false;
+
+function listener(signal: string | number) {
+  client.save();
+
+  if (typeof signal !== "string") return;
+
+  if (process.listenerCount(signal) === 1) {
+    process.off("SIGINT", listener);
+    process.off("SIGTERM", listener);
+    process.kill(process.pid, signal);
+  }
+}
+
 function register(opts?: Options) {
-  if (!client) {
-    let hasClosed = false;
-    listener = function (signalOrCode) {
-      if (hasClosed) return;
-      hasClosed = true;
-      client.close();
-      if (typeof signalOrCode !== "number") {
-        if (process.listenerCount(signalOrCode) === 1) {
-          process.off("exit", listener!);
-          process.off("SIGINT", listener!);
-          process.off("SIGTERM", listener!);
-          process.kill(process.pid, signalOrCode);
-        }
-      }
-    };
-    process.on("exit", listener);
+  if (!isListening) {
+    isListening = true;
     process.on("SIGINT", listener);
     process.on("SIGTERM", listener);
+    process.once("exit", listener);
   }
   client ||= new WorkerClient();
   hook.register(client, opts);
@@ -32,11 +32,11 @@ function register(opts?: Options) {
 
 export function revert() {
   hook.revert();
-  if (listener) {
+  if (isListening) {
+    isListening = false;
     process.off("exit", listener);
     process.off("SIGINT", listener);
     process.off("SIGTERM", listener);
-    listener = undefined;
   }
 }
 

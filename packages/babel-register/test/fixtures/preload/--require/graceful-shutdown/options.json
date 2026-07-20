@@ -2,8 +2,7 @@
   "args": [
     "--require",
     "<rootDir>/packages/babel-register/lib/index.js",
-    "-e",
-    "process.on('SIGINT', () => { console.log('graceful'); process.exit(0); }); setTimeout(() => process.emit('SIGINT'), 10); setTimeout(() => {}, 2000);"
+    "index.js"
   ],
   "stdout": "graceful\n"
 }
