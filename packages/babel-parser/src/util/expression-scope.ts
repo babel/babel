@@ -73,8 +73,7 @@ class ExpressionScope {
 }
 
 type ArrowHeadParsingParameterInitializerError =
-  | typeof Errors.AwaitExpressionFormalParameter
-  | typeof Errors.YieldInParameter;
+  typeof Errors.AwaitExpressionFormalParameter | typeof Errors.YieldInParameter;
 type ArrowHeadParsingDeclarationError =
   | ArrowHeadParsingParameterInitializerError
   | typeof Errors.InvalidParenthesizedAssignment

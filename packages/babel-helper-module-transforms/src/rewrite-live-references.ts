@@ -36,8 +36,7 @@ function isInType(path: NodePath) {
         return (
           (
             path.parentPath.parent as
-              | t.ExportDefaultDeclaration
-              | t.ExportNamedDeclaration
+              t.ExportDefaultDeclaration | t.ExportNamedDeclaration
           ).exportKind === "type"
         );
       default:

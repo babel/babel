@@ -1307,8 +1307,7 @@ export class Emitter {
           t.updateExpression(
             path.node.operator,
             self.explodeExpression(path.get("argument")) as
-              | t.Identifier
-              | t.MemberExpression,
+              t.Identifier | t.MemberExpression,
             path.node.prefix,
           ),
         );

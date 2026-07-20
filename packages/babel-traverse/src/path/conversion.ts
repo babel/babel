@@ -474,8 +474,7 @@ function standardizeSuperProperty(
     const assignmentPath = superProp.parentPath;
 
     const op = assignmentPath.node.operator.slice(0, -1) as
-      | LogicalOp
-      | BinaryOp;
+      LogicalOp | BinaryOp;
 
     const value = assignmentPath.node.right;
 

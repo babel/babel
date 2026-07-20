@@ -271,11 +271,7 @@ export function* traversePattern(
 
 export function hasPrivateKeys(
   pattern:
-    | t.LVal
-    | t.PatternLike
-    | t.OptionalMemberExpression
-    | null
-    | undefined,
+    t.LVal | t.PatternLike | t.OptionalMemberExpression | null | undefined,
 ) {
   let result = false;
   traversePattern(pattern, function* (node) {
