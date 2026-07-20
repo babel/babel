@@ -289,7 +289,7 @@ export default class Buffer {
   }
 
   hasContent(): boolean {
-    return this._last !== 0 /*|| this._queuedChar !== 0*/;
+    return this._last !== 0; /*|| this._queuedChar !== 0*/
   }
 
   /**

@@ -934,12 +934,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     tsTryParseIndexSignature(
       node: Undone<N.TSIndexSignature>,
     ): N.TSIndexSignature | undefined {
-      if (
-        !(
-          this.match(tt.bracketL) &&
-          this.tsLookAhead(this.tsIsUnambiguouslyIndexSignature.bind(this))
-        )
-      ) {
+      if (!(
+        this.match(tt.bracketL) &&
+        this.tsLookAhead(this.tsIsUnambiguouslyIndexSignature.bind(this))
+      )) {
         return;
       }
 
@@ -2400,8 +2398,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // Used when parsing type arguments from ES or JSX productions, where the first token
     // has been created without state.inType. Thus we need to re-scan the lt token.
     tsParseTypeArgumentsInExpression():
-      | N.TSTypeParameterInstantiation
-      | undefined {
+      N.TSTypeParameterInstantiation | undefined {
       if (this.reScan_lt() !== tt.lt) return;
       return this.tsParseTypeArguments();
     }
@@ -4258,10 +4255,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     toAssignableListItem(
       exprList: (
-        | N.Expression
-        | N.SpreadElement
-        | N.RestElement
-        | N.TSTypeCastExpression
+        N.Expression | N.SpreadElement | N.RestElement | N.TSTypeCastExpression
       )[],
       index: number,
       isLHS: boolean,

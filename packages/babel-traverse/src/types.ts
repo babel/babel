@@ -64,8 +64,7 @@ export interface VisitorBase<S>
 export type Visitor<S = unknown> = VisitorBase<S> | ExplodedVisitor<S>;
 
 export type VisitNode<S, P extends t.Node> =
-  | VisitNodeFunction<S, P>
-  | VisitNodeObject<S, P>;
+  VisitNodeFunction<S, P> | VisitNodeObject<S, P>;
 
 export type VisitNodeFunction<S, P extends t.Node> = (
   this: S,

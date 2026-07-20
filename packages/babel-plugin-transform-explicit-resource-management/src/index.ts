@@ -12,9 +12,7 @@ const enum USING_KIND {
 function isAnonymousFunctionDefinition(
   node: t.Node,
 ): node is
-  | t.ClassExpression
-  | t.ArrowFunctionExpression
-  | t.FunctionExpression {
+  t.ClassExpression | t.ArrowFunctionExpression | t.FunctionExpression {
   return (
     t.isArrowFunctionExpression(node) ||
     ((t.isFunctionExpression(node) || t.isClassExpression(node)) && !node.id)
