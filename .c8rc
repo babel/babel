@@ -2,9 +2,9 @@
   "all": true,
   "reporter": ["lcov", "text"],
   "include": [
-    "packages/*/lib/**/*.{js,cjs,mjs,ts}",
-    "codemods/*/lib/**/*.{js,cjs,mjs,ts}",
-    "eslint/*/lib/**/*.{js,cjs,mjs,ts}"
+    "packages/*/lib/**/*.{js,cjs,mjs,ts,cts,mts}",
+    "codemods/*/lib/**/*.{js,cjs,mjs,ts,cts,mts}",
+    "eslint/*/lib/**/*.{js,cjs,mjs,ts,cts,mts}"
   ],
   "exclude": [
     "packages/babel-standalone/**",

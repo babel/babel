@@ -3,6 +3,5 @@
   "env": {
     "BABEL_SHOW_CONFIG_FOR": "./src"
   },
-  "os": ["darwin", "linux"],
   "stderrContains": true
 }
