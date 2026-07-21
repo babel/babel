@@ -1,4 +1,4 @@
-import semver, { type SemVer } from "semver";
+import semver from "semver";
 import { logPlugin } from "./debug.ts";
 import {
   addProposalSyntaxPlugins,
@@ -20,8 +20,6 @@ import {
 
 import type { CallerMetadata, PluginItem, PresetAPI } from "@babel/core";
 
-import pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
-
 import getTargets, {
   prettifyTargets,
   filterItems,
@@ -30,7 +28,7 @@ import type { Targets } from "@babel/helper-compilation-targets";
 import availablePlugins from "./available-plugins.ts";
 import { declarePreset } from "@babel/helper-plugin-utils";
 
-import type { BuiltInsOption, ModuleOption, Options } from "./types.d.ts";
+import type { ModuleOption, Options } from "./types.d.ts";
 export type { Options };
 
 /**
@@ -121,38 +119,6 @@ function getSpecialModulesPluginNames(
   return modulesPluginNames;
 }
 
-const getCoreJSOptions = ({
-  useBuiltIns,
-  corejs,
-  polyfillTargets,
-  include,
-  exclude,
-  proposals,
-  shippedProposals,
-  debug,
-}: {
-  useBuiltIns: BuiltInsOption;
-  corejs: SemVer | null | false;
-  polyfillTargets: Targets;
-  include: Set<string>;
-  exclude: Set<string>;
-  proposals: boolean;
-  shippedProposals: boolean;
-  debug: boolean;
-}) => ({
-  method: `${useBuiltIns}-global`,
-  version: corejs ? corejs.toString() : undefined,
-  targets: polyfillTargets,
-  include,
-  exclude,
-  proposals,
-  shippedProposals,
-  debug,
-  "#__secret_key__@babel/preset-env__compatibility": {
-    noRuntimeName: true,
-  },
-});
-
 function getLocalTargets(
   optionsTargets: Options["targets"],
   ignoreBrowserslistConfig: boolean,
@@ -212,8 +178,6 @@ export default declarePreset((api, opts: Options) => {
     modules: optionsModules,
     shippedProposals,
     targets: optionsTargets,
-    useBuiltIns,
-    corejs: { version: corejs, proposals },
     browserslistEnv,
   } = normalizeOptions(opts);
 
@@ -287,30 +251,9 @@ export default declarePreset((api, opts: Options) => {
   removeUnsupportedItems(pluginNames, api.version);
   removeUnnecessaryItems(pluginNames, overlappingPlugins);
 
-  const polyfillPlugins: PluginItem[] = useBuiltIns
-    ? [
-        [
-          pluginCoreJS3,
-          getCoreJSOptions({
-            useBuiltIns,
-            corejs,
-            polyfillTargets: targets,
-            include: include.builtIns,
-            exclude: exclude.builtIns,
-            proposals,
-            shippedProposals,
-            debug,
-          }),
-        ],
-      ]
-    : [];
-
-  const pluginUseBuiltIns = useBuiltIns !== false;
-  const plugins = Array.from(pluginNames)
-    .map((pluginName): PluginItem => {
-      return [getPlugin(pluginName), { useBuiltIns: pluginUseBuiltIns }];
-    })
-    .concat(polyfillPlugins);
+  const plugins = Array.from(pluginNames).map((pluginName): PluginItem => {
+    return [getPlugin(pluginName), { useBuiltIns: false }];
+  });
 
   if (debug) {
     console.log("@babel/preset-env: `DEBUG` option");
@@ -321,12 +264,6 @@ export default declarePreset((api, opts: Options) => {
     pluginNames.forEach(pluginName => {
       logPlugin(pluginName, targets, compatData);
     });
-
-    if (!useBuiltIns) {
-      console.log(
-        "\nUsing polyfills: No polyfills were added, since the `useBuiltIns` option was not set.",
-      );
-    }
   }
 
   return { plugins };

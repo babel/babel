@@ -13,5 +13,3 @@ Using plugins:
   transform-regexp-modifiers { safari }
   transform-unicode-sets-regex { safari < 17 }
   transform-class-static-block { safari < 16.4 }
-
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

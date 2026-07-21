@@ -43,5 +43,3 @@ Using plugins:
   transform-regenerator { safari < 10 }
   transform-export-namespace-from { safari < 14.1 }
   bugfix/transform-tagged-template-caching { safari < 13 }
-
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

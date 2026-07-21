@@ -29,5 +29,3 @@ Using plugins:
   transform-named-capturing-groups-regex { edge < 79 }
   transform-export-namespace-from { edge < 79 }
   bugfix/transform-edge-function-name { edge < 79 }
-
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

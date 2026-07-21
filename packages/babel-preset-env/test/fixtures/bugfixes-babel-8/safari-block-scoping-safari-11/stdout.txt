@@ -32,5 +32,3 @@ Using plugins:
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari < 16.3 }
   bugfix/transform-safari-rest-destructuring-rhs-array { safari < 14.1 }
   bugfix/transform-tagged-template-caching { safari < 13 }
-
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

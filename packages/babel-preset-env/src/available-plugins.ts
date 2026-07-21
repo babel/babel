@@ -52,12 +52,18 @@ import transformUnicodePropertyRegex from "@babel/plugin-transform-unicode-prope
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 import transformUnicodeSetsRegex from "@babel/plugin-transform-unicode-sets-regex";
 
+// @ts-expect-error no types
 import bugfixAsyncArrowsInClass from "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class/index.js";
+// @ts-expect-error no types
 import bugfixEdgeDefaultParameters from "@babel/preset-modules/lib/plugins/transform-edge-default-parameters/index.js";
+// @ts-expect-error no types
 import bugfixEdgeFunctionName from "@babel/preset-modules/lib/plugins/transform-edge-function-name/index.js";
 import bugfixFirefoxClassInComputedKey from "@babel/plugin-bugfix-firefox-class-in-computed-class-key";
+// @ts-expect-error no types
 import bugfixTaggedTemplateCaching from "@babel/preset-modules/lib/plugins/transform-tagged-template-caching/index.js";
+// @ts-expect-error no types
 import bugfixSafariBlockShadowing from "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing/index.js";
+// @ts-expect-error no types
 import bugfixSafariForShadowing from "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing/index.js";
 import bugfixSafariIdDestructuringCollisionInFunctionExpression from "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression";
 import bugfixSafariRestDestructuringRhsArray from "@babel/plugin-bugfix-safari-rest-destructuring-rhs-array";
