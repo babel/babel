@@ -12,7 +12,7 @@ export type Options<Obj> = Partial<{
 export default function isType<T extends t.Node>(
   type: T["type"],
   node: t.Node | null | undefined,
-  opts: Options<t.ArrayExpression> | null | undefined,
+  opts: Options<T> | null | undefined,
 ): boolean {
   return node?.type === type && (opts == null || shallowEqual(node, opts));
 }
