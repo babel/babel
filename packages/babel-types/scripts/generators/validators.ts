@@ -73,10 +73,10 @@ function addIsHelper(
       return false;
   }
 
-  return shallowEqualN(node, opts);
+  return opts == null || shallowEqual(node, opts);
     `
       : `
-  return node?.type === ${targetType} && shallowEqualN(node, opts);
+  return isType<t.${type}>(${targetType}, node, opts);
   `,
     "}",
     "",
@@ -91,18 +91,10 @@ export default function generateValidators() {
 
   /* eslint-disable no-fallthrough */
 
-import shallowEqualN from "../../utils/shallowEqualN.ts";
+import shallowEqual from "../../utils/shallowEqual.ts";
+import isType, {type Options} from "../../utils/isType.ts";
 import type * as t from "../../index.ts";
 import deprecationWarning from "../../utils/deprecationWarning.ts";
-
-type Options<Obj> = Partial<{
-  [Prop in Exclude<keyof Obj, "type">]: Obj[Prop] extends t.Node
-    ? t.Node
-    : Obj[Prop] extends t.Node[]
-    ? t.Node[]
-    : Obj[Prop];
-}>;
-
 `;
 
   Object.keys(VISITOR_KEYS).forEach(type => {
