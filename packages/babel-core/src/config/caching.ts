@@ -371,12 +371,7 @@ function makeSimpleConfigurator(
 // Types are limited here so that in the future these values can be used
 // as part of Babel's caching logic.
 export type SimpleType =
-  | string
-  | boolean
-  | number
-  | null
-  | undefined
-  | Promise<SimpleType>;
+  string | boolean | number | null | undefined | Promise<SimpleType>;
 export function assertSimpleType(value: unknown): SimpleType {
   if (isThenable(value)) {
     throw new Error(

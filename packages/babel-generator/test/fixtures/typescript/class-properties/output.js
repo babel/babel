@@ -3,6 +3,5 @@ class C {
   x?;
   x: number;
   x: number = 1;
-  x!;
   x!: number;
 }

@@ -19,7 +19,7 @@ function _visitPaths(
   let stop = false;
   let visitIndex = 0;
 
-  for (; visitIndex < paths.length; ) {
+  for (; visitIndex < paths.length;) {
     const path = paths[visitIndex];
     visitIndex++;
 
@@ -105,7 +105,7 @@ function _visit(ctx: TraversalContext, path: NodePath<t.Node | null>) {
   );
 
   if (path.node) {
-    if (_call.call(path, opts.exit)) return true;
+    if (_call.call(path, opts.exit)) return path.shouldStop;
   }
   if (path.node) {
     _call.call(path, opts[node.type]?.exit);

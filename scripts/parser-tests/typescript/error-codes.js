@@ -92,10 +92,19 @@ export default [
   "TS1246", // An interface property cannot have an initializer.
   "TS1247", // A type literal property cannot have an initializer.
   "TS1248", // A class member cannot have the 'const' keyword.
+  "TS1253", // Abstract properties can only appear within an abstract class.
+  "TS1255", // A definite assignment assertion '!' is not permitted in this context.
+  "TS1257", // A required element cannot follow an optional element.
   "TS1260", // Keywords cannot contain escape characters.
+  "TS1263", // Declarations with initializers cannot also have definite assignment assertions.
+  "TS1264", // Declarations with definite assignment assertions must also have type annotations.
+  "TS1275", // 'accessor' modifier can only appear on a property declaration.
+  "TS1276", // An 'accessor' property cannot be declared optional.
+  "TS1277", // '{0}' modifier can only appear on a type parameter of a function, method or class
   "TS1308", // 'await' expression is only allowed within an async function.
   "TS1312", // '=' can only be used in an object literal property inside a destructuring assignment.
   "TS1317", // A parameter property cannot be declared using a rest parameter.
+  "TS1318", // An abstract accessor cannot have an implementation.
   "TS1319", // A default export can only be used in an ECMAScript-style module.
   "TS1344", // A label is not allowed here.
   "TS1347", // 'use strict' directive cannot be used with non-simple parameter list.
@@ -112,6 +121,7 @@ export default [
   "TS1490", // File appears to be binary.
   "TS1499", // Unknown regular expression flag.
   "TS1500", // Duplicate regular expression flag.
+  "TS1540", // A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
   // "TS2300", // Duplicate identifier '{0}'.
   "TS2335", // 'super' can only be referenced in a derived class.
   "TS2337", // Super calls are not permitted outside constructors or in nested functions inside constructors.
@@ -144,6 +154,7 @@ export default [
   "TS2754", // 'super' may not use type arguments.
   "TS2809", // Declaration or statement expected. This '=' follows a block of statements, so if you intended to write a destructuring assignment, you might need to wrap the the whole assignment in parentheses.
   "TS2815", // 'arguments' cannot be referenced in property initializers.
+  "TS2880", // Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
 
   "TS8002", // 'import ... =' can only be used in TypeScript files.
   "TS8003", // 'export =' can only be used in TypeScript files."

@@ -79,9 +79,7 @@ const arrayUnpackVisitor = (
 };
 
 export type DestructuringTransformerNode =
-  | t.VariableDeclaration
-  | t.ExpressionStatement
-  | t.ReturnStatement;
+  t.VariableDeclaration | t.ExpressionStatement | t.ReturnStatement;
 
 // using/await using declaration must not contain pattern as its id.
 export type VariableDeclarationKindAllowsPattern = Exclude<

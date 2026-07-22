@@ -1,7 +1,0 @@
-{
-  "args": ["./src", "--out-file", "./test.js"],
-  "os": ["win32"],
-  "env": {
-    "BABEL_SHOW_CONFIG_FOR": "./src/foo.js"
-  }
-}

@@ -1244,8 +1244,7 @@ class Scope {
   hasBinding(
     name: string,
     opts?:
-      | boolean
-      | { noGlobals?: boolean; noUids?: boolean; upToScope?: Scope },
+      boolean | { noGlobals?: boolean; noUids?: boolean; upToScope?: Scope },
   ) {
     if (!name) return false;
     // TODO: Only accept the object form.

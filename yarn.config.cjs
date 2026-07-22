@@ -154,6 +154,8 @@ function enforceBabelCoreNotInDeps({ Yarn }) {
         "@babel/eslint-shared-fixtures",
         "@babel/eslint-tests",
         "@babel/helper-transform-fixture-test-runner",
+        // only used for TS types
+        "@babel/standalone",
       ].includes(workspace.ident)
     ) {
       continue;
@@ -232,10 +234,13 @@ function enforceBabelCoreVersionFor78Compat({ Yarn }, version) {
   }
 }
 
-function enforceBabelCorePeerDependencyVersion({ Yarn }) {
+function enforceBabelPeerDependencyVersion({ Yarn }) {
   for (const workspace of Yarn.workspaces()) {
     if (workspace.pkg.peerDependencies.has("@babel/core")) {
       workspace.set("peerDependencies['@babel/core']", "^8.0.0");
+    }
+    if (workspace.pkg.peerDependencies.has("@babel/eslint-parser")) {
+      workspace.set("peerDependencies['@babel/eslint-parser']", "^8.0.0");
     }
   }
 }
@@ -261,6 +266,6 @@ module.exports = {
     } else {
       enforceBabelCoreNotInDeps(ctx);
     }
-    enforceBabelCorePeerDependencyVersion(ctx);
+    enforceBabelPeerDependencyVersion(ctx);
   },
 };

@@ -46,7 +46,13 @@ class Client implements IClient {
 class WorkerClient extends Client {
   #worker = new worker_threads.Worker(
     new URL("./worker/index.js", import.meta.url),
-    { env: markInRegisterWorker(process.env) },
+    {
+      env: markInRegisterWorker(process.env),
+      // Set execArgv to an empty array to prevent the worker from inheriting
+      // the command line flags.
+      // https://nodejs.org/api/worker_threads.html#launching-worker-threads-from-preload-scripts
+      execArgv: [],
+    },
   );
 
   constructor() {

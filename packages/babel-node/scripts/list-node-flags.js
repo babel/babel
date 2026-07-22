@@ -23,7 +23,7 @@ function push(flag) {
 
 const out = cp.execSync(`${process.execPath} --help`).toString();
 const re = /(?:(-\w), )?(--[\w-]+)\[?(?:=| \[)/g;
-for (let res; (res = re.exec(out)); ) {
+for (let res; (res = re.exec(out));) {
   if (res[1]) push(res[1]);
   push(res[2]);
 }

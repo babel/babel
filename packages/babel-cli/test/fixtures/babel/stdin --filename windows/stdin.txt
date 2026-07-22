@@ -1,3 +1,0 @@
-arr.map(function () {
-  return $]!;
-});

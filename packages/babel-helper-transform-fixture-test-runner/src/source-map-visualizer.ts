@@ -5,16 +5,18 @@ import {
 } from "@jridgewell/trace-mapping";
 
 const CONTEXT_SIZE = 4;
-const LOC_SIZE = 10;
-const CONTENT_SIZE = 15;
+const LOC_SIZE = 12;
+const MAX_CONTENT_SIZE = 24;
 
 function simpleCodeFramePoint(lines: string[], line: number, col: number) {
   const start = Math.max(col - CONTEXT_SIZE, 0);
   const end = Math.min(col + 1 + CONTEXT_SIZE, lines[line - 1].length);
 
-  const code = lines[line - 1].slice(start, end);
-  const loc = `(${line}:${col}) `.padStart(LOC_SIZE, " ");
-  return loc + code + "\n" + " ".repeat(col - start + loc.length) + "^";
+  const code = lines[line - 1].slice(start, end).trimEnd();
+  const loc = `(${line}:${col})`.padStart(LOC_SIZE, " ");
+  return (
+    loc + " " + code + "\n" + " ".repeat(loc.length + 1 + (col - start)) + "^"
+  );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -135,11 +137,7 @@ export default function visualize(output: string, map: any) {
     );
 
     return joinMultiline(
-      joinMultiline(
-        input,
-        " <--  ",
-        LOC_SIZE + CONTEXT_SIZE * 2 + CONTENT_SIZE,
-      ),
+      joinMultiline(input, " <--  ", LOC_SIZE + 1 + MAX_CONTENT_SIZE),
       output,
     );
   });

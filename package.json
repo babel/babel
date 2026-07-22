@@ -1,6 +1,6 @@
 {
   "name": "babel",
-  "version": "8.0.2",
+  "version": "8.0.4",
   "private": true,
   "type": "module",
   "scripts": {
@@ -18,7 +18,7 @@
     "test:runtime:bundlers": "node test/runtime-integration/bundlers.cjs",
     "test:runtime:node": "node test/runtime-integration/node.cjs"
   },
-  "packageManager": "yarn@4.14.1+sha512.64df448055b2d37ba269d7db535a469b8da93f8ef1140c25fd7a83c00a8fbaacb214ca0e02553b92a2c54cef78bb67d0b4817fab02001df0e24fac0faccc3b42",
+  "packageManager": "yarn@4.17.0+sha512.c2957de2f9025ab14d63b24d0d8be1f1655810e22c341042c27f7ecd017b180ec12db73d69ac366d71b304ef9f069349ce462de96f04f8f1da317f4f762c95ae",
   "devDependencies": {
     "$repo-utils": "link:./scripts/repo-utils",
     "@actions/github": "9.1.1",
@@ -77,7 +77,7 @@
     "open": "^11.0.0",
     "p-limit": "^7.2.0",
     "pkg-pr-new": "^0.0.54",
-    "prettier": "^3.8.1",
+    "prettier": "^3.9.5",
     "publint": "^0.3.17",
     "rollup": "^4.18.0",
     "rollup-plugin-dts": "patch:rollup-plugin-dts@npm%3A6.1.0#~/.yarn/patches/rollup-plugin-dts-npm-6.1.0-6d41e665a7.patch",
@@ -99,19 +99,16 @@
     "benchmark"
   ],
   "resolutions": {
-    "browserslist": "4.28.1",
-    "caniuse-lite": "1.0.30001766",
-    "core-js-compat": "3.48.0",
-    "electron-to-chromium": "1.5.278",
+    "browserslist": "4.28.4",
+    "caniuse-lite": "1.0.30001800",
+    "core-js-compat": "3.49.0",
+    "electron-to-chromium": "1.5.385",
     "@types/babel__core": "link:./nope",
     "@types/babel__traverse": "link:./nope",
     "@types/eslint-scope": "link:./nope",
-    "@babel/parser/@babel/types": "workspace:*",
-    "@babel/plugin-syntax-unicode-sets-regex/@babel/helper-create-regexp-features-plugin": "workspace:*",
     "interpret@npm:^2.2.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
     "interpret@npm:^1.0.0": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
-    "interpret@npm:^3.1.1": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch",
-    "c8/yargs": "patch:yargs@npm%3A18.0.0#~/.yarn/patches/yargs-npm-18.0.0-ec82bf7b61.patch"
+    "interpret@npm:^3.1.1": "patch:interpret@npm%3A3.1.1#~/.yarn/patches/interpret-npm-3.1.1-715bac2bd7.patch"
   },
   "engines": {
     "yarn": ">=1.4.0"

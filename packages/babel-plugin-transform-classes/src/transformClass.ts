@@ -284,8 +284,7 @@ export default function transformClass(
       ];
       if (bareSuperNode.arguments?.length) {
         const bareSuperNodeArguments = bareSuperNode.arguments as (
-          | t.Expression
-          | t.SpreadElement
+          t.Expression | t.SpreadElement
         )[];
 
         /**

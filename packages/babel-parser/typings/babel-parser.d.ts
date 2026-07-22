@@ -285,6 +285,8 @@ type ErrorInfoCompressed = {
   ClassMethodHasReadonly: [];
   ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference: [];
   ConstructorHasTypeParameters: [];
+  DeclaratorDefiniteAssertionRequiresTypeAnnotation: [];
+  DeclaratorDefiniteAssertionWithInitializer: [];
   DeclareAccessor: [{ kind: "get" | "set" }];
   DeclareClassFieldHasInitializer: [];
   DeclareFunctionHasImplementation: [];
@@ -294,6 +296,7 @@ type ErrorInfoCompressed = {
   DuplicateAccessibilityModifier: [{ modifier: Accessibility }];
   DuplicateModifier: [{ modifier: TsModifier }];
   EmptyHeritageClauseType: [{ token: "extends" | "implements" }];
+  EmptyNamespaceName: [];
   EmptyTypeArguments: [];
   EmptyTypeParameters: [];
   ExpectedAmbientAfterExportDeclare: [];
@@ -334,6 +337,7 @@ type ErrorInfoCompressed = {
     | VarianceAnnotations,
   ];
   InvalidModifiersOrder: [{ orderedModifiers: [TsModifier, TsModifier] }];
+  InvalidNamespaceName: [string | number];
   InvalidPropertyAccessAfterInstantiationExpression: [];
   InvalidTupleMemberLabel: [];
   MissingInterfaceName: [];

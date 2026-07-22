@@ -89,6 +89,10 @@ export const TSErrorTemplates = {
     "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.",
   ConstructorHasTypeParameters:
     "Type parameters cannot appear on a constructor declaration.",
+  DeclaratorDefiniteAssertionRequiresTypeAnnotation:
+    "Declarations with definite assignment assertions must also have type annotations.",
+  DeclaratorDefiniteAssertionWithInitializer:
+    "Declarations with initializers cannot also have definite assignment assertions.",
   DeclareAccessor: ({ kind }: { kind: "get" | "set" }) =>
     `'declare' is not allowed in ${kind}ters.`,
   DeclareClassFieldHasInitializer:
@@ -112,6 +116,7 @@ export const TSErrorTemplates = {
   // https://github.com/microsoft/TypeScript/blob/main/src/compiler/types.ts#L2915
   EmptyHeritageClauseType: ({ token }: { token: "extends" | "implements" }) =>
     `'${token}' list cannot be empty.`,
+  EmptyNamespaceName: "Namespace must be given a name.",
   EmptyTypeArguments: "Type argument list cannot be empty.",
   EmptyTypeParameters: "Type parameter list cannot be empty.",
   ExpectedAmbientAfterExportDeclare:
@@ -169,6 +174,8 @@ export const TSErrorTemplates = {
     orderedModifiers: [TsModifier, TsModifier];
   }) =>
     `'${orderedModifiers[0]}' modifier must precede '${orderedModifiers[1]}' modifier.`,
+  InvalidNamespaceName: (value: string | number) =>
+    `Namespace name cannot be '${value}'.`,
   InvalidPropertyAccessAfterInstantiationExpression:
     "Invalid property access after an instantiation expression. " +
     "You can either wrap the instantiation expression in parentheses, or delete the type arguments.",
@@ -927,12 +934,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     tsTryParseIndexSignature(
       node: Undone<N.TSIndexSignature>,
     ): N.TSIndexSignature | undefined {
-      if (
-        !(
-          this.match(tt.bracketL) &&
-          this.tsLookAhead(this.tsIsUnambiguouslyIndexSignature.bind(this))
-        )
-      ) {
+      if (!(
+        this.match(tt.bracketL) &&
+        this.tsLookAhead(this.tsIsUnambiguouslyIndexSignature.bind(this))
+      )) {
         return;
       }
 
@@ -2092,7 +2097,22 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.id = this.parseIdentifier();
       } else {
         node.kind = "module";
-        node.id = super.parseStringLiteral(this.state.value);
+        const { type, value } = this.state;
+        if (type === tt.string) {
+          node.id = super.parseStringLiteral(value);
+        } else if (tokenIsIdentifier(type)) {
+          this.raise(
+            TSErrors.InlineModuleDeclarationMustUseString,
+            this.state.startLoc,
+          );
+          node.id = this.tsParseEntityName(tsParseEntityNameFlags.NONE);
+        } else if (type === tt.braceL) {
+          this.raise(TSErrors.EmptyNamespaceName, this.state.startLoc);
+        } else {
+          this.raise(TSErrors.InvalidNamespaceName, this.state.startLoc, value);
+          // @ts-expect-error Parse as an expression atom to recover from the error
+          node.id = super.parseExprAtom();
+        }
       }
       if (this.match(tt.braceL)) {
         if (!isGlobal) {
@@ -2378,8 +2398,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // Used when parsing type arguments from ES or JSX productions, where the first token
     // has been created without state.inType. Thus we need to re-scan the lt token.
     tsParseTypeArgumentsInExpression():
-      | N.TSTypeParameterInstantiation
-      | undefined {
+      N.TSTypeParameterInstantiation | undefined {
       if (this.reScan_lt() !== tt.lt) return;
       return this.tsParseTypeArguments();
     }
@@ -3057,10 +3076,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         allowMissingInitializer || isAmbientContext,
       );
 
-      if (!isAmbientContext) return declaration;
-
       // If node.declare is true, the error has already been raised in tsTryParseDeclare.
-      if (!node.declare && (kind === "using" || kind === "await using")) {
+      if (
+        isAmbientContext &&
+        !node.declare &&
+        (kind === "using" || kind === "await using")
+      ) {
         this.raiseOverwrite(
           TSErrors.UsingDeclarationInAmbientContext,
           node,
@@ -3069,21 +3090,33 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         return declaration;
       }
 
-      for (const { id, init } of declaration.declarations) {
-        // Empty initializer is the easy case that we want.
-        if (!init) continue;
+      for (const declarator of declaration.declarations) {
+        const { id, init, definite } = declarator;
+        if (definite) {
+          if (init) {
+            this.raise(TSErrors.DeclaratorDefiniteAssertionWithInitializer, id);
+            // @ts-expect-error typeAnnotation is not defined on VoidPattern
+          } else if (!id.typeAnnotation) {
+            this.raise(
+              TSErrors.DeclaratorDefiniteAssertionRequiresTypeAnnotation,
+              id,
+            );
+          }
+        }
 
-        // var and let aren't ever allowed initializers.
-        // @ts-expect-error typeAnnotation is not defined on VoidPattern
-        if (kind === "var" || kind === "let" || !!id.typeAnnotation) {
-          this.raise(TSErrors.InitializerNotAllowedInAmbientContext, init);
-        } else if (
-          !isValidAmbientConstInitializer(init, this.hasPlugin("estree"))
-        ) {
-          this.raise(
-            TSErrors.ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference,
-            init,
-          );
+        if (isAmbientContext && init) {
+          // var and let aren't ever allowed initializers.
+          // @ts-expect-error typeAnnotation is not defined on VoidPattern
+          if (kind === "var" || kind === "let" || !!id.typeAnnotation) {
+            this.raise(TSErrors.InitializerNotAllowedInAmbientContext, init);
+          } else if (
+            !isValidAmbientConstInitializer(init, this.hasPlugin("estree"))
+          ) {
+            this.raise(
+              TSErrors.ConstInitializerMustBeStringOrNumericLiteralOrLiteralEnumReference,
+              init,
+            );
+          }
         }
       }
 
@@ -3546,6 +3579,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       const type = this.tsTryParseTypeAnnotation();
       if (type) node.typeAnnotation = type;
+      if (node.definite) {
+        if (this.match(tt.eq)) {
+          this.raise(TSErrors.DeclaratorDefiniteAssertionWithInitializer, node);
+        } else if (!type) {
+          this.raise(
+            TSErrors.DeclaratorDefiniteAssertionRequiresTypeAnnotation,
+            node,
+          );
+        }
+      }
     }
 
     parseClassProperty(node: Undone<N.ClassProperty>): N.ClassProperty {
@@ -4212,10 +4255,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     toAssignableListItem(
       exprList: (
-        | N.Expression
-        | N.SpreadElement
-        | N.RestElement
-        | N.TSTypeCastExpression
+        N.Expression | N.SpreadElement | N.RestElement | N.TSTypeCastExpression
       )[],
       index: number,
       isLHS: boolean,

@@ -361,9 +361,7 @@ export default function /* @no-mangle */ _regenerator() {
                   _arg > finallyLoc)
               ) {
                 entry[4] = _type as
-                  | OperatorType.Return
-                  | OperatorType.Jump
-                  | OperatorType.Throw;
+                  OperatorType.Return | OperatorType.Jump | OperatorType.Throw;
                 entry[5] = _arg;
                 ctx.n = finallyLoc;
                 method = OperatorType.Next;

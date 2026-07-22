@@ -158,10 +158,5 @@ export const mixinPlugins = {
 };
 
 export const mixinPluginNames = Object.keys(mixinPlugins) as readonly (
-  | "estree"
-  | "jsx"
-  | "flow"
-  | "typescript"
-  | "v8intrinsic"
-  | "placeholders"
+  "estree" | "jsx" | "flow" | "typescript" | "v8intrinsic" | "placeholders"
 )[];

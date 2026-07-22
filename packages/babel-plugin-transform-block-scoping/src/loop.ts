@@ -382,6 +382,10 @@ export function isVarInLoopHead(path: NodePath<t.VariableDeclaration>) {
   return false;
 }
 
+export function isVarInForStatementInit(path: NodePath<t.VariableDeclaration>) {
+  return path.parentPath.isForStatement() && path.key === "init";
+}
+
 function filterMap<T, U extends object>(list: T[], fn: (item: T) => U | null) {
   const result: U[] = [];
   for (const item of list) {
