@@ -107,6 +107,17 @@ describe("evaluation", function () {
     expect(result.value).toBe(1);
   });
 
+  it("should evaluate TypeScript instantiation expressions", function () {
+    const result = getPath("const value = 1; value<number>;", {
+      plugins: ["typescript"],
+    })
+      .get("body.1.expression")
+      .evaluate();
+
+    expect(result.confident).toBe(true);
+    expect(result.value).toBe(1);
+  });
+
   it("should deopt when var is redeclared in the same scope", function () {
     expect(
       getPath("var x = 2; var y = x + 2; { var x = 3 }")
