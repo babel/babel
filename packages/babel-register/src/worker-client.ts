@@ -35,8 +35,8 @@ class Client implements IClient {
     return this.#send(ACTIONS.IS_FILE_IGNORED, filename);
   }
 
-  close() {
-    this.#send(ACTIONS.CLOSE, undefined);
+  save() {
+    this.#send(ACTIONS.SAVE, undefined);
   }
 }
 
