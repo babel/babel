@@ -1,7 +1,9 @@
 var _class, _descriptor;
 import { observable } from 'mobx';
 let Foo = (_class = class Foo {
-  id = babelHelpers.initializerWarningHelper(_descriptor, this);
+  constructor() {
+    babelHelpers.initializerDefineProperty(this, "id", _descriptor, this);
+  }
 }, _descriptor = babelHelpers.applyDecoratedDescriptor(_class.prototype, "id", [observable], {
   configurable: true,
   enumerable: true,
