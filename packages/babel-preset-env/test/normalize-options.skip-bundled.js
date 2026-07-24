@@ -6,6 +6,26 @@ import normalizeOptions, {
 
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {
+    it("warns but accepts the removed `bugfixes` option", () => {
+      const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+      const options = { bugfixes: true };
+      const normalized = normalizeOptions(options);
+      expect(normalized).not.toHaveProperty("bugfixes");
+      expect(options).toHaveProperty("bugfixes", true);
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining("'bugfixes' option has been removed"),
+      );
+
+      expect(() => normalizeOptions({ bugfixes: false })).not.toThrow();
+      expect(warn).toHaveBeenCalledTimes(2);
+
+      normalizeOptions({});
+      expect(warn).toHaveBeenCalledTimes(2);
+
+      warn.mockRestore();
+    });
+
     it("should return normalized `include` and `exclude`", () => {
       const normalized = normalizeOptions({
         include: [

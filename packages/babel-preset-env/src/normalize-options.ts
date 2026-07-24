@@ -199,11 +199,20 @@ export function normalizeCoreJSOption(
 }
 
 export default function normalizeOptions(opts: Partial<Options>) {
-  v.invariant(
-    !Object.hasOwn(opts, "bugfixes"),
-    "The 'bugfixes' option has been removed, and now bugfix plugins are" +
-      " always enabled. Please remove it from your config.",
-  );
+  if (Object.hasOwn(opts, "bugfixes")) {
+    console.warn(
+      "\nWARNING (@babel/preset-env): The 'bugfixes' option has been removed, and now bugfix plugins are" +
+        " always enabled. Please remove it from your config.\n",
+    );
+
+    const optsWithoutBugfixes = {
+      ...opts,
+    } as Partial<Options> & {
+      bugfixes?: unknown;
+    };
+    delete optsWithoutBugfixes.bugfixes;
+    opts = optsWithoutBugfixes;
+  }
 
   v.validateTopLevelOptions(opts, TopLevelOptions);
 
