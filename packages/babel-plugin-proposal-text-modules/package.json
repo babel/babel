@@ -1,0 +1,48 @@
+{
+  "name": "@babel/plugin-proposal-text-modules",
+  "version": "8.0.0-rc.2",
+  "description": "Transform text modules imports (`import '...' with { type: 'text' }`) to work in browsers and Node.js.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-text-modules"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-text-modules",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "babel-plugin",
+    "import",
+    "text",
+    "attributes",
+    "assertions",
+    "proposal",
+    "stage-3"
+  ],
+  "dependencies": {
+    "@babel/helper-import-to-platform-api": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^8.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "babel-plugin-polyfill-corejs3": "catalog:"
+  },
+  "engines": {
+    "node": "^22.18.0 || >=24.11.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "type": "module"
+}

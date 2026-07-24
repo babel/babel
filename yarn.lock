@@ -852,6 +852,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-compilation-targets": "workspace:^"
     "@babel/helper-module-imports": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
     "@babel/traverse": "workspace:^"
   peerDependencies:
     "@babel/core": ^8.0.0
@@ -1486,6 +1487,20 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/plugin-proposal-bytes-modules@workspace:packages/babel-plugin-proposal-bytes-modules":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-bytes-modules@workspace:packages/babel-plugin-proposal-bytes-modules"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-import-to-platform-api": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    babel-plugin-polyfill-corejs3: "catalog:"
+  peerDependencies:
+    "@babel/core": ^8.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-decorators@workspace:^, @babel/plugin-proposal-decorators@workspace:packages/babel-plugin-proposal-decorators":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-decorators@workspace:packages/babel-plugin-proposal-decorators"
@@ -1667,6 +1682,19 @@ __metadata:
   checksum: 10/1dd707370ac5c6c349da7af826bd26448bed3cf06b9ba1d6864894105fd25fb02af0e1f0a2d50489826ee2d3e0bafcea47f5e4879d2fa8ff6148e2dc2c4f6278
   languageName: node
   linkType: hard
+
+"@babel/plugin-proposal-text-modules@workspace:packages/babel-plugin-proposal-text-modules":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-text-modules@workspace:packages/babel-plugin-proposal-text-modules"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-import-to-platform-api": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    babel-plugin-polyfill-corejs3: "catalog:"
+  peerDependencies:
+    "@babel/core": ^8.0.0
+  languageName: unknown
+  linkType: soft
 
 "@babel/plugin-proposal-throw-expressions@workspace:^, @babel/plugin-proposal-throw-expressions@workspace:packages/babel-plugin-proposal-throw-expressions":
   version: 0.0.0-use.local
@@ -2627,7 +2655,6 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-import-to-platform-api": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
-    "@babel/helper-plugin-utils": "workspace:^"
     babel-plugin-polyfill-corejs3: "catalog:"
   peerDependencies:
     "@babel/core": ^8.0.0
