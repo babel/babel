@@ -3,6 +3,7 @@ import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
+import { isModuleNamespaceObject } from "node:util/types";
 import type { InputOptions } from "@babel/core";
 import type { EncodedSourceMap } from "@jridgewell/gen-mapping";
 
@@ -75,6 +76,20 @@ function tryResolve(module: string) {
     return null;
   }
 }
+
+function loadOptions(loc: string): TaskOptions {
+  const options = require(loc);
+  if (isModuleNamespaceObject(options)) {
+    if (!Object.hasOwn(options, "default")) {
+      throw new Error(
+        `Fixture options must export a default export when using ES modules: ${loc}`,
+      );
+    }
+    return options.default;
+  }
+  return options;
+}
+
 function assertDirectory(loc: string) {
   if (!fs.statSync(loc).isDirectory()) {
     throw new Error(`Expected ${loc} to be a directory.`);
@@ -159,7 +174,7 @@ function pushTask(
           break;
         case "options":
           taskOptsLoc = loc;
-          Object.assign(taskOpts, require(taskOptsLoc));
+          Object.assign(taskOpts, loadOptions(taskOptsLoc));
           break;
         case "source-map":
           sourceMapLoc = loc;
@@ -462,7 +477,7 @@ export default function get(entryLoc: string | URL) {
 
   let rootOpts: TaskOptions = {};
   const rootOptsLoc = tryResolve(entryLoc + "/options");
-  if (rootOptsLoc) rootOpts = require(rootOptsLoc);
+  if (rootOptsLoc) rootOpts = loadOptions(rootOptsLoc);
 
   for (const suiteName of fs.readdirSync(entryLoc)) {
     if (shouldIgnore(suiteName)) continue;
@@ -480,7 +495,7 @@ export default function get(entryLoc: string | URL) {
     const suiteOptsLoc = tryResolve(suite.filename + "/options");
     if (suiteOptsLoc) {
       suite.options = resolveOptionPluginOrPreset(
-        require(suiteOptsLoc),
+        loadOptions(suiteOptsLoc),
         suite.filename,
       );
     }
