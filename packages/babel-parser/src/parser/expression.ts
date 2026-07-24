@@ -1090,7 +1090,7 @@ export default abstract class ExpressionParser extends LValParser {
         this.next();
 
         if (this.match(tt.dot)) {
-          return this.parseImportMetaPropertyOrPhaseCall(node);
+          return this.parseImportMetaPropertyOrPhaseCallOrSyncCall(node);
         }
 
         if (this.match(tt.parenL)) {
@@ -1574,7 +1574,8 @@ export default abstract class ExpressionParser extends LValParser {
 
   // https://tc39.es/ecma262/#prod-ImportMeta
   // https://tc39.es/proposal-source-phase-imports/
-  parseImportMetaPropertyOrPhaseCall(
+  // https://tc39.es/proposal-import-sync/
+  parseImportMetaPropertyOrPhaseCallOrSyncCall(
     this: Parser,
     node: Undone<N.MetaProperty | N.ImportExpression>,
   ): N.MetaProperty | N.ImportExpression {
@@ -1590,6 +1591,11 @@ export default abstract class ExpressionParser extends LValParser {
       (node as Undone<N.ImportExpression>).phase = isSource
         ? "source"
         : "defer";
+      return this.parseImportCall(node as Undone<N.ImportExpression>);
+    } else if (this.isContextual(tt._sync)) {
+      this.expectPlugin("importSync");
+      this.next();
+      (node as Undone<N.ImportExpression>).sync = true;
       return this.parseImportCall(node as Undone<N.ImportExpression>);
     } else {
       const id = this.createIdentifierAt(

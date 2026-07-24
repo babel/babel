@@ -37,8 +37,8 @@
           },
           "value": "bar"
         },
-        "declaration": null,
-        "attributes": []
+        "attributes": [],
+        "declaration": null
       }
     ],
     "directives": [],
