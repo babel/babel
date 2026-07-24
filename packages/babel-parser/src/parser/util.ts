@@ -30,6 +30,7 @@ import type Parser from "./index.ts";
 
 import type ScopeHandler from "../util/scope.ts";
 import { OptionFlags } from "../options.ts";
+import type { Undone } from "./node.ts";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   node: Node;
@@ -416,7 +417,7 @@ export default abstract class UtilParser extends Tokenizer {
  */
 export class ExpressionErrors {
   shorthandAssignLoc: Position | undefined | null = null;
-  doubleProtoLoc: Position | undefined | null = null;
+  doubleProtoLoc: Undone<Node> | undefined | null = null;
   privateKeyLoc: Position | undefined | null = null;
   optionalParametersLoc: Position | undefined | null = null;
   voidPatternLoc: Position | undefined | null = null;
