@@ -11,9 +11,6 @@ import pluginUnicorn from "eslint-plugin-unicorn";
 import pluginBabelDevelopment from "@babel/eslint-plugin-development";
 import pluginBabelDevelopmentInternal from "@babel/eslint-plugin-development-internal";
 import typescriptEslint from "typescript-eslint";
-import { commonJS } from "$repo-utils";
-
-const { require } = commonJS(import.meta.url);
 
 const cjsGlobals = ["__dirname", "__filename", "require", "module", "exports"];
 
@@ -351,22 +348,6 @@ export default defineConfig([
     files: [...sourceFiles("js,ts,mjs"), ...testFiles, "test/**/*.js"],
     rules: {
       "no-restricted-globals": ["error", ...cjsGlobals],
-      "no-restricted-imports": [
-        "error",
-        {
-          paths: [
-            {
-              name: "semver",
-              message:
-                "semver's named exports are not recognized by the Node.js ESM-CJS interop.",
-              importNames: Object.keys(require("semver")).filter(
-                // We use it as a type import.
-                name => name !== "SemVer"
-              ),
-            },
-          ],
-        },
-      ],
     },
   },
   {

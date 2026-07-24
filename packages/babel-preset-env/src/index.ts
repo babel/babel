@@ -1,4 +1,4 @@
-import semver, { type SemVer } from "semver";
+import { isLess, normalize, type SemVer } from "verkit";
 import { logPlugin } from "./debug.ts";
 import {
   addProposalSyntaxPlugins,
@@ -141,7 +141,7 @@ const getCoreJSOptions = ({
   debug: boolean;
 }) => ({
   method: `${useBuiltIns}-global`,
-  version: corejs ? corejs.toString() : undefined,
+  version: corejs ? normalize(corejs)! : undefined,
   targets: polyfillTargets,
   include,
   exclude,
@@ -223,7 +223,7 @@ export default declarePreset((api, opts: Options) => {
     // @babel/core < 7.13.0 doesn't load targets (api.targets() always
     // returns {} thanks to @babel/helper-plugin-utils), so we always want
     // to fallback to the old targets behavior in this case.
-    semver.lt(api.version, "7.13.0") ||
+    isLess(api.version, "7.13.0") ||
     // If any browserslist-related option is specified, fallback to the old
     // behavior of not using the targets specified in the top-level options.
     opts.targets ||

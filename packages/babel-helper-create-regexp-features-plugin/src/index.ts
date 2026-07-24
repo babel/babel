@@ -2,7 +2,7 @@ import rewritePattern from "regexpu-core";
 import { types as t, type PluginObject, type NodePath } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
-import semver from "semver";
+import { isLess } from "verkit";
 
 import {
   featuresKey,
@@ -66,7 +66,7 @@ export function createRegExpFeaturePlugin({
 
       if (
         !file.get(versionKey) ||
-        semver.lt(file.get(versionKey), PACKAGE_JSON.version)
+        isLess(file.get(versionKey), PACKAGE_JSON.version)
       ) {
         file.set(versionKey, PACKAGE_JSON.version);
       }

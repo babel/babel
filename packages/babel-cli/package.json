@@ -36,8 +36,7 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-transform-fixture-test-runner": "workspace:^",
-    "semver": "catalog:"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^"
   },
   "bin": {
     "babel": "./bin/babel.js"

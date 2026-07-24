@@ -1,4 +1,4 @@
-import semver from "semver";
+import { clean, isLess } from "verkit";
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -8,7 +8,7 @@ import type { EncodedSourceMap } from "@jridgewell/gen-mapping";
 
 const require = createRequire(import.meta.url);
 
-const nodeVersion = semver.clean(process.version.slice(1))!;
+const nodeVersion = clean(process.version.slice(1))!;
 
 function humanize(val: string, noext?: boolean) {
   if (noext) val = path.basename(val, path.extname(val));
@@ -265,7 +265,7 @@ function pushTask(
 
   // If there's node requirement, check it before pushing task
   if (taskOpts.minNodeVersion) {
-    const minimumVersion = semver.clean(taskOpts.minNodeVersion);
+    const minimumVersion = clean(taskOpts.minNodeVersion);
 
     if (minimumVersion == null) {
       throw new Error(
@@ -273,7 +273,7 @@ function pushTask(
       );
     }
 
-    if (semver.lt(nodeVersion, minimumVersion)) {
+    if (isLess(nodeVersion, minimumVersion)) {
       if (test.actual.code) {
         test.exec.code = undefined;
       } else {
@@ -286,7 +286,7 @@ function pushTask(
   }
 
   if (taskOpts.minNodeVersionTransform) {
-    const minimumVersion = semver.clean(taskOpts.minNodeVersionTransform);
+    const minimumVersion = clean(taskOpts.minNodeVersionTransform);
 
     if (minimumVersion == null) {
       throw new Error(
@@ -294,7 +294,7 @@ function pushTask(
       );
     }
 
-    if (semver.lt(nodeVersion, minimumVersion)) {
+    if (isLess(nodeVersion, minimumVersion)) {
       return;
     }
 

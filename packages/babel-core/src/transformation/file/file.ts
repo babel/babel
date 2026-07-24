@@ -4,7 +4,7 @@ import type { HubInterface, Scope } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
 import { cloneNode, interpreterDirective, traverseFast } from "@babel/types";
 import type * as t from "@babel/types";
-import semver from "semver";
+import { isValid, rangesIntersect } from "verkit";
 
 import type { NormalizedFile } from "../normalize-file.ts";
 
@@ -102,28 +102,17 @@ export default class File {
 
     if (typeof versionRange !== "string") return true;
 
-    // semver.intersects() has some surprising behavior with comparing ranges
-    // with pre-release versions. We add '^' to ensure that we are always
-    // comparing ranges with ranges, which sidesteps this logic.
-    // For example:
-    //
-    //   semver.intersects(`<7.0.1`, "7.0.0-beta.0") // false - surprising
-    //   semver.intersects(`<7.0.1`, "^7.0.0-beta.0") // true - expected
-    //
-    // This is because the first falls back to
-    //
-    //   semver.satisfies("7.0.0-beta.0", `<7.0.1`) // false - surprising
-    //
-    // and this fails because a prerelease version can only satisfy a range
-    // if it is a prerelease within the same major/minor/patch range.
+    // Treat a concrete version as its compatible range. This ensures that a
+    // helper introduced after a prerelease is not considered available for
+    // that prerelease, while preserving the existing behavior for ranges.
     //
     // Note: If this is found to have issues, please also revisit the logic in
     // transform-runtime's definitions.js file.
-    if (semver.valid(versionRange)) versionRange = `^${versionRange}`;
+    if (isValid(versionRange)) versionRange = `^${versionRange}`;
 
     return (
-      !semver.intersects(`<${minVersion}`, versionRange) &&
-      !semver.intersects(`>=9.0.0`, versionRange)
+      !rangesIntersect(`<${minVersion}`, versionRange) &&
+      !rangesIntersect(`>=9.0.0`, versionRange)
     );
   }
 

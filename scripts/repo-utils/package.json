@@ -8,7 +8,7 @@
     "./babel-top-level": "./babel.js"
   },
   "dependencies": {
-    "semver": "catalog:",
+    "verkit": "catalog:",
     "@babel/core": "workspace:^",
     "@babel/preset-typescript": "workspace:^"
   }

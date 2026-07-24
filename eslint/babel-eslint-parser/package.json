@@ -35,7 +35,7 @@
   "dependencies": {
     "eslint-scope": "^9.1.0",
     "eslint-visitor-keys": "^5.0.0",
-    "semver": "catalog:"
+    "verkit": "catalog:"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
