@@ -326,7 +326,7 @@ export function getNextSibling(
 export function getAllNextSiblings(
   this: NodePath<t.Node | null>,
 ): NodePath<t.Node | null>[] {
-  // @ts-expect-error the Number.isFinite check ensures that this.key is a number
+  // @ts-expect-error the Number.isInteger check ensures that this.key is a number
   const _key: number = this.key;
   if (!Number.isInteger(_key)) {
     return [];
@@ -342,7 +342,7 @@ export function getAllNextSiblings(
 export function getAllPrevSiblings(
   this: NodePath<t.Node | null>,
 ): NodePath<t.Node | null>[] {
-  // @ts-expect-error the Number.isFinite check ensures that this.key is a number
+  // @ts-expect-error the Number.isInteger check ensures that this.key is a number
   const _key: number = this.key;
   if (!Number.isInteger(_key)) {
     return [];
