@@ -32,9 +32,13 @@ describe("options loading", () => {
     "root-esm-named-only",
     "suite-esm-named-only",
     "task-esm-named-only",
-  ])("rejects ESM options without a default export at %s", name => {
-    expect(() => getOptions(name)).toThrow(
-      /Fixture options must export a default export when using ES modules:/,
-    );
+  ])("preserves named-only ESM options at %s", name => {
+    expect(getOptions(name)).toMatchObject({
+      assumptions: { noDocumentAll: true },
+    });
+  });
+
+  it("preserves named-only ESM plugins", () => {
+    expect(getOptions("root-esm-named-only").plugins).toHaveLength(1);
   });
 });
