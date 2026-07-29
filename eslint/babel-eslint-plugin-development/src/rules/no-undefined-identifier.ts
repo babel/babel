@@ -24,9 +24,10 @@ export default {
         const scope = context.sourceCode.getScope(node);
 
         const origin = getReferenceOrigin(callee, scope);
-        if (
-          !(origin && (origin.kind === "import" || origin.kind === "property"))
-        )
+        if (!(
+          origin &&
+          (origin.kind === "import" || origin.kind === "property")
+        ))
           return;
 
         const { name } = origin;

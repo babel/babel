@@ -64,8 +64,7 @@ export interface VisitorBase<S>
 export type Visitor<S = unknown> = VisitorBase<S> | ExplodedVisitor<S>;
 
 export type VisitNode<S, P extends t.Node> =
-  | VisitNodeFunction<S, P>
-  | VisitNodeObject<S, P>;
+  VisitNodeFunction<S, P> | VisitNodeObject<S, P>;
 
 export type VisitNodeFunction<S, P extends t.Node> = (
   this: S,
@@ -85,9 +84,13 @@ type ToNode<S extends string, N = Split<S>> = N extends keyof t.Aliases
 
 type OptionKeys = keyof TraverseOptions;
 
+type VisitNodeObjectKeys = keyof VisitNodeObject<unknown, t.Node>;
+
 export type VisitorProp<S, K extends string> = K extends OptionKeys
   ? TraverseOptions[K]
-  : VisitNode<S, ToNode<K>>;
+  : K extends VisitNodeObjectKeys
+    ? VisitNodeObject<S, t.Node>[K]
+    : VisitNode<S, ToNode<K>>;
 
 export type TraverseOptions = {
   scope?: Scope;

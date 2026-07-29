@@ -316,9 +316,7 @@ export type RootInputSourceMapOption = InputSourceMap | boolean;
 export type RootMode = "root" | "upward" | "upward-optional";
 
 export type TargetsListOrObject =
-  | Targets
-  | InputTargets
-  | InputTargets["browsers"];
+  Targets | InputTargets | InputTargets["browsers"];
 
 export type OptionsSource =
   | "arguments"

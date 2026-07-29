@@ -121,8 +121,7 @@ export function transformOptionalChain(
 
   for (let i = optionals.length - 1; i >= 0; i--) {
     const node = optionals[i] as unknown as
-      | t.MemberExpression
-      | t.CallExpression;
+      t.MemberExpression | t.CallExpression;
 
     const isCall = t.isCallExpression(node);
 

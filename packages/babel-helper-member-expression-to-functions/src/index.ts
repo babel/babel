@@ -254,7 +254,7 @@ const handler = {
       }
 
       let regular: t.Expression = member.node;
-      for (let current: NodePath = member; current !== endPath; ) {
+      for (let current: NodePath = member; current !== endPath;) {
         const parentPath = current.parentPath as NodePath<t.Expression>;
         // skip transforming `Foo.#BAR?.call(FOO)`
         if (

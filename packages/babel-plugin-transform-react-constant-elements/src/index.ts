@@ -224,7 +224,7 @@ export default declare((api, options: Options) => {
 
         const { targetScope } = visitorState;
         // Only hoist if it would give us an advantage.
-        for (let currentScope = jsxScope; ; ) {
+        for (let currentScope = jsxScope; ;) {
           if (targetScope === currentScope) return;
           if (isHoistingScope(currentScope)) break;
 

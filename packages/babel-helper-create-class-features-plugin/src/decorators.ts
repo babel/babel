@@ -34,9 +34,7 @@ type ClassElement =
   | t.StaticBlock;
 
 type ClassElementCanHaveComputedKeys =
-  | t.ClassMethod
-  | t.ClassProperty
-  | t.ClassAccessorProperty;
+  t.ClassMethod | t.ClassProperty | t.ClassAccessorProperty;
 
 export type DecoratorVersionKind = "2023-11";
 
@@ -615,8 +613,7 @@ interface DecoratorInfo {
   name: t.StringLiteral | t.Expression;
 
   privateMethods:
-    | (t.FunctionExpression | t.ArrowFunctionExpression)[]
-    | undefined;
+    (t.FunctionExpression | t.ArrowFunctionExpression)[] | undefined;
 
   // The names of local variables that will be used/returned from the decoration
   locals: t.Identifier | t.Identifier[] | undefined;
@@ -1365,8 +1362,7 @@ function transformClass(
       let locals: t.Identifier[];
       if (hasDecorators) {
         let privateMethods: (
-          | t.FunctionExpression
-          | t.ArrowFunctionExpression
+          t.FunctionExpression | t.ArrowFunctionExpression
         )[];
 
         let nameExpr: t.Expression;
@@ -1654,9 +1650,7 @@ function transformClass(
   if (classDecorators) {
     classLocals.push(classIdLocal, classInitLocal!);
     const statics: (
-      | t.ClassProperty
-      | t.ClassPrivateProperty
-      | t.ClassPrivateMethod
+      t.ClassProperty | t.ClassPrivateProperty | t.ClassPrivateMethod
     )[] = [];
     path.get("body.body").forEach(element => {
       if (
@@ -1862,8 +1856,7 @@ function transformClass(
   if (computedKeyAssignments.length > 0) {
     const elements = originalClassPath.get("body.body");
     let firstPublicElement:
-      | NodePath<t.ClassProperty | t.ClassMethod>
-      | undefined;
+      NodePath<t.ClassProperty | t.ClassMethod> | undefined;
     for (const path of elements) {
       if (
         (path.isClassProperty() || path.isClassMethod()) &&

@@ -595,10 +595,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             !insideModule)
         ) {
           const label = this.state.value as
-            | "const"
-            | "let"
-            | "type"
-            | "interface";
+            "const" | "let" | "type" | "interface";
           throw this.raise(
             FlowErrors.UnsupportedDeclareExportKind,
             this.state.startLoc,
@@ -958,8 +955,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // Used when parsing type arguments from ES or JSX productions, where the first token
     // has been created without state.inType. Thus we need to re-scan the lt token.
     flowParseTypeParameterInstantiationInExpression():
-      | N.TypeParameterInstantiation
-      | undefined {
+      N.TypeParameterInstantiation | undefined {
       if (this.reScan_lt() !== tt.lt) return;
       return this.flowParseTypeParameterInstantiation();
     }
@@ -3111,10 +3107,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }, state);
 
         let arrowExpression:
-          | N.ArrowFunctionExpression
-          | N.TypeCastExpression
-          | undefined
-          | null = null;
+          N.ArrowFunctionExpression | N.TypeCastExpression | undefined | null =
+          null;
 
         if (
           arrow.node &&
@@ -3214,8 +3208,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     setArrowFunctionParameters(
       node: Undone<N.ArrowFunctionExpression>,
       params:
-        | (N.Expression | N.SpreadElement)[]
-        | (N.Expression | N.RestElement)[],
+        (N.Expression | N.SpreadElement)[] | (N.Expression | N.RestElement)[],
     ): void {
       if (
         this.state.noArrowParamsConversionAt.includes(

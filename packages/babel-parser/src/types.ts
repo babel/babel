@@ -186,9 +186,7 @@ export type ESTreeClassElement =
 export type ESTreeLiteral = EstreeLiteral | EstreeBigIntLiteral;
 
 export type ESTreeExpression =
-  | EstreeChainExpression
-  | ESTreeLiteral
-  | EstreeTSEmptyBodyFunctionExpression;
+  EstreeChainExpression | ESTreeLiteral | EstreeTSEmptyBodyFunctionExpression;
 
 export type Node = N.Node | ESTreeNode | TSTypeCastExpression;
 
@@ -198,9 +196,7 @@ export type NormalFunction = N.FunctionDeclaration | N.FunctionExpression;
 export type Assignable = N.AssignmentExpression["left"];
 
 export type ObjectOrClassMember =
-  | N.ClassMethod
-  | N.ClassProperty
-  | N.ObjectMember;
+  N.ClassMethod | N.ClassProperty | N.ObjectMember;
 
 export type ObjectMember = N.ObjectProperty | N.ObjectMethod;
 
@@ -212,10 +208,7 @@ export type ClassMember =
   | N.ClassAccessorProperty;
 
 export type MethodLike =
-  | N.ObjectMethod
-  | N.ClassMethod
-  | N.ClassPrivateMethod
-  | N.TSDeclareMethod;
+  N.ObjectMethod | N.ClassMethod | N.ClassPrivateMethod | N.TSDeclareMethod;
 
 export type AnyImport = N.ImportDeclaration | N.TSImportEqualsDeclaration;
 export type AnyExport =

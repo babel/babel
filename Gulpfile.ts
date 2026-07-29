@@ -109,11 +109,7 @@ async function generateHelpers(
 }
 
 type TypesHelperKind =
-  | "asserts"
-  | "ast-types"
-  | "builders"
-  | "constants"
-  | "validators";
+  "asserts" | "ast-types" | "builders" | "constants" | "validators";
 
 function generateTypeHelpers(
   helperKind: TypesHelperKind,

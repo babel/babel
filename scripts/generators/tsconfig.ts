@@ -303,10 +303,6 @@ maybeWriteFile(
               name,
               ["./lib/third-party-libs.d.ts"],
             ]),
-            [
-              "babel-plugin-dynamic-import-node/utils",
-              ["./lib/babel-plugin-dynamic-import-node.d.ts"],
-            ],
             ["kexec", ["./lib/kexec.d.ts"]],
           ]),
         },

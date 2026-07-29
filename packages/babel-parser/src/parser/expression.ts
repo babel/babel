@@ -118,10 +118,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     const key = prop.key as
-      | N.Identifier
-      | N.StringLiteral
-      | N.NumericLiteral
-      | N.BigIntLiteral;
+      N.Identifier | N.StringLiteral | N.NumericLiteral | N.BigIntLiteral;
     // It is either an Identifier or a String/NumericLiteral
     const name = key.type === "Identifier" ? key.name : key.value;
 
@@ -917,12 +914,8 @@ export default abstract class ExpressionParser extends LValParser {
       );
     }
     let finishedNode:
-      | N.CallExpression
-      | N.OptionalCallExpression
-      | N.ArrowFunctionExpression = this.finishCallExpression(
-      node,
-      optionalChainMember,
-    );
+      N.CallExpression | N.OptionalCallExpression | N.ArrowFunctionExpression =
+      this.finishCallExpression(node, optionalChainMember);
 
     if (maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
       /*:: invariant(refExpressionErrors != null) */

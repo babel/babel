@@ -492,11 +492,7 @@ export default abstract class LValParser extends NodeUtils {
     const allowEmpty = flags & ParseBindingListFlags.ALLOW_EMPTY;
 
     const elts: (
-      | Pattern
-      | Identifier
-      | RestElement
-      | TSParameterProperty
-      | null
+      Pattern | Identifier | RestElement | TSParameterProperty | null
     )[] = [];
     let first = true;
     while (!this.eat(close)) {
@@ -736,11 +732,7 @@ export default abstract class LValParser extends NodeUtils {
 
   checkLVal(
     expression:
-      | Expression
-      | ObjectMember
-      | RestElement
-      | Pattern
-      | TSParameterProperty,
+      Expression | ObjectMember | RestElement | Pattern | TSParameterProperty,
     ancestor: LValAncestor,
     binding: BindingFlag = BindingFlag.TYPE_NONE,
     checkClashes: Set<string> | false = false,

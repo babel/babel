@@ -38,7 +38,7 @@ function takeVoidPatternComments(node: t.VoidPattern, parent: t.ArrayPattern) {
 }
 
 function syncScopeForReplacedVoidPattern(path: NodePath<t.Identifier>) {
-  for (let childPath: NodePath = path; childPath.parentPath != null; ) {
+  for (let childPath: NodePath = path; childPath.parentPath != null;) {
     const parentPath: NodePath = childPath.parentPath;
     switch (parentPath.type) {
       case "VariableDeclaration": {
@@ -147,9 +147,7 @@ export function removeTrailingVoidPatternsFromParams(
 export function isAnonymousFunctionDefinition(
   node: t.Node | null,
 ): node is
-  | t.ClassExpression
-  | t.ArrowFunctionExpression
-  | t.FunctionExpression {
+  t.ClassExpression | t.ArrowFunctionExpression | t.FunctionExpression {
   return (
     t.isArrowFunctionExpression(node) ||
     ((t.isFunctionExpression(node) || t.isClassExpression(node)) && !node.id)

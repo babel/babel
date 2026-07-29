@@ -405,9 +405,7 @@ export interface CallExpression extends BaseNode {
   callee: Expression | Super | Import | V8IntrinsicIdentifier;
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
   typeArguments?:
-    | TypeParameterInstantiation
-    | TSTypeParameterInstantiation
-    | null;
+    TypeParameterInstantiation | TSTypeParameterInstantiation | null;
 }
 
 export interface CatchClause extends BaseNode {
@@ -586,17 +584,14 @@ export interface MemberExpressionNonComputed extends BaseNode {
   property: Identifier | PrivateName;
 }
 export type MemberExpression =
-  | MemberExpressionComputed
-  | MemberExpressionNonComputed;
+  MemberExpressionComputed | MemberExpressionNonComputed;
 
 export interface NewExpression extends BaseNode {
   type: "NewExpression";
   callee: Expression;
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
   typeArguments?:
-    | TypeParameterInstantiation
-    | TSTypeParameterInstantiation
-    | null;
+    TypeParameterInstantiation | TSTypeParameterInstantiation | null;
 }
 
 export interface Program extends BaseNode {
@@ -655,11 +650,7 @@ export interface ObjectPropertyNonComputed extends BaseNode {
   decorators?: Decorator[] | null;
   computed: false;
   key:
-    | Identifier
-    | StringLiteral
-    | NumericLiteral
-    | BigIntLiteral
-    | PrivateName;
+    Identifier | StringLiteral | NumericLiteral | BigIntLiteral | PrivateName;
 }
 export type ObjectProperty = ObjectPropertyComputed | ObjectPropertyNonComputed;
 
@@ -841,9 +832,7 @@ export interface ClassExpression extends BaseNode {
   implements?: (TSClassImplements | ClassImplements)[] | null;
   mixins?: InterfaceExtends | null;
   superTypeArguments?:
-    | TypeParameterInstantiation
-    | TSTypeParameterInstantiation
-    | null;
+    TypeParameterInstantiation | TSTypeParameterInstantiation | null;
   typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
 
@@ -858,9 +847,7 @@ export interface ClassDeclaration extends BaseNode {
   implements?: (TSClassImplements | ClassImplements)[] | null;
   mixins?: InterfaceExtends | null;
   superTypeArguments?:
-    | TypeParameterInstantiation
-    | TSTypeParameterInstantiation
-    | null;
+    TypeParameterInstantiation | TSTypeParameterInstantiation | null;
   typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
 
@@ -901,9 +888,7 @@ export interface ExportNamedDeclaration extends BaseNode {
     | TypeAlias
     | null;
   specifiers: (
-    | ExportSpecifier
-    | ExportDefaultSpecifier
-    | ExportNamespaceSpecifier
+    ExportSpecifier | ExportDefaultSpecifier | ExportNamespaceSpecifier
   )[];
   source?: StringLiteral | null;
   attributes?: ImportAttribute[] | null;
@@ -937,9 +922,7 @@ export interface ForOfStatement extends BaseNode {
 export interface ImportDeclaration extends BaseNode {
   type: "ImportDeclaration";
   specifiers: (
-    | ImportSpecifier
-    | ImportDefaultSpecifier
-    | ImportNamespaceSpecifier
+    ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier
   )[];
   source: StringLiteral;
   attributes?: ImportAttribute[] | null;
@@ -1041,9 +1024,7 @@ export interface TaggedTemplateExpression extends BaseNode {
   tag: Expression;
   quasi: TemplateLiteral;
   typeArguments?:
-    | TypeParameterInstantiation
-    | TSTypeParameterInstantiation
-    | null;
+    TypeParameterInstantiation | TSTypeParameterInstantiation | null;
 }
 
 export interface TemplateElement extends BaseNode {
@@ -1105,8 +1086,7 @@ export interface OptionalMemberExpressionNonComputed extends BaseNode {
   property: Identifier | PrivateName;
 }
 export type OptionalMemberExpression =
-  | OptionalMemberExpressionComputed
-  | OptionalMemberExpressionNonComputed;
+  OptionalMemberExpressionComputed | OptionalMemberExpressionNonComputed;
 
 export interface OptionalCallExpression extends BaseNode {
   type: "OptionalCallExpression";
@@ -1114,9 +1094,7 @@ export interface OptionalCallExpression extends BaseNode {
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
   optional: boolean;
   typeArguments?:
-    | TypeParameterInstantiation
-    | TSTypeParameterInstantiation
-    | null;
+    TypeParameterInstantiation | TSTypeParameterInstantiation | null;
 }
 
 export interface ClassPropertyComputed extends BaseNode {
@@ -1606,11 +1584,7 @@ export interface JSXAttribute extends BaseNode {
   type: "JSXAttribute";
   name: JSXIdentifier | JSXNamespacedName;
   value?:
-    | JSXElement
-    | JSXFragment
-    | StringLiteral
-    | JSXExpressionContainer
-    | null;
+    JSXElement | JSXFragment | StringLiteral | JSXExpressionContainer | null;
 }
 
 export interface JSXClosingElement extends BaseNode {
@@ -1623,11 +1597,7 @@ export interface JSXElement extends BaseNode {
   openingElement: JSXOpeningElement;
   closingElement?: JSXClosingElement | null;
   children: (
-    | JSXText
-    | JSXExpressionContainer
-    | JSXSpreadChild
-    | JSXElement
-    | JSXFragment
+    JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement | JSXFragment
   )[];
 }
 
@@ -1668,9 +1638,7 @@ export interface JSXOpeningElement extends BaseNode {
   attributes: (JSXAttribute | JSXSpreadAttribute)[];
   selfClosing: boolean;
   typeArguments?:
-    | TypeParameterInstantiation
-    | TSTypeParameterInstantiation
-    | null;
+    TypeParameterInstantiation | TSTypeParameterInstantiation | null;
 }
 
 export interface JSXSpreadAttribute extends BaseNode {
@@ -1688,11 +1656,7 @@ export interface JSXFragment extends BaseNode {
   openingFragment: JSXOpeningFragment;
   closingFragment: JSXClosingFragment;
   children: (
-    | JSXText
-    | JSXExpressionContainer
-    | JSXSpreadChild
-    | JSXElement
-    | JSXFragment
+    JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement | JSXFragment
   )[];
 }
 
@@ -1769,15 +1733,10 @@ export interface ClassAccessorPropertyNonComputed extends BaseNode {
   variance?: Variance | null;
   computed: false;
   key:
-    | Identifier
-    | StringLiteral
-    | NumericLiteral
-    | BigIntLiteral
-    | PrivateName;
+    Identifier | StringLiteral | NumericLiteral | BigIntLiteral | PrivateName;
 }
 export type ClassAccessorProperty =
-  | ClassAccessorPropertyComputed
-  | ClassAccessorPropertyNonComputed;
+  ClassAccessorPropertyComputed | ClassAccessorPropertyNonComputed;
 
 export interface Decorator extends BaseNode {
   type: "Decorator";
@@ -1863,8 +1822,7 @@ export interface TSDeclareMethodNonComputed extends BaseNode {
   key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
 }
 export type TSDeclareMethod =
-  | TSDeclareMethodComputed
-  | TSDeclareMethodNonComputed;
+  TSDeclareMethodComputed | TSDeclareMethodNonComputed;
 
 export interface TSQualifiedName extends BaseNode {
   type: "TSQualifiedName";
@@ -2484,10 +2442,7 @@ export type Terminatorless =
   | YieldExpression
   | AwaitExpression;
 export type CompletionStatement =
-  | BreakStatement
-  | ContinueStatement
-  | ReturnStatement
-  | ThrowStatement;
+  BreakStatement | ContinueStatement | ReturnStatement | ThrowStatement;
 export type Conditional = ConditionalExpression | IfStatement;
 export type Loop =
   | DoWhileStatement
@@ -2497,9 +2452,7 @@ export type Loop =
   | ForOfStatement;
 export type While = DoWhileStatement | WhileStatement;
 export type ExpressionWrapper =
-  | ExpressionStatement
-  | ParenthesizedExpression
-  | TypeCastExpression;
+  ExpressionStatement | ParenthesizedExpression | TypeCastExpression;
 export type For = ForInStatement | ForStatement | ForOfStatement;
 export type ForXStatement = ForInStatement | ForOfStatement;
 export type Function =
@@ -2620,16 +2573,10 @@ export type UserWhitespacable =
 export type Method = ObjectMethod | ClassMethod | ClassPrivateMethod;
 export type ObjectMember = ObjectMethod | ObjectProperty;
 export type Property =
-  | ObjectProperty
-  | ClassProperty
-  | ClassPrivateProperty
-  | ClassAccessorProperty;
+  ObjectProperty | ClassProperty | ClassPrivateProperty | ClassAccessorProperty;
 export type UnaryLike = UnaryExpression | SpreadElement;
 export type Pattern =
-  | AssignmentPattern
-  | ArrayPattern
-  | ObjectPattern
-  | VoidPattern;
+  AssignmentPattern | ArrayPattern | ObjectPattern | VoidPattern;
 export type Class = ClassExpression | ClassDeclaration;
 export type ImportOrExportDeclaration =
   | ExportAllDeclaration
@@ -2637,9 +2584,7 @@ export type ImportOrExportDeclaration =
   | ExportNamedDeclaration
   | ImportDeclaration;
 export type ExportDeclaration =
-  | ExportAllDeclaration
-  | ExportDefaultDeclaration
-  | ExportNamedDeclaration;
+  ExportAllDeclaration | ExportDefaultDeclaration | ExportNamedDeclaration;
 export type ModuleSpecifier =
   | ExportSpecifier
   | ImportDefaultSpecifier
@@ -2770,15 +2715,9 @@ export type FlowDeclaration =
   | TypeAlias;
 export type FlowPredicate = DeclaredPredicate | InferredPredicate;
 export type EnumBody =
-  | EnumBooleanBody
-  | EnumNumberBody
-  | EnumStringBody
-  | EnumSymbolBody;
+  EnumBooleanBody | EnumNumberBody | EnumStringBody | EnumSymbolBody;
 export type EnumMember =
-  | EnumBooleanMember
-  | EnumNumberMember
-  | EnumStringMember
-  | EnumDefaultedMember;
+  EnumBooleanMember | EnumNumberMember | EnumStringMember | EnumDefaultedMember;
 export type JSX =
   | JSXAttribute
   | JSXClosingElement
@@ -2988,10 +2927,7 @@ export interface Aliases {
 }
 
 export type DeprecatedAliases =
-  | NumberLiteral
-  | RegexLiteral
-  | RestProperty
-  | SpreadProperty;
+  NumberLiteral | RegexLiteral | RestProperty | SpreadProperty;
 
 export interface ParentMaps {
   AnyTypeAnnotation:
@@ -4252,9 +4188,7 @@ export interface ParentMaps {
     | WhileStatement
     | WithStatement;
   EnumDefaultedMember:
-    | DeclareExportDeclaration
-    | EnumStringBody
-    | EnumSymbolBody;
+    DeclareExportDeclaration | EnumStringBody | EnumSymbolBody;
   EnumNumberBody: DeclareExportDeclaration | EnumDeclaration;
   EnumNumberMember: DeclareExportDeclaration | EnumNumberBody;
   EnumStringBody: DeclareExportDeclaration | EnumDeclaration;
@@ -4989,9 +4923,7 @@ export interface ParentMaps {
     | JSXNamespacedName
     | JSXOpeningElement;
   JSXMemberExpression:
-    | JSXClosingElement
-    | JSXMemberExpression
-    | JSXOpeningElement;
+    JSXClosingElement | JSXMemberExpression | JSXOpeningElement;
   JSXNamespacedName: JSXAttribute | JSXClosingElement | JSXOpeningElement;
   JSXOpeningElement: JSXElement;
   JSXOpeningFragment: JSXFragment;

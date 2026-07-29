@@ -144,9 +144,8 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
 
         const pendingStaticBlocks: t.StaticBlock[] = [];
         let lastStaticProp:
-          | null
-          | NodePath<t.ClassProperty>
-          | NodePath<t.ClassPrivateProperty> = null;
+          null | NodePath<t.ClassProperty> | NodePath<t.ClassPrivateProperty> =
+          null;
 
         for (const path of classBody.get("body")) {
           if (path.isStaticBlock()) {

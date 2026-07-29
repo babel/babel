@@ -95,6 +95,20 @@ describe("traverse", () => {
   });
 
   describe("Visitor", () => {
+    it("top-level enter and exit", () => {
+      traverse({} as t.Node, {
+        enter(path) {
+          expect(path).type.toBe<NodePath<t.Node>>();
+          expect(path.type).type.toBe<t.Node["type"]>();
+        },
+        exit(path) {
+          expect(path).type.toBe<NodePath<t.Node>>();
+          expect(path.type).type.toBe<t.Node["type"]>();
+        },
+        noScope: true,
+      });
+    });
+
     describe("Union types", () => {
       it("traverse", () => {
         traverse({} as t.Node, {

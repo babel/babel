@@ -135,8 +135,7 @@ export default declare((api, opt: Options) => {
         const { name } = node.left.id;
 
         let privateElement:
-          | NodePath<t.ClassPrivateMethod | t.ClassPrivateProperty>
-          | undefined;
+          NodePath<t.ClassPrivateMethod | t.ClassPrivateProperty> | undefined;
         const outerClass = path.findParent(path => {
           if (!path.isClass()) return false;
 

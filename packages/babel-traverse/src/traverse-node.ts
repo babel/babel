@@ -19,7 +19,7 @@ function _visitPaths(
   let stop = false;
   let visitIndex = 0;
 
-  for (; visitIndex < paths.length; ) {
+  for (; visitIndex < paths.length;) {
     const path = paths[visitIndex];
     visitIndex++;
 

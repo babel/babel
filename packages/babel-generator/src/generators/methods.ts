@@ -137,9 +137,7 @@ export function _methodHead(this: Printer, node: t.Method | t.TSDeclareMethod) {
 export function _predicate(
   this: Printer,
   node:
-    | t.FunctionDeclaration
-    | t.FunctionExpression
-    | t.ArrowFunctionExpression,
+    t.FunctionDeclaration | t.FunctionExpression | t.ArrowFunctionExpression,
   noLineTerminatorAfter?: boolean,
 ) {
   if (node.predicate) {
@@ -163,7 +161,7 @@ export function _functionHead(
       // We prevent inner comments from being printed here,
       // so that they are always consistently printed in the
       // same place regardless of the function type.
-      this._innerCommentsState = 0 /* INNER_COMMENT_STATE.DISALLOWED */;
+      this._innerCommentsState = 0; /* INNER_COMMENT_STATE.DISALLOWED */
     }
     this.space();
   }
@@ -173,7 +171,7 @@ export function _functionHead(
       // We prevent inner comments from being printed here,
       // so that they are always consistently printed in the
       // same place regardless of the function type.
-      this._innerCommentsState = 0 /* INNER_COMMENT_STATE.DISALLOWED */;
+      this._innerCommentsState = 0; /* INNER_COMMENT_STATE.DISALLOWED */
     }
     this.token("*");
   }
@@ -290,12 +288,8 @@ function _getFuncIdName(
   > | null,
 ) {
   let id:
-    | t.Expression
-    | t.PrivateName
-    | t.LVal
-    | t.VoidPattern
-    | undefined
-    | null = idNode;
+    t.Expression | t.PrivateName | t.LVal | t.VoidPattern | undefined | null =
+    idNode;
 
   if (!id && parent) {
     const parentType = parent.type;

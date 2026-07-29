@@ -377,11 +377,7 @@ interface NodePathOverwrites {
     this: NodePath_Final,
   ): asserts this is NodePath_Final<
     (
-      | t.Loop
-      | t.WithStatement
-      | t.Function
-      | t.LabeledStatement
-      | t.CatchClause
+      t.Loop | t.WithStatement | t.Function | t.LabeledStatement | t.CatchClause
     ) & { body: t.BlockStatement }
   >;
   /**

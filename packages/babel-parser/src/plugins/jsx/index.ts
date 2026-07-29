@@ -302,9 +302,7 @@ export default (superClass: typeof Parser) =>
     // or single identifier.
 
     jsxParseElementName():
-      | N.JSXIdentifier
-      | N.JSXNamespacedName
-      | N.JSXMemberExpression {
+      N.JSXIdentifier | N.JSXNamespacedName | N.JSXMemberExpression {
       const startLoc = this.state.startLoc;
       let node: N.JSXIdentifier | N.JSXNamespacedName | N.JSXMemberExpression =
         this.jsxParseNamespacedName();
@@ -323,9 +321,7 @@ export default (superClass: typeof Parser) =>
     // Parses any type of JSX attribute value.
 
     jsxParseAttributeValue():
-      | N.JSXExpressionContainer
-      | N.JSXElement
-      | N.StringLiteral {
+      N.JSXExpressionContainer | N.JSXElement | N.StringLiteral {
       let node;
       switch (this.state.type) {
         case tt.braceL:

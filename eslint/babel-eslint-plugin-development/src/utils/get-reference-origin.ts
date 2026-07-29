@@ -91,9 +91,7 @@ export default function getReferenceOrigin(
           // @ts-expect-error upstream typing issue: https://github.com/eslint/eslint/pull/20798
           index: definition.index,
           functionNode: definition.node as (
-            | ArrowFunctionExpression
-            | FunctionDeclaration
-            | FunctionExpression
+            ArrowFunctionExpression | FunctionDeclaration | FunctionExpression
           ) &
             Rule.NodeParentExtension,
           name: "",
@@ -188,8 +186,7 @@ function getPatternPath(node: Identifier & Rule.NodeParentExtension) {
     }
   } while (
     (current = current.parent.parent as
-      | (Node & Rule.NodeParentExtension)
-      | null)
+      (Node & Rule.NodeParentExtension) | null)
   );
 
   return path;

@@ -258,11 +258,7 @@ export function callExpression(
 }
 export function catchClause(
   param:
-    | t.Identifier
-    | t.ArrayPattern
-    | t.ObjectPattern
-    | null
-    | undefined = null,
+    t.Identifier | t.ArrayPattern | t.ObjectPattern | null | undefined = null,
   body: t.BlockStatement,
 ): t.CatchClause {
   const node: t.CatchClause = {
@@ -1107,9 +1103,7 @@ export function exportNamedDeclaration(
     | t.TypeAlias
     | null = null,
   specifiers: (
-    | t.ExportSpecifier
-    | t.ExportDefaultSpecifier
-    | t.ExportNamespaceSpecifier
+    t.ExportSpecifier | t.ExportDefaultSpecifier | t.ExportNamespaceSpecifier
   )[] = [],
   source: t.StringLiteral | null = null,
   attributes: t.ImportAttribute[] | null = null,
@@ -1173,9 +1167,7 @@ export function forOfStatement(
 }
 export function importDeclaration(
   specifiers: (
-    | t.ImportSpecifier
-    | t.ImportDefaultSpecifier
-    | t.ImportNamespaceSpecifier
+    t.ImportSpecifier | t.ImportDefaultSpecifier | t.ImportNamespaceSpecifier
   )[],
   source: t.StringLiteral,
   attributes: t.ImportAttribute[] | null = null,
@@ -2321,10 +2313,7 @@ export function voidTypeAnnotation(): t.VoidTypeAnnotation {
 export function enumDeclaration(
   id: t.Identifier,
   body:
-    | t.EnumBooleanBody
-    | t.EnumNumberBody
-    | t.EnumStringBody
-    | t.EnumSymbolBody,
+    t.EnumBooleanBody | t.EnumNumberBody | t.EnumStringBody | t.EnumSymbolBody,
 ): t.EnumDeclaration {
   const node: t.EnumDeclaration = {
     type: "EnumDeclaration",

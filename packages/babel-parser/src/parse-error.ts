@@ -9,8 +9,7 @@ type SyntaxPlugin =
   | "placeholders";
 
 type ParseErrorCode =
-  | "BABEL_PARSER_SYNTAX_ERROR"
-  | "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED";
+  "BABEL_PARSER_SYNTAX_ERROR" | "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED";
 
 // Babel uses "normal" SyntaxErrors for it's errors, but adds some extra
 // functionality. This functionality is defined in the

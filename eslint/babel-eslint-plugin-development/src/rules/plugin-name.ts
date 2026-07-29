@@ -44,9 +44,7 @@ export default {
 
     function functionVisitor(
       node: (
-        | FunctionDeclaration
-        | FunctionExpression
-        | ArrowFunctionExpression
+        FunctionDeclaration | FunctionExpression | ArrowFunctionExpression
       ) &
         Rule.NodeParentExtension,
     ) {

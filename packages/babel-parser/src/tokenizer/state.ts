@@ -7,8 +7,7 @@ import { tt, type TokenType } from "./types.ts";
 import type { Errors, ParseError } from "../parse-error.ts";
 
 export type DeferredStrictError =
-  | typeof Errors.StrictNumericEscape
-  | typeof Errors.StrictOctalLiteral;
+  typeof Errors.StrictNumericEscape | typeof Errors.StrictOctalLiteral;
 
 export const enum LoopLabelKind {
   Loop = 1,

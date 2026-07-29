@@ -637,6 +637,8 @@ const assertTest = function (
 ) {
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
+  stderr = stderr.replace(/\\\\/g, "/");
+  stderr = stderr.replace(/\\/g, "/");
 
   try {
     if (opts.stderr) {
@@ -656,6 +658,7 @@ const assertTest = function (
 
   const expectStdout = opts.stdout.trim();
   stdout = stdout.trim();
+  stdout = stdout.replace(/\\\\/g, "/");
   stdout = stdout.replace(/\\/g, "/");
 
   try {

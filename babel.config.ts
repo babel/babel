@@ -364,7 +364,7 @@ function pluginPackageJsonMacro({ types: t }: PluginAPI) {
         // instead of looping through the folders hierarchy
 
         let pkg;
-        for (let dir = pathUtils.dirname(this.filename!); ; ) {
+        for (let dir = pathUtils.dirname(this.filename!); ;) {
           try {
             pkg = fs.readFileSync(pathUtils.join(dir, "package.json"), "utf8");
             break;

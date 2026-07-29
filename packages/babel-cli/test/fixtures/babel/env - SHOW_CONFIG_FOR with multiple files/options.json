@@ -1,6 +1,5 @@
 {
   "args": ["./src", "--out-file", "./test.js"],
-  "os": ["darwin", "linux"],
   "env": {
     "BABEL_SHOW_CONFIG_FOR": "./src/foo.js"
   }
