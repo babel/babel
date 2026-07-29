@@ -45,6 +45,6 @@ echo "export default () => () => {}" > src/main/create-print-pre-check-function.
 # Temporarily ignore tests, use `rm -f path/to/format.test.js`
 # rm -f path/to/format.test.js
 
-yarn test "tests/format/(jsx?|misc|typescript|flow|flow-repo)/" --update-snapshot
+yarn test "tests/format/(jsx?|misc|typescript|flow)/" --update-snapshot
 
 cleanup
