@@ -43,7 +43,9 @@ export default function transpileConstEnum(
       ),
     );
 
-    if (!(path.scope.getOwnBinding(name)?.kind === "unknown")) {
+    const oldBinding = path.scope.getOwnBinding(name);
+    path.scope.removeOwnBinding(name);
+    if (oldBinding?.kind !== "unknown") {
       (parentIsExport ? path.parentPath : path).replaceWith(
         t.expressionStatement(
           t.callExpression(
@@ -53,7 +55,6 @@ export default function transpileConstEnum(
         ),
       );
     } else {
-      path.scope.removeOwnBinding(name);
       path.replaceWith(
         t.variableDeclaration("const", [
           t.variableDeclarator(path.node.id, obj),
