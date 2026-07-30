@@ -28,7 +28,7 @@ function registerParentMaps(parent: string, nodes: string[]) {
  * Get the node types from a validator. It will also resolve alias types to their
  * corresponding node types.
  */
-function getNodeTypesFromValidator(
+export function getNodeTypesFromValidator(
   validator: Validator<_t.Node> | undefined
 ): string[] {
   if (validator === undefined) return [];

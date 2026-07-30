@@ -274,6 +274,7 @@ defineType("TSRestType", {
 });
 
 defineType("TSNamedTupleMember", {
+  aliases: ["TSType"],
   visitor: ["label", "elementType"],
   builder: ["label", "elementType", "optional"],
   fields: {

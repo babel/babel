@@ -579,7 +579,7 @@ export function memberExpression(
   return node;
 }
 export function newExpression(
-  callee: t.Expression,
+  callee: t.Expression | t.V8IntrinsicIdentifier,
   _arguments: (t.Expression | t.SpreadElement | t.ArgumentPlaceholder)[],
 ): t.NewExpression {
   const node: t.NewExpression = {
@@ -1123,7 +1123,7 @@ export function exportNamedDeclaration(
   return node;
 }
 export function exportSpecifier(
-  local: t.Identifier,
+  local: t.Identifier | t.StringLiteral,
   exported: t.Identifier | t.StringLiteral,
 ): t.ExportSpecifier {
   const node: t.ExportSpecifier = {
@@ -1261,7 +1261,8 @@ export function classMethod(
     | t.StringLiteral
     | t.NumericLiteral
     | t.BigIntLiteral
-    | t.Expression,
+    | t.Expression
+    | t.PrivateName,
   params: (t.FunctionParameter | t.TSParameterProperty)[],
   body: t.BlockStatement,
   computed?: boolean,
@@ -1276,7 +1277,8 @@ export function classMethod(
     | t.StringLiteral
     | t.NumericLiteral
     | t.BigIntLiteral
-    | t.Expression,
+    | t.Expression
+    | t.PrivateName,
   params: (t.FunctionParameter | t.TSParameterProperty)[],
   body: t.BlockStatement,
   computed: boolean = false,
@@ -1514,7 +1516,8 @@ export function classProperty(
     | t.StringLiteral
     | t.NumericLiteral
     | t.BigIntLiteral
-    | t.Expression,
+    | t.Expression
+    | t.PrivateName,
   value?: t.Expression | null,
   typeAnnotation?: t.TypeAnnotation | t.TSTypeAnnotation | null,
   decorators?: t.Decorator[] | null,
@@ -1527,7 +1530,8 @@ export function classProperty(
     | t.StringLiteral
     | t.NumericLiteral
     | t.BigIntLiteral
-    | t.Expression,
+    | t.Expression
+    | t.PrivateName,
   value: t.Expression | null = null,
   typeAnnotation: t.TypeAnnotation | t.TSTypeAnnotation | null = null,
   decorators: t.Decorator[] | null = null,
@@ -2193,7 +2197,7 @@ export function tupleTypeAnnotation(
   return node;
 }
 export function typeofTypeAnnotation(
-  argument: t.FlowType,
+  argument: t.FlowType | t.Identifier,
 ): t.TypeofTypeAnnotation {
   const node: t.TypeofTypeAnnotation = {
     type: "TypeofTypeAnnotation",
@@ -2220,7 +2224,9 @@ export function typeAlias(
   validate(defs.right, node, "right", right, 1);
   return node;
 }
-export function typeAnnotation(typeAnnotation: t.FlowType): t.TypeAnnotation {
+export function typeAnnotation(
+  typeAnnotation: t.FlowType | t.Identifier,
+): t.TypeAnnotation {
   const node: t.TypeAnnotation = {
     type: "TypeAnnotation",
     typeAnnotation,
@@ -2862,7 +2868,8 @@ export function tsDeclareMethod(
     | t.StringLiteral
     | t.NumericLiteral
     | t.BigIntLiteral
-    | t.Expression,
+    | t.Expression
+    | t.PrivateName,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined,
   params: (t.FunctionParameter | t.TSParameterProperty)[],
   returnType?: t.TSTypeAnnotation | null,
@@ -2873,7 +2880,8 @@ export function tsDeclareMethod(
     | t.StringLiteral
     | t.NumericLiteral
     | t.BigIntLiteral
-    | t.Expression,
+    | t.Expression
+    | t.PrivateName,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined = null,
   params: (t.FunctionParameter | t.TSParameterProperty)[],
   returnType: t.TSTypeAnnotation | null = null,
