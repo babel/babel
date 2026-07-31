@@ -434,7 +434,7 @@ export default declare((api, opts: Options) => {
           path.node.specifiers.every(
             specifier =>
               t.isExportSpecifier(specifier) &&
-              isGlobalType(path, specifier.local.name),
+              isGlobalType(path, (specifier.local as t.Identifier).name),
           )
         ) {
           path.remove();
@@ -476,7 +476,8 @@ export default declare((api, opts: Options) => {
         type Parent = t.ExportDeclaration & { source?: t.StringLiteral };
         const parent = path.parent as Parent;
         if (
-          (!parent.source && isGlobalType(path, path.node.local.name)) ||
+          (!parent.source &&
+            isGlobalType(path, (path.node.local as t.Identifier).name)) ||
           path.node.exportKind === "type"
         ) {
           path.remove();

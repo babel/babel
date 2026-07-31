@@ -249,7 +249,7 @@ export default declare((api, options: Options) => {
 
         path.replaceWith(
           t.callExpression(path.hub.addHelper("construct"), [
-            node.callee,
+            node.callee as t.Expression,
             args,
           ]),
         );

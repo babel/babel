@@ -2641,7 +2641,7 @@ export default abstract class StatementParser extends ExpressionParser {
       const isMaybeTypeOnly = this.isContextual(tt._type);
       const isString = this.match(tt.string);
       const node = this.startNode<N.ExportSpecifier>();
-      node.local = this.parseModuleExportName() as N.Identifier;
+      node.local = this.parseModuleExportName();
       nodes.push(
         this.parseExportSpecifier(
           node,

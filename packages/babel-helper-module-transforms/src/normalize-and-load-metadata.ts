@@ -461,13 +461,10 @@ function getLocalExportMetadata(
       if (child.isExportNamedDeclaration()) {
         if (child.node.declaration) {
           child = child.get("declaration") as NodePath;
-        } else if (
-          initializeReexports &&
-          child.node.source &&
-          child.get("source").isStringLiteral()
-        ) {
+        } else if (initializeReexports && child.node.source) {
           child.get("specifiers").forEach(spec => {
             assertExportSpecifier(spec);
+            // @ts-expect-error FIXME: local may be StringLiteral
             bindingKindLookup.set(spec.get("local").node.name, "block");
           });
           return;

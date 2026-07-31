@@ -24,7 +24,7 @@ export default function transpileConstEnum(
           spec =>
             t.isExportSpecifier(spec) &&
             spec.exportKind !== "type" &&
-            spec.local.name === name,
+            (spec.local as t.Identifier).name === name,
         ),
     );
   }
