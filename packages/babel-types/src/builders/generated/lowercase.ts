@@ -2857,7 +2857,12 @@ export function tsDeclareMethod(
   returnType?: t.TSTypeAnnotation | null,
 ): Extract<t.TSDeclareMethod, { computed: true }>;
 export function tsDeclareMethod(
-  key: t.Identifier | t.StringLiteral | t.NumericLiteral | t.BigIntLiteral,
+  key:
+    | t.Identifier
+    | t.StringLiteral
+    | t.NumericLiteral
+    | t.BigIntLiteral
+    | t.PrivateName,
   typeParameters: t.TSTypeParameterDeclaration | null | undefined,
   params: (t.FunctionParameter | t.TSParameterProperty)[],
   returnType?: t.TSTypeAnnotation | null,

@@ -1819,7 +1819,8 @@ export interface TSDeclareMethodNonComputed extends BaseNode {
   override?: boolean | null;
   static: boolean;
   computed: false;
-  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
+  key:
+    Identifier | StringLiteral | NumericLiteral | BigIntLiteral | PrivateName;
 }
 export type TSDeclareMethod =
   TSDeclareMethodComputed | TSDeclareMethodNonComputed;
