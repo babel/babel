@@ -25,6 +25,17 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.8 (2026-07-31)
+
+#### :eyeglasses: Spec Compliance
+* `babel-generator`, `babel-parser`, `babel-plugin-transform-spread`, `babel-traverse`, `babel-types`
+  * [#17871](https://github.com/babel/babel/pull/17871) Disallow super call after new ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#18046](https://github.com/babel/babel/pull/18046) fix(generator): improve new callee parens check ([@JLHwung](https://github.com/JLHwung))
+* `babel-node`, `babel-plugin-transform-modules-systemjs`
+  * [#18044](https://github.com/babel/babel/pull/18044) fix(systemjs): support __proto__ as an export name ([@JLHwung](https://github.com/JLHwung))
 
 ## v7.29.6 (2026-05-25)
 
