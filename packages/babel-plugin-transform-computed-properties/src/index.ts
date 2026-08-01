@@ -54,6 +54,18 @@ export default declare((api, options: Options) => {
   }
 
   /**
+   * Whether `prop` is the `__proto__` form that sets the prototype rather than
+   * creating an own property.
+   */
+  function isProtoKey(prop: t.ObjectMember) {
+    return (
+      t.isObjectProperty(prop, { computed: false, shorthand: false }) &&
+      (t.isIdentifier(prop.key, { name: "__proto__" }) ||
+        t.isStringLiteral(prop.key, { value: "__proto__" }))
+    );
+  }
+
+  /**
    * Get value of an object member under object expression.
    * Returns a function expression if prop is a ObjectMethod.
    *
@@ -144,6 +156,11 @@ export default declare((api, options: Options) => {
           (prop.kind === "get" || prop.kind === "set")
         ) {
           node = buildDefineAccessor(info.state, node, prop);
+        } else if (isProtoKey(prop)) {
+          node = t.callExpression(state.addHelper("setObjectProto"), [
+            node,
+            getValue(prop)!,
+          ]);
         } else {
           node = t.callExpression(state.addHelper("defineProperty"), [
             node,
