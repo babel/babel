@@ -4,5 +4,6 @@ never encountered it as a TypeScript type declaration.
 It will be treated as a JavaScript value.
 
 This problem is likely caused by another plugin injecting
-"foo" without registering it in the scope tracker. If you are the author
- of that plugin, please use "scope.registerDeclaration(declarationPath)".
+"foo" without registering it in the scope tracker, or by a limitation
+of @babel/plugin-transform-typescript when handling exported enums. If you are
+the author of that plugin, please use "scope.registerDeclaration(declarationPath)".
