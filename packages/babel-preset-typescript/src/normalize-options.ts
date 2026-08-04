@@ -53,7 +53,7 @@ export default function normalizeOptions(options: Options = {}) {
   const onlyRemoveTypeImports = v.validateBooleanOption(
     TopLevelOptions.onlyRemoveTypeImports,
     options.onlyRemoveTypeImports,
-    true,
+    false,
   );
 
   const jsxPragmaFrag = v.validateStringOption(

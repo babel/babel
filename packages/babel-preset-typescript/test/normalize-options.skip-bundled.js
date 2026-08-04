@@ -44,7 +44,7 @@ describe("normalize options", () => {
           "ignoreExtensions": false,
           "jsxPragma": "React",
           "jsxPragmaFrag": "React.Fragment",
-          "onlyRemoveTypeImports": true,
+          "onlyRemoveTypeImports": false,
           "optimizeConstEnums": false,
           "rewriteImportExtensions": false,
         }
