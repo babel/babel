@@ -211,6 +211,49 @@ describe("@babel/register", function () {
         );
       });
 
+      it("does not interrupt app-managed SIGTERM shutdown", async () => {
+        const result = await spawnNodeAndSignalAsync("SIGTERM", [
+          "-r",
+          registerFile,
+          "-e",
+          `
+            process.on("SIGTERM", () => {
+              console.log("app SIGTERM handler ran");
+              setTimeout(() => {
+                console.log("graceful shutdown done");
+                process.exit(0);
+              }, 50);
+            });
+            console.log("ready");
+            setInterval(() => {}, 1000);
+          `,
+        ]);
+
+        expect(result).toEqual({
+          code: 0,
+          signal: null,
+          output: "ready\napp SIGTERM handler ran\ngraceful shutdown done\n",
+        });
+      });
+
+      it("preserves default SIGTERM behavior without app handlers", async () => {
+        const result = await spawnNodeAndSignalAsync("SIGTERM", [
+          "-r",
+          registerFile,
+          "-e",
+          `
+            console.log("ready");
+            setInterval(() => {}, 1000);
+          `,
+        ]);
+
+        expect(result).toEqual({
+          code: null,
+          signal: "SIGTERM",
+          output: "ready\n",
+        });
+      });
+
       it("works with the --require flag", async () => {
         const output = await spawnNodeAsync(
           ["--require", registerFile, testFileLog],
@@ -368,16 +411,20 @@ describe("@babel/register", function () {
   }
 });
 
+function getNodeEnv(env) {
+  return {
+    ...env,
+    ...(parseInt(process.versions.node) >= 22 && {
+      NODE_OPTIONS:
+        "--disable-warning=ExperimentalWarning " + (env.NODE_OPTIONS || ""),
+    }),
+  };
+}
+
 function spawnNodeAsync(args, cwd = __dirname, env = process.env) {
   const spawn = child.spawn(process.execPath, args, {
     cwd,
-    env: {
-      ...env,
-      ...(parseInt(process.versions.node) >= 22 && {
-        NODE_OPTIONS:
-          "--disable-warning=ExperimentalWarning " + (env.NODE_OPTIONS || ""),
-      }),
-    },
+    env: getNodeEnv(env),
   });
 
   let output = "";
@@ -395,5 +442,33 @@ function spawnNodeAsync(args, cwd = __dirname, env = process.env) {
 
   return new Promise(resolve => {
     callback = resolve;
+  });
+}
+
+function spawnNodeAndSignalAsync(signal, args, cwd = __dirname) {
+  const spawn = child.spawn(process.execPath, args, {
+    cwd,
+    env: getNodeEnv(process.env),
+  });
+
+  let output = "";
+  let isReady = false;
+
+  return new Promise(resolve => {
+    const onData = chunk => {
+      output += chunk;
+      if (!isReady && output.includes("ready\n")) {
+        isReady = true;
+        spawn.kill(signal);
+      }
+    };
+
+    for (const stream of [spawn.stderr, spawn.stdout]) {
+      stream.on("data", onData);
+    }
+
+    spawn.on("close", (code, closeSignal) => {
+      resolve({ code, signal: closeSignal, output });
+    });
   });
 }
