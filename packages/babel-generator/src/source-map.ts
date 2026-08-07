@@ -39,6 +39,7 @@ export default class SourceMap {
 
   constructor(
     opts: {
+      filename?: string;
       sourceFileName?: string;
       sourceRoot?: string;
       inputSourceMap?: SourceMapInput;
@@ -52,6 +53,15 @@ export default class SourceMap {
     this.#allowRangeMappings = opts.sourceMapRanges ?? false;
 
     if (opts.inputSourceMap) {
+      if (this.#allowRangeMappings) {
+        this.#allowRangeMappings = false;
+        console.warn(
+          "[BABEL] Note: The code generator has disabled source map ranges " +
+            `for ${opts.filename ?? "the generated code"}, because they ` +
+            "cannot be used together with `inputSourceMap` yet.",
+        );
+      }
+
       this._inputMap = new TraceMap(opts.inputSourceMap);
       const resolvedSources = this._inputMap.resolvedSources;
       if (resolvedSources.length) {
