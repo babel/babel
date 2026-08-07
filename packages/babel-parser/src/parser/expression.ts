@@ -228,21 +228,27 @@ export default abstract class ExpressionParser extends LValParser {
   parseMaybeAssignDisallowIn(
     this: Parser,
     refExpressionErrors?: ExpressionErrors | null,
-    afterLeftParse?: Function,
   ) {
-    return this.disallowInAnd(() =>
-      this.parseMaybeAssign(refExpressionErrors, afterLeftParse),
-    );
+    return this.disallowInAnd(() => this.parseMaybeAssign(refExpressionErrors));
   }
 
   // Set [+In] parameter for assignment expression
   parseMaybeAssignAllowIn(
     this: Parser,
+    refExpressionErrors: ExpressionErrors | null | undefined,
+    isParenItem: boolean | undefined,
+  ): N.Expression | N.TSTypeCastExpression;
+  parseMaybeAssignAllowIn(
+    this: Parser,
     refExpressionErrors?: ExpressionErrors | null,
-    afterLeftParse?: Function,
+  ): N.Expression;
+  parseMaybeAssignAllowIn(
+    this: Parser,
+    refExpressionErrors?: ExpressionErrors | null,
+    isParenItem?: boolean,
   ) {
     return this.allowInAnd(() =>
-      this.parseMaybeAssign(refExpressionErrors, afterLeftParse),
+      this.parseMaybeAssign(refExpressionErrors, isParenItem),
     );
   }
 
@@ -257,17 +263,27 @@ export default abstract class ExpressionParser extends LValParser {
   // https://tc39.es/ecma262/#prod-AssignmentExpression
   parseMaybeAssign(
     this: Parser,
+    refExpressionErrors: ExpressionErrors | null | undefined,
+    isParenItem: boolean | undefined,
+  ): N.Expression | N.TSTypeCastExpression;
+  parseMaybeAssign(
+    this: Parser,
     refExpressionErrors?: ExpressionErrors | null,
-    afterLeftParse?: Function,
-  ): N.Expression {
+  ): N.Expression;
+  parseMaybeAssign(
+    this: Parser,
+    refExpressionErrors?: ExpressionErrors | null,
+    isParenItem?: boolean,
+  ): N.Expression | N.TSTypeCastExpression {
     const startLoc = this.state.startLoc;
     const isYield = this.isContextual(tt._yield);
     if (isYield) {
       if (this.prodParam.hasYield) {
         this.next();
-        let left = this.parseYield(startLoc);
-        if (afterLeftParse) {
-          left = afterLeftParse.call(this, left, startLoc);
+        let left: N.Expression | N.TSTypeCastExpression =
+          this.parseYield(startLoc);
+        if (isParenItem) {
+          left = this.parseParenItem(left, startLoc);
         }
         return left;
       }
@@ -282,9 +298,10 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     this.state.canStartArrow = true;
-    let left = this.parseMaybeConditional(refExpressionErrors);
-    if (afterLeftParse) {
-      left = afterLeftParse.call(this, left, startLoc);
+    let left: N.Expression | N.TSTypeCastExpression =
+      this.parseMaybeConditional(refExpressionErrors);
+    if (isParenItem) {
+      left = this.parseParenItem(left, startLoc);
     }
     if (tokenIsAssignment(this.state.type)) {
       const node = this.startNodeAt<N.AssignmentExpression>(startLoc);
@@ -322,7 +339,7 @@ export default abstract class ExpressionParser extends LValParser {
           refExpressionErrors.voidPatternLoc = null;
         }
       } else {
-        node.left = left as unknown as N.Assignable; // checked a few lines further down
+        node.left = left as N.Assignable; // checked a few lines further down
       }
 
       this.next();
@@ -336,8 +353,7 @@ export default abstract class ExpressionParser extends LValParser {
         undefined,
         operator === "||=" || operator === "&&=" || operator === "??=",
       );
-      // @ts-expect-error todo(flow->ts) improve node types
-      return node;
+      return node as N.AssignmentExpression;
     } else if (ownExpressionErrors) {
       this.checkExpressionErrors(refExpressionErrors, true);
     }
@@ -1698,7 +1714,6 @@ export default abstract class ExpressionParser extends LValParser {
       | N.VoidPattern
       | N.AssignmentPattern
       | N.TSTypeCastExpression
-      | N.TypeCastExpression
     )[] = [];
     const refExpressionErrors = new ExpressionErrors();
     let first = true;
@@ -1736,7 +1751,7 @@ export default abstract class ExpressionParser extends LValParser {
           this.parseMaybeAssignAllowInOrVoidPattern(
             tt.parenR,
             refExpressionErrors,
-            this.parseParenItem,
+            true,
           ),
         );
       }
@@ -1821,11 +1836,7 @@ export default abstract class ExpressionParser extends LValParser {
 
   parseParenItem<
     T extends
-      | N.Expression
-      | N.RestElement
-      | N.SpreadElement
-      | N.TSTypeCastExpression
-      | N.TypeCastExpression,
+      N.Expression | N.RestElement | N.SpreadElement | N.TSTypeCastExpression,
   >(
     node: T,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -2330,10 +2341,10 @@ export default abstract class ExpressionParser extends LValParser {
             break;
           }
           default:
-            this.unexpected();
+            throw this.unexpected();
         }
       }
-      (prop as any).key = key;
+      prop.key = key;
       if (type !== tt.privateName) {
         // @ts-expect-error todo: computed is not defined on TSPropertySignature
         // ClassPrivateProperty is never computed, so we don't assign in that case.
@@ -2411,7 +2422,6 @@ export default abstract class ExpressionParser extends LValParser {
           | N.VoidPattern
           | N.AssignmentPattern
           | N.ArgumentPlaceholder
-          | N.TypeCastExpression
           | N.TSTypeCastExpression
         )[]
       | (
@@ -2420,7 +2430,6 @@ export default abstract class ExpressionParser extends LValParser {
           | N.VoidPattern
           | N.AssignmentPattern
           | N.ArgumentPlaceholder
-          | N.TypeCastExpression
           | N.TSTypeCastExpression
         )[]
       | null
@@ -2461,7 +2470,6 @@ export default abstract class ExpressionParser extends LValParser {
           | N.VoidPattern
           | N.AssignmentPattern
           | N.ArgumentPlaceholder
-          | N.TypeCastExpression
           | N.TSTypeCastExpression
         )[]
       | (
@@ -2470,7 +2478,6 @@ export default abstract class ExpressionParser extends LValParser {
           | N.VoidPattern
           | N.AssignmentPattern
           | N.ArgumentPlaceholder
-          | N.TypeCastExpression
           | N.TSTypeCastExpression
         )[],
     trailingCommaLoc?: Position | null,
@@ -2701,7 +2708,7 @@ export default abstract class ExpressionParser extends LValParser {
       elt = this.parseMaybeAssignAllowInOrVoidPattern(
         close,
         refExpressionErrors,
-        this.parseParenItem,
+        true,
       );
     }
     return elt;
@@ -3109,7 +3116,18 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     close: TokenType,
     refExpressionErrors: ExpressionErrors | null | undefined,
-    afterLeftParse?: Function,
+    isParenItem: boolean | undefined,
+  ): N.Expression | N.TSTypeCastExpression;
+  parseMaybeAssignAllowInOrVoidPattern(
+    this: Parser,
+    close: TokenType,
+    refExpressionErrors?: ExpressionErrors | null,
+  ): N.Expression;
+  parseMaybeAssignAllowInOrVoidPattern(
+    this: Parser,
+    close: TokenType,
+    refExpressionErrors: ExpressionErrors | null | undefined,
+    isParenItem?: boolean,
   ) {
     if (refExpressionErrors != null && this.match(tt._void)) {
       const nextCode = this.lookaheadCharCode();
@@ -3131,7 +3149,7 @@ export default abstract class ExpressionParser extends LValParser {
         );
       }
     }
-    return this.parseMaybeAssignAllowIn(refExpressionErrors, afterLeftParse);
+    return this.parseMaybeAssignAllowIn(refExpressionErrors, isParenItem);
   }
 
   // Used in Flow plugin

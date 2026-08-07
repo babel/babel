@@ -390,8 +390,8 @@ export default abstract class Tokenizer extends CommentsParser {
 
   skipSpace(): void {
     const spaceStart = this.state.pos;
-    const comments: N.Comment[] | null =
-      this.optionFlags & OptionFlags.AttachComment ? [] : null;
+    const attachComment = (this.optionFlags & OptionFlags.AttachComment) > 0;
+    let comments: N.Comment[] | undefined;
     loop: while (this.state.pos < this.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
@@ -421,7 +421,9 @@ export default abstract class Tokenizer extends CommentsParser {
               const comment = this.skipBlockComment("*/");
               if (comment !== undefined) {
                 this.addComment(comment);
-                comments?.push(comment);
+                if (attachComment) {
+                  (comments ??= []).push(comment);
+                }
               }
               break;
             }
@@ -430,7 +432,9 @@ export default abstract class Tokenizer extends CommentsParser {
               const comment = this.skipLineComment(2);
               if (comment !== undefined) {
                 this.addComment(comment);
-                comments?.push(comment);
+                if (attachComment) {
+                  (comments ??= []).push(comment);
+                }
               }
               break;
             }
@@ -458,7 +462,9 @@ export default abstract class Tokenizer extends CommentsParser {
               const comment = this.skipLineComment(3);
               if (comment !== undefined) {
                 this.addComment(comment);
-                comments?.push(comment);
+                if (attachComment) {
+                  (comments ??= []).push(comment);
+                }
               }
             } else {
               break loop;
@@ -478,7 +484,9 @@ export default abstract class Tokenizer extends CommentsParser {
               const comment = this.skipLineComment(4);
               if (comment !== undefined) {
                 this.addComment(comment);
-                comments?.push(comment);
+                if (attachComment) {
+                  (comments ??= []).push(comment);
+                }
               }
             } else {
               break loop;
@@ -489,13 +497,12 @@ export default abstract class Tokenizer extends CommentsParser {
       }
     }
 
-    // @ts-expect-error comparing undefined and number
-    if (comments?.length > 0) {
+    if (comments?.length) {
       const end = this.state.pos;
       const commentWhitespace: CommentWhitespace = {
         start: this.sourceToOffsetPos(spaceStart),
         end: this.sourceToOffsetPos(end),
-        comments: comments!,
+        comments: comments,
         leadingNode: null,
         trailingNode: null,
         containingNode: null,
@@ -523,8 +530,6 @@ export default abstract class Tokenizer extends CommentsParser {
 
   replaceToken(type: TokenType): void {
     this.state.type = type;
-    // @ts-expect-error the prevType of updateContext is required
-    // only when the new type is tt.slash/tt.jsxTagEnd
     this.updateContext();
   }
 
@@ -1483,7 +1488,7 @@ export default abstract class Tokenizer extends CommentsParser {
 
   // updateContext is used by the jsx plugin
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  updateContext(prevType: TokenType): void {}
+  updateContext(prevType?: TokenType): void {}
 
   // Raise an unexpected token error. Can take the expected token type.
   unexpected(loc?: Position | number | null, type?: TokenType): any {

@@ -559,7 +559,7 @@ export default abstract class StatementParser extends ExpressionParser {
     ) {
       return this.parseLabeledStatement(node, maybeName, expr, flags);
     } else {
-      return this.parseExpressionStatement(node, expr, decorators);
+      return this.parseExpressionStatement(node, expr);
     }
   }
 
@@ -832,11 +832,7 @@ export default abstract class StatementParser extends ExpressionParser {
           (isForIn || this.isContextual(tt._of)) &&
           init.declarations.length === 1
         ) {
-          return this.parseForIn(
-            node as Undone<N.ForXStatement>,
-            init,
-            awaitAt,
-          );
+          return this.parseForX(node as Undone<N.ForXStatement>, init, awaitAt);
         }
         if (awaitAt !== null) {
           this.unexpected(awaitAt);
@@ -876,10 +872,9 @@ export default abstract class StatementParser extends ExpressionParser {
       this.toAssignable(init, /* isLHS */ true);
       const type = isForOf ? "ForOfStatement" : "ForInStatement";
       this.checkLVal(init, { type });
-      return this.parseForIn(
-        node as Undone<N.ForInStatement | N.ForOfStatement>,
-        // @ts-expect-error init has been transformed to an assignable
-        init,
+      return this.parseForX(
+        node as Undone<N.ForXStatement>,
+        init as N.Identifier | N.MemberExpression,
         awaitAt,
       );
     } else {
@@ -945,7 +940,7 @@ export default abstract class StatementParser extends ExpressionParser {
   parseSwitchStatement(this: Parser, node: Undone<N.SwitchStatement>) {
     this.next();
     node.discriminant = this.parseHeaderExpression();
-    const cases: N.SwitchStatement["cases"] = (node.cases = []);
+    const cases: Undone<N.SwitchCase>[] = (node.cases = []);
     this.expect(tt.braceL);
     this.state.labels.push(switchLabel);
     this.scope.enter(ScopeFlag.SWITCH);
@@ -959,7 +954,6 @@ export default abstract class StatementParser extends ExpressionParser {
       if (this.match(tt._case) || this.match(tt._default)) {
         const isCase = this.match(tt._case);
         if (cur) this.finishNode(cur, "SwitchCase");
-        // @ts-expect-error Fixme
         cases.push((cur = this.startNode<N.SwitchCase>()));
         cur.consequent = [];
         this.next();
@@ -1161,8 +1155,6 @@ export default abstract class StatementParser extends ExpressionParser {
   parseExpressionStatement(
     node: Undone<N.ExpressionStatement>,
     expr: N.Expression,
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in TypeScript parser */
-    decorators: N.Decorator[] | null | undefined,
   ) {
     node.expression = expr;
     this.semicolon();
@@ -1307,10 +1299,14 @@ export default abstract class StatementParser extends ExpressionParser {
   // Parse a `for`/`in` and `for`/`of` loop, which are almost
   // same from parser's perspective.
 
-  parseForIn(
+  parseForX(
     this: Parser,
     node: Undone<N.ForXStatement>,
-    init: N.VariableDeclaration | N.AssignmentPattern,
+    init:
+      | N.VariableDeclaration
+      | N.AssignmentPattern
+      | N.Identifier
+      | N.MemberExpression,
     awaitAt?: Position | null,
   ): N.ForXStatement {
     const isForIn = this.match(tt._in);
@@ -1517,8 +1513,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.expressionScope.exit();
   }
 
-  registerFunctionStatementId(node: N.Function): void {
-    // @ts-expect-error Fixme: id is not defined in ArrowFunctionExpression
+  registerFunctionStatementId(node: N.NormalFunction): void {
     if (!node.id) return;
 
     // If it is a regular function declaration in sloppy mode, then it is
@@ -1526,15 +1521,13 @@ export default abstract class StatementParser extends ExpressionParser {
     // mode depends on properties of the current scope (see
     // treatFunctionsAsVar).
     this.scope.declareName(
-      // @ts-expect-error Fixme: id is not defined in ArrowFunctionExpression
       node.id.name,
       !this.options.annexB || this.state.strict || node.generator || node.async
         ? this.scope.treatFunctionsAsVar
           ? BindingFlag.TYPE_VAR
           : BindingFlag.TYPE_LEXICAL
         : BindingFlag.TYPE_FUNCTION,
-      // @ts-expect-error Fixme: id is not defined in ArrowFunctionExpression
-      node.id.start,
+      node.id.start!,
     );
   }
 
@@ -1657,7 +1650,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const key = this.parseIdentifier(true); // eats the modifier
 
     if (this.isClassMethod()) {
-      const method: N.ClassMethod = member as any;
+      const method = member as Undone<N.ClassMethod>;
 
       // a method named like the modifier
       method.kind = "method";
@@ -1674,7 +1667,7 @@ export default abstract class StatementParser extends ExpressionParser {
       );
       return true;
     } else if (this.isClassProperty()) {
-      const prop: N.ClassProperty = member as any;
+      const prop = member as Undone<N.ClassProperty>;
 
       // a property named like the modifier
       prop.computed = false;
@@ -2218,7 +2211,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
     if (isFromRequired || hasSpecifiers || hasDeclaration) {
       const node2 = node as Undone<N.ExportNamedDeclaration>;
-      this.checkExport(node2, true, false, !!node2.source);
+      this.checkNamedExport(node2, !!node2.source);
       if (node2.declaration?.type === "ClassDeclaration") {
         this.maybeTakeDecorators(decorators, node2.declaration, node2);
       } else if (decorators) {
@@ -2240,7 +2233,19 @@ export default abstract class StatementParser extends ExpressionParser {
         throw this.raise(Errors.UnsupportedDecoratorExport, node);
       }
 
-      this.checkExport(node2, true, true);
+      this.checkDuplicateExports(node, "default");
+      if (this.hasPlugin("exportDefaultFrom")) {
+        if (
+          decl.type === "Identifier" &&
+          decl.name === "from" &&
+          // eslint-disable-next-line @typescript-eslint/no-confusing-non-null-assertion
+          decl.end! - decl.start! === 4 && // does not contain escape
+          !decl.extra?.parenthesized
+        ) {
+          this.raise(Errors.ExportDefaultFromAsIdentifier, decl);
+        }
+      }
+
       this.sawUnambiguousESM = true;
       return this.finishNode(node2, "ExportDefaultDeclaration");
     }
@@ -2466,7 +2471,6 @@ export default abstract class StatementParser extends ExpressionParser {
   ): void {
     if (this.eatContextual(tt._from)) {
       node.source = this.parseImportSource();
-      this.checkExport(node);
       this.maybeParseImportAttributes(node);
     } else if (expect) {
       this.unexpected();
@@ -2504,73 +2508,47 @@ export default abstract class StatementParser extends ExpressionParser {
     );
   }
 
-  checkExport(
-    node: Undone<
-      | N.ExportNamedDeclaration
-      | N.ExportAllDeclaration
-      | N.ExportDefaultDeclaration
-    >,
-    checkNames?: boolean,
-    isDefault?: boolean,
+  // Check for duplicate exports
+  checkNamedExport(
+    node: Undone<N.ExportNamedDeclaration>,
     isFrom?: boolean,
   ): void {
-    if (checkNames) {
-      // Check for duplicate exports
-      if (isDefault) {
-        // Default exports
-        this.checkDuplicateExports(node, "default");
-        if (this.hasPlugin("exportDefaultFrom")) {
-          const declaration = (node as any as N.ExportDefaultDeclaration)
-            .declaration;
-          if (
-            declaration.type === "Identifier" &&
-            declaration.name === "from" &&
-            // eslint-disable-next-line @typescript-eslint/no-confusing-non-null-assertion
-            declaration.end! - declaration.start! === 4 && // does not contain escape
-            !declaration.extra?.parenthesized
-          ) {
-            this.raise(Errors.ExportDefaultFromAsIdentifier, declaration);
+    if (node.specifiers?.length) {
+      // Named exports
+      for (const specifier of node.specifiers) {
+        const { exported } = specifier;
+        const exportName =
+          exported.type === "Identifier" ? exported.name : exported.value;
+        this.checkDuplicateExports(specifier, exportName);
+        if (!isFrom && specifier.type === "ExportSpecifier") {
+          const { local } = specifier;
+          if (local.type !== "Identifier") {
+            this.raise(Errors.ExportBindingIsString, specifier, {
+              localName: local.value,
+              exportName,
+            });
+          } else {
+            // check for keywords used as local names
+            this.checkReservedWord(local.name, local.start!, true, false);
+            // check if export is defined
+            this.scope.checkLocalExport(local);
           }
         }
-        // @ts-expect-error node.specifiers may not exist
-      } else if (node.specifiers?.length) {
-        // Named exports
-        // @ts-expect-error node.specifiers may not exist
-        for (const specifier of node.specifiers) {
-          const { exported } = specifier;
-          const exportName =
-            exported.type === "Identifier" ? exported.name : exported.value;
-          this.checkDuplicateExports(specifier, exportName);
-          if (!isFrom && specifier.local) {
-            const { local } = specifier;
-            if (local.type !== "Identifier") {
-              this.raise(Errors.ExportBindingIsString, specifier, {
-                localName: local.value,
-                exportName,
-              });
-            } else {
-              // check for keywords used as local names
-              this.checkReservedWord(local.name, local.start, true, false);
-              // check if export is defined
-              this.scope.checkLocalExport(local);
-            }
-          }
-        }
-      } else if ((node as Undone<N.ExportNamedDeclaration>).declaration) {
-        const decl = (node as Undone<N.ExportNamedDeclaration>).declaration!;
-        // Exported declarations
-        if (
-          decl.type === "FunctionDeclaration" ||
-          decl.type === "ClassDeclaration"
-        ) {
-          const { id } = decl;
-          if (!id) throw new Error("Assertion failure");
+      }
+    } else if (node.declaration) {
+      const decl = node.declaration;
+      // Exported declarations
+      if (
+        decl.type === "FunctionDeclaration" ||
+        decl.type === "ClassDeclaration"
+      ) {
+        const { id } = decl;
+        if (!id) throw new Error("Assertion failure");
 
-          this.checkDuplicateExports(node, id.name);
-        } else if (decl.type === "VariableDeclaration") {
-          for (const declaration of decl.declarations) {
-            this.checkDeclaration(declaration.id);
-          }
+        this.checkDuplicateExports(node, id.name);
+      } else if (decl.type === "VariableDeclaration") {
+        for (const declaration of decl.declarations) {
+          this.checkDeclaration(declaration.id);
         }
       }
     }
@@ -2656,18 +2634,19 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   parseExportSpecifier(
-    node: any,
+    node: Undone<N.ExportSpecifier>,
     isString: boolean,
     /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript parser */
     isInTypeExport: boolean,
-    isMaybeTypeOnly /* eslint-enable @typescript-eslint/no-unused-vars */ : boolean,
+    isMaybeTypeOnly: boolean,
+    /* eslint-enable @typescript-eslint/no-unused-vars */
   ): N.ExportSpecifier {
     if (this.eatContextual(tt._as)) {
       node.exported = this.parseModuleExportName();
     } else if (isString) {
-      node.exported = this.cloneStringLiteral(node.local);
+      node.exported = this.cloneStringLiteral(node.local as N.StringLiteral);
     } else if (!node.exported) {
-      node.exported = this.cloneIdentifier(node.local);
+      node.exported = this.cloneIdentifier(node.local as N.Identifier);
     }
     return this.finishNode<N.ExportSpecifier>(node, "ExportSpecifier");
   }
@@ -2842,7 +2821,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this: Parser,
     node: Undone<N.ImportDeclaration>,
     maybeDefaultIdentifier: N.Identifier | null,
-  ): N.AnyImport {
+  ): N.ImportDeclaration {
     node.specifiers = [];
 
     // check if we have a default import like
@@ -2872,7 +2851,7 @@ export default abstract class StatementParser extends ExpressionParser {
   parseImportSourceAndAttributes(
     this: Parser,
     node: Undone<N.ImportDeclaration>,
-  ): N.AnyImport {
+  ): N.ImportDeclaration {
     node.specifiers ??= [];
     node.source = this.parseImportSource();
     this.maybeParseImportAttributes(node);
