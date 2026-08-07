@@ -15,8 +15,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@babel/helper-compilation-targets": "workspace:^",
-    "@babel/helper-module-imports": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-module-imports": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0"
