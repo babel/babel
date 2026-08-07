@@ -1,5 +1,11 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { types as t, File, PluginItem, PluginAPI } from "@babel/core";
+import type {
+  types as t,
+  File,
+  PluginAPI,
+  PluginObject,
+  PluginPass,
+} from "@babel/core";
 import {
   importToPlatformApi,
   injectParallelStaticImports,
@@ -11,7 +17,11 @@ export function buildImportTypeAsDefaultPlugin<Options extends object>(
   pluginName: string,
   type: string,
   makeTransformers: (api: PluginAPI, options: Options) => Pieces,
-): PluginItem<Options> {
+): (
+  api: PluginAPI,
+  options: Options,
+  dirname: string,
+) => PluginObject<PluginPass> {
   return declare<object, Options>((api, options) => {
     const { types: t, template } = api;
     api.assertVersion(REQUIRED_VERSION("^8.0.0"));
