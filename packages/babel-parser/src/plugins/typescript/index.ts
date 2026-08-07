@@ -1276,7 +1276,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       if (rest) {
         const restNode = this.startNodeAt<N.TSRestType>(restStartLoc);
-        restNode.typeAnnotation = type as N.TSType;
+        restNode.typeAnnotation = type;
         type = this.finishNode(restNode, "TSRestType");
       }
 

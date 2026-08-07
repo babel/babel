@@ -74,7 +74,7 @@ defineType("TSDeclareFunction", {
 
 defineType("TSDeclareMethod", {
   visitor: ["key", "typeParameters", "params", "returnType"],
-  ...classMethodOrPropertyUnionShapeCommon(),
+  ...classMethodOrPropertyUnionShapeCommon(true),
   fields: {
     ...classMethodOrDeclareMethodCommon(false),
     ...tSFunctionTypeAnnotationCommon(),
@@ -274,6 +274,7 @@ defineType("TSRestType", {
 });
 
 defineType("TSNamedTupleMember", {
+  aliases: ["TSType"],
   visitor: ["label", "elementType"],
   builder: ["label", "elementType", "optional"],
   fields: {

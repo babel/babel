@@ -588,7 +588,7 @@ export type MemberExpression =
 
 export interface NewExpression extends BaseNode {
   type: "NewExpression";
-  callee: Expression;
+  callee: Expression | V8IntrinsicIdentifier;
   arguments: (Expression | SpreadElement | ArgumentPlaceholder)[];
   typeArguments?:
     TypeParameterInstantiation | TSTypeParameterInstantiation | null;
@@ -897,7 +897,7 @@ export interface ExportNamedDeclaration extends BaseNode {
 
 export interface ExportSpecifier extends BaseNode {
   type: "ExportSpecifier";
-  local: Identifier;
+  local: Identifier | StringLiteral;
   exported: Identifier | StringLiteral;
   exportKind?: "type" | "value" | null;
 }
@@ -1458,7 +1458,7 @@ export interface TupleTypeAnnotation extends BaseNode {
 
 export interface TypeofTypeAnnotation extends BaseNode {
   type: "TypeofTypeAnnotation";
-  argument: FlowType;
+  argument: FlowType | Identifier;
 }
 
 export interface TypeAlias extends BaseNode {
@@ -1470,7 +1470,7 @@ export interface TypeAlias extends BaseNode {
 
 export interface TypeAnnotation extends BaseNode {
   type: "TypeAnnotation";
-  typeAnnotation: FlowType;
+  typeAnnotation: FlowType | Identifier;
 }
 
 export interface TypeCastExpression extends BaseNode {
@@ -1819,7 +1819,8 @@ export interface TSDeclareMethodNonComputed extends BaseNode {
   override?: boolean | null;
   static: boolean;
   computed: false;
-  key: Identifier | StringLiteral | NumericLiteral | BigIntLiteral;
+  key:
+    Identifier | StringLiteral | NumericLiteral | BigIntLiteral | PrivateName;
 }
 export type TSDeclareMethod =
   TSDeclareMethodComputed | TSDeclareMethodNonComputed;
@@ -2836,6 +2837,7 @@ export type TSType =
   | TSTupleType
   | TSOptionalType
   | TSRestType
+  | TSNamedTupleMember
   | TSUnionType
   | TSIntersectionType
   | TSConditionalType
@@ -4568,7 +4570,9 @@ export interface ParentMaps {
     | TemplateLiteral
     | ThrowStatement
     | TypeAlias
+    | TypeAnnotation
     | TypeCastExpression
+    | TypeofTypeAnnotation
     | UnaryExpression
     | UpdateExpression
     | VariableDeclarator
@@ -5867,11 +5871,14 @@ export interface ParentMaps {
   PrivateName:
     | BinaryExpression
     | ClassAccessorProperty
+    | ClassMethod
     | ClassPrivateMethod
     | ClassPrivateProperty
+    | ClassProperty
     | MemberExpression
     | ObjectProperty
-    | OptionalMemberExpression;
+    | OptionalMemberExpression
+    | TSDeclareMethod;
   Program: File | ModuleExpression;
   QualifiedTypeIdentifier:
     | DeclareExportDeclaration
@@ -6798,7 +6805,28 @@ export interface ParentMaps {
     | TSModuleBlock
     | WhileStatement
     | WithStatement;
-  TSNamedTupleMember: TSTupleType;
+  TSNamedTupleMember:
+    | TSArrayType
+    | TSAsExpression
+    | TSConditionalType
+    | TSIndexedAccessType
+    | TSIntersectionType
+    | TSMappedType
+    | TSNamedTupleMember
+    | TSOptionalType
+    | TSParenthesizedType
+    | TSRestType
+    | TSSatisfiesExpression
+    | TSTemplateLiteralType
+    | TSTupleType
+    | TSTypeAliasDeclaration
+    | TSTypeAnnotation
+    | TSTypeAssertion
+    | TSTypeOperator
+    | TSTypeParameter
+    | TSTypeParameterInstantiation
+    | TSUnionType
+    | TemplateLiteral;
   TSNamespaceExportDeclaration:
     | BlockStatement
     | DoWhileStatement
@@ -8196,7 +8224,7 @@ export interface ParentMaps {
     | WhileStatement
     | WithStatement
     | YieldExpression;
-  V8IntrinsicIdentifier: CallExpression;
+  V8IntrinsicIdentifier: CallExpression | NewExpression;
   VariableDeclaration:
     | BlockStatement
     | DoWhileStatement

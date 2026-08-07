@@ -778,7 +778,7 @@ defineType("NewExpression", {
   inherits: "CallExpression",
   fields: {
     callee: {
-      validate: assertNodeType("Expression"),
+      validate: assertNodeType("Expression", "V8IntrinsicIdentifier"),
     },
     arguments: validateArrayOfType(
       "Expression",
@@ -1631,7 +1631,7 @@ defineType("ExportSpecifier", {
   aliases: ["ModuleSpecifier"],
   fields: {
     local: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "StringLiteral"),
     },
     exported: {
       validate: assertNodeType("Identifier", "StringLiteral"),
@@ -1846,7 +1846,7 @@ export const classMethodOrPropertyCommon = () => ({
           "NumericLiteral",
           "BigIntLiteral",
         );
-        const computed = assertNodeType("Expression");
+        const computed = assertNodeType("Expression", "PrivateName");
 
         return function (
           node: Extract<t.Node, { computed: boolean }>,
@@ -1863,6 +1863,7 @@ export const classMethodOrPropertyCommon = () => ({
         "NumericLiteral",
         "BigIntLiteral",
         "Expression",
+        "PrivateName",
       ),
     ),
   },

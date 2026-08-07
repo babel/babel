@@ -85,7 +85,7 @@ export function getHelperMetadata(
           child.get("specifiers.0.exported").isIdentifier({ name: "default" })
         ) {
           const { name } = (child.node.specifiers[0] as t.ExportSpecifier)
-            .local;
+            .local as t.Identifier;
 
           validateDefaultExport(child.scope.getBinding(name)!.path);
 

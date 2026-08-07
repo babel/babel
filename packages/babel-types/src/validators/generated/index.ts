@@ -5111,6 +5111,7 @@ export function isTSType<Opts extends Options<t.TSType>>(
     case "TSTupleType":
     case "TSOptionalType":
     case "TSRestType":
+    case "TSNamedTupleMember":
     case "TSUnionType":
     case "TSIntersectionType":
     case "TSConditionalType":

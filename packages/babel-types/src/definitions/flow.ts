@@ -430,7 +430,7 @@ defineType("TypeofTypeAnnotation", {
   visitor: ["argument"],
   aliases: ["FlowType"],
   fields: {
-    argument: validateType("FlowType"),
+    argument: validateType("FlowType", "Identifier"),
   },
 });
 
@@ -447,7 +447,7 @@ defineType("TypeAlias", {
 defineType("TypeAnnotation", {
   visitor: ["typeAnnotation"],
   fields: {
-    typeAnnotation: validateType("FlowType"),
+    typeAnnotation: validateType("FlowType", "Identifier"),
   },
 });
 
