@@ -77,11 +77,81 @@ describe("path/family", function () {
       expect(lastSibling.getNextSibling().node).toBeFalsy();
     });
 
-    it("should return all preceding and succeeding sibling nodes", function () {
-      expect(sibling.getAllNextSiblings().length).toBeTruthy();
-      expect(lastSibling.getAllPrevSiblings().length).toBeTruthy();
-      expect(sibling.getAllNextSiblings()).toHaveLength(2);
-      expect(lastSibling.getAllPrevSiblings()).toHaveLength(2);
+    describe("getAllPrevSiblings and getAllNextSiblings", function () {
+      it("should return all preceding and succeeding sibling nodes", function () {
+        expect(sibling.getAllNextSiblings().length).toBeTruthy();
+        expect(lastSibling.getAllPrevSiblings().length).toBeTruthy();
+        expect(sibling.getAllNextSiblings()).toHaveLength(2);
+        expect(lastSibling.getAllPrevSiblings()).toHaveLength(2);
+      });
+
+      it("should handle a non-numeric key", function () {
+        const ast = parse("var a = 1");
+        let sibling;
+        traverse(ast, {
+          Identifier(path) {
+            sibling = path;
+          },
+        });
+        expect(sibling).toBeDefined();
+        expect(sibling.key).toBe("id");
+        expect(sibling.getAllPrevSiblings()).toHaveLength(0);
+        expect(sibling.getAllNextSiblings()).toHaveLength(0);
+      });
+
+      it.each([NaN, Infinity, -Infinity, 0.1, -0.1])(
+        "should handle a non-integer numeric key %s due to corrupted AST",
+        function (nonIntegerKey) {
+          const ast = parse("var a = ['prev', 0, 'next']");
+          let sibling;
+          traverse(ast, {
+            NumericLiteral(path) {
+              sibling = path;
+              // Manipulate the key to be non-integer
+              sibling.key = nonIntegerKey;
+            },
+          });
+          expect(sibling).toBeDefined();
+          expect(sibling.key).toBe(nonIntegerKey);
+          expect(sibling.getAllPrevSiblings()).toHaveLength(0);
+          expect(sibling.getAllNextSiblings()).toHaveLength(0);
+        },
+      );
+
+      it("should handle null nodes", function () {
+        const ast = parse(
+          "const InuktitutSeasons = [ukiuq, /* upirngaksaaq */, upirngaaq, /* aujaq */, ukiaqsaaq, /* ukiaq */]",
+        );
+        let sibling;
+        traverse(ast, {
+          Identifier(path) {
+            if (path.node.name === "upirngaaq") {
+              sibling = path;
+            }
+          },
+        });
+        expect(sibling).toBeDefined();
+        expect(sibling.getAllPrevSiblings()).toHaveLength(2); // ukiuq and the null node (upirngaksaaq)
+        expect(sibling.getAllNextSiblings()).toHaveLength(2); // the null node (aujaq) and ukiaqsaaq
+      });
+
+      it("should handle removed nodes", function () {
+        const ast = parse("var arr = [1, 2, 3, 4, 5]");
+        let sibling;
+        traverse(ast, {
+          ArrayExpression(path) {
+            const elementsPaths = path.get("elements");
+            elementsPaths[0].remove();
+            elementsPaths[elementsPaths.length - 1].remove();
+            sibling = path.get("elements")[1];
+          },
+        });
+        expect(sibling).toBeDefined();
+        expect(sibling.node.type).toBe("NumericLiteral");
+        expect(sibling.node.value).toBe(3);
+        expect(sibling.getAllPrevSiblings()).toHaveLength(1);
+        expect(sibling.getAllNextSiblings()).toHaveLength(1);
+      });
     });
 
     it("should initialize path.scope when needed", function () {

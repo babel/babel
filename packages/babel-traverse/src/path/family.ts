@@ -326,13 +326,15 @@ export function getNextSibling(
 export function getAllNextSiblings(
   this: NodePath<t.Node | null>,
 ): NodePath<t.Node | null>[] {
-  // @ts-expect-error todo(flow->ts) this.key could be a string
-  let _key: number = this.key;
-  let sibling = this.getSibling(++_key);
-  const siblings = [];
-  while (sibling.node) {
-    siblings.push(sibling);
-    sibling = this.getSibling(++_key);
+  // @ts-expect-error the Number.isInteger check ensures that this.key is a number
+  const _key: number = this.key;
+  if (!Number.isInteger(_key)) {
+    return [];
+  }
+  const siblings = [],
+    containerLength = (this.container as t.Node[]).length;
+  for (let key = _key + 1; key < containerLength; key++) {
+    siblings.push(this.getSibling(key));
   }
   return siblings;
 }
@@ -340,13 +342,14 @@ export function getAllNextSiblings(
 export function getAllPrevSiblings(
   this: NodePath<t.Node | null>,
 ): NodePath<t.Node | null>[] {
-  // @ts-expect-error todo(flow->ts) this.key could be a string
-  let _key: number = this.key;
-  let sibling = this.getSibling(--_key);
+  // @ts-expect-error the Number.isInteger check ensures that this.key is a number
+  const _key: number = this.key;
+  if (!Number.isInteger(_key)) {
+    return [];
+  }
   const siblings = [];
-  while (sibling.node) {
-    siblings.push(sibling);
-    sibling = this.getSibling(--_key);
+  for (let key = _key - 1; key >= 0; key--) {
+    siblings.push(this.getSibling(key));
   }
   return siblings;
 }
