@@ -3,7 +3,7 @@ import { DEFAULT_EXTENSIONS } from "@babel/core";
 import {
   setOptions,
   transform,
-  disableCache,
+  saveCache,
   isFileIgnored,
 } from "./transform.ts";
 
@@ -17,8 +17,8 @@ export default function handleMessage(action: ACTIONS, payload: any) {
       return transform(payload.code, payload.filename);
     case ACTIONS.IS_FILE_IGNORED:
       return isFileIgnored(payload);
-    case ACTIONS.CLOSE:
-      return disableCache();
+    case ACTIONS.SAVE:
+      return saveCache();
   }
 
   throw new Error(`Unknown internal parser worker action: ${action}`);

@@ -141,8 +141,8 @@ async function isFileIgnored(filename: string) {
   return opts === null;
 }
 
-function disableCache() {
-  return cache.disable();
+function saveCache() {
+  return cache.flush();
 }
 
-export { setOptions, transform, disableCache, isFileIgnored };
+export { setOptions, transform, saveCache, isFileIgnored };
