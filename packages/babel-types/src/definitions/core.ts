@@ -1591,6 +1591,10 @@ defineType("ExportNamedDeclaration", {
       ),
     },
     ...importAttributes,
+    phase: {
+      default: null,
+      validate: assertOneOf("defer"),
+    },
     specifiers: {
       default: [],
       validate: arrayOf(
