@@ -32,7 +32,7 @@ describe("@babel/register", function () {
   let currentHook, currentOptions, sourceMapSupport;
 
   const mocks = {
-    ["pirates"]: {
+    pirates: {
       addHook(hook, opts) {
         currentHook = hook;
         currentOptions = opts;
@@ -44,7 +44,7 @@ describe("@babel/register", function () {
       },
     },
 
-    ["source-map-support"]: {
+    "source-map-support": {
       install() {
         sourceMapSupport = true;
       },
