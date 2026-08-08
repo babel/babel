@@ -1,4 +1,4 @@
-import semver from "semver";
+import { satisfies } from "verkit";
 import type { Targets } from "@babel/helper-compilation-targets";
 
 import { version as coreVersion } from "../../index.ts";
@@ -132,9 +132,9 @@ function assertVersion(range: string | number): void {
   }
 
   // We want "*" to also allow any pre-release, but we do not pass
-  // the includePrerelease option to semver.satisfies because we
+  // the includePrerelease option to satisfies because we
   // do not want ^7.0.0 to match 8.0.0-alpha.1.
-  if (range === "*" || semver.satisfies(coreVersion, range)) return;
+  if (range === "*" || satisfies(coreVersion, range)) return;
 
   const message =
     `Requires Babel "${range}", but was loaded with "${coreVersion}". ` +

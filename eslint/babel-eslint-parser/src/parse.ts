@@ -1,4 +1,4 @@
-import semver from "semver";
+import { satisfies } from "verkit";
 import type { Options } from "./types";
 import { version } from "@babel/core";
 import { WorkerClient, type Client } from "./client.ts";
@@ -24,7 +24,7 @@ export default function parse(code: string, options: Options) {
   const minSupportedCoreVersion = REQUIRED_VERSION("^7.2.0 || ^8.0.0");
 
   if (typeof isRunningMinSupportedCoreVersion !== "boolean") {
-    isRunningMinSupportedCoreVersion = semver.satisfies(
+    isRunningMinSupportedCoreVersion = satisfies(
       version,
       minSupportedCoreVersion,
     );

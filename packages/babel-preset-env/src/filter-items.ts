@@ -1,4 +1,4 @@
-import semver from "semver";
+import { isLess } from "verkit";
 import { minVersions } from "./available-plugins.ts";
 
 export function addProposalSyntaxPlugins(
@@ -24,7 +24,7 @@ export function removeUnsupportedItems(
   items.forEach(item => {
     if (
       Object.hasOwn(minVersions, item) &&
-      semver.lt(
+      isLess(
         babelVersion,
         // @ts-expect-error we have checked minVersions[item] in has call
         minVersions[item],

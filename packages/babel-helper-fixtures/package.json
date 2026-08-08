@@ -16,11 +16,10 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@jridgewell/gen-mapping": "catalog:",
-    "semver": "catalog:"
+    "verkit": "catalog:"
   },
   "devDependencies": {
-    "@babel/core": "workspace:^",
-    "@types/semver": "^7.3.4"
+    "@babel/core": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0"

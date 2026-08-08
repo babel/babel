@@ -20,7 +20,7 @@
   "dependencies": {
     "@babel/helper-annotate-as-pure": "workspace:^",
     "regexpu-core": "^6.3.1",
-    "semver": "catalog:"
+    "verkit": "catalog:"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0"

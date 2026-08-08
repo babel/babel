@@ -6,7 +6,7 @@
 const path = require("path");
 const { fileURLToPath } = require("url");
 const { createRequire } = require("module");
-const semver = require("semver");
+const { isGreaterOrEqual, isLess, satisfies } = require("verkit");
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
 function bool(value) {
@@ -25,13 +25,13 @@ if (typeof jest !== "undefined") {
   exports.itBabel8 = bool(process.env.BABEL_9_BREAKING) ? dummy : it;
   exports.itBabel9 = bool(process.env.BABEL_9_BREAKING) ? it : dummy;
   exports.itGte = function (version) {
-    return semver.gte(process.version, version) ? it : dummy;
+    return isGreaterOrEqual(process.version, version) ? it : dummy;
   };
   exports.itLt = function (version) {
-    return semver.lt(process.version, version) ? it : dummy;
+    return isLess(process.version, version) ? it : dummy;
   };
   exports.itSatisfies = function (version) {
-    return semver.satisfies(process.version, version) ? it : dummy;
+    return satisfies(process.version, version) ? it : dummy;
   };
   exports.itNegate = function (jestIt) {
     return jestIt === dummy ? it : dummy;
@@ -44,12 +44,12 @@ if (typeof jest !== "undefined") {
     ? describe
     : dummy;
   exports.describeGte = function (version) {
-    return semver.gte(process.version, version) ? describe : describe.skip;
-  };
-  exports.describeSatisfies = function (version) {
-    return semver.satisfies(process.version, version)
+    return isGreaterOrEqual(process.version, version)
       ? describe
       : describe.skip;
+  };
+  exports.describeSatisfies = function (version) {
+    return satisfies(process.version, version) ? describe : describe.skip;
   };
   exports.describeNoCITGM = __dirname.includes("citgm_tmp")
     ? describe.skip

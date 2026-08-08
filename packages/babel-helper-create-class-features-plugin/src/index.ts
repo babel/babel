@@ -1,7 +1,7 @@
 import { types as t } from "@babel/core";
 import type { PluginAPI, PluginObject, NodePath } from "@babel/core";
 
-import semver from "semver";
+import { isLess } from "verkit";
 
 import {
   buildPrivateNamesNodes,
@@ -113,7 +113,7 @@ export function createClassFeaturePlugin({
 
       if (
         !file.get(versionKey) ||
-        semver.lt(file.get(versionKey), PACKAGE_JSON.version)
+        isLess(file.get(versionKey), PACKAGE_JSON.version)
       ) {
         file.set(versionKey, PACKAGE_JSON.version);
       }
