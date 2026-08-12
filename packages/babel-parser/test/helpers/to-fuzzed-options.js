@@ -25,22 +25,25 @@ const toAdjustFunction = adjustments =>
         adjustments,
       );
 
-const SyntaxErrorMessageRegExp = /\(\d+:\d+\)$/;
+const SyntaxErrorMessageRegExp = /\((\D[^:]*:)?(\d+):(\d+)\)$/;
 const toAdjustedSyntaxError = (adjust, error) =>
   error && SyntaxErrorMessageRegExp.test(error.message)
     ? SyntaxError(
-        error.message.replace(/\((\d+):(\d+)\)$/, function (_, line, column) {
-          const loc = {
-            line: parseInt(line, 10),
-            column: parseInt(column, 10),
-          };
-          return `(${adjust(adjust, loc.line, "line", loc)}:${adjust(
-            adjust,
-            loc.column,
-            "column",
-            loc,
-          )})`;
-        }),
+        error.message.replace(
+          SyntaxErrorMessageRegExp,
+          function (_, prefix, line, column) {
+            const loc = {
+              line: parseInt(line, 10),
+              column: parseInt(column, 10),
+            };
+            return `(${prefix ?? ""}${adjust(adjust, loc.line, "line", loc)}:${adjust(
+              adjust,
+              loc.column,
+              "column",
+              loc,
+            )})`;
+          },
+        ),
       )
     : error;
 
