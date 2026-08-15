@@ -100,12 +100,12 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 57, gzip size: 71
+  // size: 142, gzip size: 130
   arrayWithHoles: helper(
     "7.0.0-beta.0",
-    "function _arrayWithHoles(r){if(Array.isArray(r))return r}",
+    'function _arrayWithHoles(r){if(Array.isArray(r)&&("undefined"==typeof Symbol||r[Symbol.iterator]===Array.prototype[Symbol.iterator]))return r}',
     {
-      globals: ["Array"],
+      globals: ["Array", "Symbol"],
       locals: { _arrayWithHoles: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_arrayWithHoles",
