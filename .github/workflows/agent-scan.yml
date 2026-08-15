@@ -8,6 +8,9 @@ on:
   issues:
     types:
       - opened
+  issue_comment:
+    types:
+      - created
 
 jobs:
   agentscan:
@@ -17,16 +20,11 @@ jobs:
       issues: write
       contents: read
     steps:
-      - name: Cache AgentScan analysis
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae
-        with:
-          path: .agentscan-cache
-          key: agentscan-cache-${{ github.actor }}
-          restore-keys: agentscan-cache-
       - name: AgentScan
-        uses: MatteoGabriele/agentscan-action@2b7e598bd821bc0f4651e985688951930c2f60d0
+        uses: MatteoGabriele/agentscan-action@cf7615ba9f4fa86beab3323bc84b803ab430f8dc # v2.3.0
         with:
-          cache-path: ".agentscan-cache"
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          skip-comment-on-organic: true
-          skip-members: "nicolo-ribaudo,JLHwung,liuxingbaoyu,babel-bot,fisker"
+          allowed-users: "nicolo-ribaudo,JLHwung,liuxingbaoyu,babel-bot,fisker"
+          trusted-author-associations: "owner,member,collaborator"
+          honeypot: true
+          scan-issues: true
