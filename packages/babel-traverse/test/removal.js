@@ -326,7 +326,7 @@ describe("Removal", function () {
         'Property consequent of ConditionalExpression expected node to be of a type ["Expression"] but instead got undefined',
       );
     });
-    it("should throw when removing the expression property of an AwaitExpression", function () {
+    it("should throw when removing the argument property of an AwaitExpression", function () {
       const rootPath = getPath("async function foo() { await bar(); }");
       const path = rootPath.get("body.0.body.body.0.expression");
       expect(() => {

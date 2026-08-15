@@ -38,8 +38,8 @@ export const hooks = [
   function (self: NodePath, parent: NodePath) {
     if (parent.isSequenceExpression() && parent.node.expressions.length === 2) {
       // (node, NODE);
-      // we will remove the other element of a sequence expression so let's turn that sequence
-      // expression into a regular expression
+      // we're removing one element from a 2-element sequence expression, so replace the sequence
+      // expression with the remaining expression
       parent.replaceWith(parent.node.expressions[self.key === 0 ? 1 : 0]);
       return true;
     }
