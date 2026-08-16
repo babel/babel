@@ -14,7 +14,7 @@
 
 # Contributing
 
-Contributions are always welcome, no matter how large or small! Before contributing, please read the [code of conduct](https://github.com/babel/babel/blob/main/CODE_OF_CONDUCT.md).
+Contributions are always welcome, no matter how large or small! Before contributing, please read the [code of conduct](https://github.com/babel/babel/blob/main/CODE_OF_CONDUCT.md) and the [AI policy](https://github.com/babel/babel/blob/main/AI_POLICY.md).
 
 If you want an already configured online IDE to contribute to Babel, you can use [Gitpod](https://gitpod.io/#https://github.com/babel/babel)!
 
