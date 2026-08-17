@@ -807,10 +807,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 129, gzip size: 124
+  // size: 292, gzip size: 204
   iterableToArray: helper(
     "7.0.0-beta.0",
-    'function _iterableToArray(r){if("undefined"!=typeof Symbol&&null!=r[Symbol.iterator]||null!=r["@@iterator"])return Array.from(r)}',
+    'function _iterableToArray(r){var e="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(Array.isArray(r)&&(null==e||e===("undefined"!=typeof Symbol&&Array.prototype[Symbol.iterator])))return r;if(null!=e){for(var t,o=[],a=e.call(r);!(t=a.next()).done;)o.push(t.value);return o}}',
     {
       globals: ["Symbol", "Array"],
       locals: { _iterableToArray: ["body.0.id"] },
@@ -820,12 +820,12 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 416, gzip size: 293
+  // size: 524, gzip size: 329
   iterableToArrayLimit: helper(
     "7.0.0-beta.0",
-    'function _iterableToArrayLimit(r,l){var t=null==r?null:"undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(null!=t){var e,n,i,u,a=[],f=!0,o=!1;try{if(i=(t=t.call(r)).next,0===l){if(Object(t)!==t)return;f=!1}else for(;!(f=(e=i.call(t)).done)&&(a.push(e.value),a.length!==l);f=!0);}catch(r){o=!0,n=r}finally{try{if(!f&&null!=t.return&&(u=t.return(),Object(u)!==u))return}finally{if(o)throw n}}return a}}',
+    'function _iterableToArrayLimit(r,t){var e=null==r?null:"undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(Array.isArray(r)&&(null==e||e===("undefined"!=typeof Symbol&&Array.prototype[Symbol.iterator])))return r;if(null!=e){var l,n,i,a,o=[],u=!0,f=!1;try{if(i=(e=e.call(r)).next,0===t){if(Object(e)!==e)return;u=!1}else for(;!(u=(l=i.call(e)).done)&&(o.push(l.value),o.length!==t);u=!0);}catch(r){f=!0,n=r}finally{try{if(!u&&null!=e.return&&(a=e.return(),Object(a)!==a))return}finally{if(f)throw n}}return o}}',
     {
-      globals: ["Symbol", "Object"],
+      globals: ["Symbol", "Array", "Object"],
       locals: { _iterableToArrayLimit: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_iterableToArrayLimit",
@@ -1231,20 +1231,17 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 133, gzip size: 117
+  // size: 114, gzip size: 103
   slicedToArray: helper(
     "7.0.0-beta.0",
-    "function _slicedToArray(r,e){return arrayWithHoles(r)||iterableToArrayLimit(r,e)||unsupportedIterableToArray(r,e)||nonIterableRest()}",
+    "function _slicedToArray(r,e){return iterableToArrayLimit(r,e)||unsupportedIterableToArray(r,e)||nonIterableRest()}",
     {
       globals: [],
       locals: { _slicedToArray: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_slicedToArray",
       dependencies: {
-        arrayWithHoles: ["body.0.body.body.0.argument.left.left.left.callee"],
-        iterableToArrayLimit: [
-          "body.0.body.body.0.argument.left.left.right.callee",
-        ],
+        iterableToArrayLimit: ["body.0.body.body.0.argument.left.left.callee"],
         unsupportedIterableToArray: [
           "body.0.body.body.0.argument.left.right.callee",
         ],
@@ -1366,18 +1363,17 @@ const helpers: Record<string, Helper> = {
     dependencies: {},
     internal: false,
   }),
-  // size: 116, gzip size: 102
+  // size: 97, gzip size: 87
   toArray: helper(
     "7.0.0-beta.0",
-    "function _toArray(r){return arrayWithHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableRest()}",
+    "function _toArray(r){return iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableRest()}",
     {
       globals: [],
       locals: { _toArray: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_toArray",
       dependencies: {
-        arrayWithHoles: ["body.0.body.body.0.argument.left.left.left.callee"],
-        iterableToArray: ["body.0.body.body.0.argument.left.left.right.callee"],
+        iterableToArray: ["body.0.body.body.0.argument.left.left.callee"],
         unsupportedIterableToArray: [
           "body.0.body.body.0.argument.left.right.callee",
         ],

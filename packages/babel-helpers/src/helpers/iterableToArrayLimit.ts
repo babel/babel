@@ -9,6 +9,15 @@ export default function _iterableToArrayLimit<T>(arr: Iterable<T>, i: number) {
       ? null
       : (typeof Symbol !== "undefined" && arr[Symbol.iterator]) ||
         (arr as any)["@@iterator"];
+  // fast path, but not for arrays (or proxies) with a custom iterator
+  if (
+    Array.isArray(arr) &&
+    (iterator == null ||
+      (iterator as unknown) ===
+        (typeof Symbol !== "undefined" && Array.prototype[Symbol.iterator]))
+  ) {
+    return arr as unknown as T[];
+  }
   if (iterator == null) return;
 
   var _arr: T[] = [];
