@@ -209,11 +209,13 @@ export function wrapLoopBody(
   );
   let call: t.Expression = t.callExpression(t.identifier(id), callArgs);
 
-  const fnParent = loopPath.findParent(p => p.isFunction());
+  const fnParent = loopPath.findParent(p => p.isFunctionParent());
   if (fnParent) {
-    const { async, generator } = fnParent.node as t.Function;
+    // @ts-expect-error: async and generator are not on t.FunctionParent, here we provide default values for static blocks.
+    const { async = false, generator = false } =
+      fnParent.node as t.FunctionParent;
     fn.async = async;
-    fn.generator = generator ?? false;
+    fn.generator = generator;
     if (generator) call = t.yieldExpression(call, true);
     else if (async) call = t.awaitExpression(call);
   }
