@@ -1055,6 +1055,7 @@ export interface ImportExpression extends BaseNode {
   source: Expression;
   options?: Expression | null;
   phase?: "source" | "defer" | null;
+  sync?: boolean | null;
 }
 
 export interface Import extends BaseNode {
