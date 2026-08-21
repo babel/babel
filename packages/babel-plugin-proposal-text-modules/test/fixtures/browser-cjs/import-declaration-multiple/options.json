@@ -1,0 +1,3 @@
+{
+  "throws": "Cannot compile to CommonJS, since it would require top-level await."
+}

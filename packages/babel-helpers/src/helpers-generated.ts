@@ -661,6 +661,19 @@ const helpers: Record<string, Helper> = {
     dependencies: {},
     internal: false,
   }),
+  // size: 119, gzip size: 105
+  immutableUint8Array: helper(
+    "8.0.0-rc.2",
+    "function _immutableUint8Array(r){var t=r.buffer;return new Uint8Array(t.transferToImmutable?t.transferToImmutable():t)}",
+    {
+      globals: ["Uint8Array"],
+      locals: { _immutableUint8Array: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_immutableUint8Array",
+      dependencies: {},
+      internal: false,
+    },
+  ),
   // size: 537, gzip size: 258
   importDeferProxy: helper(
     "7.23.0",
