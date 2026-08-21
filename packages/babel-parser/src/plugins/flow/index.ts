@@ -2032,7 +2032,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     parseExpressionStatement(
       node: Undone<N.ExpressionStatement>,
       expr: N.Expression,
-      decorators: N.Decorator[] | null,
     ): N.ExpressionStatement {
       if (expr.type === "Identifier") {
         if (expr.name === "declare") {
@@ -2063,7 +2062,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
-      return super.parseExpressionStatement(node, expr, decorators);
+      return super.parseExpressionStatement(node, expr);
     }
 
     // export type
@@ -2165,7 +2164,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node.test = expr;
       node.consequent = consequent;
       node.alternate = this.forwardNoArrowParamsConversionAt(node, () =>
-        this.parseMaybeAssign(undefined, undefined),
+        this.parseMaybeAssign(),
       );
 
       return this.finishNode(node, "ConditionalExpression");
@@ -2265,11 +2264,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseParenItem<
       T extends
-        | N.Expression
-        | N.RestElement
-        | N.SpreadElement
-        | N.TSTypeCastExpression
-        | N.TypeCastExpression,
+        N.Expression | N.RestElement | N.SpreadElement | N.TSTypeCastExpression,
     >(
       node: T,
       startLoc: Position,
@@ -2516,7 +2511,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             | N.AssignmentPattern
             | N.ArgumentPlaceholder
             | N.TSTypeCastExpression
-            | N.TypeCastExpression
             | null
           )[]
         | readonly (
@@ -2525,7 +2519,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             | N.VoidPattern
             | N.AssignmentPattern
             | N.TSTypeCastExpression
-            | N.TypeCastExpression
             | null
           )[],
       isParenthesizedExpr?: boolean,
@@ -2537,7 +2530,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           | N.AssignmentPattern
           | N.ArgumentPlaceholder
           | N.TSTypeCastExpression
-          | N.TypeCastExpression
           | null
         )[]
       | readonly (
@@ -2546,7 +2538,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           | N.VoidPattern
           | N.AssignmentPattern
           | N.TSTypeCastExpression
-          | N.TypeCastExpression
           | null
         )[] {
       for (let i = 0; i < exprList.length; i++) {
@@ -3035,9 +3026,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     //    there
     // 3. This is neither. Just call the super method
     parseMaybeAssign(
+      refExpressionErrors: ExpressionErrors | null | undefined,
+      isParenItem: boolean | undefined,
+    ): N.Expression | N.TSTypeCastExpression;
+    parseMaybeAssign(
       refExpressionErrors?: ExpressionErrors | null,
-      afterLeftParse?: Function,
-    ): N.Expression {
+    ): N.Expression;
+    parseMaybeAssign(
+      refExpressionErrors?: ExpressionErrors | null,
+      isParenItem?: boolean,
+    ): N.Expression | N.TSTypeCastExpression {
       let state = null;
 
       let jsx;
@@ -3049,7 +3047,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         state = this.state.clone();
 
         jsx = this.tryParse(
-          () => super.parseMaybeAssign(refExpressionErrors, afterLeftParse),
+          () => super.parseMaybeAssign(refExpressionErrors, isParenItem),
           state,
         );
 
@@ -3080,7 +3078,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             () => {
               const result = super.parseMaybeAssign(
                 refExpressionErrors,
-                afterLeftParse,
+                isParenItem,
               );
 
               this.resetStartLocationFromNode(result, typeParameters);
@@ -3160,7 +3158,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         );
       }
 
-      return super.parseMaybeAssign(refExpressionErrors, afterLeftParse);
+      return super.parseMaybeAssign(refExpressionErrors, isParenItem);
     }
 
     // handle return types for arrow functions

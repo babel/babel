@@ -633,7 +633,7 @@ export default (superClass: typeof Parser) =>
       super.getTokenFromCode(code);
     }
 
-    updateContext(prevType: TokenType): void {
+    updateContext(prevType?: TokenType): void {
       const { context, type } = this.state;
       if (type === tt.slash && prevType === tt.jsxTagStart) {
         // do not consider JSX expr -> JSX open tag -> ... anymore

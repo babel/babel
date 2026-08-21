@@ -372,16 +372,17 @@ export default (superClass: typeof Parser) =>
       );
     }
 
-    checkExport(node: N.ExportNamedDeclaration): void {
-      const { specifiers } = node;
-      if (specifiers?.length) {
-        node.specifiers = specifiers.filter(
-          // @ts-expect-error placeholder typings
-          node => node.exported.type === "Placeholder",
-        );
-      }
-      super.checkExport(node);
-      node.specifiers = specifiers;
+    // TODO: Enable this
+    checkNamedExport(): void {
+      // const { specifiers } = node;
+      // if (specifiers?.length) {
+      //   node.specifiers = specifiers.filter(
+      //     // @ts-expect-error placeholder typings
+      //     node => node.exported.type === "Placeholder",
+      //   );
+      // }
+      // super.checkNamedExport(node);
+      // node.specifiers = specifiers;
     }
 
     parseImport(
