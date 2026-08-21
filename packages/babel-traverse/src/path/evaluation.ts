@@ -360,8 +360,22 @@ function _evaluate(path: NodePath, state: State): any {
         return;
       }
       value = value.value;
-      // @ts-expect-error key is any type
-      obj[key] = value;
+      if (!prop.node.computed && key === "__proto__") {
+        // A non-computed __proto__ key sets the prototype, unless the value
+        // is not an object or null, in which case it is ignored.
+        if (typeof value === "object" || typeof value === "function") {
+          Object.setPrototypeOf(obj, value);
+        }
+      } else {
+        // Define an own property, so a computed `["__proto__"]` key does not
+        // set the prototype and no setters on the prototype are triggered.
+        Object.defineProperty(obj, key, {
+          value,
+          configurable: true,
+          enumerable: true,
+          writable: true,
+        });
+      }
     }
     return obj;
   }
