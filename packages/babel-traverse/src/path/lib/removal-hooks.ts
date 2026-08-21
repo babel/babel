@@ -36,11 +36,11 @@ export const hooks = [
   },
 
   function (self: NodePath, parent: NodePath) {
-    if (parent.isSequenceExpression() && parent.node.expressions.length === 1) {
+    if (parent.isSequenceExpression() && parent.node.expressions.length === 2) {
       // (node, NODE);
-      // we've just removed the second element of a sequence expression so let's turn that sequence
-      // expression into a regular expression
-      parent.replaceWith(parent.node.expressions[0]);
+      // we're removing one element from a 2-element sequence expression, so replace the sequence
+      // expression with the remaining expression
+      parent.replaceWith(parent.node.expressions[self.key === 0 ? 1 : 0]);
       return true;
     }
   },
@@ -49,7 +49,7 @@ export const hooks = [
     if (parent.isBinary()) {
       // left + NODE;
       // NODE + right;
-      // we're in a binary expression, better remove it and replace it with the last expression
+      // we're in a binary expression, better remove it and replace it with the other expression
       if (self.key === "left") {
         parent.replaceWith(parent.node.right);
       } else {
