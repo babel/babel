@@ -51,7 +51,6 @@ import {
   sequenceExpression,
 } from "@babel/types";
 import * as t from "@babel/types";
-import { scope as scopeCache } from "../cache.ts";
 import type { ExplodedVisitor, Visitor } from "../types.ts";
 
 export type { BindingKind };
@@ -417,8 +416,6 @@ class Scope {
   path!: NodePath;
   block!: t.Pattern | t.Scopable;
 
-  inited!: boolean;
-
   labels!: Map<string, NodePath<t.LabeledStatement>>;
   bindings!: Record<string, Binding>;
   /** Only defined in the program scope */
@@ -435,21 +432,12 @@ class Scope {
    */
   constructor(path: NodePath<t.Pattern | t.Scopable>) {
     const { node } = path;
-    const cached = scopeCache.get(node);
-    // Sometimes, a scopable path is placed higher in the AST tree.
-    // In these cases, have to create a new Scope.
-    if (cached?.path === path) {
-      return cached;
-    }
-    scopeCache.set(node, this);
-
     this.uid = uid++;
 
     this.block = node;
     this.path = path;
 
     this.labels = new Map();
-    this.inited = false;
   }
 
   /**
@@ -936,13 +924,6 @@ class Scope {
       const data = scope.data[key];
       if (data != null) scope.data[key] = null;
     } while ((scope = scope.parent));
-  }
-
-  init() {
-    if (!this.inited) {
-      this.inited = true;
-      this.crawl();
-    }
   }
 
   crawl() {
