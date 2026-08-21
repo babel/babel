@@ -646,7 +646,7 @@ export default declare((api, opts: Options) => {
         path.replaceWith(path.node.expression);
       },
 
-      ["TSAsExpression|TSSatisfiesExpression"](
+      "TSAsExpression|TSSatisfiesExpression"(
         path: NodePath<t.TSAsExpression | t.TSSatisfiesExpression>,
       ) {
         let { node }: { node: t.Expression } = path;
@@ -656,7 +656,7 @@ export default declare((api, opts: Options) => {
         path.replaceWith(node);
       },
 
-      ["TSNonNullExpression|TSInstantiationExpression"](
+      "TSNonNullExpression|TSInstantiationExpression"(
         path: NodePath<t.TSNonNullExpression | t.TSInstantiationExpression>,
       ) {
         path.replaceWith(path.node.expression);

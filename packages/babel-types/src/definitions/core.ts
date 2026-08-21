@@ -1289,11 +1289,6 @@ defineType("AssignmentPattern", {
     right: {
       validate: assertNodeType("Expression"),
     },
-    // For TypeScript
-    decorators: {
-      validate: arrayOfType("Decorator"),
-      optional: true,
-    },
   },
 });
 
@@ -1408,7 +1403,7 @@ defineType("ClassExpression", {
       optional: true,
       validate: assertNodeType("Expression"),
     },
-    ["superTypeArguments"]: {
+    superTypeArguments: {
       validate: assertNodeType(
         "TypeParameterInstantiation",
         "TSTypeParameterInstantiation",
@@ -1455,7 +1450,7 @@ defineType("ClassDeclaration", {
       optional: true,
       validate: assertNodeType("Expression"),
     },
-    ["superTypeArguments"]: {
+    superTypeArguments: {
       validate: assertNodeType(
         "TypeParameterInstantiation",
         "TSTypeParameterInstantiation",
@@ -1962,7 +1957,7 @@ defineType("TaggedTemplateExpression", {
     quasi: {
       validate: assertNodeType("TemplateLiteral"),
     },
-    ["typeArguments"]: {
+    typeArguments: {
       validate: assertNodeType(
         "TypeParameterInstantiation",
         "TSTypeParameterInstantiation",

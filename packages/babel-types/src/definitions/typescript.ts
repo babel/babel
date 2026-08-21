@@ -92,13 +92,13 @@ defineType("TSQualifiedName", {
 
 const signatureDeclarationCommon = () => ({
   typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
-  ["params"]: validateArrayOfType(
+  params: validateArrayOfType(
     "ArrayPattern",
     "Identifier",
     "ObjectPattern",
     "RestElement",
   ),
-  ["returnType"]: validateOptionalType("TSTypeAnnotation"),
+  returnType: validateOptionalType("TSTypeAnnotation"),
 });
 
 const callConstructSignatureDeclaration = {
@@ -209,7 +209,7 @@ defineType("TSTypeReference", {
   visitor: ["typeName", "typeArguments"],
   fields: {
     typeName: validateType("TSEntityName"),
-    ["typeArguments"]: validateOptionalType("TSTypeParameterInstantiation"),
+    typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 
@@ -229,7 +229,7 @@ defineType("TSTypeQuery", {
   visitor: ["exprName", "typeArguments"],
   fields: {
     exprName: validateType("TSEntityName", "TSImportType"),
-    ["typeArguments"]: validateOptionalType("TSTypeParameterInstantiation"),
+    typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 
@@ -488,7 +488,7 @@ defineType("TSInstantiationExpression", {
   visitor: ["expression", "typeArguments"],
   fields: {
     expression: validateType("Expression"),
-    ["typeArguments"]: validateOptionalType("TSTypeParameterInstantiation"),
+    typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 

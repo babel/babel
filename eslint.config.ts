@@ -93,6 +93,7 @@ export default defineConfig([
       "no-case-declarations": "error",
       "no-confusing-arrow": "error",
       "no-empty": ["error", { allowEmptyCatch: true }],
+      "no-useless-computed-key": "error",
       "no-unused-vars": ["error", { caughtErrors: "none" }],
       "no-var": "error",
       "prefer-const": "error",
