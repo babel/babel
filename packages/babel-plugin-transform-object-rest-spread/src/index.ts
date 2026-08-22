@@ -226,7 +226,9 @@ export default declare((api, opts: Options) => {
       const bindingParentPath = bindings[bindingName].parentPath;
       if (
         path.scope.getBinding(bindingName)!.references > 0 ||
-        !bindingParentPath.isObjectProperty()
+        !bindingParentPath.isObjectProperty() ||
+        (bindingParentPath.node.computed &&
+          bindingParentPath.get("key").isAssignmentExpression())
       ) {
         return;
       }
