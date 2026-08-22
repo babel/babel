@@ -2186,6 +2186,12 @@ export default abstract class StatementParser extends ExpressionParser {
       if (decorators) {
         throw this.raise(Errors.UnsupportedDecoratorExport, node);
       }
+      if (
+        this.hasPlugin("deferredReexports") &&
+        (node as N.ExportNamedDeclaration).phase === "defer"
+      ) {
+        this.raise(Errors.DeferExportInvalidAll, node);
+      }
       this.parseExportFrom(node, true);
 
       this.sawUnambiguousESM = true;
@@ -2704,7 +2710,7 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   isPotentialImportPhase(isExport: boolean): boolean {
-    if (isExport) return false;
+    if (isExport) return this.isContextual(tt._defer);
     return this.isContextual(tt._source) || this.isContextual(tt._defer);
   }
 
@@ -2721,6 +2727,10 @@ export default abstract class StatementParser extends ExpressionParser {
             `Assertion failure: export declarations do not support the '${phase}' phase.`,
           );
         }
+      }
+      if (phase === "defer") {
+        this.expectPlugin("deferredReexports", loc);
+        (node as N.ExportNamedDeclaration).phase = "defer";
       }
       return;
     }

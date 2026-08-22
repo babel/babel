@@ -45,6 +45,7 @@ type Plugin$1 =
   | "decorators-legacy"
   | "decoratorAutoAccessors"
   | "deferredImportEvaluation"
+  | "deferredReexports"
   | "destructuringPrivate"
   | "doExpressions"
   | "exportDefaultFrom"
@@ -136,6 +137,7 @@ type ErrorInfoCompressed = {
   DecoratorSemicolon: [];
   DecoratorStaticBlock: [];
   DeferImportRequiresNamespace: [];
+  DeferExportInvalidAll: [];
   DeletePrivateField: [];
   DestructureNamedImport: [];
   DuplicateConstructor: [];
