@@ -132,7 +132,7 @@ export default (superClass: typeof Parser) =>
 
           case charCodes.ampersand:
             out += this.input.slice(chunkStart, this.state.pos);
-            out += this.jsxReadEntity();
+            out += this.jsxReadEntityForText();
             chunkStart = this.state.pos;
             break;
 
@@ -252,6 +252,30 @@ export default (superClass: typeof Parser) =>
       // Not a valid entity
       this.state.pos = startPos;
       return "&";
+    }
+
+    // Like jsxReadEntity(), but for JSX text content: if the decoded
+    // entity is a whitespace character that would be affected by JSX
+    // text trimming (space, tab, newline, carriage return), return a
+    // normalized numeric entity form instead of the decoded character.
+    // This preserves the developer's intent in JSXText.value, so that
+    // downstream whitespace-trimming consumers (e.g.
+    // cleanJSXElementLiteralChild) can distinguish entity-encoded
+    // whitespace from literal whitespace without re-parsing extra.raw.
+    jsxReadEntityForText(): string {
+      const ch = this.jsxReadEntity();
+      switch (ch) {
+        case " ":
+          return "&#x20;";
+        case "\t":
+          return "&#x9;";
+        case "\n":
+          return "&#xa;";
+        case "\r":
+          return "&#xd;";
+        default:
+          return ch;
+      }
     }
 
     // Read a JSX identifier (valid tag or attribute name).
