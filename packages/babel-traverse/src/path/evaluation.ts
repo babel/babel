@@ -183,8 +183,15 @@ function _evaluate(path: NodePath, state: State): any {
     }
   }
 
-  if (path.isExpressionWrapper()) {
-    // TypeCastExpression, ExpressionStatement etc
+  if (
+    path.isExpressionWrapper() ||
+    path.isTSAsExpression() ||
+    path.isTSSatisfiesExpression() ||
+    path.isTSTypeAssertion() ||
+    path.isTSNonNullExpression() ||
+    path.isTSInstantiationExpression()
+  ) {
+    // Runtime-transparent expression wrappers such as type assertions.
     return evaluateCached(path.get("expression"), state);
   }
 
