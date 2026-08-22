@@ -436,10 +436,7 @@ export default (superClass: typeof Parser) =>
       if (node != null && this.isObjectProperty(node)) {
         const { key, value } = node;
         if (this.isPrivateName(key)) {
-          this.classScope.usePrivateName(
-            this.getPrivateNameSV(key),
-            key.start!,
-          );
+          this.classScope.usePrivateName(this.getPrivateNameSV(key), key);
         }
         this.toAssignable(value, isLHS);
       } else {

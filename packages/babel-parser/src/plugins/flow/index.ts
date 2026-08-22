@@ -276,17 +276,14 @@ type EnumContext = {
 type EnumMemberInit =
   | {
       type: "number";
-      loc: number;
       value: N.NumericLiteral;
     }
   | {
       type: "string";
-      loc: number;
       value: N.StringLiteral;
     }
   | {
       type: "boolean";
-      loc: number;
       value: N.BooleanLiteral;
     }
   | {
@@ -443,7 +440,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       this.scope.declareName(
         node.id.name,
         BindingFlag.TYPE_FLOW_DECLARE_FN,
-        node.id.start!,
+        node.id,
       );
 
       return this.finishNode(node, "DeclareFunction");
@@ -496,11 +493,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.DeclareVariable {
       this.next();
       node.id = this.flowParseTypeAnnotatableIdentifier();
-      this.scope.declareName(
-        node.id.name,
-        BindingFlag.TYPE_VAR,
-        node.id.start!,
-      );
+      this.scope.declareName(node.id.name, BindingFlag.TYPE_VAR, node.id);
       this.semicolon();
       return this.finishNode(node, "DeclareVariable");
     }
@@ -691,7 +684,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       this.scope.declareName(
         node.id.name,
         isClass ? BindingFlag.TYPE_FUNCTION : BindingFlag.TYPE_LEXICAL,
-        node.id.start!,
+        node.id,
       );
 
       if (this.match(tt.lt)) {
@@ -767,7 +760,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     checkReservedType(
       word: string,
-      startLoc: Position | number,
+      startLoc: Position | Undone<N.Node>,
       declaration?: boolean,
     ) {
       if (!reservedTypes.has(word)) return;
@@ -811,11 +804,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         /* liberal */ false,
         /* declaration */ true,
       );
-      this.scope.declareName(
-        node.id.name,
-        BindingFlag.TYPE_LEXICAL,
-        node.id.start!,
-      );
+      this.scope.declareName(node.id.name, BindingFlag.TYPE_LEXICAL, node.id);
 
       if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -838,11 +827,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         /* liberal */ true,
         /* declaration */ true,
       );
-      this.scope.declareName(
-        node.id.name,
-        BindingFlag.TYPE_LEXICAL,
-        node.id.start!,
-      );
+      this.scope.declareName(node.id.name, BindingFlag.TYPE_LEXICAL, node.id);
 
       if (this.match(tt.lt)) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -1206,7 +1191,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           }
           if (this.eat(tt.bracketL)) {
             if (variance) {
-              this.unexpected(variance.start);
+              this.unexpected(variance);
             }
             nodeStart.internalSlots.push(
               this.flowParseObjectTypeInternalSlot(node, isStatic),
@@ -1221,7 +1206,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.unexpected(protoStartLoc);
           }
           if (variance) {
-            this.unexpected(variance.start);
+            this.unexpected(variance);
           }
           nodeStart.callProperties.push(
             this.flowParseObjectTypeCallProperty(node, isStatic),
@@ -1354,7 +1339,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.unexpected(protoStartLoc);
           }
           if (variance) {
-            this.unexpected(variance.start);
+            this.unexpected(variance);
           }
 
           (node as Undone<N.ObjectTypeProperty>).value =
@@ -2635,7 +2620,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       allowsDirectSuper: boolean,
     ): void {
       if ((method as any).variance) {
-        this.unexpected((method as any).variance.start);
+        this.unexpected((method as any).variance);
       }
       delete (method as any).variance;
       if (this.match(tt.lt)) {
@@ -2679,7 +2664,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       isAsync: boolean,
     ): void {
       if ((method as any).variance) {
-        this.unexpected((method as any).variance.start);
+        this.unexpected((method as any).variance);
       }
       delete (method as any).variance;
       if (this.match(tt.lt)) {
@@ -2754,7 +2739,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       refExpressionErrors?: ExpressionErrors | null,
     ): T {
       if ((prop as any).variance) {
-        this.unexpected((prop as any).variance.start);
+        this.unexpected((prop as any).variance);
       }
       delete (prop as any).variance;
 
@@ -2859,7 +2844,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
       isExport: boolean,
       phase: string | null,
-      loc?: number,
+      loc?: Undone<N.Node>,
     ): void {
       super.applyImportPhase(node, isExport, phase, loc);
       if (isExport) {
@@ -2951,18 +2936,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (isInTypeOnlyImport || specifierIsTypeImport) {
         this.checkReservedType(
           specifier.local.name,
-          specifier.local.start,
+          specifier.local,
           /* declaration */ true,
         );
       }
 
       if (isBinding && !isInTypeOnlyImport && !specifierIsTypeImport) {
-        this.checkReservedWord(
-          specifier.local.name,
-          specifier.start,
-          true,
-          true,
-        );
+        this.checkReservedWord(specifier.local.name, specifier, true, true);
       }
 
       return this.finishImportSpecifier(specifier, "ImportSpecifier");
@@ -3509,7 +3489,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // Flow enum parsing
 
     flowEnumErrorBooleanMemberNotInitialized(
-      loc: Position | number,
+      loc: Position | Undone<N.Node>,
       names: {
         enumName: string;
         memberName: string;
@@ -3519,7 +3499,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     flowEnumErrorInvalidMemberInitializer(
-      loc: Position | number,
+      loc: Position | Undone<N.Node>,
       enumContext: EnumContext,
     ) {
       return this.raise(
@@ -3534,7 +3514,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     flowEnumErrorNumberMemberNotInitialized(
-      loc: Position | number,
+      loc: Position | Undone<N.Node>,
       details: {
         enumName: string;
         memberName: string;
@@ -3563,14 +3543,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         case tt.num: {
           const literal = this.parseNumericLiteral(this.state.value);
           if (endOfInit()) {
-            return { type: "number", loc: literal.start!, value: literal };
+            return { type: "number", value: literal };
           }
           break;
         }
         case tt.string: {
           const literal = this.parseStringLiteral(this.state.value);
           if (endOfInit()) {
-            return { type: "string", loc: literal.start!, value: literal };
+            return { type: "string", value: literal };
           }
           break;
         }
@@ -3580,7 +3560,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (endOfInit()) {
             return {
               type: "boolean",
-              loc: literal.start!,
               value: literal,
             };
           }
@@ -3602,7 +3581,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     flowEnumCheckExplicitTypeMismatch(
-      loc: number,
+      loc: Undone<N.Node>,
       context: EnumContext,
       expectedType: EnumExplicitType,
     ): void {
@@ -3665,7 +3644,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         switch (init.type) {
           case "boolean": {
             this.flowEnumCheckExplicitTypeMismatch(
-              init.loc,
+              init.value,
               context,
               "boolean",
             );
@@ -3679,7 +3658,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             break;
           }
           case "number": {
-            this.flowEnumCheckExplicitTypeMismatch(init.loc, context, "number");
+            this.flowEnumCheckExplicitTypeMismatch(
+              init.value,
+              context,
+              "number",
+            );
             (memberNode as Undone<N.EnumNumberMember>).init = init.value;
             members.numberMembers.push(
               this.finishNode(
@@ -3690,7 +3673,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             break;
           }
           case "string": {
-            this.flowEnumCheckExplicitTypeMismatch(init.loc, context, "string");
+            this.flowEnumCheckExplicitTypeMismatch(
+              init.value,
+              context,
+              "string",
+            );
             (memberNode as Undone<N.EnumStringMember>).init = init.value;
             members.stringMembers.push(
               this.finishNode(
@@ -3801,7 +3788,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     flowEnumBody(node: Undone<N.EnumBody>, id: N.Identifier) {
       const enumName = id.name;
-      const nameLoc = id.start!;
       const explicitType = this.flowEnumParseExplicitType({ enumName });
       this.expect(tt.braceL);
       const { members, hasUnknownMembers } = this.flowEnumMembers({
@@ -3865,7 +3851,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             return this.finishNode(node, "EnumStringBody");
           } else if (!numsLen && !strsLen && boolsLen >= defaultedLen) {
             for (const member of members.defaultedMembers) {
-              this.flowEnumErrorBooleanMemberNotInitialized(member.start!, {
+              this.flowEnumErrorBooleanMemberNotInitialized(member, {
                 enumName,
                 memberName: member.id.name,
               });
@@ -3875,7 +3861,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             return this.finishNode(node, "EnumBooleanBody");
           } else if (!boolsLen && !strsLen && numsLen >= defaultedLen) {
             for (const member of members.defaultedMembers) {
-              this.flowEnumErrorNumberMemberNotInitialized(member.start!, {
+              this.flowEnumErrorNumberMemberNotInitialized(member, {
                 enumName,
                 memberName: member.id.name,
               });
@@ -3884,7 +3870,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.expect(tt.braceR);
             return this.finishNode(node, "EnumNumberBody");
           } else {
-            this.raise(FlowErrors.EnumInconsistentMemberValues, nameLoc, {
+            this.raise(FlowErrors.EnumInconsistentMemberValues, id, {
               enumName,
             });
             return empty();

@@ -1840,7 +1840,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           const expression =
             ((this.state.canStartArrow = false), super.parseExprSubscripts());
           if (!tsIsEntityName(expression)) {
-            this.raise(TSErrors.InvalidHeritageClauseType, expression.start!, {
+            this.raise(TSErrors.InvalidHeritageClauseType, expression, {
               token,
             });
           }
@@ -2850,14 +2850,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     checkReservedWord(
       word: string,
-      startLoc: number,
+      at: Position | Undone<N.Node>,
       checkKeywords: boolean,
       isBinding: boolean,
     ): void {
       // Strict mode words may be allowed as in `declare namespace N { const static: number; }`.
       // And we have a type checker anyway, so don't bother having the parser do it.
       if (!this.state.isAmbientContext) {
-        super.checkReservedWord(word, startLoc, checkKeywords, isBinding);
+        super.checkReservedWord(word, at, checkKeywords, isBinding);
       }
     }
 
@@ -2887,7 +2887,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: Undone<N.ImportDeclaration | N.ExportNamedDeclaration>,
       isExport: boolean,
       phase: string | null,
-      loc?: number,
+      loc?: Undone<N.Node>,
     ): void {
       super.applyImportPhase(node, isExport, phase, loc);
       if (isExport) {
@@ -4532,7 +4532,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       let hasTypeSpecifier = false;
       let canParseAsKeyword = true;
 
-      const loc = leftOfAs.start;
+      const loc = leftOfAs;
 
       // https://github.com/microsoft/TypeScript/blob/fc4f9d83d5939047aa6bb2a43965c6e9bbfbc35b/src/compiler/parser.ts#L7411-L7456
       // import { type } from "mod";          - hasTypeSpecifier: false, leftOfAs: type
@@ -4575,7 +4575,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (isImport) {
           leftOfAs = this.parseIdentifier(true);
           if (!this.isContextual(tt._as)) {
-            this.checkReservedWord(leftOfAs.name, leftOfAs.start, true, true);
+            this.checkReservedWord(leftOfAs.name, leftOfAs, true, true);
           }
         } else {
           leftOfAs = this.parseModuleExportName();

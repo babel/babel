@@ -1,5 +1,3 @@
-/*:: declare var invariant; */
-
 import type { OptionsWithDefaults } from "../options.ts";
 import { OptionFlags } from "../options.ts";
 import {
@@ -99,6 +97,59 @@ export default abstract class Tokenizer extends CommentsParser {
     this.comments = [];
     this.isLookahead = false;
 
+    let optionFlags = 0;
+    if (options.allowAwaitOutsideFunction) {
+      optionFlags |= OptionFlags.AllowAwaitOutsideFunction;
+    }
+    if (options.allowReturnOutsideFunction) {
+      optionFlags |= OptionFlags.AllowReturnOutsideFunction;
+    }
+    if (options.allowImportExportEverywhere) {
+      optionFlags |= OptionFlags.AllowImportExportEverywhere;
+    }
+    if (options.allowSuperOutsideMethod) {
+      optionFlags |= OptionFlags.AllowSuperOutsideMethod;
+    }
+    if (options.allowUndeclaredExports) {
+      optionFlags |= OptionFlags.AllowUndeclaredExports;
+    }
+    if (options.allowNewTargetOutsideFunction) {
+      optionFlags |= OptionFlags.AllowNewTargetOutsideFunction;
+    }
+    if (options.allowYieldOutsideFunction) {
+      optionFlags |= OptionFlags.AllowYieldOutsideFunction;
+    }
+    if (options.ranges) {
+      optionFlags |= OptionFlags.Ranges;
+    }
+    if (options.locations === true) {
+      optionFlags |= OptionFlags.Locations;
+    }
+    if (options.tokens) {
+      optionFlags |= OptionFlags.Tokens;
+    }
+    if (options.createImportExpressions) {
+      optionFlags |= OptionFlags.CreateImportExpressions;
+    }
+    if (options.createParenthesizedExpressions) {
+      optionFlags |= OptionFlags.CreateParenthesizedExpressions;
+    }
+    if (options.errorRecovery) {
+      optionFlags |= OptionFlags.ErrorRecovery;
+    }
+    if (options.attachComment) {
+      optionFlags |= OptionFlags.AttachComment;
+    }
+    if (options.annexB) {
+      optionFlags |= OptionFlags.AnnexB;
+    }
+
+    this.optionFlags = optionFlags;
+
+    if (optionFlags & OptionFlags.Locations) {
+      return;
+    }
+
     if (process.env.IS_PUBLISH) {
       if (!locDataCache || locDataCache.length < (this.length + 1) * 2) {
         locDataCache = new Uint32Array((this.length + 1) * 2);
@@ -112,6 +163,9 @@ export default abstract class Tokenizer extends CommentsParser {
   }
 
   setLoc(loc: Position) {
+    if (this.optionFlags & OptionFlags.Locations) {
+      return;
+    }
     const dataIndex = this.offsetToSourcePos(loc.index);
     this.locData[dataIndex * 2] = loc.line;
     this.locData[dataIndex * 2 + 1] = loc.column;
@@ -1425,23 +1479,16 @@ export default abstract class Tokenizer extends CommentsParser {
    */
   raise<ErrorDetails = object>(
     toParseError: ParseErrorConstructor<ErrorDetails>,
-    at: Position | Undone<Node> | number,
+    at: Position | Undone<Node>,
     details: ErrorDetails = {} as ErrorDetails,
   ): ParseError {
     const loc =
       at instanceof Position
         ? at
-        : typeof at === "number"
-          ? this.getLoc(at)
-          : this.optionFlags & OptionFlags.Locations
-            ? at.loc!.start
-            : this.getLoc(at.start!);
-    const pos =
-      at instanceof Position
-        ? loc.index
-        : typeof at === "number"
-          ? at
-          : at.start!;
+        : this.optionFlags & OptionFlags.Locations
+          ? at.loc!.start
+          : this.getLoc(at.start!);
+    const pos = at instanceof Position ? loc.index : at.start!;
     const error = toParseError(loc, pos, details);
 
     if (!(this.optionFlags & OptionFlags.ErrorRecovery)) throw error;
@@ -1486,7 +1533,7 @@ export default abstract class Tokenizer extends CommentsParser {
   updateContext(prevType: TokenType): void {}
 
   // Raise an unexpected token error. Can take the expected token type.
-  unexpected(loc?: Position | number | null, type?: TokenType): any {
+  unexpected(loc?: Position | Undone<Node> | null, type?: TokenType): any {
     throw this.raise(
       Errors.UnexpectedToken,
       loc != null ? loc : this.state.startLoc,
@@ -1496,7 +1543,7 @@ export default abstract class Tokenizer extends CommentsParser {
     );
   }
 
-  expectPlugin(pluginName: Plugin, loc?: Position | number | null): true {
+  expectPlugin(pluginName: Plugin, loc?: Position | Undone<Node> | null): true {
     if (this.hasPlugin(pluginName)) {
       return true;
     }
