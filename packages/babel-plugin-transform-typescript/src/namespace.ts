@@ -247,7 +247,7 @@ function handleNested(
           name,
           path.hub,
         );
-        namespaceTopLevel.splice(i, nodes.length, ...nodes);
+        namespaceTopLevel.splice(i, 1, ...nodes);
         i += nodes.length - 1;
         break;
       }
