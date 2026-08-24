@@ -520,6 +520,8 @@ export function OptionalMemberExpression(
   parentId: number,
 ): boolean {
   switch (parentId) {
+    case __node("TaggedTemplateExpression"):
+      return parent.tag === node;
     case __node("CallExpression"):
       return parent.callee === node;
     case __node("MemberExpression"):
