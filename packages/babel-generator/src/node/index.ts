@@ -53,6 +53,24 @@ function newCalleeNeedsParens(node: t.Node): boolean {
       case "TaggedTemplateExpression":
         current = current.tag;
         break;
+      case "TSInstantiationExpression":
+      case "TSNonNullExpression":
+        current = current.expression;
+        break;
+      default:
+        return false;
+    }
+  }
+}
+
+function templateTagNeedsParens(node: t.Node): boolean {
+  let current: t.Node = node;
+  while (true) {
+    switch (current.type) {
+      case "OptionalCallExpression":
+      case "OptionalMemberExpression":
+        return true;
+      case "TSInstantiationExpression":
       case "TSNonNullExpression":
         current = current.expression;
         break;
@@ -71,6 +89,11 @@ export function parentNeedsParens(
     case __node("NewExpression"):
       if (parent.callee === node) {
         return newCalleeNeedsParens(node);
+      }
+      break;
+    case __node("TaggedTemplateExpression"):
+      if (parent.tag === node) {
+        return templateTagNeedsParens(node);
       }
       break;
     case __node("Decorator"):

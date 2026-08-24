@@ -13,6 +13,8 @@ new (f?.()?.g!)();
 
 new (f!()`g`)();
 
+new (f?.g<h>)();
+
 new (import("foo")!)();
 new (import("foo")!.bar)();
 new (import("foo")!`bar`)();
