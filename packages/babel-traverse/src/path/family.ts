@@ -593,7 +593,7 @@ function getBindingIdentifierPaths(
         search.push(id.get("id"));
         continue;
       }
-      if (id.isFunctionExpression()) {
+      if (id.isFunctionExpression() || id.isClassExpression()) {
         continue;
       }
     }

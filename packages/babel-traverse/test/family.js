@@ -57,6 +57,21 @@ describe("path/family", function () {
       });
     });
   });
+  describe("getOuterBindingIdentifiers", function () {
+    it("should not treat a ClassExpression id as an outer binding", function () {
+      const ast = parse("(class Foo {})");
+      let outerNodes = {},
+        outerPaths = {};
+      traverse(ast, {
+        ClassExpression(path) {
+          outerNodes = path.getOuterBindingIdentifiers();
+          outerPaths = path.getOuterBindingIdentifierPaths();
+        },
+      });
+      expect(Object.keys(outerNodes)).toEqual([]);
+      expect(Object.keys(outerPaths)).toEqual(Object.keys(outerNodes));
+    });
+  });
   describe("getSibling", function () {
     const ast = parse(
       "var a = 1, {b} = c, [d] = e; function f() {} function g() {}",
