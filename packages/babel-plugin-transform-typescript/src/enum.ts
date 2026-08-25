@@ -37,13 +37,12 @@ export default function transpileEnum(
       // todo: Consider exclude program with import/export
       // && !path.parent.body.some(n => t.isImportDeclaration(n) || t.isExportDeclaration(n));
       const isGlobal = t.isProgram(path.parent);
-      // If the enum merges with a namespace that comes before it, the
-      // variable for this binding has already been declared by the
-      // namespace transform: assign to it instead of re-declaring it.
+      // If the enum merges with an enum or namespace that comes before it,
+      // the variable for this binding has already been declared by that
+      // declaration's transform: assign to it instead of re-declaring it.
       const existingBinding = path.scope.getOwnBinding(name);
       const isSeen =
-        seen(parentPath) ||
-        (existingBinding != null && existingBinding.identifier !== node.id);
+        existingBinding != null && existingBinding.identifier !== node.id;
 
       let init: t.Expression = t.objectExpression([]);
       if (isSeen || isGlobal) {
@@ -74,19 +73,6 @@ export default function transpileEnum(
 
     default:
       throw new Error(`Unexpected enum parent '${path.parent.type}`);
-  }
-
-  function seen(parentPath: NodePath<t.Node>): boolean {
-    if (parentPath.isExportDeclaration()) {
-      return seen(parentPath.parentPath);
-    }
-
-    if (parentPath.getData(name)) {
-      return true;
-    } else {
-      parentPath.setData(name, true);
-      return false;
-    }
   }
 }
 
