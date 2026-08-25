@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-typescript"],
+  "throws": "Identifier 'N' has already been declared."
+}
