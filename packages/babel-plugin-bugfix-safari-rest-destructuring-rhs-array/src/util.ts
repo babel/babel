@@ -35,6 +35,9 @@ export function shouldTransform(
 ): NodePath<t.Expression> | false {
   const elementPaths = path.get("elements");
   const elementPathsLength = elementPaths.length;
+  if (elementPathsLength === 0) {
+    return false;
+  }
   if (elementPaths[elementPathsLength - 1].isRestElement()) {
     const { parentPath } = path;
     const rhsPath = parentPath.isVariableDeclarator()

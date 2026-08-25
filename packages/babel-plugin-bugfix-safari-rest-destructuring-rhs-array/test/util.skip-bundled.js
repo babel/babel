@@ -61,9 +61,12 @@ describe("shouldTransform", () => {
     "var a = [0, 42]; var [_, ...rest] = a",
     "var [_, ...rest] = [0].concat(42)",
     "function foo([a, ...rest] = [1, 2]) { return rest }",
+    "const [] = [];",
+    "[] = [];",
   ];
 
   const negativeNestedCases = [
+    "const [[]] = [[]];",
     "const [[a, ...rest]] = [[1]]",
     "[[a, ...rest]] = [1, 2]",
     "const [[...rest]] = [[1]]",
