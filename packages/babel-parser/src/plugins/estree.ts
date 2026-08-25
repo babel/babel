@@ -59,7 +59,7 @@ export default (superClass: typeof Parser) =>
         bigInt = null;
       }
       const node = this.estreeParseLiteral<N.EstreeBigIntLiteral>(bigInt);
-      node.bigint = String(node.value || value);
+      node.bigint = node.value == null ? value : String(node.value);
 
       return node;
     }
