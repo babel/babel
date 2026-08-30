@@ -715,7 +715,12 @@ export function convertVariableDeclaration(
     t.isVariableDeclaration(nodesOut[0]) &&
     t.isExpressionStatement(nodesOut[1]) &&
     t.isCallExpression(nodesOut[1].expression) &&
-    nodesOut[0].declarations.length === 1
+    nodesOut[0].declarations.length === 1 &&
+    t.isIdentifier(nodesOut[0].declarations[0].id) &&
+    nodesOut[1].expression.arguments.length === 1 &&
+    t.isIdentifier(nodesOut[1].expression.arguments[0], {
+      name: nodesOut[0].declarations[0].id.name,
+    })
   ) {
     // This can only happen when we generate this code:
     //    var _ref = DESTRUCTURED_VALUE;
