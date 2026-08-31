@@ -7,9 +7,9 @@ const { parse: JSONParse, stringify } = JSON;
 // function.
 const isExtended = filename => /\.extended\.json$/.test(filename);
 
-// We've only serialized one BigInt in the entire test suite:
+// We've only serialized BigInt in estree bigInt test suites:
 //
-// packages/babel-parser/test/fixtures/estree/bigInt/basic/output.extended.json
+// packages/babel-parser/test/fixtures/estree/bigInt
 //
 // This is because only estree actually includes the BigInt value in the Literal
 // node. If the JS environment doesn't support bigint, then estree will just
