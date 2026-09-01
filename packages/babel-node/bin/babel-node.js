@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-import "../lib/babel-node";
+import "../lib/babel-node.js";
