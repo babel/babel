@@ -7,17 +7,6 @@ const { parse: JSONParse, stringify } = JSON;
 // function.
 const isExtended = filename => /\.extended\.json$/.test(filename);
 
-// We've only serialized BigInt in estree bigInt test suites:
-//
-// packages/babel-parser/test/fixtures/estree/bigInt
-//
-// This is because only estree actually includes the BigInt value in the Literal
-// node. If the JS environment doesn't support bigint, then estree will just
-// use null for the value. We also happen to just throw the AST information away
-// with estree tests, so in the event that we're running on an older version of
-// Node that doesn't support bigint, it is safe to deserialize to null.
-const toBigInt = global.BigInt || (() => null);
-
 const SerializationKey = "$$ babel internal serialized type";
 
 // RegExp: RegExpLiteral#value
@@ -39,7 +28,7 @@ export const deserialize = (filename, options, string) =>
               ? value
               : value[SerializationKey] === "RegExp"
                 ? new RegExp(value.source, value.flags)
-                : toBigInt(value.value)),
+                : BigInt(value.value)),
       ),
   );
 
