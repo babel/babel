@@ -24,16 +24,23 @@ export function hoist(
     const exprs: t.Expression[] = [];
 
     (
-      vdec.declarations as (t.VariableDeclarator & { id: t.Identifier })[]
+      vdec.declarations as t.VariableDeclarator[]
     ).forEach(function (dec) {
-      // Note: We duplicate 'dec.id' here to ensure that the variable declaration IDs don't
+      // Note: We duplicate identifiers here to ensure that variable declaration IDs don't
       // have the same 'loc' value, since that can make sourcemaps and retainLines behave poorly.
-      vars[dec.id.name] = t.identifier(dec.id.name);
+      //
+      // `dec.id` can be a destructuring pattern if the user didn't run
+      // `@babel/plugin-transform-destructuring` before regenerator (see #17517).
+      // In that case, collect all binding identifiers instead of assuming `id` is an Identifier.
+      const bindings = t.getBindingIdentifiers(dec.id);
+      for (const name of Object.keys(bindings)) {
+        vars[name] = t.identifier(name);
+      }
 
       if (dec.init) {
-        exprs.push(t.assignmentExpression("=", dec.id, dec.init));
+        exprs.push(t.assignmentExpression("=", dec.id as any, dec.init));
       } else if (includeIdentifiers) {
-        exprs.push(dec.id);
+        exprs.push(dec.id as any);
       }
     });
 
