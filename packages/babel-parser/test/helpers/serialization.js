@@ -96,7 +96,7 @@ export function serialize(value) {
         : value instanceof Error
           ? value + ""
           : value;
-  const serialized = stringify(value, encode, 2).replace(
+  const serialized = stringify(value, encode, 2)?.replace(
     CompactRegExp,
     // This is safe since none of the values can have spaces in them.
     string => string.replace(/\s+/g, () => ""),
