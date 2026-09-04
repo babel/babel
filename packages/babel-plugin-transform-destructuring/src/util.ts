@@ -716,10 +716,8 @@ export function convertVariableDeclaration(
     t.isExpressionStatement(nodesOut[1]) &&
     t.isCallExpression(nodesOut[1].expression) &&
     nodesOut[0].declarations.length === 1 &&
-    t.isIdentifier(nodesOut[0].declarations[0].id) &&
-    nodesOut[1].expression.arguments.length === 1 &&
     t.isIdentifier(nodesOut[1].expression.arguments[0], {
-      name: nodesOut[0].declarations[0].id.name,
+      name: (nodesOut[0].declarations[0].id as t.Identifier).name,
     })
   ) {
     // This can only happen when we generate this code:
