@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "version": "2023-11" }],
+    "./remove-uninitialized-fields.cjs"
+  ],
+  "presets": [["typescript"]]
+}

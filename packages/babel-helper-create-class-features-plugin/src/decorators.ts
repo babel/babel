@@ -1858,6 +1858,15 @@ function transformClass(
     let firstPublicElement:
       NodePath<t.ClassProperty | t.ClassMethod> | undefined;
     for (const path of elements) {
+      // Other transforms can remove declaration fields and fields without
+      // initializers in a later visitor, so they cannot host decorator
+      // evaluations that must run while the class is being defined.
+      if (
+        path.isClassProperty() &&
+        (path.node.value == null || path.node.declare || path.node.abstract)
+      ) {
+        continue;
+      }
       if (
         (path.isClassProperty() || path.isClassMethod()) &&
         (path.node as t.ClassMethod).kind !== "constructor"
