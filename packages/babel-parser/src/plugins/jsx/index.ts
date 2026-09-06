@@ -222,6 +222,7 @@ export default (superClass: typeof Parser) =>
         );
         if (
           codePoint !== null &&
+          codePoint <= 0x10ffff &&
           this.codePointAtPos(this.state.pos) === charCodes.semicolon
         ) {
           ++this.state.pos;

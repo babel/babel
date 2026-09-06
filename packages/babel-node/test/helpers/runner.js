@@ -8,7 +8,7 @@ import {
 
 const { require, __dirname } = commonJS(import.meta.url);
 
-const binLoc = path.join(__dirname, "../../lib/babel-node");
+const binLoc = path.join(__dirname, "../../bin/babel-node.js");
 
 export const runParallel = buildParallelProcessTests(
   "babel-node",
