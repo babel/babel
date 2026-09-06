@@ -33,7 +33,10 @@ yarn set version stable
 export YARN_ENABLE_IMMUTABLE_INSTALLS=false
 yarn install
 # Install browser-playwright for ChromiumHeadless testing
-yarn add playwright @vitest/browser-playwright --dev
+# Pinned to 4.x: @angular/build's vitest peer dep is still ^4.0.8, while
+# @vitest/browser-playwright@5 requires vitest@5.0.0 exactly, which breaks
+# @angular/build's "ng test" (missing BrowserConnectionError export etc).
+yarn add playwright @vitest/browser-playwright@4.1.11 --dev
 yarn playwright install --with-deps
 yarn run build
 yarn run ng test --watch=false --browsers ChromiumHeadless
