@@ -2,6 +2,7 @@ import { ScopeFlag, BindingFlag } from "./scopeflags.ts";
 import type * as N from "../types.ts";
 import { Errors } from "../parse-error.ts";
 import type Tokenizer from "../tokenizer/index.ts";
+import type { Undone } from "../parser/node.ts";
 
 export const enum NameType {
   // var-declared names in the current lexical scope
@@ -29,7 +30,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   parser: Tokenizer;
   scopeStack: IScope[] = [];
   inModule: boolean;
-  undefinedExports = new Map<string, number>();
+  undefinedExports = new Map<string, Undone<N.Node>>();
 
   constructor(parser: Tokenizer, inModule: boolean) {
     this.parser = parser;
@@ -108,7 +109,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     );
   }
 
-  declareName(name: string, bindingType: BindingFlag, loc: number) {
+  declareName(name: string, bindingType: BindingFlag, loc: Undone<N.Node>) {
     let scope = this.currentScope();
     if (
       bindingType & BindingFlag.SCOPE_LEXICAL ||
@@ -157,7 +158,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     scope: IScope,
     name: string,
     bindingType: BindingFlag,
-    loc: number,
+    loc: Undone<N.Node>,
   ) {
     if (this.isRedeclaredInScope(scope, name, bindingType)) {
       this.parser.raise(Errors.VarRedeclaration, loc, {
@@ -203,7 +204,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     const { name } = id;
     const topLevelScope = this.scopeStack[0];
     if (!topLevelScope.names.has(name)) {
-      this.undefinedExports.set(name, id.start!);
+      this.undefinedExports.set(name, id);
     }
   }
 

@@ -2,6 +2,8 @@ import { ClassElementType } from "./scopeflags.ts";
 import type { Position } from "./location.ts";
 import { Errors } from "../parse-error.ts";
 import type Tokenizer from "../tokenizer/index.ts";
+import type { Undone } from "../parser/node.ts";
+import type * as N from "../types.ts";
 
 export class ClassScope {
   // A list of private named declared in the current class
@@ -12,7 +14,7 @@ export class ClassScope {
 
   // A list of private names used before being defined, mapping to
   // their position.
-  undefinedPrivateNames = new Map<string, Position | number>();
+  undefinedPrivateNames = new Map<string, Position | Undone<N.Node>>();
 }
 
 export default class ClassScopeHandler {
@@ -53,7 +55,11 @@ export default class ClassScopeHandler {
     }
   }
 
-  declarePrivateName(name: string, elementType: ClassElementType, loc: number) {
+  declarePrivateName(
+    name: string,
+    elementType: ClassElementType,
+    loc: Undone<N.Node>,
+  ) {
     const { privateNames, loneAccessors, undefinedPrivateNames } =
       this.current();
     let redefined = privateNames.has(name);
@@ -88,7 +94,7 @@ export default class ClassScopeHandler {
     undefinedPrivateNames.delete(name);
   }
 
-  usePrivateName(name: string, loc: Position | number) {
+  usePrivateName(name: string, loc: Position | Undone<N.Node>) {
     let classScope;
     for (classScope of this.stack) {
       if (classScope.privateNames.has(name)) return;

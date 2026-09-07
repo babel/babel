@@ -1,6 +1,8 @@
 import { Errors, type ParseErrorConstructor } from "../parse-error.ts";
 import type { Node } from "../types.ts";
 import type Tokenizer from "../tokenizer/index.ts";
+import type { Undone } from "../parser/node.ts";
+import { Position } from "./location.ts";
 
 /**
  * @module util/expression-scope
@@ -80,7 +82,10 @@ type ArrowHeadParsingDeclarationError =
   | typeof Errors.AwaitBindingIdentifier;
 
 class ArrowHeadParsingScope extends ExpressionScope {
-  declarationErrors = new Map<number, ParseErrorConstructor<object>>();
+  declarationErrors = new Map<
+    number,
+    [Position | Undone<Node>, ParseErrorConstructor<object>]
+  >();
   constructor(
     type:
       | ExpressionScopeType.kMaybeArrowParameterDeclaration
@@ -89,16 +94,20 @@ class ArrowHeadParsingScope extends ExpressionScope {
     super(type);
   }
   recordDeclarationError(
-    ParsingErrorClass: ParseErrorConstructor<object>,
     index: number,
+    ParsingErrorClass: ParseErrorConstructor<object>,
+    at: Position | Undone<Node>,
   ) {
-    this.declarationErrors.set(index, ParsingErrorClass);
+    this.declarationErrors.set(index, [at, ParsingErrorClass]);
   }
   clearDeclarationError(index: number) {
     this.declarationErrors.delete(index);
   }
   iterateErrors(
-    iterator: (a: ArrowHeadParsingDeclarationError, b: number) => void,
+    iterator: (
+      v: [Position | Undone<Node>, ArrowHeadParsingDeclarationError],
+      k: number,
+    ) => void,
   ) {
     this.declarationErrors.forEach(iterator);
   }
@@ -128,21 +137,21 @@ export default class ExpressionScopeHandler {
    */
   recordParameterInitializerError(
     toParseError: ArrowHeadParsingParameterInitializerError,
-    loc: number,
+    node: Undone<Node>,
   ): void {
     const { stack } = this;
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];
     while (!scope.isCertainlyParameterDeclaration()) {
       if (scope.canBeArrowParameterDeclaration()) {
-        scope.recordDeclarationError(toParseError, loc);
+        scope.recordDeclarationError(node.start!, toParseError, node);
       } else {
         // Type-Expression is the boundary where initializer error can populate to
         return;
       }
       scope = stack[--i];
     }
-    this.parser.raise(toParseError, loc);
+    this.parser.raise(toParseError, node);
   }
 
   /**
@@ -170,11 +179,10 @@ export default class ExpressionScopeHandler {
   ): void {
     const { stack } = this;
     const scope: ExpressionScope = stack[stack.length - 1];
-    const origin = node.start!;
     if (scope.isCertainlyParameterDeclaration()) {
-      this.parser.raise(error, origin);
+      this.parser.raise(error, node);
     } else if (scope.canBeArrowParameterDeclaration()) {
-      scope.recordDeclarationError(error, origin);
+      scope.recordDeclarationError(node.start!, error, node);
     } else {
       return;
     }
@@ -186,7 +194,7 @@ export default class ExpressionScopeHandler {
    * Errors will be recorded to any ancestry MaybeAsyncArrowParameterDeclaration
    * scope until an Expression scope is seen.
    */
-  recordAsyncArrowParametersError(at: number): void {
+  recordAsyncArrowParametersError(at: Position | Undone<Node>): void {
     const { stack } = this;
     let i = stack.length - 1;
     let scope: ExpressionScope = stack[i];
@@ -194,7 +202,11 @@ export default class ExpressionScopeHandler {
       if (
         scope.type === ExpressionScopeType.kMaybeAsyncArrowParameterDeclaration
       ) {
-        scope.recordDeclarationError(Errors.AwaitBindingIdentifier, at);
+        scope.recordDeclarationError(
+          at instanceof Position ? at.index : at.start!,
+          Errors.AwaitBindingIdentifier,
+          at,
+        );
       }
       scope = stack[--i];
     }
@@ -204,8 +216,8 @@ export default class ExpressionScopeHandler {
     const { stack } = this;
     const currentScope = stack[stack.length - 1];
     if (!currentScope.canBeArrowParameterDeclaration()) return;
-    currentScope.iterateErrors((toParseError, key) => {
-      this.parser.raise(toParseError, key);
+    currentScope.iterateErrors(([at, toParseError], key) => {
+      this.parser.raise(toParseError, at);
       // iterate from parent scope
       let i = stack.length - 2;
       let scope = stack[i];

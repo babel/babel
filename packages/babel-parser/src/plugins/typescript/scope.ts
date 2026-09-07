@@ -2,6 +2,7 @@ import ScopeHandler, { NameType, Scope } from "../../util/scope.ts";
 import { BindingFlag, ScopeFlag } from "../../util/scopeflags.ts";
 import type * as N from "../../types.ts";
 import { Errors } from "../../parse-error.ts";
+import type { Undone } from "../../parser/node.ts";
 
 const enum TsNameType {
   Types = 1 << 0,
@@ -74,7 +75,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     return false;
   }
 
-  declareName(name: string, bindingType: BindingFlag, loc: number) {
+  declareName(name: string, bindingType: BindingFlag, loc: Undone<N.Node>) {
     if (bindingType & BindingFlag.FLAG_TS_IMPORT) {
       if (this.hasImport(name, true)) {
         this.parser.raise(Errors.VarRedeclaration, loc, {
