@@ -1,4 +1,5 @@
 import assert from "node:assert";
+import path from "node:path";
 import { template, types as t } from "@babel/core";
 
 import { isModule } from "@babel/helper-module-imports";
@@ -21,10 +22,11 @@ import type { NodePath } from "@babel/core";
 
 export { buildDynamicImport } from "./dynamic-import.ts";
 
-export { default as getModuleName } from "./get-module-name.ts";
+import getModuleName from "./get-module-name.ts";
+import type { PluginOptions } from "./get-module-name.ts";
 export type { PluginOptions } from "./get-module-name.ts";
 
-export { hasExports, isSideEffectImport, isModule, rewriteThis };
+export { hasExports, isSideEffectImport, isModule, rewriteThis, getModuleName };
 
 export interface RewriteModuleStatementsAndPrepareHeaderOptions {
   exportName?: string;
@@ -247,6 +249,68 @@ export function buildNamespaceInitStatements(
     statements.push(statement);
   }
   return statements;
+}
+
+export function withExtension(filename: string, ext?: string | null): string {
+  return null == ext ? filename : filename.replace(/\.\w*$/, ext);
+}
+
+const reWinPathSep = /\\/g;
+
+export function normalizePathSeparators(srcPath: string): string {
+  return path.sep === "\\" ? srcPath.replace(reWinPathSep, "/") : srcPath;
+}
+
+const reRelativePath = /^\.*[\\/]/;
+
+interface ImportPaths {
+  filename: string | undefined;
+  filenameRelative: string | undefined;
+}
+
+export function resolveRelativeImportPaths(
+  importRelative: string,
+  rootOpts: { filename?: string; filenameRelative?: string },
+): ImportPaths {
+  if (!reRelativePath.test(importRelative)) {
+    return {
+      filename: importRelative,
+      filenameRelative: importRelative,
+    };
+  }
+  const rootAbsolute = rootOpts.filename;
+  const rootRelativeSource = rootOpts.filenameRelative;
+  const importAbsolute =
+    rootAbsolute &&
+    normalizePathSeparators(
+      path.join(path.dirname(rootAbsolute), importRelative),
+    );
+  const importRelativeSource =
+    rootRelativeSource &&
+    normalizePathSeparators(
+      path.join(path.dirname(rootRelativeSource), importRelative),
+    );
+  return {
+    filename: importAbsolute || undefined,
+    filenameRelative: importRelativeSource || undefined,
+  };
+}
+
+export function amdImportId(
+  importRelative: string,
+  rootOpts: { filename?: string; filenameRelative?: string },
+  pluginOpts: PluginOptions & { importFileExt?: string },
+): string {
+  if (!reRelativePath.test(importRelative)) return importRelative;
+  return (
+    getModuleName(
+      {
+        ...rootOpts,
+        ...resolveRelativeImportPaths(importRelative, rootOpts),
+      },
+      pluginOpts,
+    ) || withExtension(importRelative, pluginOpts.importFileExt)
+  );
 }
 
 interface ReexportParts {
