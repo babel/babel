@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-import-meta", "transform-modules-amd"]
+}
