@@ -97,7 +97,7 @@
     "benchmark"
   ],
   "resolutions": {
-    "browserslist": "4.28.4",
+    "browserslist": "4.28.7",
     "caniuse-lite": "1.0.30001800",
     "core-js-compat": "3.49.0",
     "electron-to-chromium": "1.5.385",
