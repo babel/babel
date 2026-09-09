@@ -1,0 +1,114 @@
+{
+  "type": "File",
+  "start":0,"end":109,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":81,"index":109}},
+  "errors": [
+    "SyntaxError: `import.sync()` requires exactly one or two arguments. (1:13)",
+    "SyntaxError: `import.sync()` requires exactly one or two arguments. (2:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":109,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":81,"index":109}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":26,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":26,"index":26}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":10,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":10,"index":10},"identifierName":"mod1"},
+              "name": "mod1"
+            },
+            "init": {
+              "type": "ImportExpression",
+              "start":13,"end":26,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":26,"index":26}},
+              "sync": true,
+              "options": null
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":28,"end":109,"loc":{"start":{"line":2,"column":0,"index":28},"end":{"line":2,"column":81,"index":109}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":34,"end":108,"loc":{"start":{"line":2,"column":6,"index":34},"end":{"line":2,"column":80,"index":108}},
+            "id": {
+              "type": "Identifier",
+              "start":34,"end":38,"loc":{"start":{"line":2,"column":6,"index":34},"end":{"line":2,"column":10,"index":38},"identifierName":"mod2"},
+              "name": "mod2"
+            },
+            "init": {
+              "type": "ImportExpression",
+              "start":41,"end":108,"loc":{"start":{"line":2,"column":13,"index":41},"end":{"line":2,"column":80,"index":108}},
+              "sync": true,
+              "source": {
+                "type": "StringLiteral",
+                "start":53,"end":63,"loc":{"start":{"line":2,"column":25,"index":53},"end":{"line":2,"column":35,"index":63}},
+                "extra": {
+                  "rawValue": "./foo.js",
+                  "raw": "\"./foo.js\""
+                },
+                "value": "./foo.js"
+              },
+              "options": {
+                "type": "ObjectExpression",
+                "start":65,"end":90,"loc":{"start":{"line":2,"column":37,"index":65},"end":{"line":2,"column":62,"index":90}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":67,"end":88,"loc":{"start":{"line":2,"column":39,"index":67},"end":{"line":2,"column":60,"index":88}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":67,"end":71,"loc":{"start":{"line":2,"column":39,"index":67},"end":{"line":2,"column":43,"index":71},"identifierName":"with"},
+                      "name": "with"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "ObjectExpression",
+                      "start":73,"end":88,"loc":{"start":{"line":2,"column":45,"index":73},"end":{"line":2,"column":60,"index":88}},
+                      "properties": [
+                        {
+                          "type": "ObjectProperty",
+                          "start":75,"end":87,"loc":{"start":{"line":2,"column":47,"index":75},"end":{"line":2,"column":59,"index":87}},
+                          "method": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start":75,"end":79,"loc":{"start":{"line":2,"column":47,"index":75},"end":{"line":2,"column":51,"index":79},"identifierName":"type"},
+                            "name": "type"
+                          },
+                          "computed": false,
+                          "shorthand": false,
+                          "value": {
+                            "type": "StringLiteral",
+                            "start":81,"end":87,"loc":{"start":{"line":2,"column":53,"index":81},"end":{"line":2,"column":59,"index":87}},
+                            "extra": {
+                              "rawValue": "json",
+                              "raw": "\"json\""
+                            },
+                            "value": "json"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "type": "File",
+  "start":0,"end":229,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":36,"index":229}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":229,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":36,"index":229}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":193,"end":229,"loc":{"start":{"line":4,"column":0,"index":193},"end":{"line":4,"column":36,"index":229}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":199,"end":228,"loc":{"start":{"line":4,"column":6,"index":199},"end":{"line":4,"column":35,"index":228}},
+            "id": {
+              "type": "Identifier",
+              "start":199,"end":202,"loc":{"start":{"line":4,"column":6,"index":199},"end":{"line":4,"column":9,"index":202},"identifierName":"mod"},
+              "name": "mod"
+            },
+            "init": {
+              "type": "ImportExpression",
+              "start":205,"end":228,"loc":{"start":{"line":4,"column":12,"index":205},"end":{"line":4,"column":35,"index":228}},
+              "sync": true,
+              "source": {
+                "type": "StringLiteral",
+                "start":217,"end":227,"loc":{"start":{"line":4,"column":24,"index":217},"end":{"line":4,"column":34,"index":227}},
+                "extra": {
+                  "rawValue": "./foo.js",
+                  "raw": "\"./foo.js\""
+                },
+                "value": "./foo.js"
+              },
+              "options": null
+            }
+          }
+        ],
+        "kind": "const",
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " createImportExpressions: false is irrelevant to the fact",
+            "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":59,"index":59}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " that `import.sync` is always parsed as an ImportExpression because",
+            "start":60,"end":129,"loc":{"start":{"line":2,"column":0,"index":60},"end":{"line":2,"column":69,"index":129}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " `import.sync` is a proposal syntax separate from `import()`",
+            "start":130,"end":192,"loc":{"start":{"line":3,"column":0,"index":130},"end":{"line":3,"column":62,"index":192}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " createImportExpressions: false is irrelevant to the fact",
+      "start":0,"end":59,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":59,"index":59}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " that `import.sync` is always parsed as an ImportExpression because",
+      "start":60,"end":129,"loc":{"start":{"line":2,"column":0,"index":60},"end":{"line":2,"column":69,"index":129}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " `import.sync` is a proposal syntax separate from `import()`",
+      "start":130,"end":192,"loc":{"start":{"line":3,"column":0,"index":130},"end":{"line":3,"column":62,"index":192}}
+    }
+  ]
+}

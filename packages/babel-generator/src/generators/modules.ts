@@ -302,6 +302,9 @@ export function ImportExpression(this: Printer, node: t.ImportExpression) {
   if (node.phase) {
     this.token(".");
     this.word(node.phase);
+  } else if (node.sync) {
+    this.token(".");
+    this.word("sync");
   }
   this.token("(");
   const shouldPrintTrailingComma = this.shouldPrintTrailingComma(")");
