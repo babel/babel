@@ -1,4 +1,5 @@
 import { isIdentifierName } from "@babel/helper-validator-identifier";
+import { serialize } from "./serialization.js";
 
 const { isArray } = Array;
 const { isInteger } = Number;
@@ -129,7 +130,7 @@ const toValueString = (value, type = toType(value)) =>
         ? `${value}n`
         : Object.is(value, -0)
           ? "-0"
-          : JSON.stringify(value);
+          : serialize(value)[1];
 
 const toExplanationString = ({ discrepancy, expected, actual, key }) =>
   discrepancy === "length"
