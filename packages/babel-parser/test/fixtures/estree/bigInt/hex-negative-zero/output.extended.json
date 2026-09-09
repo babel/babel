@@ -1,0 +1,32 @@
+{
+  "type": "File",
+  "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":6,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":6}},
+        "expression": {
+          "type": "UnaryExpression",
+          "start":0,"end":5,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":5}},
+          "operator": "-",
+          "prefix": true,
+          "argument": {
+            "type": "Literal",
+            "start":1,"end":5,"loc":{"start":{"line":1,"column":1},"end":{"line":1,"column":5}},
+            "value": {
+              "$$ babel internal serialized type": "bigint",
+              "value": "0"
+            },
+            "raw": "0x0n",
+            "bigint": "0"
+          }
+        }
+      }
+    ]
+  }
+}
