@@ -1131,8 +1131,8 @@ __metadata:
   resolution: "@babel/helper-validator-identifier@workspace:packages/babel-helper-validator-identifier"
   dependencies:
     "@types/regenerate": "npm:^1.4.0"
-    "@unicode/unicode-16.0.0": "npm:^1.6.17"
-    "@unicode/unicode-17.0.0": "npm:^1.6.17"
+    "@unicode/unicode-16.0.0": "npm:^2.0.7"
+    "@unicode/unicode-18.0.0": "npm:^2.0.7"
     charcodes: "npm:^0.2.0"
     regenerate: "npm:^1.4.0"
   languageName: unknown
@@ -6344,17 +6344,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@unicode/unicode-16.0.0@npm:^1.6.17":
-  version: 1.6.17
-  resolution: "@unicode/unicode-16.0.0@npm:1.6.17"
-  checksum: 10/dae9d06d3c9de3f29b068ad6481c810ea4a73baf244f4d5c47ed2d66b577cc9a67583a0cb8e244b0eaf699cedc174961d5ce816368f658cb96d0684f514c05eb
+"@unicode/unicode-16.0.0@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "@unicode/unicode-16.0.0@npm:2.0.7"
+  checksum: 10/139fe7ac92efbfc22a256af27ff1d90ce54702929bacc9b28aed0783497dd7cb39ff4315f2c09245c01be75a7c19c45bf379a490f68e52bb2528ac4c973d8429
   languageName: node
   linkType: hard
 
-"@unicode/unicode-17.0.0@npm:^1.6.17":
-  version: 1.6.17
-  resolution: "@unicode/unicode-17.0.0@npm:1.6.17"
-  checksum: 10/ca7817c57fdc3f3f791f65c7abd2dfa3105e50e2d8018e0afe20185597abb3e1a96147ea9518c49ecb49482776c16babe81667d2ecac54a4122225cb66aad060
+"@unicode/unicode-18.0.0@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "@unicode/unicode-18.0.0@npm:2.0.7"
+  checksum: 10/5eff6147c428e982634ca98a4a28c1f755a73ffc4e5f8fae51c506622bbef08d2a197f4621e681f714d254e41f61eb420cc9a29e521afaa72a58328f92b89f27
   languageName: node
   linkType: hard
 
