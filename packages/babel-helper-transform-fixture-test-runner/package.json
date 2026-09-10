@@ -20,8 +20,8 @@
     "@babel/helper-check-duplicate-nodes": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
     "@jridgewell/trace-mapping": "catalog:",
+    "flru": "1.0.2",
     "jest-diff": "^30.0.0",
-    "lru-cache": "^11.0.0",
     "resolve": "2.0.0-next.5"
   },
   "engines": {
