@@ -52,7 +52,6 @@ type Plugin$1 =
   | "flowComments"
   | "functionBind"
   | "functionSent"
-  | "importMeta"
   | "jsx"
   | "moduleBlocks"
   | "placeholders"

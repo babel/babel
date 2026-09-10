@@ -1,4 +1,3 @@
 {
-  "sourceType": "unambiguous",
-  "plugins": ["importMeta"]
+  "sourceType": "unambiguous"
 }
