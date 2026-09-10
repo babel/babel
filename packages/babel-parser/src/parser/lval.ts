@@ -24,7 +24,6 @@ import type {
   VoidPattern,
   ArgumentPlaceholder,
   TSTypeCastExpression,
-  TypeCastExpression,
 } from "../types.ts";
 import type { Position } from "../util/location.ts";
 import {
@@ -53,16 +52,6 @@ export const enum ParseBindingListFlags {
 export default abstract class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
   abstract parseIdentifier(liberal?: boolean): Identifier;
-  abstract parseMaybeAssign(
-    refExpressionErrors?: ExpressionErrors | null,
-    afterLeftParse?: Function,
-  ): Expression;
-
-  abstract parseMaybeAssignAllowIn(
-    refExpressionErrors?: ExpressionErrors | null,
-    afterLeftParse?: Function,
-  ): Expression;
-
   abstract parseObjectLike<T extends ObjectPattern | ObjectExpression>(
     close: TokenType,
     isPattern: boolean,
@@ -260,7 +249,6 @@ export default abstract class LValParser extends NodeUtils {
       | AssignmentPattern
       | ArgumentPlaceholder
       | TSTypeCastExpression
-      | TypeCastExpression
       | null
     )[],
     trailingCommaLoc: Position | undefined | null,
@@ -376,7 +364,6 @@ export default abstract class LValParser extends NodeUtils {
           | AssignmentPattern
           | ArgumentPlaceholder
           | TSTypeCastExpression
-          | TypeCastExpression
           | null
         )[]
       | readonly (
@@ -385,7 +372,6 @@ export default abstract class LValParser extends NodeUtils {
           | VoidPattern
           | AssignmentPattern
           | TSTypeCastExpression
-          | TypeCastExpression
           | null
         )[],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -398,7 +384,6 @@ export default abstract class LValParser extends NodeUtils {
         | AssignmentPattern
         | ArgumentPlaceholder
         | TSTypeCastExpression
-        | TypeCastExpression
         | null
       )[]
     | readonly (
@@ -407,7 +392,6 @@ export default abstract class LValParser extends NodeUtils {
         | VoidPattern
         | AssignmentPattern
         | TSTypeCastExpression
-        | TypeCastExpression
         | null
       )[] {
     return exprList;
@@ -421,10 +405,7 @@ export default abstract class LValParser extends NodeUtils {
   ): SpreadElement {
     const node = this.startNode<SpreadElement>();
     this.next();
-    node.argument = this.parseMaybeAssignAllowIn(
-      refExpressionErrors,
-      undefined,
-    );
+    node.argument = this.parseMaybeAssignAllowIn(refExpressionErrors);
     return this.finishNode(node, "SpreadElement");
   }
 
@@ -732,7 +713,12 @@ export default abstract class LValParser extends NodeUtils {
 
   checkLVal(
     expression:
-      Expression | ObjectMember | RestElement | Pattern | TSParameterProperty,
+      | Expression
+      | ObjectMember
+      | RestElement
+      | Pattern
+      | TSParameterProperty
+      | TSTypeCastExpression,
     ancestor: LValAncestor,
     binding: BindingFlag = BindingFlag.TYPE_NONE,
     checkClashes: Set<string> | false = false,
