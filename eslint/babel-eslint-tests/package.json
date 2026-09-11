@@ -13,8 +13,8 @@
     "@babel/preset-flow": "workspace:^",
     "@babel/preset-react": "workspace:^",
     "dedent": "catalog:dev",
-    "eslint": "catalog:dev",
-    "eslint-plugin-import": "catalog:dev",
+    "eslint": "catalog:babel-eslint",
+    "eslint-plugin-import": "catalog:babel-eslint",
     "globals": "catalog:globals-dev-15",
     "npm-babel-parser": "npm:@babel/parser@^7.14.0"
   },

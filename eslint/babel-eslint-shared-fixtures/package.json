@@ -13,7 +13,7 @@
     "@babel/plugin-syntax-flow": "workspace:^",
     "@babel/plugin-syntax-jsx": "workspace:^",
     "@babel/plugin-syntax-pipeline-operator": "workspace:^",
-    "eslint": "catalog:dev"
+    "eslint": "catalog:babel-eslint"
   },
   "type": "module"
 }

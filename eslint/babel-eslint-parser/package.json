@@ -42,7 +42,7 @@
     "@babel/helper-fixtures": "workspace:^",
     "@types/estree": "^1.0.5",
     "dedent": "catalog:dev",
-    "eslint": "catalog:dev",
+    "eslint": "catalog:babel-eslint",
     "typescript-eslint": "8.60.0"
   }
 }

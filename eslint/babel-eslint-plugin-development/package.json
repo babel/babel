@@ -37,6 +37,6 @@
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "devDependencies": {
-    "eslint": "catalog:dev"
+    "eslint": "catalog:babel-eslint"
   }
 }
