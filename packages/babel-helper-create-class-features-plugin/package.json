@@ -34,7 +34,7 @@
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/preset-env": "workspace:^",
     "@types/charcodes": "^0.2.0",
-    "charcodes": "^0.2.0"
+    "charcodes": "catalog:dev"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"

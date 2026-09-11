@@ -339,7 +339,7 @@ __metadata:
   resolution: "@babel/code-frame@workspace:packages/babel-code-frame"
   dependencies:
     "@babel/helper-validator-identifier": "workspace:^"
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
     js-tokens: "npm:^10.0.0"
   languageName: unknown
   linkType: soft
@@ -606,7 +606,7 @@ __metadata:
     "@jridgewell/sourcemap-codec": "catalog:dev"
     "@jridgewell/trace-mapping": "catalog:"
     "@types/jsesc": "npm:^2.5.0"
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
     jsesc: "npm:^3.0.2"
   languageName: unknown
   linkType: soft
@@ -720,7 +720,7 @@ __metadata:
     "@babel/preset-env": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@types/charcodes": "npm:^0.2.0"
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
     verkit: "catalog:"
   peerDependencies:
     "@babel/core": ^8.0.0
@@ -1093,7 +1093,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-string-parser@workspace:packages/babel-helper-string-parser"
   dependencies:
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
   languageName: unknown
   linkType: soft
 
@@ -1133,7 +1133,7 @@ __metadata:
     "@types/regenerate": "npm:^1.4.0"
     "@unicode/unicode-16.0.0": "npm:^1.6.17"
     "@unicode/unicode-17.0.0": "npm:^1.6.17"
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
     regenerate: "npm:^1.4.0"
   languageName: unknown
   linkType: soft
@@ -1280,7 +1280,7 @@ __metadata:
     "@babel/helper-string-parser": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/types": "workspace:^"
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
     typescript: "catalog:dev"
   bin:
     parser: ./bin/babel-parser.js
@@ -7617,7 +7617,7 @@ __metadata:
     "@yarnpkg/types": "npm:^4.0.0"
     babel-plugin-transform-charcodes: "npm:^0.2.1"
     c8: "npm:^11.0.0"
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
     core-js: "catalog:"
     eslint: "catalog:dev"
     eslint-config-prettier: "npm:^10.1.8"
