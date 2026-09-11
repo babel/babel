@@ -483,7 +483,7 @@ __metadata:
     "@babel/helper-fixtures": "workspace:^"
     "@types/estree": "npm:^1.0.5"
     dedent: "catalog:dev"
-    eslint: "npm:^10.0.0"
+    eslint: "catalog:dev"
     eslint-scope: "npm:^9.1.0"
     eslint-visitor-keys: "npm:^5.0.0"
     typescript-eslint: "npm:8.60.0"
@@ -498,7 +498,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-plugin-development-internal@workspace:eslint/babel-eslint-plugin-development-internal"
   dependencies:
-    eslint: "npm:^10.0.0"
+    eslint: "catalog:dev"
     eslint-plugin-import: "npm:^2.31.0"
   peerDependencies:
     eslint: ^9.0.0 || ^10.0.0
@@ -510,7 +510,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-plugin-development@workspace:eslint/babel-eslint-plugin-development"
   dependencies:
-    eslint: "npm:^10.0.0"
+    eslint: "catalog:dev"
   peerDependencies:
     eslint: ^9.0.0 || ^10.0.0
   languageName: unknown
@@ -521,7 +521,7 @@ __metadata:
   resolution: "@babel/eslint-plugin@workspace:eslint/babel-eslint-plugin"
   dependencies:
     "@babel/core": "workspace:^"
-    eslint: "npm:^10.0.0"
+    eslint: "catalog:dev"
   peerDependencies:
     "@babel/core": ^8.0.0
     "@babel/eslint-parser": ^8.0.0
@@ -542,7 +542,7 @@ __metadata:
     "@babel/plugin-syntax-flow": "workspace:^"
     "@babel/plugin-syntax-jsx": "workspace:^"
     "@babel/plugin-syntax-pipeline-operator": "workspace:^"
-    eslint: "npm:^10.0.0"
+    eslint: "catalog:dev"
   languageName: unknown
   linkType: soft
 
@@ -559,7 +559,7 @@ __metadata:
     "@babel/preset-flow": "workspace:^"
     "@babel/preset-react": "workspace:^"
     dedent: "catalog:dev"
-    eslint: "npm:^10.0.0"
+    eslint: "catalog:dev"
     eslint-plugin-import: "npm:^2.31.0"
     globals: "npm:^15.9.0"
     npm-babel-parser: "npm:@babel/parser@^7.14.0"
@@ -7619,7 +7619,7 @@ __metadata:
     c8: "npm:^11.0.0"
     charcodes: "npm:^0.2.0"
     core-js: "catalog:"
-    eslint: "npm:^10.0.0"
+    eslint: "catalog:dev"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-formatter-codeframe: "npm:^7.32.1"
     eslint-import-resolver-node: "npm:^0.4.0"

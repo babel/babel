@@ -20,7 +20,7 @@
     "eslint-plugin-import": "^2.31.0"
   },
   "devDependencies": {
-    "eslint": "^10.0.0",
+    "eslint": "catalog:dev",
     "eslint-plugin-import": "^2.31.0"
   },
   "type": "module",

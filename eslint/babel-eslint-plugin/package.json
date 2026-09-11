@@ -42,6 +42,6 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "eslint": "^10.0.0"
+    "eslint": "catalog:dev"
   }
 }
