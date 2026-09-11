@@ -56,25 +56,25 @@ export type ValidatorImpl<T extends t.Node> = (
   val: any,
 ) => void;
 
-export type ValidatorType<T extends t.Node> = {
+type ValidatorType<T extends t.Node> = {
   type: PrimitiveTypes;
 } & ValidatorImpl<T>;
-export type ValidatorEach<T extends t.Node> = {
+type ValidatorEach<T extends t.Node> = {
   each: Validator<T>;
 } & ValidatorImpl<T>;
-export type ValidatorChainOf<T extends t.Node> = {
+type ValidatorChainOf<T extends t.Node> = {
   chainOf: readonly Validator<T>[];
 } & ValidatorImpl<T>;
-export type ValidatorOneOf<T extends t.Node> = {
+type ValidatorOneOf<T extends t.Node> = {
   oneOf: readonly any[];
 } & ValidatorImpl<T>;
-export type ValidatorOneOfNodeTypes<T extends t.Node> = {
+type ValidatorOneOfNodeTypes<T extends t.Node> = {
   oneOfNodeTypes: readonly NodeTypes[];
 } & ValidatorImpl<T>;
-export type ValidatorOneOfNodeOrValueTypes<T extends t.Node> = {
+type ValidatorOneOfNodeOrValueTypes<T extends t.Node> = {
   oneOfNodeOrValueTypes: readonly (NodeTypes | PrimitiveTypes)[];
 } & ValidatorImpl<T>;
-export type ValidatorShapeOf<T extends t.Node> = {
+type ValidatorShapeOf<T extends t.Node> = {
   shapeOf: Record<string, FieldOptions<T>>;
 } & ValidatorImpl<T>;
 

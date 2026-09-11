@@ -70,7 +70,7 @@
     "jest-light-runner": "^0.7.12",
     "jest-worker": "^30.4.1",
     "json5": "^2.2.3",
-    "knip": "^6.14.2",
+    "knip": "^6.35.1",
     "lint-staged": "^17.0.0",
     "mergeiterator": "^1.4.4",
     "open": "^11.0.0",

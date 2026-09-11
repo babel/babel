@@ -21,7 +21,7 @@ export type SimpleCacheConfigurator = {
   invalidate: <T extends SimpleType>(handler: () => T) => T;
 };
 
-export type CacheEntry<ResultT, SideChannel> = {
+type CacheEntry<ResultT, SideChannel> = {
   value: ResultT;
   valid: (channel: SideChannel) => Handler<boolean>;
 }[];

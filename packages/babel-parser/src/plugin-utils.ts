@@ -1,11 +1,6 @@
-import type Parser from "./parser/index.ts";
 import type { PluginConfig } from "./typings.d.ts";
 
 export type Plugin = PluginConfig;
-
-export type MixinPlugin = (
-  superClass: new (...args: any) => Parser,
-) => new (...args: any) => Parser;
 
 const PIPELINE_PROPOSALS = ["fsharp", "hack"];
 const TOPIC_TOKENS = ["^^", "@@", "^", "%", "#"];

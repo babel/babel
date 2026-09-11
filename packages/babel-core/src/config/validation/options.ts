@@ -150,6 +150,8 @@ type Assumptions = {
 
 export type AssumptionName = keyof Assumptions;
 
+type EnvSet<T> = Record<string, T>;
+
 export type InputOptions = {
   cwd?: string;
   filename?: string;
@@ -257,7 +259,6 @@ export type CallerMetadata = {
   supportsTopLevelAwait?: boolean;
   supportsExportNamespaceFrom?: boolean;
 };
-export type EnvSet<T> = Record<string, T>;
 export type MatchItem =
   | string
   | RegExp
@@ -270,7 +271,7 @@ export type MatchItem =
       },
     ) => unknown);
 
-export type MaybeDefaultProperty<T> = T | { default: T };
+type MaybeDefaultProperty<T> = T | { default: T };
 
 export type PluginTarget<Option = object> =
   | string

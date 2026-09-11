@@ -1202,12 +1202,12 @@ function replaceThisContext(
   return state.needsClassRef;
 }
 
-export type PropNode =
+export type PropPath = NodePath<
   | t.ClassProperty
   | t.ClassPrivateMethod
   | t.ClassPrivateProperty
-  | t.StaticBlock;
-export type PropPath = NodePath<PropNode>;
+  | t.StaticBlock
+>;
 
 function isNameOrLength({ key, computed }: t.ClassProperty) {
   if (key.type === "Identifier") {

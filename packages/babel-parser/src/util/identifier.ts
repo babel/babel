@@ -11,8 +11,6 @@ export {
   isKeyword,
 } from "@babel/helper-validator-identifier";
 
-export const keywordRelationalOperator = /^in(stanceof)?$/;
-
 // Test whether a current state character code and next character code is @
 
 export function isIteratorStart(

@@ -4,7 +4,7 @@ import type { types as t } from "@babel/core";
 
 export class Entry {}
 
-export class FunctionEntry extends Entry {
+class FunctionEntry extends Entry {
   returnLoc: t.NumericLiteral;
 
   constructor(returnLoc: t.NumericLiteral) {

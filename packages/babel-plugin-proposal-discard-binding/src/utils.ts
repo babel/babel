@@ -144,7 +144,7 @@ export function removeTrailingVoidPatternsFromParams(
 }
 
 // https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
-export function isAnonymousFunctionDefinition(
+function isAnonymousFunctionDefinition(
   node: t.Node | null,
 ): node is
   t.ClassExpression | t.ArrowFunctionExpression | t.FunctionExpression {

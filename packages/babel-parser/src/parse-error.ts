@@ -36,7 +36,7 @@ interface ParseErrorSpecification<ErrorDetails> {
   pos: number;
 }
 
-export type ParseErrorGeneric<ErrorDetails> = SyntaxError &
+type ParseErrorGeneric<ErrorDetails> = SyntaxError &
   ParseErrorSpecification<ErrorDetails>;
 
 export type ParseError = SyntaxError & {

@@ -38,7 +38,7 @@ export interface Options {
  * RegExp to test for newlines in terminal.
  */
 
-export const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
+const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
 
 /**
  * Extract what lines should be marked and highlighted.
@@ -46,7 +46,7 @@ export const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
 
 type MarkerLines = Record<number, true | [number, number]>;
 
-export function getMarkerLines(
+function getMarkerLines(
   loc: NodeLocation,
   source: string[],
   opts: Options,
