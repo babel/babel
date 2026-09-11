@@ -89,7 +89,7 @@ export function insertBefore<Nodes extends NodeOrNodeList<t.Node>>(
   }
 }
 
-export function _containerInsert<Nodes extends NodeList<t.Node>>(
+function _containerInsert<Nodes extends NodeList<t.Node>>(
   this: NodePath<t.Node | null>,
   from: number,
   nodes: Nodes,
@@ -124,7 +124,7 @@ export function _containerInsert<Nodes extends NodeList<t.Node>>(
   return paths as NodePaths<Nodes>;
 }
 
-export function _containerInsertBefore<Nodes extends NodeList<t.Node>>(
+function _containerInsertBefore<Nodes extends NodeList<t.Node>>(
   this: NodePath<t.Node | null>,
   nodes: Nodes,
 ): NodePaths<Nodes> {

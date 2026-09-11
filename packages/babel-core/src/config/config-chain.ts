@@ -86,7 +86,7 @@ export function* buildPresetChain(
   };
 }
 
-export const buildPresetChainWalker = makeChainWalker<PresetInstance>({
+const buildPresetChainWalker = makeChainWalker<PresetInstance>({
   root: preset => loadPresetDescriptors(preset),
   env: (preset, envName) => loadPresetEnvDescriptors(preset)(envName),
   overrides: (preset, index) => loadPresetOverridesDescriptors(preset)(index),

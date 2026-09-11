@@ -506,7 +506,7 @@ export function resolve(
   return _resolve.call(this, dangerous, resolved) || this;
 }
 
-export function _resolve(
+function _resolve(
   this: NodePath,
   dangerous?: boolean,
   resolved?: NodePath[],

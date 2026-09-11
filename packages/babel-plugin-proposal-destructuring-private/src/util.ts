@@ -202,8 +202,9 @@ type StackItem = {
  * - ObjectPattern
  * - ObjectProperty
  * - RestElement
- * @param root
- * @param visitor
+ *
+ * NOTE: When running `yarn knip`, this export is marked as unused. It's actually used
+ * in ../../test/normalize-options.skip-bundled.js.
  */
 export function* traversePattern(
   root:
@@ -299,8 +300,8 @@ export function hasPrivateClassElement(node: t.ClassBody): boolean {
  * A private key path is analogous to an array of `key` from the pattern NodePath
  * to the private key NodePath. See also test/util.skip-bundled.js for an example output
  *
- * @export
- * @param {t.LVal} pattern
+ * NOTE: When running `yarn knip`, this export is marked as unused. It's actually used
+ * in ../../test/util.skip-bundled.js.
  */
 export function* privateKeyPathIterator(pattern: t.LVal | t.PatternLike) {
   const indexPath: number[] = [];

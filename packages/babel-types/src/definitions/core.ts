@@ -71,7 +71,7 @@ export const classMethodOrPropertyUnionShapeCommon = (
   },
 });
 
-export const memberExpressionUnionShapeCommon = {
+const memberExpressionUnionShapeCommon = {
   unionShape: {
     discriminator: "computed",
     shapes: [
@@ -428,7 +428,7 @@ defineType("ForStatement", {
   },
 });
 
-export const functionCommon = () => ({
+const functionCommon = () => ({
   params: validateArrayOfType("FunctionParameter"),
   generator: {
     default: false,
@@ -438,7 +438,7 @@ export const functionCommon = () => ({
   },
 });
 
-export const functionTypeAnnotationCommon = () => ({
+const functionTypeAnnotationCommon = () => ({
   returnType: {
     validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation"),
 

@@ -1,7 +1,4 @@
-import {
-  isKeyword,
-  keywordRelationalOperator,
-} from "../../../lib/util/identifier.js";
+import { isKeyword } from "../../../lib/util/identifier.js";
 
 describe("identifier", () => {
   describe("isKeyword", () => {
@@ -19,24 +16,6 @@ describe("identifier", () => {
     });
     it("abc is not a keyword", () => {
       expect(isKeyword("abc")).toBe(false);
-    });
-  });
-
-  describe("keywordRelationalOperator", () => {
-    it("in is true", () => {
-      expect(keywordRelationalOperator.test("in")).toBe(true);
-    });
-    it("instanceof is true", () => {
-      expect(keywordRelationalOperator.test("instanceof")).toBe(true);
-    });
-    it("stanceof is false", () => {
-      expect(keywordRelationalOperator.test("stanceof")).toBe(false);
-    });
-    it("instance is false", () => {
-      expect(keywordRelationalOperator.test("instance")).toBe(false);
-    });
-    it("abc is false", () => {
-      expect(keywordRelationalOperator.test("abc")).toBe(false);
     });
   });
 });

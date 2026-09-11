@@ -86,7 +86,7 @@ function createBinop(name: string, binop: number) {
 }
 
 let tokenTypeCounter = -1;
-export const tokenTypes: ExportedTokenType[] = [];
+const tokenTypes: ExportedTokenType[] = [];
 const tokenLabels: string[] = [];
 const tokenBinops: number[] = [];
 const tokenBeforeExprs: boolean[] = [];
@@ -405,10 +405,6 @@ export function tokenOperatorPrecedence(token: TokenType): number {
   return tokenBinops[token];
 }
 
-export function tokenIsBinaryOperator(token: TokenType): boolean {
-  return tokenBinops[token] !== -1;
-}
-
 export function tokenIsRightAssociative(token: TokenType): boolean {
   return token === tt.exponent;
 }
@@ -419,8 +415,4 @@ export function tokenIsTemplate(token: TokenType): boolean {
 
 export function getExportedToken(token: TokenType): ExportedTokenType {
   return tokenTypes[token];
-}
-
-export function isTokenType(obj: any): boolean {
-  return typeof obj === "number";
 }

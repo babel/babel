@@ -71,18 +71,6 @@ const opaqueTypes = {
   ArrowFunctionExpression: true,
 };
 
-// These types potentially have side effects regardless of what side
-// effects their subexpressions have.
-const sideEffectTypes = {
-  CallExpression: true, // Anything could happen!
-  ForInStatement: true, // Modifies the key variable.
-  UnaryExpression: true, // Think delete.
-  BinaryExpression: true, // Might invoke .toString() or .valueOf().
-  AssignmentExpression: true, // Side-effecting by definition.
-  UpdateExpression: true, // Updates are essentially assignments.
-  NewExpression: true, // Similar to CallExpression.
-};
-
 // These types are the direct cause of all leaps in control flow.
 const leapTypes = {
   YieldExpression: true,
@@ -93,13 +81,4 @@ const leapTypes = {
   ThrowStatement: true,
 };
 
-// All leap types are also side effect types.
-for (const type in leapTypes) {
-  if (Object.hasOwn(leapTypes, type)) {
-    sideEffectTypes[type as keyof typeof sideEffectTypes] =
-      leapTypes[type as keyof typeof leapTypes];
-  }
-}
-
-export const hasSideEffects = makePredicate("hasSideEffects", sideEffectTypes);
 export const containsLeap = makePredicate("containsLeap", leapTypes);
