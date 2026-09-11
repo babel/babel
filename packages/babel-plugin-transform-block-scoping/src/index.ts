@@ -8,6 +8,7 @@ import {
   isVarInLoopHead,
   isVarInForStatementInit,
   wrapLoopBody,
+  wrapLoopStatement,
 } from "./loop.ts";
 import { validateUsage } from "./validation.ts";
 
@@ -67,6 +68,10 @@ export default declare((api, opts: Options) => {
           NodePath<t.Identifier>[]
         >();
 
+        // A closure in ForStatement.init captured a head `let`/`const`.
+        // wrapLoopBody cannot fix that (the closure is not in the body).
+        let capturedInHeadClosure = false;
+
         if (headPath && isBlockScoped(headPath)) {
           const names = Object.keys(headPath.getBindingIdentifiers());
           const headScope = headPath.scope;
@@ -79,8 +84,14 @@ export default declare((api, opts: Options) => {
               headScope.crawl();
               binding = headScope.getOwnBinding(name)!;
             }
-            const { usages, capturedInClosure, hasConstantViolations } =
-              getUsageInBody(binding, path);
+            const {
+              usages,
+              capturedInClosure,
+              capturedInHeadClosure: headCapture,
+              hasConstantViolations,
+            } = getUsageInBody(binding, path);
+
+            if (headCapture) capturedInHeadClosure = true;
 
             if (
               headScope.parent!.hasBinding(name) ||
@@ -134,6 +145,53 @@ export default declare((api, opts: Options) => {
           (
             varPath.get("declarations.0.init") as NodePath<t.FunctionExpression>
           ).unwrapFunctionEnvironment();
+        }
+
+        // Per-entry wrap: the inner `for` can run its init more than once in
+        // the same function (nested in another loop — same predicate as
+        // #18088). A head-created closure would otherwise close over one
+        // shared `var`. Only ForStatement.init can hold such a closure.
+        // Do this *after* wrapLoopBody so a body-capture `_loop2(x)` still
+        // runs; then this wrap moves the whole `for` into a per-entry `_loop`.
+        // isInLoop(path) — not path.parentPath. The Loop visitor's `path` is
+        // already the inner `for`; #18088 calls isInLoop(init.parentPath),
+        // which is that same node. Passing parentPath here would skip past
+        // the outer loop to Program and incorrectly return false.
+        if (
+          isForStatement &&
+          capturedInHeadClosure &&
+          isInLoop(path)
+        ) {
+          if (throwIfClosureRequired) {
+            throw path.buildCodeFrameError(
+              "Compiling let/const in this block would add a closure " +
+                "(throwIfClosureRequired).",
+            );
+          }
+
+          const varPath = wrapLoopStatement(path);
+          (
+            varPath.get("declarations.0.init") as NodePath<t.FunctionExpression>
+          ).unwrapFunctionEnvironment();
+
+          // wrapLoopBody already lowered the head, while the `for` still sat
+          // in the outer function. Moving the node inside `_loop` is enough
+          // for codegen (`var` follows the AST). If we did *not* body-wrap,
+          // the Loop's children will not be visited (the `for` was replaced
+          // with `_loop()`), so lower `let` → `var` now that the function
+          // parent is `_loop`.
+          if (!needsBodyWrap) {
+            const fnPath = varPath.get(
+              "declarations.0.init",
+            ) as NodePath<t.FunctionExpression>;
+            const innerLoopPath = fnPath.get("body.body.0") as NodePath<t.Loop>;
+            const innerHead = innerLoopPath.isForStatement()
+              ? innerLoopPath.get("init")
+              : null;
+            if (innerHead?.isVariableDeclaration()) {
+              transformBlockScopedVariable(innerHead, state, tdzEnabled);
+            }
+          }
         }
       },
 
