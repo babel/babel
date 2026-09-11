@@ -34,7 +34,7 @@
     "@types/regenerate": "^1.4.0",
     "@unicode/unicode-16.0.0": "^1.6.17",
     "@unicode/unicode-17.0.0": "^1.6.17",
-    "charcodes": "^0.2.0",
+    "charcodes": "catalog:dev",
     "regenerate": "^1.4.0"
   },
   "engines": {

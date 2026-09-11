@@ -23,7 +23,7 @@
     "globals"
   ],
   "devDependencies": {
-    "globals": "^16.1.0"
+    "globals": "catalog:globals-16"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"

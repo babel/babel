@@ -256,7 +256,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
-    commander: "npm:^14.0.2"
+    commander: "catalog:"
   peerDependencies:
     "@babel/core": ^8.0.0
   bin:
@@ -293,8 +293,8 @@ __metadata:
     "@babel/helper-transform-fixture-test-runner": "workspace:^"
     "@jridgewell/trace-mapping": "catalog:"
     chokidar: "npm:^5.0.0"
-    commander: "npm:^14.0.2"
-    convert-source-map: "npm:^2.0.0"
+    commander: "catalog:"
+    convert-source-map: "catalog:"
     glob: "npm:^13.0.0"
     slash: "npm:^5.1.0"
   peerDependencies:
@@ -339,7 +339,7 @@ __metadata:
   resolution: "@babel/code-frame@workspace:packages/babel-code-frame"
   dependencies:
     "@babel/helper-validator-identifier": "workspace:^"
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
     js-tokens: "npm:^10.0.0"
   languageName: unknown
   linkType: soft
@@ -458,17 +458,17 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
-    "@cspotcode/source-map-support": "npm:^0.8.1"
+    "@cspotcode/source-map-support": "catalog:"
     "@jridgewell/trace-mapping": "catalog:"
     "@types/convert-source-map": "npm:^2.0.0"
     "@types/gensync": "npm:^1.0.5"
     "@types/resolve": "npm:^1.3.2"
-    convert-source-map: "npm:^2.0.0"
-    empathic: "npm:^2.0.1"
+    convert-source-map: "catalog:"
+    empathic: "catalog:"
     gensync: "npm:^1.0.0-beta.2"
     import-meta-resolve: "npm:^4.2.0"
     json5: "npm:^2.2.3"
-    obug: "npm:^2.1.1"
+    obug: "catalog:"
     ts-node: "npm:^11.0.0-beta.1"
     tsx: "npm:^4.20.3"
     verkit: "catalog:"
@@ -482,8 +482,8 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     "@types/estree": "npm:^1.0.5"
-    dedent: "npm:^1.5.3"
-    eslint: "npm:^10.0.0"
+    dedent: "catalog:dev"
+    eslint: "catalog:babel-eslint"
     eslint-scope: "npm:^9.1.0"
     eslint-visitor-keys: "npm:^5.0.0"
     typescript-eslint: "npm:8.60.0"
@@ -498,8 +498,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-plugin-development-internal@workspace:eslint/babel-eslint-plugin-development-internal"
   dependencies:
-    eslint: "npm:^10.0.0"
-    eslint-plugin-import: "npm:^2.31.0"
+    eslint: "catalog:babel-eslint"
+    eslint-plugin-import: "catalog:babel-eslint"
   peerDependencies:
     eslint: ^9.0.0 || ^10.0.0
     eslint-plugin-import: ^2.31.0
@@ -510,7 +510,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/eslint-plugin-development@workspace:eslint/babel-eslint-plugin-development"
   dependencies:
-    eslint: "npm:^10.0.0"
+    eslint: "catalog:babel-eslint"
   peerDependencies:
     eslint: ^9.0.0 || ^10.0.0
   languageName: unknown
@@ -521,7 +521,7 @@ __metadata:
   resolution: "@babel/eslint-plugin@workspace:eslint/babel-eslint-plugin"
   dependencies:
     "@babel/core": "workspace:^"
-    eslint: "npm:^10.0.0"
+    eslint: "catalog:babel-eslint"
   peerDependencies:
     "@babel/core": ^8.0.0
     "@babel/eslint-parser": ^8.0.0
@@ -542,7 +542,7 @@ __metadata:
     "@babel/plugin-syntax-flow": "workspace:^"
     "@babel/plugin-syntax-jsx": "workspace:^"
     "@babel/plugin-syntax-pipeline-operator": "workspace:^"
-    eslint: "npm:^10.0.0"
+    eslint: "catalog:babel-eslint"
   languageName: unknown
   linkType: soft
 
@@ -558,10 +558,10 @@ __metadata:
     "@babel/plugin-proposal-do-expressions": "workspace:^"
     "@babel/preset-flow": "workspace:^"
     "@babel/preset-react": "workspace:^"
-    dedent: "npm:^1.5.3"
-    eslint: "npm:^10.0.0"
-    eslint-plugin-import: "npm:^2.31.0"
-    globals: "npm:^15.9.0"
+    dedent: "catalog:dev"
+    eslint: "catalog:babel-eslint"
+    eslint-plugin-import: "catalog:babel-eslint"
+    globals: "catalog:globals-dev-15"
     npm-babel-parser: "npm:@babel/parser@^7.14.0"
   languageName: unknown
   linkType: soft
@@ -606,7 +606,7 @@ __metadata:
     "@jridgewell/sourcemap-codec": "catalog:dev"
     "@jridgewell/trace-mapping": "catalog:"
     "@types/jsesc": "npm:^2.5.0"
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
     jsesc: "npm:^3.0.2"
   languageName: unknown
   linkType: soft
@@ -684,7 +684,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
     browserslist: "npm:^4.24.0"
-    flru: "npm:1.0.2"
+    flru: "catalog:"
     verkit: "catalog:"
   languageName: unknown
   linkType: soft
@@ -720,7 +720,7 @@ __metadata:
     "@babel/preset-env": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@types/charcodes": "npm:^0.2.0"
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
     verkit: "catalog:"
   peerDependencies:
     "@babel/core": ^8.0.0
@@ -816,7 +816,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-globals@workspace:packages/babel-helper-globals"
   dependencies:
-    globals: "npm:^16.1.0"
+    globals: "catalog:globals-16"
   languageName: unknown
   linkType: soft
 
@@ -1093,7 +1093,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-string-parser@workspace:packages/babel-helper-string-parser"
   dependencies:
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
   languageName: unknown
   linkType: soft
 
@@ -1106,7 +1106,7 @@ __metadata:
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     "@jridgewell/trace-mapping": "catalog:"
-    flru: "npm:1.0.2"
+    flru: "catalog:"
     jest-diff: "npm:^30.0.0"
     resolve: "npm:2.0.0-next.5"
   languageName: unknown
@@ -1133,7 +1133,7 @@ __metadata:
     "@types/regenerate": "npm:^1.4.0"
     "@unicode/unicode-16.0.0": "npm:^1.6.17"
     "@unicode/unicode-17.0.0": "npm:^1.6.17"
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
     regenerate: "npm:^1.4.0"
   languageName: unknown
   linkType: soft
@@ -1238,7 +1238,7 @@ __metadata:
     "@babel/register": "workspace:^"
     "@babel/runtime": "workspace:^"
     "@types/v8flags": "npm:^3.1.1"
-    commander: "npm:^14.0.2"
+    commander: "catalog:"
     core-js: "catalog:"
     v8flags: "npm:^4.0.1"
   peerDependencies:
@@ -1280,7 +1280,7 @@ __metadata:
     "@babel/helper-string-parser": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/types": "workspace:^"
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
     typescript: "catalog:dev"
   bin:
     parser: ./bin/babel-parser.js
@@ -2122,7 +2122,7 @@ __metadata:
     "@babel/helper-remap-async-to-generator": "workspace:^"
     "@babel/traverse": "workspace:^"
     babel-plugin-polyfill-corejs3: "catalog:"
-    core-js-pure: "npm:^3.48.0"
+    core-js-pure: "catalog:"
   peerDependencies:
     "@babel/core": ^8.0.0
   languageName: unknown
@@ -3850,11 +3850,11 @@ __metadata:
     "@babel/plugin-transform-arrow-functions": "workspace:^"
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
     "@babel/preset-typescript": "workspace:^"
-    "@cspotcode/source-map-support": "npm:^0.8.1"
+    "@cspotcode/source-map-support": "catalog:"
     "@types/cacache": "npm:^20.0.0"
     cacache: "npm:20.0.3"
     clone-deep: "npm:^4.0.1"
-    empathic: "npm:^2.0.1"
+    empathic: "catalog:"
     pirates: "npm:^4.0.6"
   peerDependencies:
     "@babel/core": ^8.0.0
@@ -3865,7 +3865,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3"
   dependencies:
-    core-js-pure: "npm:^3.48.0"
+    core-js-pure: "catalog:"
   languageName: unknown
   linkType: soft
 
@@ -4072,7 +4072,7 @@ __metadata:
     "@babel/parser": "workspace:^"
     "@babel/template": "workspace:^"
     "@babel/types": "workspace:^"
-    obug: "npm:^2.1.1"
+    obug: "catalog:"
   languageName: unknown
   linkType: soft
 
@@ -7603,7 +7603,7 @@ __metadata:
     "@babel/preset-env": "npm:^8.0.1"
     "@babel/preset-typescript": "npm:^8.0.1"
     "@babel/runtime": "npm:^8.0.0"
-    "@cspotcode/source-map-support": "npm:^0.8.1"
+    "@cspotcode/source-map-support": "catalog:"
     "@eslint/js": "npm:^10.0.1"
     "@rollup/plugin-babel": "npm:^7.0.0"
     "@rollup/plugin-commonjs": "patch:@rollup/plugin-commonjs@npm%3A29.0.2#~/.yarn/patches/@rollup-plugin-commonjs-npm-29.0.2-18c3a497d8.patch"
@@ -7617,19 +7617,19 @@ __metadata:
     "@yarnpkg/types": "npm:^4.0.0"
     babel-plugin-transform-charcodes: "npm:^0.2.1"
     c8: "npm:^11.0.0"
-    charcodes: "npm:^0.2.0"
+    charcodes: "catalog:dev"
     core-js: "catalog:"
-    eslint: "npm:^10.0.0"
+    eslint: "catalog:dev"
     eslint-config-prettier: "npm:^10.1.8"
     eslint-formatter-codeframe: "npm:^7.32.1"
     eslint-import-resolver-node: "npm:^0.4.0"
-    eslint-plugin-import: "npm:^2.32.0"
+    eslint-plugin-import: "catalog:dev"
     eslint-plugin-jest: "npm:^29.15.0"
     eslint-plugin-n: "npm:^17.24.0"
     eslint-plugin-regexp: "npm:^3.0.0"
     eslint-plugin-unicorn: "npm:^56.0.0"
     execa: "npm:^9.0.0"
-    globals: "npm:^17.6.0"
+    globals: "catalog:globals-dev-17"
     gulp: "npm:^5.0.1"
     husky: "npm:^9.0.11"
     is-ci: "npm:^4.1.0"
@@ -9702,7 +9702,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-import@npm:^2.31.0, eslint-plugin-import@npm:^2.32.0":
+"eslint-plugin-import@npm:^2.32.0":
   version: 2.32.0
   resolution: "eslint-plugin-import@npm:2.32.0"
   dependencies:

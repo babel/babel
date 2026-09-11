@@ -26,8 +26,8 @@
   "dependencies": {
     "@jridgewell/trace-mapping": "catalog:",
     "chokidar": "^5.0.0",
-    "commander": "^14.0.2",
-    "convert-source-map": "^2.0.0",
+    "commander": "catalog:",
+    "convert-source-map": "catalog:",
     "glob": "^13.0.0",
     "slash": "^5.1.0"
   },
