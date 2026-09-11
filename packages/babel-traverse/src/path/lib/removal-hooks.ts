@@ -1,9 +1,9 @@
-// this file contains hooks that handle ancestry cleanup of parent nodes when removing children
-
 import type NodePath from "../index.ts";
 import type * as t from "@babel/types";
+
 /**
- * Pre hooks should be used for either rejecting removal or delegating removal
+ * Hooks for custom removal logic for specific node types, that handle
+ * ancestry cleanup of parent nodes when removing children.
  */
 
 export const hooks = [

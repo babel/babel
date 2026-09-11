@@ -14,49 +14,31 @@ export function remove(this: NodePath<t.Node | null>) {
 
   resync.call(this);
 
-  if (_callRemovalHooks.call(this)) {
-    _markRemoved.call(this);
-    return;
-  }
+  const handledByHook =
+    this.parentPath &&
+    hooks.some(fn => fn(this as NodePath<t.Node>, this.parentPath));
 
-  if (!this.opts?.noScope) {
-    _removeFromScope.call(this);
-  }
+  if (!handledByHook) {
+    if (this.node && !this.opts?.noScope) {
+      // Remove scope information relative to this node
+      const bindings = t.getBindingIdentifiers(this.node, false, false, true);
+      Object.keys(bindings).forEach(name => this.scope.removeBinding(name));
+    }
 
-  this.shareCommentsWithSiblings();
-  _remove.call(this);
-  _markRemoved.call(this);
-}
+    this.shareCommentsWithSiblings();
 
-function _removeFromScope(this: NodePath<t.Node | null>) {
-  if (!this.node) return;
-  const bindings = t.getBindingIdentifiers(this.node, false, false, true);
-  Object.keys(bindings).forEach(name => this.scope.removeBinding(name));
-}
-
-function _callRemovalHooks(this: NodePath<t.Node | null>) {
-  if (this.parentPath) {
-    for (const fn of hooks) {
-      if (fn(this as NodePath<t.Node>, this.parentPath)) return true;
+    if (Array.isArray(this.container)) {
+      this.container.splice(this.key as number, 1);
+      updateSiblingKeys.call(this, this.key as number, -1);
+    } else {
+      _replaceWith.call(this, null);
     }
   }
-}
 
-function _remove(this: NodePath<t.Node | null>) {
-  if (Array.isArray(this.container)) {
-    this.container.splice(this.key as number, 1);
-    updateSiblingKeys.call(this, this.key as number, -1);
-  } else {
-    _replaceWith.call(this, null);
-  }
-}
-
-export function _markRemoved(this: NodePath<t.Node | null>) {
-  // this.shouldSkip = true; this.removed = true;
+  // Mark the path as removed.
   this._traverseFlags |= SHOULD_SKIP | REMOVED;
   if (this.parent) {
-    // @ts-expect-error TODO: better types
-    getCachedPaths(this)?.delete(this.node);
+    getCachedPaths(this)?.delete(this.node!);
   }
   this.node = null;
 }
