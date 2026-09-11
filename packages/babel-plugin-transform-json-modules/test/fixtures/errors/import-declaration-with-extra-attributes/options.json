@@ -1,5 +1,5 @@
 {
   "sourceType": "module",
   "plugins": ["transform-json-modules"],
-  "throws": "Unknown attribute for JSON modules."
+  "throws": "Unknown attribute for json modules."
 }

@@ -1,0 +1,2 @@
+const j = await (typeof process === "object" && process.versions?.node ? Promise.all([import("fs"), import("module")]).then(([fs, module]) => new Promise((a => (r, j) => fs.readFile(a, (e, d) => e ? j(e) : r(d)))(module.createRequire(import.meta.url).resolve("./x")))).then(_immutableUint8Array) : fetch(import.meta.resolve("./x")).then(r => r.bytes()).then(_immutableUint8Array));
+function _immutableUint8Array(r) { var t = r.buffer; return new Uint8Array(t.transferToImmutable ? t.transferToImmutable() : t); }
