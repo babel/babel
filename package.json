@@ -62,7 +62,7 @@
     "eslint-plugin-regexp": "^3.0.0",
     "eslint-plugin-unicorn": "^56.0.0",
     "execa": "^9.0.0",
-    "globals": "^17.6.0",
+    "globals": "catalog:globals-dev-17",
     "gulp": "^5.0.1",
     "husky": "^9.0.11",
     "is-ci": "^4.1.0",

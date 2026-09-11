@@ -15,7 +15,7 @@
     "dedent": "catalog:dev",
     "eslint": "catalog:dev",
     "eslint-plugin-import": "catalog:dev",
-    "globals": "^15.9.0",
+    "globals": "catalog:globals-dev-15",
     "npm-babel-parser": "npm:@babel/parser@^7.14.0"
   },
   "type": "module"

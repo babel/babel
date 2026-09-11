@@ -561,7 +561,7 @@ __metadata:
     dedent: "catalog:dev"
     eslint: "catalog:dev"
     eslint-plugin-import: "catalog:dev"
-    globals: "npm:^15.9.0"
+    globals: "catalog:globals-dev-15"
     npm-babel-parser: "npm:@babel/parser@^7.14.0"
   languageName: unknown
   linkType: soft
@@ -816,7 +816,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-globals@workspace:packages/babel-helper-globals"
   dependencies:
-    globals: "npm:^16.1.0"
+    globals: "catalog:globals-16"
   languageName: unknown
   linkType: soft
 
@@ -7629,7 +7629,7 @@ __metadata:
     eslint-plugin-regexp: "npm:^3.0.0"
     eslint-plugin-unicorn: "npm:^56.0.0"
     execa: "npm:^9.0.0"
-    globals: "npm:^17.6.0"
+    globals: "catalog:globals-dev-17"
     gulp: "npm:^5.0.1"
     husky: "npm:^9.0.11"
     is-ci: "npm:^4.1.0"
