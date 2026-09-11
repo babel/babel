@@ -16,14 +16,14 @@ type UnicodeRange = {
   readonly end: number;
 };
 
-import unicode16Start from "@unicode/unicode-16.0.0/Binary_Property/ID_Start/ranges.js";
-import unicode16Cont from "@unicode/unicode-16.0.0/Binary_Property/ID_Continue/ranges.js";
+import unicode16Start from "@unicode/unicode-16.0.0/Binary_Property/ID_Start/ranges.mjs";
+import unicode16Cont from "@unicode/unicode-16.0.0/Binary_Property/ID_Continue/ranges.mjs";
 
 const start = (
-  await import(`${unicodePackageName}/Binary_Property/ID_Start/ranges.js`)
+  await import(`${unicodePackageName}/Binary_Property/ID_Start/ranges.mjs`)
 ).default;
 const cont = (
-  await import(`${unicodePackageName}/Binary_Property/ID_Continue/ranges.js`)
+  await import(`${unicodePackageName}/Binary_Property/ID_Continue/ranges.mjs`)
 ).default;
 
 function rangesToRegenerate(ranges: readonly UnicodeRange[]): regenerate {
