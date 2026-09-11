@@ -24,7 +24,7 @@
   ],
   "dependencies": {
     "@babel/register": "workspace:^",
-    "commander": "^14.0.2",
+    "commander": "catalog:",
     "core-js": "catalog:",
     "v8flags": "^4.0.1"
   },
