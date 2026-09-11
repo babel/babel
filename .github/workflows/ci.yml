@@ -557,7 +557,7 @@ jobs:
         with:
           name: babel-artifact
       - name: Downgrade ESLint to ${{ matrix.eslint-version }}
-        run: yarn up eslint@${{ matrix.eslint-version }}
+        run: yarn up eslint@${{ matrix.eslint-version }} @eslint/js@${{ matrix.eslint-version }}
       - name: Run babel/eslint tests
         run: node ./node_modules/.bin/jest eslint
 

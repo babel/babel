@@ -11,3 +11,5 @@ export type Violation = ReportParameters[0] & { node: BabelESTreeNode };
 // As of ESLint 10 the report parameters are [violation], here we pass through the rest of the parameters as well to be future proof.
 export type RefinedReportParameters = [Violation, ...Tail<ReportParameters>];
 type Tail<T extends any[]> = T extends [any, ...infer Rest] ? Rest : never;
+
+export type SeverityString = "error" | "warn" | "off";

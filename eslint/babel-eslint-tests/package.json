@@ -12,6 +12,7 @@
     "@babel/plugin-proposal-do-expressions": "workspace:^",
     "@babel/preset-flow": "workspace:^",
     "@babel/preset-react": "workspace:^",
+    "@eslint/js": "^10.0.1",
     "dedent": "^1.5.3",
     "eslint": "^10.0.0",
     "eslint-plugin-import": "^2.31.0",
