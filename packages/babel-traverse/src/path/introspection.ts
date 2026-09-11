@@ -502,18 +502,10 @@ export function resolve(
   this: NodePath,
   dangerous?: boolean,
   resolved?: NodePath[],
-) {
-  return _resolve.call(this, dangerous, resolved) || this;
-}
-
-function _resolve(
-  this: NodePath,
-  dangerous?: boolean,
-  resolved?: NodePath[],
-): NodePath | undefined | null {
+): NodePath {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
-  if (resolved?.includes(this)) return;
+  if (resolved?.includes(this)) return this;
 
   // we store all the paths we've "resolved" in this array to prevent infinite recursion
   resolved = resolved || [];
@@ -528,18 +520,18 @@ function _resolve(
     }
   } else if (this.isReferencedIdentifier()) {
     const binding = this.scope.getBinding(this.node.name);
-    if (!binding) return;
+    if (!binding) return this;
 
     // reassigned so we can't really resolve it
-    if (!binding.constant) return;
+    if (!binding.constant) return this;
 
     // todo - lookup module in dependency graph
-    if (binding.kind === "module") return;
+    if (binding.kind === "module") return this;
 
     if (binding.path !== this) {
       const ret = binding.path.resolve(dangerous, resolved);
       // If the identifier resolves to parent node then we can't really resolve it.
-      if (this.find(parent => parent.node === ret.node)) return;
+      if (this.find(parent => parent.node === ret.node)) return this;
       return ret;
     }
   } else if (this.isTypeCastExpression()) {
@@ -550,7 +542,7 @@ function _resolve(
     // making this resolution inaccurate
 
     const targetKey = toComputedKey(this.node);
-    if (!isLiteral(targetKey)) return;
+    if (!isLiteral(targetKey)) return this;
 
     // @ts-expect-error todo(flow->ts): NullLiteral
     const targetName = targetKey.value;
@@ -580,6 +572,8 @@ function _resolve(
       if (elem) return elem.resolve(dangerous, resolved);
     }
   }
+
+  return this;
 }
 
 export function isConstantExpression(this: NodePath<t.Node | null>): boolean {
