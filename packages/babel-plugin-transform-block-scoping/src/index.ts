@@ -157,11 +157,7 @@ export default declare((api, opts: Options) => {
         // already the inner `for`; #18088 calls isInLoop(init.parentPath),
         // which is that same node. Passing parentPath here would skip past
         // the outer loop to Program and incorrectly return false.
-        if (
-          isForStatement &&
-          capturedInHeadClosure &&
-          isInLoop(path)
-        ) {
+        if (isForStatement && capturedInHeadClosure && isInLoop(path)) {
           if (throwIfClosureRequired) {
             throw path.buildCodeFrameError(
               "Compiling let/const in this block would add a closure " +
