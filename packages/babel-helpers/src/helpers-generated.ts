@@ -1199,6 +1199,23 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
+  // size: 84, gzip size: 90
+  setObjectProto: helper(
+    "8.1.0",
+    "function _setObjectProto(t,e){return null!==e&&Object(e)!==e||setPrototypeOf(t,e),t}",
+    {
+      globals: ["Object"],
+      locals: { _setObjectProto: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_setObjectProto",
+      dependencies: {
+        setPrototypeOf: [
+          "body.0.body.body.0.argument.expressions.0.right.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
   // size: 163, gzip size: 102
   setPrototypeOf: helper(
     "7.0.0-beta.0",

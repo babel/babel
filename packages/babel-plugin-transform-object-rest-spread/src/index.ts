@@ -107,6 +107,18 @@ export default declare((api, opts: Options) => {
     return false;
   }
 
+  // Whether `prop` is the `__proto__` form that sets the prototype rather than
+  // creating an own property.
+  function isProtoKey(
+    prop: t.ObjectMember | t.SpreadElement,
+  ): prop is t.ObjectProperty {
+    return (
+      t.isObjectProperty(prop, { computed: false, shorthand: false }) &&
+      (t.isIdentifier(prop.key, { name: "__proto__" }) ||
+        t.isStringLiteral(prop.key, { value: "__proto__" }))
+    );
+  }
+
   // returns an array of all keys of an object, and a status flag indicating if all extracted keys
   // were converted to stringLiterals or not
   // e.g. extracts {keys: ["a", "b", "3", ++x], allPrimitives: false }
@@ -860,6 +872,8 @@ export default declare((api, opts: Options) => {
 
         let exp: t.CallExpression | null = null;
         let props: t.ObjectMember[] = [];
+        // Whether `exp` is a spread call we can still append arguments to.
+        let canAppend = false;
 
         function make() {
           const hadProps = props.length > 0;
@@ -868,12 +882,13 @@ export default declare((api, opts: Options) => {
 
           if (!exp) {
             exp = t.callExpression(helper, [obj]);
+            canAppend = true;
             return;
           }
 
           // When we can assume that getters are pure and don't depend on
           // the order of evaluation, we can avoid making multiple calls.
-          if (pureGetters) {
+          if (pureGetters && canAppend) {
             if (hadProps) {
               exp.arguments.push(obj);
             }
@@ -887,12 +902,23 @@ export default declare((api, opts: Options) => {
             // [[GetOwnProperty]]
             ...(hadProps ? [t.objectExpression([]), obj] : []),
           ]);
+          canAppend = true;
         }
 
         for (const prop of path.node.properties) {
           if (t.isSpreadElement(prop)) {
             make();
             exp!.arguments.push(prop.argument);
+          } else if (exp && isProtoKey(prop)) {
+            // The spread helpers copy own properties, so a `__proto__` key
+            // left in one of their source objects would be dropped instead of
+            // updating the prototype of the object being built.
+            if (props.length) make();
+            exp = t.callExpression(file.addHelper("setObjectProto"), [
+              exp,
+              prop.value as t.Expression,
+            ]);
+            canAppend = false;
           } else {
             props.push(prop);
           }
