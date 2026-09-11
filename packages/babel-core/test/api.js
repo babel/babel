@@ -655,6 +655,46 @@ describe("api", function () {
     });
   });
 
+  it("source map merging disables range mappings", function () {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      const code = [
+        "let Foo = function Foo() {};",
+        "",
+        "//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0ZG91dCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztJQUFNLEdBQUcsWUFBSCxHQUFHO3dCQUFILEdBQUciLCJmaWxlIjoidW5kZWZpbmVkIiwic291cmNlc0NvbnRlbnQiOlsiY2xhc3MgRm9vIHt9XG4iXX0=",
+      ].join("\n");
+
+      const result = transformSync(code, {
+        filename: "input.js",
+        sourceMaps: true,
+        generatorOpts: { sourceMapRanges: true },
+      });
+
+      expect(result.map.rangeMappings).toBeUndefined();
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining(
+          "The code generator has disabled source map ranges for " +
+            path.join(cwd, "input.js"),
+        ),
+      );
+
+      // Without an input source map, the same options do generate ranges.
+      warn.mockClear();
+      const withRanges = transformSync("let Foo = function Foo() {};", {
+        filename: "input.js",
+        sourceMaps: true,
+        generatorOpts: { sourceMapRanges: true },
+      });
+
+      expect(withRanges.map.rangeMappings).toBeDefined();
+      expect(warn).not.toHaveBeenCalled();
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
   it("default source map filename", function () {
     return transformAsync("var a = 10;", {
       cwd: "/some/absolute",

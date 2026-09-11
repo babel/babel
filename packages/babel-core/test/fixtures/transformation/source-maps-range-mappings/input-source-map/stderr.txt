@@ -1,0 +1,1 @@
+[BABEL] Note: The code generator has disabled source map ranges for <CWD>/packages/babel-core/test/fixtures/transformation/source-maps-range-mappings/input-source-map/input.js, because they cannot be used together with `inputSourceMap` yet.
