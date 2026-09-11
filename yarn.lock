@@ -2122,7 +2122,7 @@ __metadata:
     "@babel/helper-remap-async-to-generator": "workspace:^"
     "@babel/traverse": "workspace:^"
     babel-plugin-polyfill-corejs3: "catalog:"
-    core-js-pure: "npm:^3.48.0"
+    core-js-pure: "catalog:"
   peerDependencies:
     "@babel/core": ^8.0.0
   languageName: unknown
@@ -3865,7 +3865,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/runtime-corejs3@workspace:packages/babel-runtime-corejs3"
   dependencies:
-    core-js-pure: "npm:^3.48.0"
+    core-js-pure: "catalog:"
   languageName: unknown
   linkType: soft
 
