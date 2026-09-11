@@ -110,12 +110,6 @@ export type Format = {
   topicToken?: GeneratorOptions["topicToken"];
 };
 
-interface PrintSequenceOptions {
-  statement?: boolean;
-  indent?: boolean;
-  trailingCommentsLineOffset?: number;
-}
-
 interface PrintListOptions {
   separator?: (this: Printer, occurrenceCount: number, last: boolean) => void;
   statement?: boolean;
@@ -123,7 +117,6 @@ interface PrintListOptions {
   printTrailingSeparator?: boolean;
 }
 
-export type PrintJoinOptions = PrintListOptions & PrintSequenceOptions;
 class Printer {
   constructor(
     format: Format,
@@ -943,7 +936,7 @@ class Printer {
     nodes: t.Node[] | undefined | null,
     statement?: boolean,
     indent?: boolean,
-    separator?: PrintJoinOptions["separator"] | null,
+    separator?: PrintListOptions["separator"] | null,
     printTrailingSeparator?: boolean | null,
     resetTokenContext?: boolean,
     trailingCommentsLineOffset?: number,

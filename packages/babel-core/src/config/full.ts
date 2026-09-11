@@ -53,8 +53,7 @@ export type ResolvedConfig = {
 };
 
 export type { Plugin };
-export type PluginPassList = Plugin[];
-export type PluginPasses = PluginPassList[];
+export type PluginPasses = Plugin[][];
 
 export default gensync(function* loadFullConfig(
   inputOpts: InputOptions | null | undefined,
