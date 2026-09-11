@@ -5,7 +5,7 @@ export default function _arrayWithHoles<T>(arr: T[]) {
   if (
     Array.isArray(arr) &&
     (typeof Symbol === "undefined" ||
-      arr[Symbol.iterator] === Array.prototype[Symbol.iterator])
+      arr[Symbol.iterator] === [][Symbol.iterator])
   ) {
     return arr;
   }
