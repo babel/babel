@@ -468,6 +468,59 @@ describe("evaluation", function () {
     expect(evalResult.value).toBe(1);
   });
 
+  it("should not crash on {}.toString", function () {
+    const path = getPath(`
+      String({ ["toString"]: "".toUpperCase });
+      Number({ ["toString"]: "".toUpperCase });
+      `);
+    const evalResult = path.get("body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+    const evalResult2 = path.get("body.1.expression").evaluate();
+    expect(evalResult2.confident).toBe(false);
+  });
+
+  it("should not crash on {}.toString 2", function () {
+    const path = getPath(`
+      "" + { ["toString"]: "".toUpperCase };
+      ({ ["toString"]: "".toUpperCase } + "");
+      `);
+    const evalResult = path.get("body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+    const evalResult2 = path.get("body.1.expression").evaluate();
+    expect(evalResult2.confident).toBe(false);
+  });
+
+  it("should not crash on {}.toString 3", function () {
+    const path = getPath(
+      `"" == { ["toString"]: "".toUpperCase };
+      ({ ["toString"]: "".toUpperCase } == "");
+      "" != { ["toString"]: "".toUpperCase };
+      ({ ["toString"]: "".toUpperCase } != "");
+      `,
+    );
+    const evalResult = path.get("body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+    const evalResult2 = path.get("body.1.expression").evaluate();
+    expect(evalResult2.confident).toBe(false);
+    const evalResult3 = path.get("body.2.expression").evaluate();
+    expect(evalResult3.confident).toBe(false);
+    const evalResult4 = path.get("body.3.expression").evaluate();
+    expect(evalResult4.confident).toBe(false);
+  });
+
+  it("should not crash on {}.toString 4", function () {
+    const path = getPath(
+      `
+      Math.min(1, { ["toString"]: "".toUpperCase });
+      parseInt({ ["toString"]: "".toUpperCase });
+      `,
+    );
+    const evalResult = path.get("body.0.expression").evaluate();
+    expect(evalResult.confident).toBe(false);
+    const evalResult2 = path.get("body.1.expression").evaluate();
+    expect(evalResult2.confident).toBe(false);
+  });
+
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
