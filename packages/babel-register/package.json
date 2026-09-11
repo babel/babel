@@ -15,7 +15,7 @@
   "type": "module",
   "main": "./lib/index.js",
   "dependencies": {
-    "@cspotcode/source-map-support": "^0.8.1",
+    "@cspotcode/source-map-support": "catalog:",
     "cacache": "20.0.3",
     "clone-deep": "^4.0.1",
     "empathic": "catalog:",

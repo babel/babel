@@ -36,7 +36,7 @@
     "@babel/preset-env": "^8.0.1",
     "@babel/preset-typescript": "^8.0.1",
     "@babel/runtime": "^8.0.0",
-    "@cspotcode/source-map-support": "^0.8.1",
+    "@cspotcode/source-map-support": "catalog:",
     "@eslint/js": "^10.0.1",
     "@rollup/plugin-babel": "^7.0.0",
     "@rollup/plugin-commonjs": "patch:@rollup/plugin-commonjs@npm%3A29.0.2#~/.yarn/patches/@rollup-plugin-commonjs-npm-29.0.2-18c3a497d8.patch",

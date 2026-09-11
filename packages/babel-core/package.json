@@ -63,7 +63,7 @@
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
     "@babel/preset-env": "workspace:^",
     "@babel/preset-typescript": "workspace:^",
-    "@cspotcode/source-map-support": "^0.8.1",
+    "@cspotcode/source-map-support": "catalog:",
     "@jridgewell/trace-mapping": "catalog:",
     "@types/convert-source-map": "^2.0.0",
     "@types/resolve": "^1.3.2",
