@@ -684,7 +684,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
     browserslist: "npm:^4.24.0"
-    flru: "npm:1.0.2"
+    flru: "catalog:"
     verkit: "catalog:"
   languageName: unknown
   linkType: soft
@@ -1106,7 +1106,7 @@ __metadata:
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     "@jridgewell/trace-mapping": "catalog:"
-    flru: "npm:1.0.2"
+    flru: "catalog:"
     jest-diff: "npm:^30.0.0"
     resolve: "npm:2.0.0-next.5"
   languageName: unknown
