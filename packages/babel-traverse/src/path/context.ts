@@ -142,62 +142,43 @@ export function setContext<S = unknown>(
 export function resync(this: NodePath<t.Node | null>) {
   if (this.removed) return;
 
-  _resyncParent.call(this);
-  _resyncList.call(this);
-  _resyncKey.call(this);
-}
-
-function _resyncParent(this: NodePath<t.Node | null>) {
   if (this.parentPath) {
     this.parent = this.parentPath.node;
   }
-}
 
-function _resyncKey(this: NodePath<t.Node | null>) {
-  if (!this.container) return;
+  if (this.parent && this.inList) {
+    // @ts-expect-error this.listKey should present in this.parent
+    const newContainer = this.parent[this.listKey] as t.Node;
+    if (this.container !== newContainer) {
+      // container is out of sync. this is likely the result of it being reassigned
+      this.container = newContainer || null;
+    }
+  }
 
   if (
-    this.node ===
-    // @ts-expect-error this.key should present in this.container
-    this.container[this.key]
+    this.container &&
+    this.node !== this.container[this.key as keyof typeof this.container]
   ) {
-    return;
-  }
+    // grrr, path key is out of sync. this is likely due to a modification to the AST
+    // not done through our path APIs
 
-  // grrr, path key is out of sync. this is likely due to a modification to the AST
-  // not done through our path APIs
-
-  if (Array.isArray(this.container)) {
-    for (let i = 0; i < this.container.length; i++) {
-      if (this.container[i] === this.node) {
-        _setKey.call(this, i);
-        return;
+    let key: string | number = -1;
+    if (Array.isArray(this.container)) {
+      key = this.container.indexOf(this.node!);
+    } else {
+      for (key of Object.keys(this.container)) {
+        if (this.container[key as keyof typeof this.container] === this.node) {
+          break;
+        }
       }
     }
-  } else {
-    for (const key of Object.keys(this.container)) {
-      // @ts-expect-error this.key should present in this.container
-      if (this.container[key] === this.node) {
-        _setKey.call(this, key);
-        return;
-      }
+    if (key === -1) {
+      // ¯\_(ツ)_/¯ who knows where it's gone lol
+      this.key = null;
+    } else {
+      _setKey.call(this, key);
     }
   }
-
-  // ¯\_(ツ)_/¯ who knows where it's gone lol
-  this.key = null;
-}
-
-function _resyncList(this: NodePath<t.Node | null>) {
-  if (!this.parent || !this.inList) return;
-
-  const newContainer =
-    // @ts-expect-error this.listKey should present in this.parent
-    this.parent[this.listKey];
-  if (this.container === newContainer) return;
-
-  // container is out of sync. this is likely the result of it being reassigned
-  this.container = newContainer || null;
 }
 
 export function popContext(this: NodePath<t.Node | null>) {
