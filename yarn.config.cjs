@@ -100,6 +100,59 @@ function enforceType({ Yarn }) {
 }
 
 /**
+ * Enforces that dependencies used by multiple packages use a catalog range,
+ * instead of a plain semver range.
+ * @param {Context} context
+ */
+function enforceDependenciesCatalog({ Yarn }) {
+  const packageDependencies = Yarn.dependencies().filter(
+    dependency =>
+      dependency.workspace.cwd !== "." &&
+      // Ignore peerDependencies, since changing them is a breaking change
+      dependency.type !== "peerDependencies" &&
+      // Allow link/workspace dependencies to be used as-is, without the catalog
+      !(
+        dependency.range.startsWith("workspace:") ||
+        dependency.range.startsWith("catalog:") ||
+        dependency.range.startsWith("link:")
+      ) &&
+      // internal packages often have old dependencies for testing, dont require
+      // a catalog for them.
+      !dependency.workspace.ident?.startsWith("@babel-internal/")
+  );
+
+  const workspacesByDep = new Map();
+  for (const dependency of packageDependencies) {
+    let workspaces = workspacesByDep.get(dependency.ident);
+    if (!workspaces) {
+      workspaces = new Set();
+      workspacesByDep.set(dependency.ident, workspaces);
+    }
+    workspaces.add(dependency.workspace.ident);
+  }
+
+  for (const dependency of packageDependencies) {
+    const workspaces = workspacesByDep.get(dependency.ident);
+    if (workspaces.size < 2) {
+      continue;
+    }
+
+    if (
+      dependency.range.startsWith("workspace:") ||
+      dependency.range.startsWith("catalog:") ||
+      dependency.range.startsWith("link:")
+    ) {
+      continue;
+    }
+
+    dependency.error(
+      `"${dependency.ident}" is used by multiple packages (${[...workspaces].join(", ")}).` +
+        ` Dependencies used by multiple packages must use a Yarn catalog: add it to .yarnrc.yml.`
+    );
+  }
+}
+
+/**
  * Enforces that a dependency doesn't appear in both `dependencies` and `devDependencies`
  * @param {Context} context
  */
@@ -256,6 +309,7 @@ module.exports = {
     enforceMainAndTypes(ctx);
     enforceType(ctx);
     enforceExportsAndTypes(ctx);
+    enforceDependenciesCatalog(ctx);
     enforceNoDualTypeDependencies(ctx);
     enforceBabelHelperBabelDeps(ctx);
     if (process.env.BABEL_CORE_DEV_DEP_VERSION) {
