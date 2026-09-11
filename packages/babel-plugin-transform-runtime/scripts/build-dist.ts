@@ -28,23 +28,20 @@ function outputFile(filePath: string, data: string) {
   fs.writeFileSync(filePath, data);
 }
 
-function corejsVersion(pkgName: string, depName: string) {
-  return JSON.parse(
-    fs.readFileSync(
-      new URL(`../../${pkgName}/package.json`, import.meta.url),
-      "utf-8"
-    )
-  ).dependencies[depName];
-}
-
 writeHelpers("@babel/runtime");
 writeHelpers("@babel/runtime-corejs3", {
   polyfillProvider: [
     polyfillCorejs3,
     {
       method: "usage-pure",
-      version: corejsVersion("babel-runtime-corejs3", "core-js-pure"),
       proposals: true,
+      // We could use a Yaml parser, but we fully control the file so ¯\_(ツ)_/¯
+      version: /core-js-pure:\s*(\S+)/.exec(
+        fs.readFileSync(
+          new URL(`../../../.yarnrc.yml`, import.meta.url),
+          "utf-8"
+        )
+      )![1],
     },
   ],
 });
