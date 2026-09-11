@@ -41,11 +41,16 @@ export function getUsageInBody(
   const seen = new WeakSet<t.Node>();
 
   let capturedInClosure = false;
+  // References to the binding that occur inside a closure created in the
+  // loop head (e.g. `for (let i = 0, f = () => i; ...)`). Per spec, such a
+  // closure captures the one-time environment used to evaluate the head,
+  // which is never touched again once the per-iteration environments are
+  // created, so these references must not be treated as regular in-body
+  // usages of the per-iteration binding.
+  const headClosureCaptures: NodePath<t.Identifier>[] = [];
 
   const constantViolations = filterMap(binding.constantViolations, path => {
-    const { inBody, inClosure } = relativeLoopLocation(path, loopPath);
-    if (!inBody) return null;
-    capturedInClosure ||= inClosure;
+    const { inBody, inHead, inClosure } = relativeLoopLocation(path, loopPath);
 
     const id = path.isUpdateExpression()
       ? path.get("argument")
@@ -53,13 +58,26 @@ export function getUsageInBody(
         ? path.get("left")
         : null;
     if (id) seen.add(id.node);
+
+    if (inHead && inClosure) {
+      if (id) headClosureCaptures.push(id as NodePath<t.Identifier>);
+      return null;
+    }
+    if (!inBody) return null;
+    capturedInClosure ||= inClosure;
+
     return id as NodePath<t.Identifier> | null;
   });
 
   const references = filterMap(binding.referencePaths, path => {
     if (seen.has(path.node)) return null;
 
-    const { inBody, inClosure } = relativeLoopLocation(path, loopPath);
+    const { inBody, inHead, inClosure } = relativeLoopLocation(path, loopPath);
+
+    if (inHead && inClosure) {
+      headClosureCaptures.push(path as NodePath<t.Identifier>);
+      return null;
+    }
     if (!inBody) return null;
     capturedInClosure ||= inClosure;
 
@@ -70,11 +88,13 @@ export function getUsageInBody(
     capturedInClosure,
     hasConstantViolations: constantViolations.length > 0,
     usages: references.concat(constantViolations),
+    headClosureCaptures,
   };
 }
 
 function relativeLoopLocation(path: NodePath, loopPath: NodePath<t.Loop>) {
   const bodyPath = loopPath.get("body");
+  const headPath = loopPath.isForStatement() ? loopPath.get("init") : null;
   let inClosure = false;
 
   for (let currPath = path; currPath; currPath = currPath.parentPath) {
@@ -82,9 +102,11 @@ function relativeLoopLocation(path: NodePath, loopPath: NodePath<t.Loop>) {
       inClosure = true;
     }
     if (currPath === bodyPath) {
-      return { inBody: true, inClosure };
+      return { inBody: true, inHead: false, inClosure };
+    } else if (headPath && currPath === headPath) {
+      return { inBody: false, inHead: true, inClosure };
     } else if (currPath === loopPath) {
-      return { inBody: false, inClosure };
+      return { inBody: false, inHead: false, inClosure };
     }
   }
 
