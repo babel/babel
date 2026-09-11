@@ -14,7 +14,8 @@ export default function _iterableToArrayLimit<T>(arr: Iterable<T>, i: number) {
     Array.isArray(arr) &&
     (iterator == null ||
       (iterator as unknown) ===
-        (typeof Symbol !== "undefined" && Array.prototype[Symbol.iterator]))
+        (typeof Symbol !== "undefined" && [][Symbol.iterator]) ||
+      (iterator as unknown) === ([] as any)["@@iterator"])
   ) {
     return arr as unknown as T[];
   }

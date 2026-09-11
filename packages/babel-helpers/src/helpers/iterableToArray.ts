@@ -10,8 +10,8 @@ export default function _iterableToArray<T>(iter: Iterable<T>) {
   if (
     Array.isArray(iter) &&
     (iterator == null ||
-      iterator ===
-        (typeof Symbol !== "undefined" && Array.prototype[Symbol.iterator]))
+      iterator === (typeof Symbol !== "undefined" && [][Symbol.iterator]) ||
+      iterator === ([] as any)["@@iterator"])
   ) {
     return iter as T[];
   }

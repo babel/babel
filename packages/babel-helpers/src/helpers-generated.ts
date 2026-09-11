@@ -100,10 +100,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 142, gzip size: 130
+  // size: 165, gzip size: 137
   arrayWithHoles: helper(
     "7.0.0-beta.0",
-    'function _arrayWithHoles(r){if(Array.isArray(r)&&("undefined"==typeof Symbol||r[Symbol.iterator]===Array.prototype[Symbol.iterator]))return r}',
+    'function _arrayWithHoles(r){if(Array.isArray(r)&&("undefined"==typeof Symbol||r[Symbol.iterator]===[][Symbol.iterator])&&r["@@iterator"]===[]["@@iterator"])return r}',
     {
       globals: ["Array", "Symbol"],
       locals: { _arrayWithHoles: ["body.0.id"] },
@@ -807,10 +807,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 292, gzip size: 204
+  // size: 301, gzip size: 206
   iterableToArray: helper(
     "7.0.0-beta.0",
-    'function _iterableToArray(r){var e="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(Array.isArray(r)&&(null==e||e===("undefined"!=typeof Symbol&&Array.prototype[Symbol.iterator])))return r;if(null!=e){for(var t,o=[],a=e.call(r);!(t=a.next()).done;)o.push(t.value);return o}}',
+    'function _iterableToArray(r){var e="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(Array.isArray(r)&&(null==e||e===("undefined"!=typeof Symbol&&[][Symbol.iterator])||e===[]["@@iterator"]))return r;if(null!=e){for(var t,o=[],a=e.call(r);!(t=a.next()).done;)o.push(t.value);return o}}',
     {
       globals: ["Symbol", "Array"],
       locals: { _iterableToArray: ["body.0.id"] },
@@ -820,10 +820,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 524, gzip size: 329
+  // size: 533, gzip size: 330
   iterableToArrayLimit: helper(
     "7.0.0-beta.0",
-    'function _iterableToArrayLimit(r,t){var e=null==r?null:"undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(Array.isArray(r)&&(null==e||e===("undefined"!=typeof Symbol&&Array.prototype[Symbol.iterator])))return r;if(null!=e){var l,n,i,a,o=[],u=!0,f=!1;try{if(i=(e=e.call(r)).next,0===t){if(Object(e)!==e)return;u=!1}else for(;!(u=(l=i.call(e)).done)&&(o.push(l.value),o.length!==t);u=!0);}catch(r){f=!0,n=r}finally{try{if(!u&&null!=e.return&&(a=e.return(),Object(a)!==a))return}finally{if(f)throw n}}return o}}',
+    'function _iterableToArrayLimit(r,t){var e=null==r?null:"undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(Array.isArray(r)&&(null==e||e===("undefined"!=typeof Symbol&&[][Symbol.iterator])||e===[]["@@iterator"]))return r;if(null!=e){var l,n,i,a,u=[],o=!0,f=!1;try{if(i=(e=e.call(r)).next,0===t){if(Object(e)!==e)return;o=!1}else for(;!(o=(l=i.call(e)).done)&&(u.push(l.value),u.length!==t);o=!0);}catch(r){f=!0,n=r}finally{try{if(!o&&null!=e.return&&(a=e.return(),Object(a)!==a))return}finally{if(f)throw n}}return u}}',
     {
       globals: ["Symbol", "Array", "Object"],
       locals: { _iterableToArrayLimit: ["body.0.id"] },
