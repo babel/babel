@@ -684,7 +684,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
     browserslist: "npm:^4.24.0"
-    lru-cache: "npm:^11.0.0"
+    flru: "npm:1.0.2"
     verkit: "catalog:"
   languageName: unknown
   linkType: soft
@@ -1106,8 +1106,8 @@ __metadata:
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
     "@jridgewell/trace-mapping": "catalog:"
+    flru: "npm:1.0.2"
     jest-diff: "npm:^30.0.0"
-    lru-cache: "npm:^11.0.0"
     resolve: "npm:2.0.0-next.5"
   languageName: unknown
   linkType: soft
@@ -10470,6 +10470,13 @@ __metadata:
   version: 3.4.2
   resolution: "flatted@npm:3.4.2"
   checksum: 10/a9e78fe5c2c1fcd98209a015ccee3a6caa953e01729778e83c1fe92e68601a63e1e69cd4e573010ca99eaf585a581b80ccf1018b99283e6cbc2117bcba1e030f
+  languageName: node
+  linkType: hard
+
+"flru@npm:1.0.2":
+  version: 1.0.2
+  resolution: "flru@npm:1.0.2"
+  checksum: 10/eb83ad671537f0f42fc658704d1f137bcb7bd65c1c41cb01ddc1dcf298fe601e06a9dc93f6f492e0c761a2c027ddd2a9c267b503af66da663937ed4d17db61b7
   languageName: node
   linkType: hard
 
