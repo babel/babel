@@ -1,84 +1,59 @@
-import assert from "node:assert";
 import { types as t } from "@babel/core";
 
-const mMap = new WeakMap();
-function m(node: t.Node) {
-  if (!mMap.has(node)) {
-    mMap.set(node, {});
-  }
-  return mMap.get(node);
-}
-
-function makePredicate(
-  propertyName: string,
-  knownTypes: Record<string, boolean>,
-) {
-  function onlyChildren(node: t.Node): boolean {
-    t.assertNode(node);
-
-    // Assume no side effects until we find out otherwise.
-    let result = false;
-
-    function check(child: any) {
-      if (result) {
-        // Do nothing.
-      } else if (Array.isArray(child)) {
-        child.some(check);
-      } else if (t.isNode(child)) {
-        assert.strictEqual(result, false);
-        result = predicate(child);
-      }
-      return result;
-    }
-
-    const keys = t.VISITOR_KEYS[node.type];
-    if (keys) {
-      for (let i = 0; i < keys.length; i++) {
-        const key = keys[i];
-        const child = node[key as keyof typeof node];
-        check(child);
-      }
-    }
-
-    return result;
-  }
-
-  function predicate(node: t.Node) {
-    t.assertNode(node);
-
-    const meta = m(node);
-    if (Object.hasOwn(meta, propertyName)) return meta[propertyName];
-
-    // Certain types are "opaque," which means they have no side
-    // effects or leaps and we don't care about their subexpressions.
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    if (Object.hasOwn(opaqueTypes, node.type))
-      return (meta[propertyName] = false);
-
-    if (Object.hasOwn(knownTypes, node.type))
-      return (meta[propertyName] = true);
-
-    return (meta[propertyName] = onlyChildren(node));
-  }
-
-  predicate.onlyChildren = onlyChildren;
-
-  return predicate;
-}
-
-const opaqueTypes = {
-  FunctionExpression: true,
-  ArrowFunctionExpression: true,
-};
-
 // These types are the direct cause of all leaps in control flow.
-const leapTypes = {
-  YieldExpression: true,
-  AwaitExpression: true,
-  BreakStatement: true,
-  ContinueStatement: true,
-  ReturnStatement: true,
-  ThrowStatement: true,
-};
+const leapTypes = new Set([
+  "YieldExpression",
+  "AwaitExpression",
+  "BreakStatement",
+  "ContinueStatement",
+  "ReturnStatement",
+  "ThrowStatement",
+]);
 
-export const containsLeap = makePredicate("containsLeap", leapTypes);
+export function containsLeap(node: t.Node | null): boolean {
+  if (!node) return false;
+
+  // Functions are "opaque" which means they have no leaps and we don't care
+  // about their subexpressions.
+  if (
+    node.type === "FunctionExpression" ||
+    node.type === "ArrowFunctionExpression"
+  ) {
+    return false;
+  }
+
+  if (leapTypes.has(node.type)) return true;
+
+  return containsLeapInChildren(node);
+}
+
+const containsLeapInChildrenCache = new WeakMap<t.Node, boolean>();
+
+export function containsLeapInChildren(node: t.Node): boolean {
+  if (containsLeapInChildrenCache.has(node)) {
+    return containsLeapInChildrenCache.get(node)!;
+  }
+
+  const keys = t.VISITOR_KEYS[node.type];
+  if (keys) {
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const child = node[key as keyof typeof node] as unknown as
+        t.Node | t.Node[];
+      if (Array.isArray(child)) {
+        if (child.some(containsLeap)) {
+          containsLeapInChildrenCache.set(node, true);
+          return true;
+        }
+      } else if (t.isNode(child)) {
+        if (containsLeap(child)) {
+          containsLeapInChildrenCache.set(node, true);
+          return true;
+        }
+      }
+    }
+  }
+
+  containsLeapInChildrenCache.set(node, false);
+  return false;
+}
