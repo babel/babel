@@ -499,7 +499,7 @@ __metadata:
   resolution: "@babel/eslint-plugin-development-internal@workspace:eslint/babel-eslint-plugin-development-internal"
   dependencies:
     eslint: "catalog:dev"
-    eslint-plugin-import: "npm:^2.31.0"
+    eslint-plugin-import: "catalog:dev"
   peerDependencies:
     eslint: ^9.0.0 || ^10.0.0
     eslint-plugin-import: ^2.31.0
@@ -560,7 +560,7 @@ __metadata:
     "@babel/preset-react": "workspace:^"
     dedent: "catalog:dev"
     eslint: "catalog:dev"
-    eslint-plugin-import: "npm:^2.31.0"
+    eslint-plugin-import: "catalog:dev"
     globals: "npm:^15.9.0"
     npm-babel-parser: "npm:@babel/parser@^7.14.0"
   languageName: unknown
@@ -7623,7 +7623,7 @@ __metadata:
     eslint-config-prettier: "npm:^10.1.8"
     eslint-formatter-codeframe: "npm:^7.32.1"
     eslint-import-resolver-node: "npm:^0.4.0"
-    eslint-plugin-import: "npm:^2.32.0"
+    eslint-plugin-import: "catalog:dev"
     eslint-plugin-jest: "npm:^29.15.0"
     eslint-plugin-n: "npm:^17.24.0"
     eslint-plugin-regexp: "npm:^3.0.0"
@@ -9702,7 +9702,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-import@npm:^2.31.0, eslint-plugin-import@npm:^2.32.0":
+"eslint-plugin-import@npm:^2.32.0":
   version: 2.32.0
   resolution: "eslint-plugin-import@npm:2.32.0"
   dependencies:

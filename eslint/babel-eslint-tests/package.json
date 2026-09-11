@@ -14,7 +14,7 @@
     "@babel/preset-react": "workspace:^",
     "dedent": "catalog:dev",
     "eslint": "catalog:dev",
-    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-import": "catalog:dev",
     "globals": "^15.9.0",
     "npm-babel-parser": "npm:@babel/parser@^7.14.0"
   },

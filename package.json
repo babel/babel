@@ -56,7 +56,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-formatter-codeframe": "^7.32.1",
     "eslint-import-resolver-node": "^0.4.0",
-    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-import": "catalog:dev",
     "eslint-plugin-jest": "^29.15.0",
     "eslint-plugin-n": "^17.24.0",
     "eslint-plugin-regexp": "^3.0.0",
