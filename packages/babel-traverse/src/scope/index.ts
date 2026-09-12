@@ -10,6 +10,7 @@ import {
   assignmentExpression,
   cloneNode,
   getBindingIdentifiers,
+  traverseBindingIdentifiers,
   identifier,
   isArrayExpression,
   isBinary,
@@ -49,6 +50,7 @@ import {
   isPrivateName,
   isExportDeclaration,
   sequenceExpression,
+  traverseAssignmentIdentifiers,
 } from "@babel/types";
 import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache.ts";
@@ -324,10 +326,10 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
         binding?.reference(path);
       } else if (isVariableDeclaration(declar)) {
         for (const decl of declar.declarations) {
-          for (const name of Object.keys(getBindingIdentifiers(decl))) {
-            const binding = scope.getBinding(name);
+          traverseBindingIdentifiers(decl, function (id) {
+            const binding = scope.getBinding(id.name);
             binding?.reference(path);
-          }
+          });
         }
       }
     },
@@ -734,10 +736,9 @@ class Scope {
   }
 
   registerConstantViolation(path: NodePath<t.Node>) {
-    const ids = path.getAssignmentIdentifiers();
-    for (const name of Object.keys(ids)) {
-      this.getBinding(name)?.reassign(path);
-    }
+    traverseAssignmentIdentifiers(path.node, function (id) {
+      path.scope.getBinding(id.name)?.reassign(path);
+    });
   }
 
   registerBinding(
@@ -756,18 +757,18 @@ class Scope {
     }
 
     const parent = this.getProgramParent();
-    const ids = path.getOuterBindingIdentifiers(true);
+    traverseBindingIdentifiers(
+      path.node,
+      id => {
+        const name = id.name;
+        parent.referencesSet.add(name);
 
-    for (const name of Object.keys(ids)) {
-      parent.referencesSet.add(name);
-
-      for (const id of ids[name]) {
         const local = this.getOwnBinding(name);
 
         if (local) {
           // same identifier so continue safely as we're likely trying to register it
           // multiple times
-          if (local.identifier === id) continue;
+          if (local.identifier === id) return;
 
           this.checkBlockScopedCollisions(local, kind, name, id);
         }
@@ -783,8 +784,9 @@ class Scope {
             kind: kind,
           });
         }
-      }
-    }
+      },
+      true,
+    );
   }
 
   addGlobal(node: t.Identifier | t.JSXIdentifier) {
@@ -994,14 +996,15 @@ class Scope {
     // register assignments
     for (const path of state.assignments) {
       // register undeclared bindings as globals
-      const ids = path.getAssignmentIdentifiers();
-      for (const name of Object.keys(ids)) {
-        if (path.scope.getBinding(name)) continue;
-        programParent.addGlobal(ids[name]);
-      }
-
-      // register as constant violation
-      path.scope.registerConstantViolation(path);
+      traverseAssignmentIdentifiers(path.node, function (id) {
+        const binding = path.scope.getBinding(id.name);
+        if (binding) {
+          // register as constant violation
+          binding.reassign(path);
+          return;
+        }
+        programParent.addGlobal(id);
+      });
     }
 
     // register references
