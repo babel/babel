@@ -12,8 +12,9 @@ export function isGlobalType({ scope }: NodePath, name: string) {
       `never encountered it as a TypeScript type declaration.\n` +
       `It will be treated as a JavaScript value.\n\n` +
       `This problem is likely caused by another plugin injecting\n` +
-      `"${name}" without registering it in the scope tracker. If you are the author\n` +
-      ` of that plugin, please use "scope.registerDeclaration(declarationPath)".`,
+      `"${name}" without registering it in the scope tracker, or by a limitation\n` +
+      `of @babel/plugin-transform-typescript when handling exported enums. If you are\n` +
+      `the author of that plugin, please use "scope.registerDeclaration(declarationPath)".`,
   );
 
   return false;
