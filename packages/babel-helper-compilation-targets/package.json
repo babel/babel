@@ -28,7 +28,7 @@
     "@babel/compat-data": "workspace:^",
     "@babel/helper-validator-option": "workspace:^",
     "browserslist": "^4.24.0",
-    "flru": "1.0.2",
+    "flru": "catalog:",
     "verkit": "catalog:"
   },
   "devDependencies": {

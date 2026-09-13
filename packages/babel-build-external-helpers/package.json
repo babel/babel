@@ -19,7 +19,7 @@
     "external-helpers"
   ],
   "dependencies": {
-    "commander": "^14.0.2"
+    "commander": "catalog:"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0"

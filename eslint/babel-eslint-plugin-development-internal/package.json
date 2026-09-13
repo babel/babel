@@ -20,8 +20,8 @@
     "eslint-plugin-import": "^2.31.0"
   },
   "devDependencies": {
-    "eslint": "^10.0.0",
-    "eslint-plugin-import": "^2.31.0"
+    "eslint": "catalog:babel-eslint",
+    "eslint-plugin-import": "catalog:babel-eslint"
   },
   "type": "module",
   "exports": {

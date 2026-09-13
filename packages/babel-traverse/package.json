@@ -22,7 +22,7 @@
     "@babel/parser": "workspace:^",
     "@babel/template": "workspace:^",
     "@babel/types": "workspace:^",
-    "obug": "^2.1.1"
+    "obug": "catalog:"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",

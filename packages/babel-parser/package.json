@@ -42,7 +42,7 @@
     "@babel/helper-fixtures": "workspace:^",
     "@babel/helper-string-parser": "workspace:^",
     "@babel/helper-validator-identifier": "workspace:^",
-    "charcodes": "^0.2.0",
+    "charcodes": "catalog:dev",
     "typescript": "catalog:dev"
   },
   "bin": "./bin/babel-parser.js",
