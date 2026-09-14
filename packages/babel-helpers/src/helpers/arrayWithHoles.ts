@@ -9,8 +9,8 @@ export default function _arrayWithHoles<T>(arr: T[]) {
     if (arrayIterator !== [][Symbol.iterator]) return;
   }
   if (!arrayIterator) {
-    arrayIterator = arr["@@iterator"];
-    if (arrayIterator && arrayIterator !== []["@@iterator"]) return;
+    arrayIterator = (arr as any)["@@iterator"];
+    if (arrayIterator && arrayIterator !== ([] as any)["@@iterator"]) return;
   }
   return arr;
 }
