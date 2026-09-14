@@ -1531,12 +1531,10 @@ export default abstract class Tokenizer extends CommentsParser {
 
   errorHandlers_readInt: IntErrorHandlers = {
     invalidDigit: (pos, lineStart, curLine, radix) => {
-      if (!(this.optionFlags & OptionFlags.ErrorRecovery)) return false;
-
       this.raise(Errors.InvalidDigit, buildPosition(pos, lineStart, curLine), {
         radix,
       });
-      // Continue parsing the number as if there was no invalid digit.
+      // Continue parsing the number in error recovery mode as if there was no invalid digit.
       return true;
     },
     numericSeparatorInEscapeSequence: this.errorBuilder(
