@@ -1534,8 +1534,6 @@ export default abstract class Tokenizer extends CommentsParser {
       this.raise(Errors.InvalidDigit, buildPosition(pos, lineStart, curLine), {
         radix,
       });
-      // Continue parsing the number in error recovery mode as if there was no invalid digit.
-      return true;
     },
     numericSeparatorInEscapeSequence: this.errorBuilder(
       Errors.NumericSeparatorInEscapeSequence,
