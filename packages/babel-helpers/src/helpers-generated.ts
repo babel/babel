@@ -100,10 +100,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 165, gzip size: 137
+  // size: 188, gzip size: 150
   arrayWithHoles: helper(
     "7.0.0-beta.0",
-    'function _arrayWithHoles(r){if(Array.isArray(r)&&("undefined"==typeof Symbol||r[Symbol.iterator]===[][Symbol.iterator])&&r["@@iterator"]===[]["@@iterator"])return r}',
+    'function _arrayWithHoles(r){var t;if(Array.isArray(r)&&("undefined"==typeof Symbol||(t=r[Symbol.iterator])===[][Symbol.iterator])&&(t||!(t=r["@@iterator"])||t===[]["@@iterator"]))return r}',
     {
       globals: ["Array", "Symbol"],
       locals: { _arrayWithHoles: ["body.0.id"] },
