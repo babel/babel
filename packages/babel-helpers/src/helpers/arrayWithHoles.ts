@@ -2,12 +2,15 @@
 
 export default function _arrayWithHoles<T>(arr: T[]) {
   // Protect against arrays (or proxies) with a custom iterator
-  if (
-    Array.isArray(arr) &&
-    (typeof Symbol === "undefined" ||
-      arr[Symbol.iterator] === [][Symbol.iterator]) &&
-    (arr as any)["@@iterator"] === ([] as any)["@@iterator"]
-  ) {
-    return arr;
+  var arrayIterator;
+  if (!Array.isArray(arr)) return;
+  if (typeof Symbol !== "undefined") {
+    arrayIterator = arr[Symbol.iterator];
+    if (arrayIterator !== [][Symbol.iterator]) return;
   }
+  if (!arrayIterator) {
+    arrayIterator = arr["@@iterator"];
+    if (arrayIterator && arrayIterator !== []["@@iterator"]) return;
+  }
+  return arr;
 }
