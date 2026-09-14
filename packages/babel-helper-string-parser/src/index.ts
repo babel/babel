@@ -298,14 +298,12 @@ export type IntErrorHandlers = {
     lineStart: number,
     curLine: number,
   ): void;
-  // It can return "true" to indicate that the error was handled
-  // and the int parsing should continue.
   invalidDigit(
     pos: number,
     lineStart: number,
     curLine: number,
     radix: number,
-  ): boolean;
+  ): void;
 };
 
 export function readInt(
@@ -375,12 +373,9 @@ export function readInt(
     if (val >= radix) {
       // If we found a digit which is too big, errors.invalidDigit can return true to avoid
       // breaking the loop (this is used for error recovery).
-      if (val <= 9 && bailOnError) {
-        return { n: null, pos };
-      } else if (
-        val <= 9 &&
-        errors.invalidDigit(pos, lineStart, curLine, radix)
-      ) {
+      if (val <= 9) {
+        if (bailOnError) return { n: null, pos };
+        errors.invalidDigit(pos, lineStart, curLine, radix);
         val = 0;
       } else if (forceLen) {
         val = 0;
