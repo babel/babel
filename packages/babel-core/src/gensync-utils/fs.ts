@@ -6,7 +6,7 @@ export const readFile = gensync<[filepath: string, encoding: "utf8"], string>({
   errback: fs.readFile,
 });
 
-export const stat = gensync({
+export const stat = gensync<[filepath: string], fs.Stats>({
   sync: fs.statSync,
   errback: fs.stat,
 });

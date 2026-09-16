@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "postinstall": "node scripts/postinstall.ts",
+    "postinstall": "node scripts/postinstall.mjs",
     "bootstrap": "make bootstrap",
     "codesandbox:build": "make build-no-bundle",
     "build": "make build",
