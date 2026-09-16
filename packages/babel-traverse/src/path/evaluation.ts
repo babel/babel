@@ -267,7 +267,10 @@ function _evaluate(path: NodePath, state: State): any {
     }
 
     const bindingPath = binding.path;
-    if (!bindingPath.isVariableDeclarator()) {
+    if (
+      !bindingPath.isVariableDeclarator() ||
+      !bindingPath.get("id").isIdentifier()
+    ) {
       deopt(bindingPath, state);
       return;
     }

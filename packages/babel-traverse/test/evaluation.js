@@ -471,4 +471,67 @@ describe("evaluation", function () {
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
+
+  describe("destructuring deopt", function () {
+    it("should deopt object pattern destructured bindings with single reference", function () {
+      const path = getPath(`
+        const O = { e: 80 };
+        function f() {
+          const { e } = O;
+          return e;
+        }
+      `);
+      const evalResult = path.get("body.1.body.body.1.argument").evaluate();
+      expect(evalResult.confident).toBe(false);
+    });
+
+    it("should deopt array pattern destructured bindings", function () {
+      const path = getPath(`
+        const arr = [1, 2];
+        const [a] = arr;
+        a;
+      `);
+      const evalResult = path.get("body.2.expression").evaluate();
+      expect(evalResult.confident).toBe(false);
+    });
+
+    it("should deopt destructured binding with a primitive init", function () {
+      const path = getPath(`
+        const { length } = "hello";
+        length;
+      `);
+      const evalResult = path.get("body.1.expression").evaluate();
+      expect(evalResult.confident).toBe(false);
+    });
+
+    it("should deopt destructuring with a default value", function () {
+      const path = getPath(`
+        const O = { e: 80 };
+        const { e = 1 } = O;
+        e;
+      `);
+      const evalResult = path.get("body.2.expression").evaluate();
+      expect(evalResult.confident).toBe(false);
+    });
+
+    it("should deopt nested destructuring", function () {
+      const path = getPath(`
+        const O = { a: { b: 2 } };
+        const { a: { b } } = O;
+        b;
+      `);
+      const evalResult = path.get("body.2.expression").evaluate();
+      expect(evalResult.confident).toBe(false);
+    });
+
+    it("should evaluate non-destructured bindings", function () {
+      const path = getPath(`
+        const foo = 5;
+        foo + foo;
+      `);
+      const evalResult = path.get("body.1.expression").evaluate();
+      expect(evalResult.confident).toBe(true);
+      expect(evalResult.value).toBe(10);
+    });
+  });
 });
