@@ -2200,17 +2200,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       while (stack.length !== 0) {
         const node = stack.pop()!;
-        if (
-          node.type === "ArrowFunctionExpression" &&
-          node.body.type !== "BlockStatement"
-        ) {
+        if (node.type === "ArrowFunctionExpression") {
           if (node.typeParameters || !node.returnType) {
             // This is an arrow expression without ambiguity, so check its parameters
             this.finishArrowValidation(node);
           } else {
             arrows.push(node);
           }
-          stack.push(node.body);
+          if (node.body.type !== "BlockStatement") {
+            stack.push(node.body);
+          }
         } else if (node.type === "ConditionalExpression") {
           stack.push(node.consequent);
           stack.push(node.alternate);

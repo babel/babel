@@ -1,6 +1,6 @@
 {
   "name": "@babel/parser",
-  "version": "8.0.4",
+  "version": "8.0.5",
   "description": "A JavaScript parser",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-parser",
@@ -42,7 +42,7 @@
     "@babel/helper-fixtures": "workspace:^",
     "@babel/helper-string-parser": "workspace:^",
     "@babel/helper-validator-identifier": "workspace:^",
-    "charcodes": "^0.2.0",
+    "charcodes": "catalog:dev",
     "typescript": "catalog:dev"
   },
   "bin": "./bin/babel-parser.js",

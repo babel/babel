@@ -25,6 +25,57 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.5 (2026-09-10)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#18218](https://github.com/babel/babel/pull/18218) fix(parser): do not form html entity for invalid codepoint ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#18215](https://github.com/babel/babel/pull/18215) fix(parser): remove non-decimal prefix from bigint ([@JLHwung](https://github.com/JLHwung))
+  * [#18063](https://github.com/babel/babel/pull/18063) Disallow new import prop access ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-destructuring`
+  * [#18214](https://github.com/babel/babel/pull/18214) fix: only collapse the empty-object check when it targets the declared binding ([@Kjubikstronk](https://github.com/Kjubikstronk))
+* `babel-plugin-transform-typescript`
+  * [#18190](https://github.com/babel/babel/pull/18190) fix(ts): improve variable handling in namespace ([@JLHwung](https://github.com/JLHwung))
+  * [#18207](https://github.com/babel/babel/pull/18207) [ts] Allow merging `enum` into a `namespace` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-node`
+  * [#18217](https://github.com/babel/babel/pull/18217) Fix import path for babel-node.js ([@drubetti](https://github.com/drubetti))
+* `babel-plugin-bugfix-safari-rest-destructuring-rhs-array`
+  * [#18213](https://github.com/babel/babel/pull/18213) fix(bugfix): bound check before array access ([@JLHwung](https://github.com/JLHwung))
+* `babel-traverse`
+  * [#18183](https://github.com/babel/babel/pull/18183) fix(remove): unwrap single sequence expression ([@JLHwung](https://github.com/JLHwung))
+  * [#18153](https://github.com/babel/babel/pull/18153) Handle null in `getAll{Prev,Next}Siblings` ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-block-scoping`
+  * [#18194](https://github.com/babel/babel/pull/18194) fix: improve for loop closure environment check ([@JLHwung](https://github.com/JLHwung))
+  * [#18193](https://github.com/babel/babel/pull/18193) fix: assign closure body after handling return ([@JLHwung](https://github.com/JLHwung))
+  * [#18088](https://github.com/babel/babel/pull/18088) Fix initialization of nested for loop head declarations ([@journey-ad](https://github.com/journey-ad))
+* `babel-generator`
+  * [#18202](https://github.com/babel/babel/pull/18202) fix(generator): keep parens for ?. chain in tag ([@JLHwung](https://github.com/JLHwung))
+* `babel-register`
+  * [#18137](https://github.com/babel/babel/pull/18137) fix(babel-register): preserve app-managed graceful shutdown ([@jibin7jose](https://github.com/jibin7jose))
+* Other
+  * [#18140](https://github.com/babel/babel/pull/18140) chore: fix @babel/eslint-plugin peer deps ([@JLHwung](https://github.com/JLHwung))
+* `babel-cli`, `babel-helper-transform-fixture-test-runner`, `babel-register`
+  * [#18131](https://github.com/babel/babel/pull/18131) fix(register): do not inherit parent execArgv ([@JLHwung](https://github.com/JLHwung))
+* `babel-standalone`
+  * [#18095](https://github.com/babel/babel/pull/18095) Add types for `@babel/standalone` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+
+#### :memo: Documentation
+* [#18187](https://github.com/babel/babel/pull/18187) Add AI policy ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-cli`, `babel-core`, `babel-helper-compilation-targets`, `babel-helper-create-class-features-plugin`, `babel-helper-create-regexp-features-plugin`, `babel-helper-fixtures`, `babel-preset-env`
+  * [#18145](https://github.com/babel/babel/pull/18145) refactor: replace `semver` with `verkit` ([@sxzz](https://github.com/sxzz))
+* `babel-node`
+  * [#18177](https://github.com/babel/babel/pull/18177) Update node flags list ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-types`
+  * [#18103](https://github.com/babel/babel/pull/18103) Simplify AST validators ([@fisker](https://github.com/fisker))
+
+#### :running_woman: Performance
+* `babel-parser`
+  * [#18176](https://github.com/babel/babel/pull/18176) perf: Improve `@babel/parser` ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
 ## v8.0.4 (2026-07-09)
 
 #### :eyeglasses: Spec Compliance

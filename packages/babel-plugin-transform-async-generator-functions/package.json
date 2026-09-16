@@ -28,7 +28,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "babel-plugin-polyfill-corejs3": "catalog:",
-    "core-js-pure": "^3.48.0"
+    "core-js-pure": "catalog:"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"

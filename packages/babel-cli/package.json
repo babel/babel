@@ -1,6 +1,6 @@
 {
   "name": "@babel/cli",
-  "version": "8.0.4",
+  "version": "8.0.5",
   "description": "Babel command line.",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/babel-cli",
@@ -26,8 +26,8 @@
   "dependencies": {
     "@jridgewell/trace-mapping": "catalog:",
     "chokidar": "^5.0.0",
-    "commander": "^14.0.2",
-    "convert-source-map": "^2.0.0",
+    "commander": "catalog:",
+    "convert-source-map": "catalog:",
     "glob": "^13.0.0",
     "slash": "^5.1.0"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@babel/generator",
-  "version": "8.0.0",
+  "version": "8.0.5",
   "description": "Turns an AST into code.",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
@@ -31,7 +31,7 @@
     "@babel/helper-fixtures": "workspace:^",
     "@babel/plugin-transform-typescript": "workspace:^",
     "@jridgewell/sourcemap-codec": "catalog:dev",
-    "charcodes": "^0.2.0"
+    "charcodes": "catalog:dev"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"

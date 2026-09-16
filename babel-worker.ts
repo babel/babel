@@ -34,7 +34,7 @@ export async function transform(src: string, dest: string, opts: any = {}) {
   }
   log(`Compiling '${styleText("cyan", src)}'...`);
   const content = readFileSync(src, { encoding: "utf8" });
-  const { code, map } = (await transformAsync(content, {
+  const { code } = (await transformAsync(content, {
     filename: src,
     sourceFileName: path.relative(path.dirname(dest), src),
     caller: {
@@ -45,18 +45,7 @@ export async function transform(src: string, dest: string, opts: any = {}) {
     ...opts,
   }))!;
 
-  if (map) {
-    writeFileSync(
-      dest,
-      `${code}
-
-//# sourceMappingURL=${path.basename(dest)}.map
-`,
-      "utf8"
-    );
-    writeFileSync(dest + ".map", JSON.stringify(map), "utf8");
-  } else {
-    // @ts-expect-error code must not be for our project source
+  if (code) {
     writeFileSync(dest, code, "utf8");
   }
 }

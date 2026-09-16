@@ -331,7 +331,6 @@ if (process.env.CIRCLE_PR_NUMBER) {
 const babelVersion =
   require("./packages/babel-core/package.json").version + versionSuffix;
 function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
-  const sourcemap = process.env.NODE_ENV === "production";
   return Promise.all(
     packages.map(
       async ({
@@ -579,7 +578,6 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
               }),
             buildStandalone &&
               rollupPolyfillNode({
-                sourceMap: sourcemap,
                 include: "**/*.{js,mjs,cjs,ts}",
               }),
             // https://github.com/babel/babel/issues/14301
@@ -607,7 +605,6 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           format,
           importAttributesKey: "with",
           name,
-          sourcemap: sourcemap,
           exports: "named",
           interop(id) {
             if (!id) return "default";
@@ -665,7 +662,6 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           esModule: true,
           interop: "compat",
           name,
-          sourcemap: sourcemap,
           exports: "named",
           plugins: [
             rollupTerser({
