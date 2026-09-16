@@ -1,0 +1,72 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+          "test": {
+            "type": "Identifier",
+            "start":0,"end":1,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":1,"index":1},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "Identifier",
+            "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"b"},
+            "name": "b",
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 4
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start":10,"end":17,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":17,"index":17}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"c"},
+                "name": "c"
+              }
+            ],
+            "body": {
+              "type": "BlockStatement",
+              "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17}},
+              "body": [],
+              "directives": []
+            }
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? b : (c => {})",
+            "start":19,"end":39,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":39,"index":39}}
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " a ? b : (c => {})",
+      "start":19,"end":39,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":39,"index":39}}
+    }
+  ]
+}
