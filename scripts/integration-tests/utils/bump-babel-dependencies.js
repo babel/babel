@@ -29,10 +29,10 @@ if (process.argv[2] === "resolutions") {
     bumpBabelDependency("peerDependencies", "*");
   }
   if ("devDependencies" in content) {
-    bumpBabelDependency("devDependencies", "latest");
+    bumpBabelDependency("devDependencies", "7");
   }
   if ("dependencies" in content) {
-    bumpBabelDependency("dependencies", "latest");
+    bumpBabelDependency("dependencies", "7");
   }
 }
 
