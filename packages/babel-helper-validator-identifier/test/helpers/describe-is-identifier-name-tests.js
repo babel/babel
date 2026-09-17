@@ -29,6 +29,23 @@ export function describeIsIdentifierNameTests(isIdentifierNameImpl) {
     it("supports astral symbols", function () {
       expect(isIdentifierNameImpl("x\uDB40\uDDD5")).toBe(true);
     });
+    it("supports Unicode 18.0", () => {
+      // BMP ID_Start
+      expect(isIdentifierNameImpl("\u{0558}")).toBe(true);
+      expect(isIdentifierNameImpl("_\u{0558}")).toBe(true);
+      // BMP ID_Continue
+      expect(isIdentifierNameImpl("_\u{05c9}")).toBe(true);
+
+      // SMP ID_Start
+      expect(isIdentifierNameImpl("\u{107BB}")).toBe(true);
+      expect(isIdentifierNameImpl("_\u{107BB}")).toBe(true);
+      // SMP ID_Continue
+      expect(isIdentifierNameImpl("_\u{10ECB}")).toBe(true);
+
+      // UTF16 encoding of U+107BB = D801 DFBB
+      expect(isIdentifierNameImpl("\uD801")).toBe(false);
+      expect(isIdentifierNameImpl("\uDFBB")).toBe(false);
+    });
     it("supports Unicode 17.0", () => {
       // BMP ID_Start
       expect(isIdentifierNameImpl("\u{0c5c}")).toBe(true);
@@ -39,7 +56,6 @@ export function describeIsIdentifierNameTests(isIdentifierNameImpl) {
       // SMP ID_Start
       expect(isIdentifierNameImpl("\u{10940}")).toBe(true);
       expect(isIdentifierNameImpl("_\u{10940}")).toBe(true);
-
       // SMP ID_Continue
       expect(isIdentifierNameImpl("_\u{10efa}")).toBe(true);
 
@@ -57,7 +73,6 @@ export function describeIsIdentifierNameTests(isIdentifierNameImpl) {
       // SMP ID_Start
       expect(isIdentifierNameImpl("\u{105c0}")).toBe(true);
       expect(isIdentifierNameImpl("_\u{105c0}")).toBe(true);
-
       // SMP ID_Continue
       expect(isIdentifierNameImpl("_\u{10d40}")).toBe(true);
 
