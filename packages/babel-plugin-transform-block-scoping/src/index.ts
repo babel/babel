@@ -104,15 +104,15 @@ export default declare((api, opts: Options) => {
               // `for (let i = 0, f = () => i; ...)`) closes over the
               // one-time environment used to evaluate the head, which is
               // never updated again once the loop starts iterating. Give
-              // it its own binding, snapshotted once right after the
-              // head finishes evaluating, so later mutations of `name`
-              // inside the loop don't leak into it.
+              // it its own binding, snapshotted right after `name`'s own
+              // declarator runs, so later mutations of `name` (whether
+              // from the loop itself or from a later declarator in the
+              // same head, e.g. `y = f()`) don't leak into it.
               const frozenName = headScope.generateUid(name);
               for (const capturePath of headClosureCaptures) {
                 capturePath.replaceWith(t.identifier(frozenName));
               }
-              headPath.pushContainer(
-                "declarations",
+              binding.path.insertAfter(
                 t.variableDeclarator(
                   t.identifier(frozenName),
                   t.identifier(name),
