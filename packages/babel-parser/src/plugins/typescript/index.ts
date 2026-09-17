@@ -4643,6 +4643,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
      */
     fillOptionalPropertiesForTSESLint(node: N.Node): void {
       switch (node.type) {
+        case "ImportDeclaration":
+          node.phase ??= null;
+          return;
         case "ExpressionStatement":
           // @ts-expect-error TS-ESTree AST shape
           node.directive ??= undefined;
