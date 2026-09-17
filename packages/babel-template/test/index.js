@@ -59,6 +59,47 @@ describe("@babel/template", function () {
     `);
   });
 
+  it("should allow private fields outside class by default", function () {
+    expect(template.ast("this.#x = 1")).toMatchInlineSnapshot(`
+      Object {
+        "expression": Object {
+          "left": Object {
+            "computed": false,
+            "loc": undefined,
+            "object": Object {
+              "loc": undefined,
+              "type": "ThisExpression",
+            },
+            "property": Object {
+              "id": Object {
+                "loc": undefined,
+                "name": "x",
+                "type": "Identifier",
+              },
+              "loc": undefined,
+              "type": "PrivateName",
+            },
+            "type": "MemberExpression",
+          },
+          "loc": undefined,
+          "operator": "=",
+          "right": Object {
+            "extra": Object {
+              "raw": "1",
+              "rawValue": 1,
+            },
+            "loc": undefined,
+            "type": "NumericLiteral",
+            "value": 1,
+          },
+          "type": "AssignmentExpression",
+        },
+        "loc": undefined,
+        "type": "ExpressionStatement",
+      }
+    `);
+  });
+
   describe("string-based", () => {
     it("should handle replacing values from an object", () => {
       const value = t.stringLiteral("some string value");
