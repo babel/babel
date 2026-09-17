@@ -105,9 +105,8 @@ export default declare((api, opts: Options) => {
               // one-time environment used to evaluate the head, which is
               // never updated again once the loop starts iterating. Give
               // it its own binding, snapshotted right after `name`'s own
-              // declarator runs, so later mutations of `name` (whether
-              // from the loop itself or from a later declarator in the
-              // same head, e.g. `y = f()`) don't leak into it.
+              // declarator runs, so later mutations of `name` from the
+              // loop itself don't leak into it.
               const frozenName = headScope.generateUid(name);
               for (const capturePath of headClosureCaptures) {
                 capturePath.replaceWith(t.identifier(frozenName));
