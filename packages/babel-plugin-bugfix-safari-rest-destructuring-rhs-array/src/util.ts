@@ -3,9 +3,9 @@ import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expr
 
 /**
  * Check whether a path is an ArrayExpression with exactly N non-spread & non-hole elements and no trailing comma
- * @param path
- * @param N
- * @returns
+ *
+ * NOTE: When running `yarn knip`, this export is marked as unused. It's actually used
+ * in ../../test/util.skip-bundled.js.
  */
 export function isPathSimpleArrayWithLength(
   path: NodePath,

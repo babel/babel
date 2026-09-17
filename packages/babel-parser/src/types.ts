@@ -23,16 +23,6 @@ export interface CommentLine extends CommentBase {
 
 export type Comment = CommentBlock | CommentLine;
 
-// A whitespace containing comments
-export interface CommentWhitespace {
-  start: number;
-  end: number;
-  comments: Comment[];
-  leadingNode: N.Node | null;
-  trailingNode: N.Node | null;
-  containerNode: N.Node | null;
-}
-
 export type ExportedToken = Omit<Token, "type"> & { type: ExportedTokenType };
 
 export interface ParserOutput {
@@ -57,7 +47,7 @@ export interface BaseNode {
 // JSX
 // ================
 
-export type JSXElementTag = N.JSXOpeningElement | N.JSXClosingElement;
+type JSXElementTag = N.JSXOpeningElement | N.JSXClosingElement;
 export type JSXFragmentTag = N.JSXOpeningFragment | N.JSXClosingFragment;
 export type JSXTag = JSXElementTag | JSXFragmentTag;
 
@@ -168,14 +158,14 @@ export interface ParseClassMemberState {
 // ESTree
 // ================
 
-export type ESTreeNode =
+type ESTreeNode =
   | ESTreeClassElement
   | ESTreeExpression
   | EstreePrivateIdentifier
   | EstreeProperty
   | EstreeRegExpLiteral;
 
-export type ESTreeClassElement =
+type ESTreeClassElement =
   | EstreeAccessorProperty
   | EstreeMethodDefinition
   | EstreePropertyDefinition
@@ -183,7 +173,7 @@ export type ESTreeClassElement =
   | EstreeTSAbstractPropertyDefinition
   | EstreeTSAbstractAccessorProperty;
 
-export type ESTreeLiteral = EstreeLiteral | EstreeBigIntLiteral;
+type ESTreeLiteral = EstreeLiteral | EstreeBigIntLiteral;
 
 export type ESTreeExpression =
   EstreeChainExpression | ESTreeLiteral | EstreeTSEmptyBodyFunctionExpression;
@@ -309,21 +299,21 @@ export interface EstreeChainExpression extends BaseNode {
   expression: N.Expression;
 }
 
-export interface DeclarationBase extends BaseNode {
+interface DeclarationBase extends BaseNode {
   // TypeScript allows declarations to be prefixed by `declare`.
   //TODO: a FunctionDeclaration is never "declare", because it's a TSDeclareFunction instead.
   declare?: boolean;
 }
 
-export interface HasDecorators extends BaseNode {
+interface HasDecorators extends BaseNode {
   decorators?: N.Decorator[];
 }
 
-export interface TypeParameterDeclarationBase extends BaseNode {
+interface TypeParameterDeclarationBase extends BaseNode {
   params: (N.TypeParameter | N.TSTypeParameter)[];
 }
 
-export interface TypeAnnotationBase extends BaseNode {
+interface TypeAnnotationBase extends BaseNode {
   typeAnnotation: N.Node;
 }
 

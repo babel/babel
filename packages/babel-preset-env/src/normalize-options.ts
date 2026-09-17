@@ -48,6 +48,10 @@ const getValidIncludesAndExcludes = (
   return Array.from(set);
 };
 
+/*
+ * NOTE: When running `yarn knip`, this export is marked as unused. It's actually used
+ * in ../../test/normalize-options.skip-bundled.js.
+ */
 export const normalizePluginName = (plugin: string) =>
   plugin.replace(/^(?:@babel\/|babel-)(?:plugin-)?/, "");
 
@@ -91,6 +95,10 @@ const expandIncludesAndExcludes = (
   return selectedPlugins;
 };
 
+/*
+ * NOTE: When running `yarn knip`, this export is marked as unused. It's actually used
+ * in ../../test/normalize-options.skip-bundled.js.
+ */
 export const checkDuplicateIncludeExcludes = (
   include: string[] = [],
   exclude: string[] = [],
@@ -116,6 +124,10 @@ const normalizeTargets = (
   return { ...targets };
 };
 
+/*
+ * NOTE: When running `yarn knip`, this export is marked as unused. It's actually used
+ * in ../../test/normalize-options.skip-bundled.js.
+ */
 export const validateModulesOption = (
   modulesOpt: ModuleOption = ModulesOption.auto,
 ) => {
@@ -132,9 +144,7 @@ export const validateModulesOption = (
   return modulesOpt;
 };
 
-export const validateUseBuiltInsOption = (
-  builtInsOpt: BuiltInsOption = false,
-) => {
+const validateUseBuiltInsOption = (builtInsOpt: BuiltInsOption = false) => {
   v.invariant(
     // @ts-expect-error we have provided fallback for undefined keys
     UseBuiltInsOption[builtInsOpt.toString()] ||
@@ -153,7 +163,7 @@ export type NormalizedCorejsOption = {
   version: SemVer | null | false;
 };
 
-export function normalizeCoreJSOption(
+function normalizeCoreJSOption(
   corejs: CorejsOption | undefined | null,
   useBuiltIns: BuiltInsOption,
 ): NormalizedCorejsOption {
