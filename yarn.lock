@@ -1105,6 +1105,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-check-duplicate-nodes": "workspace:^"
     "@babel/helper-fixtures": "workspace:^"
+    "@jridgewell/sourcemap-codec": "catalog:dev"
     "@jridgewell/trace-mapping": "catalog:"
     flru: "catalog:"
     jest-diff: "npm:^30.0.0"
