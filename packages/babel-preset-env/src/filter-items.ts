@@ -1,4 +1,4 @@
-import { isLess } from "verkit";
+import { isLessThan } from "verkit";
 import { minVersions } from "./available-plugins.ts";
 
 export function addProposalSyntaxPlugins(
@@ -24,7 +24,7 @@ export function removeUnsupportedItems(
   items.forEach(item => {
     if (
       Object.hasOwn(minVersions, item) &&
-      isLess(
+      isLessThan(
         babelVersion,
         // @ts-expect-error we have checked minVersions[item] in has call
         minVersions[item],
