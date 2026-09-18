@@ -1,4 +1,4 @@
-import { isGreater, isValid } from "verkit";
+import { isGreaterThan, isValid } from "verkit";
 
 import pluginsCompatData from "@babel/compat-data/plugins" with { type: "json" };
 
@@ -46,7 +46,7 @@ export function targetsSupported(target: Targets, support: Targets) {
       );
     }
 
-    return isGreater(
+    return isGreaterThan(
       semverify(lowestImplementedVersion),
       lowestTargetedVersion.toString(),
     );

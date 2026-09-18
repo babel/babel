@@ -1,4 +1,4 @@
-import { isLess, isValid } from "verkit";
+import { isLessThan, isValid } from "verkit";
 import { OptionValidator } from "@babel/helper-validator-option";
 import { unreleasedLabels } from "./targets.ts";
 import type { Target, Targets } from "./types.d.ts";
@@ -12,7 +12,7 @@ export function semverMin(
   first: string | undefined | null,
   second: string,
 ): string {
-  return first && isLess(first, second) ? first : second;
+  return first && isLessThan(first, second) ? first : second;
 }
 
 // Convert version to a semver value.
