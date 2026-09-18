@@ -121,7 +121,7 @@ function enumFill(path: NodePath<t.TSEnumDeclaration>, t: t, id: t.Identifier) {
   };
 }
 
-export function isSyntacticallyString(expr: t.Expression): boolean {
+function isSyntacticallyString(expr: t.Expression): boolean {
   expr = skipTransparentExprWrapperNodes(expr);
   switch (expr.type) {
     case "BinaryExpression": {

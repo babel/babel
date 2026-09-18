@@ -14,10 +14,6 @@ export function hasOwnDecorators(node: t.Class | t.ClassBody["body"][number]) {
   return !!node.decorators?.length;
 }
 
-export function hasDecorators(node: t.Class) {
-  return hasOwnDecorators(node) || node.body.body.some(hasOwnDecorators);
-}
-
 import * as charCodes from "charcodes";
 
 type ClassDecoratableElement =

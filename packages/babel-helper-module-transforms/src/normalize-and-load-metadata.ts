@@ -53,7 +53,7 @@ export interface SourceModuleMetadata {
   referenced: boolean;
 }
 
-export interface LocalExportMetadata {
+interface LocalExportMetadata {
   names: string[]; // names of exports,
   kind: "import" | "hoisted" | "block" | "var";
 }

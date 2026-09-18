@@ -80,7 +80,7 @@ export class Token {
   declare loc: SourceLocation;
 }
 
-export let locDataCache: Uint32Array | undefined;
+let locDataCache: Uint32Array | undefined;
 
 // ## Tokenizer
 

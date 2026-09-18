@@ -974,7 +974,7 @@ export class Emitter {
     // break statement), then any sibling subexpressions will almost
     // certainly have to be exploded in order to maintain the order of their
     // side effects relative to the leaping child(ren).
-    const hasLeapingChildren = meta.containsLeap.onlyChildren(expr);
+    const hasLeapingChildren = meta.containsLeapInChildren(expr);
 
     // If ignoreResult is true, then we must take full responsibility for
     // emitting the expression with all its side effects, and we should not

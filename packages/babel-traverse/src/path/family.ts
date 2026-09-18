@@ -445,7 +445,7 @@ function get(
 
 export { get };
 
-export function _getKey<T extends t.Node>(
+function _getKey<T extends t.Node>(
   this: NodePath<T>,
   key: keyof T & string,
   context?: TraversalContext,
@@ -474,7 +474,7 @@ export function _getKey<T extends t.Node>(
   }
 }
 
-export function _getPattern(
+function _getPattern(
   this: NodePath,
   parts: string[],
   context?: TraversalContext,

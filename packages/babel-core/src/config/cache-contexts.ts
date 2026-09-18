@@ -4,8 +4,6 @@ import type {
   TargetsListOrObject,
 } from "./validation/options.ts";
 
-export type { ConfigContext as FullConfig };
-
 export type FullPreset = {
   targets: TargetsListOrObject;
 } & ConfigContext;

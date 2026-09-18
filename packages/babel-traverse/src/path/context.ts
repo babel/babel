@@ -1,7 +1,6 @@
 // This file contains methods responsible for maintaining a TraversalContext.
 
 import { SHOULD_SKIP, SHOULD_STOP } from "./index.ts";
-import { _markRemoved } from "./removal.ts";
 import type TraversalContext from "../context.ts";
 import type NodePath from "./index.ts";
 import type { ExplodedVisitor, TraverseOptions } from "../types.ts";
@@ -143,73 +142,42 @@ export function setContext<S = unknown>(
 export function resync(this: NodePath<t.Node | null>) {
   if (this.removed) return;
 
-  _resyncParent.call(this);
-  _resyncList.call(this);
-  _resyncKey.call(this);
-  //this._resyncRemoved();
-}
-
-export function _resyncParent(this: NodePath<t.Node | null>) {
   if (this.parentPath) {
     this.parent = this.parentPath.node;
   }
-}
 
-export function _resyncKey(this: NodePath<t.Node | null>) {
-  if (!this.container) return;
-
-  if (
-    this.node ===
-    // @ts-expect-error this.key should present in this.container
-    this.container[this.key]
-  ) {
-    return;
-  }
-
-  // grrr, path key is out of sync. this is likely due to a modification to the AST
-  // not done through our path APIs
-
-  if (Array.isArray(this.container)) {
-    for (let i = 0; i < this.container.length; i++) {
-      if (this.container[i] === this.node) {
-        setKey.call(this, i);
-        return;
-      }
-    }
-  } else {
-    for (const key of Object.keys(this.container)) {
-      // @ts-expect-error this.key should present in this.container
-      if (this.container[key] === this.node) {
-        setKey.call(this, key);
-        return;
-      }
-    }
-  }
-
-  // ¯\_(ツ)_/¯ who knows where it's gone lol
-  this.key = null;
-}
-
-export function _resyncList(this: NodePath<t.Node | null>) {
-  if (!this.parent || !this.inList) return;
-
-  const newContainer =
+  if (this.parent && this.inList) {
     // @ts-expect-error this.listKey should present in this.parent
-    this.parent[this.listKey];
-  if (this.container === newContainer) return;
+    const newContainer = this.parent[this.listKey] as t.Node;
+    if (this.container !== newContainer) {
+      // container is out of sync. this is likely the result of it being reassigned
+      this.container = newContainer || null;
+    }
+  }
 
-  // container is out of sync. this is likely the result of it being reassigned
-  this.container = newContainer || null;
-}
-
-export function _resyncRemoved(this: NodePath<t.Node | null>) {
   if (
-    this.key == null ||
-    !this.container ||
-    // @ts-expect-error this.key should present in this.container
-    this.container[this.key] !== this.node
+    this.container &&
+    this.node !== this.container[this.key as keyof typeof this.container]
   ) {
-    _markRemoved.call(this);
+    // grrr, path key is out of sync. this is likely due to a modification to the AST
+    // not done through our path APIs
+
+    let key: string | number = -1;
+    if (Array.isArray(this.container)) {
+      key = this.container.indexOf(this.node!);
+    } else {
+      for (key of Object.keys(this.container)) {
+        if (this.container[key as keyof typeof this.container] === this.node) {
+          break;
+        }
+      }
+    }
+    if (key === -1) {
+      // ¯\_(ツ)_/¯ who knows where it's gone lol
+      this.key = null;
+    } else {
+      _setKey.call(this, key);
+    }
   }
 }
 
@@ -241,10 +209,10 @@ export function setup(
   this.container = container;
 
   this.parentPath = parentPath || this.parentPath;
-  setKey.call(this, key);
+  _setKey.call(this, key);
 }
 
-export function setKey(this: NodePath<t.Node | null>, key: string | number) {
+function _setKey(this: NodePath<t.Node | null>, key: string | number) {
   this.key = key;
   this.node =
     // @ts-expect-error this.key must present in this.container
