@@ -1,0 +1,3 @@
+const [j, j2] = await Promise.all([typeof process === "object" && process.versions?.node ? import("fs").then(fs => fs.promises.readFile(new URL(import.meta.resolve("./x")))).then(_immutableUint8Array) : fetch(import.meta.resolve("./x")).then(r => r.bytes()).then(_immutableUint8Array), typeof process === "object" && process.versions?.node ? import("fs").then(fs => fs.promises.readFile(new URL(import.meta.resolve("./x3")))).then(_immutableUint8Array) : fetch(import.meta.resolve("./x3")).then(r => r.bytes()).then(_immutableUint8Array)]);
+function _immutableUint8Array(r) { var t = r.buffer; return new Uint8Array(t.transferToImmutable ? t.transferToImmutable() : t); }
+someBody;
