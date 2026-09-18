@@ -25,6 +25,17 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.9 (2026-09-18)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-typescript`
+  * [#18247](https://github.com/babel/babel/pull/18247) [ts] Allow merging `enum` into a `namespace` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#18241](https://github.com/babel/babel/pull/18241) Fix parsing of arrow function params inside ternaries with Flow ([@robhogan](https://github.com/robhogan))
+
+#### :house: Internal
+* `babel-parser`
+  * [#18245](https://github.com/babel/babel/pull/18245) test: test with ts-eslint 8.70.0 ([@JLHwung](https://github.com/JLHwung))
 ## v7.29.8 (2026-07-31)
 
 #### :eyeglasses: Spec Compliance
