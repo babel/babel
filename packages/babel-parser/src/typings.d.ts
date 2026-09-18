@@ -4,6 +4,7 @@ export type Plugin =
   | "decorators-legacy"
   | "decoratorAutoAccessors"
   | "deferredImportEvaluation"
+  | "deferredReexports"
   | "destructuringPrivate"
   | "doExpressions"
   | "exportDefaultFrom"
