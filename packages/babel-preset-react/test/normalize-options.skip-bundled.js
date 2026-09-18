@@ -9,14 +9,16 @@ describe("normalize options", () => {
         "@babel/preset-react: 'throwIfNamespaces' is not a valid top-level option.\n- Did you mean 'throwIfNamespace'?",
       );
     });
-    it.each(["development", "pure", "throwIfNamespace"])(
-      "should throw when `%p` is not a boolean",
-      optionName => {
-        expect(() => normalizeOptions({ [optionName]: 0 })).toThrow(
-          `@babel/preset-react: '${optionName}' option must be a boolean.`,
-        );
-      },
-    );
+    it.each([
+      "development",
+      "developmentSourceSelf",
+      "pure",
+      "throwIfNamespace",
+    ])("should throw when `%p` is not a boolean", optionName => {
+      expect(() => normalizeOptions({ [optionName]: 0 })).toThrow(
+        `@babel/preset-react: '${optionName}' option must be a boolean.`,
+      );
+    });
     it.each(["importSource", "pragma", "pragmaFrag", "runtime"])(
       "should throw when `%p` is not a string",
       optionName => {
@@ -60,6 +62,7 @@ describe("normalize options", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "development": undefined,
+          "developmentSourceSelf": false,
           "importSource": "react",
           "pragma": undefined,
           "pragmaFrag": undefined,
@@ -71,6 +74,7 @@ describe("normalize options", () => {
       expect(normalizeOptions({ runtime: "classic" })).toMatchInlineSnapshot(`
         Object {
           "development": undefined,
+          "developmentSourceSelf": false,
           "importSource": undefined,
           "pragma": "React.createElement",
           "pragmaFrag": "React.Fragment",
@@ -101,6 +105,7 @@ describe("normalize options", () => {
       expect(normalizeOptions({})).toMatchInlineSnapshot(`
         Object {
           "development": undefined,
+          "developmentSourceSelf": true,
           "importSource": undefined,
           "pragma": "React.createElement",
           "pragmaFrag": "React.Fragment",
@@ -114,6 +119,7 @@ describe("normalize options", () => {
       expect(normalizeOptions({ runtime: "automatic" })).toMatchInlineSnapshot(`
         Object {
           "development": undefined,
+          "developmentSourceSelf": true,
           "importSource": undefined,
           "pragma": undefined,
           "pragmaFrag": undefined,
