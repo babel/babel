@@ -25,6 +25,31 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.6 (2026-09-18)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helper-validator-identifier`, `babel-parser`
+  * [#18237](https://github.com/babel/babel/pull/18237) Update identifier definition to Unicode 18 ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#18240](https://github.com/babel/babel/pull/18240) Fix parsing of arrow function params inside ternaries with Flow ([@robhogan](https://github.com/robhogan))
+* `babel-helper-string-parser`, `babel-parser`
+  * [#18239](https://github.com/babel/babel/pull/18239) fix: polish error message for invalid binary 0b19 ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-code-frame`, `babel-core`, `babel-generator`, `babel-helper-create-class-features-plugin`, `babel-helper-module-transforms`, `babel-parser`, `babel-plugin-bugfix-safari-rest-destructuring-rhs-array`, `babel-plugin-proposal-destructuring-private`, `babel-plugin-proposal-discard-binding`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-typescript`, `babel-preset-env`, `babel-traverse`, `babel-types`
+  * [#18235](https://github.com/babel/babel/pull/18235) Remove unused internal exports ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#18245](https://github.com/babel/babel/pull/18245) test: test with ts-eslint 8.70.0 ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`
+  * [#18231](https://github.com/babel/babel/pull/18231) build: do not emit sourcemap in production build ([@JLHwung](https://github.com/JLHwung))
+* `babel-build-external-helpers`, `babel-cli`, `babel-code-frame`, `babel-core`, `babel-generator`, `babel-helper-compilation-targets`, `babel-helper-create-class-features-plugin`, `babel-helper-globals`, `babel-helper-string-parser`, `babel-helper-transform-fixture-test-runner`, `babel-helper-validator-identifier`, `babel-node`, `babel-parser`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-runtime`, `babel-register`, `babel-runtime-corejs3`, `babel-traverse`
+  * [#18236](https://github.com/babel/babel/pull/18236) Enforce usage of Yarn catalog for reused dependencies ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-helper-compilation-targets`, `babel-helper-transform-fixture-test-runner`
+  * [#18232](https://github.com/babel/babel/pull/18232) Replace `lru-cache` with `flru` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v8.0.5 (2026-09-10)
 
 #### :eyeglasses: Spec Compliance
