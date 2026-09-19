@@ -5,6 +5,7 @@ import type TraversalContext from "../context.ts";
 import type NodePath from "./index.ts";
 import type { ExplodedVisitor, TraverseOptions } from "../types.ts";
 import * as t from "@babel/types";
+import Scope from "../scope/index.ts";
 
 export function _call(this: NodePath, fns?: Function[]): boolean {
   if (!fns) return false;
@@ -77,9 +78,14 @@ export function _forceSetScope(this: NodePath) {
     path = path.parentPath;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  this.scope = this.getScope(target!);
-  this.scope?.init();
+  if (this.isScope()) {
+    if (this.scope?.block !== this.node) {
+      this.scope = new Scope(this);
+      this.scope.crawl();
+    }
+  } else {
+    this.scope = target!;
+  }
 }
 
 export function setScope(this: NodePath<t.Node | null>) {
@@ -105,10 +111,14 @@ export function setScope(this: NodePath<t.Node | null>) {
     path = path.parentPath;
   }
 
-  // @ts-expect-error getScope does not accept NodePath<null> as this
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  this.scope = this.getScope(target!);
-  this.scope?.init();
+  if (this.isScope()) {
+    if (this.scope?.block !== this.node) {
+      this.scope = new Scope(this);
+      this.scope.crawl();
+    }
+  } else {
+    this.scope = target!;
+  }
 }
 
 export function setContext<S = unknown>(
