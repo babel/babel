@@ -125,6 +125,11 @@ function evaluateCached(path: NodePath, state: State): any {
   }
 }
 
+function hasDangerousToString(obj: any) {
+  if (typeof obj !== "object" || obj === null) return false;
+  return Object.hasOwn(obj, "toString");
+}
+
 function _evaluate(path: NodePath, state: State): any {
   if (!state.confident) return;
 
@@ -407,6 +412,10 @@ function _evaluate(path: NodePath, state: State): any {
       case "-":
         return left - right;
       case "+":
+        if (hasDangerousToString(left) || hasDangerousToString(right)) {
+          deopt(path, state);
+          return;
+        }
         return left + right;
       case "/":
         return left / right;
@@ -425,8 +434,22 @@ function _evaluate(path: NodePath, state: State): any {
       case ">=":
         return left >= right;
       case "==":
+        if (
+          (typeof right === "string" && hasDangerousToString(left)) ||
+          (typeof left === "string" && hasDangerousToString(right))
+        ) {
+          deopt(path, state);
+          return;
+        }
         return left == right; // eslint-disable-line eqeqeq
       case "!=":
+        if (
+          (typeof right === "string" && hasDangerousToString(left)) ||
+          (typeof left === "string" && hasDangerousToString(right))
+        ) {
+          deopt(path, state);
+          return;
+        }
         return left != right; // eslint-disable-line eqeqeq
       case "===":
         return left === right;
@@ -496,6 +519,11 @@ function _evaluate(path: NodePath, state: State): any {
     if (func) {
       const args = path.get("arguments").map(arg => evaluateCached(arg, state));
       if (!state.confident) return;
+
+      if (args.some(arg => hasDangerousToString(arg))) {
+        deopt(path, state);
+        return;
+      }
 
       return func.apply(context, args);
     }
