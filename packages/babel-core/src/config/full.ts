@@ -97,9 +97,10 @@ export default gensync(function* loadFullConfig(
 
   const externalDependencies: DeepArray<string> = [];
 
-  const ignored = yield* enhanceError(
-    context,
-    function* recursePresetDescriptors(
+  let ignored;
+
+  try {
+    ignored = yield* (function* recursePresetDescriptors(
       rawPresets: UnloadedDescriptor<PresetAPI>[],
       pluginDescriptorsPass: UnloadedDescriptor<PluginAPI>[],
     ): Handler<true | void> {
@@ -166,8 +167,10 @@ export default gensync(function* loadFullConfig(
           });
         }
       }
-    },
-  )(presetsDescriptors, pluginDescriptorsByPass[0]);
+    })(presetsDescriptors, pluginDescriptorsByPass[0]);
+  } catch (e) {
+    enhanceError(e as Error, presetContext);
+  }
 
   if (ignored) return null;
 
@@ -179,37 +182,44 @@ export default gensync(function* loadFullConfig(
     assumptions: opts.assumptions ?? {},
   };
 
-  yield* enhanceError(context, function* loadPluginDescriptors() {
-    pluginDescriptorsByPass[0].unshift(...initialPluginsDescriptors);
+  try {
+    yield* (function* loadPluginDescriptors() {
+      pluginDescriptorsByPass[0].unshift(...initialPluginsDescriptors);
 
-    for (const descs of pluginDescriptorsByPass) {
-      const pass: Plugin[] = [];
-      passes.push(pass);
+      for (const descs of pluginDescriptorsByPass) {
+        const pass: Plugin[] = [];
+        passes.push(pass);
 
-      for (let i = 0; i < descs.length; i++) {
-        const descriptor = descs[i];
-        // @ts-expect-error TODO: disallow false
-        if (descriptor.options !== false) {
-          try {
-            // eslint-disable-next-line no-var
-            var plugin = yield* loadPluginDescriptor(descriptor, pluginContext);
-          } catch (e) {
-            if (
-              (e as NodeJS.ErrnoException).code ===
-              "BABEL_UNKNOWN_PLUGIN_PROPERTY"
-            ) {
-              // print special message for `plugins: ["@babel/foo", { foo: "option" }]`
-              checkNoUnwrappedItemOptionPairs(descs, i, "plugin", e as Error);
+        for (let i = 0; i < descs.length; i++) {
+          const descriptor = descs[i];
+          // @ts-expect-error TODO: disallow false
+          if (descriptor.options !== false) {
+            try {
+              // eslint-disable-next-line no-var
+              var plugin = yield* loadPluginDescriptor(
+                descriptor,
+                pluginContext,
+              );
+            } catch (e) {
+              if (
+                (e as NodeJS.ErrnoException).code ===
+                "BABEL_UNKNOWN_PLUGIN_PROPERTY"
+              ) {
+                // print special message for `plugins: ["@babel/foo", { foo: "option" }]`
+                checkNoUnwrappedItemOptionPairs(descs, i, "plugin", e as Error);
+              }
+              throw e;
             }
-            throw e;
-          }
-          pass.push(plugin);
+            pass.push(plugin);
 
-          externalDependencies.push(plugin.externalDependencies);
+            externalDependencies.push(plugin.externalDependencies);
+          }
         }
       }
-    }
-  })();
+    })();
+  } catch (e) {
+    enhanceError(e as Error, presetContext);
+  }
 
   opts.plugins = passes[0];
   opts.presets = passes
@@ -225,23 +235,14 @@ export default gensync(function* loadFullConfig(
   };
 });
 
-function enhanceError<T extends Function>(context: ConfigContext, fn: T): T {
-  return function* (arg1: unknown, arg2: unknown) {
-    try {
-      return yield* fn(arg1, arg2);
-    } catch (e) {
-      // There are a few case where thrown errors will try to annotate themselves multiple times, so
-      // to keep things simple we just bail out if re-wrapping the message.
-      if (!(e as Error).message.startsWith("[BABEL]")) {
-        (e as Error).message =
-          `[BABEL] ${context.filename ?? "unknown file"}: ${
-            (e as Error).message
-          }`;
-      }
+function enhanceError(e: Error, context: ConfigContext): never {
+  // There are a few case where thrown errors will try to annotate themselves multiple times, so
+  // to keep things simple we just bail out if re-wrapping the message.
+  if (!e.message.startsWith("[BABEL]")) {
+    e.message = `[BABEL] ${context.filename ?? "unknown file"}: ${e.message}`;
+  }
 
-      throw e;
-    }
-  } as any;
+  throw e;
 }
 
 /**
