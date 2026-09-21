@@ -377,19 +377,16 @@ function readConfig(
 
 export function* resolveShowConfigPath(
   dirname: string,
+  targetPath: string,
 ): Handler<string | null> {
-  const targetPath = process.env.BABEL_SHOW_CONFIG_FOR;
-  if (targetPath != null) {
-    const absolutePath = path.resolve(dirname, targetPath);
-    const stats = (yield* fs.stat(absolutePath))!;
-    if (!stats.isFile()) {
-      throw new Error(
-        `${absolutePath}: BABEL_SHOW_CONFIG_FOR must refer to a regular file, directories are not supported.`,
-      );
-    }
-    return absolutePath;
+  const absolutePath = path.resolve(dirname, targetPath);
+  const stats = (yield* fs.stat(absolutePath))!;
+  if (!stats.isFile()) {
+    throw new Error(
+      `${absolutePath}: BABEL_SHOW_CONFIG_FOR must refer to a regular file, directories are not supported.`,
+    );
   }
-  return null;
+  return absolutePath;
 }
 
 function throwConfigError(filepath: string): never {
