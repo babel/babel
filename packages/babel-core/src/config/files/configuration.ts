@@ -4,7 +4,11 @@ import path from "node:path";
 import json5 from "json5";
 import gensync from "gensync";
 import type { Handler } from "gensync";
-import { makeWeakCache, makeWeakCacheSync } from "../caching.ts";
+import {
+  makeStrongCache,
+  makeWeakCache,
+  makeWeakCacheSync,
+} from "../caching.ts";
 import type { CacheConfigurator } from "../caching.ts";
 import { makeConfigAPI } from "../helpers/config-api.ts";
 import type { ConfigAPI } from "../helpers/config-api.ts";
@@ -67,23 +71,37 @@ const runConfig = makeWeakCache(function* runConfig(
   };
 });
 
+const loadConfigModule = makeStrongCache(function* loadConfigModule(
+  filepath: string,
+  cache: CacheConfigurator<void>,
+) {
+  if (!nodeFs.existsSync(filepath)) {
+    cache.never();
+    return null;
+  }
+
+  return {
+    value: yield* loadCodeDefault(
+      filepath,
+      (yield* isAsync()) ? "auto" : "require",
+      "You appear to be using a native ECMAScript module configuration " +
+        "file, which is only supported when running Babel asynchronously " +
+        "or when using the Node.js `--experimental-require-module` flag.",
+      "You appear to be using a configuration file that contains top-level " +
+        "await, which is only supported when running Babel asynchronously.",
+    ),
+  };
+});
+
 function* readConfigCode(
   filepath: string,
   data: ConfigCacheData,
 ): Handler<ConfigFile | null> {
-  if (!nodeFs.existsSync(filepath)) return null;
-
-  let options = yield* loadCodeDefault(
-    filepath,
-    (yield* isAsync()) ? "auto" : "require",
-    "You appear to be using a native ECMAScript module configuration " +
-      "file, which is only supported when running Babel asynchronously " +
-      "or when using the Node.js `--experimental-require-module` flag.",
-    "You appear to be using a configuration file that contains top-level " +
-      "await, which is only supported when running Babel asynchronously.",
-  );
+  const loaded = yield* loadConfigModule(filepath);
+  if (loaded === null) return null;
 
   let cacheNeedsConfiguration = false;
+  let options = loaded.value;
   if (typeof options === "function") {
     ({ options, cacheNeedsConfiguration } = yield* runConfig(options, data));
   }
