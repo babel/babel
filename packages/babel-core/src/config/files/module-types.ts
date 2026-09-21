@@ -12,6 +12,8 @@ const debug = createDebug("babel:config:loading:files:module-types");
 
 const require = createRequire(import.meta.url);
 
+const requireAndEndHiddenCallStack = endHiddenCallStack(require);
+
 const LOADING_CJS_FILES = new Set();
 
 function loadCjsDefault(filepath: string) {
@@ -28,7 +30,7 @@ function loadCjsDefault(filepath: string) {
   let module;
   try {
     LOADING_CJS_FILES.add(filepath);
-    module = endHiddenCallStack(require)(filepath);
+    module = requireAndEndHiddenCallStack(filepath);
   } finally {
     LOADING_CJS_FILES.delete(filepath);
   }
