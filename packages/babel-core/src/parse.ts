@@ -4,7 +4,7 @@ import loadConfig, { type InputOptions } from "./config/index.ts";
 import parser, { type ParseResult } from "./parser/index.ts";
 import normalizeOptions from "./transformation/normalize-opts.ts";
 
-import { beginHiddenCallStack } from "./errors/rewrite-stack-trace.ts";
+import { beginHiddenCallStackForGensync } from "./errors/rewrite-stack-trace.ts";
 
 type FileParseCallback = {
   (err: Error, ast: null): void;
@@ -20,18 +20,20 @@ type Parse = {
   ): void;
 };
 
-const parseRunner = gensync(function* parse(
-  code: string,
-  opts: InputOptions | undefined | null,
-): Handler<ParseResult | null> {
-  const config = yield* loadConfig(opts);
+const parseRunner = beginHiddenCallStackForGensync(
+  gensync(function* parse(
+    code: string,
+    opts: InputOptions | undefined | null,
+  ): Handler<ParseResult | null> {
+    const config = yield* loadConfig(opts);
 
-  if (config === null) {
-    return null;
-  }
+    if (config === null) {
+      return null;
+    }
 
-  return yield* parser(config.passes, normalizeOptions(config), code);
-});
+    return yield* parser(config.passes, normalizeOptions(config), code);
+  }),
+);
 
 export const parse: Parse = function parse(
   code,
@@ -49,13 +51,13 @@ export const parse: Parse = function parse(
     );
   }
 
-  beginHiddenCallStack(parseRunner.errback)(code, opts, callback);
+  parseRunner.errback(code, opts, callback);
   return null;
 };
 
 export function parseSync(...args: Parameters<typeof parseRunner.sync>) {
-  return beginHiddenCallStack(parseRunner.sync)(...args);
+  return parseRunner.sync(...args);
 }
 export function parseAsync(...args: Parameters<typeof parseRunner.async>) {
-  return beginHiddenCallStack(parseRunner.async)(...args);
+  return parseRunner.async(...args);
 }
