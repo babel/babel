@@ -55,7 +55,9 @@ export type ResolvedConfig = {
 export type { Plugin };
 export type PluginPasses = Plugin[][];
 
-export default gensync(function* loadFullConfig(
+export default gensync(loadFullConfigImpl);
+
+export function* loadFullConfigImpl(
   inputOpts: InputOptions | null | undefined,
 ): Handler<ResolvedConfig | null> {
   const result = yield* loadPrivatePartialConfig(inputOpts);
@@ -225,7 +227,7 @@ export default gensync(function* loadFullConfig(
     passes: passes,
     externalDependencies: freezeDeepArray(externalDependencies),
   };
-});
+}
 
 function enhanceError(e: Error, context: ConfigContext): never {
   // There are a few case where thrown errors will try to annotate themselves multiple times, so
