@@ -99,7 +99,11 @@ export default function* loadPrivatePartialConfig(
       ? path.resolve(cwd, args.filename)
       : undefined;
 
-  const showConfigPath = yield* resolveShowConfigPath(absoluteCwd);
+  const relativeShowConfigPath = process.env.BABEL_SHOW_CONFIG_FOR;
+  const showConfigPath =
+    relativeShowConfigPath != null
+      ? yield* resolveShowConfigPath(absoluteCwd, relativeShowConfigPath)
+      : null;
 
   const context: ConfigContext = {
     filename,
