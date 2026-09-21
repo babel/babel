@@ -90,7 +90,7 @@ export default function* loadPrivatePartialConfig(
   } = args;
   const absoluteCwd = path.resolve(cwd);
   const absoluteRootDir = resolveRootMode(
-    path.resolve(absoluteCwd, rootDir),
+    rootDir === "." ? absoluteCwd : path.resolve(absoluteCwd, rootDir),
     rootMode,
   );
 
