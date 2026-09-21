@@ -329,7 +329,10 @@ export function* loadConfig(
   envName: string,
   caller: CallerMetadata | undefined,
 ): Handler<ConfigFile> {
-  const filepath = require.resolve(name, { paths: [dirname] });
+  const filepath =
+    path.isAbsolute(name) && path.extname(name) !== ""
+      ? name
+      : require.resolve(name, { paths: [dirname] });
 
   const conf = yield* readConfig(filepath, envName, caller);
   if (!conf) {
