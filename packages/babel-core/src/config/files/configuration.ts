@@ -301,7 +301,12 @@ function* loadOneConfig(
 ): Handler<ConfigFile | null> {
   const configs = yield* gensync.all(
     names.map(filename =>
-      readConfig(path.join(dirname, filename), envName, caller),
+      readConfig(
+        path.join(dirname, filename),
+        path.extname(filename),
+        envName,
+        caller,
+      ),
     ),
   );
   const config = configs.reduce((previousConfig: ConfigFile | null, config) => {
@@ -329,12 +334,13 @@ export function* loadConfig(
   envName: string,
   caller: CallerMetadata | undefined,
 ): Handler<ConfigFile> {
+  const extName = path.extname(name);
   const filepath =
-    path.isAbsolute(name) && path.extname(name) !== ""
+    path.isAbsolute(name) && extName !== ""
       ? name
       : require.resolve(name, { paths: [dirname] });
 
-  const conf = yield* readConfig(filepath, envName, caller);
+  const conf = yield* readConfig(filepath, extName, envName, caller);
   if (!conf) {
     throw new ConfigError(
       `Config file contains no configuration data`,
@@ -352,11 +358,11 @@ export function* loadConfig(
  */
 function readConfig(
   filepath: string,
+  extName: string,
   envName: string,
   caller: CallerMetadata | undefined,
 ): Handler<ConfigFile | null> {
-  const ext = path.extname(filepath);
-  switch (ext) {
+  switch (extName) {
     case ".js":
     case ".cjs":
     case ".mjs":
