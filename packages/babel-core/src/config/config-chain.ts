@@ -741,27 +741,33 @@ function emptyChain(): ConfigChain {
   };
 }
 
+const configChainOptionSkipKeys = new Set([
+  "extends",
+  "env",
+  "overrides",
+  "plugins",
+  "presets",
+  "passPerPreset",
+  "ignore",
+  "only",
+  "test",
+  "include",
+  "exclude",
+]);
+
 function createConfigChainOptions(opts: InputOptions): ConfigChainOptions {
-  const options = {
-    ...opts,
-  };
-  delete options.extends;
-  delete options.env;
-  delete options.overrides;
-  delete options.plugins;
-  delete options.presets;
-  delete options.passPerPreset;
-  delete options.ignore;
-  delete options.only;
-  delete options.test;
-  delete options.include;
-  delete options.exclude;
+  const options: ConfigChainOptions = {};
+  for (const k of Object.keys(opts)) {
+    if (!configChainOptionSkipKeys.has(k)) {
+      // @ts-expect-error string can not index ConfigChainOptions
+      options[k] = opts[k];
+    }
+  }
 
   // "sourceMap" is just aliased to sourceMap, so copy it over as
   // we merge the options together.
-  if (Object.hasOwn(options, "sourceMap")) {
-    options.sourceMaps = options.sourceMap;
-    delete options.sourceMap;
+  if (Object.hasOwn(opts, "sourceMap")) {
+    options.sourceMaps = opts.sourceMap;
   }
   return options;
 }
