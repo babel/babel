@@ -589,7 +589,9 @@ function makeChainWalker<
         index: undefined,
       });
 
-      const envOpts = env(input, context.envName);
+      const envOpts = input.options.env?.[context.envName]
+        ? env(input, context.envName)
+        : null;
       if (
         envOpts &&
         configIsApplicable(envOpts, dirname, context, input.filepath)
