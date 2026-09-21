@@ -26,7 +26,7 @@ export type {
   NormalizedOptions,
 } from "./validation/options.ts";
 
-import loadFullConfig from "./full.ts";
+import loadFullConfig, { loadFullConfigImpl } from "./full.ts";
 import {
   type PartialConfig,
   loadPartialConfig as loadPartialConfigImpl,
@@ -73,7 +73,7 @@ export function loadPartialConfig(
 function* loadOptionsImpl(
   opts: InputOptions | null | undefined,
 ): Handler<ResolvedOptions | null> {
-  const config = yield* loadFullConfig(opts);
+  const config = yield* loadFullConfigImpl(opts);
   // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
   return config?.options ?? null;
 }
