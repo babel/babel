@@ -21,7 +21,28 @@ export function resolveBrowserslistConfigFile(
   return path.resolve(configFileDir, browserslistConfigFile);
 }
 
+const targetsCache = new Map<string, Targets>();
+
 export function resolveTargets(options: InputOptions, root: string): Targets {
+  const optTargets = options.targets;
+  if (
+    typeof optTargets === "string" &&
+    options.browserslistConfigFile == null
+  ) {
+    const cacheKey = `${optTargets}\0${root}\0${options.browserslistEnv ?? ""}`;
+    let resolved;
+    if (targetsCache.has(cacheKey)) {
+      resolved = targetsCache.get(cacheKey)!;
+    } else {
+      resolved = resolveTargetsImpl(options, root);
+      targetsCache.set(cacheKey, resolved);
+    }
+    return { ...resolved };
+  }
+  return resolveTargetsImpl(options, root);
+}
+
+function resolveTargetsImpl(options: InputOptions, root: string): Targets {
   const optTargets = options.targets;
   let targets: InputTargets;
 
