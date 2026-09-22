@@ -1,0 +1,26 @@
+module.exports = {
+  assumptions: {
+    arrayLikeIsIterable: true,
+    constantReexports: true,
+    ignoreFunctionLength: true,
+    ignoreToPrimitiveHint: true,
+    mutableTemplateObject: true,
+    noClassCalls: true,
+    noDocumentAll: true,
+    objectRestNoSymbols: true,
+    privateFieldsAsProperties: true,
+    pureGetters: true,
+    setClassMethods: true,
+    setComputedProperties: true,
+    setPublicClassFields: true,
+    setSpreadProperties: true,
+    skipForOfIteratorClosing: true,
+    superIsCallableConstructor: true,
+  },
+  targets: "defaults",
+  presets: [["@babel/preset-env", { exclude: ["transform-typeof-symbol"] }]],
+  plugins: [
+    "@babel/plugin-transform-typescript",
+    ["@babel/plugin-proposal-decorators", { version: "2023-11" }],
+  ],
+};
