@@ -118,9 +118,7 @@ describe("@babel/core errors", function () {
           at require (... internal node frames ...)
           at Module.parseSync (<BABEL_CORE_LIB_SOME_FILE>:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
-          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
-          at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
-          at ... internal jest frames ..."
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)"
     `);
   });
 
@@ -245,13 +243,13 @@ describe("@babel/core errors", function () {
           at buildRootChain.next (<anonymous>)
           at loadPrivatePartialConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
           at loadPrivatePartialConfig.next (<anonymous>)
-          at loadFullConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at loadFullConfig.next (<anonymous>)
+          at loadFullConfigImpl (<BABEL_CORE_LIB_SOME_FILE>:_:_)
+          at loadFullConfigImpl.next (<anonymous>)
           at parse (<BABEL_CORE_LIB_SOME_FILE>:_:_)
           at parse.next (<anonymous>)
           at evaluateSync (<CWD>/node_modules/gensync/index.js:_:_)
           at sync (<CWD>/node_modules/gensync/index.js:_:_)
-          at stopHiding - secret - don't use this - v1 (<BABEL_CORE_LIB_SOME_FILE>:_:_)
+          at Object.stopHiding - secret - don't use this - v1 [as sync] (<BABEL_CORE_LIB_SOME_FILE>:_:_)
           at Module.parseSync (<BABEL_CORE_LIB_SOME_FILE>:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
           at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
