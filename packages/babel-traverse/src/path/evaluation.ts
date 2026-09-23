@@ -271,6 +271,11 @@ function _evaluate(path: NodePath, state: State): any {
       deopt(bindingPath, state);
       return;
     }
+    const idPath = bindingPath.get("id");
+    if (!idPath.isIdentifier()) {
+      deopt(idPath, state);
+      return;
+    }
     const initPath = bindingPath.get("init");
     // @ts-expect-error FIXME: evaluateCached does not accept NodePath<null>
     const value = evaluateCached(initPath, state);
