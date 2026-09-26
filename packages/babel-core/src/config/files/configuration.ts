@@ -75,10 +75,8 @@ const loadConfigModule = makeStrongCache(function* loadConfigModule(
   filepath: string,
   cache: CacheConfigurator<void>,
 ) {
-  if (!nodeFs.existsSync(filepath)) {
-    cache.never();
-    return null;
-  }
+  const exists = cache.invalidate(() => nodeFs.existsSync(filepath));
+  if (!exists) return null;
 
   return {
     value: yield* loadCodeDefault(
