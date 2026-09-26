@@ -750,6 +750,7 @@ const configChainOptionSkipKeys = new Set([
   "plugins",
   "presets",
   "passPerPreset",
+  "sourceMap",
   "ignore",
   "only",
   "test",
