@@ -58,6 +58,11 @@ describe("@babel/core config loading", () => {
       ).toThrowErrorMatchingInlineSnapshot(
         `"Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'."`,
       );
+      expect(() =>
+        createConfigItem(myPlugin, {}),
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'."`,
+      );
     });
     it("accepts a callback as the second argument", () => {
       function myPlugin() {
