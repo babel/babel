@@ -132,7 +132,7 @@ export function createConfigItem(
     beginHiddenCallStack(createConfigItemRunner.errback)(
       target,
       undefined,
-      callback!,
+      options,
     );
   } else {
     throw new Error(

@@ -59,6 +59,22 @@ describe("@babel/core config loading", () => {
         `"Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'."`,
       );
     });
+    it("accepts a callback as the second argument", () => {
+      function myPlugin() {
+        return {};
+      }
+      return new Promise((resolve, reject) => {
+        createConfigItem(myPlugin, (err, val) => {
+          try {
+            expect(err).toBeUndefined();
+            expect(val.value).toBe(myPlugin);
+            resolve();
+          } catch (e) {
+            reject(e);
+          }
+        });
+      });
+    });
   });
 
   describe("createConfigItemSync", () => {
