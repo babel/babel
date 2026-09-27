@@ -57,7 +57,10 @@ describe("core", () => {
 
   it("createConfigItem", () => {
     const plugin = () => ({ visitor: {} });
-    const callback = (_err: Error, _val: ConfigItem<PluginAPI> | null) => {};
+    const callback = (
+      _err: Error | undefined,
+      _val: ConfigItem<PluginAPI> | null,
+    ) => {};
 
     expect(createConfigItem).type.toBeCallableWith(plugin, callback);
     expect(createConfigItem).type.toBeCallableWith(
@@ -72,7 +75,7 @@ describe("core", () => {
     expect(createConfigItem).type.not.toBeCallableWith(plugin);
 
     createConfigItem(plugin, (err, val) => {
-      expect(err).type.toBe<Error>();
+      expect(err).type.toBe<Error | undefined>();
       expect(val).type.toBe<ConfigItem<PluginAPI> | null>();
     });
   });

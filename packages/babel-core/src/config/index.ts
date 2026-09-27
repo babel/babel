@@ -120,7 +120,7 @@ export function createConfigItemSync(
 type CreateConfigItemOptions = Parameters<typeof createConfigItemImpl>[1];
 
 type CreateConfigItemCallback = (
-  err: Error,
+  err: Error | undefined,
   val: ConfigItem<PluginAPI> | null,
 ) => void;
 
