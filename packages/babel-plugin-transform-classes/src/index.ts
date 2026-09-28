@@ -66,7 +66,7 @@ export default declare((api, options: Options) => {
 
         path.replaceWith(
           t.variableDeclaration("let", [
-            t.variableDeclarator(ref, t.toExpression(node)),
+            t.variableDeclarator(ref, t.removeComments(t.toExpression(node))),
           ]),
         );
       },

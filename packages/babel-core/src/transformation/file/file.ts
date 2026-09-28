@@ -1,6 +1,6 @@
 import * as helpers from "@babel/helpers";
-import { NodePath } from "@babel/traverse";
-import type { HubInterface, Scope } from "@babel/traverse";
+import { createRootPath } from "@babel/traverse";
+import type { HubInterface, NodePath, Scope } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
 import { cloneNode, interpreterDirective, traverseFast } from "@babel/types";
 import type * as t from "@babel/types";
@@ -42,13 +42,8 @@ export default class File {
     this.ast = ast;
     this.inputMap = inputMap;
 
-    this.path = NodePath.get({
-      hub: this.hub,
-      parentPath: null,
-      parent: this.ast,
-      container: this.ast,
-      key: "program",
-    }).setContext() as NodePath<t.Program>;
+    const rootPath = createRootPath(ast, this.hub);
+    this.path = rootPath.get("program");
     this.scope = this.path.scope;
   }
 

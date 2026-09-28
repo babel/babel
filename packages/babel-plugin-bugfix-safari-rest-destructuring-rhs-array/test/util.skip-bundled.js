@@ -18,7 +18,6 @@ function getPath(input, parserOpts = {}, nodeType, index = 1) {
         }
       },
     },
-    undefined,
     { counter: 0 },
   );
   return targetPath;

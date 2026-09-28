@@ -1,8 +1,6 @@
 // This file contains methods that modify the path/node in some ways.
 
-import { getCachedPaths } from "../cache.ts";
-import NodePath from "./index.ts";
-import { _getQueueContexts, pushContext, setScope } from "./context.ts";
+import NodePath, { INSERTED } from "./index.ts";
 import { _assertUnremoved } from "./removal.ts";
 import {
   arrowFunctionExpression,
@@ -14,7 +12,6 @@ import {
   expressionStatement,
   isAssignmentExpression,
   isCallExpression,
-  isExportNamedDeclaration,
   isExpression,
   isIdentifier,
   isSequenceExpression,
@@ -29,6 +26,7 @@ import type {
   NodeListType,
   NodePaths,
 } from "./index.ts";
+import TraversalContext, { createNodePath } from "../context.ts";
 
 /**
  * Insert the provided nodes before the current one.
@@ -42,19 +40,12 @@ export function insertBefore<Nodes extends NodeOrNodeList<t.Node>>(
 
   const nodes = _verifyNodeList.call(this, nodes_);
 
-  const { parentPath, parent } = this;
+  const { parentPath } = this;
 
   if (
     parentPath.isExpressionStatement() ||
     parentPath.isLabeledStatement() ||
-    // https://github.com/babel/babel/issues/15293
-    // When Babel transforms `export class String { field }`, the class properties plugin will inject the defineProperty
-    // helper, which depends on the builtins e.g. String, Number, Symbol, etc. To prevent them from being shadowed by local
-    // exports, the helper injector replaces the named export into `class _String { field }; export { _String as String }`,
-    // with `parentPath` here changed to the moved ClassDeclaration, causing rare inconsistency between `parent` and `parentPath`.
-    // Here we retrieve the parent type from the `parent` property. This is a temporary fix and we should revisit when
-    // helpers should get injected.
-    isExportNamedDeclaration(parent) ||
+    parentPath.isExportNamedDeclaration() ||
     (parentPath.isExportDefaultDeclaration() && this.isDeclaration())
   ) {
     return parentPath.insertBefore(nodes as Nodes);
@@ -94,37 +85,42 @@ function _containerInsert<Nodes extends NodeList<t.Node>>(
   from: number,
   nodes: Nodes,
 ): NodePaths<Nodes> {
-  updateSiblingKeys.call(this, from, nodes.length);
+  const len = nodes.length;
+
+  updateSiblingKeys.call(this, from, len);
 
   const paths: NodePath<t.Node | null>[] = [];
 
-  // @ts-expect-error todo(flow->ts): this.container could be a NodePath
-  this.container.splice(from, 0, ...nodes);
-  for (let i = 0; i < nodes.length; i++) {
+  (this.container as t.Node[]).splice(from, 0, ...nodes);
+
+  for (let i = 0; i < len; i++) {
     const to = from + i;
     const path = this.getSibling(to);
+    path._traverseFlags |= INSERTED;
     paths.push(path);
-
-    if (this.context?.queue) {
-      pushContext.call(path, this.context);
-    }
   }
 
-  const contexts = _getQueueContexts.call(this);
+  for (let ctx = TraversalContext.current; ctx; ctx = ctx._parent) {
+    const stack = ctx.getListStack(this.container, this);
+    if (!stack) continue;
 
-  for (const path of paths) {
-    setScope.call(path);
-    path.debug("Inserted.");
+    const shouldQueue =
+      stack.container !== this.container || from <= stack.index;
 
-    for (const context of contexts) {
-      context.maybeQueue(path, true);
+    for (let i = ctx._depth - 1; i > 0; i--) {
+      const frame = ctx._stacks[i];
+      if (frame.container === this.container && frame.index >= from) {
+        frame.index += len;
+      }
     }
+
+    if (shouldQueue) stack.queue.push(...paths);
   }
 
   return paths as NodePaths<Nodes>;
 }
 
-function _containerInsertBefore<Nodes extends NodeList<t.Node>>(
+export function _containerInsertBefore<Nodes extends NodeList<t.Node>>(
   this: NodePath<t.Node | null>,
   nodes: Nodes,
 ): NodePaths<Nodes> {
@@ -193,12 +189,11 @@ export function insertAfter<Nodes extends NodeOrNodeList<t.Node>>(
 
   const nodes = _verifyNodeList.call(this, nodes_);
 
-  const { parentPath, parent } = this;
+  const { parentPath } = this;
   if (
     parentPath.isExpressionStatement() ||
     parentPath.isLabeledStatement() ||
-    // see insertBefore
-    isExportNamedDeclaration(parent) ||
+    parentPath.isExportNamedDeclaration() ||
     (parentPath.isExportDefaultDeclaration() && this.isDeclaration())
   ) {
     return parentPath.insertAfter(
@@ -303,19 +298,29 @@ export function updateSiblingKeys(
   fromIndex: number,
   incrementBy: number,
 ) {
-  if (!this.parent) return;
-
-  const paths = getCachedPaths(this);
-  if (!paths) return;
-
-  for (const [, path] of paths) {
-    if (
-      typeof path.key === "number" &&
-      path.container === this.container &&
-      path.key >= fromIndex
-    ) {
-      path.key += incrementBy;
+  if (!incrementBy) return;
+  const { parentPath, container } = this;
+  updateSiblingKey(parentPath._childPath0, container, fromIndex, incrementBy);
+  updateSiblingKey(parentPath._childPath1, container, fromIndex, incrementBy);
+  if (parentPath._childPaths) {
+    for (const path of parentPath._childPaths.values()) {
+      updateSiblingKey(path, container, fromIndex, incrementBy);
     }
+  }
+}
+
+function updateSiblingKey(
+  path: NodePath | undefined,
+  container: NodePath["container"],
+  fromIndex: number,
+  incrementBy: number,
+) {
+  if (
+    path?.container === container &&
+    typeof path.key === "number" &&
+    path.key >= fromIndex
+  ) {
+    path.key += incrementBy;
   }
 }
 
@@ -372,13 +377,14 @@ export function unshiftContainer<
   // get the first path and insert our nodes before it, if it doesn't exist then it
   // doesn't matter, our nodes will be inserted anyway
   const container = (this.node as N)[listKey] as t.Node[];
-  const path = NodePath.get({
-    parentPath: this,
-    parent: this.node,
+  const path = createNodePath(
+    this.context,
+    this,
+    container[0],
     container,
+    0,
     listKey,
-    key: 0,
-  }).setContext(this.context);
+  );
 
   return _containerInsertBefore.call(path, verifiedNodes) as NodePaths<Nodes>;
 }
@@ -394,15 +400,15 @@ export function pushContainer<
 
   // get an invisible path that represents the last node + 1 and replace it with our
   // nodes, effectively inlining it
-
   const container = (this.node as N)[listKey] as t.Node[];
-  const path = NodePath.get({
-    parentPath: this,
-    parent: this.node,
+  const path = createNodePath(
+    this.context,
+    this,
+    container[container.length],
     container,
+    container.length,
     listKey,
-    key: container.length,
-  }).setContext(this.context);
+  );
 
   return path.replaceWithMultiple(verifiedNodes) as NodePaths<Nodes>;
 }

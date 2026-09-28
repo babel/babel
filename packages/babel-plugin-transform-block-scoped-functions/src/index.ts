@@ -21,9 +21,9 @@ export default declare(api => {
           "@babel/plugin-transform-async-generator-functions/async_generator_function",
         );
 
-      const func = path.node;
+      const func = t.toExpression(path.node);
       const declar = t.variableDeclaration(useLet ? "let" : "var", [
-        t.variableDeclarator(func.id!, t.toExpression(func)),
+        t.variableDeclarator(func.id!, func),
       ]);
 
       // hoist it up above everything else

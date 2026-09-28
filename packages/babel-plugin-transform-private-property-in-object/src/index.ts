@@ -30,7 +30,7 @@ export default declare((api, opt: Options) => {
   // The visitor of this plugin is only effective when not compiling
   // private fields and methods.
 
-  const classWeakSets = new WeakMap<t.Class, t.Identifier>();
+  const classWeakSets = new WeakMap<t.ClassBody, t.Identifier>();
   const fieldsWeakSets = new WeakMap<
     t.ClassPrivateProperty | t.ClassPrivateMethod,
     t.Identifier
@@ -91,6 +91,7 @@ export default declare((api, opt: Options) => {
 
   function getWeakSetId<Ref extends t.Node>(
     weakSets: WeakMap<t.Node, t.Identifier>,
+    cacheKey: t.Node,
     outerClass: NodePath<t.Class>,
     reference: NodePath<Ref>,
     name = "",
@@ -100,11 +101,11 @@ export default declare((api, opt: Options) => {
       before?: boolean,
     ) => void,
   ) {
-    let id = weakSets.get(reference.node);
+    let id = weakSets.get(cacheKey);
 
     if (!id) {
       id = outerClass.scope.generateUidIdentifier(`${name || ""} brandCheck`);
-      weakSets.set(reference.node, id);
+      weakSets.set(cacheKey, id);
 
       inject(reference, template.expression.ast`${t.cloneNode(id)}.add(this)`);
 
@@ -174,6 +175,7 @@ export default declare((api, opt: Options) => {
           } else {
             const id = getWeakSetId(
               classWeakSets,
+              outerClass.node.body,
               outerClass,
               outerClass,
               outerClass.node.id?.name,
@@ -193,6 +195,7 @@ export default declare((api, opt: Options) => {
 
           const id = getWeakSetId<t.ClassPrivateProperty>(
             fieldsWeakSets,
+            privateElement!.node,
             outerClass,
             privateElement as NodePath<t.ClassPrivateProperty>,
             privateElement!.node.key.id.name,

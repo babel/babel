@@ -2,9 +2,14 @@
 
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "../index.ts";
-import NodePath from "./index.ts";
-import { getCachedPaths } from "../cache.ts";
-import { _verifyNodeList, _containerInsertAfter } from "./modification.ts";
+import TraversalContext from "../context.ts";
+import NodePath, { INSERTED } from "./index.ts";
+import { cacheNodePath, uncacheNodePath } from "../cache.ts";
+import {
+  _verifyNodeList,
+  _containerInsertBefore,
+  _containerInsertAfter,
+} from "./modification.ts";
 import { parse } from "@babel/parser";
 import {
   FUNCTION_TYPES,
@@ -38,14 +43,7 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 import { resync, setScope } from "./context.ts";
-
-/**
- * Replace a node with an array of multiple. This method performs the following steps:
- *
- *  - Inherit the comments of first provided node with that of the current node.
- *  - Insert the provided nodes after the current node.
- *  - Remove the current node.
- */
+import { _assertUnremoved } from "./removal.ts";
 
 import type { NodeOrNodeList, NodePaths } from "./index.ts";
 
@@ -53,23 +51,96 @@ export function replaceWithMultiple<Nodes extends NodeOrNodeList<t.Node>>(
   this: NodePath<t.Node | null>,
   nodes: Nodes,
 ): NodePaths<Nodes> {
+  _assertUnremoved.call(this);
   resync.call(this);
 
   const verifiedNodes = _verifyNodeList.call(this, nodes);
   inheritLeadingComments(verifiedNodes[0], this.node);
   inheritTrailingComments(verifiedNodes[verifiedNodes.length - 1], this.node);
-  // @ts-expect-error TODO: better types
-  getCachedPaths(this)?.delete(this.node);
+
+  if (verifiedNodes.length === 1 && verifiedNodes[0] === this.node) {
+    return [this] as NodePaths<Nodes>;
+  }
+
+  const { parentPath } = this;
+  const insertAfterParent =
+    parentPath.isExpressionStatement() ||
+    parentPath.isLabeledStatement() ||
+    parentPath.isExportNamedDeclaration() ||
+    (parentPath.isExportDefaultDeclaration() && this.isDeclaration());
+
+  if (
+    !insertAfterParent &&
+    ((this.isExpression() &&
+      !parentPath.isJSXElement() &&
+      !parentPath.isJSXFragment()) ||
+      (parentPath.isForStatement() && this.key === "init"))
+  ) {
+    return this.replaceExpressionWithStatements(
+      verifiedNodes as t.Statement[],
+    ) as NodePaths<Nodes>;
+  }
+
+  const inList = Array.isArray(this.container);
+  if (!insertAfterParent && inList) {
+    const index = this.node ? verifiedNodes.indexOf(this.node) : -1;
+    if (index !== -1) {
+      const paths: NodePath<t.Node | null>[] =
+        index > 0
+          ? _containerInsertBefore.call(this, verifiedNodes.slice(0, index))
+          : [];
+      paths.push(this);
+      if (index + 1 < verifiedNodes.length) {
+        paths.push(
+          ..._containerInsertAfter.call(this, verifiedNodes.slice(index + 1)),
+        );
+      }
+      return paths as NodePaths<Nodes>;
+    }
+  }
+
+  if (!insertAfterParent && !inList && !this.isStatementOrBlock()) {
+    throw new Error(
+      "We don't know what to do with this node type. " +
+        "We were previously a Statement but we can't fit in here?",
+    );
+  }
+
+  uncacheNodePath(this);
   this.node =
     // @ts-expect-error this.key must present in this.container
     this.container[this.key] = null;
-  const paths = this.insertAfter(nodes);
 
-  if (this.node) {
-    this.requeue();
+  let paths: NodePaths<Nodes>;
+  if (insertAfterParent) {
+    paths = parentPath.insertAfter(
+      verifiedNodes.map(node =>
+        isExpression(node) ? expressionStatement(node) : node,
+      ),
+    ) as NodePaths<Nodes>;
+  } else if (inList) {
+    paths = _containerInsertAfter.call(this, verifiedNodes) as NodePaths<Nodes>;
   } else {
-    this.remove();
+    const [blockPath] = this.replaceWith(blockStatement([]));
+    if (
+      !blockPath._visitFrame?.parentPath ||
+      TraversalContext.current?._parent
+    ) {
+      return blockPath.pushContainer(
+        "body",
+        verifiedNodes as t.Statement[],
+      ) as NodePaths<Nodes>;
+    }
+
+    blockPath.node.body.push(...(verifiedNodes as t.Statement[]));
+    const paths = blockPath.get("body");
+    for (const path of paths) {
+      path._traverseFlags |= INSERTED;
+    }
+    return paths as NodePaths<Nodes>;
   }
+
+  this.remove();
   return paths;
 }
 
@@ -199,7 +270,6 @@ export function replaceWith(
 
   // replace the node
   _replaceWith.call(this, replacement);
-  this.type = replacement.type;
 
   // potentially create new scope
   setScope.call(this as NodePath<t.Node>);
@@ -227,12 +297,15 @@ export function _replaceWith(
   }
 
   this.debug(`Replace with ${node?.type}`);
-  // @ts-expect-error TODO: better types
-  getCachedPaths(this)?.set(node, this).delete(this.node);
 
+  uncacheNodePath(this);
   this.node = node;
   // @ts-expect-error this.key must present in this.container
   this.container[this.key] = node;
+  this._childPath0 = undefined;
+  this._childPath1 = undefined;
+  this._childPaths = undefined;
+  cacheNodePath(this);
 }
 
 /**
