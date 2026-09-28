@@ -758,10 +758,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 484, gzip size: 304
+  // size: 447, gzip size: 290
   interopRequireWildcard: helper(
     "7.14.0",
-    'function _interopRequireWildcard(e,t){if("function"==typeof WeakMap)var r=new WeakMap;return(_interopRequireWildcard=function(e,t){if(!t&&e&&e.__esModule)return e;var n,o,i=Object.defineProperty,f={__proto__:null,default:e};if(null===e||"object"!=typeof e&&"function"!=typeof e)return f;if(r){if(r.has(e))return r.get(e);r.set(e,f)}for(o in e)"default"!==o&&{}.hasOwnProperty.call(e,o)&&((n=i&&Object.getOwnPropertyDescriptor(e,o))&&(n.get||n.set)?i(f,o,n):f[o]=e[o]);return f})(e,t)}',
+    'function _interopRequireWildcard(e,r){if("function"==typeof WeakMap)var t=new WeakMap;return(_interopRequireWildcard=function(e,r){if(!r&&e&&e.__esModule)return e;var n,i,o=Object.defineProperty,u={__proto__:null,default:e};if(Object(e)!==e)return u;if(t){if(t.has(e))return t.get(e);t.set(e,u)}for(i in e)"default"!==i&&{}.hasOwnProperty.call(e,i)&&((n=o&&Object.getOwnPropertyDescriptor(e,i))&&(n.get||n.set)?o(u,i,n):u[i]=e[i]);return u})(e,r)}',
     {
       globals: ["WeakMap", "Object"],
       locals: {

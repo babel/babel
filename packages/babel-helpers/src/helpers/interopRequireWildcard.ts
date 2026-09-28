@@ -20,10 +20,7 @@ export default function _interopRequireWildcard(
     var desc: PropertyDescriptor | undefined;
     var key: string;
 
-    if (
-      obj === null ||
-      (typeof obj !== "object" && typeof obj !== "function")
-    ) {
+    if (Object(obj) !== obj) {
       return newObj;
     }
 
