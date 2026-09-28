@@ -5,8 +5,7 @@ export default function _interopRequireWildcard(
   nodeInterop: boolean,
 ) {
   if (typeof WeakMap === "function") {
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
+    var cache = new WeakMap();
   }
 
   // @ts-expect-error: assign to function
@@ -15,7 +14,8 @@ export default function _interopRequireWildcard(
       return obj;
     }
     // Temporary variable for output size
-    var _;
+    var defineProp = Object.defineProperty as
+      typeof Object.defineProperty | undefined;
     var newObj: Record<string, any> = { __proto__: null, default: obj };
     var desc: PropertyDescriptor | undefined;
     var key: string;
@@ -27,19 +27,16 @@ export default function _interopRequireWildcard(
       return newObj;
     }
 
-    _ = nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    if (_) {
-      if (_.has(obj)) return _.get(obj);
-      _.set(obj, newObj);
+    if (cache) {
+      if (cache.has(obj)) return cache.get(obj);
+      cache.set(obj, newObj);
     }
 
     for (key in obj) {
       if (key !== "default" && {}.hasOwnProperty.call(obj, key)) {
-        desc =
-          (_ = Object.defineProperty) &&
-          Object.getOwnPropertyDescriptor(obj, key);
+        desc = defineProp && Object.getOwnPropertyDescriptor(obj, key);
         if (desc && (desc.get || desc.set)) {
-          _(newObj, key, desc);
+          defineProp!(newObj, key, desc);
         } else {
           newObj[key] = obj[key];
         }
