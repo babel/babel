@@ -332,11 +332,15 @@ export function* loadConfig(
   envName: string,
   caller: CallerMetadata | undefined,
 ): Handler<ConfigFile> {
-  const extName = path.extname(name);
+  let extName = path.extname(name);
   const filepath =
     path.isAbsolute(name) && extName !== ""
       ? name
       : require.resolve(name, { paths: [dirname] });
+  if (extName === "") {
+    // If the original name had no extension, derive it from the resolved filepath.
+    extName = path.extname(filepath);
+  }
 
   const conf = yield* readConfig(filepath, extName, envName, caller);
   if (!conf) {
