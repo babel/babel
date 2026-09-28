@@ -35,6 +35,8 @@ yarn install
 # Install browser-playwright for ChromiumHeadless testing
 yarn add playwright @vitest/browser-playwright --dev
 yarn playwright install --with-deps
+# Angular CLI uses oxc linker by default. This ensures that Babel is used for the build
+export NG_BUILD_BABEL_LINKER=1
 yarn run build
 yarn run ng test --watch=false --browsers ChromiumHeadless
 
