@@ -18,6 +18,7 @@ export default function _interopRequireWildcard(
     var _;
     var newObj: Record<string, any> = { __proto__: null, default: obj };
     var desc: PropertyDescriptor | undefined;
+    var key: string;
 
     if (
       obj === null ||
@@ -32,7 +33,7 @@ export default function _interopRequireWildcard(
       _.set(obj, newObj);
     }
 
-    for (const key in obj) {
+    for (key in obj) {
       if (key !== "default" && {}.hasOwnProperty.call(obj, key)) {
         desc =
           (_ = Object.defineProperty) &&
