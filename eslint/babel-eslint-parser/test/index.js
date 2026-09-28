@@ -219,6 +219,23 @@ describe("Babel and Espree", () => {
     it("template string with object with template string inside", () => {
       parseAndAssertSame("`${ { a:`${2}` } }`");
     });
+
+    it("template element ranges inside accessor property #18230", () => {
+      const ast = parseForESLint("class T { accessor a = `x${y}z`; }", {
+        eslintVisitorKeys: true,
+        eslintScopeManager: true,
+        babelOptions: BABEL_OPTIONS,
+      }).ast;
+
+      const accessor = ast.body[0].body.body[0];
+      expect(accessor.type).toBe("AccessorProperty");
+
+      const quasis = accessor.value.quasis;
+      expect(quasis.map(q => q.range)).toEqual([
+        [23, 27], // `x${
+        [28, 31], // }z`
+      ]);
+    });
   });
 
   it("simple expression", () => {
