@@ -31,11 +31,10 @@ yarn set version stable
 export YARN_ENABLE_IMMUTABLE_INSTALLS=false
 yarn install
 # Install browser-playwright for ChromiumHeadless testing
-# Pinned to 4.x: @angular/build's vitest peer dep is still ^4.0.8, while
-# @vitest/browser-playwright@5 requires vitest@5.0.0 exactly, which breaks
-# @angular/build's "ng test" (missing BrowserConnectionError export etc).
-yarn add playwright @vitest/browser-playwright@4 --dev
+yarn add playwright @vitest/browser-playwright --dev
 yarn playwright install --with-deps
+# Angular CLI uses oxc linker by default. This ensures that Babel is used for the build
+export NG_BUILD_BABEL_LINKER=1
 yarn run build
 yarn run ng test --watch=false --browsers ChromiumHeadless
 
