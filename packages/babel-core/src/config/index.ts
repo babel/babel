@@ -117,26 +117,41 @@ export function createConfigItemSync(
 ) {
   return beginHiddenCallStack(createConfigItemRunner.sync)(...args);
 }
-export function createConfigItem(
+type CreateConfigItemOptions = Parameters<typeof createConfigItemImpl>[1];
+
+type CreateConfigItemCallback = (
+  err: Error | undefined,
+  val: ConfigItem<PluginAPI> | null,
+) => void;
+
+type CreateConfigItem = {
+  (target: PluginTarget, callback: CreateConfigItemCallback): void;
+  (
+    target: PluginTarget,
+    options: CreateConfigItemOptions,
+    callback: CreateConfigItemCallback,
+  ): void;
+};
+
+export const createConfigItem: CreateConfigItem = function createConfigItem(
   target: PluginTarget,
-  options: Parameters<typeof createConfigItemImpl>[1],
-  callback?: (err: Error, val: ConfigItem<PluginAPI> | null) => void,
+  options?: CreateConfigItemOptions | CreateConfigItemCallback,
+  callback?: CreateConfigItemCallback,
 ) {
-  if (callback !== undefined) {
-    beginHiddenCallStack(createConfigItemRunner.errback)(
-      target,
-      options,
-      callback,
-    );
-  } else if (typeof options === "function") {
-    beginHiddenCallStack(createConfigItemRunner.errback)(
-      target,
-      undefined,
-      callback!,
-    );
-  } else {
+  if (typeof options === "function") {
+    callback = options;
+    options = undefined;
+  }
+
+  if (callback === undefined) {
     throw new Error(
       "Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'.",
     );
   }
-}
+
+  beginHiddenCallStack(createConfigItemRunner.errback)(
+    target,
+    options,
+    callback,
+  );
+};
