@@ -283,7 +283,8 @@ function isExecutionUncertain(type: t.Node["type"], key: string) {
 function isExecutionUncertainInList(paths: NodePath[], maxIndex: number) {
   for (let i = 0; i < maxIndex; i++) {
     const path = paths[i];
-    if (isExecutionUncertain(path.parent.type, path.parentKey)) {
+    const parent = path.parent;
+    if (!parent || isExecutionUncertain(parent.type, path.parentKey)) {
       return true;
     }
   }

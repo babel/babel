@@ -56,16 +56,16 @@ export default class TraversalContext<S = unknown> {
     return this._stacks[this._depth];
   }
 
-  getListStack(
+  findInsertionStack(
     container: t.Node | t.Node[] | null,
-    path?: NodePath<t.Node | null>,
+    path: NodePath<t.Node | null>,
   ) {
     for (let i = this._depth - 1; i > 0; i--) {
       const stack = this._stacks[i];
       if (stack.container === container) return stack;
     }
 
-    for (let parent = path?.parentPath; parent; parent = parent.parentPath) {
+    for (let parent = path.parentPath; parent; parent = parent.parentPath) {
       if (!parent.node) return;
 
       for (let i = this._depth - 1; i > 0; i--) {
@@ -109,6 +109,8 @@ export function createNodePath(
           cached._traverseFlags = 0;
           cached.skipKeys = undefined;
         }
+
+        if (initializeScope && !cached.scope) setScope.call(cached);
 
         return cached;
       }

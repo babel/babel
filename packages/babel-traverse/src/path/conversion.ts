@@ -112,7 +112,6 @@ export function ensureBlock(
   body.key = key;
   cacheNodePath(body);
 
-  blockPath.scope = this.scope;
   setScope.call(blockPath);
   parentPath.scope = blockPath.scope;
 }

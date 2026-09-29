@@ -272,6 +272,7 @@ export function replaceWith(
   _replaceWith.call(this, replacement);
 
   // potentially create new scope
+  this.scope = undefined!;
   setScope.call(this as NodePath<t.Node>);
 
   // requeue for visiting

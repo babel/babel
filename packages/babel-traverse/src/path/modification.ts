@@ -101,7 +101,7 @@ function _containerInsert<Nodes extends NodeList<t.Node>>(
   }
 
   for (let ctx = TraversalContext.current; ctx; ctx = ctx._parent) {
-    const stack = ctx.getListStack(this.container, this);
+    const stack = ctx.findInsertionStack(this.container, this);
     if (!stack) continue;
 
     const shouldQueue =
