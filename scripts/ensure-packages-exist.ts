@@ -6,7 +6,6 @@ import { mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join as joinPath } from "node:path";
 import pLimit from "p-limit";
-import open from "open";
 
 const packages = execSync("yarn workspaces list --no-private --json", {
   encoding: "utf-8",
@@ -55,19 +54,29 @@ if (process.argv.includes("--check-only")) {
   process.exit(1);
 }
 
+const npmVersion = execSync("npm --version", { encoding: "utf-8" }).trim();
+const [major, minor] = npmVersion.split(".").map(Number);
+if (major < 11 || (major === 11 && minor < 15)) {
+  console.error(
+    `npm >= 11.15.0 is required to configure trusted publishing (found ${npmVersion}). Aborting.`
+  );
+  process.exit(1);
+}
+
 const rl = createRL({
   input: process.stdin,
   output: process.stdout,
 });
 
 await rl.question(
-  "I can do that for you. Please make sure that you are logged in to the npm command line (run `npm whoami` in a separate terminal), then press Enter to continue."
+  "I can do that for you. Please make sure that you are logged in to the npm command line (run `npm whoami` in a separate terminal), then press Enter to continue.\n" +
+    "When asked to authenticate on the npm website, you can check the option to skip two-factor authentication for the next 5 minutes to avoid being asked for every package."
 );
 
 let whoami;
 try {
   whoami = execSync("npm whoami --json", {
-    stdio: "ignore",
+    stdio: ["ignore", "pipe", "ignore"],
     encoding: "utf-8",
   });
 } catch {
@@ -98,13 +107,14 @@ for (const failure of failures) {
     cwd: tmpDir,
   });
 
-  const settingsURL = `https://www.npmjs.com/package/${failure.name}/access`;
+  console.log(`Setting up OIDC publishing for ${failure.name}...`);
+  execSync(
+    `npm trust github ${failure.name} --file release.yml --repository babel/babel --environment npm --allow-publish --yes`,
+    { stdio: "inherit" }
+  );
 
-  console.log(`Please go to set up OIDC publishing at:\n${settingsURL}`);
-  await rl.question("Press ENTER to open in the browser...");
-  await open(settingsURL);
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  await rl.question("Press ENTER when you are done.");
+  // Avoid hitting the npm rate limits
+  await new Promise(resolve => setTimeout(resolve, 2000));
 }
 
 console.log("\n\nAll done!");
