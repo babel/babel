@@ -331,6 +331,16 @@ export default declare<PluginState, Options>((api, options: Options) => {
               // because they must be hoisted
               path.node.kind = "var";
             } else if (path.isImportDeclaration()) {
+              for (const specifier of path.node.specifiers) {
+                if (
+                  t.isImportNamespaceSpecifier(specifier) &&
+                  specifier.exportsFilter
+                ) {
+                  throw path.buildCodeFrameError(
+                    "Transforming `import { x, y } as ns from '...'` is not supported yet.",
+                  );
+                }
+              }
               const source = path.node.source.value;
               pushModule(source, "imports", path.node.specifiers);
               for (const name of Object.keys(path.getBindingIdentifiers())) {
@@ -424,6 +434,11 @@ export default declare<PluginState, Options>((api, options: Options) => {
                 const specifiers = path.node.specifiers;
                 if (specifiers?.length) {
                   if (path.node.source) {
+                    if (path.node.phase === "defer") {
+                      throw path.buildCodeFrameError(
+                        "Transforming `export defer { x } from '...'` is not supported yet.",
+                      );
+                    }
                     pushModule(path.node.source.value, "exports", specifiers);
                     path.remove();
                   } else {

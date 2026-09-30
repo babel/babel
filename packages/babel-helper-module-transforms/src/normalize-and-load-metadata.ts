@@ -315,6 +315,11 @@ function getModuleMetadata(
             data.referenced = true;
           }
         } else if (spec.isImportNamespaceSpecifier()) {
+          if (spec.node.exportsFilter) {
+            throw spec.buildCodeFrameError(
+              "Transforming `import { x, y } as ns from '...'` is not supported yet.",
+            );
+          }
           const localName = spec.get("local").node.name;
 
           data.importsNamespace.add(localName);
@@ -357,6 +362,11 @@ function getModuleMetadata(
       };
       data.referenced = true;
     } else if (child.isExportNamedDeclaration() && child.node.source) {
+      if (child.node.phase === "defer") {
+        throw child.buildCodeFrameError(
+          "Transforming `export defer { x } from '...'` is not supported yet.",
+        );
+      }
       hasExports = true;
       const data = getData(child.node.source, child.node);
       if (!data.loc) data.loc = child.node.loc;

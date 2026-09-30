@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    "transform-export-namespace-from"
+  ],
+  "parserOpts": {
+    "plugins": [
+      "namespaceImportFilter",
+      "deferredReexports",
+      "deferredImportEvaluation"
+    ]
+  },
+  "throws": "Transforming `export defer * as ns from '...'` is not supported yet."
+}
