@@ -2195,6 +2195,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const isFromRequired =
       hasDefault ||
       hasStar ||
+      (node as Undone<N.ExportNamedDeclaration>).phase === "defer" ||
       // export { x, y } as ns from '...'
       (hasSpecifiers &&
         node.specifiers[0]?.type === "ExportNamespaceSpecifier");
@@ -2324,7 +2325,11 @@ export default abstract class StatementParser extends ExpressionParser {
       const startLoc = this.state.startLoc;
       this.setLoc(startLoc);
       const specifiers = this.parseExportSpecifiers(isTypeExport);
-      if (this.isContextual(tt._as)) {
+      if (
+        this.isContextual(tt._as) &&
+        // https://github.com/tc39/proposal-deferred-reexports/issues/98
+        !this.hasPrecedingLineBreak()
+      ) {
         // export { x, y } as ns from '...'
         this.expectPlugin("namespaceImportFilter");
         const specifier =
@@ -2707,13 +2712,20 @@ export default abstract class StatementParser extends ExpressionParser {
         ({ local: name, exported: alias, exportKind: kind } = specifier);
       }
 
-      const nameString = name.type === "Identifier" ? name.name : name.value;
-      if (seen.has(nameString)) {
-        this.raise(Errors.FilteredNamespaceDuplicateName, name, {
-          name: nameString,
-        });
+      const nameString =
+        name.type === "Identifier"
+          ? name.name
+          : this.isStringModuleExportName(name)
+            ? name.value
+            : null;
+      if (nameString !== null) {
+        if (seen.has(nameString)) {
+          this.raise(Errors.FilteredNamespaceDuplicateName, name, {
+            name: nameString,
+          });
+        }
+        seen.add(nameString);
       }
-      seen.add(nameString);
 
       // In error recovery mode, keep the whole specifier when it cannot be
       // represented by just its name.
@@ -2752,7 +2764,13 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   isPotentialImportPhase(isExport: boolean): boolean {
-    if (isExport) return this.isContextual(tt._defer);
+    if (isExport) {
+      if (!this.isContextual(tt._defer)) return false;
+      // export defer { x } from '...'
+      // export defer * as ns from '...'
+      const ch = this.lookaheadCharCode();
+      return ch === charCodes.leftCurlyBrace || ch === charCodes.asterisk;
+    }
     return this.isContextual(tt._source) || this.isContextual(tt._defer);
   }
 

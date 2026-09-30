@@ -2,7 +2,8 @@
   "sourceType": "module",
   "plugins": [
     "deferredReexports",
+    "deferredImportEvaluation",
     "exportDefaultFrom"
   ],
-  "throws": "The 'deferredReexports' plugin requires 'deferredImportEvaluation'."
+  "throws": "Unexpected token, expected \"{\" (1:7)"
 }
