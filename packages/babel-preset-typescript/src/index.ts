@@ -6,6 +6,8 @@ import type { Options } from "./normalize-options.ts";
 import pluginRewriteTSImports from "./plugin-rewrite-ts-imports.ts";
 import type { PluginItem } from "@babel/core";
 
+export type { Options };
+
 export default declarePreset((api, opts: Options) => {
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
