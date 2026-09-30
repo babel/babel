@@ -6,6 +6,7 @@ export function getVisitorKeys() {
   if (!visitorKeys) {
     // AST Types that are not presented in Babel AST
     const newTypes = {
+      AccessorProperty: ["decorators", "typeAnnotation", "value", "key"],
       ChainExpression: ESLINT_VISITOR_KEYS.ChainExpression,
       ImportExpression: ESLINT_VISITOR_KEYS.ImportExpression,
       Literal: ESLINT_VISITOR_KEYS.Literal,
