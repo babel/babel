@@ -14,6 +14,7 @@ export type Plugin =
   | "functionSent"
   | "jsx"
   | "moduleBlocks"
+  | "namespaceImportFilter"
   | "placeholders"
   | "sourcePhaseImports"
   | "throwExpressions"

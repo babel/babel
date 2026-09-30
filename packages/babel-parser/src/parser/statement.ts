@@ -2326,10 +2326,10 @@ export default abstract class StatementParser extends ExpressionParser {
       const specifiers = this.parseExportSpecifiers(isTypeExport);
       if (this.isContextual(tt._as)) {
         // export { x, y } as ns from '...'
-        this.expectPlugin("deferredReexports");
+        this.expectPlugin("namespaceImportFilter");
         const specifier =
           this.startNodeAt<N.ExportNamespaceSpecifier>(startLoc);
-        specifier.exportsFilter = this.toNamespaceFilterSpecifiers(specifiers);
+        specifier.exportsFilter = this.toNamespaceExportsFilter(specifiers);
         this.next(); // eat `as`
         specifier.exported = this.parseModuleExportName();
         node2.specifiers.push(
@@ -2695,39 +2695,43 @@ export default abstract class StatementParser extends ExpressionParser {
 
   // Converts the specifiers parsed in `{ ... }` to the list of names of a
   // filtered namespace (`{ ... } as ns`).
-  toNamespaceFilterSpecifiers(
+  toNamespaceExportsFilter(
     specifiers: (N.ImportSpecifier | N.ExportSpecifier)[],
-  ): N.NamespaceFilterSpecifier[] {
+  ): (N.Identifier | N.StringLiteral)[] {
     const seen = new Set<string>();
     return specifiers.map(specifier => {
-      let imported, alias, kind;
+      let name, alias, kind;
       if (specifier.type === "ImportSpecifier") {
-        ({ imported, local: alias, importKind: kind } = specifier);
-        delete (specifier as Partial<N.ImportSpecifier>).local;
-        delete specifier.importKind;
+        ({ imported: name, local: alias, importKind: kind } = specifier);
       } else {
-        ({ local: imported, exported: alias, exportKind: kind } = specifier);
-        delete (specifier as Partial<N.ExportSpecifier>).local;
-        delete (specifier as Partial<N.ExportSpecifier>).exported;
-        delete specifier.exportKind;
+        ({ local: name, exported: alias, exportKind: kind } = specifier);
       }
-      const node = this.castNodeTo(specifier, "NamespaceFilterSpecifier");
-      node.imported = imported;
 
-      const name =
-        imported.type === "Identifier" ? imported.name : imported.value;
-      if (seen.has(name)) {
-        this.raise(Errors.FilteredNamespaceDuplicateName, imported, { name });
+      const nameString = name.type === "Identifier" ? name.name : name.value;
+      if (seen.has(nameString)) {
+        this.raise(Errors.FilteredNamespaceDuplicateName, name, {
+          name: nameString,
+        });
       }
-      seen.add(name);
-      if (alias.start !== imported.start) {
+      seen.add(nameString);
+
+      // In error recovery mode, keep the whole specifier when it cannot be
+      // represented by just its name.
+      let invalid = false;
+      if (alias.start !== name.start) {
         this.raise(Errors.FilteredNamespaceRename, alias);
-        node.property = alias;
+        invalid = true;
       }
       if (kind === "type" || kind === "typeof") {
-        this.raise(Errors.FilteredNamespaceTypeModifier, node);
+        this.raise(Errors.FilteredNamespaceTypeModifier, specifier);
+        invalid = true;
       }
-      return node;
+      if (invalid) {
+        return specifier as unknown as N.Identifier | N.StringLiteral;
+      }
+
+      this.replaceNodeInPendingComments(specifier, name);
+      return name;
     });
   }
 
@@ -3091,9 +3095,9 @@ export default abstract class StatementParser extends ExpressionParser {
 
     if (this.isContextual(tt._as)) {
       // import { x, y } as ns from '...'
-      this.expectPlugin("deferredReexports");
+      this.expectPlugin("namespaceImportFilter");
       const specifier = this.startNodeAt<N.ImportNamespaceSpecifier>(startLoc);
-      specifier.exportsFilter = this.toNamespaceFilterSpecifiers(
+      specifier.exportsFilter = this.toNamespaceExportsFilter(
         node.specifiers.splice(specifiersStart) as N.ImportSpecifier[],
       );
       this.next(); // eat `as`

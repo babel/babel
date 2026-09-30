@@ -1757,7 +1757,7 @@ defineType("ImportNamespaceSpecifier", {
     exportsFilter: {
       // import { a, b } as ns from "mod"
       optional: true,
-      validate: arrayOfType("NamespaceFilterSpecifier"),
+      validate: arrayOfType("Identifier", "StringLiteral"),
     },
   },
 });
@@ -2147,7 +2147,7 @@ defineType("ExportNamespaceSpecifier", {
     exportsFilter: {
       // export { a, b } as ns from "mod"
       optional: true,
-      validate: arrayOfType("NamespaceFilterSpecifier"),
+      validate: arrayOfType("Identifier", "StringLiteral"),
     },
   },
 });

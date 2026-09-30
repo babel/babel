@@ -206,6 +206,11 @@ export default class CommentsParser extends BaseParser {
           case "ImportDeclaration":
             adjustInnerComments(node, node.specifiers, commentWS);
             break;
+          case "ImportNamespaceSpecifier":
+          case "ExportNamespaceSpecifier":
+            // import { x, y, } as ns from '...'
+            adjustInnerComments(node, node.exportsFilter ?? [], commentWS);
+            break;
           case "TSEnumBody":
             adjustInnerComments(node, node.members, commentWS);
             break;
@@ -262,6 +267,18 @@ export default class CommentsParser extends BaseParser {
     const commentWS = commentStack[length - 1];
     if (commentWS.leadingNode === node) {
       commentWS.leadingNode = null;
+    }
+  }
+
+  /**
+   * Replace `oldNode` with `newNode` in the comment whitespaces that
+   * have not been finalized yet. This is used when an AST node is replaced by
+   * one of its children spanning the same range.
+   */
+  replaceNodeInPendingComments(oldNode: Node, newNode: Node) {
+    for (const commentWS of this.state.commentStack) {
+      if (commentWS.leadingNode === oldNode) commentWS.leadingNode = newNode;
+      if (commentWS.trailingNode === oldNode) commentWS.trailingNode = newNode;
     }
   }
 

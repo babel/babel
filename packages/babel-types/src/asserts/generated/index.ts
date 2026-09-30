@@ -1083,12 +1083,6 @@ export function assertModuleExpression(
 ): asserts node is t.ModuleExpression {
   assert("ModuleExpression", node, opts);
 }
-export function assertNamespaceFilterSpecifier(
-  node: object | null | undefined,
-  opts?: object | null,
-): asserts node is t.NamespaceFilterSpecifier {
-  assert("NamespaceFilterSpecifier", node, opts);
-}
 export function assertTopicReference(
   node: object | null | undefined,
   opts?: object | null,

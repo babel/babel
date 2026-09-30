@@ -55,6 +55,7 @@ type Plugin$1 =
   | "functionSent"
   | "jsx"
   | "moduleBlocks"
+  | "namespaceImportFilter"
   | "placeholders"
   | "sourcePhaseImports"
   | "throwExpressions"

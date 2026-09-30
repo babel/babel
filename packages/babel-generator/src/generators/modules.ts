@@ -57,25 +57,9 @@ export function ExportSpecifier(this: Printer, node: t.ExportSpecifier) {
   }
 }
 
-export function NamespaceFilterSpecifier(
-  this: Printer,
-  node: t.NamespaceFilterSpecifier,
-) {
-  this.print(node.imported);
-
-  // only emitted by the parser when `.errorRecovery` is enabled, and the source
-  // uses the invalid `{ a as b } as ns` syntax.
-  if (node.property) {
-    this.space();
-    this.word("as");
-    this.space();
-    this.print(node.property);
-  }
-}
-
 function _printNamespaceFilter(
   this: Printer,
-  exportsFilter: t.NamespaceFilterSpecifier[] | null | undefined,
+  exportsFilter: t.ImportNamespaceSpecifier["exportsFilter"],
 ) {
   if (exportsFilter) {
     this.token("{");

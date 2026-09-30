@@ -135,11 +135,6 @@ export default function isReferenced(
     case "ImportSpecifier":
       return false;
 
-    // no: import { NODE } as ns from "foo";
-    // no: export { NODE } as ns from "foo";
-    case "NamespaceFilterSpecifier":
-      return false;
-
     // no: import "foo" assert { NODE: "json" }
     case "ImportAttribute":
       return false;

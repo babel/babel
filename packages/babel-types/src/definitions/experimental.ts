@@ -149,23 +149,6 @@ defineType("ModuleExpression", {
   aliases: ["Expression"],
 });
 
-// https://github.com/tc39/proposal-deferred-reexports
-defineType("NamespaceFilterSpecifier", {
-  visitor: ["imported", "property"],
-  builder: ["imported"],
-  fields: {
-    imported: {
-      validate: assertNodeType("Identifier", "StringLiteral"),
-    },
-    property: {
-      // Only produced by the parser in error recovery mode, for the
-      // invalid `import { a as b } as ns from "mod"`
-      optional: true,
-      validate: assertNodeType("Identifier", "StringLiteral"),
-    },
-  },
-});
-
 // https://github.com/tc39/proposal-pipeline-operator
 defineType("TopicReference", {
   aliases: ["Expression"],

@@ -2807,17 +2807,6 @@ export function moduleExpression(body: t.Program): t.ModuleExpression {
   validate(defs.body, node, "body", body, 1);
   return node;
 }
-export function namespaceFilterSpecifier(
-  imported: t.Identifier | t.StringLiteral,
-): t.NamespaceFilterSpecifier {
-  const node: t.NamespaceFilterSpecifier = {
-    type: "NamespaceFilterSpecifier",
-    imported,
-  };
-  const defs = NODE_FIELDS.NamespaceFilterSpecifier;
-  validate(defs.imported, node, "imported", imported, 1);
-  return node;
-}
 export function topicReference(): t.TopicReference {
   return {
     type: "TopicReference",

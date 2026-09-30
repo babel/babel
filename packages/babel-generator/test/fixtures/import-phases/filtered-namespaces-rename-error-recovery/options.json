@@ -1,4 +1,4 @@
 {
-  "plugins": ["deferredImportEvaluation", "deferredReexports"],
+  "plugins": ["deferredImportEvaluation", "deferredReexports", "namespaceImportFilter"],
   "parserOpts": { "errorRecovery": true }
 }

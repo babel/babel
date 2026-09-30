@@ -123,7 +123,6 @@ export interface ExplVisitorBase<S> {
   MetaProperty?: ExplVisitNode<S, t.MetaProperty>;
   MixedTypeAnnotation?: ExplVisitNode<S, t.MixedTypeAnnotation>;
   ModuleExpression?: ExplVisitNode<S, t.ModuleExpression>;
-  NamespaceFilterSpecifier?: ExplVisitNode<S, t.NamespaceFilterSpecifier>;
   NewExpression?: ExplVisitNode<S, t.NewExpression>;
   NullLiteral?: ExplVisitNode<S, t.NullLiteral>;
   NullLiteralTypeAnnotation?: ExplVisitNode<S, t.NullLiteralTypeAnnotation>;
@@ -388,7 +387,6 @@ export interface VisitorBaseNodes<S> {
   MetaProperty?: VisitNode<S, t.MetaProperty>;
   MixedTypeAnnotation?: VisitNode<S, t.MixedTypeAnnotation>;
   ModuleExpression?: VisitNode<S, t.ModuleExpression>;
-  NamespaceFilterSpecifier?: VisitNode<S, t.NamespaceFilterSpecifier>;
   NewExpression?: VisitNode<S, t.NewExpression>;
   NullLiteral?: VisitNode<S, t.NullLiteral>;
   NullLiteralTypeAnnotation?: VisitNode<S, t.NullLiteralTypeAnnotation>;

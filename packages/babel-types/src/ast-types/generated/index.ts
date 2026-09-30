@@ -161,7 +161,6 @@ export type Node =
   | MetaProperty
   | MixedTypeAnnotation
   | ModuleExpression
-  | NamespaceFilterSpecifier
   | NewExpression
   | NullLiteral
   | NullLiteralTypeAnnotation
@@ -941,7 +940,7 @@ export interface ImportDefaultSpecifier extends BaseNode {
 export interface ImportNamespaceSpecifier extends BaseNode {
   type: "ImportNamespaceSpecifier";
   local: Identifier;
-  exportsFilter?: NamespaceFilterSpecifier[] | null;
+  exportsFilter?: (Identifier | StringLiteral)[] | null;
 }
 
 export interface ImportSpecifier extends BaseNode {
@@ -1072,7 +1071,7 @@ export interface BigIntLiteral extends BaseNode {
 export interface ExportNamespaceSpecifier extends BaseNode {
   type: "ExportNamespaceSpecifier";
   exported: Identifier | StringLiteral;
-  exportsFilter?: NamespaceFilterSpecifier[] | null;
+  exportsFilter?: (Identifier | StringLiteral)[] | null;
 }
 
 export interface OptionalMemberExpressionComputed extends BaseNode {
@@ -1761,12 +1760,6 @@ export interface ExportDefaultSpecifier extends BaseNode {
 export interface ModuleExpression extends BaseNode {
   type: "ModuleExpression";
   body: Program;
-}
-
-export interface NamespaceFilterSpecifier extends BaseNode {
-  type: "NamespaceFilterSpecifier";
-  imported: Identifier | StringLiteral;
-  property?: Identifier | StringLiteral | null;
 }
 
 export interface TopicReference extends BaseNode {
@@ -4524,7 +4517,6 @@ export interface ParentMaps {
     | LogicalExpression
     | MemberExpression
     | MetaProperty
-    | NamespaceFilterSpecifier
     | NewExpression
     | ObjectMethod
     | ObjectProperty
@@ -5238,7 +5230,6 @@ export interface ParentMaps {
     | WhileStatement
     | WithStatement
     | YieldExpression;
-  NamespaceFilterSpecifier: ExportNamespaceSpecifier | ImportNamespaceSpecifier;
   NewExpression:
     | ArrayExpression
     | ArrowFunctionExpression
@@ -6100,6 +6091,7 @@ export interface ParentMaps {
     | ImportAttribute
     | ImportDeclaration
     | ImportExpression
+    | ImportNamespaceSpecifier
     | ImportSpecifier
     | JSXAttribute
     | JSXExpressionContainer
@@ -6107,7 +6099,6 @@ export interface ParentMaps {
     | JSXSpreadChild
     | LogicalExpression
     | MemberExpression
-    | NamespaceFilterSpecifier
     | NewExpression
     | ObjectMethod
     | ObjectProperty

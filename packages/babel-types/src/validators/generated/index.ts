@@ -2465,24 +2465,6 @@ export function isModuleExpression<Opts extends Options<t.ModuleExpression>>(
 ): boolean {
   return isType<t.ModuleExpression>("ModuleExpression", node, opts);
 }
-export function isNamespaceFilterSpecifier(
-  node: t.Node | null | undefined,
-): node is t.NamespaceFilterSpecifier;
-export function isNamespaceFilterSpecifier<
-  Opts extends Options<t.NamespaceFilterSpecifier>,
->(
-  node: t.Node | null | undefined,
-  opts?: Opts | null,
-): node is t.NamespaceFilterSpecifier & Opts;
-export function isNamespaceFilterSpecifier<
-  Opts extends Options<t.NamespaceFilterSpecifier>,
->(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  return isType<t.NamespaceFilterSpecifier>(
-    "NamespaceFilterSpecifier",
-    node,
-    opts,
-  );
-}
 export function isTopicReference(
   node: t.Node | null | undefined,
 ): node is t.TopicReference;
