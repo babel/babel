@@ -421,6 +421,13 @@ function deeplyMakePlainObject(obj) {
         }
       }
     });
+
+    describe("templates", () => {
+      // This test needs typescript-estree, espree doesn't support AccessorProperty
+      it("template element ranges inside accessor property #18230", () => {
+        parseAndAssertSame("class T { accessor a = `x${y}z`; }");
+      });
+    });
   },
 );
 
