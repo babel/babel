@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "flow",
+    "deferredReexports",
+    "deferredImportEvaluation"
+  ]
+}

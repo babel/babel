@@ -1,0 +1,63 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+        "phase": "defer",
+        "specifiers": [
+          {
+            "type": "ExportNamespaceSpecifier",
+            "start":13,"end":27,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":27,"index":27}},
+            "exportsFilter": [
+              {
+                "type": "NamespaceFilterSpecifier",
+                "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16}},
+                "imported": {
+                  "type": "Identifier",
+                  "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"a"},
+                  "name": "a"
+                }
+              },
+              {
+                "type": "NamespaceFilterSpecifier",
+                "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19}},
+                "imported": {
+                  "type": "Identifier",
+                  "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"b"},
+                  "name": "b"
+                }
+              }
+            ],
+            "exported": {
+              "type": "Identifier",
+              "start":25,"end":27,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":27,"index":27},"identifierName":"ns"},
+              "name": "ns"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":33,"end":36,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":36,"index":36}},
+          "extra": {
+            "rawValue": "x",
+            "raw": "\"x\""
+          },
+          "value": "x"
+        },
+        "attributes": [],
+        "declaration": null
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

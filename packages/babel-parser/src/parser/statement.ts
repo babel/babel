@@ -2172,7 +2172,6 @@ export default abstract class StatementParser extends ExpressionParser {
       hasStar && this.maybeParseExportNamespaceSpecifier(node);
     const parseAfterNamespace =
       parseAfterDefault && (!hasNamespace || this.eat(tt.comma));
-    const isFromRequired = hasDefault || hasStar;
 
     if (hasStar && !hasNamespace) {
       if (hasDefault) this.unexpected();
@@ -2193,6 +2192,12 @@ export default abstract class StatementParser extends ExpressionParser {
     }
 
     const hasSpecifiers = this.maybeParseExportNamedSpecifiers(node);
+    const isFromRequired =
+      hasDefault ||
+      hasStar ||
+      // export { x, y } as ns from '...'
+      (hasSpecifiers &&
+        node.specifiers[0]?.type === "ExportNamespaceSpecifier");
 
     if (hasDefault && parseAfterDefault && !hasStar && !hasSpecifiers) {
       this.unexpected(null, tt.braceL);
@@ -2316,7 +2321,23 @@ export default abstract class StatementParser extends ExpressionParser {
 
       if (!node2.specifiers) node2.specifiers = [];
       const isTypeExport = node2.exportKind === "type";
-      node2.specifiers.push(...this.parseExportSpecifiers(isTypeExport));
+      const startLoc = this.state.startLoc;
+      this.setLoc(startLoc);
+      const specifiers = this.parseExportSpecifiers(isTypeExport);
+      if (this.isContextual(tt._as)) {
+        // export { x, y } as ns from '...'
+        this.expectPlugin("deferredReexports");
+        const specifier =
+          this.startNodeAt<N.ExportNamespaceSpecifier>(startLoc);
+        specifier.exportsFilter = this.toNamespaceFilterSpecifiers(specifiers);
+        this.next(); // eat `as`
+        specifier.exported = this.parseModuleExportName();
+        node2.specifiers.push(
+          this.finishNode(specifier, "ExportNamespaceSpecifier"),
+        );
+      } else {
+        node2.specifiers.push(...specifiers);
+      }
       node2.source = null;
 
       node2.attributes = [];
@@ -2672,6 +2693,44 @@ export default abstract class StatementParser extends ExpressionParser {
     return this.parseIdentifier(true);
   }
 
+  // Converts the specifiers parsed in `{ ... }` to the list of names of a
+  // filtered namespace (`{ ... } as ns`).
+  toNamespaceFilterSpecifiers(
+    specifiers: (N.ImportSpecifier | N.ExportSpecifier)[],
+  ): N.NamespaceFilterSpecifier[] {
+    const seen = new Set<string>();
+    return specifiers.map(specifier => {
+      let imported, alias, kind;
+      if (specifier.type === "ImportSpecifier") {
+        ({ imported, local: alias, importKind: kind } = specifier);
+        delete (specifier as Partial<N.ImportSpecifier>).local;
+        delete specifier.importKind;
+      } else {
+        ({ local: imported, exported: alias, exportKind: kind } = specifier);
+        delete (specifier as Partial<N.ExportSpecifier>).local;
+        delete (specifier as Partial<N.ExportSpecifier>).exported;
+        delete specifier.exportKind;
+      }
+      const node = this.castNodeTo(specifier, "NamespaceFilterSpecifier");
+      node.imported = imported;
+
+      const name =
+        imported.type === "Identifier" ? imported.name : imported.value;
+      if (seen.has(name)) {
+        this.raise(Errors.FilteredNamespaceDuplicateName, imported, { name });
+      }
+      seen.add(name);
+      if (alias.start !== imported.start) {
+        this.raise(Errors.FilteredNamespaceRename, alias);
+        node.property = alias;
+      }
+      if (kind === "type" || kind === "typeof") {
+        this.raise(Errors.FilteredNamespaceTypeModifier, node);
+      }
+      return node;
+    });
+  }
+
   checkImportPhase(node: Undone<N.ImportDeclaration>) {
     const { specifiers } = node;
     const singleBindingType =
@@ -2852,7 +2911,7 @@ export default abstract class StatementParser extends ExpressionParser {
     const hasStar = parseNext && this.maybeParseStarImportSpecifier(node);
     // now we check if we need to parse the next imports
     // but only if they are not importing * (everything)
-    if (parseNext && !hasStar) this.parseNamedImportSpecifiers(node);
+    if (parseNext && !hasStar) this.parseNamedOrFilteredImportSpecifiers(node);
     this.expectContextual(tt._from);
 
     return this.parseImportSourceAndAttributes(node);
@@ -2892,12 +2951,8 @@ export default abstract class StatementParser extends ExpressionParser {
   finishImportSpecifier<
     T extends
       N.ImportSpecifier | N.ImportDefaultSpecifier | N.ImportNamespaceSpecifier,
-  >(
-    specifier: Undone<T>,
-    type: T["type"],
-    bindingType: BindingFlag = BindingFlag.TYPE_LEXICAL,
-  ) {
-    this.checkLVal(specifier.local, { type }, bindingType);
+  >(specifier: Undone<T>, type: T["type"]) {
+    this.checkLVal(specifier.local, { type }, BindingFlag.TYPE_LEXICAL);
     return this.finishNode(specifier, type);
   }
 
@@ -3028,6 +3083,40 @@ export default abstract class StatementParser extends ExpressionParser {
     return false;
   }
 
+  parseNamedOrFilteredImportSpecifiers(node: Undone<N.ImportDeclaration>) {
+    const startLoc = this.state.startLoc;
+    this.setLoc(startLoc);
+    const specifiersStart = node.specifiers.length;
+    this.parseNamedImportSpecifiers(node);
+
+    if (this.isContextual(tt._as)) {
+      // import { x, y } as ns from '...'
+      this.expectPlugin("deferredReexports");
+      const specifier = this.startNodeAt<N.ImportNamespaceSpecifier>(startLoc);
+      specifier.exportsFilter = this.toNamespaceFilterSpecifiers(
+        node.specifiers.splice(specifiersStart) as N.ImportSpecifier[],
+      );
+      this.next(); // eat `as`
+      this.parseImportSpecifierLocal(
+        node,
+        specifier,
+        "ImportNamespaceSpecifier",
+      );
+      return;
+    }
+
+    // We only know that the specifiers are named imports, and not the names of
+    // a filtered namespace, once we have seen what follows `}`.
+    const isInTypeOnlyImport =
+      node.importKind === "type" || node.importKind === "typeof";
+    for (let i = specifiersStart; i < node.specifiers.length; i++) {
+      this.checkImportSpecifier(
+        node.specifiers[i] as N.ImportSpecifier,
+        isInTypeOnlyImport,
+      );
+    }
+  }
+
   parseNamedImportSpecifiers(node: Undone<N.ImportDeclaration>) {
     let first = true;
     this.expect(tt.braceL);
@@ -3053,44 +3142,57 @@ export default abstract class StatementParser extends ExpressionParser {
         importedIsString,
         node.importKind === "type" || node.importKind === "typeof",
         isMaybeTypeOnly,
-        undefined,
       );
       node.specifiers.push(importSpecifier);
     }
   }
 
   // https://tc39.es/ecma262/#prod-ImportSpecifier
+  // The specifier is validated later by checkImportSpecifier.
   parseImportSpecifier(
     specifier: Undone<N.ImportSpecifier>,
+    /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript and Flow parser */
     importedIsString: boolean,
-    /* used in TypeScript and Flow parser */
     isInTypeOnlyImport: boolean,
     isMaybeTypeOnly: boolean,
-    bindingType: BindingFlag | undefined,
+    /* eslint-enable @typescript-eslint/no-unused-vars */
   ): N.ImportSpecifier {
     if (this.eatContextual(tt._as)) {
       specifier.local = this.parseIdentifier();
     } else {
-      const { imported } = specifier;
-      if (importedIsString) {
-        throw this.raise(Errors.ImportBindingIsString, specifier, {
-          importName: (imported as N.StringLiteral).value,
-        });
-      }
-      this.checkReservedWord(
-        (imported as N.Identifier).name,
-        specifier.start!,
-        true,
-        true,
+      specifier.local ??= this.cloneIdentifier(
+        specifier.imported as N.Identifier,
       );
-      if (!specifier.local) {
-        specifier.local = this.cloneIdentifier(imported as N.Identifier);
-      }
     }
-    return this.finishImportSpecifier(
-      specifier,
-      "ImportSpecifier",
-      bindingType,
+    return this.finishNode(specifier, "ImportSpecifier");
+  }
+
+  checkImportSpecifier(
+    specifier: N.ImportSpecifier,
+    /* used in TypeScript and Flow parser */
+    isInTypeOnlyImport: boolean,
+    bindingType: BindingFlag = BindingFlag.TYPE_LEXICAL,
+    checkReservedWord: boolean = true,
+  ) {
+    const { imported, local } = specifier;
+    if (this.isStringModuleExportName(local)) {
+      throw this.raise(Errors.ImportBindingIsString, specifier, {
+        importName: (imported as N.StringLiteral).value,
+      });
+    }
+    if (checkReservedWord && local.start === imported.start) {
+      this.checkReservedWord(local.name, local.start!, true, true);
+    }
+    this.checkLVal(local, { type: "ImportSpecifier" }, bindingType);
+  }
+
+  isStringModuleExportName(
+    node: N.Identifier | N.StringLiteral,
+  ): node is N.StringLiteral {
+    return (
+      node.type === "StringLiteral" ||
+      // estree
+      (node.type as string) === "Literal"
     );
   }
 

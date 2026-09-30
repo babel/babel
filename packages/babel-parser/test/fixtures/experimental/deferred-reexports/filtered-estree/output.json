@@ -1,0 +1,82 @@
+{
+  "type": "File",
+  "start":0,"end":58,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":29}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":58,"loc":{"start":{"line":1,"column":0},"end":{"line":2,"column":29}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0},"end":{"line":1,"column":28}},
+        "specifiers": [
+          {
+            "type": "ExportNamespaceSpecifier",
+            "start":7,"end":18,"loc":{"start":{"line":1,"column":7},"end":{"line":1,"column":18}},
+            "exportsFilter": [
+              {
+                "type": "NamespaceFilterSpecifier",
+                "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10}},
+                "imported": {
+                  "type": "Identifier",
+                  "start":9,"end":10,"loc":{"start":{"line":1,"column":9},"end":{"line":1,"column":10},"identifierName":"a"},
+                  "name": "a"
+                }
+              }
+            ],
+            "exported": {
+              "type": "Identifier",
+              "start":16,"end":18,"loc":{"start":{"line":1,"column":16},"end":{"line":1,"column":18},"identifierName":"ns"},
+              "name": "ns"
+            }
+          }
+        ],
+        "source": {
+          "type": "Literal",
+          "start":24,"end":27,"loc":{"start":{"line":1,"column":24},"end":{"line":1,"column":27}},
+          "value": "x",
+          "raw": "\"x\""
+        },
+        "attributes": [],
+        "declaration": null
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":29,"end":58,"loc":{"start":{"line":2,"column":0},"end":{"line":2,"column":29}},
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start":36,"end":48,"loc":{"start":{"line":2,"column":7},"end":{"line":2,"column":19}},
+            "exportsFilter": [
+              {
+                "type": "NamespaceFilterSpecifier",
+                "start":38,"end":39,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":10}},
+                "imported": {
+                  "type": "Identifier",
+                  "start":38,"end":39,"loc":{"start":{"line":2,"column":9},"end":{"line":2,"column":10},"identifierName":"a"},
+                  "name": "a"
+                }
+              }
+            ],
+            "local": {
+              "type": "Identifier",
+              "start":45,"end":48,"loc":{"start":{"line":2,"column":16},"end":{"line":2,"column":19},"identifierName":"ns2"},
+              "name": "ns2"
+            }
+          }
+        ],
+        "source": {
+          "type": "Literal",
+          "start":54,"end":57,"loc":{"start":{"line":2,"column":25},"end":{"line":2,"column":28}},
+          "value": "x",
+          "raw": "\"x\""
+        },
+        "attributes": []
+      }
+    ],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

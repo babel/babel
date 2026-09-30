@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "typescript",
+    "deferredReexports",
+    "deferredImportEvaluation"
+  ]
+}

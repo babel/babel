@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "estree",
+    "deferredReexports",
+    "deferredImportEvaluation"
+  ]
+}

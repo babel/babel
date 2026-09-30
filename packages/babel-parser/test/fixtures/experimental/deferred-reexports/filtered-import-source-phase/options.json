@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "deferredReexports",
+    "deferredImportEvaluation",
+    "sourcePhaseImports"
+  ]
+}

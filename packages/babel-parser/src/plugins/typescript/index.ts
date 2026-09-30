@@ -4500,11 +4500,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       importedIsString: boolean,
       isInTypeOnlyImport: boolean,
       isMaybeTypeOnly: boolean,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      bindingType: BindingFlag | undefined,
     ): N.ImportSpecifier {
       if (!importedIsString && isMaybeTypeOnly) {
-        this.parseTypeOnlyImportSpecifier(specifier, isInTypeOnlyImport);
+        this.parseTypeOnlyImportSpecifier(specifier);
         return this.finishNode<N.ImportSpecifier>(specifier, "ImportSpecifier");
       }
       specifier.importKind = "value";
@@ -4513,16 +4511,27 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         importedIsString,
         isInTypeOnlyImport,
         isMaybeTypeOnly,
-        isInTypeOnlyImport
+      );
+    }
+
+    checkImportSpecifier(
+      specifier: N.ImportSpecifier,
+      isInTypeOnlyImport: boolean,
+    ): void {
+      const hasTypeSpecifier = specifier.importKind === "type";
+      if (hasTypeSpecifier && isInTypeOnlyImport) {
+        this.raise(TSErrors.TypeModifierIsUsedInTypeImports, specifier);
+      }
+      super.checkImportSpecifier(
+        specifier,
+        isInTypeOnlyImport,
+        hasTypeSpecifier || isInTypeOnlyImport
           ? BindingFlag.TYPE_TS_TYPE_IMPORT
           : BindingFlag.TYPE_TS_VALUE_IMPORT,
       );
     }
 
-    parseTypeOnlyImportSpecifier(
-      node: Undone<N.ImportSpecifier>,
-      isInTypeOnly: boolean,
-    ) {
+    parseTypeOnlyImportSpecifier(node: Undone<N.ImportSpecifier>) {
       let leftOfAs = node.imported;
 
       let hasTypeSpecifier = false;
@@ -4559,26 +4568,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // { type something ...? }
         hasTypeSpecifier = true;
         leftOfAs = this.parseIdentifier(true);
-        if (!this.isContextual(tt._as)) {
-          this.checkReservedWord(leftOfAs.name, leftOfAs.start!, true, true);
-        }
-      }
-      if (hasTypeSpecifier && isInTypeOnly) {
-        this.raise(TSErrors.TypeModifierIsUsedInTypeImports, node.imported);
       }
 
       node.imported = leftOfAs;
 
       node.importKind = hasTypeSpecifier ? "type" : "value";
 
-      this.checkIdentifier(
-        (node.local ??= this.eatContextual(tt._as)
-          ? this.parseIdentifier()
-          : this.cloneIdentifier(node.imported as N.Identifier)),
-        hasTypeSpecifier
-          ? BindingFlag.TYPE_TS_TYPE_IMPORT
-          : BindingFlag.TYPE_TS_VALUE_IMPORT,
-      );
+      node.local ??= this.eatContextual(tt._as)
+        ? this.parseIdentifier()
+        : this.cloneIdentifier(node.imported as N.Identifier);
     }
 
     parseTypeOnlyExportSpecifier(

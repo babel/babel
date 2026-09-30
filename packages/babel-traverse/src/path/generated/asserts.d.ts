@@ -474,6 +474,11 @@ export interface NodePathAssertions {
   assertModuleSpecifier<Opts extends Options<t.ModuleSpecifier>>(
     opts?: Opts,
   ): asserts this is NodePath<t.ModuleSpecifier & Opts>;
+  assertNamespaceFilterSpecifier<
+    Opts extends Options<t.NamespaceFilterSpecifier>,
+  >(
+    opts?: Opts,
+  ): asserts this is NodePath<t.NamespaceFilterSpecifier & Opts>;
   assertNewExpression<Opts extends Options<t.NewExpression>>(
     opts?: Opts,
   ): asserts this is NodePath<t.NewExpression & Opts>;

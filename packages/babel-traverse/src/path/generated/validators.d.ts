@@ -983,6 +983,13 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.ModuleSpecifier & Opts>;
+  isNamespaceFilterSpecifier(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<t.NamespaceFilterSpecifier>;
+  isNamespaceFilterSpecifier<Opts extends Options<t.NamespaceFilterSpecifier>>(
+    this: NodePath<t.Node | null>,
+    opts: Opts,
+  ): this is NodePath<t.NamespaceFilterSpecifier & Opts>;
   isNewExpression(
     this: NodePath<t.Node | null>,
   ): this is NodePath<t.NewExpression>;
