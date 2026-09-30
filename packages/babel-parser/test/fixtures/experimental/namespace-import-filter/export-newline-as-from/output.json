@@ -1,0 +1,85 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":15,"index":28}},
+  "errors": [
+    "SyntaxError: Missing semicolon. (2:2)",
+    "SyntaxError: Missing semicolon. (2:5)",
+    "SyntaxError: Missing semicolon. (2:10)",
+    "SyntaxError: Export 'a' is not defined. (1:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":15,"index":28}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+              "name": "a"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+              "name": "a"
+            }
+          }
+        ],
+        "source": null,
+        "attributes": [],
+        "declaration": null
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":13,"end":15,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":2,"index":15}},
+        "expression": {
+          "type": "Identifier",
+          "start":13,"end":15,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":2,"index":15},"identifierName":"as"},
+          "name": "as"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":16,"end":18,"loc":{"start":{"line":2,"column":3,"index":16},"end":{"line":2,"column":5,"index":18}},
+        "expression": {
+          "type": "Identifier",
+          "start":16,"end":18,"loc":{"start":{"line":2,"column":3,"index":16},"end":{"line":2,"column":5,"index":18},"identifierName":"ns"},
+          "name": "ns"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":19,"end":23,"loc":{"start":{"line":2,"column":6,"index":19},"end":{"line":2,"column":10,"index":23}},
+        "expression": {
+          "type": "Identifier",
+          "start":19,"end":23,"loc":{"start":{"line":2,"column":6,"index":19},"end":{"line":2,"column":10,"index":23},"identifierName":"from"},
+          "name": "from"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":24,"end":28,"loc":{"start":{"line":2,"column":11,"index":24},"end":{"line":2,"column":15,"index":28}},
+        "expression": {
+          "type": "StringLiteral",
+          "start":24,"end":27,"loc":{"start":{"line":2,"column":11,"index":24},"end":{"line":2,"column":14,"index":27}},
+          "extra": {
+            "rawValue": "x",
+            "raw": "\"x\""
+          },
+          "value": "x"
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
