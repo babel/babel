@@ -293,6 +293,7 @@ const privateInVisitor = privateNameVisitorFactory<
     file: File;
     innerBinding?: t.Identifier | null;
     privateFieldsAsProperties: boolean;
+    noUninitializedPrivateFieldAccess: boolean;
   },
   PrivateNameMetadata
 >({
@@ -301,7 +302,12 @@ const privateInVisitor = privateNameVisitorFactory<
     if (operator !== "in") return;
     if (!t.isPrivateName(left)) return;
 
-    const { privateFieldsAsProperties, privateNamesMap, redeclared } = this;
+    const {
+      privateFieldsAsProperties,
+      noUninitializedPrivateFieldAccess,
+      privateNamesMap,
+      redeclared,
+    } = this;
 
     const { name } = left.id;
 
@@ -323,15 +329,25 @@ const privateInVisitor = privateNameVisitorFactory<
       return;
     }
 
-    const { id, static: isStatic } = privateNamesMap.get(name)!;
+    const { id, static: isStatic, method } = privateNamesMap.get(name)!;
 
     if (isStatic) {
-      path.replaceWith(
-        template.expression.ast`${buildCheckInRHS(
-          right,
-          file,
-        )} === ${t.cloneNode(this.classRef)}`,
-      );
+      let replacement: t.Expression = template.expression.ast`${buildCheckInRHS(
+        right,
+        file,
+      )} === ${t.cloneNode(this.classRef)}`;
+      // Static methods and accessors are added before any field initializer
+      // runs, but a static field only once its initializer has. Its storage
+      // is `{ _: value }` (see buildPrivateStaticFieldInitSpec), so it is
+      // undefined exactly until then.
+      if (!method && !noUninitializedPrivateFieldAccess) {
+        replacement = t.logicalExpression(
+          "&&",
+          replacement,
+          t.unaryExpression("!", t.unaryExpression("!", t.cloneNode(id))),
+        );
+      }
+      path.replaceWith(replacement);
       return;
     }
 
@@ -806,6 +822,7 @@ export function transformPrivateNamesUsage(
     classRef: ref,
     file: state,
     privateFieldsAsProperties,
+    noUninitializedPrivateFieldAccess,
     innerBinding,
   });
 }

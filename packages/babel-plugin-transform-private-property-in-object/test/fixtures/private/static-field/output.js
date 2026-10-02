@@ -7,7 +7,7 @@ let Foo = /*#__PURE__*/function () {
   return babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
-      return babelHelpers.checkInRHS(other) === Foo;
+      return babelHelpers.checkInRHS(other) === Foo && !!_foo;
     }
   }]);
 }();
