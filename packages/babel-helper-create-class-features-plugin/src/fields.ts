@@ -339,13 +339,12 @@ const privateInVisitor = privateNameVisitorFactory<
       // Static methods and accessors are added before any field initializer
       // runs, but a static field only once its initializer has. Its storage
       // is `{ _: value }` (see buildPrivateStaticFieldInitSpec), so it is
-      // undefined exactly until then. Under noUninitializedPrivateFieldAccess
-      // the storage is the raw value and cannot tell the two apart.
+      // undefined exactly until then.
       if (!method && !noUninitializedPrivateFieldAccess) {
         replacement = t.logicalExpression(
           "&&",
           replacement,
-          t.binaryExpression("!==", t.cloneNode(id), t.buildUndefinedNode()),
+          t.unaryExpression("!", t.unaryExpression("!", t.cloneNode(id))),
         );
       }
       path.replaceWith(replacement);
