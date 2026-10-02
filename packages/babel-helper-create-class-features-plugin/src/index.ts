@@ -1,7 +1,7 @@
 import { types as t } from "@babel/core";
 import type { PluginAPI, PluginObject, NodePath } from "@babel/core";
 
-import { isLess } from "verkit";
+import { isLessThan } from "verkit";
 
 import {
   buildPrivateNamesNodes,
@@ -113,7 +113,7 @@ export function createClassFeaturePlugin({
 
       if (
         !file.get(versionKey) ||
-        isLess(file.get(versionKey), PACKAGE_JSON.version)
+        isLessThan(file.get(versionKey), PACKAGE_JSON.version)
       ) {
         file.set(versionKey, PACKAGE_JSON.version);
       }

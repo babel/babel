@@ -2,8 +2,8 @@ import { parse } from "@babel/parser";
 
 import traverse from "../lib/index.js";
 
-function getPath(code) {
-  const ast = parse(code);
+function getPath(code, parserOptions) {
+  const ast = parse(code, parserOptions);
   let path;
   traverse(ast, {
     Program: function (_path) {
@@ -89,6 +89,33 @@ describe("evaluation", function () {
         .get("body")[1]
         .evaluateTruthy(),
     ).toBe(true);
+  });
+
+  it.each([
+    ["as expressions", "1 as number"],
+    ["satisfies expressions", "1 satisfies number"],
+    ["type assertions", "<number>1"],
+    ["non-null expressions", "1!"],
+  ])("should evaluate TypeScript %s", function (_name, expression) {
+    const result = getPath(`const value = ${expression}; value;`, {
+      plugins: ["typescript"],
+    })
+      .get("body.1.expression")
+      .evaluate();
+
+    expect(result.confident).toBe(true);
+    expect(result.value).toBe(1);
+  });
+
+  it("should evaluate TypeScript instantiation expressions", function () {
+    const result = getPath("const value = 1; value<number>;", {
+      plugins: ["typescript"],
+    })
+      .get("body.1.expression")
+      .evaluate();
+
+    expect(result.confident).toBe(true);
+    expect(result.value).toBe(1);
   });
 
   it("should deopt when var is redeclared in the same scope", function () {
@@ -466,6 +493,28 @@ describe("evaluation", function () {
     const evalResult = path.get("body.0.expression").evaluate();
     expect(evalResult.confident).toBe(true);
     expect(evalResult.value).toBe(1);
+  });
+
+  it("should deopt for destructured bindings", function () {
+    const cases = [
+      "const { a } = { a: 1 }; a;",
+      "const { a: b } = { a: 1 }; b;",
+      "const { a = 1 } = {}; a;",
+      "const { ['a']: a } = { a: 1 }; a;",
+      "const { ...a } = {}; a;",
+      "const { x: { a } } = { x: { a: 1 } }; a;",
+      "const [a] = [1]; a;",
+      "const [, a] = [1, 2]; a;",
+      "const [a = 1] = []; a;",
+      "const [...a] = [1]; a;",
+      "const [[a]] = [[1]]; a;",
+    ];
+
+    for (const code of cases) {
+      const path = getPath(code);
+      const evalResult = path.get("body.1.expression").evaluate();
+      expect(evalResult.confident).toBe(false);
+    }
   });
 
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");

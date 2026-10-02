@@ -1,4 +1,4 @@
-import { clean, isLess } from "verkit";
+import { clean, isLessThan } from "verkit";
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -283,7 +283,7 @@ function pushTask(
       );
     }
 
-    if (isLess(nodeVersion, minimumVersion)) {
+    if (isLessThan(nodeVersion, minimumVersion)) {
       if (test.actual.code) {
         test.exec.code = undefined;
       } else {
@@ -304,7 +304,7 @@ function pushTask(
       );
     }
 
-    if (isLess(nodeVersion, minimumVersion)) {
+    if (isLessThan(nodeVersion, minimumVersion)) {
       return;
     }
 

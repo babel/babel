@@ -1,5 +1,10 @@
 import { expect, it, describe } from "tstyche";
-import { transformSync } from "../src/index.ts";
+import {
+  createConfigItem,
+  transformSync,
+  type ConfigItem,
+  type PluginAPI,
+} from "../src/index.ts";
 import type presetEnv from "@babel/preset-env";
 import type presetReact from "@babel/preset-react";
 import type presetTypescript from "@babel/preset-typescript";
@@ -47,6 +52,31 @@ describe("core", () => {
           return {};
         },
       ],
+    });
+  });
+
+  it("createConfigItem", () => {
+    const plugin = () => ({ visitor: {} });
+    const callback = (
+      _err: Error | undefined,
+      _val: ConfigItem<PluginAPI> | null,
+    ) => {};
+
+    expect(createConfigItem).type.toBeCallableWith(plugin, callback);
+    expect(createConfigItem).type.toBeCallableWith(
+      plugin,
+      { type: "plugin" },
+      callback,
+    );
+    expect(createConfigItem).type.toBeCallableWith(plugin, undefined, callback);
+    expect(createConfigItem).type.not.toBeCallableWith(plugin, {
+      type: "plugin",
+    });
+    expect(createConfigItem).type.not.toBeCallableWith(plugin);
+
+    createConfigItem(plugin, (err, val) => {
+      expect(err).type.toBe<Error | undefined>();
+      expect(val).type.toBe<ConfigItem<PluginAPI> | null>();
     });
   });
 });

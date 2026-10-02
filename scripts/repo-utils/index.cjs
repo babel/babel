@@ -6,7 +6,7 @@
 const path = require("path");
 const { fileURLToPath } = require("url");
 const { createRequire } = require("module");
-const { isGreaterOrEqual, isLess, satisfies } = require("verkit");
+const { isGreaterThanOrEqual, isLessThan, satisfies } = require("verkit");
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
 function bool(value) {
@@ -25,10 +25,10 @@ if (typeof jest !== "undefined") {
   exports.itBabel8 = bool(process.env.BABEL_9_BREAKING) ? dummy : it;
   exports.itBabel9 = bool(process.env.BABEL_9_BREAKING) ? it : dummy;
   exports.itGte = function (version) {
-    return isGreaterOrEqual(process.version, version) ? it : dummy;
+    return isGreaterThanOrEqual(process.version, version) ? it : dummy;
   };
   exports.itLt = function (version) {
-    return isLess(process.version, version) ? it : dummy;
+    return isLessThan(process.version, version) ? it : dummy;
   };
   exports.itSatisfies = function (version) {
     return satisfies(process.version, version) ? it : dummy;
@@ -44,7 +44,7 @@ if (typeof jest !== "undefined") {
     ? describe
     : dummy;
   exports.describeGte = function (version) {
-    return isGreaterOrEqual(process.version, version)
+    return isGreaterThanOrEqual(process.version, version)
       ? describe
       : describe.skip;
   };

@@ -1,4 +1,4 @@
-import { isLess } from "verkit";
+import { isLessThan } from "verkit";
 import { prettifyVersion } from "./pretty.ts";
 import {
   semverify,
@@ -28,7 +28,7 @@ export function getInclusionReasons(
         if (
           !targetIsUnreleased &&
           (minIsUnreleased ||
-            isLess(targetVersion.toString(), semverify(minVersion)))
+            isLessThan(targetVersion.toString(), semverify(minVersion)))
         ) {
           result[env] = prettifyVersion(targetVersion);
         }

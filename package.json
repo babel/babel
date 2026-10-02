@@ -73,7 +73,6 @@
     "knip": "^6.35.1",
     "lint-staged": "^17.0.0",
     "mergeiterator": "^1.4.4",
-    "open": "^11.0.0",
     "p-limit": "^7.2.0",
     "pkg-pr-new": "^0.0.54",
     "prettier": "^3.9.5",

@@ -1,4 +1,4 @@
-import { isLess, normalize, type SemVer } from "verkit";
+import { isLessThan, normalize, type SemVer } from "verkit";
 import { logPlugin } from "./debug.ts";
 import {
   addProposalSyntaxPlugins,
@@ -223,7 +223,7 @@ export default declarePreset((api, opts: Options) => {
     // @babel/core < 7.13.0 doesn't load targets (api.targets() always
     // returns {} thanks to @babel/helper-plugin-utils), so we always want
     // to fallback to the old targets behavior in this case.
-    isLess(api.version, "7.13.0") ||
+    isLessThan(api.version, "7.13.0") ||
     // If any browserslist-related option is specified, fallback to the old
     // behavior of not using the targets specified in the top-level options.
     opts.targets ||
