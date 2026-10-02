@@ -83,7 +83,8 @@ export default declare((api, opts: Options) => {
               usages,
               capturedInClosure,
               hasConstantViolations,
-              headClosureCaptures,
+              capturedInHeadClosure,
+              headUsages,
             } = getUsageInBody(binding, path);
 
             if (
@@ -99,24 +100,32 @@ export default declare((api, opts: Options) => {
               name = newName;
             }
 
-            if (headClosureCaptures.length > 0) {
+            if (capturedInHeadClosure && binding.constantViolations.length) {
               // A closure created in the loop head (e.g. the `f` in
               // `for (let i = 0, f = () => i; ...)`) closes over the
               // one-time environment used to evaluate the head, which is
-              // never updated again once the loop starts iterating. Give
-              // it its own binding, snapshotted right after `name`'s own
-              // declarator runs, so later mutations of `name` from the
-              // loop itself don't leak into it.
-              const frozenName = headScope.generateUid(name);
-              for (const capturePath of headClosureCaptures) {
-                capturePath.replaceWith(t.identifier(frozenName));
+              // never updated again once the loop starts iterating. Rename
+              // the binding's uses in the head to a separate binding, and
+              // only copy it to the per-iteration binding after the whole
+              // initializer has run:
+              //   for (let _i = 0, f = () => _i, i = _i; ...)
+              const headName = headScope.generateUid(name);
+              const declarationIds = (
+                binding.path as NodePath<t.VariableDeclarator>
+              )
+                .get("id")
+                .getBindingIdentifierPaths(true)[name];
+              for (const usage of [...declarationIds, ...headUsages]) {
+                usage.replaceWith(t.identifier(headName));
               }
-              binding.path.insertAfter(
+              headPath.pushContainer(
+                "declarations",
                 t.variableDeclarator(
-                  t.identifier(frozenName),
                   t.identifier(name),
+                  t.identifier(headName),
                 ),
               );
+              headScope.crawl();
             }
 
             if (capturedInClosure) {

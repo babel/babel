@@ -41,15 +41,17 @@ export function getUsageInBody(
   const seen = new WeakSet<t.Node>();
 
   let capturedInClosure = false;
-  // References to the binding that occur inside a closure created in the
-  // loop head (e.g. `for (let i = 0, f = () => i; ...)`). Per spec, such a
+  // Whether the binding is referenced by a closure created in the loop
+  // head (e.g. `for (let i = 0, f = () => i; ...)`). Per spec, such a
   // closure captures the one-time environment used to evaluate the head,
-  // which is never touched again once the per-iteration environments are
-  // created, so these references must not be treated as regular in-body
-  // usages of the per-iteration binding.
-  const headClosureCaptures: NodePath<t.Identifier>[] = [];
+  // which is only copied into the first per-iteration environment after
+  // the whole initializer has run.
+  let capturedInHeadClosure = false;
+  // All the identifiers in the loop head (other than the declaration
+  // itself) that refer to the binding.
+  const headUsages: NodePath<t.Identifier>[] = [];
 
-  const constantViolations = filterMap(binding.constantViolations, path => {
+  const constantViolations = binding.constantViolations.flatMap(path => {
     const { inBody, inHead, inClosure } = relativeLoopLocation(path, loopPath);
 
     const id = path.isUpdateExpression()
@@ -59,14 +61,19 @@ export function getUsageInBody(
         : null;
     if (id) seen.add(id.node);
 
-    if (inHead && inClosure) {
-      if (id) headClosureCaptures.push(id as NodePath<t.Identifier>);
-      return null;
+    // `id` might be a destructuring pattern, such as `[i] = [1]`
+    const ids =
+      id?.getBindingIdentifierPaths(true)[binding.identifier.name] ?? [];
+
+    if (inHead) {
+      capturedInHeadClosure ||= inClosure;
+      headUsages.push(...ids);
+      return [];
     }
-    if (!inBody) return null;
+    if (!inBody) return [];
     capturedInClosure ||= inClosure;
 
-    return id as NodePath<t.Identifier> | null;
+    return ids;
   });
 
   const references = filterMap(binding.referencePaths, path => {
@@ -74,8 +81,9 @@ export function getUsageInBody(
 
     const { inBody, inHead, inClosure } = relativeLoopLocation(path, loopPath);
 
-    if (inHead && inClosure) {
-      headClosureCaptures.push(path as NodePath<t.Identifier>);
+    if (inHead) {
+      capturedInHeadClosure ||= inClosure;
+      headUsages.push(path as NodePath<t.Identifier>);
       return null;
     }
     if (!inBody) return null;
@@ -88,7 +96,8 @@ export function getUsageInBody(
     capturedInClosure,
     hasConstantViolations: constantViolations.length > 0,
     usages: references.concat(constantViolations),
-    headClosureCaptures,
+    capturedInHeadClosure,
+    headUsages,
   };
 }
 
