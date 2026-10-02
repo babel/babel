@@ -4,7 +4,7 @@ class Foo {
     babelHelpers.classPrivateFieldInitSpec(this, _bar, "bar");
   }
   static test() {
-    return babelHelpers.checkInRHS(Foo) === Foo;
+    return babelHelpers.checkInRHS(Foo) === Foo && _foo !== void 0;
   }
   test() {
     return _bar.has(babelHelpers.checkInRHS(this));
