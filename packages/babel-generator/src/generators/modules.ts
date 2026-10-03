@@ -57,11 +57,28 @@ export function ExportSpecifier(this: Printer, node: t.ExportSpecifier) {
   }
 }
 
+function _printNamespaceFilter(
+  this: Printer,
+  exportsFilter: t.ImportNamespaceSpecifier["exportsFilter"],
+) {
+  if (exportsFilter) {
+    this.token("{");
+    if (exportsFilter.length) {
+      this.space();
+      this.printList(exportsFilter, this.shouldPrintTrailingComma("}"));
+      this.space();
+    }
+    this.token("}");
+  } else {
+    this.token("*");
+  }
+}
+
 export function ExportNamespaceSpecifier(
   this: Printer,
   node: t.ExportNamespaceSpecifier,
 ) {
-  this.token("*");
+  _printNamespaceFilter.call(this, node.exportsFilter);
   this.space();
   this.word("as");
   this.space();
@@ -142,6 +159,10 @@ export function ExportNamedDeclaration(
   } else {
     if (node.exportKind === "type") {
       this.word("type");
+      this.space();
+    }
+    if (node.phase === "defer") {
+      this.word("defer");
       this.space();
     }
 
@@ -290,7 +311,7 @@ export function ImportNamespaceSpecifier(
   this: Printer,
   node: t.ImportNamespaceSpecifier,
 ) {
-  this.token("*");
+  _printNamespaceFilter.call(this, node.exportsFilter);
   this.space();
   this.word("as");
   this.space();

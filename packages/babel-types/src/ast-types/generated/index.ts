@@ -893,6 +893,7 @@ export interface ExportNamedDeclaration extends BaseNode {
   source?: StringLiteral | null;
   attributes?: ImportAttribute[] | null;
   exportKind?: "type" | "value" | null;
+  phase?: "defer" | null;
 }
 
 export interface ExportSpecifier extends BaseNode {
@@ -939,6 +940,7 @@ export interface ImportDefaultSpecifier extends BaseNode {
 export interface ImportNamespaceSpecifier extends BaseNode {
   type: "ImportNamespaceSpecifier";
   local: Identifier;
+  exportsFilter?: (Identifier | StringLiteral)[] | null;
 }
 
 export interface ImportSpecifier extends BaseNode {
@@ -1069,6 +1071,7 @@ export interface BigIntLiteral extends BaseNode {
 export interface ExportNamespaceSpecifier extends BaseNode {
   type: "ExportNamespaceSpecifier";
   exported: Identifier | StringLiteral;
+  exportsFilter?: (Identifier | StringLiteral)[] | null;
 }
 
 export interface OptionalMemberExpressionComputed extends BaseNode {
@@ -6088,6 +6091,7 @@ export interface ParentMaps {
     | ImportAttribute
     | ImportDeclaration
     | ImportExpression
+    | ImportNamespaceSpecifier
     | ImportSpecifier
     | JSXAttribute
     | JSXExpressionContainer

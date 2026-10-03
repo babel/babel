@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    "transform-modules-commonjs"
+  ],
+  "parserOpts": {
+    "plugins": [
+      "namespaceImportFilter",
+      "deferredReexports",
+      "deferredImportEvaluation"
+    ]
+  },
+  "throws": "Transforming `export defer { x } from '...'` is not supported yet."
+}

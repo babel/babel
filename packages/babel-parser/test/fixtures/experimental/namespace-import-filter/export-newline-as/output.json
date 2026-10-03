@@ -1,0 +1,80 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":6,"index":26}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":6,"index":26}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+              "name": "a"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+              "name": "a"
+            }
+          }
+        ],
+        "source": null,
+        "attributes": [],
+        "declaration": null
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":13,"end":19,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":6,"index":19}},
+        "expression": {
+          "type": "CallExpression",
+          "start":13,"end":18,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":5,"index":18}},
+          "callee": {
+            "type": "Identifier",
+            "start":13,"end":15,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":2,"index":15},"identifierName":"as"},
+            "name": "as"
+          },
+          "arguments": [
+            {
+              "type": "NumericLiteral",
+              "start":16,"end":17,"loc":{"start":{"line":2,"column":3,"index":16},"end":{"line":2,"column":4,"index":17}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          ]
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":20,"end":26,"loc":{"start":{"line":3,"column":0,"index":20},"end":{"line":3,"column":6,"index":26}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":24,"end":25,"loc":{"start":{"line":3,"column":4,"index":24},"end":{"line":3,"column":5,"index":25}},
+            "id": {
+              "type": "Identifier",
+              "start":24,"end":25,"loc":{"start":{"line":3,"column":4,"index":24},"end":{"line":3,"column":5,"index":25},"identifierName":"a"},
+              "name": "a"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

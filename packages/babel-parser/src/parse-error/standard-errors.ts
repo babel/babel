@@ -63,6 +63,8 @@ export default {
   DecoratorStaticBlock: "Decorators can't be used with a static block.",
   DeferImportRequiresNamespace:
     'Only `import defer * as x from "./module"` is valid.',
+  DeferExportInvalidAll:
+    '`export defer * from "./module"` is invalid. Explicitly list the re-exported names.',
   DeletePrivateField: "Deleting a private field is not allowed.",
   DestructureNamedImport:
     "ES2015 named imports do not destructure. Use another statement for destructuring after the import.",
@@ -84,7 +86,12 @@ export default {
     `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export { '${localName}' as '${exportName}' } from 'some-module'\`?`,
   ExportDefaultFromAsIdentifier:
     "'from' is not allowed as an identifier after 'export default'.",
-
+  FilteredNamespaceDuplicateName: ({ name }: { name: string }) =>
+    `Duplicate name '${name}' in filtered namespace.`,
+  FilteredNamespaceRename:
+    "Names in a filtered namespace cannot be renamed using `as`.",
+  FilteredNamespaceTypeModifier:
+    "Names in a filtered namespace cannot have a type modifier.",
   ForInOfLoopInitializer: ({
     type,
   }: {
