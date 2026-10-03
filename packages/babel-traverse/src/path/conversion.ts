@@ -36,6 +36,8 @@ import {
   exportNamedDeclaration,
   exportSpecifier,
   inherits,
+  inheritsComments,
+  removeComments,
   buildUndefinedNode,
 } from "@babel/types";
 import type * as t from "@babel/types";
@@ -43,17 +45,20 @@ import template from "@babel/template";
 import { environmentVisitor, explode } from "../visitors.ts";
 import type NodePath from "./index.ts";
 import type { Visitor } from "../types.ts";
-import { setup } from "./context.ts";
+import { setScope, setup } from "./context.ts";
 import type Scope from "../scope/index.ts";
+import { createNodePath } from "../context.ts";
+import { cacheNodePath, uncacheNodePath } from "../cache.ts";
 
 export function ensureBlock(
   this: NodePath<
     t.Loop | t.WithStatement | t.Function | t.LabeledStatement | t.CatchClause
   >,
 ): void {
-  const body = this.get("body");
-  const bodyNode = body.node;
+  const bodyNode = this.node.body;
+  if (bodyNode?.type === "BlockStatement") return;
 
+  const body = this.get("body");
   if (Array.isArray(body)) {
     throw new Error("Can't convert array path to a block statement");
   }
@@ -61,54 +66,54 @@ export function ensureBlock(
     throw new Error("Can't convert node without a body");
   }
 
-  if (body.isBlockStatement()) {
-    // @ts-expect-error TS throws because ensureBlock returns the body node path
-    // however, we don't use the return value and treat it as a transform and
-    // assertion utilities. For better type inference we annotate it as an
-    // assertion method
-    // TODO: Unify the implementation with the type definition
-    return bodyNode;
-  }
-
   const statements: t.Statement[] = [];
 
-  let stringPath = "body";
   let key;
   let listKey;
   if (body.isStatement()) {
     listKey = "body";
     key = 0;
     statements.push(body.node);
+  } else if (this.isFunction()) {
+    key = "argument";
+    statements.push(returnStatement(body.node));
   } else {
-    stringPath += ".body.0";
-    if (this.isFunction()) {
-      key = "argument";
-      statements.push(returnStatement(body.node));
-    } else {
-      key = "expression";
-      statements.push(expressionStatement(body.node));
-    }
+    key = "expression";
+    statements.push(expressionStatement(body.node));
   }
 
-  this.node.body = blockStatement(statements);
-  const parentPath = this.get(stringPath) as NodePath;
-  setup.call(
-    body,
-    parentPath,
-    listKey
-      ? // @ts-expect-error listKey must present in parent path
-        parentPath.node[listKey]
-      : parentPath.node,
-    listKey,
-    key,
-  );
+  uncacheNodePath(body);
+  const block = blockStatement(statements);
+  this.node.body = block;
 
-  // @ts-expect-error TS throws because ensureBlock returns the body node path
-  // however, we don't use the return value and treat it as a transform and
-  // assertion utilities. For better type inference we annotate it as an
-  // assertion method
-  // TODO: Unify the implementation with the type definition
-  return this.node;
+  const blockPath = createNodePath(
+    this.context,
+    this,
+    block,
+    this.node,
+    "body",
+    null,
+    false,
+  );
+  const parentPath = listKey
+    ? blockPath
+    : createNodePath(
+        this.context,
+        blockPath,
+        statements[0],
+        block.body,
+        0,
+        "body",
+        false,
+      );
+  body.listKey = listKey ?? null;
+  body.container = listKey ? block.body : parentPath.node;
+  body.parentPath = parentPath as any;
+  body.key = key;
+  cacheNodePath(body);
+
+  setScope.call(blockPath);
+  parentPath.scope = blockPath.scope;
 }
 
 /**
@@ -810,11 +815,11 @@ export function splitExportDeclaration(
   if (!this.isExportDeclaration() || this.isExportAllDeclaration()) {
     throw new Error("Only default and named export declarations can be split.");
   }
-  if (this.isExportNamedDeclaration() && this.get("specifiers").length > 0) {
+  if (this.isExportNamedDeclaration() && this.node.specifiers.length > 0) {
     throw new Error("It doesn't make sense to split exported specifiers.");
   }
 
-  const declaration = this.get("declaration");
+  const declaration = this.get("declaration") as NodePath<t.Declaration>;
 
   if (this.isExportDefaultDeclaration()) {
     const standaloneDeclaration =
@@ -828,19 +833,15 @@ export function splitExportDeclaration(
 
     // @ts-expect-error id is not defined in expressions other than function/class
     let id = declaration.node.id;
-    let needBindingRegistration = false;
+    const needBindingRegistration = !standaloneDeclaration || !id;
 
     if (!id) {
-      needBindingRegistration = true;
-
       id = scope.generateUidIdentifier("default");
 
       if (standaloneDeclaration || exportExpr) {
         declaration.node.id = cloneNode(id);
       }
     } else if (exportExpr && scope.hasBinding(id.name)) {
-      needBindingRegistration = true;
-
       id = scope.generateUidIdentifier(id.name);
     }
 
@@ -858,16 +859,18 @@ export function splitExportDeclaration(
       exportSpecifier(cloneNode(id), identifier("default")),
     ]);
 
-    this.insertAfter(updatedExportDeclaration);
-    this.replaceWith(updatedDeclaration);
+    const replacementPath = replaceExportDeclaration(
+      this,
+      declaration,
+      updatedDeclaration,
+      updatedExportDeclaration,
+    );
 
     if (needBindingRegistration) {
-      scope.registerDeclaration(this);
+      scope.registerDeclaration(replacementPath);
     }
 
-    return this;
-  } else if (this.get("specifiers").length > 0) {
-    throw new Error("It doesn't make sense to split exported specifiers.");
+    return replacementPath;
   }
 
   const bindingIdentifiers = declaration.getOuterBindingIdentifiers();
@@ -878,9 +881,41 @@ export function splitExportDeclaration(
 
   const aliasDeclar = exportNamedDeclaration(null, specifiers);
 
-  this.insertAfter(aliasDeclar);
-  this.replaceWith(declaration.node!);
-  return this;
+  return replaceExportDeclaration(
+    this,
+    declaration,
+    declaration.node,
+    aliasDeclar,
+  );
+}
+
+function replaceExportDeclaration(
+  path: NodePath<t.ExportDefaultDeclaration | t.ExportNamedDeclaration>,
+  declaration: NodePath<t.Declaration>,
+  replacement: t.Declaration,
+  exportDeclaration: t.ExportNamedDeclaration,
+): NodePath<t.Declaration> {
+  inheritsComments(replacement, path.node);
+  removeComments(path.node);
+
+  uncacheNodePath(declaration);
+  if (replacement === declaration.node) {
+    declaration.parentPath = path.parentPath;
+  } else {
+    const replacementPath = createNodePath(
+      path.context,
+      path.parentPath,
+      replacement,
+      path.container,
+      path.key,
+      path.listKey,
+    ) as NodePath<t.VariableDeclaration>;
+    const declarator = replacementPath.get("declarations")[0];
+    setup.call(declaration, declarator, declarator.node, null, "init");
+  }
+  cacheNodePath(declaration);
+
+  return path.replaceWithMultiple([replacement, exportDeclaration])[0];
 }
 
 const getRefersOuterBindingVisitor = (): Visitor<{

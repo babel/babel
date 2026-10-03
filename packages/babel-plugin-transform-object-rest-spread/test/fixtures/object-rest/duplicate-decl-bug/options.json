@@ -1,3 +1,0 @@
-{
-  "plugins": ["./plugin-clear-scope", "transform-object-rest-spread"]
-}

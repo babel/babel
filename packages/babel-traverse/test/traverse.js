@@ -64,29 +64,6 @@ describe("traverse", function () {
     });
   });
 
-  it("traverse denylistTypes", function () {
-    const expected = [
-      body[0],
-      body[0].declarations[0],
-      body[0].declarations[0].id,
-      body[0].declarations[0].init,
-      body[1],
-      body[1].expression,
-      body[1].expression.right,
-    ];
-
-    const actual = [];
-
-    traverse(program, {
-      denylist: ["MemberExpression"],
-      enter: function (path) {
-        actual.push(path.node);
-      },
-    });
-
-    expect(actual).toEqual(expected);
-  });
-
   it("hasType", function () {
     expect(traverse.hasType(ast, "ThisExpression")).toBeTruthy();
     expect(
@@ -102,81 +79,6 @@ describe("traverse", function () {
     expect(traverse.hasType(ast, "ThisExpression", ["Program"])).toBeFalsy();
 
     expect(traverse.hasType(ast, "ArrowFunctionExpression")).toBeFalsy();
-  });
-
-  it("clearCache", function () {
-    const paths = [];
-    const scopes = [];
-    traverse(ast, {
-      enter(path) {
-        scopes.push(path.scope);
-        paths.push(path);
-        path.stop();
-      },
-    });
-
-    traverse.cache.clear();
-
-    const paths2 = [];
-    const scopes2 = [];
-    traverse(ast, {
-      enter(path) {
-        scopes2.push(path.scope);
-        paths2.push(path);
-        path.stop();
-      },
-    });
-
-    scopes2.forEach(function (_, i) {
-      expect(scopes[i]).not.toBe(scopes2[i]);
-      expect(paths[i]).not.toBe(paths2[i]);
-    });
-  });
-
-  it("clearPath", function () {
-    const paths = [];
-    traverse(ast, {
-      enter(path) {
-        paths.push(path);
-      },
-    });
-
-    traverse.cache.clearPath();
-
-    const paths2 = [];
-    traverse(ast, {
-      enter(path) {
-        paths2.push(path);
-      },
-    });
-
-    paths2.forEach(function (p, i) {
-      expect(p).not.toBe(paths[i]);
-    });
-  });
-
-  it("clearScope", function () {
-    const scopes = [];
-    traverse(ast, {
-      enter(path) {
-        scopes.push(path.scope);
-        path.stop();
-      },
-    });
-
-    traverse.cache.clearScope();
-
-    const scopes2 = [];
-    traverse(ast, {
-      enter(path) {
-        scopes2.push(path.scope);
-        path.stop();
-      },
-    });
-
-    scopes2.forEach(function (p, i) {
-      expect(p).not.toBe(scopes[i]);
-    });
   });
 
   describe("path.skip()", function () {
@@ -199,9 +101,7 @@ describe("traverse", function () {
       expect(skipped).toBe(true);
     });
 
-    // Skipped: see the comment in the `NodePath.requeue` method.
-    // eslint-disable-next-line jest/no-disabled-tests
-    it.skip("skipped and requeued paths should be visited", function () {
+    it("skipped and requeued paths should be visited", function () {
       const ast = parse("id");
 
       let visited = false;
@@ -346,7 +246,6 @@ describe("traverse", function () {
             }
           },
         },
-        undefined,
         { level: 1 },
       );
       expect(contextLevel).toBe(2);

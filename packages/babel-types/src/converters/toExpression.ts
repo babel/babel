@@ -35,19 +35,15 @@ function toExpression(
   // ClassDeclaration -> ClassExpression
   // FunctionDeclaration, ObjectMethod, ClassMethod -> FunctionExpression
   if (isClass(node)) {
-    // @ts-expect-error todo(flow->ts): avoid type unsafe mutations
-    node.type = "ClassExpression";
-    // abstract modifiers are only allowed on class declarations
-    node.abstract = false;
+    return {
+      ...node,
+      type: "ClassExpression",
+      abstract: undefined,
+    } as t.ClassExpression;
   } else if (isFunction(node)) {
-    // @ts-expect-error todo(flow->ts): avoid type unsafe mutations
-    node.type = "FunctionExpression";
+    return { ...node, type: "FunctionExpression" } as t.FunctionExpression;
   }
-
   // if it's still not an expression
-  if (!isExpression(node)) {
-    throw new Error(`cannot turn ${node.type} to an expression`);
-  }
-
-  return node;
+  // @ts-expect-error node is narrowed to never, but we want to throw an error
+  throw new Error(`cannot turn ${node.type} to an expression`);
 }

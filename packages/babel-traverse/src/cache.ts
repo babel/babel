@@ -1,39 +1,36 @@
-import type { Node } from "@babel/types";
+import type * as t from "@babel/types";
 import type NodePath from "./path/index.ts";
-import type Scope from "./scope/index.ts";
 
-let pathsCache = new WeakMap<Node, Map<Node, NodePath>>();
-export { pathsCache as path };
-export let scope = new WeakMap<Node, Scope>();
-
-export function clear() {
-  clearPath();
-  clearScope();
+export function getCachedNodePath(parent: NodePath, node: t.Node) {
+  const first = parent._childPath0;
+  if (first?.node === node) return first;
+  const second = parent._childPath1;
+  if (second?.node === node) return second;
+  return parent._childPaths?.get(node);
 }
 
-export function clearPath() {
-  pathsCache = new WeakMap();
-}
+export function cacheNodePath(path: NodePath<t.Node | null>) {
+  const { node, parentPath } = path;
+  if (!parentPath || !node) return;
 
-export function clearScope() {
-  scope = new WeakMap();
-}
-
-export function getCachedPaths(path: NodePath<Node | null>) {
-  const { parent, parentPath } = path;
-  return parentPath ? parentPath._store : pathsCache.get(parent);
-}
-
-export function getOrCreateCachedPaths(
-  node: Node,
-  parentPath?: NodePath | null,
-) {
-  if (parentPath) {
-    return (parentPath._store ||= new Map());
+  if (!parentPath._childPath0) {
+    parentPath._childPath0 = path;
+  } else if (!parentPath._childPath1) {
+    parentPath._childPath1 = path;
+  } else {
+    (parentPath._childPaths ??= new Map()).set(node, path);
   }
+}
 
-  let paths = pathsCache.get(node);
-  if (!paths) pathsCache.set(node, (paths = new Map()));
+export function uncacheNodePath(path: NodePath<t.Node | null>) {
+  const { node, parentPath } = path;
+  if (!parentPath || !node) return;
 
-  return paths;
+  if (parentPath._childPath0 === path) {
+    parentPath._childPath0 = undefined;
+  } else if (parentPath._childPath1 === path) {
+    parentPath._childPath1 = undefined;
+  } else {
+    parentPath._childPaths?.delete(node);
+  }
 }
