@@ -894,6 +894,43 @@ describe("generation", function () {
     `);
   });
 
+  it("disables source map ranges when an inputSourceMap is provided", () => {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      const code = "var t = x => x * x;";
+      const opts = {
+        sourceMaps: true,
+        filename: "input.js",
+        inputSourceMap: {
+          version: 3,
+          names: ["t", "x"],
+          sources: ["source-maps/arrow-function/input.js"],
+          mappings:
+            "AAAA,IAAIA,CAAC,GAAG,SAAJA,CAACA,CAAGC,CAAC;EAAA,OAAIA,CAAC,GAAGA,CAAC;AAAA",
+        },
+      };
+
+      const withRanges = generate(parse(code), {
+        ...opts,
+        sourceMapRanges: true,
+      }).map;
+      const withoutRanges = generate(parse(code), opts).map;
+
+      expect(withRanges.rangeMappings).toBeUndefined();
+      expect(withRanges).toEqual(withoutRanges);
+
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining(
+          "The code generator has disabled source map ranges for input.js",
+        ),
+      );
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
   it("should not throw when loc.column === 0 with inputSourceMap", () => {
     const ast = parseExpression("a(\n)");
 

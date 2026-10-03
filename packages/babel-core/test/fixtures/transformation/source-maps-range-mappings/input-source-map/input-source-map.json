@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "names": [],
+  "sources": [
+    "input.ts"
+  ],
+  "sourcesContent": [
+    "const square = (x: number): number => x * x;\nconst greet = (name: string): string => \"Hello, \" + name;\n"
+  ],
+  "mappings": "AAAA,MAAM,MAAM,GAAI,CAAS,IAAa,CAAC,GAAG,CAAC;AAC3C,MAAM,KAAK,GAAI,IAAY,IAAa,SAAS,GAAG,IAAI",
+  "ignoreList": []
+}
