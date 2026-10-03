@@ -360,6 +360,11 @@
       "import": "./helpers/esm/setFunctionName.js",
       "default": "./helpers/setFunctionName.js"
     },
+    "./helpers/setObjectProto": {
+      "node": "./helpers/setObjectProto.js",
+      "import": "./helpers/esm/setObjectProto.js",
+      "default": "./helpers/setObjectProto.js"
+    },
     "./helpers/setPrototypeOf": {
       "node": "./helpers/setPrototypeOf.js",
       "import": "./helpers/esm/setPrototypeOf.js",
