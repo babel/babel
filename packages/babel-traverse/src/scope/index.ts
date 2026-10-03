@@ -755,6 +755,12 @@ class Scope {
       return;
     }
 
+    if (path.isTSEnumDeclaration() && !path.node.declare) {
+      const id = path.get("id");
+      this.registerBinding(kind, id, path);
+      return;
+    }
+
     const parent = this.getProgramParent();
     const ids = path.getOuterBindingIdentifiers(true);
 
