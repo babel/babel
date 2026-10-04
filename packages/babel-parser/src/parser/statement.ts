@@ -1467,7 +1467,12 @@ export default abstract class StatementParser extends ExpressionParser {
     this.prodParam.enter(functionFlags(isAsync, node.generator));
 
     if (!isDeclaration) {
+      // The name of a function expression is not part of an enclosing async
+      // arrow head, so `await` must not be recorded as an error there:
+      // `async (x = function await() {}) => {}` is valid.
+      this.expressionScope.enter(newExpressionScope());
       node.id = this.parseFunctionId();
+      this.expressionScope.exit();
     }
 
     this.parseFunctionParams(node, /* isConstructor */ false);
