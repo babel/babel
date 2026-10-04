@@ -20,7 +20,6 @@ permissions:
   contents: read
   pull-requests: read
   issues: read
-  copilot-requests: write
 # Otherwise GH will re-trigger the workflow when a new label is added and cancel
 # the running one.
 concurrency:
