@@ -1885,6 +1885,7 @@ export default abstract class ExpressionParser extends LValParser {
   // argument list.
   // https://tc39.es/ecma262/#prod-NewExpression
   parseNew(this: Parser, node: Undone<N.NewExpression>): N.NewExpression {
+    this.state.canStartArrow = false;
     this.parseNewCallee(node);
 
     if (this.eat(tt.parenL)) {
@@ -2890,6 +2891,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     if (!soloAwait) {
+      this.state.canStartArrow = false;
       node.argument = this.parseMaybeUnary(null, true);
     }
 
