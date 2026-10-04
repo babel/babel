@@ -1,0 +1,138 @@
+{
+  "type": "File",
+  "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":21,"index":56}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":56,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":21,"index":56}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+          "callee": {
+            "type": "Identifier",
+            "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5},"identifierName":"async"},
+            "name": "async"
+          },
+          "arguments": [
+            {
+              "type": "CallExpression",
+              "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9}},
+              "callee": {
+                "type": "Identifier",
+                "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"a"},
+                "name": "a"
+              },
+              "arguments": []
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":12,"end":18,"loc":{"start":{"line":2,"column":0,"index":12},"end":{"line":2,"column":6,"index":18}},
+        "expression": {
+          "type": "CallExpression",
+          "start":13,"end":16,"loc":{"start":{"line":2,"column":1,"index":13},"end":{"line":2,"column":4,"index":16}},
+          "callee": {
+            "type": "Identifier",
+            "start":13,"end":14,"loc":{"start":{"line":2,"column":1,"index":13},"end":{"line":2,"column":2,"index":14},"identifierName":"a"},
+            "name": "a"
+          },
+          "arguments": [],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 12
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":19,"end":34,"loc":{"start":{"line":3,"column":0,"index":19},"end":{"line":3,"column":15,"index":34}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":19,"end":33,"loc":{"start":{"line":3,"column":0,"index":19},"end":{"line":3,"column":14,"index":33}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "AssignmentPattern",
+              "start":20,"end":27,"loc":{"start":{"line":3,"column":1,"index":20},"end":{"line":3,"column":8,"index":27}},
+              "left": {
+                "type": "Identifier",
+                "start":20,"end":21,"loc":{"start":{"line":3,"column":1,"index":20},"end":{"line":3,"column":2,"index":21},"identifierName":"a"},
+                "name": "a"
+              },
+              "right": {
+                "type": "CallExpression",
+                "start":24,"end":27,"loc":{"start":{"line":3,"column":5,"index":24},"end":{"line":3,"column":8,"index":27}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":24,"end":25,"loc":{"start":{"line":3,"column":5,"index":24},"end":{"line":3,"column":6,"index":25},"identifierName":"b"},
+                  "name": "b"
+                },
+                "arguments": []
+              }
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":32,"end":33,"loc":{"start":{"line":3,"column":13,"index":32},"end":{"line":3,"column":14,"index":33}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":35,"end":56,"loc":{"start":{"line":4,"column":0,"index":35},"end":{"line":4,"column":21,"index":56}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":35,"end":55,"loc":{"start":{"line":4,"column":0,"index":35},"end":{"line":4,"column":20,"index":55}},
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [
+            {
+              "type": "AssignmentPattern",
+              "start":42,"end":49,"loc":{"start":{"line":4,"column":7,"index":42},"end":{"line":4,"column":14,"index":49}},
+              "left": {
+                "type": "Identifier",
+                "start":42,"end":43,"loc":{"start":{"line":4,"column":7,"index":42},"end":{"line":4,"column":8,"index":43},"identifierName":"a"},
+                "name": "a"
+              },
+              "right": {
+                "type": "CallExpression",
+                "start":46,"end":49,"loc":{"start":{"line":4,"column":11,"index":46},"end":{"line":4,"column":14,"index":49}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":46,"end":47,"loc":{"start":{"line":4,"column":11,"index":46},"end":{"line":4,"column":12,"index":47},"identifierName":"b"},
+                  "name": "b"
+                },
+                "arguments": []
+              }
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":54,"end":55,"loc":{"start":{"line":4,"column":19,"index":54},"end":{"line":4,"column":20,"index":55}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

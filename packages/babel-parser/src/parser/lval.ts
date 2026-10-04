@@ -772,9 +772,12 @@ export default abstract class LValParser extends NodeUtils {
 
     const unwrappedExpression = unwrapParenthesizedExpression(expression);
     disallowCallExpression ||=
-      unwrappedExpression.type === "CallExpression" &&
-      (unwrappedExpression.callee.type === "Import" ||
-        unwrappedExpression.callee.type === "Super");
+      // Although Annex B allows call expressions as assignment patterns
+      // (runtime error), they are not allowed as binding patterns.
+      binding !== BindingFlag.TYPE_NONE ||
+      (unwrappedExpression.type === "CallExpression" &&
+        (unwrappedExpression.callee.type === "Import" ||
+          unwrappedExpression.callee.type === "Super"));
     const validity = this.isValidLVal(
       type,
       disallowCallExpression,
