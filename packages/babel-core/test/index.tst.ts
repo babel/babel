@@ -1,10 +1,15 @@
 import { expect, it, describe } from "tstyche";
 import {
   createConfigItem,
+  generate,
+  parseSync,
   transformSync,
   type ConfigItem,
+  type GeneratorOptions,
+  type GeneratorResult,
   type PluginAPI,
 } from "../src/index.ts";
+import type * as generator from "@babel/generator";
 import type presetEnv from "@babel/preset-env";
 import type presetReact from "@babel/preset-react";
 import type presetTypescript from "@babel/preset-typescript";
@@ -49,10 +54,22 @@ describe("core", () => {
       plugins: [
         function (api) {
           expect(api).type.toHaveProperty("types");
+          expect(api).type.toHaveProperty("generate");
           return {};
         },
       ],
     });
+  });
+
+  it("generate", () => {
+    expect(generate).type.toBe<typeof generator.default>();
+    expect<GeneratorOptions>().type.toBe<generator.GeneratorOptions>();
+    expect<GeneratorResult>().type.toBe<generator.GeneratorResult>();
+
+    const ast = parseSync("", null)!;
+    expect(generate(ast)).type.toBe<GeneratorResult>();
+    expect(generate).type.toBeCallableWith(ast, { compact: true });
+    expect(generate).type.not.toBeCallableWith(ast, { compact: 1 });
   });
 
   it("createConfigItem", () => {
