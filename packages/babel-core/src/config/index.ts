@@ -149,9 +149,5 @@ export const createConfigItem: CreateConfigItem = function createConfigItem(
     );
   }
 
-  createConfigItemRunner.errback(
-    target,
-    options,
-    callback,
-  );
+  createConfigItemRunner.errback(target, options, callback);
 };
