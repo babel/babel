@@ -3569,6 +3569,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (typeParameters) node.typeParameters = typeParameters;
     }
 
+    checkStrictBindReservedWord(
+      at: N.Identifier,
+      bindingType: BindingFlag,
+      strictModeChanged?: boolean,
+    ): void {
+      // Ambient declarations are never evaluated, so they are not subject to
+      // strict mode restrictions, even though class bodies are always strict.
+      if (this.state.isAmbientContext) return;
+      super.checkStrictBindReservedWord(at, bindingType, strictModeChanged);
+    }
+
     parseClassPropertyAnnotation(
       node: Undone<
         N.ClassProperty | N.ClassPrivateProperty | N.ClassAccessorProperty

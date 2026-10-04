@@ -1,0 +1,55 @@
+{
+  "type": "File",
+  "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":26,"index":45}},
+  "errors": [
+    "SyntaxError: Binding 'eval' in strict mode. (1:6)",
+    "SyntaxError: Binding 'arguments' in strict mode. (2:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":45,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":26,"index":45}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":15,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":15,"index":15},"identifierName":"eval"},
+          "name": "eval"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":16,"end":18,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":18,"index":18}},
+          "body": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":19,"end":45,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":26,"index":45}},
+        "expression": {
+          "type": "ClassExpression",
+          "start":20,"end":43,"loc":{"start":{"line":2,"column":1,"index":20},"end":{"line":2,"column":24,"index":43}},
+          "id": {
+            "type": "Identifier",
+            "start":26,"end":40,"loc":{"start":{"line":2,"column":7,"index":26},"end":{"line":2,"column":21,"index":40},"identifierName":"arguments"},
+            "name": "arguments"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start":41,"end":43,"loc":{"start":{"line":2,"column":22,"index":41},"end":{"line":2,"column":24,"index":43}},
+            "body": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 19
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

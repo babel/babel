@@ -2129,6 +2129,7 @@ export default abstract class StatementParser extends ExpressionParser {
   ): void {
     if (tokenIsIdentifier(this.state.type)) {
       node.id = this.parseIdentifier();
+      this.checkStrictBindReservedWord(node.id, bindingType);
       if (isStatement) {
         this.declareNameFromIdentifier(node.id, bindingType);
       }
