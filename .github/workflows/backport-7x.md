@@ -106,7 +106,7 @@ jobs:
           BACKPORT_PR: ${{ needs.safe_outputs.outputs.created_pr_number }}
         run: |
           gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Backported to 7.x in #$BACKPORT_PR."
-          gh pr edit "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --remove-label "7.x: needs backport"
+          gh api -X DELETE "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/labels/7.x%3A%20needs%20backport"
 safe-outputs:
   create-pull-request:
     base-branch: 7.x
