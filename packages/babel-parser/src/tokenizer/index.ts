@@ -23,6 +23,7 @@ import type { ParseError } from "../parse-error.ts";
 import { Errors, type ParseErrorConstructor } from "../parse-error.ts";
 import {
   lineBreakG,
+  hasNewLine,
   isNewLine,
   isWhitespace,
   skipWhiteSpace,
@@ -227,8 +228,50 @@ export default abstract class Tokenizer extends CommentsParser {
   }
 
   nextTokenStartSince(pos: number): number {
-    skipWhiteSpace.lastIndex = pos;
-    return skipWhiteSpace.test(this.input) ? skipWhiteSpace.lastIndex : pos;
+    if (this.inModule || !(this.optionFlags & OptionFlags.AnnexB)) {
+      skipWhiteSpace.lastIndex = pos;
+      return skipWhiteSpace.test(this.input) ? skipWhiteSpace.lastIndex : pos;
+    }
+    let next = pos;
+    for (;;) {
+      skipWhiteSpace.lastIndex = next;
+      if (skipWhiteSpace.test(this.input)) next = skipWhiteSpace.lastIndex;
+      const commentEnd = this.htmlLikeCommentEndAt(next, pos);
+      if (commentEnd === -1) return next;
+      next = commentEnd;
+    }
+  }
+
+  /**
+   * The skipWhiteSpace regexes do not handle the Annex B HTML-like comments,
+   * this method mirrors the logic in skipSpace. Callers must check that
+   * HTML-like comments are allowed (Annex B is enabled and not in a module).
+   *
+   * @param pos position to check for an HTML-like comment
+   * @param spaceStart start of the whitespace preceding `pos`, since `-->`
+   * is only a comment at the start of the input or after a line terminator
+   * @returns the end of the HTML-like comment starting at `pos`, or -1
+   */
+  htmlLikeCommentEndAt(pos: number, spaceStart: number): number {
+    const { input } = this;
+    const ch = input.charCodeAt(pos);
+    let end;
+    if (ch === charCodes.lessThan) {
+      if (!input.startsWith("!--", pos + 1)) return -1;
+      end = pos + 4;
+    } else if (ch === charCodes.dash) {
+      if (
+        !input.startsWith("->", pos + 1) ||
+        !(spaceStart === 0 || hasNewLine(input, spaceStart, pos))
+      ) {
+        return -1;
+      }
+      end = pos + 3;
+    } else {
+      return -1;
+    }
+    while (end < this.length && !isNewLine(input.charCodeAt(end))) ++end;
+    return end;
   }
 
   lookaheadCharCode(): number {
