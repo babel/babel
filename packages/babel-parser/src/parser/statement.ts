@@ -403,11 +403,16 @@ export default abstract class StatementParser extends ExpressionParser {
             this.state.startLoc,
           );
         }
-        return this.parseFunctionStatement(
-          node,
-          false,
-          !allowDeclaration && allowFunctionDeclaration,
-        );
+        if (!allowDeclaration && allowFunctionDeclaration) {
+          const result = this.parseFunctionStatement(node, false, true);
+          // Annex B.3.1: unlike functions in if statement clauses (B.3.3),
+          // labelled function declarations are bound in the enclosing scope.
+          if (flags & ParseStatementFlag.AllowLabeledFunction) {
+            this.registerFunctionStatementId(result);
+          }
+          return result;
+        }
+        return this.parseFunctionStatement(node, false, false);
       case tt._class:
         if (!allowDeclaration) this.unexpected();
         return this.parseClass(
