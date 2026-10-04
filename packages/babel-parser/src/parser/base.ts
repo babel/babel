@@ -30,6 +30,17 @@ export default class BaseParser {
   sawUnambiguousESM: boolean = false;
   ambiguousScriptDifferentAst: boolean = false;
 
+  // Used by the Flow and TypeScript plugins to signify the start of an
+  // expression which looks like a typed arrow function, but it isn't.
+  // Contains node (offset) positions.
+  // e.g. a ? (b) : c => d
+  //          ^
+  // This only depends on the input, so it is not in the state: it is not
+  // reset when backtracking, so that nested conditional expressions don't
+  // try to parse the same arrow function again, which would take
+  // exponential time.
+  noArrowAt = new Set<number>();
+
   // Initialized by Tokenizer
   declare state: State;
   // input and length are not in state as they are constant and we do

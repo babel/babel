@@ -56,16 +56,8 @@ export default class State {
 
   errors: ParseError[] = [];
 
-  // The following two arrays are shared by the Flow and TypeScript plugins,
-  // which cannot be enabled at the same time.
-
-  // Used to signify the start of an expression which looks like a
-  // typed arrow function, but it isn't. Contains node (offset) positions.
-  // e.g. a ? (b) : c => d
-  //          ^
-  noArrowAt: number[] = [];
-
-  // Contains source positions.
+  // Shared by the Flow and TypeScript plugins, which cannot be enabled at
+  // the same time. See also Parser#noArrowAt. Contains source positions.
   // Flow: used to signify the start of an expression whose params, if it
   // looks like an arrow function, shouldn't be converted to assignable nodes.
   // This is used to defer the validation of typed arrow functions inside
@@ -180,7 +172,6 @@ export default class State {
     state.startLoc = this.startLoc;
     state.endLoc = this.endLoc;
     state.errors = this.errors.slice();
-    state.noArrowAt = this.noArrowAt.slice();
     state.noArrowParamsConversionAt = this.noArrowParamsConversionAt.slice();
     state.labels = this.labels.slice();
     state.commentsLen = this.commentsLen;
