@@ -417,6 +417,7 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
         "typescript/cast/type-assertion-after-operator/input.ts",
         "typescript/cast/type-assertion-and-assign/input.ts",
         "typescript/cast/type-assertion-before-operator/input.ts",
+        "typescript/conditional/async-call-followed-by-colon-type-assertion/input.ts",
 
         // ts-eslint/tsc does not support this example
         "typescript/regression/nested-extends-in-arrow-type-param/input.ts",

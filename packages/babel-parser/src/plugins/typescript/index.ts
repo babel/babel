@@ -4413,7 +4413,21 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     shouldParseAsyncArrow(): boolean {
-      if (this.match(tt.colon)) return true;
+      if (this.match(tt.colon)) {
+        // `async(b): c => d` is an arrow function with a return type, but in
+        // `a ? await async(b) : c` the `:` is the conditional's separator.
+        // Like for parenthesized arrow functions (see parseArrow), only parse
+        // a return type if it's followed by `=>`. This is only a lookahead:
+        // parseAsyncArrowFromCallExpression parses the return type.
+        const state = this.state.clone();
+        const result = this.tryParse(abort => {
+          const returnType = this.tsParseTypeAnnotation();
+          if (!this.match(tt.arrow)) abort();
+          return returnType;
+        });
+        this.state = state;
+        return !result.aborted && !result.thrown;
+      }
       return super.shouldParseAsyncArrow();
     }
 
