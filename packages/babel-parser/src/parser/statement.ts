@@ -2453,8 +2453,12 @@ export default abstract class StatementParser extends ExpressionParser {
     }
     // lookahead again when `export default from` is seen
     if (this.match(tt._default) && hasFrom) {
+      // Without the plugin, `export default from\n"x"` is valid: ASI applies
+      // after the `from` identifier reference, so don't look past line breaks.
       const nextAfterFrom = this.input.charCodeAt(
-        this.nextTokenStartSince(next + 4),
+        this.hasPlugin("exportDefaultFrom")
+          ? this.nextTokenStartSince(next + 4)
+          : this.nextTokenInLineStartSince(next + 4),
       );
       return (
         nextAfterFrom === charCodes.quotationMark ||
