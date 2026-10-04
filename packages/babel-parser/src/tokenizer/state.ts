@@ -56,16 +56,23 @@ export default class State {
 
   errors: ParseError[] = [];
 
+  // The following two arrays are shared by the Flow and TypeScript plugins,
+  // which cannot be enabled at the same time.
+
   // Used to signify the start of an expression which looks like a
-  // typed arrow function, but it isn't
+  // typed arrow function, but it isn't. Contains node (offset) positions.
   // e.g. a ? (b) : c => d
   //          ^
   noArrowAt: number[] = [];
 
-  // Used to signify the start of an expression whose params, if it looks like
-  // an arrow function, shouldn't be converted to assignable nodes.
+  // Contains source positions.
+  // Flow: used to signify the start of an expression whose params, if it
+  // looks like an arrow function, shouldn't be converted to assignable nodes.
   // This is used to defer the validation of typed arrow functions inside
   // conditional expressions.
+  // TypeScript: used to signify the start of an expression where, like in
+  // TypeScript, an arrow function that might be a parenthesized expression
+  // can only have a return type if it's followed by `:`.
   // e.g. a ? (b) : c => d
   //          ^
   noArrowParamsConversionAt: number[] = [];
@@ -84,7 +91,6 @@ export default class State {
   @bit accessor isAmbientContext = false;
   @bit accessor inAbstractClass = false;
   @bit accessor inDisallowConditionalTypesContext = false;
-  @bit accessor inConditionalConsequent = false;
 
   // For the Hack-style pipelines plugin
   @bit accessor inHackPipelineBody = false;
