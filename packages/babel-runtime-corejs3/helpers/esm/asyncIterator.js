@@ -41,7 +41,7 @@ function AsyncFromSyncIterator(r) {
       }) : AsyncFromSyncIteratorContinuation(n.apply(this.s, arguments));
     },
     "throw": function _throw(r) {
-      var n = this.s["return"];
+      var n = this.s["throw"];
       return void 0 === n ? _Promise.reject(r) : AsyncFromSyncIteratorContinuation(n.apply(this.s, arguments));
     }
   }, new AsyncFromSyncIterator(r);
