@@ -1414,10 +1414,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 270, gzip size: 201
+  // size: 300, gzip size: 217
   toPrimitive: helper(
     "7.1.5",
-    'function toPrimitive(t,r){if("object"!=typeof t||!t)return t;var e=t[Symbol.toPrimitive];if(void 0!==e){var i=e.call(t,r||"default");if("object"!=typeof i)return i;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===r?String:Number)(t)}',
+    'function toPrimitive(t,e){if("object"!=typeof t||!t)return t;var r;if("undefined"!=typeof Symbol&&void 0!==(r=t[Symbol.toPrimitive])){var i=r.call(t,e||"default");if("object"!=typeof i)return i;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===e?String:Number)(t)}',
     {
       globals: ["Symbol", "TypeError", "String", "Number"],
       locals: { toPrimitive: ["body.0.id"] },
