@@ -218,6 +218,8 @@ export default declare((api, options: Options) => {
     name: "transform-for-of",
     visitor: {
       ForOfStatement(path, state) {
+        if (path.node.await) return;
+
         const right = path.get("right");
         if (
           right.isArrayExpression() ||
