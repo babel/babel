@@ -79,7 +79,10 @@ jobs:
             > "$out/pr.json"
 
           branch="automation/backport-$PR_NUMBER"
-          existing_pr=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$branch" --state all --json url --jq '.[0].url // ""')
+          # Ignore closed PRs, so that a new backport can be triggered after
+          # closing the previous one.
+          existing_pr=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$branch" --state all --json url,state \
+            --jq '[.[] | select(.state != "CLOSED")][0].url // ""')
 
           state=$(jq -r .state "$out/pr.json")
           base=$(jq -r .baseRefName "$out/pr.json")
@@ -244,7 +247,8 @@ jobs:
           branch=$(jq -r .backport_branch "$out/context.json")
           title=$(jq -r .pr.title "$out/context.json")
 
-          git push "https://babel-bot:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/$branch"
+          # --force, since the branch might still exist from a closed backport PR
+          git push --force "https://babel-bot:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/$branch"
 
           {
             echo "**Backport of #$PR_NUMBER to 7.x**"
@@ -367,6 +371,8 @@ safe-outputs:
     base-branch: 7.x
     allowed-branches: ["automation/backport-*"]
     preserve-branch-name: true
+    # The branch might still exist from a closed backport PR
+    recreate-ref: true
     labels: ["7.x: backport"]
     draft: false
     fallback-as-issue: false
