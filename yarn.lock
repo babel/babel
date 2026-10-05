@@ -14986,15 +14986,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerate-unicode-properties@npm:^10.2.2":
-  version: 10.2.2
-  resolution: "regenerate-unicode-properties@npm:10.2.2"
-  dependencies:
-    regenerate: "npm:^1.4.2"
-  checksum: 10/5041ee31185c4700de9dd76783fab9def51c412751190d523d621db5b8e35a6c2d91f1642c12247e7d94f84b8ae388d044baac1e88fc2ba0ac215ca8dc7bed38
-  languageName: node
-  linkType: hard
-
 "regenerate-unicode-properties@npm:^10.3.0":
   version: 10.3.0
   resolution: "regenerate-unicode-properties@npm:10.3.0"
@@ -15061,21 +15052,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regexpu-core@npm:^6.3.1":
-  version: 6.4.0
-  resolution: "regexpu-core@npm:6.4.0"
-  dependencies:
-    regenerate: "npm:^1.4.2"
-    regenerate-unicode-properties: "npm:^10.2.2"
-    regjsgen: "npm:^0.8.0"
-    regjsparser: "npm:^0.13.0"
-    unicode-match-property-ecmascript: "npm:^2.0.0"
-    unicode-match-property-value-ecmascript: "npm:^2.2.1"
-  checksum: 10/bf5f85a502a17f127a1f922270e2ecc1f0dd071ff76a3ec9afcd6b1c2bf7eae1486d1e3b1a6d621aee8960c8b15139e6b5058a84a68e518e1a92b52e9322faf9
-  languageName: node
-  linkType: hard
-
-"regexpu-core@npm:^6.5.3":
+"regexpu-core@npm:^6.3.1, regexpu-core@npm:^6.5.3":
   version: 6.5.3
   resolution: "regexpu-core@npm:6.5.3"
   dependencies:
