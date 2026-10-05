@@ -70,8 +70,10 @@ export default function _createForOfIteratorHelper<T>(
     n: function () {
       normalCompletion = true;
       var step = (it as Iterator<T>).next();
-      normalCompletion = step.done!;
-      return step;
+      if (step.done) return step;
+      var value = step.value;
+      normalCompletion = false;
+      return { done: false, value: value };
     },
     e: function (e: Error) {
       didErr = true;

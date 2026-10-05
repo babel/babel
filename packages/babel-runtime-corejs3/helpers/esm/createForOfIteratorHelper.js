@@ -37,7 +37,12 @@ function _createForOfIteratorHelper(r, e) {
     n: function n() {
       a = !0;
       var r = t.next();
-      return a = r.done, r;
+      if (r.done) return r;
+      var e = r.value;
+      return a = !1, {
+        done: !1,
+        value: e
+      };
     },
     e: function e(r) {
       u = !0, o = r;
