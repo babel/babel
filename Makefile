@@ -106,6 +106,12 @@ prepublish-build:
 prepublish:
 	$(MAKEJS) prepublish
 
+prepublish-no-lint:
+	$(MAKEJS) prepublish-no-lint
+
+prepublish-no-test:
+	$(MAKEJS) prepublish-no-test
+
 bootstrap-only:
 	$(MAKEJS) bootstrap-only
 
@@ -197,6 +203,6 @@ ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	exit 1
 endif
 	$(YARN) release-tool version $(VERSION) --all --yes --tag-version-prefix="version-e2e-test-"
-	$(MAKE) prepublish
+	$(MAKE) prepublish-no-test
 	YARN_NPM_PUBLISH_REGISTRY=http://localhost:4873 $(YARN) release-tool publish --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean

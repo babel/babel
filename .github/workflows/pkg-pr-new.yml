@@ -23,6 +23,7 @@ jobs:
           node-version: latest
           cache: "yarn"
       - name: Build
-        run: make prepublish
+        # Linting and testing are done by the CI workflow
+        run: make prepublish-no-test
       - name: Publish
         run: yarn pkg-pr-new publish --only-templates --yarn './codemods/*' './eslint/*' './packages/*'

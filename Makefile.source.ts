@@ -215,19 +215,34 @@ target["build-plugin-transform-runtime-dist"] = function () {
   node(["scripts/build-dist.ts"], "packages/babel-plugin-transform-runtime");
 };
 
+// Used by the release workflow: it must lint and test what is being published.
 target["prepublish"] = function () {
+  prepublish(() => target["test"]());
+};
+
+// The following variants are only meant for CI jobs that need the publish
+// build: linting the same sources is already done by the "Lint" CI jobs.
+target["prepublish-no-lint"] = function () {
+  prepublish(() => target["test-only"]());
+};
+
+target["prepublish-no-test"] = function () {
+  prepublish(() => {});
+};
+
+function prepublish(check: () => void) {
   target["bootstrap-only"]();
 
   env(
     () => {
       target["prepublish-build"]();
-      target["test"]();
+      check();
     },
     {
       IS_PUBLISH: "true",
     }
   );
-};
+}
 
 target["prepublish-build"] = function () {
   target["clean-lib"]();

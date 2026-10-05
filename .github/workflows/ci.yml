@@ -152,7 +152,8 @@ jobs:
       - name: Install
         run: yarn install
       - name: Prepublish
-        run: make prepublish
+        # Linting is done by the "Lint" job
+        run: make prepublish-no-lint
 
   lint:
     name: Lint
@@ -751,6 +752,7 @@ jobs:
           node-version: "*"
           cache: "yarn"
       - name: Build
-        run: make prepublish
+        # Linting is done by the "Lint" job
+        run: make prepublish-no-lint
       - name: Publint
         run: node ./scripts/publint.ts
