@@ -96,7 +96,7 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
       );
     },
     throw: function (maybeError?: any) {
-      var thr = this.s["return"];
+      var thr = this.s["throw"];
       if (thr === undefined) {
         // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         return Promise.reject(maybeError);
