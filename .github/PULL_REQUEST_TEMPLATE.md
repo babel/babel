@@ -18,6 +18,7 @@ If you are making a change that should have a docs update: submit another PR to 
 | Tests Added + Pass?      | Yes
 | Documentation PR Link    | <!-- If only readme change, add `[skip ci]` to your commits -->
 | Any Dependency Changes?  |
+| If this is a bug fix, do you<br>need it backported to 7.x? | No |
 | License                  | MIT
 
 <!-- Describe your changes below in as much detail as possible -->
