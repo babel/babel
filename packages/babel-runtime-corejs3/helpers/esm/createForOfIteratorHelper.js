@@ -35,6 +35,7 @@ function _createForOfIteratorHelper(r, e) {
       t = t.call(r);
     },
     n: function n() {
+      a = !0;
       var r = t.next();
       return a = r.done, r;
     },

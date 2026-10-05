@@ -68,6 +68,7 @@ export default function _createForOfIteratorHelper<T>(
       it = (it as IteratorFunction<T>).call(o);
     },
     n: function () {
+      normalCompletion = true;
       var step = (it as Iterator<T>).next();
       normalCompletion = step.done!;
       return step;
