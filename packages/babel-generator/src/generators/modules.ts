@@ -114,6 +114,11 @@ export function ExportAllDeclaration(
     this.word("type");
     this.space();
   }
+  // `export defer * from` in error recovery mode
+  if ((node as { phase?: string | null }).phase === "defer") {
+    this.word("defer");
+    this.space();
+  }
   this.token("*");
   this.space();
   this.word("from");

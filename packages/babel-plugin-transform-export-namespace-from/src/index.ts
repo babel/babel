@@ -17,7 +17,7 @@ export default declare(api => {
 
         if (node.phase === "defer") {
           throw path.buildCodeFrameError(
-            "Transforming `export defer * as ns from '...'` is not supported yet.",
+            "Transforming `export defer ... from '...'` is not supported yet.",
           );
         }
         if (specifiers[index].exportsFilter) {

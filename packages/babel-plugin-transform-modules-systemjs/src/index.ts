@@ -436,7 +436,16 @@ export default declare<PluginState, Options>((api, options: Options) => {
                   if (path.node.source) {
                     if (path.node.phase === "defer") {
                       throw path.buildCodeFrameError(
-                        "Transforming `export defer { x } from '...'` is not supported yet.",
+                        "Transforming `export defer ... from '...'` is not supported yet.",
+                      );
+                    }
+                    const [firstSpecifier] = specifiers;
+                    if (
+                      t.isExportNamespaceSpecifier(firstSpecifier) &&
+                      firstSpecifier.exportsFilter
+                    ) {
+                      throw path.buildCodeFrameError(
+                        "Transforming `export { x, y } as ns from '...'` is not supported yet.",
                       );
                     }
                     pushModule(path.node.source.value, "exports", specifiers);

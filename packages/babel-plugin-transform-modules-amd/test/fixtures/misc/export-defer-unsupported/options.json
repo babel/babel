@@ -9,5 +9,5 @@
       "deferredImportEvaluation"
     ]
   },
-  "throws": "Transforming `export defer { x } from '...'` is not supported yet."
+  "throws": "Transforming `export defer ... from '...'` is not supported yet."
 }

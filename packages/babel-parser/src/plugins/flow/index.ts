@@ -2866,6 +2866,18 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
+    parseNamedOrFilteredImportSpecifiers(node: Undone<N.ImportDeclaration>) {
+      super.parseNamedOrFilteredImportSpecifiers(node);
+      const specifier = node.specifiers[node.specifiers.length - 1];
+      // `import type { x } as ns`
+      if (
+        node.importKind === "type" &&
+        specifier?.type === "ImportNamespaceSpecifier"
+      ) {
+        this.unexpected(specifier.start);
+      }
+    }
+
     // parse import-type/typeof shorthand
     parseImportSpecifier(
       specifier: any,

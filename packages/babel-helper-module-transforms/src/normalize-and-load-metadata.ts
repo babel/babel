@@ -364,7 +364,7 @@ function getModuleMetadata(
     } else if (child.isExportNamedDeclaration() && child.node.source) {
       if (child.node.phase === "defer") {
         throw child.buildCodeFrameError(
-          "Transforming `export defer { x } from '...'` is not supported yet.",
+          "Transforming `export defer ... from '...'` is not supported yet.",
         );
       }
       hasExports = true;
