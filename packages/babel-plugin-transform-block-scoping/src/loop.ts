@@ -41,11 +41,18 @@ export function getUsageInBody(
   const seen = new WeakSet<t.Node>();
 
   let capturedInClosure = false;
+  // Whether the binding is referenced by a closure created in the loop
+  // head (e.g. `for (let i = 0, f = () => i; ...)`). Per spec, such a
+  // closure captures the one-time environment used to evaluate the head,
+  // which is only copied into the first per-iteration environment after
+  // the whole initializer has run.
+  let capturedInHeadClosure = false;
+  // All the identifiers in the loop head (other than the declaration
+  // itself) that refer to the binding.
+  const headUsages: NodePath<t.Identifier>[] = [];
 
-  const constantViolations = filterMap(binding.constantViolations, path => {
-    const { inBody, inClosure } = relativeLoopLocation(path, loopPath);
-    if (!inBody) return null;
-    capturedInClosure ||= inClosure;
+  const constantViolations = binding.constantViolations.flatMap(path => {
+    const { inBody, inHead, inClosure } = relativeLoopLocation(path, loopPath);
 
     const id = path.isUpdateExpression()
       ? path.get("argument")
@@ -53,13 +60,32 @@ export function getUsageInBody(
         ? path.get("left")
         : null;
     if (id) seen.add(id.node);
-    return id as NodePath<t.Identifier> | null;
+
+    // `id` might be a destructuring pattern, such as `[i] = [1]`
+    const ids =
+      id?.getBindingIdentifierPaths(true)[binding.identifier.name] ?? [];
+
+    if (inHead) {
+      capturedInHeadClosure ||= inClosure;
+      headUsages.push(...ids);
+      return [];
+    }
+    if (!inBody) return [];
+    capturedInClosure ||= inClosure;
+
+    return ids;
   });
 
   const references = filterMap(binding.referencePaths, path => {
     if (seen.has(path.node)) return null;
 
-    const { inBody, inClosure } = relativeLoopLocation(path, loopPath);
+    const { inBody, inHead, inClosure } = relativeLoopLocation(path, loopPath);
+
+    if (inHead) {
+      capturedInHeadClosure ||= inClosure;
+      headUsages.push(path as NodePath<t.Identifier>);
+      return null;
+    }
     if (!inBody) return null;
     capturedInClosure ||= inClosure;
 
@@ -70,11 +96,14 @@ export function getUsageInBody(
     capturedInClosure,
     hasConstantViolations: constantViolations.length > 0,
     usages: references.concat(constantViolations),
+    capturedInHeadClosure,
+    headUsages,
   };
 }
 
 function relativeLoopLocation(path: NodePath, loopPath: NodePath<t.Loop>) {
   const bodyPath = loopPath.get("body");
+  const headPath = loopPath.isForStatement() ? loopPath.get("init") : null;
   let inClosure = false;
 
   for (let currPath = path; currPath; currPath = currPath.parentPath) {
@@ -82,9 +111,11 @@ function relativeLoopLocation(path: NodePath, loopPath: NodePath<t.Loop>) {
       inClosure = true;
     }
     if (currPath === bodyPath) {
-      return { inBody: true, inClosure };
+      return { inBody: true, inHead: false, inClosure };
+    } else if (headPath && currPath === headPath) {
+      return { inBody: false, inHead: true, inClosure };
     } else if (currPath === loopPath) {
-      return { inBody: false, inClosure };
+      return { inBody: false, inHead: false, inClosure };
     }
   }
 
