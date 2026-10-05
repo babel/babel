@@ -28,24 +28,30 @@ function _createForOfIteratorHelper(r, e) {
     throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
   var o,
-    a = !0,
-    u = !1;
+    a,
+    u = !0;
   return {
     s: function s() {
       t = t.call(r);
     },
     n: function n() {
+      u = !0;
       var r = t.next();
-      return a = r.done, r;
+      return r.done ? {
+        done: !0
+      } : {
+        value: r.value,
+        done: u = !1
+      };
     },
     e: function e(r) {
-      u = !0, o = r;
+      o = !0, a = r;
     },
     f: function f() {
       try {
-        a || null == t["return"] || t["return"]();
+        u || null == t["return"] || t["return"]();
       } finally {
-        if (u) throw o;
+        if (o) throw a;
       }
     }
   };

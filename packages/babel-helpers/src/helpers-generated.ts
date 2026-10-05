@@ -490,10 +490,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 692, gzip size: 423
+  // size: 726, gzip size: 432
   createForOfIteratorHelper: helper(
     "7.9.0",
-    'function _createForOfIteratorHelper(r,e){var t="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(!t){if(Array.isArray(r)||(t=unsupportedIterableToArray(r))||e&&r&&"number"==typeof r.length){t&&(r=t);var n=0,F=function(){};return{s:F,n:function(){return n>=r.length?{done:!0}:{done:!1,value:r[n++]}},e:function(r){throw r},f:F}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var o,a=!0,u=!1;return{s:function(){t=t.call(r)},n:function(){var r=t.next();return a=r.done,r},e:function(r){u=!0,o=r},f:function(){try{a||null==t.return||t.return()}finally{if(u)throw o}}}}',
+    'function _createForOfIteratorHelper(r,e){var t="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(!t){if(Array.isArray(r)||(t=unsupportedIterableToArray(r))||e&&r&&"number"==typeof r.length){t&&(r=t);var n=0,F=function(){};return{s:F,n:function(){return n>=r.length?{done:!0}:{done:!1,value:r[n++]}},e:function(r){throw r},f:F}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var o,a,u=!0;return{s:function(){t=t.call(r)},n:function(){u=!0;var r=t.next();return r.done?{done:!0}:{value:r.value,done:u=!1}},e:function(r){o=!0,a=r},f:function(){try{u||null==t.return||t.return()}finally{if(o)throw a}}}}',
     {
       globals: ["Symbol", "Array", "TypeError"],
       locals: { _createForOfIteratorHelper: ["body.0.id"] },

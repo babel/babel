@@ -58,7 +58,8 @@ export default function _createForOfIteratorHelper<T>(
   }
 
   var normalCompletion = true,
-    didErr = false,
+    // Left undefined (falsy) instead of false to reduce the bundle size
+    didErr: boolean | undefined,
     err: Error | undefined;
 
   // "it" is being reassigned multiple times to reduce the variables (bundle size)
@@ -68,9 +69,12 @@ export default function _createForOfIteratorHelper<T>(
       it = (it as IteratorFunction<T>).call(o);
     },
     n: function () {
+      normalCompletion = true;
       var step = (it as Iterator<T>).next();
-      normalCompletion = step.done!;
-      return step;
+      return step.done
+        ? // Return a fresh object so that the caller doesn't call the done getter again
+          ({ done: true } as IteratorReturnResult<undefined>)
+        : { value: step.value, done: (normalCompletion = false) };
     },
     e: function (e: Error) {
       didErr = true;
