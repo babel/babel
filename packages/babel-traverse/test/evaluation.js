@@ -456,6 +456,28 @@ describe("evaluation", function () {
     expect(evalResult.confident).toBe(false);
   });
 
+  it("should deopt for destructured bindings", function () {
+    const cases = [
+      "const { a } = { a: 1 }; a;",
+      "const { a: b } = { a: 1 }; b;",
+      "const { a = 1 } = {}; a;",
+      "const { ['a']: a } = { a: 1 }; a;",
+      "const { ...a } = {}; a;",
+      "const { x: { a } } = { x: { a: 1 } }; a;",
+      "const [a] = [1]; a;",
+      "const [, a] = [1, 2]; a;",
+      "const [a = 1] = []; a;",
+      "const [...a] = [1]; a;",
+      "const [[a]] = [[1]]; a;",
+    ];
+
+    for (const code of cases) {
+      const path = getPath(code);
+      const evalResult = path.get("body.1.expression").evaluate();
+      expect(evalResult.confident).toBe(false);
+    }
+  });
+
   addDeoptTest("({a:{b}})", "ObjectExpression", "Identifier");
   addDeoptTest("({[a + 'b']: 1})", "ObjectExpression", "Identifier");
   addDeoptTest("[{a}]", "ArrayExpression", "Identifier");
