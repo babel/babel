@@ -12,7 +12,8 @@ export default function _interopRequireWildcard(
 
   // Temporary variable for output size
   var defineProp = Object.defineProperty as
-    typeof Object.defineProperty | undefined;
+    | typeof Object.defineProperty
+    | undefined;
   var newObj: Record<string, any> = { __proto__: null, default: obj };
   var desc: PropertyDescriptor | undefined;
   var key: string;
