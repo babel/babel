@@ -1,0 +1,4 @@
+{
+  "plugins": ["deferredImportEvaluation", "deferredReexports"],
+  "parserOpts": { "errorRecovery": true }
+}

@@ -15,6 +15,12 @@ export default declare(api => {
         const index = t.isExportDefaultSpecifier(specifiers[0]) ? 1 : 0;
         if (!t.isExportNamespaceSpecifier(specifiers[index])) return;
 
+        if (node.phase === "defer") {
+          throw path.buildCodeFrameError(
+            "Transforming `export defer ... from '...'` is not supported yet.",
+          );
+        }
+
         const nodes = [];
 
         if (index === 1) {
