@@ -5,7 +5,6 @@ on:
     # "personal" branches for stacked PRs; will run when opening the PR
     branches-ignore:
       - "nicolo-ribaudo/**"
-      - "JLHwung/**"
       - "jlhwung/**"
       - "liuxingbaoyu/**"
   pull_request:
