@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, NodePath, Scope } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION("^8.1.0"));
+  api.assertVersion(REQUIRED_VERSION("^8.0.6"));
   const t: typeof api.types = api.types;
   const { template } = api;
 
