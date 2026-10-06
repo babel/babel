@@ -10,6 +10,9 @@ import {
   ensureStatementsHoisted,
   wrapInterop,
   getModuleName,
+  withExtension,
+  resolveRelativeImportPaths,
+  amdImportId,
 } from "@babel/helper-module-transforms";
 import type { PluginOptions } from "@babel/helper-module-transforms";
 import { types as t, template, type NodePath } from "@babel/core";
@@ -45,6 +48,8 @@ export interface Options extends PluginOptions {
   exactGlobals?: boolean;
   globals?: Record<string, string>;
   importInterop?: RewriteModuleStatementsAndPrepareHeaderOptions["importInterop"];
+  /** Extension applied to relative CommonJS `require()` paths, e.g. ".js". */
+  importFileExt?: string;
   /** @deprecated Use the `constantReexports` and `enumerableModuleMeta` assumptions instead. */
   loose?: boolean;
   noInterop?: boolean;
@@ -70,6 +75,7 @@ export default declare((api, options: Options) => {
     strictMode,
     noInterop,
     importInterop,
+    importFileExt,
   } = options;
 
   const constantReexports =
@@ -96,7 +102,8 @@ export default declare((api, options: Options) => {
     let initAssignments = [];
 
     if (exactGlobals) {
-      const globalName = browserGlobals[moduleNameOrBasename];
+      const globalName =
+        browserGlobals[filename] || browserGlobals[moduleNameOrBasename];
 
       if (globalName) {
         initAssignments = [];
@@ -136,10 +143,12 @@ export default declare((api, options: Options) => {
     browserGlobals: Record<string, string>,
     exactGlobals: boolean | undefined,
     source: string,
+    filename: string | undefined,
   ) {
     let memberExpression: t.MemberExpression;
     if (exactGlobals) {
-      const globalRef = browserGlobals[source];
+      const globalRef =
+        (filename && browserGlobals[filename]) || browserGlobals[source];
       if (globalRef) {
         memberExpression = globalRef
           .split(".")
@@ -173,9 +182,10 @@ export default declare((api, options: Options) => {
         exit(path) {
           if (!isModule(path)) return;
 
+          const fileOpts = this.file.opts;
           const browserGlobals = globals || {};
 
-          const moduleName = getModuleName(this.file.opts, options);
+          const moduleName = getModuleName(fileOpts, options);
           let moduleNameLiteral: t.StringLiteral | undefined;
           if (moduleName) moduleNameLiteral = t.stringLiteral(moduleName);
 
@@ -208,14 +218,25 @@ export default declare((api, options: Options) => {
           }
 
           for (const [source, metadata] of meta.source) {
-            amdArgs.push(t.stringLiteral(source));
+            const {
+              filename: sourceFilename,
+              filenameRelative: sourceRelative,
+            } = resolveRelativeImportPaths(source, fileOpts);
+            amdArgs.push(
+              t.stringLiteral(amdImportId(source, fileOpts, options)),
+            );
             commonjsArgs.push(
               t.callExpression(t.identifier("require"), [
-                t.stringLiteral(source),
+                t.stringLiteral(withExtension(source, importFileExt)),
               ]),
             );
             browserArgs.push(
-              buildBrowserArg(browserGlobals, exactGlobals, source),
+              buildBrowserArg(
+                browserGlobals,
+                exactGlobals,
+                source,
+                sourceRelative || sourceFilename,
+              ),
             );
             importNames.push(t.identifier(metadata.name));
 
@@ -267,7 +288,10 @@ export default declare((api, options: Options) => {
               GLOBAL_TO_ASSIGN: buildBrowserInit(
                 browserGlobals,
                 exactGlobals,
-                this.filename || "unknown",
+                fileOpts.filenameRelative ||
+                  fileOpts.filename ||
+                  this.filename ||
+                  "unknown",
                 moduleNameLiteral,
               ),
             }) as t.Statement,
