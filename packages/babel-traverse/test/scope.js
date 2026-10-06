@@ -1,3 +1,4 @@
+import { runInNewContext } from "node:vm";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
@@ -1151,6 +1152,108 @@ describe("scope", () => {
   });
 
   describe("rename", () => {
+    it.each([
+      [
+        "function declaration",
+        "function test(p=a,read=()=>a){let a=1;return[p,read(),a]} test();",
+      ],
+      [
+        "function expression",
+        "const test=function(p=a,read=()=>a){let a=1;return[p,read(),a]}; test();",
+      ],
+      [
+        "arrow",
+        "const test=(p=a,read=()=>a)=>{let a=1;return[p,read(),a]}; test();",
+      ],
+      [
+        "body var",
+        "function test(p=a,read=()=>a){var a=1;return[p,read(),a]} test();",
+      ],
+      [
+        "destructuring",
+        "function test({p=a,read=()=>a}={}){let a=1;return[p,read(),a]} test();",
+      ],
+      [
+        "computed destructuring key",
+        "function test({[a]:p=a,read=()=>a}={}){let a=1;return[p,read(),a]} test();",
+      ],
+      [
+        "object method",
+        "const object={[a](p=a,read=()=>a){let a=1;return[p,read(),a]}}; object[9]();",
+      ],
+      [
+        "class method",
+        "class C{[a](p=a,read=()=>a){let a=1;return[p,read(),a]}} new C()[9]();",
+      ],
+    ])(
+      "renames outer references in %s parameters despite body shadows",
+      (_, source) => {
+        const code = `let a=9; ${source}`;
+        const program = getPath(code);
+        const binding = program.scope.getBinding("a");
+        const references = [...binding.referencePaths];
+        expect(Array.from(runInNewContext(code))).toEqual([9, 9, 1]);
+
+        program.scope.rename("a", "fresh_a");
+
+        // Check the existing scope metadata without crawling again.
+        for (const reference of references) {
+          expect(reference.node.name).toBe("fresh_a");
+          expect(reference.scope.getBinding("fresh_a")).toBe(binding);
+        }
+        expect(Array.from(runInNewContext(String(program)))).toEqual([9, 9, 1]);
+      },
+    );
+
+    it.each([
+      [
+        "plain parameter",
+        "function test(a,read=()=>a){return[read(),a]} test(2);",
+        [2, 2],
+      ],
+      [
+        "destructured parameter",
+        "function test({a=2,read=()=>a}={}){return[read(),a]} test();",
+        [2, 2],
+      ],
+      [
+        "earlier parameter",
+        "function test(a=2,read=()=>a){var a=1;return[read(),a]} test();",
+        [2, 1],
+      ],
+      [
+        "named function expression",
+        "const test=function a(p=a){return[typeof p]}; test();",
+        ["function"],
+      ],
+    ])(
+      "preserves %s shadows in parameter initializers",
+      (_, source, expected) => {
+        const code = `let a=9; ${source}`;
+        const program = getPath(code);
+        expect(Array.from(runInNewContext(code))).toEqual(expected);
+        program.scope.rename("a", "fresh_a");
+        expect(Array.from(runInNewContext(String(program)))).toEqual(expected);
+      },
+    );
+
+    it("preserves later parameter temporal dead zones when renaming outer bindings", () => {
+      const program = getPath(
+        "let a=9; function test(p=a,a=2){return[p,a]} test();",
+      );
+      const evaluate = code => {
+        try {
+          runInNewContext(code);
+          return "completed";
+        } catch (error) {
+          return error.name;
+        }
+      };
+      expect(evaluate(String(program))).toBe("ReferenceError");
+      program.scope.rename("a", "fresh_a");
+      expect(evaluate(String(program))).toBe("ReferenceError");
+    });
+
     it(".parentPath after renaming variable in switch", () => {
       const program = getPath(`
         switch (x) {

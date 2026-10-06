@@ -22,6 +22,13 @@ const getRenameVisitor = () =>
         )
       ) {
         path.skip();
+        if (path.isFunction()) {
+          // Parameter initializers can resolve bindings outside the function,
+          // even when a declaration in its body shadows the same name.
+          for (const param of path.get("params")) {
+            path.context.maybeQueue(param);
+          }
+        }
         if (path.isMethod()) {
           path.requeueComputedKeyAndDecorators();
         }
