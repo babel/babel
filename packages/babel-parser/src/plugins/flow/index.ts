@@ -2866,15 +2866,26 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
+    parseNamedOrFilteredImportSpecifiers(node: Undone<N.ImportDeclaration>) {
+      super.parseNamedOrFilteredImportSpecifiers(node);
+      const specifier = node.specifiers[node.specifiers.length - 1];
+      // `import type { x } as ns`
+      if (
+        node.importKind === "type" &&
+        specifier?.type === "ImportNamespaceSpecifier"
+      ) {
+        this.unexpected(specifier.start);
+      }
+    }
+
     // parse import-type/typeof shorthand
     parseImportSpecifier(
       specifier: any,
+      /* eslint-disable @typescript-eslint/no-unused-vars */
       importedIsString: boolean,
       isInTypeOnlyImport: boolean,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       isMaybeTypeOnly: boolean,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      bindingType: BindingFlag | undefined,
+      /* eslint-enable @typescript-eslint/no-unused-vars */
     ): N.ImportSpecifier {
       const firstIdent = specifier.imported;
 
@@ -2887,7 +2898,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
-      let isBinding = false;
       if (this.isContextual(tt._as) && !this.isLookaheadContextual("as")) {
         const as_ident = this.parseIdentifier(true);
         if (
@@ -2913,13 +2923,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           specifier.imported = this.parseIdentifier(true);
           specifier.importKind = specifierTypeKind;
         } else {
-          if (importedIsString) {
-            /*:: invariant(firstIdent instanceof N.StringLiteral) */
-            throw this.raise(Errors.ImportBindingIsString, specifier, {
-              importName: firstIdent.value,
-            });
-          }
-          /*:: invariant(firstIdent instanceof N.Node) */
           specifier.imported = firstIdent;
           specifier.importKind = null;
         }
@@ -2927,35 +2930,36 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (this.eatContextual(tt._as)) {
           specifier.local = this.parseIdentifier();
         } else {
-          isBinding = true;
           specifier.local = this.cloneIdentifier(specifier.imported);
         }
       }
 
+      return this.finishNode(specifier, "ImportSpecifier");
+    }
+
+    checkImportSpecifier(
+      specifier: N.ImportSpecifier,
+      isInTypeOnlyImport: boolean,
+    ): void {
       const specifierIsTypeImport = hasTypeImportKind(specifier);
-
-      if (isInTypeOnlyImport && specifierIsTypeImport) {
-        this.raise(FlowErrors.ImportTypeShorthandOnlyInPureImport, specifier);
-      }
-
-      if (isInTypeOnlyImport || specifierIsTypeImport) {
+      const isTypeImport = isInTypeOnlyImport || specifierIsTypeImport;
+      if (isTypeImport) {
+        if (isInTypeOnlyImport && specifierIsTypeImport) {
+          this.raise(FlowErrors.ImportTypeShorthandOnlyInPureImport, specifier);
+        }
+        const { local } = specifier;
         this.checkReservedType(
-          specifier.local.name,
-          specifier.local.start,
+          local.name,
+          local.start!,
           /* declaration */ true,
         );
       }
-
-      if (isBinding && !isInTypeOnlyImport && !specifierIsTypeImport) {
-        this.checkReservedWord(
-          specifier.local.name,
-          specifier.start,
-          true,
-          true,
-        );
-      }
-
-      return this.finishImportSpecifier(specifier, "ImportSpecifier");
+      super.checkImportSpecifier(
+        specifier,
+        isInTypeOnlyImport,
+        BindingFlag.TYPE_LEXICAL,
+        /* checkReservedWord */ !isTypeImport,
+      );
     }
 
     parseBindingAtom() {

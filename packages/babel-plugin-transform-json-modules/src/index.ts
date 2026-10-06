@@ -94,6 +94,14 @@ export default declare((api, options: Options) => {
                 "JSON modules do not support named imports.",
               );
             }
+            if (
+              specifier.isImportNamespaceSpecifier() &&
+              specifier.node.exportsFilter
+            ) {
+              throw specifier.buildCodeFrameError(
+                "Transforming `import { x, y } as ns from '...'` is not supported yet.",
+              );
+            }
 
             id = specifier.node.local;
             needsNS = specifier.isImportNamespaceSpecifier();

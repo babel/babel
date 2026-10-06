@@ -509,7 +509,10 @@ export default (superClass: typeof Parser) =>
         case "ExportNamedDeclaration":
           if (
             node.specifiers.length === 1 &&
-            node.specifiers[0].type === "ExportNamespaceSpecifier"
+            node.specifiers[0].type === "ExportNamespaceSpecifier" &&
+            // ESTree cannot represent `export { x, y } as ns from '...'`
+            // https://github.com/estree/estree/issues/339
+            !node.specifiers[0].exportsFilter
           ) {
             this.castNodeTo(node, "ExportAllDeclaration");
             // @ts-expect-error mutating AST types
