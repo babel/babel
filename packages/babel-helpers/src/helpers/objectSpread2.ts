@@ -36,8 +36,21 @@ export default function _objectSpread2(target: object) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i] != null ? arguments[i] : {};
     if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        defineProperty(target, key, source[key]);
+      source = Object(source);
+      var keys: (string | symbol)[];
+      if (typeof Reflect !== "undefined" && Reflect.ownKeys) {
+        keys = Reflect.ownKeys(source);
+      } else {
+        keys = Object.getOwnPropertyNames(source);
+        if (Object.getOwnPropertySymbols) {
+          keys.push.apply(keys, Object.getOwnPropertySymbols(source));
+        }
+      }
+      keys.forEach(function (key) {
+        var descriptor = Object.getOwnPropertyDescriptor(source, key);
+        if (descriptor && descriptor.enumerable) {
+          defineProperty(target, key, source[key]);
+        }
       });
     } else if (Object.getOwnPropertyDescriptors) {
       Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));

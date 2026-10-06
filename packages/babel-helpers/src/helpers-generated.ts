@@ -942,16 +942,15 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 613, gzip size: 294
+  // size: 847, gzip size: 361
   objectSpread2: helper(
     "7.5.0",
-    "function ownKeys(e,r){var t=Object.keys(e);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(e);r&&(o=o.filter(function(r){return Object.getOwnPropertyDescriptor(e,r).enumerable})),t.push.apply(t,o)}return t}function _objectSpread2(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?arguments[r]:{};r%2?ownKeys(Object(t),!0).forEach(function(r){defineProperty(e,r,t[r])}):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(t)):ownKeys(Object(t)).forEach(function(r){Object.defineProperty(e,r,Object.getOwnPropertyDescriptor(t,r))})}return e}",
+    'function ownKeys(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(e);t&&(o=o.filter(function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable})),r.push.apply(r,o)}return r}function _objectSpread2(e){for(var t=1;t<arguments.length;t++){var r,o=null!=arguments[t]?arguments[t]:{};t%2?(o=Object(o),"undefined"!=typeof Reflect&&Reflect.ownKeys?r=Reflect.ownKeys(o):(r=Object.getOwnPropertyNames(o),Object.getOwnPropertySymbols&&r.push.apply(r,Object.getOwnPropertySymbols(o))),r.forEach(function(t){var r=Object.getOwnPropertyDescriptor(o,t);r&&r.enumerable&&defineProperty(e,t,o[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(o)):ownKeys(Object(o)).forEach(function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(o,t))})}return e}',
     {
-      globals: ["Object"],
+      globals: ["Object", "Reflect"],
       locals: {
         ownKeys: [
           "body.0.id",
-          "body.1.body.body.0.body.body.1.expression.consequent.callee.object.callee",
           "body.1.body.body.0.body.body.1.expression.alternate.alternate.callee.object.callee",
         ],
         _objectSpread2: ["body.1.id"],
@@ -960,7 +959,7 @@ const helpers: Record<string, Helper> = {
       exportName: "_objectSpread2",
       dependencies: {
         defineProperty: [
-          "body.1.body.body.0.body.body.1.expression.consequent.arguments.0.body.body.0.expression.callee",
+          "body.1.body.body.0.body.body.1.expression.consequent.expressions.2.arguments.0.body.body.1.expression.right.callee",
         ],
       },
       internal: false,
