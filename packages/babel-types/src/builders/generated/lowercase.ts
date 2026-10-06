@@ -2697,10 +2697,7 @@ export function restPlaceholder(): t.RestPlaceholder {
 export function partialCallExpression(
   callee: t.Expression,
   _arguments: (
-    | t.Expression
-    | t.SpreadElement
-    | t.ArgumentPlaceholder
-    | t.RestPlaceholder
+    t.Expression | t.SpreadElement | t.ArgumentPlaceholder | t.RestPlaceholder
   )[],
 ): t.PartialCallExpression {
   const node: t.PartialCallExpression = {
@@ -2716,10 +2713,7 @@ export function partialCallExpression(
 export function partialNewExpression(
   callee: t.Expression,
   _arguments: (
-    | t.Expression
-    | t.SpreadElement
-    | t.ArgumentPlaceholder
-    | t.RestPlaceholder
+    t.Expression | t.SpreadElement | t.ArgumentPlaceholder | t.RestPlaceholder
   )[],
 ): t.PartialNewExpression {
   const node: t.PartialNewExpression = {
@@ -2735,10 +2729,7 @@ export function partialNewExpression(
 export function optionalPartialCallExpression(
   callee: t.Expression,
   _arguments: (
-    | t.Expression
-    | t.SpreadElement
-    | t.ArgumentPlaceholder
-    | t.RestPlaceholder
+    t.Expression | t.SpreadElement | t.ArgumentPlaceholder | t.RestPlaceholder
   )[],
   optional: boolean,
 ): t.OptionalPartialCallExpression {
