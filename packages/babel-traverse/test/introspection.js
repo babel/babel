@@ -211,6 +211,14 @@ describe("path/introspection", function () {
       const reference = program.get("body.1.expression");
       expect(reference.referencesImport("source", "*")).toBe(false);
     });
+    it("rejects a named import via a type-only namespace import member expression", () => {
+      const program = getPath(
+        `import type * as react from "react"; react.memo;`,
+        { sourceType: "module", plugins: ["typescript"] },
+      );
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("react", "memo")).toBe(false);
+    });
 
     describe("filtered namespace", function () {
       const options = {
@@ -253,6 +261,18 @@ describe("path/introspection", function () {
         );
         const reference = program.get("body.1.expression");
         expect(reference.referencesImport("source", "dep")).toBe(false);
+      });
+      it("rejects a filtered name via a type-only import", function () {
+        const program = getPath(
+          `import type { memo } as react from "react"; react; react.memo;`,
+          { ...options, plugins: ["typescript", "namespaceImportFilter"] },
+        );
+        expect(
+          program.get("body.1.expression").referencesImport("react", "memo"),
+        ).toBe(false);
+        expect(
+          program.get("body.2.expression").referencesImport("react", "memo"),
+        ).toBe(false);
       });
     });
   });

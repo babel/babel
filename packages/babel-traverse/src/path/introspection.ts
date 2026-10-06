@@ -163,9 +163,12 @@ export function referencesImport(
       ).get("object");
       if (!object.isReferencedIdentifier()) return false;
 
-      const path = object.scope.getBinding(object.node.name)?.path;
+      const binding = object.scope.getBinding(object.node.name);
+      if (binding?.kind !== "module") return false;
+
+      const { path } = binding;
       if (
-        !path?.isImportNamespaceSpecifier() ||
+        !path.isImportNamespaceSpecifier() ||
         path.parent.source.value !== moduleSource
       ) {
         return false;
