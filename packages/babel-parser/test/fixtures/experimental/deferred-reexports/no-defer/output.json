@@ -1,0 +1,121 @@
+{
+  "type": "File",
+  "start":0,"end":86,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":19,"index":86}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":86,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":19,"index":86}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"x"},
+              "name": "x"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"x"},
+              "name": "x"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":18,"end":21,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":21,"index":21}},
+          "extra": {
+            "rawValue": "x",
+            "raw": "\"x\""
+          },
+          "value": "x"
+        },
+        "attributes": [],
+        "declaration": null,
+        "phase": null
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":23,"end":47,"loc":{"start":{"line":2,"column":0,"index":23},"end":{"line":2,"column":24,"index":47}},
+        "specifiers": [
+          {
+            "type": "ExportNamespaceSpecifier",
+            "start":30,"end":37,"loc":{"start":{"line":2,"column":7,"index":30},"end":{"line":2,"column":14,"index":37}},
+            "exported": {
+              "type": "Identifier",
+              "start":35,"end":37,"loc":{"start":{"line":2,"column":12,"index":35},"end":{"line":2,"column":14,"index":37},"identifierName":"ns"},
+              "name": "ns"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":43,"end":46,"loc":{"start":{"line":2,"column":20,"index":43},"end":{"line":2,"column":23,"index":46}},
+          "extra": {
+            "rawValue": "y",
+            "raw": "\"y\""
+          },
+          "value": "y"
+        },
+        "attributes": [],
+        "phase": null
+      },
+      {
+        "type": "ExportAllDeclaration",
+        "start":48,"end":66,"loc":{"start":{"line":3,"column":0,"index":48},"end":{"line":3,"column":18,"index":66}},
+        "source": {
+          "type": "StringLiteral",
+          "start":62,"end":65,"loc":{"start":{"line":3,"column":14,"index":62},"end":{"line":3,"column":17,"index":65}},
+          "extra": {
+            "rawValue": "z",
+            "raw": "\"z\""
+          },
+          "value": "z"
+        },
+        "attributes": []
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":67,"end":86,"loc":{"start":{"line":4,"column":0,"index":67},"end":{"line":4,"column":19,"index":86}},
+        "specifiers": [],
+        "source": null,
+        "attributes": [],
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start":74,"end":86,"loc":{"start":{"line":4,"column":7,"index":74},"end":{"line":4,"column":19,"index":86}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":80,"end":85,"loc":{"start":{"line":4,"column":13,"index":80},"end":{"line":4,"column":18,"index":85}},
+              "id": {
+                "type": "Identifier",
+                "start":80,"end":81,"loc":{"start":{"line":4,"column":13,"index":80},"end":{"line":4,"column":14,"index":81},"identifierName":"w"},
+                "name": "w"
+              },
+              "init": {
+                "type": "NumericLiteral",
+                "start":84,"end":85,"loc":{"start":{"line":4,"column":17,"index":84},"end":{"line":4,"column":18,"index":85}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            }
+          ],
+          "kind": "const"
+        },
+        "phase": null
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
