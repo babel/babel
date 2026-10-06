@@ -1,7 +1,5 @@
 /* @minVersion 7.0.0-beta.0 */
 
-import objectWithoutPropertiesLoose from "./objectWithoutPropertiesLoose.ts";
-
 export default function _objectWithoutProperties(
   source: null | undefined,
   excluded: PropertyKey[],
@@ -22,15 +20,26 @@ export default function _objectWithoutProperties<
 ): Pick<T, Exclude<keyof T, K[number]>> | Record<string, never> {
   if (source == null) return {};
 
-  var target = objectWithoutPropertiesLoose(source, excluded);
+  source = Object(source) as T;
+  var target = {} as Pick<T, Exclude<keyof T, K[number]>>;
+  var sourceKeys: PropertyKey[];
   var key, i;
 
-  if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i] as keyof typeof source & keyof typeof target;
-      if (excluded.indexOf(key) !== -1) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+  // Snapshot all keys before property reads; getters can change later keys.
+  if (typeof Reflect !== "undefined" && Reflect.ownKeys) {
+    sourceKeys = Reflect.ownKeys(source);
+  } else {
+    sourceKeys = Object.getOwnPropertyNames(source);
+    if (Object.getOwnPropertySymbols) {
+      sourceKeys = sourceKeys.concat(Object.getOwnPropertySymbols(source));
+    }
+  }
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i] as keyof typeof source & keyof typeof target;
+    if (excluded.indexOf(key) !== -1) continue;
+    var desc = Object.getOwnPropertyDescriptor(source, key);
+    if (desc && desc.enumerable) {
       target[key] = source[key];
     }
   }

@@ -966,29 +966,25 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 279, gzip size: 205
+  // size: 395, gzip size: 264
   objectWithoutProperties: helper(
     "7.0.0-beta.0",
-    "function _objectWithoutProperties(e,t){if(null==e)return{};var o,r,i=objectWithoutPropertiesLoose(e,t);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);for(r=0;r<n.length;r++)o=n[r],-1===t.indexOf(o)&&{}.propertyIsEnumerable.call(e,o)&&(i[o]=e[o])}return i}",
+    'function _objectWithoutProperties(e,t){if(null==e)return{};e=Object(e);var r,n,o,c={};for("undefined"!=typeof Reflect&&Reflect.ownKeys?r=Reflect.ownKeys(e):(r=Object.getOwnPropertyNames(e),Object.getOwnPropertySymbols&&(r=r.concat(Object.getOwnPropertySymbols(e)))),o=0;o<r.length;o++)if(n=r[o],-1===t.indexOf(n)){var f=Object.getOwnPropertyDescriptor(e,n);f&&f.enumerable&&(c[n]=e[n])}return c}',
     {
-      globals: ["Object"],
+      globals: ["Object", "Reflect"],
       locals: { _objectWithoutProperties: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_objectWithoutProperties",
-      dependencies: {
-        objectWithoutPropertiesLoose: [
-          "body.0.body.body.1.declarations.2.init.callee",
-        ],
-      },
+      dependencies: {},
       internal: false,
     },
   ),
-  // size: 169, gzip size: 156
+  // size: 254, gzip size: 202
   objectWithoutPropertiesLoose: helper(
     "7.0.0-beta.0",
-    "function _objectWithoutPropertiesLoose(r,e){if(null==r)return{};var t={};for(var n in r)if({}.hasOwnProperty.call(r,n)){if(-1!==e.indexOf(n))continue;t[n]=r[n]}return t}",
+    "function _objectWithoutPropertiesLoose(e,r){if(null==e)return{};for(var t={},o=Object.getOwnPropertyNames(e=Object(e)),n=0;n<o.length;n++){var i=o[n];if(-1===r.indexOf(i)){var u=Object.getOwnPropertyDescriptor(e,i);u&&u.enumerable&&(t[i]=e[i])}}return t}",
     {
-      globals: [],
+      globals: ["Object"],
       locals: { _objectWithoutPropertiesLoose: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_objectWithoutPropertiesLoose",

@@ -17,11 +17,15 @@ export default function _objectWithoutPropertiesLoose<T extends object>(
 ): Partial<T> {
   if (source == null) return {};
 
+  source = Object(source) as T;
   var target: Partial<T> = {};
+  var sourceKeys = Object.getOwnPropertyNames(source);
 
-  for (var key in source) {
-    if (Object.prototype.hasOwnProperty.call(source, key)) {
-      if (excluded.indexOf(key) !== -1) continue;
+  for (var i = 0; i < sourceKeys.length; i++) {
+    var key = sourceKeys[i] as keyof typeof source;
+    if (excluded.indexOf(key) !== -1) continue;
+    var desc = Object.getOwnPropertyDescriptor(source, key);
+    if (desc && desc.enumerable) {
       target[key] = source[key];
     }
   }
