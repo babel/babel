@@ -1,0 +1,1 @@
+const j = await (typeof process === "object" && process.versions?.node ? Promise.all([import("fs"), import("module")]).then(([fs, module]) => fs.promises.readFile(module.createRequire(import.meta.url).resolve("./x"))).then(String) : fetch(import.meta.resolve("./x")).then(r => r.text()));
