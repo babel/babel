@@ -1,5 +1,7 @@
 import { globSync, readFileSync } from "node:fs";
+import { availableParallelism } from "node:os";
 import { dirname } from "node:path";
+import pLimit from "p-limit";
 import { publint } from "publint";
 import { formatMessage } from "publint/utils";
 
@@ -20,28 +22,26 @@ const exclude = new Set([
   "packages/babel-register",
 ]);
 
-for (const path of paths) {
-  const data = JSON.parse(readFileSync(path, "utf-8"));
-  if (data.private || exclude.has(dirname(path))) continue;
-  const result = await publint({
-    pkgDir: dirname(path),
-    pack: "yarn",
-  });
+const pkgDirs = paths
+  .filter(path => {
+    const data = JSON.parse(readFileSync(path, "utf-8"));
+    return !data.private && !exclude.has(dirname(path));
+  })
+  .map(dirname);
+
+const results = await pLimit(availableParallelism()).map(pkgDirs, pkgDir =>
+  publint({ pkgDir, pack: "yarn" })
+);
+
+for (const [i, result] of results.entries()) {
+  const pkgDir = pkgDirs[i];
   for (const message of result.messages) {
     if (message.type === "suggestion") continue;
     if (message.type === "error") {
       process.exitCode = 1;
-      console.error(
-        message.type,
-        dirname(path),
-        formatMessage(message, result.pkg)
-      );
+      console.error(message.type, pkgDir, formatMessage(message, result.pkg));
     } else {
-      console.log(
-        message.type,
-        dirname(path),
-        formatMessage(message, result.pkg)
-      );
+      console.log(message.type, pkgDir, formatMessage(message, result.pkg));
     }
   }
 }
