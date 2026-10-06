@@ -1,5 +1,7 @@
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
+import generate from "@babel/generator";
+import { runInNewContext } from "node:vm";
 
 import traverse, { NodePath } from "../lib/index.js";
 
@@ -49,6 +51,16 @@ function createNode(node) {
 }
 
 describe("scope", () => {
+  it("resolves catch parameter defaults to earlier catch bindings", () => {
+    const program = getPath("let a = 9; try {} catch ({ a = 1, b = a }) {}");
+    const handler = program.get("body.1.handler");
+    const reference = handler.get("param.properties.1.value.right");
+
+    expect(reference.scope.getBinding("a").identifier).toBe(
+      handler.node.param.properties[0].value.left,
+    );
+  });
+
   describe("binding paths", () => {
     it("function declaration id", function () {
       expect(
@@ -1151,6 +1163,37 @@ describe("scope", () => {
   });
 
   describe("rename", () => {
+    it("renames outer parameter defaults despite function body shadows", () => {
+      const program = getPath(
+        "let a = 9; function f(p = a) { let a = 1; return p; } f();",
+      );
+      program.scope.rename("a", "fresh_a");
+
+      expect(
+        runInNewContext(generate(program.node).code, {}, { timeout: 100 }),
+      ).toBe(9);
+    });
+
+    it("renames destructuring assignment targets in for-of loops", () => {
+      const program = getPath(
+        '"use strict"; let a = 2; for ([a] of [[1]]) {} a;',
+      );
+      program.scope.rename("a", "fresh_a");
+
+      expect(
+        runInNewContext(generate(program.node).code, {}, { timeout: 100 }),
+      ).toBe(1);
+    });
+
+    it("renames duplicate destructuring assignment targets", () => {
+      const program = getPath('"use strict"; let a = 0; [a, a] = [1, 2]; a;');
+      program.scope.rename("a", "fresh_a");
+
+      expect(
+        runInNewContext(generate(program.node).code, {}, { timeout: 100 }),
+      ).toBe(2);
+    });
+
     it(".parentPath after renaming variable in switch", () => {
       const program = getPath(`
         switch (x) {

@@ -34,6 +34,14 @@ function addDeoptTest(code, type, expectedType) {
 }
 
 describe("evaluation", function () {
+  it("evaluates computed callable properties correctly when confident", () => {
+    const result = getPath("const min = 'max'; Math[min](0, 1);")
+      .get("body.1.expression")
+      .evaluate();
+
+    expect(!result.confident || result.value === 1).toBe(true);
+  });
+
   describe("evaluateTruthy", function () {
     it("should work with null", function () {
       expect(
