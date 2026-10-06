@@ -772,8 +772,8 @@ export default abstract class LValParser extends NodeUtils {
 
     const unwrappedExpression = unwrapParenthesizedExpression(expression);
     disallowCallExpression ||=
-      // Although Annex B allows call expressions as assignment patterns
-      // (runtime error), they are not allowed as binding patterns.
+      // Annex B allows call expressions as simple assignment targets
+      // (runtime error), but never as binding targets.
       binding !== BindingFlag.TYPE_NONE ||
       (unwrappedExpression.type === "CallExpression" &&
         (unwrappedExpression.callee.type === "Import" ||
