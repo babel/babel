@@ -1,0 +1,41 @@
+{
+  "type": "File",
+  "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+        "specifiers": [
+          {
+            "type": "ExportDefaultSpecifier",
+            "start":7,"end":12,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":12,"index":12}},
+            "exported": {
+              "type": "Identifier",
+              "start":7,"end":12,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":12,"index":12},"identifierName":"defer"},
+              "name": "defer"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":18,"end":21,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":21,"index":21}},
+          "extra": {
+            "rawValue": "x",
+            "raw": "\"x\""
+          },
+          "value": "x"
+        },
+        "attributes": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
