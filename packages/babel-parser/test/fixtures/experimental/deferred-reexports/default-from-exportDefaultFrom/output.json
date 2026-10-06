@@ -30,7 +30,8 @@
           },
           "value": "x"
         },
-        "attributes": []
+        "attributes": [],
+        "phase": null
       }
     ],
     "directives": [],
