@@ -110,8 +110,10 @@ jobs:
           # is true. Use the empty string instead.
           BABEL_8_BREAKING: ''
 
+      # Babel 8 is published from `main` as `latest`, so Babel 7 releases
+      # must not overwrite that tag.
       - name: Publish to npm (Babel 7)
-        run: yarn release-tool publish --yes --provenance
+        run: yarn release-tool publish --yes --provenance --tag latest-7
 
       - name: Generate babel-types docs
         continue-on-error: true
