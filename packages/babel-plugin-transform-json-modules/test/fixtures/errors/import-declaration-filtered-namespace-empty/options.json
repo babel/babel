@@ -1,0 +1,6 @@
+{
+  "sourceType": "module",
+  "plugins": ["transform-json-modules"],
+  "parserOpts": { "plugins": ["namespaceImportFilter"] },
+  "throws": "Transforming `import { x, y } as ns from '...'` is not supported yet."
+}

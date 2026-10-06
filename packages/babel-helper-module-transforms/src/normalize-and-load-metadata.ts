@@ -315,6 +315,11 @@ function getModuleMetadata(
             data.referenced = true;
           }
         } else if (spec.isImportNamespaceSpecifier()) {
+          if (spec.node.exportsFilter) {
+            throw spec.buildCodeFrameError(
+              "Transforming `import { x, y } as ns from '...'` is not supported yet.",
+            );
+          }
           const localName = spec.get("local").node.name;
 
           data.importsNamespace.add(localName);

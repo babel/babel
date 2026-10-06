@@ -1,0 +1,107 @@
+{
+  "type": "File",
+  "start":0,"end":76,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":38,"index":76}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":76,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":38,"index":76}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start":7,"end":27,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":27,"index":27}},
+            "exportsFilter": [
+              {
+                "type": "Identifier",
+                "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+                "name": "a",
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": " a ",
+                    "start":12,"end":19,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":19,"index":19}}
+                  }
+                ]
+              }
+            ],
+            "local": {
+              "type": "Identifier",
+              "start":25,"end":27,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":27,"index":27},"identifierName":"ns"},
+              "name": "ns"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":33,"end":36,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":36,"index":36}},
+          "extra": {
+            "rawValue": "x",
+            "raw": "\"x\""
+          },
+          "value": "x"
+        },
+        "attributes": []
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":38,"end":76,"loc":{"start":{"line":2,"column":0,"index":38},"end":{"line":2,"column":38,"index":76}},
+        "specifiers": [
+          {
+            "type": "ExportNamespaceSpecifier",
+            "start":45,"end":66,"loc":{"start":{"line":2,"column":7,"index":45},"end":{"line":2,"column":28,"index":66}},
+            "exportsFilter": [
+              {
+                "type": "Identifier",
+                "start":47,"end":48,"loc":{"start":{"line":2,"column":9,"index":47},"end":{"line":2,"column":10,"index":48},"identifierName":"b"},
+                "name": "b",
+                "trailingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": " b ",
+                    "start":50,"end":57,"loc":{"start":{"line":2,"column":12,"index":50},"end":{"line":2,"column":19,"index":57}}
+                  }
+                ]
+              }
+            ],
+            "exported": {
+              "type": "Identifier",
+              "start":63,"end":66,"loc":{"start":{"line":2,"column":25,"index":63},"end":{"line":2,"column":28,"index":66},"identifierName":"ns2"},
+              "name": "ns2"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":72,"end":75,"loc":{"start":{"line":2,"column":34,"index":72},"end":{"line":2,"column":37,"index":75}},
+          "extra": {
+            "rawValue": "x",
+            "raw": "\"x\""
+          },
+          "value": "x"
+        },
+        "attributes": [],
+        "declaration": null
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": " a ",
+      "start":12,"end":19,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":19,"index":19}}
+    },
+    {
+      "type": "CommentBlock",
+      "value": " b ",
+      "start":50,"end":57,"loc":{"start":{"line":2,"column":12,"index":50},"end":{"line":2,"column":19,"index":57}}
+    }
+  ]
+}
