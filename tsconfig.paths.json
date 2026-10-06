@@ -137,6 +137,9 @@
       "@babel/plugin-proposal-export-default-from": [
         "./packages/babel-plugin-proposal-export-default-from/src"
       ],
+      "@babel/plugin-proposal-filtered-namespaces": [
+        "./packages/babel-plugin-proposal-filtered-namespaces/src"
+      ],
       "@babel/plugin-proposal-function-bind": [
         "./packages/babel-plugin-proposal-function-bind/src"
       ],

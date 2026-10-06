@@ -165,6 +165,11 @@
       "import": "./helpers/esm/createForOfIteratorHelperLoose.js",
       "default": "./helpers/createForOfIteratorHelperLoose.js"
     },
+    "./helpers/createModuleNsFilter": {
+      "node": "./helpers/createModuleNsFilter.js",
+      "import": "./helpers/esm/createModuleNsFilter.js",
+      "default": "./helpers/createModuleNsFilter.js"
+    },
     "./helpers/createSuper": {
       "node": "./helpers/createSuper.js",
       "import": "./helpers/esm/createSuper.js",
@@ -189,6 +194,11 @@
       "node": "./helpers/extends.js",
       "import": "./helpers/esm/extends.js",
       "default": "./helpers/extends.js"
+    },
+    "./helpers/filterModuleNamespace": {
+      "node": "./helpers/filterModuleNamespace.js",
+      "import": "./helpers/esm/filterModuleNamespace.js",
+      "default": "./helpers/filterModuleNamespace.js"
     },
     "./helpers/get": {
       "node": "./helpers/get.js",

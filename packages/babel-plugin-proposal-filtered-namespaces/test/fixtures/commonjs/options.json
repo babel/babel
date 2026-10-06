@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "proposal-filtered-namespaces",
+    "transform-dynamic-import",
+    "transform-modules-commonjs"
+  ]
+}
