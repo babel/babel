@@ -13382,7 +13382,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsesc@npm:^3.0.2":
+"jsesc@npm:^3.0.2, jsesc@npm:~3.1.0":
   version: 3.1.0
   resolution: "jsesc@npm:3.1.0"
   bin:
@@ -13397,15 +13397,6 @@ __metadata:
   bin:
     jsesc: bin/jsesc
   checksum: 10/fab949f585c71e169c5cbe00f049f20de74f067081bbd64a55443bad1c71e1b5a5b448f2359bf2fe06f5ed7c07e2e4a9101843b01c823c30b6afc11f5bfaf724
-  languageName: node
-  linkType: hard
-
-"jsesc@npm:~3.0.2":
-  version: 3.0.2
-  resolution: "jsesc@npm:3.0.2"
-  bin:
-    jsesc: bin/jsesc
-  checksum: 10/8e5a7de6b70a8bd71f9cb0b5a7ade6a73ae6ab55e697c74cc997cede97417a3a65ed86c36f7dd6125fe49766e8386c845023d9e213916ca92c9dfdd56e2babf3
   languageName: node
   linkType: hard
 
@@ -15753,7 +15744,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerate@npm:^1.4.0, regenerate@npm:^1.4.2, regenerate@npm:^1.5.0":
+"regenerate@npm:^1.4.2, regenerate@npm:^1.5.0":
   version: 1.5.0
   resolution: "regenerate@npm:1.5.0"
   checksum: 10/f868568154ded35f005d64da3305e145ad479daa8eb3fad581c08ff0c367fd2b53413938cfdb42e86e89e9f8266dfbc867a8578a4fe15aa140a2f1a0d74eea51
@@ -15817,7 +15808,7 @@ __metadata:
     regenerate: "npm:^1.5.0"
     regenerate-unicode-properties: "npm:^10.3.0"
     regjsgen: "npm:^0.8.0"
-    regjsparser: "npm:^0.12.0"
+    regjsparser: "npm:^0.13.0"
     unicode-match-property-ecmascript: "npm:^2.0.0"
     unicode-match-property-value-ecmascript: "npm:^2.2.1"
   checksum: 10/6e35cae2de8239ff1516347f91f442b54e4680f9605dc76f037a2caec7b939edbfb3e3e6d673502774bfa5dae62df47fc9cecb44872a213c8e2229f510956080
@@ -15842,14 +15833,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regjsparser@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "regjsparser@npm:0.12.0"
+"regjsparser@npm:^0.13.0":
+  version: 0.13.4
+  resolution: "regjsparser@npm:0.13.4"
   dependencies:
-    jsesc: "npm:~3.0.2"
+    jsesc: "npm:~3.1.0"
   bin:
     regjsparser: bin/parser
-  checksum: 10/c2d6506b3308679de5223a8916984198e0493649a67b477c66bdb875357e3785abbf3bedf7c5c2cf8967d3b3a7bdf08b7cbd39e65a70f9e1ffad584aecf5f06a
+  checksum: 10/e719ebf06b1f80ff443650d67a82ef94337deba90651b8ff843f36bc9f4652a8178a1afc6255015857d08ece4cefaf356ea6999d89dacfe8a6f80150516ecc21
   languageName: node
   linkType: hard
 
