@@ -1,6 +1,12 @@
 {
   "type": "File",
   "start":0,"end":139,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":139}},
+  "errors": [
+    "SyntaxError: Binding 'eval' in strict mode. (1:14)",
+    "SyntaxError: Binding 'arguments' in strict mode. (2:21)",
+    "SyntaxError: Binding 'arguments' in strict mode. (4:8)",
+    "SyntaxError: Binding 'eval' in strict mode. (7:8)"
+  ],
   "program": {
     "type": "Program",
     "start":0,"end":139,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":139}},
