@@ -151,7 +151,7 @@ function _evaluate(path: NodePath, state: State): any {
 
   if (
     path.isTaggedTemplateExpression() &&
-    path.get("tag").isMemberExpression()
+    path.get("tag").isMemberExpression({ computed: false })
   ) {
     const object = path.get("tag.object") as NodePath;
     const {
@@ -474,7 +474,7 @@ function _evaluate(path: NodePath, state: State): any {
       func = global[callee.node.name];
     }
 
-    if (callee.isMemberExpression()) {
+    if (callee.isMemberExpression({ computed: false })) {
       const object = callee.get("object");
       const property = callee.get("property");
 

@@ -495,6 +495,35 @@ describe("evaluation", function () {
     expect(evalResult.value).toBe(1);
   });
 
+  it.each([
+    'const min = "max"; Math[min](0, 1);',
+    "Math[min](0, 1);",
+    'const charCodeAt = "indexOf"; "abc"[charCodeAt](0);',
+    '"abc"[charCodeAt](0);',
+    'const raw = "fromCharCode"; String[raw]`x`;',
+    "String[raw]`x`;",
+  ])("should deopt computed callable properties: %s", function (code) {
+    const path = getPath(code);
+    const statements = path.get("body");
+    const result = statements[statements.length - 1].evaluate();
+    expect(result.confident).toBe(false);
+  });
+
+  it.each([
+    ['const min = "max"; Math.min(0, 1);', 0],
+    ['const charCodeAt = "indexOf"; "abc".charCodeAt(0);', 97],
+    ['const raw = "fromCharCode"; String.raw`x`;', "x"],
+  ])(
+    "should evaluate noncomputed callable properties: %s",
+    function (code, value) {
+      const path = getPath(code);
+      const statements = path.get("body");
+      const result = statements[statements.length - 1].evaluate();
+      expect(result.confident).toBe(true);
+      expect(result.value).toBe(value);
+    },
+  );
+
   it("should deopt for destructured bindings", function () {
     const cases = [
       "const { a } = { a: 1 }; a;",
