@@ -2245,6 +2245,7 @@ export default abstract class StatementParser extends ExpressionParser {
       } else if (decorators) {
         throw this.raise(Errors.UnsupportedDecoratorExport, node);
       }
+      if (this.hasPlugin("deferredReexports")) node2.phase ??= null;
       this.sawUnambiguousESM = true;
       return this.finishNode(node2, "ExportNamedDeclaration");
     }
