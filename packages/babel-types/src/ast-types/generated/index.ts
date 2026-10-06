@@ -1707,10 +1707,7 @@ export interface PartialCallExpression extends BaseNode {
   type: "PartialCallExpression";
   callee: Expression;
   arguments: (
-    | Expression
-    | SpreadElement
-    | ArgumentPlaceholder
-    | RestPlaceholder
+    Expression | SpreadElement | ArgumentPlaceholder | RestPlaceholder
   )[];
 }
 
@@ -1718,10 +1715,7 @@ export interface PartialNewExpression extends BaseNode {
   type: "PartialNewExpression";
   callee: Expression;
   arguments: (
-    | Expression
-    | SpreadElement
-    | ArgumentPlaceholder
-    | RestPlaceholder
+    Expression | SpreadElement | ArgumentPlaceholder | RestPlaceholder
   )[];
 }
 
@@ -1729,10 +1723,7 @@ export interface OptionalPartialCallExpression extends BaseNode {
   type: "OptionalPartialCallExpression";
   callee: Expression;
   arguments: (
-    | Expression
-    | SpreadElement
-    | ArgumentPlaceholder
-    | RestPlaceholder
+    Expression | SpreadElement | ArgumentPlaceholder | RestPlaceholder
   )[];
   optional: boolean;
 }
