@@ -1,6 +1,13 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    # "personal" branches for stacked PRs; will run when opening the PR
+    branches-ignore:
+      - "nicolo-ribaudo/**"
+      - "jlhwung/**"
+      - "liuxingbaoyu/**"
+  pull_request:
 
 permissions:
   contents: read
