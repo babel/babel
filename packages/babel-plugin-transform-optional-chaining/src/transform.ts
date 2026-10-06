@@ -240,8 +240,6 @@ export function transform(
   path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
   assumptions: OptionalChainAssumptions,
 ) {
-  const { scope } = path;
-
   // maybeWrapped points to the outermost transparent expression wrapper
   // or the path itself
   const maybeWrapped = findOutermostTransparentParent(path);
@@ -255,36 +253,24 @@ export function transform(
       t.booleanLiteral(true),
     );
   } else {
-    let wrapLast: ((value: t.Expression) => t.Expression) | undefined;
     if (
       parentPath.isCallExpression({ callee: maybeWrapped.node }) &&
       // note that the first condition must implies that `path.optional` is `true`,
       // otherwise the parentPath should be an OptionalCallExpression
       path.isOptionalMemberExpression()
     ) {
-      // Ensure (a?.b)() has proper `this`
-      wrapLast = ((replacement: t.MemberExpression) => {
-        // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
-        // object must not be Super as super?.foo is invalid
-
-        const object = skipTransparentExprWrapperNodes(
-          replacement.object,
-        ) as t.Expression;
-        let baseRef: t.Expression | undefined;
-        if (!assumptions.pureGetters || !isSimpleMemberExpression(object)) {
-          // memoize the context object when getters are not always pure
-          // or the object is not a simple member expression
-          // `(a?.b.c)()` to `(a == null ? undefined : (_a$b = a.b).c.bind(_a$b))()`
-          baseRef = scope.maybeGenerateMemoised(object)!;
-          if (baseRef) {
-            replacement.object = t.assignmentExpression("=", baseRef, object);
-          }
-        }
-        return t.callExpression(
-          t.memberExpression(replacement, t.identifier("bind")),
-          [t.cloneNode(baseRef ?? object)],
-        );
-      }) as (value: t.Expression) => t.Expression;
+      // Preserve the member call receiver and evaluate arguments before
+      // checking whether the callee is callable, including the nullish branch.
+      transformOptionalChain(
+        path,
+        assumptions,
+        parentPath,
+        t.callExpression(
+          t.buildUndefinedNode(),
+          parentPath.node.arguments.map(arg => t.cloneNode(arg)),
+        ),
+      );
+      return;
     }
 
     transformOptionalChain(
@@ -294,7 +280,6 @@ export function transform(
       willPathCastToBoolean(maybeWrapped)
         ? t.booleanLiteral(false)
         : t.buildUndefinedNode(),
-      wrapLast,
     );
   }
 }
