@@ -2375,6 +2375,21 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return hasNamespace;
     }
 
+    maybeParseExportNamedSpecifiers(
+      node: Undone<N.Node>,
+    ): node is Undone<N.ExportNamedDeclaration> {
+      if (!super.maybeParseExportNamedSpecifiers(node)) return false;
+      const specifier = node.specifiers[node.specifiers.length - 1];
+      // `export type { x } as ns`
+      if (
+        node.exportKind === "type" &&
+        specifier?.type === "ExportNamespaceSpecifier"
+      ) {
+        this.unexpected(specifier.start);
+      }
+      return true;
+    }
+
     parseClassId(
       node: N.Class,
       isStatement: boolean,
@@ -2870,9 +2885,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     parseNamedOrFilteredImportSpecifiers(node: Undone<N.ImportDeclaration>) {
       super.parseNamedOrFilteredImportSpecifiers(node);
       const specifier = node.specifiers[node.specifiers.length - 1];
-      // `import type { x } as ns`
+      // `import type { x } as ns`, `import typeof { x } as ns`
       if (
-        node.importKind === "type" &&
+        hasTypeImportKind(node) &&
         specifier?.type === "ImportNamespaceSpecifier"
       ) {
         this.unexpected(specifier.start);
