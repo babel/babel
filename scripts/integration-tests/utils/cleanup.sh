@@ -14,7 +14,9 @@ function handle_error {
   echo "$(basename $0): ERROR! An error was encountered executing line $1." 1>&2;
   cleanup
   echo "Exiting with error." 1>&2;
+  echo "::group::npm debug logs"
   cat $HOME/.npm/_logs/*.log
+  echo "::endgroup::"
   exit 1
 }
 
