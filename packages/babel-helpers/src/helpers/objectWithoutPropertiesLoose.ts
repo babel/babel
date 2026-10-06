@@ -22,7 +22,12 @@ export default function _objectWithoutPropertiesLoose<T extends object>(
   for (var key in source) {
     if (Object.prototype.hasOwnProperty.call(source, key)) {
       if (excluded.indexOf(key) !== -1) continue;
-      target[key] = source[key];
+      Object.defineProperty(target, key, {
+        value: source[key],
+        enumerable: true,
+        configurable: true,
+        writable: true,
+      });
     }
   }
 

@@ -31,7 +31,12 @@ export default function _objectWithoutProperties<
       key = sourceSymbolKeys[i] as keyof typeof source & keyof typeof target;
       if (excluded.indexOf(key) !== -1) continue;
       if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
+      Object.defineProperty(target, key, {
+        value: source[key],
+        enumerable: true,
+        configurable: true,
+        writable: true,
+      });
     }
   }
 

@@ -966,10 +966,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 279, gzip size: 205
+  // size: 349, gzip size: 238
   objectWithoutProperties: helper(
     "7.0.0-beta.0",
-    "function _objectWithoutProperties(e,t){if(null==e)return{};var o,r,i=objectWithoutPropertiesLoose(e,t);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);for(r=0;r<n.length;r++)o=n[r],-1===t.indexOf(o)&&{}.propertyIsEnumerable.call(e,o)&&(i[o]=e[o])}return i}",
+    "function _objectWithoutProperties(e,t){if(null==e)return{};var o,r,i=objectWithoutPropertiesLoose(e,t);if(Object.getOwnPropertySymbols){var b=Object.getOwnPropertySymbols(e);for(r=0;r<b.length;r++)o=b[r],-1===t.indexOf(o)&&{}.propertyIsEnumerable.call(e,o)&&Object.defineProperty(i,o,{value:e[o],enumerable:!0,configurable:!0,writable:!0})}return i}",
     {
       globals: ["Object"],
       locals: { _objectWithoutProperties: ["body.0.id"] },
@@ -983,12 +983,12 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 169, gzip size: 156
+  // size: 241, gzip size: 196
   objectWithoutPropertiesLoose: helper(
     "7.0.0-beta.0",
-    "function _objectWithoutPropertiesLoose(r,e){if(null==r)return{};var t={};for(var n in r)if({}.hasOwnProperty.call(r,n)){if(-1!==e.indexOf(n))continue;t[n]=r[n]}return t}",
+    "function _objectWithoutPropertiesLoose(e,r){if(null==e)return{};var t={};for(var n in e)if({}.hasOwnProperty.call(e,n)){if(-1!==r.indexOf(n))continue;Object.defineProperty(t,n,{value:e[n],enumerable:!0,configurable:!0,writable:!0})}return t}",
     {
-      globals: [],
+      globals: ["Object"],
       locals: { _objectWithoutPropertiesLoose: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_objectWithoutPropertiesLoose",
