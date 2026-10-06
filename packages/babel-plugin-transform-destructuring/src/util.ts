@@ -352,16 +352,17 @@ export class DestructuringTransformer {
       objRef = temp;
     }
 
-    // Replace impure computed key expressions if we have a rest parameter
-    if (hasObjectRest(pattern)) {
-      let copiedPattern: t.ObjectPattern | undefined;
-      for (let i = 0; i < pattern.properties.length; i++) {
-        const prop = pattern.properties[i];
-        if (t.isRestElement(prop)) {
-          break;
-        }
+    const hasRest = hasObjectRest(pattern);
+    let copiedPattern: t.ObjectPattern | undefined;
+    for (let i = 0; i < pattern.properties.length; i++) {
+      let prop = pattern.properties[i];
+      if (t.isRestElement(prop)) {
+        this.pushObjectRest(pattern, objRef, prop, i);
+      } else {
+        // Capture keys for rest exclusion when their property is reached, after
+        // the preceding property's read and binding initialization have finished.
         const key = prop.key;
-        if (prop.computed && !this.scope.isPure(key)) {
+        if (hasRest && prop.computed && !this.scope.isPure(key)) {
           const name = this.scope.generateUidIdentifierBasedOnNode(key);
           this.nodes.push(
             //@ts-expect-error PrivateName has been handled by destructuring-private
@@ -373,19 +374,8 @@ export class DestructuringTransformer {
               properties: pattern.properties.slice(),
             };
           }
-          copiedPattern.properties[i] = {
-            ...prop,
-            key: name,
-          };
+          prop = copiedPattern.properties[i] = { ...prop, key: name };
         }
-      }
-    }
-
-    for (let i = 0; i < pattern.properties.length; i++) {
-      const prop = pattern.properties[i];
-      if (t.isRestElement(prop)) {
-        this.pushObjectRest(pattern, objRef, prop, i);
-      } else {
         this.pushObjectProperty(prop, objRef);
       }
     }
