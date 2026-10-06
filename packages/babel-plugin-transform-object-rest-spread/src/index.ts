@@ -182,6 +182,7 @@ export default declare((api, opts: Options) => {
   function replaceImpureComputedKeys(
     properties: NodePath<t.ObjectProperty>[],
     scope: Scope,
+    inline = false,
   ) {
     const tempVariableDeclarations: t.VariableDeclarator[] = [];
 
@@ -209,10 +210,18 @@ export default declare((api, opts: Options) => {
         );
         const tempVariableDeclaration = t.variableDeclarator(
           t.identifier(tempVariableName),
-          keyExpression.node,
+          inline ? null : keyExpression.node,
         );
         tempVariableDeclarations.push(tempVariableDeclaration);
-        keyExpression.replaceWith(t.identifier(tempVariableName));
+        keyExpression.replaceWith(
+          inline
+            ? t.assignmentExpression(
+                "=",
+                t.identifier(tempVariableName),
+                keyExpression.node,
+              )
+            : t.identifier(tempVariableName),
+        );
       }
     }
 
@@ -295,6 +304,7 @@ export default declare((api, opts: Options) => {
     path: NodePath<t.ObjectPattern>,
     file: PluginPass,
     objRef: t.Identifier | t.MemberExpression,
+    inlineComputedKeys = false,
   ): [
     t.VariableDeclarator[],
     t.AssignmentExpression["left"],
@@ -309,6 +319,7 @@ export default declare((api, opts: Options) => {
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(
       path.get("properties") as NodePath<t.ObjectProperty>[],
       path.scope,
+      inlineComputedKeys,
     );
     const { keys, allPrimitives, hasTemplateLiteral } =
       extractNormalizedKeys(path);
@@ -710,8 +721,11 @@ export default declare((api, opts: Options) => {
             ]),
           );
 
+          // Keep key evaluation inside the native assignment pattern so each
+          // read/default finishes before the next key, and nullish RHS checks
+          // happen before any key is evaluated.
           const [impureComputedPropertyDeclarators, argument, callExpression] =
-            createObjectRest(leftPath, file, t.identifier(refName));
+            createObjectRest(leftPath, file, t.identifier(refName), true);
 
           if (impureComputedPropertyDeclarators.length > 0) {
             nodes.push(

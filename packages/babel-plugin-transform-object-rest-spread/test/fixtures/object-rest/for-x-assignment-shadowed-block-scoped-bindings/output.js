@@ -3,9 +3,9 @@ let a = 0,
   y;
 for (var _ref of [["0", "1"]]) {
   var _ref2 = _ref;
-  var _a = a++;
+  var _a;
   ({
-    [_a]: result
+    [_a = a++]: result
   } = _ref2);
   y = babelHelpers.objectWithoutProperties(_ref2, [_a].map(babelHelpers.toPropertyKey));
   _ref2;
