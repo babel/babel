@@ -1,3 +1,4 @@
 {
-  "plugins": ["flow", "namespaceImportFilter"]
+  "plugins": ["flow", "namespaceImportFilter"],
+  "throws": "Unexpected token (1:14)"
 }
