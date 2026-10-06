@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    "transform-export-namespace-from"
+  ],
+  "parserOpts": {
+    "plugins": [
+      "deferredReexports",
+      "deferredImportEvaluation"
+    ]
+  },
+  "throws": "Transforming `export defer ... from '...'` is not supported yet."
+}

@@ -2177,12 +2177,18 @@ export default abstract class StatementParser extends ExpressionParser {
       hasStar && this.maybeParseExportNamespaceSpecifier(node);
     const parseAfterNamespace =
       parseAfterDefault && (!hasNamespace || this.eat(tt.comma));
-    const isFromRequired = hasDefault || hasStar;
+    const isFromRequired =
+      hasDefault ||
+      hasStar ||
+      (node as Undone<N.ExportNamedDeclaration>).phase === "defer";
 
     if (hasStar && !hasNamespace) {
       if (hasDefault) this.unexpected();
       if (decorators) {
         throw this.raise(Errors.UnsupportedDecoratorExport, node);
+      }
+      if ((node as N.ExportNamedDeclaration).phase === "defer") {
+        this.raise(Errors.DeferExportInvalidAll, node);
       }
       this.parseExportFrom(node, true);
 
@@ -2688,7 +2694,13 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   isPotentialImportPhase(isExport: boolean): boolean {
-    if (isExport) return false;
+    if (isExport) {
+      if (!this.isContextual(tt._defer)) return false;
+      // export defer { x } from '...'
+      // export defer * as ns from '...'
+      const ch = this.lookaheadCharCode();
+      return ch === charCodes.leftCurlyBrace || ch === charCodes.asterisk;
+    }
     return this.isContextual(tt._source) || this.isContextual(tt._defer);
   }
 
@@ -2705,6 +2717,10 @@ export default abstract class StatementParser extends ExpressionParser {
             `Assertion failure: export declarations do not support the '${phase}' phase.`,
           );
         }
+      }
+      if (phase === "defer") {
+        this.expectPlugin("deferredReexports", loc);
+        (node as N.ExportNamedDeclaration).phase = "defer";
       }
       return;
     }
