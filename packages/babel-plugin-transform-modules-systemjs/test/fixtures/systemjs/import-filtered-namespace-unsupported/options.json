@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    "transform-modules-systemjs"
+  ],
+  "parserOpts": {
+    "plugins": [
+      "namespaceImportFilter",
+      "deferredReexports",
+      "deferredImportEvaluation"
+    ]
+  },
+  "throws": "Transforming `import { x, y } as ns from '...'` is not supported yet."
+}

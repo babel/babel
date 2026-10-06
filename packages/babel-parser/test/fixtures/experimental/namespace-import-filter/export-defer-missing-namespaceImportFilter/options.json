@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "deferredReexports",
+    "deferredImportEvaluation"
+  ],
+  "throws": "This experimental syntax requires enabling the parser plugin: \"namespaceImportFilter\". (1:19)"
+}
