@@ -2396,11 +2396,7 @@ export function isRestPlaceholder<Opts extends Options<t.RestPlaceholder>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "RestPlaceholder") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return isType<t.RestPlaceholder>("RestPlaceholder", node, opts);
 }
 export function isPartialCallExpression(
   node: t.Node | null | undefined,
@@ -2414,11 +2410,7 @@ export function isPartialCallExpression<
 export function isPartialCallExpression<
   Opts extends Options<t.PartialCallExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "PartialCallExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return isType<t.PartialCallExpression>("PartialCallExpression", node, opts);
 }
 export function isPartialNewExpression(
   node: t.Node | null | undefined,
@@ -2432,11 +2424,7 @@ export function isPartialNewExpression<
 export function isPartialNewExpression<
   Opts extends Options<t.PartialNewExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "PartialNewExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return isType<t.PartialNewExpression>("PartialNewExpression", node, opts);
 }
 export function isOptionalPartialCallExpression(
   node: t.Node | null | undefined,
@@ -2450,11 +2438,11 @@ export function isOptionalPartialCallExpression<
 export function isOptionalPartialCallExpression<
   Opts extends Options<t.OptionalPartialCallExpression>,
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
-  if (!node) return false;
-
-  if (node.type !== "OptionalPartialCallExpression") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return isType<t.OptionalPartialCallExpression>(
+    "OptionalPartialCallExpression",
+    node,
+    opts,
+  );
 }
 export function isBindExpression(
   node: t.Node | null | undefined,
