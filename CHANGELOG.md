@@ -25,6 +25,17 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.10 (2026-10-07)
+
+#### :bug: Bug Fix
+* `babel-helpers`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-runtime`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#18287](https://github.com/babel/babel/pull/18287) Guard `@@toPrimitive` usage in toPrimitive helper ([@babel-bot](https://github.com/babel-bot))
+* `babel-traverse`
+  * [#18281](https://github.com/babel/babel/pull/18281) fix(traverse): do not evaluate destructured bindings in `path.evaluate` ([@babel-bot](https://github.com/babel-bot))
+
+#### :house: Internal
+* `babel-helpers`, `babel-plugin-transform-modules-commonjs`, `babel-runtime-corejs3`
+  * [#18279](https://github.com/babel/babel/pull/18279) Simplify `interopRequireWildcard` helper ([@babel-bot](https://github.com/babel-bot))
 ## v7.29.9 (2026-09-18)
 
 #### :bug: Bug Fix
