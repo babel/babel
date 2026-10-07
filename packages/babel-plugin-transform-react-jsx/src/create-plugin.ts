@@ -58,14 +58,20 @@ export interface Options {
   useBuiltIns: boolean;
   useSpread?: boolean;
 }
-export default function createPlugin({
+
+export interface OptionsDevelopment extends Options {
+  sourceSelf?: boolean;
+}
+
+export default function createPlugin<const Development extends boolean>({
   name,
   development,
 }: {
   name: string;
-  development: boolean;
+  development: Development;
 }) {
-  return declare((_, options: Options) => {
+  type Opts = Development extends true ? OptionsDevelopment : Options;
+  return declare((_, options: Opts) => {
     const {
       pure: PURE_ANNOTATION,
 
@@ -83,6 +89,11 @@ export default function createPlugin({
       pragma: PRAGMA_DEFAULT = DEFAULT.pragma,
       pragmaFrag: PRAGMA_FRAG_DEFAULT = DEFAULT.pragmaFrag,
     } = options;
+
+    const sourceSelf = development
+      ? ((options as OptionsDevelopment).sourceSelf ??
+        (process.env.BABEL_8_BREAKING ? false : true))
+      : undefined;
 
     if (process.env.BABEL_8_BREAKING) {
       if ("useSpread" in options) {
@@ -242,7 +253,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               );
             }
 
-            if (development) {
+            if (development && sourceSelf) {
               // Returns whether the class has specified a superclass.
               function isDerivedClass(classNode: Class) {
                 return classNode.superClass !== null;
@@ -630,11 +641,13 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           extracted.key ?? path.scope.buildUndefinedNode(),
           t.booleanLiteral(children.length > 1),
         );
-        if (extracted.__source) {
-          args.push(extracted.__source);
-          if (extracted.__self) args.push(extracted.__self);
-        } else if (extracted.__self) {
-          args.push(path.scope.buildUndefinedNode(), extracted.__self);
+        if (sourceSelf) {
+          if (extracted.__source) {
+            args.push(extracted.__source);
+            if (extracted.__self) args.push(extracted.__self);
+          } else if (extracted.__self) {
+            args.push(path.scope.buildUndefinedNode(), extracted.__self);
+          }
         }
       } else if (extracted.key !== undefined) {
         args.push(extracted.key);
