@@ -25,6 +25,34 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.7 (2026-10-07)
+
+#### :bug: Bug Fix
+* `babel-helper-create-regexp-features-plugin`, `babel-plugin-transform-dotall-regex`, `babel-plugin-transform-unicode-sets-regex`, `babel-preset-env`
+  * [#18295](https://github.com/babel/babel/pull/18295) Bump regexpu-core to 6.5.3 ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-for-of`
+  * [#18292](https://github.com/babel/babel/pull/18292) Skip `for await` in `transform-for-of` ([@brunoborta](https://github.com/brunoborta))
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-runtime-corejs3`
+  * [#18283](https://github.com/babel/babel/pull/18283) Fix `asyncIterator` helper forwarding `.throw()` to `.return()` ([@brunoborta](https://github.com/brunoborta))
+* `babel-parser`
+  * [#18288](https://github.com/babel/babel/pull/18288) fix(parser): allow await as a function expression name inside async arrow ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-modules-systemjs`, `babel-runtime-corejs3`
+  * [#18284](https://github.com/babel/babel/pull/18284) Guard `@@toPrimitive` usage in toPrimitive helper ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-plugin-transform-block-scoping`
+  * [#18195](https://github.com/babel/babel/pull/18195) fix: closures in for-loop init capture wrong binding ([@joelle-a-dev](https://github.com/joelle-a-dev))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-transform-private-property-in-object`
+  * [#18265](https://github.com/babel/babel/pull/18265) Return false for `#x in` on static private fields before initialization ([@hoobnn](https://github.com/hoobnn))
+* `babel-traverse`
+  * [#18151](https://github.com/babel/babel/pull/18151) Evaluate TypeScript expression wrappers in `NodePath#evaluate` ([@CINC0S](https://github.com/CINC0S))
+  * [#18250](https://github.com/babel/babel/pull/18250) fix(traverse): do not evaluate destructured bindings in `path.evaluate` ([@wulu007](https://github.com/wulu007))
+* Other
+  * [#18257](https://github.com/babel/babel/pull/18257) Fix eslint-parser AST definition of AccessorProperty ([@jpradelle](https://github.com/jpradelle))
+* `babel-core`
+  * [#18254](https://github.com/babel/babel/pull/18254) fix(core): createConfigItem allows cb as 2nd arg ([@JLHwung](https://github.com/JLHwung))
+
+#### :house: Internal
+* `babel-helpers`, `babel-plugin-transform-modules-commonjs`, `babel-runtime-corejs3`
+  * [#18255](https://github.com/babel/babel/pull/18255) Simplify `interopRequireWildcard` helper ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v8.0.6 (2026-09-18)
 
 #### :eyeglasses: Spec Compliance
