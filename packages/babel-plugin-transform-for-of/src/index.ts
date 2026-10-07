@@ -10,8 +10,8 @@ export interface Options {
   loose?: boolean;
 }
 
-// `declar` is moved into the loop body, where a binding of the body must not
-// capture a name that the loop head declares or reads.
+// The loop head is moved into the body, so a binding of the body must not
+// capture a name that the head declares or reads.
 function getLeftNames(path: NodePath<t.ForXStatement>) {
   const names = Object.keys(path.getBindingIdentifiers());
   path.get("left").traverse({
