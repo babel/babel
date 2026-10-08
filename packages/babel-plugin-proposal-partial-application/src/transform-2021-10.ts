@@ -21,10 +21,16 @@ type PartialNode =
   | t.PartialNewExpression
   | t.OptionalPartialCallExpression;
 
+// The partially applied function has a parameter for every placeholder
+// position up to the highest ordinal, so `f~(?1000000)` would need a million
+// parameters. Cap it to keep the output, and the compilation time, small.
+const MAX_PARAMS = 256;
+
 // Whether `node` can be referenced from the partially applied function
 // instead of being evaluated eagerly and captured
 function isStableReference(node: t.Node, scope: Scope) {
-  if (t.isImmutable(node)) return true;
+  // JSX elements are "immutable" nodes, but create a new object every time
+  if (t.isImmutable(node)) return !t.isJSX(node);
   if (!t.isIdentifier(node)) return false;
   const binding = scope.getBinding(node.name);
   if (!binding?.constant) return false;
@@ -78,10 +84,10 @@ function buildNullishCheck(
  * arguments are not evaluated.
  */
 function buildPartialApplication(
-  node: PartialNode,
-  scope: Scope,
+  path: NodePath<PartialNode>,
   { noDocumentAll }: Assumptions,
 ): t.Expression {
+  const { node, scope } = path;
   const params: t.Identifier[] = [];
   const values: t.Expression[] = [];
   const capture = (value: t.Expression): t.Expression => {
@@ -134,9 +140,16 @@ function buildPartialApplication(
   };
   let position = 0;
   let rest: t.Identifier | undefined;
-  const args = node.arguments.map(arg => {
+  const args = node.arguments.map((arg, i) => {
     if (t.isArgumentPlaceholder(arg)) {
-      return placeholder(arg.ordinal ? arg.ordinal.value : position++);
+      const index = arg.ordinal ? arg.ordinal.value : position++;
+      if (!Number.isInteger(index) || index < 0 || index >= MAX_PARAMS) {
+        const argPath = path.get("arguments")[i];
+        throw argPath.buildCodeFrameError(
+          `Partial applications with more than ${MAX_PARAMS} parameters are not supported.`,
+        );
+      }
+      return placeholder(index);
     } else if (t.isRestPlaceholder(arg)) {
       rest = scope.generateUidIdentifier("restPlaceholder");
       return t.spreadElement(t.cloneNode(rest));
@@ -207,9 +220,7 @@ export function createVisitor(assumptions: Assumptions): Visitor {
       // `a == null ? void 0 : a.b~()`, and `a.b~()` is visited again.
       transformOptionalChain(callee, assumptions, path, t.buildUndefinedNode());
     } else {
-      path.replaceWith(
-        buildPartialApplication(path.node, path.scope, assumptions),
-      );
+      path.replaceWith(buildPartialApplication(path, assumptions));
     }
     continueOptionalChain(path);
   }
