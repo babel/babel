@@ -1084,8 +1084,22 @@ export default abstract class ExpressionParser extends LValParser {
   finishPartialCallExpression<
     T extends N.PartialCallExpression | N.OptionalPartialCallExpression,
   >(node: Undone<T>, optional: boolean): T {
+    return this.finishNode(
+      node,
+      optional ? "OptionalPartialCallExpression" : "PartialCallExpression",
+    );
+  }
+
+  // Parse the arguments of `f~(...)` or `new F~(...)` after the `(`
+  parsePartialCallArguments(
+    this: Parser,
+  ): N.PartialCallExpression["arguments"] {
+    const args = this.parseCallExpressionArguments(
+      PlaceholderParsingFlags.AllowPlaceholder,
+    );
+    this.toReferencedList(args);
     let seenRestPlaceholder = false;
-    for (const arg of node.arguments) {
+    for (const arg of args as N.PartialCallExpression["arguments"]) {
       if (arg.type === "RestPlaceholder") {
         if (seenRestPlaceholder) {
           this.raise(Errors.DuplicateRestPlaceholder, arg);
@@ -1093,10 +1107,7 @@ export default abstract class ExpressionParser extends LValParser {
         seenRestPlaceholder = true;
       }
     }
-    return this.finishNode(
-      node,
-      optional ? "OptionalPartialCallExpression" : "PartialCallExpression",
-    );
+    return args;
   }
 
   parsePartialArguments(
@@ -1128,9 +1139,7 @@ export default abstract class ExpressionParser extends LValParser {
     if (optionalChainMember) {
       (node as Undone<N.OptionalPartialCallExpression>).optional = optional;
     }
-    node.arguments = this.parseCallExpressionArguments(
-      PlaceholderParsingFlags.AllowPlaceholder,
-    );
+    node.arguments = this.parsePartialCallArguments();
     return this.finishPartialCallExpression(node, optionalChainMember);
   }
 
@@ -2046,9 +2055,7 @@ export default abstract class ExpressionParser extends LValParser {
 
     if (this.eat(tt.parenL)) {
       if (partial) {
-        node.arguments = this.parseCallExpressionArguments(
-          PlaceholderParsingFlags.AllowPlaceholder,
-        );
+        node.arguments = this.parsePartialCallArguments();
       } else {
         const args = this.parseExprList(tt.parenR);
         this.toReferencedList(args);
@@ -2882,17 +2889,22 @@ export default abstract class ExpressionParser extends LValParser {
           if (!(placeholderFlags & PlaceholderParsingFlags.AllowPlaceholder)) {
             this.raise(Errors.UnexpectedRestPlaceholder, this.state.startLoc);
           } else if (
-            placeholderFlags & PlaceholderParsingFlags.UseVersion2018_07 &&
-            this.getPluginOption("partialApplication", "version") === "2018-07"
+            placeholderFlags & PlaceholderParsingFlags.UseVersion2018_07
           ) {
-            this.raise(
-              Errors.IncorrectPartialApplicationVersion,
-              this.state.startLoc,
-              {
-                expected: "2021-10",
-                actual: "2018-07",
-              },
-            );
+            // Rest placeholders were introduced in 2021-10, where they are
+            // only valid in `~(` argument lists
+            if (
+              this.getPluginOption("partialApplication", "version") ===
+              "2018-07"
+            ) {
+              this.raise(
+                Errors.IncorrectPartialApplicationVersion,
+                this.state.startLoc,
+                { expected: "2021-10", actual: "2018-07" },
+              );
+            } else {
+              this.raise(Errors.UnexpectedRestPlaceholder, this.state.startLoc);
+            }
           }
           return this.parseRestPlaceholder();
         }
@@ -2904,22 +2916,22 @@ export default abstract class ExpressionParser extends LValParser {
       );
     } else if (this.match(tt.question)) {
       this.expectPlugin("partialApplication");
-      if (!(placeholderFlags & PlaceholderParsingFlags.AllowPlaceholder)) {
+      const isCallWithoutTilde = !!(
+        placeholderFlags & PlaceholderParsingFlags.UseVersion2018_07
+      );
+      // Without `~(`, only version 2018-07 allows `?`. Don't suggest
+      // switching to 2018-07 here: the same call may use 2021-10-only
+      // syntax, such as `f(?, ...)`.
+      const allowed =
+        !!(placeholderFlags & PlaceholderParsingFlags.AllowPlaceholder) &&
+        (!isCallWithoutTilde ||
+          this.getPluginOption("partialApplication", "version") === "2018-07");
+      if (!allowed) {
         this.raise(Errors.UnexpectedArgumentPlaceholder, this.state.startLoc);
-      } else if (
-        placeholderFlags & PlaceholderParsingFlags.UseVersion2018_07 &&
-        this.getPluginOption("partialApplication", "version") !== "2018-07"
-      ) {
-        this.raise(
-          Errors.IncorrectPartialApplicationVersion,
-          this.state.startLoc,
-          {
-            expected: "2018-07",
-            actual: this.getPluginOption("partialApplication", "version")!,
-          },
-        );
       }
-      return this.parseArgumentPlaceholder(placeholderFlags);
+      // Placeholder ordinals were introduced in 2021-10. When the placeholder
+      // itself is unexpected, its ordinal isn't reported again.
+      return this.parseArgumentPlaceholder(allowed && isCallWithoutTilde);
     } else {
       elt = this.parseMaybeAssignAllowInOrVoidPattern(
         close,
@@ -3366,23 +3378,15 @@ export default abstract class ExpressionParser extends LValParser {
     return this.parseMaybeAssignAllowIn(refExpressionErrors, isParenItem);
   }
 
-  parseArgumentPlaceholder(
-    placeholderFlags: PlaceholderParsingFlags,
-  ): N.ArgumentPlaceholder {
+  parseArgumentPlaceholder(disallowOrdinal: boolean): N.ArgumentPlaceholder {
     const node = this.startNode<N.ArgumentPlaceholder>();
     this.next(); // eat `?`
     if (this.match(tt.num)) {
-      if (
-        placeholderFlags & PlaceholderParsingFlags.UseVersion2018_07 &&
-        this.getPluginOption("partialApplication", "version") === "2018-07"
-      ) {
+      if (disallowOrdinal) {
         this.raise(
           Errors.IncorrectPartialApplicationVersion,
           this.state.startLoc,
-          {
-            expected: "2021-10",
-            actual: "2018-07",
-          },
+          { expected: "2021-10", actual: "2018-07" },
         );
       }
       const ordinal = this.parseNumericLiteral(this.state.value);

@@ -1,0 +1,39 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+  "errors": [
+    "SyntaxError: The partial application can have only one rest placeholder. (1:12)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "expression": {
+          "type": "PartialNewExpression",
+          "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+          "callee": {
+            "type": "Identifier",
+            "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5},"identifierName":"F"},
+            "name": "F"
+          },
+          "arguments": [
+            {
+              "type": "RestPlaceholder",
+              "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10}}
+            },
+            {
+              "type": "RestPlaceholder",
+              "start":12,"end":15,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":15,"index":15}}
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
