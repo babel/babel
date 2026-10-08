@@ -1,14 +1,8 @@
 import type Printer from "../printer.ts";
-import {
-  isCallExpression,
-  isLiteral,
-  isMemberExpression,
-  isNewExpression,
-  isPattern,
-} from "@babel/types";
+import { isLiteral, isMemberExpression, isPattern } from "@babel/types";
 import * as charCodes from "charcodes";
 import type * as t from "@babel/types";
-import { TokenContext } from "../node/index.ts";
+import { TokenContext, hasPostfixPart } from "../node/index.ts";
 
 export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
   const { operator } = node;
@@ -95,12 +89,14 @@ export function NewExpression(
   this.word("new");
   this.space();
   this.print(node.callee);
+  // Omit `()` in minified output, unless a postfix part would then extend
+  // the callee instead (e.g. `new F()?.b` vs `new F?.b`), or `()` is needed
+  // to print the type arguments.
   if (
     this.format.minified &&
     node.arguments.length === 0 &&
-    !isCallExpression(parent, { callee: node }) &&
-    !isMemberExpression(parent) &&
-    !isNewExpression(parent)
+    !node.typeArguments &&
+    !hasPostfixPart(node, parent)
   ) {
     return;
   }
