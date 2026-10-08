@@ -56,7 +56,7 @@ const isClassExtendsClause = (
   );
 };
 
-const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
+export const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
   switch (parentId) {
     case __node("MemberExpression"):
     case __node("OptionalMemberExpression"):
@@ -68,6 +68,7 @@ const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
     case __node("TaggedTemplateExpression"):
       return parent.tag === node;
     case __node("TSNonNullExpression"):
+    case __node("TSInstantiationExpression"):
       return true;
   }
 
