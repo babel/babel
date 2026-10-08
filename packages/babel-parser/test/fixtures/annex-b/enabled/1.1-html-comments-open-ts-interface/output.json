@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":21}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":2,"index":21}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+        "expression": {
+          "type": "Identifier",
+          "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9},"identifierName":"interface"},
+          "name": "interface"
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " c",
+            "start":10,"end":16,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":16,"index":16}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":17,"end":18,"loc":{"start":{"line":2,"column":0,"index":17},"end":{"line":2,"column":1,"index":18}},
+        "expression": {
+          "type": "Identifier",
+          "start":17,"end":18,"loc":{"start":{"line":2,"column":0,"index":17},"end":{"line":2,"column":1,"index":18},"identifierName":"F"},
+          "name": "F"
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " c",
+            "start":10,"end":16,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":16,"index":16}}
+          }
+        ]
+      },
+      {
+        "type": "BlockStatement",
+        "start":19,"end":21,"loc":{"start":{"line":3,"column":0,"index":19},"end":{"line":3,"column":2,"index":21}},
+        "body": [],
+        "directives": []
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " c",
+      "start":10,"end":16,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":16,"index":16}}
+    }
+  ]
+}
