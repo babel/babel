@@ -1,4 +1,4 @@
-var _a, _a3, _a3$b, _f, _o, _o$f, _a4, _a6, _ref;
+var _a, _a3, _a3$b, _f, _o, _o$f, _a4, _a6, _ref, _f3, _a8, _a0;
 (_a = a) === null || _a === void 0 || ((_a$b, _a2) => function (_argPlaceholder) {
   return _a$b.call(_a2, _argPlaceholder);
 })(_a.b, _a);
@@ -19,3 +19,12 @@ var _a, _a3, _a3$b, _f, _o, _o$f, _a4, _a6, _ref;
 })(_a6.b, _a6)) === null || _ref === void 0 ? void 0 : (_ref2 => function (_argPlaceholder7) {
   return _ref2(_argPlaceholder7);
 })(_ref);
+((_f3 = f) === null || _f3 === void 0 ? void 0 : (_f4 => function (_argPlaceholder8) {
+  return _f4(_argPlaceholder8);
+})(_f3))?.(1);
+x?.y[(_a8 = a) === null || _a8 === void 0 ? void 0 : ((_a8$b, _a9) => function () {
+  return _a8$b.call(_a9);
+})(_a8.b, _a8)];
+x?.y((_a0 = a) === null || _a0 === void 0 ? void 0 : ((_a0$b, _a1) => function () {
+  return _a0$b.call(_a1);
+})(_a0.b, _a0));

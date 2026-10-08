@@ -23,3 +23,33 @@ function* gen() {
 const it = gen();
 it.next();
 expect(it.next(10).value(5)).toBe(15);
+
+// Fixed arguments are evaluated once, and shared by every call
+const same = ((...args) => args)~({}, [], /a/g, `${"t"}`, ?);
+const [first, second] = [same(1), same(2)];
+for (let i = 0; i < 4; i++) {
+  expect(first[i]).toBe(second[i]);
+}
+
+// `arguments` refers to the enclosing function
+function withArguments() {
+  return ((a, b) => [a, b])~(arguments[0], ?);
+}
+expect(withArguments("a")("b")).toEqual(["a", "b"]);
+
+// Spread arguments are iterated once
+function* items() {
+  yield 1;
+  yield 2;
+}
+const spread = ((...args) => args)~(...items(), ?);
+expect(spread(3)).toEqual([1, 2, 3]);
+expect(spread(4)).toEqual([1, 2, 4]);
+
+// A `var` declared in a loop is not shared by the partial applications
+const fromVar = [];
+for (var j = 0; j < 3; j++) {
+  var x = j;
+  fromVar.push((a => a)~(x));
+}
+expect(fromVar.map(fn => fn())).toEqual([0, 1, 2]);
