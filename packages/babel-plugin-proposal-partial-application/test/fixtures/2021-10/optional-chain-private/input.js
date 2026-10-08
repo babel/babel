@@ -3,5 +3,6 @@ class A {
   static test(o) {
     o?.#f~(?);
     o?.x.#f~(?);
+    o.#f?.~(?);
   }
 }
