@@ -1,0 +1,82 @@
+{
+  "type": "File",
+  "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":62}},
+  "errors": [
+    "SyntaxError: Binding 'eval' in strict mode. (2:8)",
+    "SyntaxError: Binding 'arguments' in strict mode. (3:16)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":62}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":62,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":62}},
+        "id": {
+          "type": "Identifier",
+          "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":13,"end":62,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":4,"column":1,"index":62}},
+          "body": [
+            {
+              "type": "ClassDeclaration",
+              "start":17,"end":30,"loc":{"start":{"line":2,"column":2,"index":17},"end":{"line":2,"column":15,"index":30}},
+              "id": {
+                "type": "Identifier",
+                "start":23,"end":27,"loc":{"start":{"line":2,"column":8,"index":23},"end":{"line":2,"column":12,"index":27},"identifierName":"eval"},
+                "name": "eval"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start":28,"end":30,"loc":{"start":{"line":2,"column":13,"index":28},"end":{"line":2,"column":15,"index":30}},
+                "body": []
+              }
+            },
+            {
+              "type": "VariableDeclaration",
+              "start":33,"end":60,"loc":{"start":{"line":3,"column":2,"index":33},"end":{"line":3,"column":29,"index":60}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":37,"end":59,"loc":{"start":{"line":3,"column":6,"index":37},"end":{"line":3,"column":28,"index":59}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":37,"end":38,"loc":{"start":{"line":3,"column":6,"index":37},"end":{"line":3,"column":7,"index":38},"identifierName":"g"},
+                    "name": "g"
+                  },
+                  "init": {
+                    "type": "ClassExpression",
+                    "start":41,"end":59,"loc":{"start":{"line":3,"column":10,"index":41},"end":{"line":3,"column":28,"index":59}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":47,"end":56,"loc":{"start":{"line":3,"column":16,"index":47},"end":{"line":3,"column":25,"index":56},"identifierName":"arguments"},
+                      "name": "arguments"
+                    },
+                    "superClass": null,
+                    "body": {
+                      "type": "ClassBody",
+                      "start":57,"end":59,"loc":{"start":{"line":3,"column":26,"index":57},"end":{"line":3,"column":28,"index":59}},
+                      "body": []
+                    }
+                  }
+                }
+              ],
+              "kind": "var"
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

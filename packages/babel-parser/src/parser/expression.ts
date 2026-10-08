@@ -2702,8 +2702,8 @@ export default abstract class ExpressionParser extends LValParser {
           );
 
           // Ensure the function name isn't a forbidden identifier in strict mode, e.g. 'eval'
-          if (this.state.strict && node.id) {
-            this.checkIdentifier(
+          if (node.id) {
+            this.checkStrictBindReservedWord(
               node.id,
               BindingFlag.TYPE_OUTSIDE,
               strictModeChanged,
