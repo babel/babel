@@ -6,6 +6,7 @@ import {
 } from "@babel/core";
 import {
   isTransparentExprWrapper,
+  skipTransparentExprWrapperNodes,
   skipTransparentExprWrappers,
 } from "@babel/helper-skip-transparent-expression-wrappers";
 import { transformOptionalChain } from "@babel/plugin-transform-optional-chaining";
@@ -20,43 +21,35 @@ type PartialNode =
   | t.PartialNewExpression
   | t.OptionalPartialCallExpression;
 
-// Whether `node` is a temporary variable, such as the ones injected by
-// `scope.push`. They are reassigned without being tracked as violations.
-function isTemporary(node: t.Node, scope: Scope) {
-  if (!t.isIdentifier(node)) return false;
-  const binding = scope.getBinding(node.name);
-  return (
-    !!binding &&
-    binding.path.isVariableDeclarator() &&
-    binding.path.node.init == null
-  );
-}
-
 // Whether `node` can be referenced from the partially applied function
 // instead of being evaluated eagerly and captured
 function isStableReference(node: t.Node, scope: Scope) {
   if (t.isImmutable(node)) return true;
-  if (t.isIdentifier(node)) {
-    const binding = scope.getBinding(node.name);
-    if (!binding?.constant || isTemporary(node, scope)) return false;
-    // Imports are live bindings
-    if (binding.kind === "module") return false;
-    // Sloppy mode parameters can be reassigned through `arguments`
-    if (
-      binding.kind === "param" &&
-      !binding.scope.path.isArrowFunctionExpression() &&
-      !binding.path.isInStrictMode()
-    ) {
+  if (!t.isIdentifier(node)) return false;
+  const binding = scope.getBinding(node.name);
+  if (!binding?.constant) return false;
+  switch (binding.kind) {
+    case "module":
+      // Imports are live bindings
       return false;
-    }
-    return true;
+    case "param":
+      // Sloppy mode parameters can be reassigned through `arguments`
+      return (
+        binding.scope.path.isArrowFunctionExpression() ||
+        binding.path.isInStrictMode()
+      );
+    default:
+      // Temporary variables, such as the ones injected by `scope.push`, are
+      // reassigned without being tracked as constant violations
+      return !(
+        binding.path.isVariableDeclarator() && binding.path.node.init == null
+      );
   }
-  return false;
 }
 
 function buildNullishCheck(
-  ref: t.Identifier,
   check: t.Expression,
+  ref: t.Expression,
   noDocumentAll: boolean,
 ) {
   if (noDocumentAll) {
@@ -72,7 +65,7 @@ function buildNullishCheck(
 /**
  * Lower `f~(a, ?, ?0, ...)`, `o.f~(?)` and `new C~(?)` to
  *
- *   ((_f, _a) => function (_arg0, _arg1, ..._rest) {
+ *   ((_f, _a) => function (_arg0, ..._rest) {
  *     return _f(_a, _arg0, _arg0, ..._rest);
  *   })(f, a)
  *
@@ -81,20 +74,18 @@ function buildNullishCheck(
  * passed as parameters, rather than stored in temporary variables, so
  * that every partially applied function has its own copy of them.
  *
- * When `nullishCheck` is set (`f?.~()`), the result is `undefined` if the
- * callee is nullish, and the arguments are not evaluated.
+ * For `f?.~()`, the result is `undefined` if the callee is nullish, and the
+ * arguments are not evaluated.
  */
 function buildPartialApplication(
   node: PartialNode,
   scope: Scope,
-  nullishCheck: { noDocumentAll: boolean } | null,
+  { noDocumentAll }: Assumptions,
 ): t.Expression {
-  const isNew = t.isPartialNewExpression(node);
-
   const params: t.Identifier[] = [];
   const values: t.Expression[] = [];
-  const capture = (value: t.Expression, force = false): t.Expression => {
-    if (!force && isStableReference(value, scope)) return value;
+  const capture = (value: t.Expression): t.Expression => {
+    if (isStableReference(value, scope)) return value;
     const id = scope.generateUidIdentifierBasedOnNode(value);
     params.push(id);
     values.push(value);
@@ -102,9 +93,9 @@ function buildPartialApplication(
   };
 
   // The callee and its receiver
-  const callee = skipTransparentExprWrapperNodes(node.callee);
-  let receiver: t.Expression | null = null;
-  let receiverRef: t.Identifier | null = null;
+  const isNew = t.isPartialNewExpression(node);
+  let callee = skipTransparentExprWrapperNodes(node.callee);
+  let receiver: t.Expression | undefined;
   if (
     !isNew &&
     (t.isMemberExpression(callee) || t.isOptionalMemberExpression(callee))
@@ -112,102 +103,60 @@ function buildPartialApplication(
     const { object } = callee;
     if (t.isSuper(object)) {
       receiver = t.thisExpression();
-    } else if (
-      // These can be read twice without being memoized
-      t.isThisExpression(object) ||
-      isStableReference(object, scope) ||
-      isTemporary(object, scope)
-    ) {
-      receiver = t.cloneNode(object);
     } else {
-      receiverRef = scope.generateUidIdentifierBasedOnNode(object);
-      scope.push({ id: t.cloneNode(receiverRef) });
-      callee.object = t.assignmentExpression(
-        "=",
-        t.cloneNode(receiverRef),
-        object,
-      );
+      const ref = scope.maybeGenerateMemoised(object);
+      if (ref) callee.object = t.assignmentExpression("=", ref, object);
+      receiver = t.cloneNode(ref ?? object);
     }
   }
 
-  let test: t.Expression | null = null;
-  let calleeRef: t.Expression;
-  if (
-    nullishCheck &&
-    !(t.isIdentifier(callee) && isStableReference(callee, scope))
-  ) {
-    const ref = scope.generateUidIdentifierBasedOnNode(callee);
-    scope.push({ id: t.cloneNode(ref) });
+  let test: t.Expression | undefined;
+  if (t.isOptionalPartialCallExpression(node) && node.optional) {
+    const ref = scope.maybeGenerateMemoised(callee);
     test = buildNullishCheck(
-      ref,
-      t.assignmentExpression("=", t.cloneNode(ref), callee),
-      nullishCheck.noDocumentAll,
+      ref ? t.assignmentExpression("=", ref, callee) : t.cloneNode(callee),
+      ref ?? callee,
+      noDocumentAll,
     );
-    calleeRef = capture(t.cloneNode(ref), true);
-  } else {
-    if (nullishCheck) {
-      test = buildNullishCheck(
-        callee as t.Identifier,
-        t.cloneNode(callee),
-        nullishCheck.noDocumentAll,
-      );
-    }
-    calleeRef = capture(callee);
+    if (ref) callee = t.cloneNode(ref);
   }
-  if (receiverRef) {
-    receiver = capture(t.cloneNode(receiverRef), true);
-  } else if (receiver) {
-    receiver = capture(receiver);
-  }
+
+  callee = capture(callee);
+  if (receiver) receiver = capture(receiver);
 
   // The arguments
-  let positionalCount = 0;
-  let maxOrdinal = 0;
-  let hasRest = false;
-  for (const arg of node.arguments) {
-    if (t.isArgumentPlaceholder(arg)) {
-      if (arg.ordinal) {
-        maxOrdinal = Math.max(maxOrdinal, arg.ordinal.value + 1);
-      } else {
-        positionalCount++;
-      }
-    } else if (t.isRestPlaceholder(arg)) {
-      hasRest = true;
-    }
-  }
   const placeholders: t.Identifier[] = [];
-  for (let i = Math.max(positionalCount, maxOrdinal); i > 0; i--) {
-    placeholders.push(scope.generateUidIdentifier("argPlaceholder"));
-  }
-  const rest = hasRest ? scope.generateUidIdentifier("restPlaceholder") : null;
-
+  const placeholder = (index: number) => {
+    while (placeholders.length <= index) {
+      placeholders.push(scope.generateUidIdentifier("argPlaceholder"));
+    }
+    return t.cloneNode(placeholders[index]);
+  };
   let position = 0;
-  const args: (t.Expression | t.SpreadElement)[] = node.arguments.map(arg => {
+  let rest: t.Identifier | undefined;
+  const args = node.arguments.map(arg => {
     if (t.isArgumentPlaceholder(arg)) {
-      return t.cloneNode(
-        placeholders[arg.ordinal ? arg.ordinal.value : position++],
-      );
+      return placeholder(arg.ordinal ? arg.ordinal.value : position++);
     } else if (t.isRestPlaceholder(arg)) {
-      return t.spreadElement(t.cloneNode(rest!));
+      rest = scope.generateUidIdentifier("restPlaceholder");
+      return t.spreadElement(t.cloneNode(rest));
     } else if (t.isSpreadElement(arg)) {
       // Spread arguments are iterated when the function is partially applied
-      return t.spreadElement(
-        capture(t.arrayExpression([t.spreadElement(arg.argument)]), true),
-      );
+      return t.spreadElement(capture(t.arrayExpression([arg])));
     }
     return capture(arg);
   });
 
   let body: t.Expression;
   if (isNew) {
-    body = t.newExpression(calleeRef, args);
+    body = t.newExpression(callee, args);
   } else if (receiver) {
-    body = t.callExpression(
-      t.memberExpression(calleeRef, t.identifier("call")),
-      [receiver, ...args],
-    );
+    body = t.callExpression(t.memberExpression(callee, t.identifier("call")), [
+      receiver,
+      ...args,
+    ]);
   } else {
-    body = t.callExpression(calleeRef, args);
+    body = t.callExpression(callee, args);
   }
 
   let result: t.Expression = t.functionExpression(
@@ -221,17 +170,9 @@ function buildPartialApplication(
       values,
     );
   }
-  if (test) {
-    result = t.conditionalExpression(test, t.buildUndefinedNode(), result);
-  }
-  return result;
-}
-
-function skipTransparentExprWrapperNodes(node: t.Expression): t.Expression {
-  while (isTransparentExprWrapper(node)) {
-    node = node.expression;
-  }
-  return node;
+  return test
+    ? t.conditionalExpression(test, t.buildUndefinedNode(), result)
+    : result;
 }
 
 // After `a?.b~()` in `a?.b~().c` is lowered to `a == null ? void 0 : ...`,
@@ -255,52 +196,27 @@ function continueOptionalChain(path: NodePath) {
   }
 }
 
-function exitPartialCallOrNew(
-  path: NodePath<t.PartialCallExpression | t.PartialNewExpression>,
-) {
-  path.replaceWith(buildPartialApplication(path.node, path.scope, null));
-}
-
 export function createVisitor(assumptions: Assumptions): Visitor {
+  function exit(path: NodePath<PartialNode>) {
+    const callee = skipTransparentExprWrappers(path.get("callee"));
+    if (
+      path.isOptionalPartialCallExpression() &&
+      (callee.isOptionalMemberExpression() || callee.isOptionalCallExpression())
+    ) {
+      // Lower the optional chain in the callee first: `a?.b~()` becomes
+      // `a == null ? void 0 : a.b~()`, and `a.b~()` is visited again.
+      transformOptionalChain(callee, assumptions, path, t.buildUndefinedNode());
+    } else {
+      path.replaceWith(
+        buildPartialApplication(path.node, path.scope, assumptions),
+      );
+    }
+    continueOptionalChain(path);
+  }
+
   return {
-    PartialCallExpression: { exit: exitPartialCallOrNew },
-    PartialNewExpression: { exit: exitPartialCallOrNew },
-    OptionalPartialCallExpression: {
-      exit(path) {
-        const { node } = path;
-        const callee = skipTransparentExprWrappers(path.get("callee"));
-        let partialPath: NodePath = path;
-        if (
-          callee.isOptionalMemberExpression() ||
-          callee.isOptionalCallExpression()
-        ) {
-          // Lower the optional chain in the callee, so that `a?.b~()`
-          // becomes `a == null ? void 0 : a.b~()`
-          transformOptionalChain(
-            callee,
-            assumptions,
-            path,
-            t.buildUndefinedNode(),
-          );
-          const replacement = path as NodePath;
-          if (replacement.isConditionalExpression()) {
-            partialPath = replacement.get("alternate");
-          } else if (replacement.isLogicalExpression()) {
-            partialPath = replacement.get("right");
-          }
-          // The chain could not be lowered in place; the replacement
-          // will be visited again.
-          if (partialPath.node !== node) return;
-        }
-        partialPath.replaceWith(
-          buildPartialApplication(
-            node,
-            partialPath.scope,
-            node.optional ? assumptions : null,
-          ),
-        );
-        continueOptionalChain(path);
-      },
-    },
+    PartialCallExpression: { exit },
+    PartialNewExpression: { exit },
+    OptionalPartialCallExpression: { exit },
   };
 }
