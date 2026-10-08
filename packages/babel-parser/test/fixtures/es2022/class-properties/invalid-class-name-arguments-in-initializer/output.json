@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":37}},
+  "errors": [
+    "SyntaxError: 'arguments' is only allowed in functions and class methods. (2:12)",
+    "SyntaxError: Binding 'arguments' in strict mode. (2:12)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":37}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":37}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":37,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":3,"column":1,"index":37}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":12,"end":35,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":25,"index":35}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":12,"end":13,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":3,"index":13},"identifierName":"x"},
+                "name": "x"
+              },
+              "computed": false,
+              "value": {
+                "type": "ClassExpression",
+                "start":16,"end":34,"loc":{"start":{"line":2,"column":6,"index":16},"end":{"line":2,"column":24,"index":34}},
+                "id": {
+                  "type": "Identifier",
+                  "start":22,"end":31,"loc":{"start":{"line":2,"column":12,"index":22},"end":{"line":2,"column":21,"index":31},"identifierName":"arguments"},
+                  "name": "arguments"
+                },
+                "superClass": null,
+                "body": {
+                  "type": "ClassBody",
+                  "start":32,"end":34,"loc":{"start":{"line":2,"column":22,"index":32},"end":{"line":2,"column":24,"index":34}},
+                  "body": []
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
