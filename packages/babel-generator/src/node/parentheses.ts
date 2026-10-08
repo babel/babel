@@ -347,6 +347,11 @@ export function TSInstantiationExpression(
     case __node("NewExpression"):
     case __node("TSInstantiationExpression"):
       return parent.typeArguments != null;
+    // `f<T>~()` is parsed as a comparison
+    case __node("PartialCallExpression"):
+    case __node("OptionalPartialCallExpression"):
+    case __node("PartialNewExpression"):
+      return parent.callee === node;
   }
 
   return false;
