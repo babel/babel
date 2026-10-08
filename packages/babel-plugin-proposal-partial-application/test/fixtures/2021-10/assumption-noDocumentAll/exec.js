@@ -1,0 +1,11 @@
+const add = (x, y) => x + y;
+const a = { b: { v: 1, c(x) { return [this.v, x]; } }, m() { return this.b; } };
+const none = null;
+expect(a?.b.c~(?)(2)).toEqual([1, 2]);
+expect(a?.m().c~(?)(3)).toEqual([1, 3]);
+expect(none?.b.c~(?)).toBe(undefined);
+expect(none?.m().c~(?)).toBe(undefined);
+expect(add?.~(?, 1)(1)).toBe(2);
+expect(none?.~(?)).toBe(undefined);
+expect(a.b.c?.~(?)(4)).toEqual([1, 4]);
+expect(a.b.missing?.~(?)).toBe(undefined);

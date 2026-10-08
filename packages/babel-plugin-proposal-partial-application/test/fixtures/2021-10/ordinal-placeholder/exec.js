@@ -9,3 +9,7 @@ expect(swap.length).toBe(2);
 
 const identity = x => x;
 expect([5, 6, 7].map(identity~(?1))).toEqual([0, 1, 2]);
+
+// The length accounts for the highest ordinal
+expect(printABC~(?3).length).toBe(4);
+expect(printABC~(?, ?, ?0, ...).length).toBe(2);
