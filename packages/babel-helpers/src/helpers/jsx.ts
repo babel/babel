@@ -33,14 +33,14 @@ export default function _createRawReactElement(
   key?: ReactKey,
   children?: ReactNode[],
 ): ReactElement {
-  if (!REACT_ELEMENT_TYPE) {
-    REACT_ELEMENT_TYPE =
+  var elementType =
+    REACT_ELEMENT_TYPE ||
+    (REACT_ELEMENT_TYPE =
       (typeof Symbol === "function" &&
         // "for" is a reserved keyword in ES3 so escaping it here for backward compatibility
         Symbol["for"] &&
         Symbol["for"]("react.element")) ||
-      0xeac7;
-  }
+      0xeac7);
 
   var defaultProps: Props = type && type.defaultProps;
   var childrenLength = arguments.length - 3;
@@ -51,12 +51,13 @@ export default function _createRawReactElement(
     props = { children: void 0 };
   }
 
-  if (childrenLength === 1) {
-    props.children = children;
-  } else if (childrenLength > 1) {
-    var childArray = new Array(childrenLength);
-    for (var i = 0; i < childrenLength; i++) {
-      childArray[i] = arguments[i + 3];
+  if (childrenLength > 0) {
+    var childArray: any = children;
+    if (childrenLength > 1) {
+      childArray = new Array(childrenLength);
+      for (var i = 0; i < childrenLength; i++) {
+        childArray[i] = arguments[i + 3];
+      }
     }
     props.children = childArray;
   }
@@ -72,7 +73,7 @@ export default function _createRawReactElement(
   }
 
   return {
-    $$typeof: REACT_ELEMENT_TYPE,
+    $$typeof: elementType,
     type: type,
     key: key === undefined ? null : "" + key,
     ref: null,

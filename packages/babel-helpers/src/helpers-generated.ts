@@ -839,18 +839,17 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 520, gzip size: 341
+  // size: 494, gzip size: 337
   jsx: helper(
     "7.0.0-beta.0",
-    'var REACT_ELEMENT_TYPE;function _createRawReactElement(e,r,E,l){REACT_ELEMENT_TYPE||(REACT_ELEMENT_TYPE="function"==typeof Symbol&&Symbol.for&&Symbol.for("react.element")||60103);var o=e&&e.defaultProps,n=arguments.length-3;if(r||0===n||(r={children:void 0}),1===n)r.children=l;else if(n>1){for(var t=Array(n),f=0;f<n;f++)t[f]=arguments[f+3];r.children=t}if(r&&o)for(var i in o)void 0===r[i]&&(r[i]=o[i]);else r||(r=o||{});return{$$typeof:REACT_ELEMENT_TYPE,type:e,key:void 0===E?null:""+E,ref:null,props:r,_owner:null}}',
+    'var REACT_ELEMENT_TYPE;function _createRawReactElement(e,r,o,l){var E=REACT_ELEMENT_TYPE||(REACT_ELEMENT_TYPE="function"==typeof Symbol&&Symbol.for&&Symbol.for("react.element")||60103),n=e&&e.defaultProps,t=arguments.length-3;if(r||0===t||(r={children:void 0}),t>0){var f=l;if(t>1){f=Array(t);for(var a=0;a<t;a++)f[a]=arguments[a+3]}r.children=f}if(r&&n)for(var i in n)void 0===r[i]&&(r[i]=n[i]);else r||(r=n||{});return{$$typeof:E,type:e,key:void 0===o?null:""+o,ref:null,props:r,_owner:null}}',
     {
       globals: ["Symbol", "Array"],
       locals: {
         REACT_ELEMENT_TYPE: [
           "body.0.declarations.0.id",
-          "body.1.body.body.0.expression.left",
-          "body.1.body.body.4.argument.properties.0.value",
-          "body.1.body.body.0.expression.right.left",
+          "body.1.body.body.0.declarations.0.init.left",
+          "body.1.body.body.0.declarations.0.init.right.left",
         ],
         _createRawReactElement: ["body.1.id"],
       },
