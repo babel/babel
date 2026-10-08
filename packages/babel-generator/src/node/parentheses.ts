@@ -65,6 +65,9 @@ export const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
     case __node("CallExpression"):
     case __node("OptionalCallExpression"):
     case __node("NewExpression"):
+    case __node("PartialCallExpression"):
+    case __node("OptionalPartialCallExpression"):
+    case __node("PartialNewExpression"):
       return parent.callee === node;
     case __node("TaggedTemplateExpression"):
       return parent.tag === node;

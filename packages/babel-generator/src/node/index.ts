@@ -61,6 +61,8 @@ function newCalleeNeedsParens(node: t.Node): boolean {
       case "ImportExpression":
       case "OptionalCallExpression":
       case "OptionalMemberExpression":
+      case "PartialCallExpression":
+      case "OptionalPartialCallExpression":
         return true;
       case "MemberExpression":
         current = current.object;
@@ -90,6 +92,7 @@ function isWrappedOptionalChain(node: t.Node): boolean {
     switch (current.type) {
       case "OptionalCallExpression":
       case "OptionalMemberExpression":
+      case "OptionalPartialCallExpression":
         return true;
       case "TSInstantiationExpression":
         // Inside `!`, it is already wrapped in its own parentheses: `(a?.b<c>)!`
@@ -112,6 +115,7 @@ export function parentNeedsParens(
 ): boolean {
   switch (parentId) {
     case __node("NewExpression"):
+    case __node("PartialNewExpression"):
       if (parent.callee === node) {
         return newCalleeNeedsParens(node);
       }
@@ -122,6 +126,7 @@ export function parentNeedsParens(
       }
       break;
     case __node("CallExpression"):
+    case __node("PartialCallExpression"):
       if (parent.callee === node) {
         return isWrappedOptionalChain(node);
       }
