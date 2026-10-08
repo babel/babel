@@ -4,6 +4,8 @@ import {
   isLiteral,
   isMemberExpression,
   isNewExpression,
+  isOptionalPartialCallExpression,
+  isPartialCallExpression,
   isPattern,
 } from "@babel/types";
 import * as charCodes from "charcodes";
@@ -105,6 +107,8 @@ export function NewExpression(
     this.format.minified &&
     node.arguments.length === 0 &&
     !isCallExpression(parent, { callee: node }) &&
+    !isPartialCallExpression(parent, { callee: node }) &&
+    !isOptionalPartialCallExpression(parent, { callee: node }) &&
     !isMemberExpression(parent) &&
     !isNewExpression(parent)
   ) {
