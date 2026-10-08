@@ -37,7 +37,19 @@ function isTemporary(node: t.Node, scope: Scope) {
 function isStableReference(node: t.Node, scope: Scope) {
   if (t.isImmutable(node)) return true;
   if (t.isIdentifier(node)) {
-    return !!scope.getBinding(node.name)?.constant && !isTemporary(node, scope);
+    const binding = scope.getBinding(node.name);
+    if (!binding?.constant || isTemporary(node, scope)) return false;
+    // Imports are live bindings
+    if (binding.kind === "module") return false;
+    // Sloppy mode parameters can be reassigned through `arguments`
+    if (
+      binding.kind === "param" &&
+      !binding.scope.path.isArrowFunctionExpression() &&
+      !binding.path.isInStrictMode()
+    ) {
+      return false;
+    }
+    return true;
   }
   return false;
 }
