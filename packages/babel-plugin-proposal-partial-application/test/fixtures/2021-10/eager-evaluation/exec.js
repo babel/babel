@@ -15,3 +15,11 @@ for (var i = 0; i < 3; i++) {
   fns.push(((a, b) => [a, b])~(i, ?));
 }
 expect(fns.map(fn => fn("b"))).toEqual([[0, "b"], [1, "b"], [2, "b"]]);
+
+// `yield` in fixed arguments is evaluated by the enclosing generator
+function* gen() {
+  return ((a, b) => a + b)~(yield, ?);
+}
+const it = gen();
+it.next();
+expect(it.next(10).value(5)).toBe(15);
