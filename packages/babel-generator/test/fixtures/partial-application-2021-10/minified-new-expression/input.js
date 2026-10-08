@@ -3,3 +3,4 @@
 (new F().a)~();
 new F~();
 new F~(?);
+new (new F)~(?);

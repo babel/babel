@@ -6,6 +6,7 @@ import {
   isNewExpression,
   isOptionalPartialCallExpression,
   isPartialCallExpression,
+  isPartialNewExpression,
   isPattern,
 } from "@babel/types";
 import * as charCodes from "charcodes";
@@ -110,7 +111,8 @@ export function NewExpression(
     !isPartialCallExpression(parent, { callee: node }) &&
     !isOptionalPartialCallExpression(parent, { callee: node }) &&
     !isMemberExpression(parent) &&
-    !isNewExpression(parent)
+    !isNewExpression(parent) &&
+    !isPartialNewExpression(parent)
   ) {
     return;
   }
@@ -128,6 +130,28 @@ export function NewExpression(
   _printExpressionArguments.call(this, node);
 }
 
+// Prevent the inner comments of `f~()`, `a?.~()` and `new F~()` from being
+// printed after `?.` or `~`: they are printed inside the parentheses, like
+// the ones of `f()`. When the original tokens of the node are known, they
+// are printed at their original position instead.
+function _resetInnerComments(this: Printer, node: t.Node) {
+  if (!this.tokenMap?.has(node)) {
+    this._innerCommentsState = 0; /* INNER_COMMENT_STATE.DISALLOWED */
+  }
+}
+
+function _printPartialArguments(
+  this: Printer,
+  node:
+    | t.OptionalPartialCallExpression
+    | t.PartialCallExpression
+    | t.PartialNewExpression,
+) {
+  this.token("~");
+  _resetInnerComments.call(this, node);
+  _printExpressionArguments.call(this, node);
+}
+
 export function PartialNewExpression(
   this: Printer,
   node: t.PartialNewExpression,
@@ -136,8 +160,7 @@ export function PartialNewExpression(
   this.space();
   this.print(node.callee, true);
 
-  this.token("~");
-  _printExpressionArguments.call(this, node);
+  _printPartialArguments.call(this, node);
 }
 
 export function SequenceExpression(this: Printer, node: t.SequenceExpression) {
@@ -232,10 +255,10 @@ export function OptionalPartialCallExpression(
 
   if (node.optional) {
     this.token("?.", true);
+    _resetInnerComments.call(this, node);
   }
 
-  this.token("~");
-  _printExpressionArguments.call(this, node);
+  _printPartialArguments.call(this, node);
 }
 
 export function PartialCallExpression(
@@ -244,8 +267,7 @@ export function PartialCallExpression(
 ) {
   this.print(node.callee, true);
 
-  this.token("~");
-  _printExpressionArguments.call(this, node);
+  _printPartialArguments.call(this, node);
 }
 
 export function Import(this: Printer) {
