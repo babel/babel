@@ -2567,8 +2567,8 @@ export default abstract class ExpressionParser extends LValParser {
 
           // Ensure the function name isn't a forbidden identifier in strict mode, e.g. 'eval'
           // @ts-expect-error id is not defined on ArrowFunctionExpression
-          if (this.state.strict && node.id) {
-            this.checkIdentifier(
+          if (node.id) {
+            this.checkStrictBindReservedWord(
               // @ts-expect-error id is not defined on ArrowFunctionExpression
               node.id,
               BindingFlag.TYPE_OUTSIDE,

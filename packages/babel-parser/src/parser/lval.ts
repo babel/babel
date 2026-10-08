@@ -841,6 +841,22 @@ export default abstract class LValParser extends NodeUtils {
     bindingType: BindingFlag,
     strictModeChanged: boolean = false,
   ) {
+    this.checkStrictBindReservedWord(at, bindingType, strictModeChanged);
+
+    if (bindingType & BindingFlag.FLAG_NO_LET_IN_LEXICAL && at.name === "let") {
+      this.raise(Errors.LetInLexicalBinding, at);
+    }
+
+    if (!(bindingType & BindingFlag.TYPE_NONE)) {
+      this.declareNameFromIdentifier(at, bindingType);
+    }
+  }
+
+  checkStrictBindReservedWord(
+    at: Identifier,
+    bindingType: BindingFlag,
+    strictModeChanged: boolean = false,
+  ) {
     if (
       this.state.strict &&
       (strictModeChanged
@@ -854,14 +870,6 @@ export default abstract class LValParser extends NodeUtils {
           bindingName: at.name,
         });
       }
-    }
-
-    if (bindingType & BindingFlag.FLAG_NO_LET_IN_LEXICAL && at.name === "let") {
-      this.raise(Errors.LetInLexicalBinding, at);
-    }
-
-    if (!(bindingType & BindingFlag.TYPE_NONE)) {
-      this.declareNameFromIdentifier(at, bindingType);
     }
   }
 
