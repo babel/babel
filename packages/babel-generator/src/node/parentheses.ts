@@ -345,6 +345,13 @@ export function TSInstantiationExpression(
     case __node("NewExpression"):
     case __node("TSInstantiationExpression"):
       return parent.typeArguments != null;
+    case __node("MemberExpression"):
+    case __node("OptionalMemberExpression"):
+      // `a<b>.c` is invalid, and `a<b>[0]` is parsed as a comparison
+      return parent.object === node;
+    case __node("TSNonNullExpression"):
+      // `a<b>!` is invalid
+      return true;
   }
 
   return false;
