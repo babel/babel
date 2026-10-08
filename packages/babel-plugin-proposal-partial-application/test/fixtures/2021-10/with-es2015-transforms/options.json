@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["proposal-partial-application", { "version": "2021-10" }],
+    "transform-arrow-functions",
+    "transform-parameters",
+    "transform-spread"
+  ]
+}
