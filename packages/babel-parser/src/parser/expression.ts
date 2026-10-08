@@ -865,7 +865,10 @@ export default abstract class ExpressionParser extends LValParser {
     } else if (
       !noCalls &&
       this.match(tt.tilde) &&
-      !this.hasPrecedingLineBreak()
+      !this.hasPrecedingLineBreak() &&
+      // Check for `~(`, so that `await ~x` outside of async functions is
+      // still parsed as an await expression with a recoverable error
+      this.lookaheadCharCode() === charCodes.leftParenthesis
     ) {
       return this.parsePartialArguments(
         base as N.Expression,
@@ -1110,6 +1113,20 @@ export default abstract class ExpressionParser extends LValParser {
     return args;
   }
 
+  // Eat the `~` of a partial application, which requires version 2021-10
+  parsePartialApplicationTilde(this: Parser): void {
+    this.expectPlugin("partialApplication");
+    const version = this.getPluginOption("partialApplication", "version")!;
+    if (version !== "2021-10") {
+      this.raise(
+        Errors.IncorrectPartialApplicationVersion,
+        this.state.startLoc,
+        { expected: "2021-10", actual: version },
+      );
+    }
+    this.next(); // eat `~`
+  }
+
   parsePartialArguments(
     this: Parser,
     base: N.Expression,
@@ -1117,19 +1134,7 @@ export default abstract class ExpressionParser extends LValParser {
     state: N.ParseSubscriptState,
     optional: boolean,
   ): N.Expression {
-    this.expectPlugin("partialApplication");
-    const partialApplicationVersion = this.getPluginOption(
-      "partialApplication",
-      "version",
-    )!;
-    if (partialApplicationVersion !== "2021-10") {
-      this.raise(
-        Errors.IncorrectPartialApplicationVersion,
-        this.state.startLoc,
-        { expected: "2021-10", actual: partialApplicationVersion },
-      );
-    }
-    this.next(); // eat `~`
+    this.parsePartialApplicationTilde();
     this.expect(tt.parenL);
     const node = this.startNodeAt<
       N.PartialCallExpression | N.OptionalPartialCallExpression
@@ -2037,19 +2042,7 @@ export default abstract class ExpressionParser extends LValParser {
 
     let partial = false;
     if (this.match(tt.tilde) && !this.hasPrecedingLineBreak()) {
-      this.expectPlugin("partialApplication");
-      const partialApplicationVersion = this.getPluginOption(
-        "partialApplication",
-        "version",
-      )!;
-      if (partialApplicationVersion !== "2021-10") {
-        this.raise(
-          Errors.IncorrectPartialApplicationVersion,
-          this.state.startLoc,
-          { expected: "2021-10", actual: partialApplicationVersion },
-        );
-      }
-      this.next(); // eat `~`
+      this.parsePartialApplicationTilde();
       partial = true;
     }
 
@@ -2879,13 +2872,12 @@ export default abstract class ExpressionParser extends LValParser {
       }
       elt = null;
     } else if (this.match(tt.ellipsis)) {
-      if (close === tt.parenR) {
+      if (close === tt.parenR && this.hasPlugin("partialApplication")) {
         const nextChar = this.lookaheadCharCode();
         if (
           nextChar === charCodes.rightParenthesis ||
           nextChar === charCodes.comma
         ) {
-          this.expectPlugin("partialApplication");
           if (!(placeholderFlags & PlaceholderParsingFlags.AllowPlaceholder)) {
             this.raise(Errors.UnexpectedRestPlaceholder, this.state.startLoc);
           } else if (
