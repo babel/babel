@@ -38,6 +38,15 @@ for (const type of Object.keys(parens) as (keyof typeof parens)[]) {
   }
 }
 
+// Whether the parent prints something right after the node, such as `()` in
+// `node()`, `.x` in `node.x` or `!` in `node!`.
+export function hasPostfixPart(node: t.Node, parent: t.Node | null): boolean {
+  return (
+    parent != null &&
+    parens.hasPostfixPart(node, parent, generatorInfosMap.get(parent.type)![1])
+  );
+}
+
 function newCalleeNeedsParens(node: t.Node): boolean {
   let current: t.Node = node;
   while (true) {
