@@ -106,7 +106,8 @@ export function NewExpression(
   if (
     node.arguments.length === 0 &&
     this.tokenMap &&
-    !this.tokenMap.endMatches(node, ")")
+    !this.tokenMap.endMatches(node, ")") &&
+    (!hasPostfixPart(node, parent) || node.extra?.parenthesized)
   ) {
     return;
   }

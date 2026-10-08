@@ -318,5 +318,69 @@ describe("experimental_preserveFormat", () => {
 
       expect(out.code.trimEnd()).toBe(expected.trimEnd());
     });
+
+    it("adds `()` to `new` when a postfix part is added after it", () => {
+      const input = `
+        a = new F;
+        b = new F;
+        c = new F;
+        d = (new F);
+        e = new F;
+      `;
+      const expected = `
+        a = new F().x;
+        b = new F()?.x;
+        c = new F()\`x\`;
+        d = (new F).x;
+        e =g(new F);
+      `;
+
+      const out = babel.transformSync(input, {
+        configFile: false,
+        plugins: [
+          ({ types: t }) => {
+            const wrappers = {
+              a: node => t.memberExpression(node, t.identifier("x")),
+              b: node =>
+                t.optionalMemberExpression(
+                  node,
+                  t.identifier("x"),
+                  false,
+                  true,
+                ),
+              c: node =>
+                t.taggedTemplateExpression(
+                  node,
+                  t.templateLiteral(
+                    [t.templateElement({ raw: "x" }, true)],
+                    [],
+                  ),
+                ),
+              d: node => t.memberExpression(node, t.identifier("x")),
+              e: node => t.callExpression(t.identifier("g"), [node]),
+            };
+            return {
+              visitor: {
+                AssignmentExpression(path) {
+                  const { left, right } = path.node;
+                  path.node.right = wrappers[left.name](right);
+                  path.skip();
+                },
+              },
+            };
+          },
+        ],
+        parserOpts: {
+          createParenthesizedExpressions: true,
+          tokens: true,
+        },
+        generatorOpts: {
+          retainLines: true,
+          experimental_preserveFormat: true,
+        },
+      });
+
+      expect(out.code.trimEnd()).toBe(expected.trimEnd());
+    });
   });
 });
