@@ -380,6 +380,11 @@ export function TSInstantiationExpression(
     case __node("TSNonNullExpression"):
       // `a<b>!` is invalid
       return true;
+    // `f<T>~()` is parsed as a comparison
+    case __node("PartialCallExpression"):
+    case __node("OptionalPartialCallExpression"):
+    case __node("PartialNewExpression"):
+      return parent.callee === node;
   }
 
   return false;
