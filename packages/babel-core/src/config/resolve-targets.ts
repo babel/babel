@@ -27,6 +27,7 @@ export function resolveTargets(options: InputOptions, root: string): Targets {
   const optTargets = options.targets;
   if (
     typeof optTargets === "string" &&
+    optTargets !== "" &&
     options.browserslistConfigFile == null
   ) {
     const cacheKey = `${optTargets}\0${root}\0${options.browserslistEnv ?? ""}`;
