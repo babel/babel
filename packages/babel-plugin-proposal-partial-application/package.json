@@ -18,7 +18,9 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-partial-application": "workspace:^"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
+    "@babel/plugin-syntax-partial-application": "workspace:^",
+    "@babel/plugin-transform-optional-chaining": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0"

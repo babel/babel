@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["proposal-partial-application", { "version": "2021-10" }],
+    "syntax-typescript"
+  ]
+}
