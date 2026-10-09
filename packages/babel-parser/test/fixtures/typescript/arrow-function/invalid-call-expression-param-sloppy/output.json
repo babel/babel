@@ -1,0 +1,385 @@
+{
+  "type": "File",
+  "start":0,"end":137,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":14,"index":137}},
+  "errors": [
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (1:1)",
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (2:1)",
+    "SyntaxError: A binding pattern parameter cannot be optional in an implementation signature. (3:1)",
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (3:1)",
+    "SyntaxError: Unexpected type cast in parameter position. (4:1)",
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (4:1)",
+    "SyntaxError: Unexpected type cast in parameter position. (5:7)",
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (5:7)",
+    "SyntaxError: Unexpected type cast in parameter position. (6:1)",
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (6:1)",
+    "SyntaxError: Unexpected type cast in parameter position. (7:1)",
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (7:1)",
+    "SyntaxError: Unexpected type cast in parameter position. (8:1)",
+    "SyntaxError: Binding invalid left-hand side in function parameter list. (8:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":137,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":14,"index":137}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "CallExpression",
+              "start":1,"end":7,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":7,"index":7}},
+              "callee": {
+                "type": "Identifier",
+                "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2},"identifierName":"a"},
+                "name": "a"
+              },
+              "arguments": [],
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7}},
+                "typeAnnotation": {
+                  "type": "TSTypeReference",
+                  "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              }
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":15,"end":33,"loc":{"start":{"line":2,"column":0,"index":15},"end":{"line":2,"column":18,"index":33}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":15,"end":32,"loc":{"start":{"line":2,"column":0,"index":15},"end":{"line":2,"column":17,"index":32}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "AssignmentPattern",
+              "start":16,"end":26,"loc":{"start":{"line":2,"column":1,"index":16},"end":{"line":2,"column":11,"index":26}},
+              "left": {
+                "type": "CallExpression",
+                "start":16,"end":22,"loc":{"start":{"line":2,"column":1,"index":16},"end":{"line":2,"column":7,"index":22}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":16,"end":17,"loc":{"start":{"line":2,"column":1,"index":16},"end":{"line":2,"column":2,"index":17},"identifierName":"a"},
+                  "name": "a"
+                },
+                "arguments": [],
+                "typeAnnotation": {
+                  "type": "TSTypeAnnotation",
+                  "start":19,"end":22,"loc":{"start":{"line":2,"column":4,"index":19},"end":{"line":2,"column":7,"index":22}},
+                  "typeAnnotation": {
+                    "type": "TSTypeReference",
+                    "start":21,"end":22,"loc":{"start":{"line":2,"column":6,"index":21},"end":{"line":2,"column":7,"index":22}},
+                    "typeName": {
+                      "type": "Identifier",
+                      "start":21,"end":22,"loc":{"start":{"line":2,"column":6,"index":21},"end":{"line":2,"column":7,"index":22},"identifierName":"T"},
+                      "name": "T"
+                    }
+                  }
+                }
+              },
+              "right": {
+                "type": "NumericLiteral",
+                "start":25,"end":26,"loc":{"start":{"line":2,"column":10,"index":25},"end":{"line":2,"column":11,"index":26}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":31,"end":32,"loc":{"start":{"line":2,"column":16,"index":31},"end":{"line":2,"column":17,"index":32}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":34,"end":49,"loc":{"start":{"line":3,"column":0,"index":34},"end":{"line":3,"column":15,"index":49}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":34,"end":48,"loc":{"start":{"line":3,"column":0,"index":34},"end":{"line":3,"column":14,"index":48}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "CallExpression",
+              "start":35,"end":42,"loc":{"start":{"line":3,"column":1,"index":35},"end":{"line":3,"column":8,"index":42}},
+              "callee": {
+                "type": "Identifier",
+                "start":35,"end":36,"loc":{"start":{"line":3,"column":1,"index":35},"end":{"line":3,"column":2,"index":36},"identifierName":"a"},
+                "name": "a"
+              },
+              "arguments": [],
+              "optional": true,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":39,"end":42,"loc":{"start":{"line":3,"column":5,"index":39},"end":{"line":3,"column":8,"index":42}},
+                "typeAnnotation": {
+                  "type": "TSTypeReference",
+                  "start":41,"end":42,"loc":{"start":{"line":3,"column":7,"index":41},"end":{"line":3,"column":8,"index":42}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":41,"end":42,"loc":{"start":{"line":3,"column":7,"index":41},"end":{"line":3,"column":8,"index":42},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              }
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":47,"end":48,"loc":{"start":{"line":3,"column":13,"index":47},"end":{"line":3,"column":14,"index":48}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":50,"end":62,"loc":{"start":{"line":4,"column":0,"index":50},"end":{"line":4,"column":12,"index":62}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":50,"end":61,"loc":{"start":{"line":4,"column":0,"index":50},"end":{"line":4,"column":11,"index":61}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "TSNonNullExpression",
+              "start":51,"end":55,"loc":{"start":{"line":4,"column":1,"index":51},"end":{"line":4,"column":5,"index":55}},
+              "expression": {
+                "type": "CallExpression",
+                "start":51,"end":54,"loc":{"start":{"line":4,"column":1,"index":51},"end":{"line":4,"column":4,"index":54}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":51,"end":52,"loc":{"start":{"line":4,"column":1,"index":51},"end":{"line":4,"column":2,"index":52},"identifierName":"a"},
+                  "name": "a"
+                },
+                "arguments": []
+              }
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":60,"end":61,"loc":{"start":{"line":4,"column":10,"index":60},"end":{"line":4,"column":11,"index":61}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":63,"end":81,"loc":{"start":{"line":5,"column":0,"index":63},"end":{"line":5,"column":18,"index":81}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":63,"end":80,"loc":{"start":{"line":5,"column":0,"index":63},"end":{"line":5,"column":17,"index":80}},
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [
+            {
+              "type": "TSNonNullExpression",
+              "start":70,"end":74,"loc":{"start":{"line":5,"column":7,"index":70},"end":{"line":5,"column":11,"index":74}},
+              "expression": {
+                "type": "CallExpression",
+                "start":70,"end":73,"loc":{"start":{"line":5,"column":7,"index":70},"end":{"line":5,"column":10,"index":73}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":70,"end":71,"loc":{"start":{"line":5,"column":7,"index":70},"end":{"line":5,"column":8,"index":71},"identifierName":"a"},
+                  "name": "a"
+                },
+                "arguments": []
+              }
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":79,"end":80,"loc":{"start":{"line":5,"column":16,"index":79},"end":{"line":5,"column":17,"index":80}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":82,"end":98,"loc":{"start":{"line":6,"column":0,"index":82},"end":{"line":6,"column":16,"index":98}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":82,"end":97,"loc":{"start":{"line":6,"column":0,"index":82},"end":{"line":6,"column":15,"index":97}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "TSAsExpression",
+              "start":83,"end":91,"loc":{"start":{"line":6,"column":1,"index":83},"end":{"line":6,"column":9,"index":91}},
+              "expression": {
+                "type": "CallExpression",
+                "start":83,"end":86,"loc":{"start":{"line":6,"column":1,"index":83},"end":{"line":6,"column":4,"index":86}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":83,"end":84,"loc":{"start":{"line":6,"column":1,"index":83},"end":{"line":6,"column":2,"index":84},"identifierName":"a"},
+                  "name": "a"
+                },
+                "arguments": []
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":90,"end":91,"loc":{"start":{"line":6,"column":8,"index":90},"end":{"line":6,"column":9,"index":91}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":90,"end":91,"loc":{"start":{"line":6,"column":8,"index":90},"end":{"line":6,"column":9,"index":91},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":96,"end":97,"loc":{"start":{"line":6,"column":14,"index":96},"end":{"line":6,"column":15,"index":97}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":99,"end":122,"loc":{"start":{"line":7,"column":0,"index":99},"end":{"line":7,"column":23,"index":122}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":99,"end":121,"loc":{"start":{"line":7,"column":0,"index":99},"end":{"line":7,"column":22,"index":121}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "TSSatisfiesExpression",
+              "start":100,"end":115,"loc":{"start":{"line":7,"column":1,"index":100},"end":{"line":7,"column":16,"index":115}},
+              "expression": {
+                "type": "CallExpression",
+                "start":100,"end":103,"loc":{"start":{"line":7,"column":1,"index":100},"end":{"line":7,"column":4,"index":103}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":100,"end":101,"loc":{"start":{"line":7,"column":1,"index":100},"end":{"line":7,"column":2,"index":101},"identifierName":"a"},
+                  "name": "a"
+                },
+                "arguments": []
+              },
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":114,"end":115,"loc":{"start":{"line":7,"column":15,"index":114},"end":{"line":7,"column":16,"index":115}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":114,"end":115,"loc":{"start":{"line":7,"column":15,"index":114},"end":{"line":7,"column":16,"index":115},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":120,"end":121,"loc":{"start":{"line":7,"column":21,"index":120},"end":{"line":7,"column":22,"index":121}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":123,"end":137,"loc":{"start":{"line":8,"column":0,"index":123},"end":{"line":8,"column":14,"index":137}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":123,"end":136,"loc":{"start":{"line":8,"column":0,"index":123},"end":{"line":8,"column":13,"index":136}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "TSTypeAssertion",
+              "start":124,"end":130,"loc":{"start":{"line":8,"column":1,"index":124},"end":{"line":8,"column":7,"index":130}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":125,"end":126,"loc":{"start":{"line":8,"column":2,"index":125},"end":{"line":8,"column":3,"index":126}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":125,"end":126,"loc":{"start":{"line":8,"column":2,"index":125},"end":{"line":8,"column":3,"index":126},"identifierName":"T"},
+                  "name": "T"
+                }
+              },
+              "expression": {
+                "type": "CallExpression",
+                "start":127,"end":130,"loc":{"start":{"line":8,"column":4,"index":127},"end":{"line":8,"column":7,"index":130}},
+                "callee": {
+                  "type": "Identifier",
+                  "start":127,"end":128,"loc":{"start":{"line":8,"column":4,"index":127},"end":{"line":8,"column":5,"index":128},"identifierName":"a"},
+                  "name": "a"
+                },
+                "arguments": []
+              }
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":135,"end":136,"loc":{"start":{"line":8,"column":12,"index":135},"end":{"line":8,"column":13,"index":136}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}
