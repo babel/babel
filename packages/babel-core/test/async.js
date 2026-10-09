@@ -111,6 +111,16 @@ describe("asynchronicity", () => {
 
       expect(code).toBe(`"success"`);
     });
+
+    it("mjs throwing an error when loaded repeatedly", async () => {
+      process.chdir("config-file-mjs-throws");
+
+      for (let i = 0; i < 2; i++) {
+        await expect(babel.transformAsync("")).rejects.toThrow(
+          "Error thrown by babel.config.mjs",
+        );
+      }
+    });
   });
 
   describe("plugin", () => {
