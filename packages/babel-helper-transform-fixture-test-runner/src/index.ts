@@ -39,7 +39,7 @@ type Module = {
   exports: Record<string, unknown>;
 };
 
-const EXTERNAL_HELPERS_VERSION = "7.100.0";
+const EXTERNAL_HELPERS_VERSION = "8.100.0";
 
 const cachedScripts = flru<{ code: string; cachedData: Buffer | undefined }>(
   10,

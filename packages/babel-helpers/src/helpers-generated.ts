@@ -524,6 +524,19 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
+  // size: 379, gzip size: 277
+  createModuleNsFilter: helper(
+    "8.1.0",
+    'function _createModuleNsFilter(e){return r=>{for(var getter=e=>()=>r[e],t=Object.create(null),n=0;n<e.length;n++){var o=e[n];if(!(o in r))throw new ReferenceError("The requested module does not provide an export named \'"+o+"\'");o in t||Object.defineProperty(t,o,{enumerable:!0,get:getter(o)})}return Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.freeze(t)}}',
+    {
+      globals: ["Object", "ReferenceError", "Symbol"],
+      locals: { _createModuleNsFilter: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_createModuleNsFilter",
+      dependencies: {},
+      internal: false,
+    },
+  ),
   // size: 255, gzip size: 172
   createSuper: helper(
     "7.9.0",
@@ -607,6 +620,23 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_extends",
       dependencies: {},
+      internal: false,
+    },
+  ),
+  // size: 452, gzip size: 279
+  filterModuleNamespace: helper(
+    "8.1.0",
+    'function _filterModuleNamespace(r){var t,e=!1;try{var o=r(function(r){if(Object(r)===r)try{var{exports:o}=r;if(void 0!==o){if(Object(o)!==o)throw new TypeError("import()\'s `exports` must be an object");for(var i of(t=[],o)){if("string"!=typeof i)throw new TypeError("import()\'s `exports` must be strings");t.push(i)}}}catch(r){throw e=!0,r}return r})}catch(r){if(e)return Promise.reject(r);throw r}return t?(t.sort(),o.then(createModuleNsFilter(t))):o}',
+    {
+      globals: ["Object", "TypeError", "Promise"],
+      locals: { _filterModuleNamespace: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_filterModuleNamespace",
+      dependencies: {
+        createModuleNsFilter: [
+          "body.0.body.body.2.argument.consequent.expressions.1.arguments.0.callee",
+        ],
+      },
       internal: false,
     },
   ),
