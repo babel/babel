@@ -2032,6 +2032,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     parseExpressionStatement(
       node: Undone<N.ExpressionStatement>,
       expr: N.Expression,
+      flags: ParseStatementFlag,
     ): N.ExpressionStatement {
       if (expr.type === "Identifier") {
         if (expr.name === "declare") {
@@ -2062,7 +2063,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
-      return super.parseExpressionStatement(node, expr);
+      return super.parseExpressionStatement(node, expr, flags);
     }
 
     // export type

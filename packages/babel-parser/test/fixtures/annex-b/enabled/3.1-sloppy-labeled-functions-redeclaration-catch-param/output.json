@@ -1,0 +1,70 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+  "errors": [
+    "SyntaxError: Identifier 'f' has already been declared. (1:31)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TryStatement",
+        "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+        "block": {
+          "type": "BlockStatement",
+          "start":4,"end":6,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":6,"index":6}},
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start":7,"end":39,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":39,"index":39}},
+          "param": {
+            "type": "Identifier",
+            "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"f"},
+            "name": "f"
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start":17,"end":39,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":39,"index":39}},
+            "body": [
+              {
+                "type": "LabeledStatement",
+                "start":19,"end":37,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":37,"index":37}},
+                "body": {
+                  "type": "FunctionDeclaration",
+                  "start":22,"end":37,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":37,"index":37}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":31,"end":32,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":32,"index":32},"identifierName":"f"},
+                    "name": "f"
+                  },
+                  "generator": false,
+                  "async": false,
+                  "params": [],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":35,"end":37,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":37,"index":37}},
+                    "body": [],
+                    "directives": []
+                  }
+                },
+                "label": {
+                  "type": "Identifier",
+                  "start":19,"end":20,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":20,"index":20},"identifierName":"l"},
+                  "name": "l"
+                }
+              }
+            ],
+            "directives": []
+          }
+        },
+        "finalizer": null
+      }
+    ],
+    "directives": []
+  }
+}
