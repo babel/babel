@@ -222,6 +222,44 @@ describe("@babel/core config loading", () => {
       expect(config).toBe(path.join(cwd, "my-config.js"));
       expect(options.comments).toBe(false);
     });
+
+    // The extension must be taken from the resolved path, since
+    // path.extname("./babel.config") is ".config".
+    it("should load a JS config file from a relative path with a dot but without extension", () => {
+      const cwd = path.join(
+        __dirname,
+        "fixtures",
+        "config-loading",
+        "extensionless",
+      );
+
+      const { options, config } = loadPartialConfigSync({
+        cwd,
+        filename: path.join(cwd, "file.js"),
+        configFile: "./babel.config",
+      });
+
+      expect(config).toBe(path.join(cwd, "babel.config.js"));
+      expect(options.comments).toBe(false);
+    });
+
+    it("should load a JS config file from an absolute path with a dot but without extension", () => {
+      const cwd = path.join(
+        __dirname,
+        "fixtures",
+        "config-loading",
+        "extensionless",
+      );
+
+      const { options, config } = loadPartialConfigSync({
+        cwd,
+        filename: path.join(cwd, "file.js"),
+        configFile: path.join(cwd, "babel.config"),
+      });
+
+      expect(config).toBe(path.join(cwd, "babel.config.js"));
+      expect(options.comments).toBe(false);
+    });
   });
 
   describe("loadPartialConfigAsync", () => {
