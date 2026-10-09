@@ -172,6 +172,38 @@ describe("api", function () {
     expect(babel.tokTypes).toBeDefined();
   });
 
+  it("exposes generate", function () {
+    const ast = babel.parseSync("var foo = 42", {
+      configFile: false,
+      babelrc: false,
+    });
+    babel.traverse(ast, {
+      VariableDeclaration(path) {
+        path.node.kind = "let";
+      },
+    });
+    expect(babel.generate(ast).code).toBe("let foo = 42;");
+    expect(babel.generate(ast, { compact: true }).code).toBe("let foo=42;");
+  });
+
+  it("exposes generate in the plugin API", function () {
+    let code;
+    babel.transformSync("foo(1 + 2)", {
+      configFile: false,
+      babelrc: false,
+      plugins: [
+        api => ({
+          visitor: {
+            CallExpression(path) {
+              code = api.generate(path.node.arguments[0]).code;
+            },
+          },
+        }),
+      ],
+    });
+    expect(code).toBe("1 + 2");
+  });
+
   it("parse throws on undefined callback", () => {
     expect(() => parse("", {})).toThrowErrorMatchingInlineSnapshot(
       `"Starting from Babel 8.0.0, the 'parse' function expects a callback. If you need to call it synchronously, please use 'parseSync'."`,
