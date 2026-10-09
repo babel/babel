@@ -1075,6 +1075,7 @@ export default abstract class ExpressionParser extends LValParser {
   ): N.Expression | N.Super | N.Import {
     const startLoc = this.state.startLoc;
     const isImport = this.match(tt._import);
+    this.state.canStartArrow = false;
     const base = this.parseExprAtom();
     if (isImport && base.type === "ImportExpression") {
       onUnparenthesizedImportExpression(base);
@@ -2890,6 +2891,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     if (!soloAwait) {
+      this.state.canStartArrow = false;
       node.argument = this.parseMaybeUnary(null, true);
     }
 

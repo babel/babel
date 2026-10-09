@@ -1847,6 +1847,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           : this.tsParseType();
       });
       this.expect(tt.gt);
+      this.state.canStartArrow = false;
       node.expression = this.parseMaybeUnary();
       return this.finishNode(node, "TSTypeAssertion");
     }

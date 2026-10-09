@@ -406,6 +406,7 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
 
         // ts-eslint/tsc does not support <const> in tsx mode
         "typescript/cast/as-const/input.ts",
+        "typescript/cast/type-assertion-parenthesized-arrow/input.ts",
         "typescript/types/const-type-parameters/input.ts",
 
         // ts-eslint/tsc does not support <T> cast in tsx mode
