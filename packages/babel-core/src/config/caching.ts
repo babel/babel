@@ -85,14 +85,18 @@ export function makeStrongCacheSync<ArgT, ResultT, SideChannel>(
  *       a. RETURN the cached value
  *   3. If there is a FinishLock associated to the current "arg" parameter representing a valid cache,
  *       a. Wait for that lock to be released
- *       b. RETURN the value associated with that lock
+ *       b. RETURN the value associated with that lock, or THROW the error associated with it
  *   5. Start executing the function to be cached
  *       a. If it pauses on a promise, then
  *           i. Let FinishLock be a new lock
  *          ii. Store FinishLock as associated to the current "arg" parameter
  *         iii. Wait for the function to finish executing
- *          iv. Release FinishLock
- *           v. Send the function result to anyone waiting on FinishLock
+ *          iv. If the function throws an error, then
+ *               - Remove FinishLock, so that the next call executes the function again
+ *               - Send the error to anyone waiting on FinishLock
+ *               - THROW the error, without storing it in the cache
+ *           v. Release FinishLock
+ *          vi. Send the function result to anyone waiting on FinishLock
  *   6. Store the result in the cache
  *   7. RETURN the result
  */
@@ -131,9 +135,19 @@ function makeCachedFunction<ArgT, ResultT, SideChannel>(
     let value: ResultT;
 
     if (isIterableIterator(handlerResult)) {
-      value = yield* onFirstPause(handlerResult, () => {
-        finishLock = setupAsyncLocks(cache, futureCache, arg);
-      });
+      try {
+        value = yield* onFirstPause(handlerResult, () => {
+          finishLock = setupAsyncLocks(cache, futureCache, arg);
+        });
+      } catch (error) {
+        // Remove the lock so that the next call runs the handler again, and
+        // propagate the error to the callers that are waiting for the lock.
+        if (finishLock!) {
+          futureCache.delete(arg);
+          finishLock.reject(error);
+        }
+        throw error;
+      }
     } else {
       value = handlerResult;
     }
@@ -400,15 +414,30 @@ class Lock<T> {
   released: boolean = false;
   promise: Promise<T>;
   _resolve: undefined | ((value: T) => void);
+  _reject: undefined | ((error: unknown) => void);
 
   constructor() {
-    this.promise = new Promise(resolve => {
+    this.promise = new Promise((resolve, reject) => {
       this._resolve = resolve;
+      this._reject = reject;
     });
   }
 
   release(value: T) {
     this.released = true;
     this._resolve!(value);
+  }
+
+  reject(error: unknown) {
+    this.released = true;
+    // The call that owns the lock rethrows the error itself, and only the
+    // concurrent calls waiting for the lock (see getCachedValueOrWait) listen
+    // to this promise. When there are no such calls, rejecting it would be
+    // reported as an unhandled rejection, which crashes Node.js even though
+    // the error has already been handled by the caller. The no-op handler only
+    // marks the promise as handled: the waiting calls, if any, still receive
+    // the error through their own handlers.
+    this.promise.catch(() => {});
+    this._reject!(error);
   }
 }
