@@ -11,7 +11,7 @@ import path from "node:path";
 import getTargets, {
   type InputTargets,
 } from "@babel/helper-compilation-targets";
-import flru from "flru";
+
 import type { Targets } from "@babel/helper-compilation-targets";
 
 export function resolveBrowserslistConfigFile(
@@ -21,27 +21,7 @@ export function resolveBrowserslistConfigFile(
   return path.resolve(configFileDir, browserslistConfigFile);
 }
 
-const targetsCache = flru<Targets>(64);
-
 export function resolveTargets(options: InputOptions, root: string): Targets {
-  const optTargets = options.targets;
-  if (
-    typeof optTargets === "string" &&
-    optTargets !== "" &&
-    options.browserslistConfigFile == null
-  ) {
-    const cacheKey = `${optTargets}\0${root}\0${options.browserslistEnv ?? ""}`;
-    let resolved = targetsCache.get(cacheKey);
-    if (resolved === undefined) {
-      resolved = resolveTargetsImpl(options, root);
-      targetsCache.set(cacheKey, resolved);
-    }
-    return { ...resolved };
-  }
-  return resolveTargetsImpl(options, root);
-}
-
-function resolveTargetsImpl(options: InputOptions, root: string): Targets {
   const optTargets = options.targets;
   let targets: InputTargets;
 
