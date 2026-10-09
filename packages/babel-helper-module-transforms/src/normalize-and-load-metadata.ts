@@ -186,7 +186,7 @@ export default function normalizeModuleAndLoadMetadata(
         ? sources
         : new Map(
             [...sources].map(([key, value]) => [
-              new URL(key, new URL(filename, "https://localhost").href)
+              new URL(key, new URL(filename, "file:///").href)
                 .pathname,
               value,
             ]),
