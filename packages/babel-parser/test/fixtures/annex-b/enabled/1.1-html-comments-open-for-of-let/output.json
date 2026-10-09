@@ -1,0 +1,125 @@
+{
+  "type": "File",
+  "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":10,"index":53}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":10,"index":53}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":10,"index":26}},
+        "await": false,
+        "left": {
+          "type": "VariableDeclaration",
+          "start":5,"end":19,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":2,"column":3,"index":19}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":16,"end":19,"loc":{"start":{"line":2,"column":0,"index":16},"end":{"line":2,"column":3,"index":19}},
+              "id": {
+                "type": "ArrayPattern",
+                "start":16,"end":19,"loc":{"start":{"line":2,"column":0,"index":16},"end":{"line":2,"column":3,"index":19}},
+                "elements": [
+                  {
+                    "type": "Identifier",
+                    "start":17,"end":18,"loc":{"start":{"line":2,"column":1,"index":17},"end":{"line":2,"column":2,"index":18},"identifierName":"a"},
+                    "name": "a"
+                  }
+                ]
+              },
+              "init": null,
+              "leadingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " c",
+                  "start":9,"end":15,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":15,"index":15}}
+                }
+              ]
+            }
+          ],
+          "kind": "let"
+        },
+        "right": {
+          "type": "Identifier",
+          "start":23,"end":24,"loc":{"start":{"line":2,"column":7,"index":23},"end":{"line":2,"column":8,"index":24},"identifierName":"b"},
+          "name": "b"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":25,"end":26,"loc":{"start":{"line":2,"column":9,"index":25},"end":{"line":2,"column":10,"index":26}}
+        }
+      },
+      {
+        "type": "ForOfStatement",
+        "start":27,"end":53,"loc":{"start":{"line":3,"column":0,"index":27},"end":{"line":4,"column":10,"index":53}},
+        "await": false,
+        "left": {
+          "type": "VariableDeclaration",
+          "start":32,"end":46,"loc":{"start":{"line":3,"column":5,"index":32},"end":{"line":4,"column":3,"index":46}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":43,"end":46,"loc":{"start":{"line":4,"column":0,"index":43},"end":{"line":4,"column":3,"index":46}},
+              "id": {
+                "type": "ObjectPattern",
+                "start":43,"end":46,"loc":{"start":{"line":4,"column":0,"index":43},"end":{"line":4,"column":3,"index":46}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":44,"end":45,"loc":{"start":{"line":4,"column":1,"index":44},"end":{"line":4,"column":2,"index":45}},
+                    "key": {
+                      "type": "Identifier",
+                      "start":44,"end":45,"loc":{"start":{"line":4,"column":1,"index":44},"end":{"line":4,"column":2,"index":45},"identifierName":"a"},
+                      "name": "a"
+                    },
+                    "computed": false,
+                    "method": false,
+                    "shorthand": true,
+                    "value": {
+                      "type": "Identifier",
+                      "start":44,"end":45,"loc":{"start":{"line":4,"column":1,"index":44},"end":{"line":4,"column":2,"index":45},"identifierName":"a"},
+                      "name": "a"
+                    }
+                  }
+                ]
+              },
+              "init": null,
+              "leadingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " c",
+                  "start":36,"end":42,"loc":{"start":{"line":3,"column":9,"index":36},"end":{"line":3,"column":15,"index":42}}
+                }
+              ]
+            }
+          ],
+          "kind": "let"
+        },
+        "right": {
+          "type": "Identifier",
+          "start":50,"end":51,"loc":{"start":{"line":4,"column":7,"index":50},"end":{"line":4,"column":8,"index":51},"identifierName":"b"},
+          "name": "b"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":52,"end":53,"loc":{"start":{"line":4,"column":9,"index":52},"end":{"line":4,"column":10,"index":53}}
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " c",
+      "start":9,"end":15,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":15,"index":15}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " c",
+      "start":36,"end":42,"loc":{"start":{"line":3,"column":9,"index":36},"end":{"line":3,"column":15,"index":42}}
+    }
+  ]
+}

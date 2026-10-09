@@ -1,0 +1,52 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":6,"index":17}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":6,"index":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":6,"index":17}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":11,"end":16,"loc":{"start":{"line":2,"column":0,"index":11},"end":{"line":2,"column":5,"index":16}},
+            "id": {
+              "type": "Identifier",
+              "start":11,"end":12,"loc":{"start":{"line":2,"column":0,"index":11},"end":{"line":2,"column":1,"index":12},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":15,"end":16,"loc":{"start":{"line":2,"column":4,"index":15},"end":{"line":2,"column":5,"index":16}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            },
+            "leadingComments": [
+              {
+                "type": "CommentLine",
+                "value": " c",
+                "start":4,"end":10,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":10,"index":10}}
+              }
+            ]
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " c",
+      "start":4,"end":10,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":10,"index":10}}
+    }
+  ]
+}
