@@ -2246,7 +2246,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             return super.parseFunctionStatement(
               node,
               /* async */ false,
-              /* isHangingDeclaration */ false,
+              ParseStatementFlag.AllowDeclaration,
             );
           case tt._class:
             // While this is also set by tsTryParseDeclare, we need to set it
