@@ -117,7 +117,7 @@ function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
         file.opts.wrapPluginVisitorMethod,
       );
 
-    traverse(file.ast.program, visitor, file.scope, null, file.path, true);
+    file.path.parentPath.traverse(visitor);
 
     for (const [plugin, pass] of passPairs) {
       if (plugin.post) {

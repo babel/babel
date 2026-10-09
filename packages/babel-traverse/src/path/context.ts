@@ -1,12 +1,15 @@
 // This file contains methods responsible for maintaining a TraversalContext.
 
 import { SHOULD_SKIP, SHOULD_STOP } from "./index.ts";
-import type TraversalContext from "../context.ts";
 import type NodePath from "./index.ts";
-import type { ExplodedVisitor, TraverseOptions } from "../types.ts";
 import * as t from "@babel/types";
+import Scope from "../scope/index.ts";
 
-export function _call(this: NodePath, fns?: Function[]): boolean {
+export function _call(
+  this: NodePath,
+  fns: Function[] | undefined,
+  state: any,
+): boolean {
   if (!fns) return false;
 
   for (const fn of fns) {
@@ -15,7 +18,7 @@ export function _call(this: NodePath, fns?: Function[]): boolean {
     const node = this.node;
     if (!node) return true;
 
-    const ret = fn.call(this.state, this, this.state);
+    const ret = fn.call(state, this, state);
     if (ret && typeof ret === "object" && typeof ret.then === "function") {
       throw new Error(
         `You appear to be using a plugin with an async traversal visitor, ` +
@@ -47,10 +50,7 @@ export function skip(this: NodePath) {
 }
 
 export function skipKey(this: NodePath, key: string) {
-  if (this.skipKeys == null) {
-    this.skipKeys = {};
-  }
-  this.skipKeys[key] = true;
+  (this.skipKeys ??= []).push(key);
 }
 
 export function stop(this: NodePath) {
@@ -58,7 +58,28 @@ export function stop(this: NodePath) {
   this._traverseFlags |= SHOULD_SKIP | SHOULD_STOP;
 }
 
-export function _forceSetScope(this: NodePath) {
+export function setScope(this: NodePath) {
+  const ctx = this.context;
+  if (ctx.opts.noScope) return;
+
+  const isScope = this.isScope();
+  if (isScope && this.scope?.block === this.node) {
+    this.scope.init();
+    return this.scope;
+  }
+
+  const target = getScopeParent.call(this);
+
+  if (isScope) {
+    const scope = new Scope(this, target);
+    this.scope = scope;
+    this.scope.init();
+    return scope;
+  }
+  this.scope = target!;
+}
+
+export function getScopeParent(this: NodePath): Scope | undefined {
   let path = this.parentPath;
 
   if (
@@ -77,60 +98,7 @@ export function _forceSetScope(this: NodePath) {
     path = path.parentPath;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  this.scope = this.getScope(target!);
-  this.scope?.init();
-}
-
-export function setScope(this: NodePath<t.Node | null>) {
-  if (this.opts?.noScope) return;
-
-  let path = this.parentPath;
-
-  if (
-    // Skip method scope if is computed method key or decorator expression
-    ((this.key === "key" || this.listKey === "decorators") &&
-      path.isMethod()) ||
-    // Skip switch scope if for discriminant (`x` in `switch (x) {}`).
-    (this.key === "discriminant" && path.isSwitchStatement())
-  ) {
-    path = path.parentPath;
-  }
-
-  let target;
-  while (path && !target) {
-    if (path.opts?.noScope) return;
-
-    target = path.scope;
-    path = path.parentPath;
-  }
-
-  // @ts-expect-error getScope does not accept NodePath<null> as this
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  this.scope = this.getScope(target!);
-  this.scope?.init();
-}
-
-export function setContext<S = unknown>(
-  this: NodePath<t.Node | null>,
-  context?: TraversalContext<S>,
-) {
-  if (this.skipKeys != null) {
-    this.skipKeys = {};
-  }
-  // this.shouldSkip = false; this.shouldStop = false; this.removed = false;
-  this._traverseFlags = 0;
-
-  if (context) {
-    this.context = context as TraversalContext;
-    this.state = context.state;
-    // Discard the S type parameter from context.opts
-    this.opts = context.opts as TraverseOptions & ExplodedVisitor<unknown>;
-  }
-
-  setScope.call(this);
-
-  return this;
+  return target;
 }
 
 /**
@@ -141,10 +109,6 @@ export function setContext<S = unknown>(
 
 export function resync(this: NodePath<t.Node | null>) {
   if (this.removed) return;
-
-  if (this.parentPath) {
-    this.parent = this.parentPath.node;
-  }
 
   if (this.parent && this.inList) {
     // @ts-expect-error this.listKey should present in this.parent
@@ -166,8 +130,11 @@ export function resync(this: NodePath<t.Node | null>) {
     if (Array.isArray(this.container)) {
       key = this.container.indexOf(this.node!);
     } else {
-      for (key of Object.keys(this.container)) {
-        if (this.container[key as keyof typeof this.container] === this.node) {
+      for (const candidate of Object.keys(this.container)) {
+        if (
+          this.container[candidate as keyof typeof this.container] === this.node
+        ) {
+          key = candidate;
           break;
         }
       }
@@ -181,28 +148,11 @@ export function resync(this: NodePath<t.Node | null>) {
   }
 }
 
-export function popContext(this: NodePath<t.Node | null>) {
-  this.contexts.pop();
-  if (this.contexts.length > 0) {
-    this.setContext(this.contexts[this.contexts.length - 1]);
-  } else {
-    this.setContext(undefined);
-  }
-}
-
-export function pushContext(
-  this: NodePath<t.Node | null>,
-  context: TraversalContext,
-) {
-  this.contexts.push(context);
-  this.setContext(context);
-}
-
 export function setup(
   this: NodePath,
   parentPath: NodePath | undefined | null,
   container: t.Node | t.Node[],
-  listKey: string | undefined | null,
+  listKey: string | null,
   key: string | number,
 ) {
   this.listKey = listKey;
@@ -217,48 +167,32 @@ function _setKey(this: NodePath<t.Node | null>, key: string | number) {
   this.node =
     // @ts-expect-error this.key must present in this.container
     this.container[this.key];
-  this.type = this.node?.type ?? null;
 }
 
-export function requeue(this: NodePath<t.Node | null>, pathToQueue = this) {
-  if (pathToQueue.removed) return;
+export function requeue(
+  this: NodePath<t.Node | null>,
+  target: NodePath<t.Node | null> = this,
+) {
+  if (target.removed || !target.node) return;
+  target.shouldSkip = false;
 
-  // If a path is skipped, and then replaced with a
-  // new one, the new one shouldn't probably be skipped.
-
-  pathToQueue.shouldSkip = false;
-
-  // TODO(loganfsmyth): This should be switched back to queue in parent contexts
-  // automatically once #2892 and #4135 have been resolved. See #4140.
-  // let contexts = this._getQueueContexts();
-  const contexts = this.contexts;
-
-  for (const context of contexts) {
-    context.maybeQueue(pathToQueue);
+  const frame = this._visitFrame;
+  if (frame?.parentPath) {
+    (frame.priorityQueue ??= []).push(target);
   }
 }
 
 export function requeueComputedKeyAndDecorators(
   this: NodePath<t.Method | t.Property>,
 ) {
-  const { context, node } = this;
+  const { node } = this;
+  const queue = this._visitFrame!.queue;
   if (!t.isPrivate(node) && node.computed) {
-    context.maybeQueue(this.get("key"));
+    queue.push(this.get("key"));
   }
   if (node.decorators) {
     for (const decorator of this.get("decorators")) {
-      context.maybeQueue(decorator);
+      queue.push(decorator);
     }
   }
-}
-
-export function _getQueueContexts(this: NodePath<t.Node | null>) {
-  let path = this;
-  let contexts = this.contexts;
-  while (!contexts.length) {
-    path = path.parentPath;
-    if (!path) break;
-    contexts = path.contexts;
-  }
-  return contexts;
 }

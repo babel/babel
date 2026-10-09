@@ -54,9 +54,5 @@ function toStatement(node: t.Node, ignore?: boolean): t.Statement | false {
     }
   }
 
-  // @ts-expect-error manipulating node.type
-  node.type = newType;
-
-  // @ts-expect-error todo(flow->ts) refactor to avoid type unsafe mutations like reassigning node type above
-  return node;
+  return { ...node, type: newType } as t.Statement;
 }
