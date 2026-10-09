@@ -67,6 +67,12 @@ import type Parser from "./index.ts";
 import { OptionFlags, type SourceType } from "../options.ts";
 import { createExportedTokens } from "./statement.ts";
 
+export const enum PlaceholderParsingFlags {
+  None = 0,
+  AllowPlaceholder = 1 << 0,
+  UseVersion2018_07 = 1 << 1,
+}
+
 export default abstract class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
   abstract parseBlock(
@@ -798,6 +804,17 @@ export default abstract class ExpressionParser extends LValParser {
         state,
         optional,
       );
+    } else if (
+      !noCalls &&
+      this.match(tt.tilde) &&
+      !this.hasPrecedingLineBreak()
+    ) {
+      return this.parsePartialArguments(
+        base as N.Expression,
+        startLoc,
+        state,
+        optional,
+      );
     } else {
       const computed = this.eat(tt.bracketL);
       if (computed || optional || this.eat(tt.dot)) {
@@ -921,7 +938,10 @@ export default abstract class ExpressionParser extends LValParser {
       node.arguments = this.parseCallExpressionArguments();
     } else {
       node.arguments = this.parseCallExpressionArguments(
-        base.type !== "Super",
+        PlaceholderParsingFlags.UseVersion2018_07 |
+          (base.type !== "Super"
+            ? PlaceholderParsingFlags.AllowPlaceholder
+            : PlaceholderParsingFlags.None),
         node,
         refExpressionErrors,
       );
@@ -1003,9 +1023,71 @@ export default abstract class ExpressionParser extends LValParser {
     );
   }
 
+  finishPartialCallExpression<
+    T extends N.PartialCallExpression | N.OptionalPartialCallExpression,
+  >(node: Undone<T>, optional: boolean): T {
+    return this.finishNode(
+      node,
+      optional ? "OptionalPartialCallExpression" : "PartialCallExpression",
+    );
+  }
+
+  // Parse the arguments of `f~(...)` or `new F~(...)` after the `(`
+  parsePartialCallArguments(
+    this: Parser,
+  ): N.PartialCallExpression["arguments"] {
+    const args = this.parseCallExpressionArguments(
+      PlaceholderParsingFlags.AllowPlaceholder,
+    );
+    this.toReferencedList(args);
+    let seenRestPlaceholder = false;
+    for (const arg of args as N.PartialCallExpression["arguments"]) {
+      if (arg.type === "RestPlaceholder") {
+        if (seenRestPlaceholder) {
+          this.raise(Errors.DuplicateRestPlaceholder, arg);
+        }
+        seenRestPlaceholder = true;
+      }
+    }
+    return args;
+  }
+
+  parsePartialArguments(
+    this: Parser,
+    base: N.Expression,
+    startLoc: Position,
+    state: N.ParseSubscriptState,
+    optional: boolean,
+  ): N.Expression {
+    this.expectPlugin("partialApplication");
+    const partialApplicationVersion = this.getPluginOption(
+      "partialApplication",
+      "version",
+    )!;
+    if (partialApplicationVersion !== "2021-10") {
+      this.raise(
+        Errors.IncorrectPartialApplicationVersion,
+        this.state.startLoc,
+        { expected: "2021-10", actual: partialApplicationVersion },
+      );
+    }
+    this.next(); // eat `~`
+    this.expect(tt.parenL);
+    const node = this.startNodeAt<
+      N.PartialCallExpression | N.OptionalPartialCallExpression
+    >(startLoc);
+    node.callee = base;
+    const { optionalChainMember } = state;
+    if (optionalChainMember) {
+      (node as Undone<N.OptionalPartialCallExpression>).optional = optional;
+    }
+    node.arguments = this.parsePartialCallArguments();
+    return this.finishPartialCallExpression(node, optionalChainMember);
+  }
+
   parseCallExpressionArguments(
     this: Parser,
-    allowPlaceholder?: boolean,
+    placeholderFlags?: PlaceholderParsingFlags,
     nodeForExtra?: Undone<N.Node> | null,
     refExpressionErrors?: ExpressionErrors | null,
   ): (N.Expression | N.SpreadElement)[] {
@@ -1031,7 +1113,7 @@ export default abstract class ExpressionParser extends LValParser {
           tt.parenR,
           false,
           refExpressionErrors,
-          allowPlaceholder,
+          placeholderFlags,
         ),
       );
     }
@@ -1852,7 +1934,9 @@ export default abstract class ExpressionParser extends LValParser {
     return node;
   }
 
-  parseNewOrNewTarget(this: Parser): N.NewExpression | N.MetaProperty {
+  parseNewOrNewTarget(
+    this: Parser,
+  ): N.NewExpression | N.PartialNewExpression | N.MetaProperty {
     const node = this.startNode<N.NewExpression | N.MetaProperty>();
     this.next();
     if (this.match(tt.dot)) {
@@ -1875,7 +1959,9 @@ export default abstract class ExpressionParser extends LValParser {
       return metaProp;
     }
 
-    return this.parseNew(node as Undone<N.NewExpression>);
+    return this.parseNew(
+      node as Undone<N.NewExpression | N.PartialNewExpression>,
+    );
   }
 
   // New's precedence is slightly tricky. It must allow its argument to
@@ -1884,22 +1970,56 @@ export default abstract class ExpressionParser extends LValParser {
   // argument to parseSubscripts to prevent it from consuming the
   // argument list.
   // https://tc39.es/ecma262/#prod-NewExpression
-  parseNew(this: Parser, node: Undone<N.NewExpression>): N.NewExpression {
+  parseNew(
+    this: Parser,
+    node: Undone<N.NewExpression | N.PartialNewExpression>,
+  ): N.NewExpression | N.PartialNewExpression {
     this.parseNewCallee(node);
 
+    let partial = false;
+    if (this.match(tt.tilde) && !this.hasPrecedingLineBreak()) {
+      this.expectPlugin("partialApplication");
+      const partialApplicationVersion = this.getPluginOption(
+        "partialApplication",
+        "version",
+      )!;
+      if (partialApplicationVersion !== "2021-10") {
+        this.raise(
+          Errors.IncorrectPartialApplicationVersion,
+          this.state.startLoc,
+          { expected: "2021-10", actual: partialApplicationVersion },
+        );
+      }
+      this.next(); // eat `~`
+      partial = true;
+    }
+
     if (this.eat(tt.parenL)) {
-      const args = this.parseExprList(tt.parenR);
-      this.toReferencedList(args);
-      // (parseExprList should be all non-null in this case)
-      node.arguments = args as N.Expression[];
+      if (partial) {
+        node.arguments = this.parsePartialCallArguments();
+      } else {
+        const args = this.parseExprList(tt.parenR);
+        this.toReferencedList(args);
+        // (parseExprList should be all non-null in this case)
+        node.arguments = args as N.Expression[];
+      }
     } else {
+      if (partial) {
+        this.raise(Errors.PartialNewHasNoArguments, node);
+      }
       node.arguments = [];
     }
 
-    return this.finishNode(node, "NewExpression");
+    return this.finishNode(
+      node,
+      partial ? "PartialNewExpression" : "NewExpression",
+    );
   }
 
-  parseNewCallee(this: Parser, node: Undone<N.NewExpression>): void {
+  parseNewCallee(
+    this: Parser,
+    node: Undone<N.NewExpression | N.PartialNewExpression>,
+  ): void {
     const callee = this.parseNoCallExpr(base => {
       this.raise(Errors.ImportCallNotNewExpression, base, base);
     });
@@ -2663,25 +2783,26 @@ export default abstract class ExpressionParser extends LValParser {
     close: TokenType,
     allowEmpty?: boolean,
     refExpressionErrors?: ExpressionErrors | null,
-    allowPlaceholder?: boolean | null,
+    placeholderFlags?: PlaceholderParsingFlags,
   ): N.Expression | null;
   parseExprListItem(
     this: Parser,
     close: TokenType,
     allowEmpty?: false,
     refExpressionErrors?: ExpressionErrors | null,
-    allowPlaceholder?: boolean | null,
+    placeholderFlags?: PlaceholderParsingFlags | null,
   ): N.Expression;
   parseExprListItem(
     this: Parser,
     close: TokenType,
     allowEmpty?: boolean | null,
     refExpressionErrors?: ExpressionErrors | null,
-    allowPlaceholder?: boolean | null,
+    placeholderFlags: PlaceholderParsingFlags = PlaceholderParsingFlags.None,
   ):
     | N.Expression
     | N.SpreadElement
     | N.ArgumentPlaceholder
+    | N.RestPlaceholder
     | N.VoidPattern
     | N.AssignmentPattern
     | N.TSTypeCastExpression
@@ -2695,20 +2816,59 @@ export default abstract class ExpressionParser extends LValParser {
       }
       elt = null;
     } else if (this.match(tt.ellipsis)) {
+      if (close === tt.parenR) {
+        const nextChar = this.lookaheadCharCode();
+        if (
+          nextChar === charCodes.rightParenthesis ||
+          nextChar === charCodes.comma
+        ) {
+          this.expectPlugin("partialApplication");
+          if (!(placeholderFlags & PlaceholderParsingFlags.AllowPlaceholder)) {
+            this.raise(Errors.UnexpectedRestPlaceholder, this.state.startLoc);
+          } else if (
+            placeholderFlags & PlaceholderParsingFlags.UseVersion2018_07
+          ) {
+            // Rest placeholders were introduced in 2021-10, where they are
+            // only valid in `~(` argument lists
+            if (
+              this.getPluginOption("partialApplication", "version") ===
+              "2018-07"
+            ) {
+              this.raise(
+                Errors.IncorrectPartialApplicationVersion,
+                this.state.startLoc,
+                { expected: "2021-10", actual: "2018-07" },
+              );
+            } else {
+              this.raise(Errors.UnexpectedRestPlaceholder, this.state.startLoc);
+            }
+          }
+          return this.parseRestPlaceholder();
+        }
+      }
       const spreadNodeStartLoc = this.state.startLoc;
-
       elt = this.parseParenItem(
         this.parseSpread(refExpressionErrors),
         spreadNodeStartLoc,
       );
     } else if (this.match(tt.question)) {
       this.expectPlugin("partialApplication");
-      if (!allowPlaceholder) {
+      const isCallWithoutTilde = !!(
+        placeholderFlags & PlaceholderParsingFlags.UseVersion2018_07
+      );
+      // Without `~(`, only version 2018-07 allows `?`. Don't suggest
+      // switching to 2018-07 here: the same call may use 2021-10-only
+      // syntax, such as `f(?, ...)`.
+      const allowed =
+        !!(placeholderFlags & PlaceholderParsingFlags.AllowPlaceholder) &&
+        (!isCallWithoutTilde ||
+          this.getPluginOption("partialApplication", "version") === "2018-07");
+      if (!allowed) {
         this.raise(Errors.UnexpectedArgumentPlaceholder, this.state.startLoc);
       }
-      const node = this.startNode<N.ArgumentPlaceholder>();
-      this.next();
-      elt = this.finishNode(node, "ArgumentPlaceholder");
+      // Placeholder ordinals were introduced in 2021-10. When the placeholder
+      // itself is unexpected, its ordinal isn't reported again.
+      return this.parseArgumentPlaceholder(allowed && isCallWithoutTilde);
     } else {
       elt = this.parseMaybeAssignAllowInOrVoidPattern(
         close,
@@ -3155,6 +3315,36 @@ export default abstract class ExpressionParser extends LValParser {
       }
     }
     return this.parseMaybeAssignAllowIn(refExpressionErrors, isParenItem);
+  }
+
+  parseArgumentPlaceholder(disallowOrdinal: boolean): N.ArgumentPlaceholder {
+    const node = this.startNode<N.ArgumentPlaceholder>();
+    this.next(); // eat `?`
+    if (this.match(tt.num)) {
+      if (disallowOrdinal) {
+        this.raise(
+          Errors.IncorrectPartialApplicationVersion,
+          this.state.startLoc,
+          { expected: "2021-10", actual: "2018-07" },
+        );
+      }
+      const ordinal = this.parseNumericLiteral(this.state.value);
+      if (!this.isDecimalIntegerLiteral(ordinal)) {
+        this.raise(
+          Errors.ArgumentPlaceholderOrdinalMustBeDecimalInteger,
+          ordinal,
+          this.getLiteralRaw(ordinal),
+        );
+      }
+      node.ordinal = ordinal;
+    }
+    return this.finishNode(node, "ArgumentPlaceholder");
+  }
+
+  parseRestPlaceholder(): N.RestPlaceholder {
+    const node = this.startNode<N.RestPlaceholder>();
+    this.next(); // eat `...`
+    return this.finishNode(node, "RestPlaceholder");
   }
 
   // Used in Flow plugin

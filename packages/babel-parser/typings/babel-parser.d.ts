@@ -72,7 +72,7 @@ type ParserPluginWithOptions =
 type PluginConfig = Plugin$1 | ParserPluginWithOptions;
 
 interface PartialApplicationPluginOptions {
-  version: "2018-07";
+  version: "2018-07" | "2021-10";
 }
 
 interface PipelineOperatorPluginOptions {
@@ -216,7 +216,6 @@ type ErrorInfoCompressed = {
   SuperNotAllowed: [];
   SuperPrivateField: [];
   TrailingDecorator: [];
-  UnexpectedArgumentPlaceholder: [];
   UnexpectedDigitAfterHash: [];
   UnexpectedImportExport: [];
   UnexpectedKeyword: [{ keyword: string }];
