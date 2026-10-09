@@ -46,6 +46,8 @@ function newCalleeNeedsParens(node: t.Node): boolean {
       case "ImportExpression":
       case "OptionalCallExpression":
       case "OptionalMemberExpression":
+      case "PartialCallExpression":
+      case "OptionalPartialCallExpression":
         return true;
       case "MemberExpression":
         current = current.object;
@@ -69,6 +71,7 @@ function templateTagNeedsParens(node: t.Node): boolean {
     switch (current.type) {
       case "OptionalCallExpression":
       case "OptionalMemberExpression":
+      case "OptionalPartialCallExpression":
         return true;
       case "TSInstantiationExpression":
       case "TSNonNullExpression":
@@ -87,6 +90,7 @@ export function parentNeedsParens(
 ): boolean {
   switch (parentId) {
     case __node("NewExpression"):
+    case __node("PartialNewExpression"):
       if (parent.callee === node) {
         return newCalleeNeedsParens(node);
       }

@@ -322,7 +322,10 @@ export function assertOptionalChainStart<T extends t.Node>(): Validator<T> {
     let current = node;
     while (node) {
       const { type } = current;
-      if (type === "OptionalCallExpression") {
+      if (
+        type === "OptionalCallExpression" ||
+        type === "OptionalPartialCallExpression"
+      ) {
         if (current.optional) return;
         current = current.callee;
         continue;
