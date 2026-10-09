@@ -483,11 +483,8 @@ export default (superClass: typeof Parser) =>
         // callee isn't optional in the type definition
         // @ts-expect-error delete non-optional properties
         delete node.callee;
-      } else if (node.type === "OptionalCallExpression") {
-        this.castNodeTo(node, "CallExpression");
       } else {
-        // @ts-expect-error ESTree AST: optional is not defined on CallExpression
-        node.optional = false;
+        this.toESTreeCall(node);
       }
 
       return node;
@@ -497,13 +494,27 @@ export default (superClass: typeof Parser) =>
       T extends N.PartialCallExpression | N.OptionalPartialCallExpression,
     >(unfinished: Undone<T>, optional: boolean): T {
       const node = super.finishPartialCallExpression(unfinished, optional);
-      if (node.type === "OptionalPartialCallExpression") {
+      this.toESTreeCall(node);
+      return node;
+    }
+
+    // ESTree has no optional call types: a call in an optional chain keeps
+    // the type of a regular call, and has an `optional` property
+    toESTreeCall(
+      node:
+        | N.CallExpression
+        | N.OptionalCallExpression
+        | N.PartialCallExpression
+        | N.OptionalPartialCallExpression,
+    ): void {
+      if (node.type === "OptionalCallExpression") {
+        this.castNodeTo(node, "CallExpression");
+      } else if (node.type === "OptionalPartialCallExpression") {
         this.castNodeTo(node, "PartialCallExpression");
       } else {
         // @ts-expect-error ESTree AST: optional is not defined on CallExpression
         node.optional = false;
       }
-      return node;
     }
 
     parseExport(

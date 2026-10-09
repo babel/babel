@@ -405,7 +405,7 @@ export default abstract class UtilParser extends Tokenizer {
     return node.extra.raw;
   }
 
-  // https://tc39.es/ecma262/#prod-DecimalLiteral
+  // https://tc39.es/ecma262/#prod-DecimalIntegerLiteral
   // Unlike the spec, this routine also rejects the NonOctalDecimalIntegerLiteral production
   isDecimalIntegerLiteral(node: NumericLiteral): boolean {
     const raw = this.getLiteralRaw(node);
