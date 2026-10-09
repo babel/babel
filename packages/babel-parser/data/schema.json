@@ -201,6 +201,7 @@
               "functionSent",
               "jsx",
               "moduleBlocks",
+              "namespaceImportFilter",
               "partialApplication",
               "pipelineOperator",
               "placeholders",

@@ -211,6 +211,70 @@ describe("path/introspection", function () {
       const reference = program.get("body.1.expression");
       expect(reference.referencesImport("source", "*")).toBe(false);
     });
+    it("rejects a named import via a type-only namespace import member expression", () => {
+      const program = getPath(
+        `import type * as react from "react"; react.memo;`,
+        { sourceType: "module", plugins: ["typescript"] },
+      );
+      const reference = program.get("body.1.expression");
+      expect(reference.referencesImport("react", "memo")).toBe(false);
+    });
+
+    describe("filtered namespace", function () {
+      const options = {
+        sourceType: "module",
+        plugins: ["namespaceImportFilter"],
+      };
+
+      it("rejects a filtered namespace import as a full namespace", function () {
+        const program = getPath(
+          `import { dep } as ns from "source"; ns;`,
+          options,
+        );
+        const reference = program.get("body.1.expression");
+        expect(reference.referencesImport("source", "*")).toBe(false);
+      });
+      it("accepts a filtered name via a member expression", function () {
+        const program = getPath(
+          `import { dep, "😅" } as ns from "source"; ns.dep; ns["😅"];`,
+          options,
+        );
+        expect(
+          program.get("body.1.expression").referencesImport("source", "dep"),
+        ).toBe(true);
+        expect(
+          program.get("body.2.expression").referencesImport("source", "😅"),
+        ).toBe(true);
+      });
+      it("rejects a name not in the filter via a member expression", function () {
+        const program = getPath(
+          `import { dep } as ns from "source"; ns.other;`,
+          options,
+        );
+        const reference = program.get("body.1.expression");
+        expect(reference.referencesImport("source", "other")).toBe(false);
+      });
+      it("rejects a filtered name from the wrong module", function () {
+        const program = getPath(
+          `import { dep } as ns from "wrong-source"; ns.dep;`,
+          options,
+        );
+        const reference = program.get("body.1.expression");
+        expect(reference.referencesImport("source", "dep")).toBe(false);
+      });
+      it("rejects a filtered name via a type-only import", function () {
+        const program = getPath(
+          `import type { memo } as react from "react"; react; react.memo;`,
+          { ...options, plugins: ["typescript", "namespaceImportFilter"] },
+        );
+        expect(
+          program.get("body.1.expression").referencesImport("react", "memo"),
+        ).toBe(false);
+        expect(
+          program.get("body.2.expression").referencesImport("react", "memo"),
+        ).toBe(false);
+      });
+    });
   });
 
   describe("_guessExecutionStatusRelativeTo", function () {

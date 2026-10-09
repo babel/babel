@@ -20,6 +20,11 @@ export default declare(api => {
             "Transforming `export defer ... from '...'` is not supported yet.",
           );
         }
+        if (specifiers[index].exportsFilter) {
+          throw path.buildCodeFrameError(
+            "Transforming `export { x, y } as ns from '...'` is not supported yet.",
+          );
+        }
 
         const nodes = [];
 
