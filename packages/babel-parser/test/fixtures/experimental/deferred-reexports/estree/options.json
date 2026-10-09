@@ -1,0 +1,8 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "deferredReexports",
+    "deferredImportEvaluation",
+    "estree"
+  ]
+}
