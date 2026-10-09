@@ -1,4 +1,3 @@
 {
-  "plugins": [["transform-block-scoping", { "throwIfClosureRequired": true }]],
   "throws": "Compiling let/const in this block would add a closure (throwIfClosureRequired)."
 }

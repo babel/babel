@@ -1,2 +1,4 @@
 * text eol=lf
 /.yarn/** linguist-vendored
+
+.github/workflows/*.lock.yml linguist-generated=true

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-import-defer",
-  "version": "7.24.7",
+  "version": "8.0.1",
   "description": "Allow parsing of the `import defer` syntax in import statement",
   "repository": {
     "type": "git",
@@ -19,33 +19,15 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ],
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ]
-  },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",

@@ -1,0 +1,6 @@
+{
+  "sourceType": "module",
+  "parserOpts": {
+    "allowSuperOutsideMethod": true
+  }
+}

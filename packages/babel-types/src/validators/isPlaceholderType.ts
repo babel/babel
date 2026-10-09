@@ -9,13 +9,8 @@ export default function isPlaceholderType(
 ): boolean {
   if (placeholderType === targetType) return true;
 
-  const aliases: Array<string> | undefined =
-    PLACEHOLDERS_ALIAS[placeholderType];
-  if (aliases) {
-    for (const alias of aliases) {
-      if (targetType === alias) return true;
-    }
-  }
+  const aliases: string[] | undefined = PLACEHOLDERS_ALIAS[placeholderType];
+  if (aliases?.includes(targetType)) return true;
 
   return false;
 }

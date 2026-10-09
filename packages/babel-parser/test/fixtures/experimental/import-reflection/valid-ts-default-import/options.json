@@ -1,4 +1,0 @@
-{
-  "plugins": ["importReflection", "typescript"],
-  "sourceType": "module"
-}

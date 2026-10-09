@@ -1,9 +1,9 @@
 import { types as t } from "@babel/core";
 import type { PluginPass, Scope } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
-import template from "@babel/template";
 
 export interface Options {
+  /** @deprecated Use the `setComputedProperties` assumption instead. */
   loose?: boolean;
 }
 
@@ -16,21 +16,15 @@ type PropertyInfo = {
   state: PluginPass;
 };
 
-if (!process.env.BABEL_8_BREAKING) {
-  // eslint-disable-next-line no-var
-  var DefineAccessorHelper = template.expression.ast`
-    function (type, obj, key, fn) {
-      var desc = { configurable: true, enumerable: true };
-      desc[type] = fn;
-      return Object.defineProperty(obj, key, desc);
-    }
-  `;
-  // @ts-expect-error undocumented _compact node property
-  DefineAccessorHelper._compact = true;
-}
-
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  if ("loose" in options) {
+    console.warn(
+      "@babel/plugin-transform-computed-properties: The 'loose' option has been deprecated, " +
+        "use the 'setComputedProperties' assumption instead (https://babeljs.io/assumptions).",
+    );
+  }
 
   const setComputedProperties =
     api.assumption("setComputedProperties") ?? options.loose;
@@ -49,35 +43,14 @@ export default declare((api, options: Options) => {
       !prop.computed && t.isIdentifier(prop.key)
         ? t.stringLiteral(prop.key.name)
         : prop.key;
-    const fn = getValue(prop);
-    if (process.env.BABEL_8_BREAKING) {
-      return t.callExpression(state.addHelper("defineAccessor"), [
-        t.stringLiteral(type),
-        obj,
-        key,
-        fn,
-      ]);
-    } else {
-      let helper: t.Identifier;
-      if (state.availableHelper("defineAccessor")) {
-        helper = state.addHelper("defineAccessor");
-      } else {
-        // Fallback for @babel/helpers <= 7.20.6, manually add helper function
-        const file = state.file;
-        helper = file.get("fallbackDefineAccessorHelper");
-        if (!helper) {
-          const id = file.scope.generateUidIdentifier("defineAccessor");
-          file.scope.push({
-            id,
-            init: DefineAccessorHelper,
-          });
-          file.set("fallbackDefineAccessorHelper", (helper = id));
-        }
-        helper = t.cloneNode(helper);
-      }
+    const fn = getValue(prop)!;
 
-      return t.callExpression(helper, [t.stringLiteral(type), obj, key, fn]);
-    }
+    return t.callExpression(state.addHelper("defineAccessor"), [
+      t.stringLiteral(type),
+      obj,
+      key,
+      fn,
+    ]);
   }
 
   /**
@@ -115,7 +88,7 @@ export default declare((api, options: Options) => {
             prop.key,
             prop.computed || t.isLiteral(prop.key),
           ),
-          getValue(prop),
+          getValue(prop)!,
         ),
       ),
     );
@@ -150,8 +123,8 @@ export default declare((api, options: Options) => {
     // To prevent too deep AST structures in case of large objects
     const CHUNK_LENGTH_CAP = 10;
 
-    let currentChunk: t.ObjectMember[] = null;
-    const computedPropsChunks: Array<t.ObjectMember[]> = [];
+    let currentChunk: t.ObjectMember[] | null = null;
+    const computedPropsChunks: t.ObjectMember[][] = [];
     for (const prop of computedProps) {
       if (!currentChunk || currentChunk.length === CHUNK_LENGTH_CAP) {
         currentChunk = [];
@@ -177,7 +150,7 @@ export default declare((api, options: Options) => {
             // PrivateName must not be in ObjectExpression
             t.toComputedKey(prop) as t.Expression,
             // the value of ObjectProperty in ObjectExpression must be an expression
-            getValue(prop),
+            getValue(prop)!,
           ]);
         }
       }

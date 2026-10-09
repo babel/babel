@@ -1,0 +1,96 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":0,"end":1,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":1,"index":1},"identifierName":"x"},
+              "name": "x"
+            }
+          ],
+          "body": {
+            "type": "BinaryExpression",
+            "start":5,"end":26,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":26,"index":26}},
+            "left": {
+              "type": "Identifier",
+              "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"x"},
+              "name": "x"
+            },
+            "operator": "|>",
+            "right": {
+              "type": "ArrowFunctionExpression",
+              "start":10,"end":26,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":26,"index":26}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"y"},
+                  "name": "y"
+                }
+              ],
+              "body": {
+                "type": "TemplateLiteral",
+                "start":15,"end":26,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":26,"index":26}},
+                "expressions": [
+                  {
+                    "type": "BinaryExpression",
+                    "start":18,"end":24,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":24,"index":24}},
+                    "left": {
+                      "type": "Identifier",
+                      "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"y"},
+                      "name": "y"
+                    },
+                    "operator": "|>",
+                    "right": {
+                      "type": "Identifier",
+                      "start":23,"end":24,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":24,"index":24},"identifierName":"x"},
+                      "name": "x"
+                    }
+                  }
+                ],
+                "quasis": [
+                  {
+                    "type": "TemplateElement",
+                    "start":16,"end":16,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":16,"index":16}},
+                    "value": {
+                      "raw": "",
+                      "cooked": ""
+                    },
+                    "tail": false
+                  },
+                  {
+                    "type": "TemplateElement",
+                    "start":25,"end":25,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":25,"index":25}},
+                    "value": {
+                      "raw": "",
+                      "cooked": ""
+                    },
+                    "tail": true
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

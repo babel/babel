@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "names": [],
+  "sources": [
+    "source-maps/block/input.js"
+  ],
+  "sourcesContent": [
+    "{\n  using x = fn();\n  doSomethingWith(x);\n}"
+  ],
+  "mappings": "AAAA;EAAA;EACE,MAAM,CAAC,eAAG,EAAE,CAAC,CAAC;EACd,eAAe,CAAC,CAAC,CAAC;AAAC;EAAA;AAAA;EAAA;AAAA",
+  "ignoreList": []
+}

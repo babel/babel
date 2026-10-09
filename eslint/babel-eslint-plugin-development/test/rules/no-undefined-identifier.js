@@ -1,8 +1,10 @@
-import rule from "../../lib/rules/no-undefined-identifier.cjs";
+import plugin from "../../lib/index.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
 
+const rule = plugin.rules["no-undefined-identifier"];
+
 const error =
-  "Use path.scope.buildUndefinedNode() to create an undefined identifier directly.";
+  "Use t.buildUndefinedNode() to create an undefined identifier directly.";
 
 const ruleTester = new RuleTester();
 
@@ -13,7 +15,7 @@ ruleTester.run("no-undefined-identifier", rule, {
     `import * as t from "lib"; t.identifier("undefined");`,
     `function f(_) { _.types.identifier("undefined"); }`,
     `import * as t from "@babel/types"; t.identifier("not_undefined");`,
-    `path.scope.buildUndefinedNode();`,
+    `t.buildUndefinedNode();`,
   ],
   invalid: [
     {

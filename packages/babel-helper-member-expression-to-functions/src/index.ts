@@ -5,6 +5,7 @@ import {
   assignmentExpression,
   binaryExpression,
   booleanLiteral,
+  buildUndefinedNode,
   callExpression,
   cloneNode,
   conditionalExpression,
@@ -37,7 +38,7 @@ class AssignmentMemoiser {
   get(key: t.Expression) {
     if (!this.has(key)) return;
 
-    const record = this._map.get(key);
+    const record = this._map.get(key)!;
     const { value } = record;
 
     record.count--;
@@ -68,7 +69,7 @@ function toNonOptional(
     if (path.node.optional && callee.isOptionalMemberExpression()) {
       // object must be a conditional expression because the optional private access in object has been transformed
       const object = callee.node.object as t.ConditionalExpression;
-      const context = path.scope.maybeGenerateMemoised(object);
+      const context = path.scope.maybeGenerateMemoised(object)!;
       callee
         .get("object")
         .replaceWith(assignmentExpression("=", context, object));
@@ -115,7 +116,7 @@ function isInDetachedTree(path: NodePath) {
 
 type Member = NodePath<t.OptionalMemberExpression | t.MemberExpression>;
 
-const handle = {
+const handler = {
   memoise() {
     // noop.
   },
@@ -229,9 +230,8 @@ const handle = {
       // here we use a function to wrap `parentIsOptionalCall` to get type
       // for parent, do not use it anywhere else
       // See https://github.com/microsoft/TypeScript/issues/10421
-      const isOptionalCall = (
-        parent: t.Node,
-      ): parent is t.OptionalCallExpression => parentIsOptionalCall;
+      const isOptionalCall = (_: t.Node): _ is t.OptionalCallExpression =>
+        parentIsOptionalCall;
       // if parentIsCall is true, it implies that node.extra.parenthesized is always true
       const parentIsCall = parentPath.isCallExpression({ callee: node });
       startingOptional.replaceWith(toNonOptional(startingOptional, baseRef));
@@ -244,10 +244,7 @@ const handle = {
       } else if (parentIsCall) {
         // `(a?.#b)()` to `(a == null ? void 0 : a.#b.bind(a))()`
         member.replaceWith(this.boundGet(member));
-      } else if (
-        (process.env.BABEL_8_BREAKING || this.delete) &&
-        parentPath.isUnaryExpression({ operator: "delete" })
-      ) {
+      } else if (parentPath.isUnaryExpression({ operator: "delete" })) {
         parentPath.replaceWith(this.delete(member));
       } else if (parentPath.isAssignmentExpression()) {
         // `a?.#b = c` to `(a == null ? void 0 : a.#b = c)`
@@ -257,7 +254,7 @@ const handle = {
       }
 
       let regular: t.Expression = member.node;
-      for (let current: NodePath = member; current !== endPath; ) {
+      for (let current: NodePath = member; current !== endPath;) {
         const parentPath = current.parentPath as NodePath<t.Expression>;
         // skip transforming `Foo.#BAR?.call(FOO)`
         if (
@@ -272,7 +269,7 @@ const handle = {
         current = parentPath;
       }
 
-      let context: t.Identifier;
+      let context: t.Identifier | undefined;
       const endParentPath = endPath.parentPath as NodePath<t.Expression>;
       if (
         isMemberExpression(regular) &&
@@ -282,13 +279,12 @@ const handle = {
         })
       ) {
         const { object } = regular;
-        context = member.scope.maybeGenerateMemoised(object);
+        context = member.scope.maybeGenerateMemoised(object)!;
         if (context) {
           regular.object = assignmentExpression(
             "=",
             context,
             // object must not be Super when `context` is an identifier
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             object as t.Expression,
           );
         }
@@ -317,11 +313,7 @@ const handle = {
           nonNullishCheck = logicalExpression(
             "&&",
             binaryExpression("!==", baseMemoised, nullLiteral()),
-            binaryExpression(
-              "!==",
-              cloneNode(baseRef),
-              scope.buildUndefinedNode(),
-            ),
+            binaryExpression("!==", cloneNode(baseRef), buildUndefinedNode()),
           );
         }
         replacementPath.replaceWith(
@@ -335,20 +327,14 @@ const handle = {
           nullishCheck = logicalExpression(
             "||",
             binaryExpression("===", baseMemoised, nullLiteral()),
-            binaryExpression(
-              "===",
-              cloneNode(baseRef),
-              scope.buildUndefinedNode(),
-            ),
+            binaryExpression("===", cloneNode(baseRef), buildUndefinedNode()),
           );
         }
 
         replacementPath.replaceWith(
           conditionalExpression(
             nullishCheck,
-            isDeleteOperation
-              ? booleanLiteral(true)
-              : scope.buildUndefinedNode(),
+            isDeleteOperation ? booleanLiteral(true) : buildUndefinedNode(),
             regular,
           ),
         );
@@ -387,7 +373,7 @@ const handle = {
       // Give the state handler a chance to memoise the member, since we'll
       // reference it twice. The second access (the set) should do the memo
       // assignment.
-      this.memoise(member, 2);
+      this.memoise!(member, 2);
 
       const ref = scope.generateUidIdentifierBasedOnNode(node);
       scope.push({ id: ref });
@@ -461,10 +447,7 @@ const handle = {
     }
 
     // delete MEMBER -> _delete(MEMBER)
-    if (
-      (process.env.BABEL_8_BREAKING || this.delete) &&
-      parentPath.isUnaryExpression({ operator: "delete" })
-    ) {
+    if (parentPath.isUnaryExpression({ operator: "delete" })) {
       parentPath.replaceWith(this.delete(member));
       return;
     }
@@ -532,7 +515,7 @@ function handleAssignment(
       // Give the state handler a chance to memoise the member, since we'll
       // reference it twice. The first access (the get) should do the memo
       // assignment.
-      state.memoise(member, 1);
+      state.memoise!(member, 1);
       parentPath.replaceWith(
         logicalExpression(
           operatorTrunc as t.LogicalExpression["operator"],
@@ -542,7 +525,7 @@ function handleAssignment(
       );
     } else {
       // Here, the second access (the set) is evaluated first.
-      state.memoise(member, 2);
+      state.memoise!(member, 2);
       parentPath.replaceWith(
         state.set(
           member,
@@ -606,11 +589,11 @@ export interface HandlerState<State = object> extends Handler<State> {
 // called when the member is a self-referential update.
 export default function memberExpressionToFunctions<CustomState extends object>(
   path: NodePath,
-  visitor: Visitor<HandlerState<CustomState>>,
+  visitor: Visitor<HandlerState<CustomState> & CustomState>,
   state: Handler<CustomState> & CustomState,
 ) {
   path.traverse(visitor, {
-    ...handle,
+    ...handler,
     ...state,
     memoiser: new AssignmentMemoiser(),
   });

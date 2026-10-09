@@ -1,4 +1,3 @@
 {
-  "plugins": ["importAttributes"],
   "importAttributesKeyword": "with"
 }

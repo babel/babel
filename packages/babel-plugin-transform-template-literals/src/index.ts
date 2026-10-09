@@ -2,11 +2,19 @@ import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t, type NodePath } from "@babel/core";
 
 export interface Options {
+  /** @deprecated Use the `ignoreToPrimitiveHint` and `mutableTemplateObject` assumptions instead. */
   loose?: boolean;
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  if ("loose" in options) {
+    console.warn(
+      "@babel/plugin-transform-template-literals: The 'loose' option has been deprecated, " +
+        "use the `ignoreToPrimitiveHint` and `mutableTemplateObject` assumptions instead (https://babeljs.io/assumptions).",
+    );
+  }
 
   const ignoreToPrimitiveHint =
     api.assumption("ignoreToPrimitiveHint") ?? options.loose;
@@ -69,9 +77,7 @@ export default declare((api, options: Options) => {
         for (const elem of quasi.quasis) {
           const { raw, cooked } = elem.value;
           const value =
-            cooked == null
-              ? path.scope.buildUndefinedNode()
-              : t.stringLiteral(cooked);
+            cooked == null ? t.buildUndefinedNode() : t.stringLiteral(cooked);
 
           strings.push(value);
           raws.push(t.stringLiteral(raw));
@@ -105,8 +111,8 @@ export default declare((api, options: Options) => {
       },
 
       TemplateLiteral(path) {
-        // Skip TemplateLiteral in TSLiteralType
         if (path.parent.type === "TSLiteralType") {
+          // Skip TemplateLiteral in TSLiteralType
           return;
         }
         const nodes: t.Expression[] = [];

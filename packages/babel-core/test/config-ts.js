@@ -1,36 +1,17 @@
-import { loadPartialConfigSync } from "../lib/index.js";
-import path from "path";
-import semver from "semver";
-import { USE_ESM, commonJS } from "$repo-utils";
+import { loadPartialConfigSync, loadPartialConfigAsync } from "../lib/index.js";
+import path from "node:path";
+import { commonJS } from "$repo-utils";
 
-const { __dirname, require } = commonJS(import.meta.url);
+const { __dirname } = commonJS(import.meta.url);
 
-// We skip older versions of node testing for two reasons.
-// 1. ts-node and ts don't support the old version of node.
-// 2. In the old version of node, jest has been registered in `require.extensions`, which will cause babel to disable the transforming as expected.
-// TODO: Make it work with USE_ESM.
-const shouldSkip = semver.lt(process.version, "14.0.0") || USE_ESM;
-
-(shouldSkip ? describe : describe.skip)(
-  "@babel/core config with ts [dummy]",
-  () => {
-    it("dummy", () => {
-      expect(1).toBe(1);
-    });
-  },
-);
-
-(shouldSkip ? describe.skip : describe)("@babel/core config with ts", () => {
-  it("should work with simple .cts", () => {
+describe("@babel/core config with ts", () => {
+  it("should search for .cts config files", () => {
     const config = loadPartialConfigSync({
-      configFile: path.join(
-        __dirname,
-        "fixtures/config-ts/simple-cts/babel.config.cts",
-      ),
+      root: path.join(__dirname, "fixtures/config-ts/simple-cts-no-modules"),
     });
 
     expect(config.options.targets).toMatchInlineSnapshot(`
-      Object {
+      {
         "node": "12.0.0",
       }
     `);
@@ -38,57 +19,110 @@ const shouldSkip = semver.lt(process.version, "14.0.0") || USE_ESM;
     expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });
 
-  it("should throw with invalid .ts register", () => {
-    require.extensions[".ts"] = () => {
-      throw new Error("Not support .ts.");
-    };
-    try {
-      expect(() => {
-        loadPartialConfigSync({
-          configFile: path.join(
-            __dirname,
-            "fixtures/config-ts/invalid-cts-register/babel.config.cts",
-          ),
-        });
-      }).toThrow(/Unexpected identifier.*/);
-    } finally {
-      delete require.extensions[".ts"];
-    }
+  it("should support .cts when available natively", () => {
+    const config = loadPartialConfigSync({
+      configFile: path.join(
+        __dirname,
+        "fixtures/config-ts/simple-cts-no-modules/babel.config.cts",
+      ),
+    });
+
+    expect(config.options.targets).toMatchInlineSnapshot(`
+      {
+        "node": "12.0.0",
+      }
+    `);
+
+    expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });
 
-  it("should work with ts-node", async () => {
-    const service = require("ts-node").register({
-      experimentalResolver: true,
-      compilerOptions: {
-        module: "CommonJS",
-      },
-    });
-    service.enabled(true);
-
-    try {
-      require(
-        path.join(
-          __dirname,
-          "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
-        ),
-      );
-
-      const config = loadPartialConfigSync({
+  it("should use native TS support for .cts when available", () => {
+    expect(() => {
+      loadPartialConfigSync({
         configFile: path.join(
           __dirname,
-          "fixtures/config-ts/simple-cts-with-ts-node/babel.config.cts",
+          "fixtures/config-ts/simple-cts-modules/babel.config.cts",
         ),
       });
+    }).toThrow(/import equals declaration is not supported in strip-only mode/);
+  });
 
-      expect(config.options.targets).toMatchInlineSnapshot(`
-        Object {
-          "node": "12.0.0",
-        }
-      `);
+  it("should search for .ts config files", () => {
+    const config = loadPartialConfigSync({
+      root: path.join(__dirname, "fixtures/config-ts/simple-ts-cjs"),
+    });
 
-      expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
-    } finally {
-      service.enabled(false);
-    }
+    expect(config.options.targets).toMatchInlineSnapshot(`
+      {
+        "node": "12.0.0",
+      }
+    `);
+
+    expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
+  });
+
+  it("should use native TS support for .ts (cjs) when available", () => {
+    const config = loadPartialConfigSync({
+      configFile: path.join(
+        __dirname,
+        "fixtures/config-ts/simple-ts-cjs/babel.config.ts",
+      ),
+    });
+
+    expect(config.options.targets).toMatchInlineSnapshot(`
+      {
+        "node": "12.0.0",
+      }
+    `);
+
+    expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
+  });
+
+  it("should use native TS support for .ts (esm) when available", async () => {
+    const config = await loadPartialConfigAsync({
+      configFile: path.join(
+        __dirname,
+        "fixtures/config-ts/simple-ts-esm/babel.config.ts",
+      ),
+    });
+
+    expect(config.options.targets).toMatchInlineSnapshot(`
+      {
+        "node": "12.0.0",
+      }
+    `);
+
+    expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
+  });
+
+  it("should use native TS support for .mts when available", () => {
+    const config = loadPartialConfigSync({
+      configFile: path.join(
+        __dirname,
+        "fixtures/config-ts/simple-mts-modules/babel.config.mts",
+      ),
+    });
+
+    expect(config.options.targets).toMatchInlineSnapshot(`
+      {
+        "node": "12.0.0",
+      }
+    `);
+
+    expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
+  });
+
+  it("should search for .mts config files", () => {
+    const config = loadPartialConfigSync({
+      root: path.join(__dirname, "fixtures/config-ts/simple-mts-modules"),
+    });
+
+    expect(config.options.targets).toMatchInlineSnapshot(`
+      {
+        "node": "12.0.0",
+      }
+    `);
+
+    expect(config.options.sourceRoot).toMatchInlineSnapshot(`"/a/b"`);
   });
 });

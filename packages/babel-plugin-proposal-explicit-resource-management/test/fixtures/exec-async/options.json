@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    "proposal-explicit-resource-management",
-    "transform-optional-catch-binding",
-    "transform-async-to-generator"
-  ],
-  "parserOpts": { "allowReturnOutsideFunction": true }
-}

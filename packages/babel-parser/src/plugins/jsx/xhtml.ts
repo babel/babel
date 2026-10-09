@@ -1,7 +1,5 @@
-const entities: {
-  __proto__: null;
-  [name: string]: string;
-} = {
+const entities: Record<string, string> = {
+  // @ts-expect-error __proto__ is not an actual property: https://github.com/microsoft/TypeScript/issues/38385
   __proto__: null,
   quot: "\u0022",
   amp: "&",

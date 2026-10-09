@@ -1,7 +1,6 @@
 import * as babel from "../lib/index.js";
-import path from "path";
-import { fileURLToPath } from "url";
-import { itGte } from "$repo-utils";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 describe("addon resolution", function () {
   const base = path.join(
@@ -340,7 +339,6 @@ describe("addon resolution", function () {
     });
   });
 
-  // TODO(Babel 8): remove node version check.
   it("should throw about module: usage for presets", function () {
     process.chdir("throw-module-paths");
 
@@ -351,13 +349,7 @@ describe("addon resolution", function () {
         presets: ["foo"],
       });
     }).toThrow(
-      // Todo(Babel 8): remove node checks in this file. We cannot test the desired behaviour
-      // because Jest 24 has an issue on setting the MODULE_NOT_FOUND error when the native
-      // `require.resolve` is provided.
-      // see https://github.com/babel/babel/pull/12439/files#r535996000
-      parseInt(process.versions.node, 10) <= 10
-        ? /Cannot (?:find|resolve) module 'babel-preset-foo'/
-        : /Cannot (?:find|resolve) module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/s,
+      /Cannot (?:find|resolve) module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/s,
     );
   });
 
@@ -371,9 +363,7 @@ describe("addon resolution", function () {
         plugins: ["foo"],
       });
     }).toThrow(
-      parseInt(process.versions.node, 10) <= 10
-        ? /Cannot (?:find|resolve) module 'babel-plugin-foo'/
-        : /Cannot (?:find|resolve) module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/s,
+      /Cannot (?:find|resolve) module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/s,
     );
   });
 
@@ -387,9 +377,7 @@ describe("addon resolution", function () {
         presets: ["foo"],
       });
     }).toThrow(
-      parseInt(process.versions.node, 10) <= 10
-        ? /Cannot (?:find|resolve) module 'babel-preset-foo'/
-        : /Cannot (?:find|resolve) module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/s,
+      /Cannot (?:find|resolve) module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/s,
     );
   });
 
@@ -403,9 +391,7 @@ describe("addon resolution", function () {
         plugins: ["foo"],
       });
     }).toThrow(
-      parseInt(process.versions.node, 10) <= 10
-        ? /Cannot (?:find|resolve) module 'babel-plugin-foo'/
-        : /Cannot (?:find|resolve) module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/s,
+      /Cannot (?:find|resolve) module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/s,
     );
   });
 
@@ -419,9 +405,7 @@ describe("addon resolution", function () {
         presets: ["testplugin"],
       });
     }).toThrow(
-      parseInt(process.versions.node, 10) <= 10
-        ? /Cannot (?:find|resolve) module 'babel-preset-testplugin'/
-        : /Cannot (?:find|resolve) module 'babel-preset-testplugin'.*\n- Did you accidentally pass a plugin as a preset\?/s,
+      /Cannot (?:find|resolve) module 'babel-preset-testplugin'.*\n- Did you accidentally pass a plugin as a preset\?/s,
     );
   });
 
@@ -435,9 +419,7 @@ describe("addon resolution", function () {
         plugins: ["testpreset"],
       });
     }).toThrow(
-      parseInt(process.versions.node, 10) <= 10
-        ? /Cannot (?:find|resolve) module 'babel-plugin-testpreset'/
-        : /Cannot (?:find|resolve) module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a preset as a plugin\?/s,
+      /Cannot (?:find|resolve) module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a preset as a plugin\?/s,
     );
   });
 
@@ -465,25 +447,20 @@ describe("addon resolution", function () {
     }).toThrow(/Cannot (?:find|resolve) module 'babel-plugin-foo'/);
   });
 
-  const nodeGte12 = itGte("12.0.0");
+  it("should suggest -transform- as an alternative to -proposal-", function () {
+    process.chdir("throw-proposal-to-transform");
 
-  nodeGte12(
-    "should suggest -transform- as an alternative to -proposal-",
-    function () {
-      process.chdir("throw-proposal-to-transform");
-
-      expect(() => {
-        babel.transformSync("", {
-          filename: "filename.js",
-          configFile: false,
-          plugins: ["@babel/proposal-halting-functions"],
-        });
-      }).toThrow(
-        /Cannot (?:find|resolve) module '@babel\/plugin-proposal-halting-functions'.*\n- Did you mean "@babel\/plugin-transform-halting-functions"\?/s,
-      );
-    },
-  );
-  nodeGte12("should respect package.json#exports", async function () {
+    expect(() => {
+      babel.transformSync("", {
+        filename: "filename.js",
+        configFile: false,
+        plugins: ["@babel/proposal-halting-functions"],
+      });
+    }).toThrow(
+      /Cannot (?:find|resolve) module '@babel\/plugin-proposal-halting-functions'.*\n- Did you mean "@babel\/plugin-transform-halting-functions"\?/s,
+    );
+  });
+  it("should respect package.json#exports", async function () {
     process.chdir("pkg-exports");
 
     expect(
@@ -505,5 +482,21 @@ describe("addon resolution", function () {
         })
       ).code,
     ).toBe(`"ESM"`);
+  });
+
+  it("resolvePreset", function () {
+    expect(
+      babel.resolvePreset("@babel/foo", path.join(base, "babel-org-paths")),
+    ).toMatch(
+      /babel-org-paths[\\/]node_modules[\\/]@babel[\\/]preset-foo[\\/]index.js/,
+    );
+  });
+
+  it("resolvePlugin", function () {
+    expect(
+      babel.resolvePlugin("@babel/foo", path.join(base, "babel-org-paths")),
+    ).toMatch(
+      /babel-org-paths[\\/]node_modules[\\/]@babel[\\/]plugin-foo[\\/]index.js/,
+    );
   });
 });

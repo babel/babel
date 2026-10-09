@@ -1,1 +1,0 @@
-The smart-mix pipe operator is deprecated. Use "proposal": "hack" instead.

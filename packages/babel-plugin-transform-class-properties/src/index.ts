@@ -11,7 +11,7 @@ export interface Options {
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   return createClassFeaturePlugin({
     name: "transform-class-properties",
@@ -19,12 +19,5 @@ export default declare((api, options: Options) => {
     api,
     feature: FEATURES.fields,
     loose: options.loose,
-
-    manipulateOptions(opts, parserOpts) {
-      if (!process.env.BABEL_8_BREAKING) {
-        // @ts-ignore(Babel 7 vs Babel 8) These plugins have been removed
-        parserOpts.plugins.push("classProperties", "classPrivateProperties");
-      }
-    },
   });
 });

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-optional-chaining",
-  "version": "7.24.8",
+  "version": "8.0.5",
   "description": "Transform optional chaining operators into a series of nil checks",
   "repository": {
     "type": "git",
@@ -18,11 +18,10 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
-    "@babel/plugin-syntax-optional-chaining": "condition:BABEL_8_BREAKING ? : ^7.8.3"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
@@ -31,27 +30,9 @@
     "@babel/traverse": "workspace:^"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ],
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ]
-  },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",

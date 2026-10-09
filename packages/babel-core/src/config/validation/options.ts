@@ -1,7 +1,6 @@
 import type { InputTargets, Targets } from "@babel/helper-compilation-targets";
 
 import type { ConfigItem } from "../item.ts";
-import type Plugin from "../plugin.ts";
 
 import removed from "./removed.ts";
 import {
@@ -32,51 +31,47 @@ import type {
   OptionPath,
 } from "./option-assertions.ts";
 import type { UnloadedDescriptor } from "../config-descriptors.ts";
-import type { PluginAPI } from "../helpers/config-api.ts";
 import type { ParserOptions } from "@babel/parser";
 import type { GeneratorOptions } from "@babel/generator";
+import type { VisitWrapper } from "@babel/traverse";
 import ConfigError from "../../errors/config-error.ts";
+import type { PluginObject } from "./plugins.ts";
+import type Plugin from "../plugin.ts";
+import type { PresetAPI, PluginAPI } from "../index.ts";
+import type { PresetObject } from "../../index.ts";
 
 const ROOT_VALIDATORS: ValidatorSet = {
-  cwd: assertString as Validator<ValidatedOptions["cwd"]>,
-  root: assertString as Validator<ValidatedOptions["root"]>,
-  rootMode: assertRootMode as Validator<ValidatedOptions["rootMode"]>,
-  configFile: assertConfigFileSearch as Validator<
-    ValidatedOptions["configFile"]
-  >,
+  cwd: assertString as Validator<InputOptions["cwd"]>,
+  root: assertString as Validator<InputOptions["root"]>,
+  rootMode: assertRootMode as Validator<InputOptions["rootMode"]>,
+  configFile: assertConfigFileSearch as Validator<InputOptions["configFile"]>,
 
-  caller: assertCallerMetadata as Validator<ValidatedOptions["caller"]>,
-  filename: assertString as Validator<ValidatedOptions["filename"]>,
-  filenameRelative: assertString as Validator<
-    ValidatedOptions["filenameRelative"]
-  >,
-  code: assertBoolean as Validator<ValidatedOptions["code"]>,
-  ast: assertBoolean as Validator<ValidatedOptions["ast"]>,
+  caller: assertCallerMetadata as Validator<InputOptions["caller"]>,
+  filename: assertString as Validator<InputOptions["filename"]>,
+  filenameRelative: assertString as Validator<InputOptions["filenameRelative"]>,
+  code: assertBoolean as Validator<InputOptions["code"]>,
+  ast: assertBoolean as Validator<InputOptions["ast"]>,
 
-  cloneInputAst: assertBoolean as Validator<ValidatedOptions["cloneInputAst"]>,
+  cloneInputAst: assertBoolean as Validator<InputOptions["cloneInputAst"]>,
 
-  envName: assertString as Validator<ValidatedOptions["envName"]>,
+  envName: assertString as Validator<InputOptions["envName"]>,
 };
 
 const BABELRC_VALIDATORS: ValidatorSet = {
-  babelrc: assertBoolean as Validator<ValidatedOptions["babelrc"]>,
-  babelrcRoots: assertBabelrcSearch as Validator<
-    ValidatedOptions["babelrcRoots"]
-  >,
+  babelrc: assertBoolean as Validator<InputOptions["babelrc"]>,
+  babelrcRoots: assertBabelrcSearch as Validator<InputOptions["babelrcRoots"]>,
 };
 
 const NONPRESET_VALIDATORS: ValidatorSet = {
-  extends: assertString as Validator<ValidatedOptions["extends"]>,
-  ignore: assertIgnoreList as Validator<ValidatedOptions["ignore"]>,
-  only: assertIgnoreList as Validator<ValidatedOptions["only"]>,
+  extends: assertString as Validator<InputOptions["extends"]>,
+  ignore: assertIgnoreList as Validator<InputOptions["ignore"]>,
+  only: assertIgnoreList as Validator<InputOptions["only"]>,
 
-  targets: assertTargets as Validator<ValidatedOptions["targets"]>,
+  targets: assertTargets as Validator<InputOptions["targets"]>,
   browserslistConfigFile: assertConfigFileSearch as Validator<
-    ValidatedOptions["browserslistConfigFile"]
+    InputOptions["browserslistConfigFile"]
   >,
-  browserslistEnv: assertString as Validator<
-    ValidatedOptions["browserslistEnv"]
-  >,
+  browserslistEnv: assertString as Validator<InputOptions["browserslistEnv"]>,
 };
 
 const COMMON_VALIDATORS: ValidatorSet = {
@@ -84,60 +79,80 @@ const COMMON_VALIDATORS: ValidatorSet = {
   // We may want a boolean-only version to be a common option, with the
   // object only allowed as a root config argument.
   inputSourceMap: assertInputSourceMap as Validator<
-    ValidatedOptions["inputSourceMap"]
+    InputOptions["inputSourceMap"]
   >,
-  presets: assertPluginList as Validator<ValidatedOptions["presets"]>,
-  plugins: assertPluginList as Validator<ValidatedOptions["plugins"]>,
-  passPerPreset: assertBoolean as Validator<ValidatedOptions["passPerPreset"]>,
-  assumptions: assertAssumptions as Validator<ValidatedOptions["assumptions"]>,
+  presets: assertPluginList as Validator<InputOptions["presets"]>,
+  plugins: assertPluginList as Validator<InputOptions["plugins"]>,
+  passPerPreset: assertBoolean as Validator<InputOptions["passPerPreset"]>,
+  assumptions: assertAssumptions as Validator<InputOptions["assumptions"]>,
 
-  env: assertEnvSet as Validator<ValidatedOptions["env"]>,
-  overrides: assertOverridesList as Validator<ValidatedOptions["overrides"]>,
+  env: assertEnvSet as Validator<InputOptions["env"]>,
+  overrides: assertOverridesList as Validator<InputOptions["overrides"]>,
 
   // We could limit these to 'overrides' blocks, but it's not clear why we'd
   // bother, when the ability to limit a config to a specific set of files
   // is a fairly general useful feature.
-  test: assertConfigApplicableTest as Validator<ValidatedOptions["test"]>,
-  include: assertConfigApplicableTest as Validator<ValidatedOptions["include"]>,
-  exclude: assertConfigApplicableTest as Validator<ValidatedOptions["exclude"]>,
+  test: assertConfigApplicableTest as Validator<InputOptions["test"]>,
+  include: assertConfigApplicableTest as Validator<InputOptions["include"]>,
+  exclude: assertConfigApplicableTest as Validator<InputOptions["exclude"]>,
 
-  retainLines: assertBoolean as Validator<ValidatedOptions["retainLines"]>,
-  comments: assertBoolean as Validator<ValidatedOptions["comments"]>,
+  retainLines: assertBoolean as Validator<InputOptions["retainLines"]>,
+  comments: assertBoolean as Validator<InputOptions["comments"]>,
   shouldPrintComment: assertFunction as Validator<
-    ValidatedOptions["shouldPrintComment"]
+    InputOptions["shouldPrintComment"]
   >,
-  compact: assertCompact as Validator<ValidatedOptions["compact"]>,
-  minified: assertBoolean as Validator<ValidatedOptions["minified"]>,
+  compact: assertCompact as Validator<InputOptions["compact"]>,
+  minified: assertBoolean as Validator<InputOptions["minified"]>,
   auxiliaryCommentBefore: assertString as Validator<
-    ValidatedOptions["auxiliaryCommentBefore"]
+    InputOptions["auxiliaryCommentBefore"]
   >,
   auxiliaryCommentAfter: assertString as Validator<
-    ValidatedOptions["auxiliaryCommentAfter"]
+    InputOptions["auxiliaryCommentAfter"]
   >,
-  sourceType: assertSourceType as Validator<ValidatedOptions["sourceType"]>,
+  sourceType: assertSourceType as Validator<InputOptions["sourceType"]>,
   wrapPluginVisitorMethod: assertFunction as Validator<
-    ValidatedOptions["wrapPluginVisitorMethod"]
+    InputOptions["wrapPluginVisitorMethod"]
   >,
-  highlightCode: assertBoolean as Validator<ValidatedOptions["highlightCode"]>,
-  sourceMaps: assertSourceMaps as Validator<ValidatedOptions["sourceMaps"]>,
-  sourceMap: assertSourceMaps as Validator<ValidatedOptions["sourceMap"]>,
-  sourceFileName: assertString as Validator<ValidatedOptions["sourceFileName"]>,
-  sourceRoot: assertString as Validator<ValidatedOptions["sourceRoot"]>,
-  parserOpts: assertObject as Validator<ValidatedOptions["parserOpts"]>,
-  generatorOpts: assertObject as Validator<ValidatedOptions["generatorOpts"]>,
+  highlightCode: assertBoolean as Validator<InputOptions["highlightCode"]>,
+  sourceMaps: assertSourceMaps as Validator<InputOptions["sourceMaps"]>,
+  sourceMap: assertSourceMaps as Validator<InputOptions["sourceMap"]>,
+  sourceFileName: assertString as Validator<InputOptions["sourceFileName"]>,
+  sourceRoot: assertString as Validator<InputOptions["sourceRoot"]>,
+  parserOpts: assertObject as Validator<InputOptions["parserOpts"]>,
+  generatorOpts: assertObject as Validator<InputOptions["generatorOpts"]>,
 };
-if (!process.env.BABEL_8_BREAKING) {
-  Object.assign(COMMON_VALIDATORS, {
-    getModuleId: assertFunction,
-    moduleRoot: assertString,
-    moduleIds: assertBoolean,
-    moduleId: assertString,
-  });
-}
 
-export type InputOptions = ValidatedOptions;
+type Assumptions = {
+  arrayLikeIsIterable?: boolean;
+  constantReexports?: boolean;
+  constantSuper?: boolean;
+  enumerableModuleMeta?: boolean;
+  ignoreFunctionLength?: boolean;
+  ignoreToPrimitiveHint?: boolean;
+  iterableIsArray?: boolean;
+  mutableTemplateObject?: boolean;
+  noClassCalls?: boolean;
+  noDocumentAll?: boolean;
+  noIncompleteNsImportDetection?: boolean;
+  noNewArrows?: boolean;
+  noUninitializedPrivateFieldAccess?: boolean;
+  objectRestNoSymbols?: boolean;
+  privateFieldsAsProperties?: boolean;
+  privateFieldsAsSymbols?: boolean;
+  pureGetters?: boolean;
+  setClassMethods?: boolean;
+  setComputedProperties?: boolean;
+  setPublicClassFields?: boolean;
+  setSpreadProperties?: boolean;
+  skipForOfIteratorClosing?: boolean;
+  superIsCallableConstructor?: boolean;
+};
 
-export type ValidatedOptions = {
+export type AssumptionName = keyof Assumptions;
+
+type EnvSet<T> = Record<string, T>;
+
+export type InputOptions = {
   cwd?: string;
   filename?: string;
   filenameRelative?: string;
@@ -153,93 +168,156 @@ export type ValidatedOptions = {
   envName?: string;
   caller?: CallerMetadata;
   extends?: string;
-  env?: EnvSet<ValidatedOptions>;
-  ignore?: IgnoreList;
-  only?: IgnoreList;
-  overrides?: OverridesList;
+  env?: EnvSet<InputOptions>;
+  ignore?: MatchItem[];
+  only?: MatchItem[];
+  overrides?: InputOptions[];
+  showIgnoredFiles?: boolean;
   // Generally verify if a given config object should be applied to the given file.
   test?: ConfigApplicableTest;
   include?: ConfigApplicableTest;
   exclude?: ConfigApplicableTest;
-  presets?: PluginList;
-  plugins?: PluginList;
+  presets?: PresetItem[];
+  plugins?: PluginItem[];
   passPerPreset?: boolean;
-  assumptions?: {
-    [name: string]: boolean;
-  };
+  assumptions?: Assumptions;
   // browserslists-related options
   targets?: TargetsListOrObject;
   browserslistConfigFile?: ConfigFileSearch;
   browserslistEnv?: string;
   // Options for @babel/generator
-  retainLines?: boolean;
-  comments?: boolean;
-  shouldPrintComment?: Function;
-  compact?: CompactOption;
-  minified?: boolean;
-  auxiliaryCommentBefore?: string;
-  auxiliaryCommentAfter?: string;
+  retainLines?: GeneratorOptions["retainLines"];
+  comments?: GeneratorOptions["comments"];
+  shouldPrintComment?: GeneratorOptions["shouldPrintComment"];
+  compact?: GeneratorOptions["compact"];
+  minified?: GeneratorOptions["minified"];
+  auxiliaryCommentBefore?: GeneratorOptions["auxiliaryCommentBefore"];
+  auxiliaryCommentAfter?: GeneratorOptions["auxiliaryCommentAfter"];
   // Parser
   sourceType?: SourceTypeOption;
-  wrapPluginVisitorMethod?: Function;
+  wrapPluginVisitorMethod?: VisitWrapper | null;
   highlightCode?: boolean;
   // Sourcemap generation options.
   sourceMaps?: SourceMapsOption;
   sourceMap?: SourceMapsOption;
   sourceFileName?: string;
   sourceRoot?: string;
-  // Deprecate top level parserOpts
+  // Todo(Babel 9): Deprecate top level parserOpts
   parserOpts?: ParserOptions;
-  // Deprecate top level generatorOpts
+  // Todo(Babel 9): Deprecate top level generatorOpts
   generatorOpts?: GeneratorOptions;
 };
 
-export type NormalizedOptions = {
-  readonly targets: Targets;
-} & Omit<ValidatedOptions, "targets">;
+export type NormalizedOptions = Omit<InputOptions, "presets" | "plugins"> & {
+  assumptions: Assumptions;
+  targets: Targets;
+  cloneInputAst: boolean;
+  babelrc: false;
+  configFile: false;
+  browserslistConfigFile: false;
+  passPerPreset: false;
+  envName: string;
+  cwd: string;
+  root: string;
+  rootMode: "root";
+  filename: string | undefined;
+  presets: ConfigItem<PresetAPI>[];
+  plugins: ConfigItem<PluginAPI>[];
+};
+
+export type ResolvedOptions = Omit<
+  NormalizedOptions,
+  "presets" | "plugins" | "passPerPreset"
+> & {
+  presets: { plugins: Plugin[] }[];
+  plugins: Plugin[];
+  passPerPreset: boolean;
+};
+
+export type ConfigChainOptions = Omit<
+  InputOptions,
+  | "extends"
+  | "env"
+  | "overrides"
+  | "plugins"
+  | "presets"
+  | "passPerPreset"
+  | "ignore"
+  | "only"
+  | "test"
+  | "include"
+  | "exclude"
+  | "sourceMap"
+>;
 
 export type CallerMetadata = {
   // If 'caller' is specified, require that the name is given for debugging
   // messages.
   name: string;
+  supportsStaticESM?: boolean;
+  supportsDynamicImport?: boolean;
+  supportsTopLevelAwait?: boolean;
+  supportsExportNamespaceFrom?: boolean;
 };
-export type EnvSet<T> = {
-  [x: string]: T;
-};
-export type IgnoreItem =
+export type MatchItem =
   | string
   | RegExp
   | ((
       path: string | undefined,
-      context: { dirname: string; caller: CallerMetadata; envName: string },
+      context: {
+        dirname: string;
+        caller: CallerMetadata | undefined;
+        envName: string;
+      },
     ) => unknown);
-export type IgnoreList = ReadonlyArray<IgnoreItem>;
 
-export type PluginOptions = object | void | false;
-export type PluginTarget = string | object | Function;
-export type PluginItem =
+type MaybeDefaultProperty<T> = T | { default: T };
+
+export type PluginTarget<Option = object> =
+  | string
+  | MaybeDefaultProperty<
+      (api: PluginAPI, options: Option, dirname: string) => PluginObject
+    >;
+export type PluginItem<Option = object> =
   | ConfigItem<PluginAPI>
-  | Plugin
-  | PluginTarget
-  | [PluginTarget, PluginOptions]
-  | [PluginTarget, PluginOptions, string | void];
-export type PluginList = ReadonlyArray<PluginItem>;
+  | PluginTarget<Option>
+  | [PluginTarget<Option>, Option]
+  | [PluginTarget<Option>, Option, string];
 
-export type OverridesList = Array<ValidatedOptions>;
-export type ConfigApplicableTest = IgnoreItem | Array<IgnoreItem>;
+export type PresetTarget<Option = object> =
+  | string
+  | MaybeDefaultProperty<
+      (api: PresetAPI, options: Option, dirname: string) => PresetObject
+    >;
+
+export type PresetItem<Option = object> =
+  | ConfigItem<PresetAPI>
+  | PresetTarget<Option>
+  | [PresetTarget<Option>, Option]
+  | [PresetTarget<Option>, Option, string];
+
+export type ConfigApplicableTest = MatchItem | MatchItem[];
 
 export type ConfigFileSearch = string | boolean;
-export type BabelrcSearch = boolean | IgnoreItem | IgnoreList;
+export type BabelrcSearch = boolean | MatchItem | MatchItem[];
 export type SourceMapsOption = boolean | "inline" | "both";
-export type SourceTypeOption = "module" | "script" | "unambiguous";
+export type SourceTypeOption = "module" | "commonjs" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";
-export type RootInputSourceMapOption = object | boolean;
+// https://github.com/mozilla/source-map/blob/801be934007c3ed0ef66c620641b1668e92c891d/source-map.d.ts#L15C8-L23C2
+interface InputSourceMap {
+  version: number;
+  sources: string[];
+  names: string[];
+  sourceRoot?: string | undefined;
+  sourcesContent?: string[] | undefined;
+  mappings: string;
+  file: string;
+}
+export type RootInputSourceMapOption = InputSourceMap | boolean;
 export type RootMode = "root" | "upward" | "upward-optional";
 
 export type TargetsListOrObject =
-  | Targets
-  | InputTargets
-  | InputTargets["browsers"];
+  Targets | InputTargets | InputTargets["browsers"];
 
 export type OptionsSource =
   | "arguments"
@@ -293,7 +371,6 @@ const knownAssumptions = [
   "skipForOfIteratorClosing",
   "superIsCallableConstructor",
 ] as const;
-export type AssumptionName = (typeof knownAssumptions)[number];
 export const assumptionsNames = new Set(knownAssumptions);
 
 function getSource(loc: NestingPath): OptionsSource {
@@ -304,7 +381,7 @@ export function validate(
   type: OptionsSource,
   opts: any,
   filename?: string,
-): ValidatedOptions {
+): InputOptions {
   try {
     return validateNested(
       {
@@ -315,15 +392,13 @@ export function validate(
     );
   } catch (error) {
     const configError = new ConfigError(error.message, filename);
-    // @ts-expect-error TODO: .code is not defined on ConfigError or Error
     if (error.code) configError.code = error.code;
     throw configError;
   }
 }
 
-function validateNested(loc: NestingPath, opts: { [key: string]: unknown }) {
+function validateNested(loc: NestingPath, opts: Record<string, unknown>) {
   const type = getSource(loc);
-
   assertNoDuplicateSourcemap(opts);
 
   Object.keys(opts).forEach((key: string) => {
@@ -403,10 +478,7 @@ function assertNoDuplicateSourcemap(opts: any): void {
   }
 }
 
-function assertEnvSet(
-  loc: OptionPath,
-  value: unknown,
-): void | EnvSet<ValidatedOptions> {
+function assertEnvSet(loc: OptionPath, value: unknown) {
   if (loc.parent.type === "env") {
     throw new Error(`${msg(loc)} is not allowed inside of another .env block`);
   }
@@ -428,13 +500,10 @@ function assertEnvSet(
       validateNested(envLoc, env);
     }
   }
-  return obj;
+  return obj as EnvSet<InputOptions> | undefined | null;
 }
 
-function assertOverridesList(
-  loc: OptionPath,
-  value: unknown[],
-): undefined | OverridesList {
+function assertOverridesList(loc: OptionPath, value: unknown[]) {
   if (loc.parent.type === "env") {
     throw new Error(`${msg(loc)} is not allowed inside an .env block`);
   }
@@ -458,11 +527,11 @@ function assertOverridesList(
       validateNested(overridesLoc, env);
     }
   }
-  return arr as OverridesList;
+  return arr as InputOptions[] | null | undefined;
 }
 
 export function checkNoUnwrappedItemOptionPairs<API>(
-  items: Array<UnloadedDescriptor<API>>,
+  items: UnloadedDescriptor<API>[],
   index: number,
   type: "plugin" | "preset",
   e: Error,

@@ -38,7 +38,6 @@ type NodeWithDescription =
       type: NodeTypesWithDescriptions;
     };
 
-// eslint-disable-next-line no-confusing-arrow
 const toNodeDescription = (node: NodeWithDescription) =>
   node.type === "UpdateExpression"
     ? NodeDescriptions.UpdateExpression[`${node.prefix}`]

@@ -1,5 +1,7 @@
-import rule from "../../lib/rules/no-deprecated-clone.cjs";
+import plugin from "../../lib/index.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
+
+const rule = plugin.rules["no-deprecated-clone"];
 
 const cloneError = "t.clone() is deprecated. Use t.cloneNode() instead.";
 const cloneDeepError =
@@ -149,6 +151,11 @@ ruleTester.run("no-deprecated-clone", rule, {
       code: `import { declare } from "@babel/helper-plugin-utils"; declare(({ types }) => { types.cloneDeep() });`,
       output: `import { declare } from "@babel/helper-plugin-utils"; declare(({ types }) => { types.cloneNode() });`,
       errors: [cloneDeepError],
+    },
+    {
+      code: `import { "declare" as d } from "@babel/helper-plugin-utils"; d(({ types }) => { types.clone() });`,
+      output: `import { "declare" as d } from "@babel/helper-plugin-utils"; d(({ types }) => { types.cloneNode() });`,
+      errors: [cloneError],
     },
   ],
 });

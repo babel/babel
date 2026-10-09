@@ -63,8 +63,3 @@ export const INHERIT_KEYS = {
   optional: ["typeAnnotation", "typeParameters", "returnType"],
   force: ["start", "loc", "end"],
 } as const;
-
-export const BLOCK_SCOPED_SYMBOL = Symbol.for("var used to be block scoped");
-export const NOT_LOCAL_BINDING = Symbol.for(
-  "should not be considered a local binding",
-);

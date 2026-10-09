@@ -36,7 +36,8 @@
           },
           "value": "foobar"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

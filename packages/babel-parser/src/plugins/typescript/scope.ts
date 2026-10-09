@@ -1,4 +1,3 @@
-import type { Position } from "../../util/location.ts";
 import ScopeHandler, { NameType, Scope } from "../../util/scope.ts";
 import { BindingFlag, ScopeFlag } from "../../util/scopeflags.ts";
 import type * as N from "../../types.ts";
@@ -20,13 +19,22 @@ const enum TsNameType {
 }
 
 class TypeScriptScope extends Scope {
-  tsNames: Map<string, TsNameType> = new Map();
+  tsNames = new Map<string, TsNameType>();
 }
 
 // See https://github.com/babel/babel/pull/9766#discussion_r268920730 for an
 // explanation of how typescript handles scope.
 
 export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope> {
+  get inTSNamespace() {
+    const scopeStack = this.scopeStack;
+    return (
+      scopeStack.length >= 2 &&
+      scopeStack[scopeStack.length - 1].flags === ScopeFlag.OTHER &&
+      (scopeStack[scopeStack.length - 2].flags & ScopeFlag.TS_NAMESPACE) > 0
+    );
+  }
+
   importsStack: Set<string>[] = [];
 
   createScope(flags: ScopeFlag): TypeScriptScope {
@@ -36,7 +44,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   }
 
   enter(flags: ScopeFlag): void {
-    if (flags === ScopeFlag.TS_MODULE) {
+    if (flags & (ScopeFlag.TS_MODULE | ScopeFlag.TS_NAMESPACE)) {
       this.importsStack.push(new Set());
     }
 
@@ -46,7 +54,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   exit() {
     const flags = super.exit();
 
-    if (flags === ScopeFlag.TS_MODULE) {
+    if (flags & (ScopeFlag.TS_MODULE | ScopeFlag.TS_NAMESPACE)) {
       this.importsStack.pop();
     }
 
@@ -66,7 +74,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     return false;
   }
 
-  declareName(name: string, bindingType: BindingFlag, loc: Position) {
+  declareName(name: string, bindingType: BindingFlag, loc: number) {
     if (bindingType & BindingFlag.FLAG_TS_IMPORT) {
       if (this.hasImport(name, true)) {
         this.parser.raise(Errors.VarRedeclaration, loc, {
@@ -113,12 +121,12 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     name: string,
     bindingType: BindingFlag,
   ): boolean {
-    const type = scope.tsNames.get(name);
+    const type = scope.tsNames.get(name)!;
     if ((type & TsNameType.Enums) > 0) {
       if (bindingType & BindingFlag.FLAG_TS_ENUM) {
         // Enums can be merged with other enums if they are both
         //  const or both non-const.
-        const isConst = !!(bindingType & BindingFlag.FLAG_TS_CONST_ENUM);
+        const isConst = (bindingType & BindingFlag.FLAG_TS_CONST_ENUM) > 0;
         const wasConst = (type & TsNameType.ConstEnums) > 0;
         return isConst !== wasConst;
       }
@@ -128,7 +136,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
       bindingType & BindingFlag.FLAG_CLASS &&
       (type & TsNameType.Classes) > 0
     ) {
-      if (scope.names.get(name) & NameType.Lexical) {
+      if (scope.names.get(name)! & NameType.Lexical) {
         // Classes can be merged with interfaces
         return !!(bindingType & BindingFlag.KIND_VALUE);
       } else {
@@ -151,7 +159,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
     const len = this.scopeStack.length;
     for (let i = len - 1; i >= 0; i--) {
       const scope = this.scopeStack[i];
-      const type = scope.tsNames.get(name);
+      const type = scope.tsNames.get(name)!;
       if (
         (type & TsNameType.Types) > 0 ||
         (type & TsNameType.ExportOnlyBindings) > 0

@@ -1,7 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "plugins": [["proposal-decorators", { "version": "2023-05" }]],
-  "assumptions": {
-    "constantSuper": true
-  }
-}

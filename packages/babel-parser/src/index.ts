@@ -4,13 +4,15 @@ import {
   mixinPluginNames,
   mixinPlugins,
 } from "./plugin-utils.ts";
-import type {
+export type {
   PluginConfig as ParserPlugin,
   FlowPluginOptions,
-  RecordAndTuplePluginOptions,
   PipelineOperatorPluginOptions,
-} from "./typings.ts";
+  TypeScriptPluginOptions,
+} from "./typings.d.ts";
 import Parser, { type PluginsMap } from "./parser/index.ts";
+import type { ParseError } from "./parse-error.ts";
+export type { ParseError };
 
 import type { ExportedTokenType } from "./tokenizer/types.ts";
 import {
@@ -18,11 +20,28 @@ import {
   tt as internalTokenTypes,
   type InternalTokenTypes,
 } from "./tokenizer/types.ts";
+export type { Token } from "./tokenizer/index.ts";
 
-import type { Expression, File } from "./types.ts";
+// TODO: Rather than type-casting the internal AST definitions to the
+// @babel/types one, we should actually unify them.
+import type { Expression, File } from "@babel/types";
 export type { Expression, File };
 
-export function parse(input: string, options?: Options): File {
+export type ParserOptions = Partial<Options>;
+
+export type ParseResult<Result extends File | Expression = File> = Result & {
+  comments: File["comments"];
+  errors: ParseError[];
+  tokens?: File["tokens"];
+};
+
+/**
+ * Parse the provided code as an entire ECMAScript program.
+ */
+export function parse(
+  input: string,
+  options?: ParserOptions,
+): ParseResult<File> {
   if (options?.sourceType === "unambiguous") {
     options = {
       ...options,
@@ -66,7 +85,10 @@ export function parse(input: string, options?: Options): File {
   }
 }
 
-export function parseExpression(input: string, options?: Options): Expression {
+export function parseExpression(
+  input: string,
+  options?: ParserOptions,
+): ParseResult<Expression> {
   const parser = getParser(options, input);
   if (parser.options.strictMode) {
     parser.state.strict = true;
@@ -88,7 +110,10 @@ function generateExportedTokenTypes(
 
 export const tokTypes = generateExportedTokenTypes(internalTokenTypes);
 
-function getParser(options: Options | undefined | null, input: string): Parser {
+function getParser(
+  options: ParserOptions | undefined | null,
+  input: string,
+): Parser {
   let cls = Parser;
   const pluginsMap: PluginsMap = new Map();
   if (options?.plugins) {
@@ -123,7 +148,7 @@ function getParserClass(
     }
   }
   const key = pluginList.join("|");
-  let cls = parserClassCache.get(key);
+  let cls = parserClassCache.get(key)!;
   if (!cls) {
     cls = Parser;
     for (const plugin of pluginList) {
@@ -135,10 +160,16 @@ function getParserClass(
   return cls;
 }
 
-export type {
-  FlowPluginOptions,
-  ParserPlugin,
-  PipelineOperatorPluginOptions,
-  RecordAndTuplePluginOptions,
-};
-export type ParserOptions = Partial<Options>;
+export function getLine(locData: Uint32Array, pos: number): number {
+  if (pos < 0 || pos * 2 >= locData.length) {
+    throw new Error(`Position ${pos} is out of bounds for location data.`);
+  }
+  return locData[pos * 2];
+}
+
+export function getColumn(locData: Uint32Array, pos: number): number {
+  if (pos < 0 || pos * 2 + 1 >= locData.length) {
+    throw new Error(`Position ${pos} is out of bounds for location data.`);
+  }
+  return locData[pos * 2 + 1];
+}

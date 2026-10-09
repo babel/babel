@@ -1,0 +1,81 @@
+import * as charCodes from "charcodes";
+import {
+  bmpIdentifier,
+  bmpIdentifierStart,
+  supplementaryIdentifierCodes,
+  supplementaryIdentifierStartCodes,
+} from "./identifier-regex-browser.ts";
+
+// This has a complexity linear to the value of the code. The
+// assumption is that looking up supplementary identifier characters is
+// rare.
+function isInSupplementarySet(code: number, set: readonly number[]): boolean {
+  let pos = 0x10000;
+  for (let i = 0, length = set.length; i < length; i += 2) {
+    pos += set[i];
+    if (pos > code) return false;
+
+    pos += set[i + 1];
+    if (pos >= code) return true;
+  }
+  return false;
+}
+
+// Test whether a given character code starts an identifier.
+
+export function isIdentifierStart(code: number): boolean {
+  if (code < charCodes.uppercaseA) return code === charCodes.dollarSign;
+  if (code <= charCodes.uppercaseZ) return true;
+  if (code < charCodes.lowercaseA) return code === charCodes.underscore;
+  if (code <= charCodes.lowercaseZ) return true;
+  if (code <= 0xffff) {
+    return code >= 0xaa && bmpIdentifierStart.test(String.fromCharCode(code));
+  }
+  return isInSupplementarySet(code, supplementaryIdentifierStartCodes);
+}
+
+// Test whether a given character is part of an identifier.
+
+export function isIdentifierChar(code: number): boolean {
+  if (code < charCodes.digit0) return code === charCodes.dollarSign;
+  if (code < charCodes.colon) return true;
+  if (code < charCodes.uppercaseA) return false;
+  if (code <= charCodes.uppercaseZ) return true;
+  if (code < charCodes.lowercaseA) return code === charCodes.underscore;
+  if (code <= charCodes.lowercaseZ) return true;
+  if (code <= 0xffff) {
+    return code >= 0xaa && bmpIdentifier.test(String.fromCharCode(code));
+  }
+  return (
+    isInSupplementarySet(code, supplementaryIdentifierStartCodes) ||
+    isInSupplementarySet(code, supplementaryIdentifierCodes)
+  );
+}
+
+// Test whether a given string is a valid identifier name
+
+export function isIdentifierName(name: string): boolean {
+  let isFirst = true;
+  for (let i = 0; i < name.length; i++) {
+    // The implementation is based on
+    // https://source.chromium.org/chromium/chromium/src/+/master:v8/src/builtins/builtins-string-gen.cc;l=1455;drc=221e331b49dfefadbc6fa40b0c68e6f97606d0b3;bpv=0;bpt=1
+    // We reimplement `codePointAt` because `codePointAt` is a V8 builtin which is not inlined by TurboFan (as of M91)
+    // since `name` is mostly ASCII, an inlined `charCodeAt` wins here
+    let cp = name.charCodeAt(i);
+    if ((cp & 0xfc00) === 0xd800 && i + 1 < name.length) {
+      const trail = name.charCodeAt(++i);
+      if ((trail & 0xfc00) === 0xdc00) {
+        cp = 0x10000 + ((cp & 0x3ff) << 10) + (trail & 0x3ff);
+      }
+    }
+    if (isFirst) {
+      isFirst = false;
+      if (!isIdentifierStart(cp)) {
+        return false;
+      }
+    } else if (!isIdentifierChar(cp)) {
+      return false;
+    }
+  }
+  return !isFirst;
+}

@@ -1,37 +1,26 @@
 import * as helpers from "@babel/helpers";
 import { NodePath } from "@babel/traverse";
-import type { HubInterface, Visitor, Scope } from "@babel/traverse";
+import type { HubInterface, Scope } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
-import traverse from "@babel/traverse";
-import { cloneNode, interpreterDirective } from "@babel/types";
+import { cloneNode, interpreterDirective, traverseFast } from "@babel/types";
 import type * as t from "@babel/types";
-import semver from "semver";
+import { isValid, rangesIntersect } from "verkit";
 
 import type { NormalizedFile } from "../normalize-file.ts";
 
-// @ts-expect-error This file is `any`
-import * as babel7 from "./babel-7-helpers.cjs";
-
-const errorVisitor: Visitor<{ loc: t.SourceLocation | null }> = {
-  enter(path, state) {
-    const loc = path.node.loc;
-    if (loc) {
-      state.loc = loc;
-      path.stop();
-    }
-  },
-};
+import type { ResolvedOptions } from "../../config/validation/options.ts";
+import type { SourceMapConverter } from "convert-source-map";
 
 export default class File {
-  _map: Map<unknown, unknown> = new Map();
-  opts: { [key: string]: any };
-  declarations: { [key: string]: t.Identifier } = {};
+  _map = new Map<unknown, unknown>();
+  opts: ResolvedOptions;
+  declarations: Record<string, t.Identifier> = {};
   path: NodePath<t.Program>;
   ast: t.File;
   scope: Scope;
-  metadata: { [key: string]: any } = {};
+  metadata: Record<string, any> = {};
   code: string = "";
-  inputMap: any;
+  inputMap: SourceMapConverter | null;
 
   hub: HubInterface & { file: File } = {
     // keep it for the usage in babel-core, ex: path.hub.file.opts.filename
@@ -39,10 +28,15 @@ export default class File {
     getCode: () => this.code,
     getScope: () => this.scope,
     addHelper: this.addHelper.bind(this),
-    buildError: this.buildCodeFrameError.bind(this),
+    buildError: this.buildCodeFrameError.bind(
+      this,
+    ) as HubInterface["buildError"],
   };
 
-  constructor(options: any, { code, ast, inputMap }: NormalizedFile) {
+  constructor(
+    options: ResolvedOptions,
+    { code, ast, inputMap }: NormalizedFile,
+  ) {
     this.opts = options;
     this.code = code;
     this.ast = ast;
@@ -60,7 +54,7 @@ export default class File {
 
   /**
    * Provide backward-compatible access to the interpreter directive handling
-   * in Babel 6.x. If you are writing a plugin for Babel 7.x, it would be
+   * in Babel 6.x. If you are writing a plugin for Babel 7.x or higher, it would be
    * best to use 'program.interpreter' directly.
    */
   get shebang(): string {
@@ -76,18 +70,6 @@ export default class File {
   }
 
   set(key: unknown, val: unknown) {
-    if (!process.env.BABEL_8_BREAKING) {
-      if (key === "helpersNamespace") {
-        throw new Error(
-          "Babel 7.0.0-beta.56 has dropped support for the 'helpersNamespace' utility." +
-            "If you are using @babel/plugin-external-helpers you will need to use a newer " +
-            "version than the one you currently have installed. " +
-            "If you have your own implementation, you'll want to explore using 'helperGenerator' " +
-            "alongside 'file.availableHelper()'.",
-        );
-      }
-    }
-
     this._map.set(key, val);
   }
 
@@ -107,6 +89,8 @@ export default class File {
    * considered unavailable.
    */
   availableHelper(name: string, versionRange?: string | null): boolean {
+    if (helpers.isInternal(name)) return false;
+
     let minVersion;
     try {
       minVersion = helpers.minVersion(name);
@@ -118,39 +102,28 @@ export default class File {
 
     if (typeof versionRange !== "string") return true;
 
-    // semver.intersects() has some surprising behavior with comparing ranges
-    // with pre-release versions. We add '^' to ensure that we are always
-    // comparing ranges with ranges, which sidesteps this logic.
-    // For example:
-    //
-    //   semver.intersects(`<7.0.1`, "7.0.0-beta.0") // false - surprising
-    //   semver.intersects(`<7.0.1`, "^7.0.0-beta.0") // true - expected
-    //
-    // This is because the first falls back to
-    //
-    //   semver.satisfies("7.0.0-beta.0", `<7.0.1`) // false - surprising
-    //
-    // and this fails because a prerelease version can only satisfy a range
-    // if it is a prerelease within the same major/minor/patch range.
+    // Treat a concrete version as its compatible range. This ensures that a
+    // helper introduced after a prerelease is not considered available for
+    // that prerelease, while preserving the existing behavior for ranges.
     //
     // Note: If this is found to have issues, please also revisit the logic in
     // transform-runtime's definitions.js file.
-    if (semver.valid(versionRange)) versionRange = `^${versionRange}`;
+    if (isValid(versionRange)) versionRange = `^${versionRange}`;
 
-    if (process.env.BABEL_8_BREAKING) {
-      return (
-        !semver.intersects(`<${minVersion}`, versionRange) &&
-        !semver.intersects(`>=9.0.0`, versionRange)
-      );
-    } else {
-      return (
-        !semver.intersects(`<${minVersion}`, versionRange) &&
-        !semver.intersects(`>=8.0.0`, versionRange)
-      );
-    }
+    return (
+      !rangesIntersect(`<${minVersion}`, versionRange) &&
+      !rangesIntersect(`>=9.0.0`, versionRange)
+    );
   }
 
   addHelper(name: string): t.Identifier {
+    if (helpers.isInternal(name)) {
+      throw new Error("Cannot use internal helper " + name);
+    }
+    return this._addHelper(name);
+  }
+
+  _addHelper(name: string): t.Identifier {
     const declar = this.declarations[name];
     if (declar) return cloneNode(declar);
 
@@ -166,9 +139,9 @@ export default class File {
     const uid = (this.declarations[name] =
       this.scope.generateUidIdentifier(name));
 
-    const dependencies: { [key: string]: t.Identifier } = {};
+    const dependencies: Record<string, t.Identifier> = {};
     for (const dep of helpers.getDependencies(name)) {
-      dependencies[dep] = this.addHelper(dep);
+      dependencies[dep] = this._addHelper(dep);
     }
 
     const { nodes, globals } = helpers.get(
@@ -207,11 +180,12 @@ export default class File {
     let loc = node?.loc;
 
     if (!loc && node) {
-      const state: { loc?: t.SourceLocation | null } = {
-        loc: null,
-      };
-      traverse(node, errorVisitor, this.scope, state);
-      loc = state.loc;
+      traverseFast(node, function (node) {
+        if (node.loc) {
+          loc = node.loc;
+          return traverseFast.stop;
+        }
+      });
 
       let txt =
         "This is an error on an internal node. Probably an internal error.";
@@ -230,13 +204,13 @@ export default class File {
           {
             start: {
               line: loc.start.line,
-              column: loc.start.column + 1,
+              column: loc.start.column,
             },
             end:
               loc.end && loc.start.line === loc.end.line
                 ? {
                     line: loc.end.line,
-                    column: loc.end.column + 1,
+                    column: loc.end.column,
                   }
                 : undefined,
           },
@@ -245,30 +219,5 @@ export default class File {
     }
 
     return new _Error(msg);
-  }
-}
-
-if (!process.env.BABEL_8_BREAKING) {
-  // @ts-expect-error Babel 7
-  File.prototype.addImport = function addImport() {
-    throw new Error(
-      "This API has been removed. If you're looking for this " +
-        "functionality in Babel 7, you should import the " +
-        "'@babel/helper-module-imports' module and use the functions exposed " +
-        " from that module, such as 'addNamed' or 'addDefault'.",
-    );
-  };
-  // @ts-expect-error Babel 7
-  File.prototype.addTemplateObject = function addTemplateObject() {
-    throw new Error(
-      "This function has been moved into the template literal transform itself.",
-    );
-  };
-
-  if (!USE_ESM || IS_STANDALONE) {
-    // @ts-expect-error Babel 7
-    File.prototype.getModuleName = function getModuleName() {
-      return babel7.getModuleName()(this.opts, this.opts);
-    };
   }
 }

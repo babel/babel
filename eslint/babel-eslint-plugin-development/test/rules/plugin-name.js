@@ -1,5 +1,7 @@
-import rule from "../../lib/rules/plugin-name.cjs";
+import plugin from "../../lib/index.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
+
+const rule = plugin.rules["plugin-name"];
 
 const missingPluginError = "This file does not export a Babel plugin.";
 const missingNameError = "This Babel plugin doesn't have a 'name' property.";
@@ -35,7 +37,15 @@ ruleTester.run("plugin-name", rule, {
       errors: [missingPluginError],
     },
     {
+      code: `var exports = 0; module[exports] = function notAnExport() { return { name: "foo" }; }`,
+      errors: [missingPluginError],
+    },
+    {
       code: `export default function fn() { return {} }`,
+      errors: [missingNameError],
+    },
+    {
+      code: `export default function fn() { return { ...oldPlugin } }`,
       errors: [missingNameError],
     },
     {

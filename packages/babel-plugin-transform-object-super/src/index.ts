@@ -8,7 +8,6 @@ function replacePropertySuper(
   getObjectRef: () => t.Identifier,
   file: File,
 ) {
-  // @ts-expect-error todo(flow->ts):
   const replaceSupers = new ReplaceSupers({
     getObjectRef: getObjectRef,
     methodPath: path,
@@ -19,7 +18,7 @@ function replacePropertySuper(
 }
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
   const newLets = new Set<{
     scopePath: NodePath;
     id: t.Identifier;
@@ -45,7 +44,7 @@ export default declare(api => {
         },
       },
       ObjectExpression(path, state) {
-        let objectRef: t.Identifier;
+        let objectRef: t.Identifier | undefined;
         const getObjectRef = () =>
           (objectRef = objectRef || path.scope.generateUidIdentifier("obj"));
 
@@ -58,7 +57,7 @@ export default declare(api => {
         if (objectRef) {
           const scopePath = path.findParent(
             p => p.isFunction() || p.isProgram() || p.isLoop(),
-          );
+          )!;
           const useLet = scopePath.isLoop();
           // For transform-block-scoping
           if (useLet) {

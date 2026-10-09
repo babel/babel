@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import * as babel from "@babel/core";
 import {
   buildExternalHelpers,
@@ -16,56 +15,35 @@ import {
 import { codeFrameColumns } from "@babel/code-frame";
 import * as helpers from "./helpers.ts";
 import visualizeSourceMap from "./source-map-visualizer.ts";
-import assert from "assert";
-import fs, { readFileSync, realpathSync } from "fs";
-import path from "path";
-import vm from "vm";
-import LruCache from "lru-cache";
-import { fileURLToPath } from "url";
+import assert from "node:assert";
+import fs, { readFileSync, realpathSync } from "node:fs";
+import path from "node:path";
+import vm from "node:vm";
+import flru from "flru";
+import { fileURLToPath } from "node:url";
 import { diff } from "jest-diff";
-import type { ChildProcess } from "child_process";
-import { spawn } from "child_process";
-import os from "os";
-import readdirRecursive from "fs-readdir-recursive";
+import type { ChildProcess } from "node:child_process";
+import { spawn } from "node:child_process";
+import os from "node:os";
+import * as resolve from "resolve";
 
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import checkDuplicateNodes from "@babel/helper-check-duplicate-nodes";
-import { createHash } from "crypto";
+import { createHash } from "node:crypto";
 
 type Module = {
   id: string;
   exports: Record<string, unknown>;
 };
 
-if (!process.env.BABEL_8_BREAKING) {
-  // Introduced in Node.js 10
-  if (!assert.rejects) {
-    assert.rejects = async function (block, validateError) {
-      try {
-        await (typeof block === "function" ? block() : block);
-        return Promise.reject(new Error("Promise not rejected"));
-      } catch (error) {
-        // @ts-expect-error Fixme: validateError can be a string | object
-        // see https://nodejs.org/api/assert.html#assertrejectsasyncfn-error-message
-        if (typeof validateError === "function" && !validateError(error)) {
-          return Promise.reject(
-            new Error("Promise rejected with invalid error"),
-          );
-        }
-      }
-    };
-  }
-}
-
 const EXTERNAL_HELPERS_VERSION = "7.100.0";
 
-const cachedScripts = new LruCache<
-  string,
-  { code: string; cachedData?: Buffer }
->({ max: 10 });
+const cachedScripts = flru<{ code: string; cachedData: Buffer | undefined }>(
+  10,
+);
 const contextModuleCache = new WeakMap();
 
 // We never want our tests to accidentally load the root
@@ -74,15 +52,29 @@ const contextModuleCache = new WeakMap();
 // to re-enable config loading.
 function transformWithoutConfigFile(code: string, opts: InputOptions) {
   return babel.transformSync(code, {
+    browserslistConfigFile: false,
     configFile: false,
     babelrc: false,
+    caller: {
+      name: "babel-helper-transform-fixture-test-runner/sync",
+      supportsStaticESM: false,
+      supportsDynamicImport: false,
+      supportsExportNamespaceFrom: false,
+    },
     ...opts,
   });
 }
 function transformAsyncWithoutConfigFile(code: string, opts: InputOptions) {
   return babel.transformAsync(code, {
+    browserslistConfigFile: false,
     configFile: false,
     babelrc: false,
+    caller: {
+      name: "babel-helper-transform-fixture-test-runner/async",
+      supportsStaticESM: false,
+      supportsDynamicImport: false,
+      supportsExportNamespaceFrom: false,
+    },
     ...opts,
   });
 }
@@ -132,25 +124,12 @@ function runCacheableScriptInTestContext(
     cachedScripts.set(filename, cached);
   }
 
-  let script: vm.Script;
-  if (process.env.BABEL_8_BREAKING) {
-    script = new vm.Script(cached.code, {
-      filename,
-      lineOffset: -1,
-      cachedData: cached.cachedData,
-    });
-    cached.cachedData = script.createCachedData();
-  } else {
-    script = new vm.Script(cached.code, {
-      filename,
-      lineOffset: -1,
-      cachedData: cached.cachedData,
-      produceCachedData: true,
-    });
-    if (script.cachedDataProduced) {
-      cached.cachedData = script.cachedData;
-    }
-  }
+  const script = new vm.Script(cached.code, {
+    filename,
+    lineOffset: -1,
+    cachedData: cached.cachedData,
+  });
+  cached.cachedData = script.createCachedData();
 
   const module = {
     id: filename,
@@ -179,8 +158,8 @@ function runModuleInTestContext(
   context: vm.Context,
   moduleCache: any,
 ) {
-  const filename = require.resolve(id, {
-    paths: [path.dirname(relativeFilename)],
+  const filename = resolve.sync(id, {
+    basedir: path.dirname(relativeFilename),
   });
 
   // Expose Node-internal modules if the tests want them. Note, this will not execute inside
@@ -209,11 +188,13 @@ let sharedTestContext: vm.Context;
 export function runCodeInTestContext(
   code: string,
   opts: {
-    filename: string;
+    filename: string | URL;
+    timeout?: number;
   },
   context = (sharedTestContext ??= createTestContext()),
 ) {
-  const filename = opts.filename;
+  const filename =
+    opts.filename instanceof URL ? fileURLToPath(opts.filename) : opts.filename;
   const dirname = path.dirname(filename);
   const moduleCache = contextModuleCache.get(context);
   const req = (id: string) =>
@@ -226,18 +207,21 @@ export function runCodeInTestContext(
 
   const oldCwd = process.cwd();
   try {
-    if (opts.filename) process.chdir(path.dirname(opts.filename));
+    if (filename) process.chdir(path.dirname(filename));
 
     // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
     // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
     // rely on 'this === global'.
-    const src = `(function(exports, require, module, __filename, __dirname, opts) {\n${code}\n});`;
+    const src = `((function(exports, require, module, __filename, __dirname, opts) {\n${code}\n})).apply(global, global.__callArgs);`;
+    context.__callArgs = [module.exports, req, module, filename, dirname, opts];
     return vm.runInContext(src, context, {
       filename,
       displayErrors: true,
       lineOffset: -1,
-    })(module.exports, req, module, filename, dirname, opts);
+      timeout: opts.timeout ?? 10000,
+    });
   } finally {
+    context.__callArgs = undefined;
     process.chdir(oldCwd);
   }
 }
@@ -283,7 +267,7 @@ async function run(task: Test) {
   function getOpts(self: TestFile): any {
     const newOpts = {
       ast: true,
-      cwd: path.dirname(self.loc),
+      cwd: path.dirname(self.loc!),
       filename: self.loc,
       filenameRelative: self.filename,
       sourceFileName: self.filename,
@@ -294,14 +278,14 @@ async function run(task: Test) {
       ...opts,
     };
 
-    return resolveOptionPluginOrPreset(newOpts, optionsDir);
+    return resolveOptionPluginOrPreset(newOpts, optionsDir!);
   }
 
   let execCode = exec.code;
-  let result: FileResult;
+  let result: FileResult | undefined;
   let resultExec;
 
-  let execErr: Error;
+  let execErr: Error | undefined;
 
   if (execCode) {
     const context = createTestContext();
@@ -309,12 +293,14 @@ async function run(task: Test) {
 
     // Ignore Babel logs of exec.js files.
     // They will be validated in input/output files.
-    ({ result } = await maybeMockConsole(validateLogs, () =>
-      babel.transformAsync(execCode, execOpts),
-    ));
+    result = (
+      await maybeMockConsole(validateLogs, async () =>
+        babel.transformAsync(execCode!, execOpts),
+      )
+    ).result!;
 
-    checkDuplicateNodes(result.ast);
-    execCode = result.code;
+    checkDuplicateNodes(result.ast!);
+    execCode = result.code!;
 
     try {
       resultExec = runCodeInTestContext(execCode, execOpts, context);
@@ -333,26 +319,25 @@ async function run(task: Test) {
   const inputCode = actual.code;
   const expectedCode = expected.code;
   if (!execCode || inputCode) {
-    let actualLogs;
+    const res = await maybeMockConsole(validateLogs, () =>
+      babel.transformAsync(inputCode!, getOpts(actual)),
+    );
+    result = res.result!;
 
-    ({ result, actualLogs } = await maybeMockConsole(validateLogs, () =>
-      babel.transformAsync(inputCode, getOpts(actual)),
-    ));
-
-    const outputCode = normalizeOutput(result.code, {
+    const outputCode = normalizeOutput(result.code!, {
       normalizePathSeparator: true,
     });
 
-    checkDuplicateNodes(result.ast);
+    checkDuplicateNodes(result.ast!);
     if (!ignoreOutput) {
       if (
-        !expected.code &&
+        !expectedCode &&
         outputCode &&
         !opts.throws &&
-        fs.statSync(path.dirname(expected.loc)).isDirectory() &&
+        fs.statSync(path.dirname(expected.loc!)).isDirectory() &&
         !process.env.CI
       ) {
-        const expectedFile = expected.loc.replace(
+        const expectedFile = expected.loc!.replace(
           /\.m?js$/,
           result.sourceType === "module" ? ".mjs" : ".js",
         );
@@ -362,11 +347,11 @@ async function run(task: Test) {
 
         if (expected.loc !== expectedFile) {
           try {
-            fs.unlinkSync(expected.loc);
+            fs.unlinkSync(expected.loc!);
           } catch (_) {}
         }
       } else {
-        validateFile(outputCode, expected.loc, expectedCode);
+        validateFile(outputCode, expected.loc!, expectedCode!);
 
         if (inputCode) {
           expect(expected.loc).toMatch(
@@ -383,22 +368,14 @@ async function run(task: Test) {
       };
 
       validateFile(
-        normalizeOutput(actualLogs.stdout, normalizationOpts),
-        stdout.loc,
-        process.env.BABEL_8_BREAKING
-          ? // In Babel 8, preset-env does not enable all the unnecessary syntax
-            // plugins. For simplicity, just strip them fro the expected output
-            // so that we do not need to separate tests for every fixture.
-            stdout.code.replace(
-              /\n\s*syntax-(?!import-attributes|import-assertions).*/g,
-              "",
-            )
-          : stdout.code,
+        normalizeOutput(res.actualLogs.stdout, normalizationOpts),
+        stdout.loc!,
+        stdout.code!,
       );
       validateFile(
-        normalizeOutput(actualLogs.stderr, normalizationOpts),
-        stderr.loc,
-        stderr.code,
+        normalizeOutput(res.actualLogs.stderr, normalizationOpts),
+        stderr.loc!,
+        stderr.code!,
       );
     }
   }
@@ -408,7 +385,7 @@ async function run(task: Test) {
   }
 
   if (task.validateSourceMapVisual === true) {
-    const visual = visualizeSourceMap(result.code, result.map);
+    const visual = visualizeSourceMap(result!.code!, result!.map);
     try {
       expect(visual).toEqual(task.sourceMapVisual.code);
     } catch (e) {
@@ -424,7 +401,7 @@ async function run(task: Test) {
 
   if (opts.sourceMaps === true) {
     try {
-      expect(result.map).toEqual(task.sourceMap);
+      expect(result!.map).toEqual(task.sourceMap);
     } catch (e) {
       if (!process.env.OVERWRITE && task.sourceMap) throw e;
 
@@ -433,7 +410,7 @@ async function run(task: Test) {
       console.log(`Updated test file: ${task.sourceMapFile.loc}`);
       fs.writeFileSync(
         task.sourceMapFile.loc,
-        JSON.stringify(result.map, null, 2),
+        JSON.stringify(result!.map, null, 2),
       );
     }
   }
@@ -464,13 +441,9 @@ function validateFile(
   }
 }
 
-function escapeRegExp(string: string) {
-  return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
-}
-
 function normalizeOutput(
   code: string,
-  { normalizePathSeparator = false, normalizePresetEnvDebug = false } = {},
+  { normalizePathSeparator = false } = {},
 ) {
   const dir = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
@@ -481,39 +454,16 @@ function normalizeOutput(
     .trim()
     // (non-win32) /foo/babel/packages -> <CWD>/packages
     // (win32) C:\foo\babel\packages -> <CWD>\packages
-    .replace(new RegExp(escapeRegExp(dir), "g"), symbol);
+    .replaceAll(dir, symbol);
   if (process.platform === "win32") {
     result = result
       // C:/foo/babel/packages -> <CWD>/packages
-      .replace(new RegExp(escapeRegExp(dir.replace(/\\/g, "/")), "g"), symbol)
+      .replaceAll(dir.replaceAll("\\", "/"), symbol)
       // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
-      .replace(
-        new RegExp(escapeRegExp(dir.replace(/\\/g, "\\\\")), "g"),
-        symbol,
-      );
+      .replaceAll(dir.replaceAll("\\", "\\\\"), symbol);
     if (normalizePathSeparator) {
-      result = result.replace(
-        new RegExp(`${escapeRegExp(symbol)}[\\w\\\\/.-]+`, "g"),
-        path => path.replace(/\\\\?/g, "/"),
-      );
-    }
-  }
-
-  if (!process.env.BABEL_8_BREAKING) {
-    // In Babel 8, preset-env logs transform- instead of proposal-. Manually rewrite
-    // the output logs so that we don't have to duplicate all the debug fixtures for
-    // the two different Babel versions.
-    if (normalizePresetEnvDebug) {
-      result = result.replace(/(\s+)proposal-/g, "$1transform-");
-    }
-
-    // For some reasons, in older Node.js versions some symlinks are not properly
-    // resolved. The behavior is still ok, but we need to unify the output with
-    // newer Node.js versions.
-    if (parseInt(process.versions.node, 10) <= 8) {
-      result = result.replace(
-        /<CWD>\/node_modules\/@babel\/runtime-corejs3/g,
-        "<CWD>/packages/babel-runtime-corejs3",
+      result = result.replaceAll(/<CWD>[\w\\/.-]+/g, path =>
+        path.replaceAll(/\\\\?/g, "/"),
       );
     }
   }
@@ -527,7 +477,7 @@ export type SuiteOptions = {
 };
 
 export default function (
-  fixturesLoc: string,
+  fixturesLoc: string | URL,
   name: string,
   suiteOpts: SuiteOptions = {},
   taskOpts: TaskOptions = {},
@@ -539,17 +489,6 @@ export default function (
     if (suiteOpts.ignoreSuites?.includes(testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function () {
-      if (
-        !process.env.IS_PUBLISH &&
-        process.env.TEST_babel7plugins_babel8core
-      ) {
-        // Make sure that the ESM version of @babel/core is always loaded
-        // for babel7-8 interop tests.
-        // In `eval` so that it doesn't cause a syntax error when running
-        // tests in old Node.js.
-        beforeAll(() => eval('import("@babel/core")').catch(console.error));
-      }
-
       for (const task of testSuite.tests) {
         if (
           suiteOpts.ignoreTasks?.includes(task.title) ||
@@ -585,12 +524,10 @@ export default function (
             if (dynamicOpts) dynamicOpts(task.options, task);
 
             if (task.externalHelpers) {
-              (task.options.plugins ??= [])
-                // @ts-expect-error manipulating input options
-                .push([
-                  "external-helpers",
-                  { helperVersion: EXTERNAL_HELPERS_VERSION },
-                ]);
+              (task.options.plugins ??= []).push([
+                "external-helpers",
+                { helperVersion: EXTERNAL_HELPERS_VERSION },
+              ]);
             }
 
             const throwMsg = task.options.throws;
@@ -623,19 +560,18 @@ export type ProcessTestOpts = {
   executor?: string;
   ipc?: boolean;
   ipcMessage?: string;
-  stdout?: string;
-  stderr?: string;
-  stdin?: string;
-  stdoutPath?: string;
-  stderrPath?: string;
+  stdout: string;
+  stderr: string;
+  stdin: string;
+  stdoutPath: string;
+  stderrPath: string;
   stdoutContains?: boolean;
   stderrContains?: boolean;
-  testLoc?: string;
-  outFiles?: Record<string, string>;
-  inFiles?: Record<string, string>;
+  testLoc: string;
+  outFiles: Record<string, string>;
+  inFiles: Record<string, string>;
   noBabelrc?: boolean;
   minNodeVersion?: number;
-  flaky?: boolean;
   env?: Record<string, string>;
   BABEL_8_BREAKING?: boolean;
 };
@@ -660,27 +596,21 @@ export type ProcessTestAfterHook = (
   stderr: string;
 };
 
-const nodeGte8 = parseInt(process.versions.node, 10) >= 8;
-
 // https://github.com/nodejs/node/issues/11422#issue-208189446
-const tmpDir = realpathSync(os.tmpdir());
+// https://github.com/libuv/libuv/issues/5010#issuecomment-4466710203
+const tmpDir = realpathSync.native(os.tmpdir());
 
 const readDir = function (loc: string, pathFilter: (arg0: string) => boolean) {
   const files: Record<string, string> = {};
   if (fs.existsSync(loc)) {
-    if (process.env.BABEL_8_BREAKING) {
-      fs.readdirSync(loc, { withFileTypes: true, recursive: true })
-        .filter(dirent => dirent.isFile() && pathFilter(dirent.name))
-        .forEach(dirent => {
-          const fullpath = path.join(dirent.path, dirent.name);
-          files[path.relative(loc, fullpath)] = readFile(fullpath);
-        });
-    } else {
-      readdirRecursive(loc, pathFilter).forEach(function (filename) {
-        files[filename] = readFile(path.join(loc, filename));
+    fs.readdirSync(loc, { withFileTypes: true, recursive: true })
+      .filter(dirent => dirent.isFile() && pathFilter(dirent.name))
+      .forEach(dirent => {
+        const fullpath = path.join(dirent.parentPath, dirent.name);
+        files[path.relative(loc, fullpath)] = readFile(fullpath);
       });
-    }
   }
+
   return files;
 };
 
@@ -706,6 +636,8 @@ const assertTest = function (
 ) {
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
+  stderr = stderr.replace(/\\\\/g, "/");
+  stderr = stderr.replace(/\\/g, "/");
 
   try {
     if (opts.stderr) {
@@ -725,6 +657,7 @@ const assertTest = function (
 
   const expectStdout = opts.stdout.trim();
   stdout = stdout.trim();
+  stdout = stdout.replace(/\\\\/g, "/");
   stdout = stdout.replace(/\\/g, "/");
 
   try {
@@ -799,11 +732,19 @@ export function buildParallelProcessTests(name: string, tests: ProcessTest[]) {
   };
 }
 
+const rootUrl = new URL("../../..", import.meta.url);
+function resolveRootDirOrRootUrlToken(arg: string) {
+  return arg
+    .replace("<rootDir>", fileURLToPath(rootUrl))
+    .replace("<rootUrl>", rootUrl.href.slice(0, -1));
+}
+
 export function buildProcessTests(
-  dir: string,
+  dir: string | URL,
   beforeHook: ProcessTestBeforeHook,
   afterHook?: ProcessTestAfterHook,
 ) {
+  if (dir instanceof URL) dir = fileURLToPath(dir);
   const tests: ProcessTest[] = [];
 
   fs.readdirSync(dir).forEach(function (suiteName) {
@@ -818,6 +759,14 @@ export function buildProcessTests(
 
       let opts: ProcessTestOpts = {
         args: [],
+        stdout: "",
+        stderr: "",
+        stdin: "",
+        stdoutPath: "",
+        stderrPath: "",
+        testLoc: "",
+        outFiles: {},
+        inFiles: {},
       };
 
       const optionsLoc = path.join(testLoc, "options.json");
@@ -881,13 +830,7 @@ export function buildProcessTests(
       const skip =
         (opts.minNodeVersion &&
           parseInt(process.versions.node, 10) < opts.minNodeVersion) ||
-        (opts.flaky && !process.env.BABEL_CLI_FLAKY_TESTS) ||
         opts.BABEL_8_BREAKING === false;
-
-      if (opts.flaky) {
-        testName += " (flaky)";
-      }
-
       const test: ProcessTest = {
         suiteName,
         testName,
@@ -910,26 +853,30 @@ export function buildProcessTests(
           try {
             beforeHook(test, tmpLoc);
 
-            if (test.binLoc === undefined) {
-              throw new Error("test.binLoc is undefined");
+            let args = [];
+            if (opts.executor) {
+              args.push("--require", path.join(dirname, "./exit-loader.cjs"));
+            }
+            if (test.binLoc) {
+              args.push(test.binLoc);
             }
 
-            let args =
-              opts.executor && nodeGte8
-                ? [
-                    "--require",
-                    path.join(dirname, "./exit-loader.cjs"),
-                    test.binLoc,
-                  ]
-                : [test.binLoc];
-
-            args = args.concat(opts.args);
-            const env = { ...process.env, FORCE_COLOR: "false", ...opts.env };
+            args = args
+              .concat(opts.args)
+              .map(arg => resolveRootDirOrRootUrlToken(arg));
+            const env = {
+              ...process.env,
+              FORCE_COLOR: "false",
+              ...(parseInt(process.versions.node) >= 22 && {
+                NODE_OPTIONS: "--disable-warning=ExperimentalWarning",
+              }),
+              ...opts.env,
+            };
             const child = spawn(process.execPath, args, {
               env,
               cwd: tmpLoc,
               stdio:
-                (opts.executor && nodeGte8) || opts.ipc
+                opts.executor || opts.ipc
                   ? ["pipe", "pipe", "pipe", "ipc"]
                   : "pipe",
             });
@@ -977,16 +924,16 @@ export function buildProcessTests(
             }
 
             if (opts.stdin) {
-              child.stdin.write(opts.stdin);
-              child.stdin.end();
+              child.stdin!.write(opts.stdin);
+              child.stdin!.end();
             }
 
             const captureOutput = (proc: ChildProcess) => {
-              proc.stderr.on("data", function (chunk) {
+              proc.stderr!.on("data", function (chunk) {
                 stderr += chunk;
               });
 
-              proc.stdout.on("data", function (chunk) {
+              proc.stdout!.on("data", function (chunk) {
                 stdout += chunk;
               });
             };
@@ -996,15 +943,11 @@ export function buildProcessTests(
                 cwd: tmpLoc,
               });
 
-              child.stdout.pipe(executor.stdin);
-              child.stderr.pipe(executor.stdin);
+              child.stdout!.pipe(executor.stdin);
+              child.stderr!.pipe(executor.stdin);
 
               executor.on("close", function () {
-                if (nodeGte8) {
-                  child.send("exit");
-                } else {
-                  child.kill("SIGKILL");
-                }
+                child.send("exit");
               });
 
               captureOutput(executor);

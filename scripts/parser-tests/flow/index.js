@@ -1,38 +1,58 @@
-import fs from "fs/promises";
-import path from "path";
-import { fileURLToPath } from "url";
+// @ts-check
+
+import fs from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import merge from "mergeiterator";
 import TestRunner from "../utils/parser-test-runner.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const flowOptionsMapping = {
-  esproposal_decorators: "decorators-legacy",
-  types: "flowComments",
-  intern_comments: false,
-};
-
-function getPlugins(test) {
+function convertFlowParserTestOptionsToBabelParserOptions(testOptions = {}) {
   const flowOptions = { all: true };
 
-  const plugins = [["flow", flowOptions], "flowComments", "jsx"];
+  const options = {
+    plugins: [["flow", flowOptions], "flowComments", "jsx"],
+  };
 
-  if (!test.options) return plugins;
-
-  for (const [option, enabled] of Object.entries(test.options)) {
-    if (!enabled) {
-      const idx = plugins.indexOf(flowOptionsMapping[option]);
-      if (idx !== -1) plugins.splice(idx, 1);
-    } else if (option === "enums") {
-      flowOptions.enums = true;
-    } else if (!(option in flowOptionsMapping)) {
-      throw new Error("Parser options not mapped " + option);
-    } else if (flowOptionsMapping[option]) {
-      plugins.push(flowOptionsMapping[option]);
+  for (const [option, enabled] of Object.entries(testOptions)) {
+    // https://github.com/facebook/flow/blob/8c1ea0b9e5eb69a8f0a6059ec15caad54ad77ba4/src/parser/test/run_tests.ml#L123
+    switch (option) {
+      case "components":
+        // we don't support this syntax
+        continue;
+      case "assert_operator":
+        // we don't support this syntax
+        continue;
+      case "enums":
+        flowOptions.enums = true;
+        continue;
+      case "pattern_matching":
+        // we don't support this syntax
+        continue;
+      case "records":
+        // we don't support this syntax
+        continue;
+      case "esproposal_decorators":
+        options.plugins.push("decorators-legacy");
+        continue;
+      case "types":
+        if (enabled === false) {
+          options.plugins = [];
+        }
+        continue;
+      case "use_strict":
+        options.strictMode = enabled;
+        continue;
+      case "intern_comments":
+        // we don't support this syntax
+        continue;
+      default:
+        throw new Error("Unknown flow parser test option: " + option);
     }
   }
 
-  return plugins;
+  return options;
 }
 
 async function* readdirRecursive(root, dir = ".") {
@@ -61,8 +81,8 @@ async function* loadTests(root) {
 
       const [contents, tree, options] = await Promise.all([
         fs.readFile(noExt + ".js", "utf8"),
-        fs.readFile(noExt + ".tree.json", "utf8").catch(() => null),
-        fs.readFile(noExt + ".options.json", "utf8").catch(() => null),
+        fs.readFile(noExt + ".tree.json", "utf8").catch(() => "{}"),
+        fs.readFile(noExt + ".options.json", "utf8").catch(() => "{}"),
       ]);
 
       yield {
@@ -77,7 +97,7 @@ async function* loadTests(root) {
 
 const runner = new TestRunner({
   testDir: path.join(dirname, "../../../build/flow/src/parser/test/flow"),
-  allowlist: path.join(dirname, "allowlist.txt"),
+  allowlist: path.join(dirname, "allowlist.md"),
   shouldUpdate: process.argv.includes("--update-allowlist"),
 
   async *getTests() {
@@ -90,7 +110,7 @@ const runner = new TestRunner({
         fileName: test.file,
         id: test.file,
         expectedError: !shouldSuccess,
-        plugins: getPlugins(test),
+        options: convertFlowParserTestOptionsToBabelParserOptions(test.options),
       };
     }
   },
@@ -99,15 +119,15 @@ const runner = new TestRunner({
     try {
       parser(test.contents, {
         sourceType: "module",
-        plugins: test.plugins,
+        ...test.options,
       });
     } catch (e) {
-      // lets retry in script mode
+      // let's retry in script mode
       if (!test.expectedError) {
         try {
           parser(test.contents, {
             sourceType: "script",
-            plugins: test.plugins,
+            ...test.options,
           });
           return;
         } catch {}

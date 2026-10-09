@@ -36,6 +36,33 @@ describe("converters", function () {
         ),
       );
     });
+
+    it("bigint", function () {
+      expect(t.valueToNode(BigInt(123))).toEqual(t.bigIntLiteral(BigInt(123)));
+      expect(t.valueToNode(BigInt(-123))).toEqual(
+        t.unaryExpression("-", t.bigIntLiteral(BigInt(123))),
+      );
+      expect(t.valueToNode(BigInt(0))).toEqual(t.bigIntLiteral(BigInt(0)));
+      expect(t.valueToNode(BigInt(-0))).toEqual(t.bigIntLiteral(BigInt(0)));
+      expect(t.valueToNode(BigInt(0x1fffffffffffff))).toEqual(
+        t.bigIntLiteral(BigInt("9007199254740991")),
+      );
+      expect(t.valueToNode(BigInt("9007199254740992"))).toEqual(
+        t.bigIntLiteral(BigInt("9007199254740992")),
+      );
+      expect(t.valueToNode(BigInt("-9007199254740992"))).toEqual(
+        t.unaryExpression("-", t.bigIntLiteral(BigInt("9007199254740992"))),
+      );
+      expect(t.valueToNode(BigInt("123456789012345678901234567890"))).toEqual(
+        t.bigIntLiteral(BigInt("123456789012345678901234567890")),
+      );
+      expect(t.valueToNode(BigInt("-123456789012345678901234567890"))).toEqual(
+        t.unaryExpression(
+          "-",
+          t.bigIntLiteral(BigInt("123456789012345678901234567890")),
+        ),
+      );
+    });
     it("string", function () {
       expect(t.valueToNode('This is a "string"')).toEqual(
         t.stringLiteral('This is a "string"'),
@@ -70,6 +97,22 @@ describe("converters", function () {
         t.objectExpression([
           t.objectProperty(t.identifier("a"), t.numericLiteral(1)),
           t.objectProperty(t.stringLiteral("b c"), t.numericLiteral(2)),
+        ]),
+      );
+    });
+    it("object with __proto__ key", () => {
+      expect(
+        t.valueToNode({
+          ["__proto__"]: "__proto__",
+          __proto__: null,
+        }),
+      ).toEqual(
+        t.objectExpression([
+          t.objectProperty(
+            t.stringLiteral("__proto__"),
+            t.stringLiteral("__proto__"),
+            true,
+          ),
         ]),
       );
     });
@@ -217,6 +260,13 @@ describe("converters", function () {
         t.toExpression(node);
       }).toThrow(Error);
       t.assertProgram(node);
+    });
+    it("strip class abstract", function () {
+      const node = t.classDeclaration(t.identifier("A"), null, t.classBody([]));
+      node.abstract = true;
+      t.toExpression(node);
+      t.assertClassExpression(node);
+      expect(node.abstract).toBe(false);
     });
   });
 });

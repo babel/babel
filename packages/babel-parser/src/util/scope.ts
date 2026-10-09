@@ -1,5 +1,4 @@
 import { ScopeFlag, BindingFlag } from "./scopeflags.ts";
-import type { Position } from "./location.ts";
 import type * as N from "../types.ts";
 import { Errors } from "../parse-error.ts";
 import type Tokenizer from "../tokenizer/index.ts";
@@ -16,7 +15,7 @@ export const enum NameType {
 // Start an AST node, attaching a start offset.
 export class Scope {
   flags: ScopeFlag = 0;
-  names: Map<string, NameType> = new Map();
+  names = new Map<string, NameType>();
   firstLexicalName = "";
 
   constructor(flags: ScopeFlag) {
@@ -28,9 +27,9 @@ export class Scope {
 // current scope in order to detect duplicate variable names.
 export default class ScopeHandler<IScope extends Scope = Scope> {
   parser: Tokenizer;
-  scopeStack: Array<IScope> = [];
+  scopeStack: IScope[] = [];
   inModule: boolean;
-  undefinedExports: Map<string, Position> = new Map();
+  undefinedExports = new Map<string, number>();
 
   constructor(parser: Tokenizer, inModule: boolean) {
     this.parser = parser;
@@ -41,7 +40,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     return (this.currentScope().flags & ScopeFlag.PROGRAM) > 0;
   }
   get inFunction() {
-    return (this.currentVarScopeFlags() & ScopeFlag.FUNCTION) > 0;
+    return (this.currentVarScopeFlags() & ScopeFlag.FUNCTION_BASE) > 0;
   }
   get allowSuper() {
     return (this.currentThisScopeFlags() & ScopeFlag.SUPER) > 0;
@@ -49,12 +48,18 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   get allowDirectSuper() {
     return (this.currentThisScopeFlags() & ScopeFlag.DIRECT_SUPER) > 0;
   }
+  get allowNewTarget() {
+    return (this.currentThisScopeFlags() & ScopeFlag.NEW_TARGET) > 0;
+  }
   get inClass() {
-    return (this.currentThisScopeFlags() & ScopeFlag.CLASS) > 0;
+    return (this.currentThisScopeFlags() & ScopeFlag.CLASS_BASE) > 0;
   }
   get inClassAndNotInNonArrowFunction() {
     const flags = this.currentThisScopeFlags();
-    return (flags & ScopeFlag.CLASS) > 0 && (flags & ScopeFlag.FUNCTION) === 0;
+    return (
+      (flags & ScopeFlag.CLASS_BASE) > 0 &&
+      (flags & ScopeFlag.FUNCTION_BASE) === 0
+    );
   }
   get inStaticBlock() {
     for (let i = this.scopeStack.length - 1; ; i--) {
@@ -62,14 +67,17 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
       if (flags & ScopeFlag.STATIC_BLOCK) {
         return true;
       }
-      if (flags & (ScopeFlag.VAR | ScopeFlag.CLASS)) {
+      if (flags & (ScopeFlag.VAR | ScopeFlag.CLASS_BASE)) {
         // function body, module body, class property initializers
         return false;
       }
     }
   }
   get inNonArrowFunction() {
-    return (this.currentThisScopeFlags() & ScopeFlag.FUNCTION) > 0;
+    return (this.currentThisScopeFlags() & ScopeFlag.FUNCTION_BASE) > 0;
+  }
+  get inBareCaseStatement() {
+    return (this.currentScope().flags & ScopeFlag.SWITCH) > 0;
   }
   get treatFunctionsAsVar() {
     return this.treatFunctionsAsVarInScope(this.currentScope());
@@ -86,7 +94,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   }
 
   exit(): ScopeFlag {
-    const scope = this.scopeStack.pop();
+    const scope = this.scopeStack.pop()!;
     return scope.flags;
   }
 
@@ -95,12 +103,12 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
   // > treated like var declarations rather than like lexical declarations.
   treatFunctionsAsVarInScope(scope: IScope): boolean {
     return !!(
-      scope.flags & (ScopeFlag.FUNCTION | ScopeFlag.STATIC_BLOCK) ||
+      scope.flags & (ScopeFlag.FUNCTION_BASE | ScopeFlag.STATIC_BLOCK) ||
       (!this.parser.inModule && scope.flags & ScopeFlag.PROGRAM)
     );
   }
 
-  declareName(name: string, bindingType: BindingFlag, loc: Position) {
+  declareName(name: string, bindingType: BindingFlag, loc: number) {
     let scope = this.currentScope();
     if (
       bindingType & BindingFlag.SCOPE_LEXICAL ||
@@ -149,7 +157,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     scope: IScope,
     name: string,
     bindingType: BindingFlag,
-    loc: Position,
+    loc: number,
   ) {
     if (this.isRedeclaredInScope(scope, name, bindingType)) {
       this.parser.raise(Errors.VarRedeclaration, loc, {
@@ -169,7 +177,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
       return scope.names.has(name);
     }
 
-    const type = scope.names.get(name);
+    const type = scope.names.get(name) || 0;
 
     if (bindingType & BindingFlag.SCOPE_FUNCTION) {
       return (
@@ -195,7 +203,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     const { name } = id;
     const topLevelScope = this.scopeStack[0];
     if (!topLevelScope.names.has(name)) {
-      this.undefinedExports.set(name, id.loc.start);
+      this.undefinedExports.set(name, id.start!);
     }
   }
 
@@ -217,7 +225,7 @@ export default class ScopeHandler<IScope extends Scope = Scope> {
     for (let i = this.scopeStack.length - 1; ; i--) {
       const { flags } = this.scopeStack[i];
       if (
-        flags & (ScopeFlag.VAR | ScopeFlag.CLASS) &&
+        flags & (ScopeFlag.VAR | ScopeFlag.CLASS_BASE) &&
         !(flags & ScopeFlag.ARROW)
       ) {
         return flags;

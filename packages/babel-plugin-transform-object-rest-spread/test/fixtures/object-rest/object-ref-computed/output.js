@@ -1,3 +1,4 @@
+var _key, _key2, _key3;
 var key, x, y, z;
 // impure
 key = 1;
@@ -7,9 +8,8 @@ var _ = {
       y: 1
     }
   },
-  _key = key++,
   {
-    [_key]: {
+    [_key = key++]: {
       y
     }
   } = _,
@@ -29,28 +29,26 @@ var _$ = {
       z: 3
     },
     3: {
-      y: 2,
-      z: 3
+      y: 4,
+      z: 6
     }
   },
-  _key2 = ++key,
-  _key3 = ++key,
   {
-    [_key3]: {
+    [_key2 = ++key]: {
       y
     },
-    [_key2]: {
+    [_key3 = ++key]: {
       z
     }
   } = _$,
-  rest_y = babelHelpers.objectWithoutProperties(_$[_key3], ["y"]),
-  rest_z = babelHelpers.objectWithoutProperties(_$[_key2], ["z"]);
+  rest_y = babelHelpers.objectWithoutProperties(_$[_key2], ["y"]),
+  rest_z = babelHelpers.objectWithoutProperties(_$[_key3], ["z"]);
 expect(y).toBe(2);
 expect(rest_y).toEqual({
   z: 3
 });
-expect(z).toBe(3);
+expect(z).toBe(6);
 expect(rest_z).toEqual({
-  y: 2
+  y: 4
 });
 expect(key).toBe(3);

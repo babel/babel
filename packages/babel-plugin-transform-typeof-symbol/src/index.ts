@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   return {
     name: "transform-typeof-symbol",
@@ -28,7 +28,7 @@ export default declare(api => {
         ) {
           // optimise `typeof foo === "string"` since we can determine that they'll never
           // need to handle symbols
-          const opposite = path.getOpposite();
+          const opposite = path.getOpposite()!;
           if (
             opposite.isStringLiteral() &&
             opposite.node.value !== "symbol" &&
@@ -38,34 +38,22 @@ export default declare(api => {
           }
         }
 
-        let isUnderHelper = path.findParent(path => {
-          if (path.isFunction()) {
+        const isUnderHelper = path.findParent(path => {
+          if (path.isFunctionDeclaration()) {
             return (
               path.get("body.directives.0")?.node.value.value ===
               "@babel/helpers - typeof"
             );
           }
+          return false;
         });
 
         if (isUnderHelper) return;
 
         const helper = this.addHelper("typeof");
 
-        // TODO: This is needed for backward compatibility with
+        // This is needed for backward compatibility with
         // @babel/helpers <= 7.8.3.
-        // Remove in Babel 8
-        isUnderHelper = path.findParent(path => {
-          return (
-            (path.isVariableDeclarator() && path.node.id === helper) ||
-            (path.isFunctionDeclaration() &&
-              path.node.id &&
-              path.node.id.name === helper.name)
-          );
-        });
-
-        if (isUnderHelper) {
-          return;
-        }
 
         const call = t.callExpression(helper, [node.argument]);
         const arg = path.get("argument");

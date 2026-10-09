@@ -8,7 +8,7 @@ import type * as t from "../index.ts";
 export default function validate(
   node: t.Node | undefined | null,
   key: string,
-  val: any,
+  val: unknown,
 ): void {
   if (!node) return;
 
@@ -20,11 +20,30 @@ export default function validate(
   validateChild(node, key, val);
 }
 
-export function validateField(
-  node: t.Node | undefined | null,
+export function validateInternal<T extends t.Node>(
+  field: FieldOptions<T>,
+  node: T,
   key: string,
-  val: any,
-  field: FieldOptions | undefined | null,
+  val: unknown,
+  maybeNode?: 1,
+): void {
+  if (!field?.validate) return;
+  if (field.optional && val == null) return;
+
+  field.validate(node, key, val);
+
+  if (maybeNode) {
+    const type = (val as t.Node).type;
+    if (type == null) return;
+    NODE_PARENT_VALIDATIONS[type]?.(node, key, val);
+  }
+}
+
+export function validateField<T extends t.Node>(
+  node: T,
+  key: string,
+  val: unknown,
+  field: FieldOptions<T> | undefined | null,
 ): void {
   if (!field?.validate) return;
   if (field.optional && val == null) return;
@@ -33,12 +52,11 @@ export function validateField(
 }
 
 export function validateChild(
-  node: t.Node | undefined | null,
-  key: string,
-  val?: t.Node | undefined | null,
+  node: t.Node,
+  key: string | { toString(): string },
+  val?: unknown,
 ) {
-  if (val == null) return;
-  const validate = NODE_PARENT_VALIDATIONS[val.type];
-  if (!validate) return;
-  validate(node, key, val);
+  const type = (val as t.Node)?.type;
+  if (type == null) return;
+  NODE_PARENT_VALIDATIONS[type]?.(node, key, val);
 }

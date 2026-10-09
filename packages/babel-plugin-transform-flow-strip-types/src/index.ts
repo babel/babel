@@ -4,22 +4,16 @@ import { types as t, type NodePath } from "@babel/core";
 
 export interface Options {
   requireDirective?: boolean;
-  allowDeclareFields?: boolean;
 }
 
 export default declare((api, opts: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const FLOW_DIRECTIVE = /@flow(?:\s+(?:strict(?:-local)?|weak))?|@noflow/;
 
   let skipStrip = false;
 
   const { requireDirective = false } = opts;
-
-  if (!process.env.BABEL_8_BREAKING) {
-    // eslint-disable-next-line no-var
-    var { allowDeclareFields = false } = opts;
-  }
 
   return {
     name: "transform-flow-strip-types",
@@ -105,27 +99,9 @@ export default declare((api, opts: Options) => {
           if (child.isClassProperty()) {
             const { node } = child;
 
-            if (!process.env.BABEL_8_BREAKING) {
-              if (!allowDeclareFields && node.declare) {
-                throw child.buildCodeFrameError(
-                  `The 'declare' modifier is only allowed when the ` +
-                    `'allowDeclareFields' option of ` +
-                    `@babel/plugin-transform-flow-strip-types or ` +
-                    `@babel/preset-flow is enabled.`,
-                );
-              }
-            }
-
             if (node.declare) {
               child.remove();
             } else {
-              if (!process.env.BABEL_8_BREAKING) {
-                if (!allowDeclareFields && !node.value && !node.decorators) {
-                  child.remove();
-                  return;
-                }
-              }
-
               node.variance = null;
               node.typeAnnotation = null;
             }
@@ -181,6 +157,11 @@ export default declare((api, opts: Options) => {
       },
 
       CallExpression({ node }) {
+        if (skipStrip) return;
+        node.typeArguments = null;
+      },
+
+      JSXOpeningElement({ node }) {
         if (skipStrip) return;
         node.typeArguments = null;
       },

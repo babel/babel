@@ -1,16 +1,15 @@
-import _regeneratorRuntime from "@babel/runtime/helpers/regeneratorRuntime";
-var _marked = /*#__PURE__*/_regeneratorRuntime().mark(giveWord);
+import _regenerator from "@babel/runtime/helpers/regenerator";
+var _marked = /*#__PURE__*/_regenerator().m(giveWord);
 import foo, * as bar from "someModule";
 export const myWord = Symbol("abc");
 export function giveWord() {
-  return _regeneratorRuntime().wrap(function giveWord$(_context) {
-    while (1) switch (_context.prev = _context.next) {
+  return _regenerator().w(function (_context) {
+    while (1) switch (_context.n) {
       case 0:
-        _context.next = 2;
+        _context.n = 1;
         return myWord;
-      case 2:
-      case "end":
-        return _context.stop();
+      case 1:
+        return _context.a(2);
     }
   }, _marked);
 }

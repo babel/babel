@@ -2,11 +2,12 @@
 
 import arrayLikeToArray from "./arrayLikeToArray.ts";
 
-type NonArrayIterable<V, T extends Iterable<V> = Iterable<V>> =
-  T extends Array<any> ? never : Iterable<V>;
+type NonArrayIterable<V, T extends Iterable<V> = Iterable<V>> = T extends any[]
+  ? never
+  : Iterable<V>;
 
 export default function _unsupportedIterableToArray<T>(
-  o: RelativeIndexable<T> /* string | typedarray */ | ArrayLike<T> | Set<T>,
+  o: string | NodeJS.TypedArray | ArrayLike<T> | Set<T>,
   minLen?: number | null,
 ): T[];
 export default function _unsupportedIterableToArray<T, K>(

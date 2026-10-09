@@ -3,7 +3,7 @@ import baseline from "@babel-baseline/core";
 import current from "@babel/core";
 import parser from "@babel-baseline/parser";
 import { report } from "../../util.mjs";
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 
 const suite = new Benchmark.Suite();
 const fixtureName = "babel-parser-expression.txt";

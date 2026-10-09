@@ -1,7 +1,7 @@
-import semver from "semver";
+import { isLessThan, isValid } from "verkit";
 import { OptionValidator } from "@babel/helper-validator-option";
 import { unreleasedLabels } from "./targets.ts";
-import type { Target, Targets } from "./types.ts";
+import type { Target, Targets } from "./types.d.ts";
 
 const versionRegExp =
   /^(?:\d+|\d(?:\d?[^\d\n\r\u2028\u2029]\d+|\d{2,}(?:[^\d\n\r\u2028\u2029]\d+)?))$/;
@@ -12,13 +12,13 @@ export function semverMin(
   first: string | undefined | null,
   second: string,
 ): string {
-  return first && semver.lt(first, second) ? first : second;
+  return first && isLessThan(first, second) ? first : second;
 }
 
 // Convert version to a semver value.
 // 2.5 -> 2.5.0; 1 -> 1.0.0;
 export function semverify(version: number | string): string {
-  if (typeof version === "string" && semver.valid(version)) {
+  if (typeof version === "string" && isValid(version)) {
     return version;
   }
 
@@ -52,8 +52,7 @@ export function isUnreleasedVersion(
 
 export function getLowestUnreleased(a: string, b: string, env: Target): string {
   const unreleasedLabel:
-    | (typeof unreleasedLabels)[keyof typeof unreleasedLabels]
-    | undefined =
+    (typeof unreleasedLabels)[keyof typeof unreleasedLabels] | undefined =
     // @ts-expect-error unreleasedLabel is undefined when env is not safari
     unreleasedLabels[env];
   if (a === unreleasedLabel) {
@@ -76,7 +75,7 @@ export function getHighestUnreleased(
 export function getLowestImplementedVersion(
   plugin: Targets,
   environment: Target,
-): string {
+): string | undefined {
   const result = plugin[environment];
   // When Android support data is absent, use Chrome data as fallback
   if (!result && environment === "android") {

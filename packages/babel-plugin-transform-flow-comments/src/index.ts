@@ -4,7 +4,7 @@ import { types as t, type NodePath } from "@babel/core";
 import generateCode from "@babel/generator";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   function commentFromString(comment: string | t.Comment): t.Comment {
     return typeof comment === "string"
@@ -90,7 +90,7 @@ export default declare(api => {
       .replace(/\*-\//g, "*-ESCAPED/")
       .replace(/\*\//g, "*-/");
     if (optional) comment = "?" + comment;
-    if (comment[0] !== ":") comment = ":: " + comment;
+    if (!comment.startsWith(":")) comment = ":: " + comment;
     return comment;
   }
 
@@ -177,7 +177,7 @@ export default declare(api => {
       ClassProperty(path) {
         const { node } = path;
         if (!node.value) {
-          wrapInFlowComment(path);
+          wrapInFlowComment(path as NodePath<t.ClassProperty>);
         } else if (node.typeAnnotation) {
           attachComment({
             ofPath: path.get("typeAnnotation"),
@@ -277,18 +277,18 @@ export default declare(api => {
             comments = [];
           }
 
-          if (node.superTypeParameters) {
-            const superTypeParameters = path.get(
-              "superTypeParameters",
+          if (node.superTypeArguments) {
+            const superTypeArguments = path.get(
+              "superTypeArguments",
             ) as NodePath<t.TypeParameterInstantiation>;
             comments.push(
               generateComment(
-                superTypeParameters,
+                superTypeArguments,
                 // @ts-expect-error optional is not in TypeParameterInstantiation
-                superTypeParameters.node.optional,
+                superTypeArguments.node.optional,
               ),
             );
-            superTypeParameters.remove();
+            superTypeArguments.remove();
           }
         }
 
@@ -299,7 +299,7 @@ export default declare(api => {
             impls
               .map(impl => generateComment(impl).replace(/^:: /, ""))
               .join(", ");
-          delete node["implements"];
+          delete node.implements;
 
           if (comments.length === 1) {
             comments[0] += ` ${comment}`;

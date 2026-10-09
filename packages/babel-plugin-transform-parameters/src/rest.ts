@@ -2,7 +2,7 @@ import { template, types as t } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/core";
 
 import {
-  iifeVisitor,
+  getIIFEVisitor,
   collectShadowedParamsNames,
   buildScopeIIFE,
 } from "./shadow-utils.ts";
@@ -136,28 +136,20 @@ const memberExpressionOptimisationVisitor: Visitor<State> = {
           !state.deopted &&
           !(
             // ex: `args[0] = "whatever"`
-            (
-              (grandparentPath.isAssignmentExpression() &&
-                parentPath.node === grandparentPath.node.left) ||
-              // ex: `[args[0]] = ["whatever"]`
-              grandparentPath.isLVal() ||
-              // ex: `for (rest[0] in this)`
-              // ex: `for (rest[0] of this)`
-              grandparentPath.isForXStatement() ||
-              // ex: `++args[0]`
-              // ex: `args[0]--`
-              grandparentPath.isUpdateExpression() ||
-              // ex: `delete args[0]`
-              grandparentPath.isUnaryExpression({ operator: "delete" }) ||
-              // ex: `args[0]()`
-              // ex: `new args[0]()`
-              // ex: `new args[0]`
-              ((grandparentPath.isCallExpression() ||
-                grandparentPath.isNewExpression()) &&
-                parentPath.node === grandparentPath.node.callee)
-            )
+            (grandparentPath.isAssignmentExpression() &&
+              parentPath.node === grandparentPath.node.left) || // ex: `[args[0]] = ["whatever"]`
+            grandparentPath.isLVal() || // ex: `for (rest[0] in this)`
+            // ex: `for (rest[0] of this)`
+            grandparentPath.isForXStatement() || // ex: `++args[0]`
+            // ex: `args[0]--`
+            grandparentPath.isUpdateExpression() || // ex: `delete args[0]`
+            grandparentPath.isUnaryExpression({ operator: "delete" }) || // ex: `args[0]()`
+            // ex: `new args[0]()`
+            // ex: `new args[0]`
+            ((grandparentPath.isCallExpression() ||
+              grandparentPath.isNewExpression()) &&
+              parentPath.node === grandparentPath.node.callee)
           );
-
         if (argsOptEligible) {
           if (parentPath.node.computed) {
             // if we know that this member expression is referencing a number then
@@ -272,7 +264,7 @@ function optimiseIndexGetter(
     const valRes = offsetTestPath.get("left").evaluate();
     if (valRes.confident) {
       if (valRes.value === true) {
-        replacedParentPath.replaceWith(scope.buildUndefinedNode());
+        replacedParentPath.replaceWith(t.buildUndefinedNode());
       } else {
         offsetTestPath.replaceWith(offsetTestPath.get("right"));
       }
@@ -303,7 +295,7 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
 
   const restPath = path.get(
     `params.${node.params.length - 1}.argument`,
-  ) as NodePath<t.Pattern | t.Identifier>;
+  ) as NodePath<t.ArrayPattern | t.ObjectPattern | t.Identifier>;
 
   if (!restPath.isIdentifier()) {
     const shadowedParams = new Set<string>();
@@ -315,7 +307,7 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
         needsOuterBinding: false,
         scope,
       };
-      restPath.traverse(iifeVisitor, state);
+      restPath.traverse(getIIFEVisitor(), state);
       needsIIFE = state.needsOuterBinding;
     }
 
@@ -354,7 +346,7 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
     references: [],
     offset: paramsCount,
     argumentsNode: argsId,
-    outerBinding: scope.getBindingIdentifier(rest.name),
+    outerBinding: scope.getBindingIdentifier(rest.name)!,
     candidates: [],
     name: rest.name,
     deopted: false,
@@ -434,6 +426,7 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
         // Stop crawling up if this is a function.
         return path.isFunction();
       }
+      return false;
     });
 
     target.insertBefore(loop);

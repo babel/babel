@@ -40,7 +40,8 @@
           },
           "value": "file"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

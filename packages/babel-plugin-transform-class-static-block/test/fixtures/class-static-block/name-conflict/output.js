@@ -1,6 +1,8 @@
+var _staticBlock;
 class Foo {
-  static #_ = 42;
+  static #_() {}
   // static block can not be transformed as `#_` here
-  static #_2 = this.foo = this.#_;
+  static #_2 = _staticBlock = () => this.foo = this.#_;
 }
+_staticBlock();
 expect(Foo.foo).toBe(42);

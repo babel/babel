@@ -1,5 +1,5 @@
-import semver from "semver";
-import { minVersions, legacyBabel7SyntaxPlugins } from "./available-plugins.ts";
+import { isLessThan } from "verkit";
+import { minVersions } from "./available-plugins.ts";
 
 export function addProposalSyntaxPlugins(
   items: Set<string>,
@@ -11,7 +11,7 @@ export function addProposalSyntaxPlugins(
 }
 export function removeUnnecessaryItems(
   items: Set<string>,
-  overlapping: { [name: string]: string[] },
+  overlapping: Record<string, string[]>,
 ) {
   items.forEach(item => {
     overlapping[item]?.forEach(name => items.delete(name));
@@ -24,17 +24,11 @@ export function removeUnsupportedItems(
   items.forEach(item => {
     if (
       Object.hasOwn(minVersions, item) &&
-      semver.lt(
+      isLessThan(
         babelVersion,
         // @ts-expect-error we have checked minVersions[item] in has call
         minVersions[item],
       )
-    ) {
-      items.delete(item);
-    } else if (
-      !process.env.BABEL_8_BREAKING &&
-      babelVersion[0] === "8" &&
-      legacyBabel7SyntaxPlugins.has(item)
     ) {
       items.delete(item);
     }

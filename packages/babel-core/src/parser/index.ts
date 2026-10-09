@@ -1,14 +1,15 @@
 import type { Handler } from "gensync";
-import { parse, type File as ParseResult } from "@babel/parser";
+import { parse, type ParseResult } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
 import generateMissingPluginMessage from "./util/missing-plugin-helper.ts";
 import type { PluginPasses } from "../config/index.ts";
+import type { ResolvedOptions } from "../config/validation/options.ts";
 
 export type { ParseResult };
 
 export default function* parser(
   pluginPasses: PluginPasses,
-  { parserOpts, highlightCode = true, filename = "unknown" }: any,
+  { parserOpts, highlightCode = true, filename = "unknown" }: ResolvedOptions,
   code: string,
 ): Handler<ParseResult> {
   try {
@@ -27,9 +28,9 @@ export default function* parser(
     if (results.length === 0) {
       return parse(code, parserOpts);
     } else if (results.length === 1) {
-      // @ts-expect-error - If we want to allow async parsers
+      // If we want to allow async parsers
       yield* [];
-      if (typeof results[0].then === "function") {
+      if (typeof (results[0] as any).then === "function") {
         throw new Error(
           `You appear to be using an async parser plugin, ` +
             `which your current version of Babel does not support. ` +
@@ -49,6 +50,13 @@ export default function* parser(
       // err.code will be changed to BABEL_PARSE_ERROR later.
     }
 
+    const startLine = parserOpts?.startLine;
+    const startColumn = parserOpts?.startColumn;
+
+    if (startColumn != null) {
+      code = " ".repeat(startColumn) + code;
+    }
+
     const { loc, missingPlugin } = err;
     if (loc) {
       const codeFrame = codeFrameColumns(
@@ -56,11 +64,12 @@ export default function* parser(
         {
           start: {
             line: loc.line,
-            column: loc.column + 1,
+            column: loc.column,
           },
         },
         {
           highlightCode,
+          startLine: startLine,
         },
       );
       if (missingPlugin) {

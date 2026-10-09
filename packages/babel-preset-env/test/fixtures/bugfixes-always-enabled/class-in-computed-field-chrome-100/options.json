@@ -1,5 +1,14 @@
 {
   "validateLogs": true,
-  "targets": { "chrome": 100 },
-  "presets": [["env", { "debug": true }]]
+  "targets": {
+    "chrome": 100
+  },
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true
+      }
+    ]
+  ]
 }

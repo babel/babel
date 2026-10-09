@@ -1,9 +1,8 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 import { types as t, type Scope } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   function getTempId(scope: Scope) {
     let id = scope.path.getData("functionBind");
@@ -43,7 +42,7 @@ export default declare(api => {
       bind.callee.object = t.assignmentExpression(
         "=",
         tempId,
-        // @ts-ignore(Babel 7 vs Babel 8) Fixme: support `super.foo(?)`
+        // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
         bind.callee.object,
       );
     }
@@ -52,7 +51,7 @@ export default declare(api => {
 
   return {
     name: "proposal-function-bind",
-    inherits: syntaxFunctionBind,
+    manipulateOptions: (_, parser) => parser.plugins.push("functionBind"),
 
     visitor: {
       CallExpression({ node, scope }) {

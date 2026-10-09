@@ -65,7 +65,7 @@ function applyDecs2311(e, t, n, r, o, i) {
           t[4](this, e);
         }
       } : P[F] = v, l || setFunctionName(P[F], r, E ? "" : F)) : l || (P = _Object$getOwnPropertyDescriptor(e, r)), !l && !f) {
-        if ((c = y[+s][r]) && 7 != (c ^ o)) throw Error("Decorating two elements with the same name (" + P[F].name + ") is not supported yet");
+        if ((c = y[+s][r]) && 7 !== (c ^ o)) throw Error("Decorating two elements with the same name (" + P[F].name + ") is not supported yet");
         y[+s][r] = o < 3 ? 1 : o;
       }
     }

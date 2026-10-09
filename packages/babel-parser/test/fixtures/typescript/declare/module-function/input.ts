@@ -1,3 +1,3 @@
-declare module m {
+declare module "m" {
   function foo() {}
 }

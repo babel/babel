@@ -1,7 +1,0 @@
-{
-  "plugins": [["transform-typescript", { "allowDeclareFields": false }]],
-  "parserOpts": {
-    "plugins": ["decoratorAutoAccessors"]
-  },
-  "BABEL_8_BREAKING": false
-}

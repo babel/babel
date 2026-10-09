@@ -1,6 +1,6 @@
 {
   "name": "@babel/eslint-plugin-development",
-  "version": "7.25.1",
+  "version": "8.0.6",
   "description": "ESLint rules that enforce best practices in the development of Babel plugins.",
   "keywords": [
     "eslint",
@@ -8,14 +8,17 @@
     "eslint-plugin"
   ],
   "author": "The Babel Team (https://babel.dev/team)",
-  "main": "./lib/index.cjs",
+  "main": "./lib/index.js",
   "type": "module",
   "exports": {
-    ".": "./lib/index.cjs",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
   "engines": {
-    "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "publishConfig": {
     "access": "public"
@@ -30,17 +33,10 @@
     "url": "https://github.com/babel/babel/issues"
   },
   "homepage": "https://babel.dev/",
-  "devDependencies": {
-    "eslint": "^9.7.0"
+  "peerDependencies": {
+    "eslint": "^9.0.0 || ^10.0.0"
   },
-  "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        }
-      },
-      {}
-    ]
+  "devDependencies": {
+    "eslint": "catalog:babel-eslint"
   }
 }

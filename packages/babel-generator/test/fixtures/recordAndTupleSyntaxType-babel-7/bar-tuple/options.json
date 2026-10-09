@@ -1,4 +1,0 @@
-{
-  "plugins": [["recordAndTuple", { "syntaxType": "bar" }]],
-  "recordAndTupleSyntaxType": "bar"
-}

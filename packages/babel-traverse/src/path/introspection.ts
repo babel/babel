@@ -11,6 +11,7 @@ import {
   isStringLiteral,
   isType,
   matchesPattern as _matchesPattern,
+  toComputedKey,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -29,59 +30,8 @@ export function matchesPattern(
   return _matchesPattern(this.node, pattern, allowPartial);
 }
 
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  /**
-   * Check whether we have the input `key`. If the `key` references an array then we check
-   * if the array has any items, otherwise we just check if it's falsy.
-   */
-  // eslint-disable-next-line no-restricted-globals
-  exports.has = function has<N extends t.Node>(
-    this: NodePath<N>,
-    key: keyof N,
-  ): boolean {
-    const val = (this.node as N)?.[key];
-    if (val && Array.isArray(val)) {
-      return !!val.length;
-    } else {
-      return !!val;
-    }
-  };
-}
-
 export function isStatic(this: NodePath): boolean {
   return this.scope.isStatic(this.node);
-}
-
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  /**
-   * Alias of `has`.
-   */
-  // eslint-disable-next-line no-restricted-globals
-  exports.is = exports.has;
-
-  /**
-   * Opposite of `has`.
-   */
-  // eslint-disable-next-line no-restricted-globals
-  exports.isnt = function isnt<N extends t.Node>(
-    this: NodePath<N>,
-    key: keyof N,
-  ): boolean {
-    // @ts-expect-error Babel 7
-    return !this.has(key);
-  };
-
-  /**
-   * Check whether the path node `key` strict equals `value`.
-   */
-  // eslint-disable-next-line no-restricted-globals
-  exports.equals = function equals<N extends t.Node>(
-    this: NodePath<N>,
-    key: keyof N,
-    value: any,
-  ): boolean {
-    return (this.node as N)[key] === value;
-  };
 }
 
 /**
@@ -89,7 +39,10 @@ if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
  * been removed yet we still internally know the type and need it to calculate node replacement.
  */
 
-export function isNodeType(this: NodePath, type: string): boolean {
+export function isNodeType(
+  this: NodePath<t.Node | null>,
+  type: string,
+): boolean {
   return isType(this.type, type);
 }
 
@@ -103,7 +56,9 @@ export function isNodeType(this: NodePath, type: string): boolean {
  * to tell the path replacement that it's ok to replace this with an expression.
  */
 
-export function canHaveVariableDeclarationOrExpression(this: NodePath) {
+export function canHaveVariableDeclarationOrExpression(
+  this: NodePath<t.Node | null>,
+): boolean {
   return (
     (this.key === "init" || this.key === "left") && this.parentPath.isFor()
   );
@@ -118,7 +73,7 @@ export function canHaveVariableDeclarationOrExpression(this: NodePath) {
  */
 
 export function canSwapBetweenExpressionAndStatement(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   replacement: t.Node,
 ): boolean {
   if (this.key !== "body" || !this.parentPath.isArrowFunctionExpression()) {
@@ -174,7 +129,7 @@ export function isCompletionRecord(
  * so we can explode it if necessary.
  */
 
-export function isStatementOrBlock(this: NodePath): boolean {
+export function isStatementOrBlock(this: NodePath<t.Node | null>): boolean {
   if (
     this.parentPath.isLabeledStatement() ||
     isBlockStatement(this.container as t.Node)
@@ -216,7 +171,7 @@ export function referencesImport(
   }
 
   const binding = this.scope.getBinding((this.node as t.Identifier).name);
-  if (!binding || binding.kind !== "module") return false;
+  if (binding?.kind !== "module") return false;
 
   const path = binding.path;
   const parent = path.parentPath;
@@ -255,7 +210,7 @@ export function getSource(this: NodePath): string {
   const node = this.node;
   if (node.end) {
     const code = this.hub.getCode();
-    if (code) return code.slice(node.start, node.end);
+    if (code) return code.slice(node.start!, node.end);
   }
   return "";
 }
@@ -335,7 +290,7 @@ function isExecutionUncertainInList(paths: NodePath[], maxIndex: number) {
   return false;
 }
 
-// TODO(Babel 8)
+// TODO(Babel 9)
 // This can be { before: boolean, after: boolean, unknown: boolean }.
 // This allows transforms like the tdz one to treat cases when the status
 // is both before and unknown/after like if it were before.
@@ -437,7 +392,7 @@ function _guessExecutionStatusRelativeToCached(
     divergence.this.listKey &&
     divergence.target.container === divergence.this.container
   ) {
-    return divergence.target.key > divergence.this.key ? "before" : "after";
+    return divergence.target.key! > divergence.this.key! ? "before" : "after";
   }
 
   // otherwise we're associated by a parent node, check which key comes before the other
@@ -469,12 +424,12 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
   // then we can be a bit smarter and handle cases where the function is either
   // a. not called at all (part of an export)
   // b. called directly
-  const binding = target.scope.getBinding(target.node.id.name);
+  const binding = target.scope.getBinding(target.node.id!.name)!;
 
   // no references!
   if (!binding.references) return "before";
 
-  const referencePaths: Array<NodePath> = binding.referencePaths;
+  const referencePaths: NodePath[] = binding.referencePaths;
 
   let allStatus;
 
@@ -500,7 +455,8 @@ function _guessExecutionStatusRelativeToDifferentFunctionsInternal(
     }
   }
 
-  return allStatus;
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  return allStatus!;
 }
 
 function _guessExecutionStatusRelativeToDifferentFunctionsCached(
@@ -533,24 +489,23 @@ function _guessExecutionStatusRelativeToDifferentFunctionsCached(
 }
 
 /**
- * Resolve a "pointer" `NodePath` to it's absolute path.
+ * Resolve the value pointed to by a NodePath
+ * e.g.
+ * ```
+ *  var a = 1;
+ *  var b = a;
+ *  b;
+ * ```
+ * `b.resolve()` will return `1`
  */
 export function resolve(
   this: NodePath,
   dangerous?: boolean,
   resolved?: NodePath[],
-) {
-  return _resolve.call(this, dangerous, resolved) || this;
-}
-
-export function _resolve(
-  this: NodePath,
-  dangerous?: boolean,
-  resolved?: NodePath[],
-): NodePath | undefined | null {
+): NodePath {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
-  if (resolved?.includes(this)) return;
+  if (resolved?.includes(this)) return this;
 
   // we store all the paths we've "resolved" in this array to prevent infinite recursion
   resolved = resolved || [];
@@ -558,24 +513,25 @@ export function _resolve(
 
   if (this.isVariableDeclarator()) {
     if (this.get("id").isIdentifier()) {
+      // @ts-expect-error FIXME: NodePath<null>
       return this.get("init").resolve(dangerous, resolved);
     } else {
       // otherwise it's a request for a pattern and that's a bit more tricky
     }
   } else if (this.isReferencedIdentifier()) {
     const binding = this.scope.getBinding(this.node.name);
-    if (!binding) return;
+    if (!binding) return this;
 
     // reassigned so we can't really resolve it
-    if (!binding.constant) return;
+    if (!binding.constant) return this;
 
     // todo - lookup module in dependency graph
-    if (binding.kind === "module") return;
+    if (binding.kind === "module") return this;
 
     if (binding.path !== this) {
       const ret = binding.path.resolve(dangerous, resolved);
       // If the identifier resolves to parent node then we can't really resolve it.
-      if (this.find(parent => parent.node === ret.node)) return;
+      if (this.find(parent => parent.node === ret.node)) return this;
       return ret;
     }
   } else if (this.isTypeCastExpression()) {
@@ -585,8 +541,8 @@ export function _resolve(
     // this is dangerous, as non-direct target assignments will mutate it's state
     // making this resolution inaccurate
 
-    const targetKey = this.toComputedKey();
-    if (!isLiteral(targetKey)) return;
+    const targetKey = toComputedKey(this.node);
+    if (!isLiteral(targetKey)) return this;
 
     // @ts-expect-error todo(flow->ts): NullLiteral
     const targetName = targetKey.value;
@@ -612,12 +568,15 @@ export function _resolve(
     } else if (target.isArrayExpression() && !isNaN(+targetName)) {
       const elems = target.get("elements");
       const elem = elems[targetName];
+      // @ts-expect-error FIXME: NodePath<null>
       if (elem) return elem.resolve(dangerous, resolved);
     }
   }
+
+  return this;
 }
 
-export function isConstantExpression(this: NodePath): boolean {
+export function isConstantExpression(this: NodePath<t.Node | null>): boolean {
   if (this.isIdentifier()) {
     const binding = this.scope.getBinding(this.node.name);
     if (!binding) return false;
@@ -676,7 +635,7 @@ export function isConstantExpression(this: NodePath): boolean {
   return false;
 }
 
-export function isInStrictMode(this: NodePath) {
+export function isInStrictMode(this: NodePath<t.Node | null>) {
   const start = this.isProgram() ? this : this.parentPath;
 
   const strictParent = start.find(path => {
@@ -695,9 +654,6 @@ export function isInStrictMode(this: NodePath) {
     if (path.isFunction()) {
       body = path.node.body as t.BlockStatement;
     } else if (path.isProgram()) {
-      // @ts-expect-error TODO: TS thinks that `path` here cannot be
-      // Program due to the `isProgram()` check at the beginning of
-      // the function
       body = path.node;
     } else {
       return false;
@@ -708,6 +664,7 @@ export function isInStrictMode(this: NodePath) {
         return true;
       }
     }
+    return false;
   });
 
   return !!strictParent;

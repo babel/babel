@@ -4,15 +4,14 @@ var Example = /*#__PURE__*/function () {
   function Example() {}
   var _proto = Example.prototype;
   _proto.test1 = /*#__PURE__*/function () {
-    var _test = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
-      return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) switch (_context.prev = _context.next) {
+    var _test = babelHelpers.asyncToGenerator(/*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
+      return babelHelpers.regenerator().w(function (_context) {
+        while (1) switch (_context.n) {
           case 0:
-            _context.next = 2;
+            _context.n = 1;
             return Promise.resolve(2);
-          case 2:
-          case "end":
-            return _context.stop();
+          case 1:
+            return _context.a(2);
         }
       }, _callee);
     }));
@@ -21,15 +20,14 @@ var Example = /*#__PURE__*/function () {
     }
     return test1;
   }();
-  _proto.test2 = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function test2() {
-    return babelHelpers.regeneratorRuntime().wrap(function test2$(_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+  _proto.test2 = /*#__PURE__*/babelHelpers.regenerator().m(function test2() {
+    return babelHelpers.regenerator().w(function (_context2) {
+      while (1) switch (_context2.n) {
         case 0:
-          _context2.next = 2;
+          _context2.n = 1;
           return 3;
-        case 2:
-        case "end":
-          return _context2.stop();
+        case 1:
+          return _context2.a(2);
       }
     }, test2);
   });

@@ -1,5 +1,0 @@
-{
-  "plugins": ["importAttributes"],
-  "importAttributesKeyword": "assert",
-  "expectedReParseError": true
-}

@@ -61,14 +61,14 @@ function a7(_ref8 = {}) {
 function a8([_ref9]) {
   let a1 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref9), _ref9));
 }
-function a9([_ref10]) {
+function a9([_ref0]) {
   let {
       a1
-    } = _ref10,
-    a2 = babelHelpers.objectWithoutProperties(_ref10, _excluded9);
+    } = _ref0,
+    a2 = babelHelpers.objectWithoutProperties(_ref0, _excluded9);
 }
-function a10([a1, _ref11]) {
-  let a2 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref11), _ref11));
+function a10([a1, _ref1]) {
+  let a2 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref1), _ref1));
 }
 // Unchanged
 function b(a) {}

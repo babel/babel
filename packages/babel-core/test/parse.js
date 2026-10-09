@@ -1,8 +1,8 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { parseSync } from "../lib/index.js";
-import { fileURLToPath } from "url";
-import { createRequire } from "module";
+import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
 
@@ -38,5 +38,30 @@ describe("parseSync", function () {
       cwd: fixture(),
     });
     expect(JSON.parse(JSON.stringify(result))).toEqual(output);
+  });
+
+  it("should show correct codeFrame with startLine and startColumn", function () {
+    const input = `const* a = 1;`;
+    let err;
+    try {
+      parseSync(input, {
+        parserOpts: {
+          startLine: 3,
+          startColumn: 3,
+          startIndex: 6,
+        },
+        highlightCode: false,
+        configFile: false,
+        babelrc: false,
+      });
+    } catch (e) {
+      err = e;
+    }
+    expect(err.message).toMatchInlineSnapshot(`
+      "unknown: Unexpected token (3:8)
+
+      > 3 |    const* a = 1;
+          |         ^"
+    `);
   });
 });

@@ -1,27 +1,13 @@
-import type { Options } from "../options.ts";
+import type { OptionsWithDefaults } from "../options.ts";
 import type { CommentWhitespace } from "../parser/comments";
 import { Position } from "../util/location.ts";
 
 import { types as ct, type TokContext } from "./context.ts";
 import { tt, type TokenType } from "./types.ts";
-import type { Errors } from "../parse-error.ts";
-import type { ParseError } from "../parse-error.ts";
+import type { Errors, ParseError } from "../parse-error.ts";
 
 export type DeferredStrictError =
-  | typeof Errors.StrictNumericEscape
-  | typeof Errors.StrictOctalLiteral;
-
-type TopicContextState = {
-  // When a topic binding has been currently established,
-  // then this is 1. Otherwise, it is 0. This is forwards compatible
-  // with a future plugin for multiple lexical topics.
-  maxNumOfResolvableTopics: number;
-  // When a topic binding has been currently established, and if that binding
-  // has been used as a topic reference `#`, then this is 0. Otherwise, it is
-  // `null`. This is forwards compatible with a future plugin for multiple
-  // lexical topics.
-  maxTopicIndex: null | 0;
-};
+  typeof Errors.StrictNumericEscape | typeof Errors.StrictOctalLiteral;
 
 export const enum LoopLabelKind {
   Loop = 1,
@@ -31,19 +17,26 @@ export const enum LoopLabelKind {
 declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.d.ts").BitDecorator<State>;
 
 export default class State {
-  @bit.storage flags: number;
+  @bit.storage flags: number = 0;
 
   @bit accessor strict = false;
 
-  curLine: number;
-  lineStart: number;
+  startIndex!: number;
+  curLine!: number;
+  lineStart!: number;
 
   // And, if locations are used, the {line, column} object
   // corresponding to those offsets
-  startLoc: Position;
-  endLoc: Position;
+  startLoc!: Position;
+  endLoc!: Position;
 
-  init({ strictMode, sourceType, startLine, startColumn }: Options): void {
+  init({
+    strictMode,
+    sourceType,
+    startIndex,
+    startLine,
+    startColumn,
+  }: OptionsWithDefaults): void {
     this.strict =
       strictMode === false
         ? false
@@ -51,15 +44,17 @@ export default class State {
           ? true
           : sourceType === "module";
 
+    this.startIndex = startIndex;
     this.curLine = startLine;
     this.lineStart = -startColumn;
-    this.startLoc = this.endLoc = new Position(startLine, startColumn, 0);
+    this.startLoc = this.endLoc = new Position(
+      startLine,
+      startColumn,
+      startIndex,
+    );
   }
 
-  errors: ParseError<any>[] = [];
-
-  // Used to signify the start of a potential arrow function
-  potentialArrowAt: number = -1;
+  errors: ParseError[] = [];
 
   // Used to signify the start of an expression which looks like a
   // typed arrow function, but it isn't
@@ -76,34 +71,35 @@ export default class State {
   noArrowParamsConversionAt: number[] = [];
 
   // Flags to track
-  @bit accessor maybeInArrowParameters = false;
+
+  /**
+   * Track whether the current start is the start of an AssignmentExpression production.
+   * The ArrowFunctionExpression and AsyncArrowFunctionExpression productions can only be
+   * parsed if this is true.
+   */
+  @bit accessor canStartArrow = false;
   @bit accessor inType = false;
   @bit accessor noAnonFunctionType = false;
   @bit accessor hasFlowComment = false;
   @bit accessor isAmbientContext = false;
   @bit accessor inAbstractClass = false;
   @bit accessor inDisallowConditionalTypesContext = false;
+  @bit accessor inConditionalConsequent = false;
 
   // For the Hack-style pipelines plugin
-  topicContext: TopicContextState = {
-    maxNumOfResolvableTopics: 0,
-    maxTopicIndex: null,
-  };
-
-  // For the F#-style pipelines plugin
-  @bit accessor soloAwait = false;
-  @bit accessor inFSharpPipelineDirectBody = false;
+  @bit accessor inHackPipelineBody = false;
+  @bit accessor seenTopicReference = false;
 
   // Labels in scope.
-  labels: Array<{
-    kind: LoopLabelKind;
+  labels: {
+    kind: LoopLabelKind | null;
     name?: string | null;
     statementStart?: number;
-  }> = [];
+  }[] = [];
 
   commentsLen = 0;
   // Comment attachment store
-  commentStack: Array<CommentWhitespace> = [];
+  commentStack: CommentWhitespace[] = [];
 
   // The current position of the tokenizer in the input.
   pos: number = 0;
@@ -121,13 +117,13 @@ export default class State {
 
   // Position information for the previous token
   // this is initialized when generating the second token.
-  lastTokEndLoc: Position = null;
+  lastTokEndLoc: Position | null = null;
   // this is initialized when generating the second token.
-  lastTokStartLoc: Position = null;
+  lastTokStartLoc: Position | null = null;
 
   // The context stack is used to track whether the apostrophe "`" starts
   // or ends a string template
-  context: Array<TokContext> = [ct.brace];
+  context: TokContext[] = [ct.brace];
 
   // Used to track whether a JSX element is allowed to form
   @bit accessor canStartJSXElement = true;
@@ -151,7 +147,7 @@ export default class State {
 
   // todo(JLHwung): set strictErrors to null and avoid recording string errors
   // after a non-directive is parsed
-  strictErrors: Map<number, [DeferredStrictError, Position]> = new Map();
+  strictErrors = new Map<number, [DeferredStrictError, Position]>();
 
   // Tokens length in token store
   tokensLength: number = 0;
@@ -162,21 +158,24 @@ export default class State {
    */
 
   curPosition(): Position {
-    return new Position(this.curLine, this.pos - this.lineStart, this.pos);
+    return new Position(
+      this.curLine,
+      this.pos - this.lineStart,
+      this.pos + this.startIndex,
+    );
   }
 
   clone(): State {
     const state = new State();
     state.flags = this.flags;
+    state.startIndex = this.startIndex;
     state.curLine = this.curLine;
     state.lineStart = this.lineStart;
     state.startLoc = this.startLoc;
     state.endLoc = this.endLoc;
     state.errors = this.errors.slice();
-    state.potentialArrowAt = this.potentialArrowAt;
     state.noArrowAt = this.noArrowAt.slice();
     state.noArrowParamsConversionAt = this.noArrowParamsConversionAt.slice();
-    state.topicContext = this.topicContext;
     state.labels = this.labels.slice();
     state.commentsLen = this.commentsLen;
     state.commentStack = this.commentStack.slice();
@@ -204,10 +203,10 @@ export type LookaheadState = {
   end: number;
   context: TokContext[];
   startLoc: Position;
-  lastTokEndLoc: Position;
+  lastTokEndLoc: Position | null;
   curLine: number;
   lineStart: number;
-  curPosition: () => Position;
+  curPosition: State["curPosition"];
   /* Used only in readToken_mult_modulo */
   inType: boolean;
   // These boolean properties are not initialized in createLookaheadState()

@@ -1,5 +1,0 @@
-{
-  "plugins": ["importAssertions"],
-  "importAttributesKeyword": "with-legacy",
-  "expectedReParseError": true
-}

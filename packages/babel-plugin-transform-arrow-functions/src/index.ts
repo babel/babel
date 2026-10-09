@@ -1,11 +1,19 @@
 import { declare } from "@babel/helper-plugin-utils";
 
 export interface Options {
+  /** @deprecated Use the `noNewArrows` assumption instead. */
   spec?: boolean;
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  if ("spec" in options) {
+    console.warn(
+      "@babel/plugin-transform-arrow-functions: The 'spec' option has been deprecated, " +
+        `use the 'noNewArrows: ${!options.spec}' assumption instead (https://babeljs.io/assumptions).`,
+    );
+  }
 
   const noNewArrows = api.assumption("noNewArrows") ?? !options.spec;
 
@@ -18,23 +26,12 @@ export default declare((api, options: Options) => {
         // was queued up.
         if (!path.isArrowFunctionExpression()) return;
 
-        if (process.env.BABEL_8_BREAKING) {
-          path.arrowFunctionToExpression({
-            // While other utils may be fine inserting other arrows to make more transforms possible,
-            // the arrow transform itself absolutely cannot insert new arrow functions.
-            allowInsertArrow: false,
-            noNewArrows,
-          });
-        } else {
-          path.arrowFunctionToExpression({
-            allowInsertArrow: false,
-            noNewArrows,
-
-            // This is only needed for backward compat with @babel/traverse <7.13.0
-            // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-            specCompliant: !noNewArrows,
-          });
-        }
+        path.arrowFunctionToExpression({
+          // While other utils may be fine inserting other arrows to make more transforms possible,
+          // the arrow transform itself absolutely cannot insert new arrow functions.
+          allowInsertArrow: false,
+          noNewArrows,
+        });
       },
     },
   };

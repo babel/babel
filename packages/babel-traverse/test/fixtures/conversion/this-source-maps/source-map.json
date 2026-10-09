@@ -1,18 +1,12 @@
 {
   "version": 3,
-  "names": [
-    "fn",
-    "_this",
-    "inner",
-    "console",
-    "log"
-  ],
+  "names": [],
   "sources": [
     "conversion/this-source-maps/input.js"
   ],
   "sourcesContent": [
     "function fn() {\n  var inner = () => {\n    console.log(this);\n  };\n}"
   ],
-  "mappings": "AAAA,SAASA,EAAEA,CAAA,EAAG;EAAA,IAAAC,KAAA;EACZ,IAAIC,KAAK,GAAG,SAAAA,CAAA,EAAM;IAChBC,OAAO,CAACC,GAAG,CAACH,KAAI,CAAC;EACnB,CAAC;AACH",
+  "mappings": "AAAA,SAAS,EAAE,GAAG;EAAA;EACZ,IAAI,KAAK,GAAG,YAAM;IAChB,OAAO,CAAC,GAAG,CAAC,KAAI,CAAC;EACnB,CAAC;AACH",
   "ignoreList": []
 }

@@ -9,17 +9,15 @@
 </p>
 
 <p align="center">
-  <a href="https://gitpod.io/#https://github.com/babel/babel"><img alt="Gitpod ready-to-code" src="https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod"></a>
-</p>
-<p align="center">
-    <a href="https://www.npmjs.com/package/@babel/core"><img alt="v7 npm Downloads" src="https://img.shields.io/npm/dm/@babel/core.svg?maxAge=43200&label=v7%20downloads"></a>
-  <a href="https://www.npmjs.com/package/babel-core"><img alt="v6 npm Downloads" src="https://img.shields.io/npm/dm/babel-core.svg?maxAge=43200&label=v6%20downloads"></a>
+    <a href="https://npmx.dev/package/@babel/core"><img alt="npm Downloads" src="https://img.shields.io/npm/dm/@babel/core.svg?maxAge=43200&label=npm%20downloads&logo=babel&logoSize=auto"></a>
 </p>
 <p align="center">
   <a href="https://github.com/babel/babel/actions/workflows/ci.yml"><img alt="GitHub CI Status" src="https://github.com/babel/babel/actions/workflows/ci.yml/badge.svg?branch=main"></a>
-  <a href="https://codecov.io/github/babel/babel"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/babel/babel/main.svg?maxAge=43200"></a>
-  <a href="https://slack.babeljs.io/"><img alt="Slack Status" src="https://slack.babeljs.io/badge.svg"></a>
-  <a href="https://twitter.com/intent/follow?screen_name=babeljs"><img alt="Follow on Twitter" src="https://img.shields.io/twitter/follow/babeljs.svg?style=social&label=Follow"></a>
+  <a href="https://codecov.io/github/babel/babel"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/babel/babel/main.svg?maxAge=43200&logo=codecov"></a>
+  <a href="https://pkg.pr.new/~/babel/babel"><img alt="pkg.pr.new" src="https://img.shields.io/badge/PR_previews-pkg.pr.new-10a5e9"></a>
+</p>
+<p align="center">
+  <a href="https://slack.babeljs.io/"><img alt="Slack Status" src="https://img.shields.io/badge/chat-on_slack-brightgreen?style=flat&logo=slack&logoColor=white"></a>
 </p>
 
 <h2 align="center">Supporting Babel</h2>
@@ -76,7 +74,7 @@ function greet(input) {
 }
 ```
 
-Try it out at our [REPL](https://babel.dev/repl#?browsers=defaults%2C%20not%20ie%2011&loose=true&code_lz=GYVwdgxgLglg9mABAcwE4FN1QBQzABxCgEpEBvAKEUQyhFST0KkQH5XEAiACXQBs-cRAHc4qPgBNOAbgoBfIA&shippedProposals=true&sourceType=script&lineWrap=true&presets=env%2Cenv&prettier=true).
+Try it out at our [REPL](https://babel.dev/repl#?browsers=defaults&loose=true&code_lz=GYVwdgxgLglg9mABAcwE4FN1QBQzABxCgEpEBvAKEUQyhFST0KkQH5XEAiACXQBs-cRAHc4qPgBNOAbgoBfIA&shippedProposals=true&sourceType=script&lineWrap=true&presets=env%2Cenv&prettier=true&forceAllTransforms=true).
 
 ## FAQ
 
@@ -90,7 +88,7 @@ I'm so glad you asked: [Hallelujah —— In Praise of Babel](SONG.md) by [@angu
 
 ### Looking for support?
 
-For questions and support please join our [Slack Community](https://slack.babeljs.io/) (you can [sign up here](https://slack.babeljs.io/) for an invite), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
+For questions and support please [join or open a GitHub Discussion](https://github.com/babel/babel/discussions), join our [Slack Community](https://slack.babeljs.io/) (you can [sign up here](https://slack.babeljs.io/) for an invite), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Bluesky](https://bsky.app/profile/babel.dev).
 
 ### Where are the docs?
 

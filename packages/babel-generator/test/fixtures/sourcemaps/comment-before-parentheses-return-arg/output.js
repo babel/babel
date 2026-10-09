@@ -1,5 +1,5 @@
 function assertElement(assertFn, shouldBeElement, opt_message) {
-  return /** @type {!Ele	ment} */(
+  return (/** @type {!Ele	ment} */
     assertType_(
       assertFn,
       shouldBeElement,

@@ -1,4 +1,4 @@
-import type { Options } from "../options.ts";
+import type { OptionFlags, Options } from "../options.ts";
 import type State from "../tokenizer/state.ts";
 import type { PluginsMap } from "./index.ts";
 import type ScopeHandler from "../util/scope.ts";
@@ -9,12 +9,13 @@ import type {
   ParserPluginWithOptions,
   PluginConfig,
   PluginOptions,
-} from "../typings.ts";
+} from "../typings.d.ts";
 import type * as N from "../types.ts";
 
 export default class BaseParser {
   // Properties set by constructor in index.js
   declare options: Options;
+  declare optionFlags: OptionFlags;
   declare inModule: boolean;
   declare scope: ScopeHandler<any>;
   declare classScope: ClassScopeHandler;
@@ -22,6 +23,7 @@ export default class BaseParser {
   declare expressionScope: ExpressionScopeHandler;
   declare plugins: PluginsMap;
   declare filename: string | undefined | null;
+  declare startIndex: number;
   // Names of exports store. `default` is stored as a name for both
   // `export default foo;` and `export { foo as default };`.
   declare exportedIdentifiers: Set<string>;
@@ -35,7 +37,17 @@ export default class BaseParser {
   declare input: string;
   declare length: number;
   // Comment store for Program.comments
-  declare comments: Array<N.Comment>;
+  declare comments: N.Comment[];
+
+  declare locData: Uint32Array;
+
+  sourceToOffsetPos(sourcePos: number) {
+    return sourcePos + this.startIndex;
+  }
+
+  offsetToSourcePos(offsetPos: number) {
+    return offsetPos - this.startIndex;
+  }
 
   // This method accepts either a string (plugin name) or an array pair
   // (plugin name and options object). If an options object is given,

@@ -1,9 +1,9 @@
 {
   "name": "@babel/compat-data",
-  "version": "7.25.4",
+  "version": "8.0.5",
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
-  "description": "",
+  "description": "The compat-data to determine required Babel plugins",
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel.git",
@@ -12,32 +12,15 @@
   "publishConfig": {
     "access": "public"
   },
-  "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "exports": {
-          "./plugins": "./plugins.js",
-          "./native-modules": "./native-modules.js",
-          "./overlapping-plugins": "./overlapping-plugins.js",
-          "./plugin-bugfixes": "./plugin-bugfixes.js"
-        },
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        }
-      },
-      null
-    ]
-  },
   "exports": {
-    "./plugins": "./plugins.js",
-    "./native-modules": "./native-modules.js",
-    "./corejs2-built-ins": "./corejs2-built-ins.js",
-    "./corejs3-shipped-proposals": "./corejs3-shipped-proposals.js",
-    "./overlapping-plugins": "./overlapping-plugins.js",
-    "./plugin-bugfixes": "./plugin-bugfixes.js"
+    "./plugins": "./data/plugins.json",
+    "./native-modules": "./data/native-modules.json",
+    "./overlapping-plugins": "./data/overlapping-plugins.json",
+    "./plugin-bugfixes": "./data/plugin-bugfixes.json",
+    "./package.json": "./package.json"
   },
   "scripts": {
-    "build-data": "./scripts/download-compat-table.sh && node ./scripts/build-data.js && node ./scripts/build-modules-support.js && node ./scripts/build-bugfixes-targets.js"
+    "build-data": "./scripts/download-compat-table.sh && node ./scripts/build-data.mjs && node ./scripts/build-modules-support.mjs && node ./scripts/build-bugfixes-targets.mjs"
   },
   "keywords": [
     "babel",
@@ -45,12 +28,12 @@
     "compat-data"
   ],
   "devDependencies": {
-    "@mdn/browser-compat-data": "^5.5.36",
-    "core-js-compat": "^3.37.1",
-    "electron-to-chromium": "^1.4.816"
+    "@mdn/browser-compat-data": "^6.0.8",
+    "core-js-compat": "catalog:",
+    "electron-to-chromium": "^1.5.278"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "type": "commonjs"
 }

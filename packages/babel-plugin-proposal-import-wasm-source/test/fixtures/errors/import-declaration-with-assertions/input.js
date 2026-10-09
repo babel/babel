@@ -1,1 +1,1 @@
-import source s from "./x.wasm" assert { some: "attr" };
+import source s from "./x.wasm" with { some: "attr" };

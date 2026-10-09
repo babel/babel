@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-import-wasm-source",
-  "version": "7.24.7",
+  "version": "8.0.1",
   "description": "Transform source phase imports (`import source ... from '...'`) to work in browsers and Node.js, assuming that the imported source is a WebAssembly module.",
   "repository": {
     "type": "git",
@@ -37,31 +37,16 @@
     "@babel/plugin-syntax-import-source": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.22.0"
+    "@babel/core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/plugin-transform-json-modules": "workspace:^"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "type": "module",
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ],
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        }
-      },
-      {}
-    ]
-  }
+  "type": "module"
 }

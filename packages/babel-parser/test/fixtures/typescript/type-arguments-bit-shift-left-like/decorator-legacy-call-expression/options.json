@@ -1,3 +1,6 @@
 {
-  "plugins": ["decorators-legacy", "typescript"]
+  "plugins": [
+    "decorators-legacy",
+    "typescript"
+  ]
 }

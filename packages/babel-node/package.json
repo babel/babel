@@ -1,6 +1,6 @@
 {
   "name": "@babel/node",
-  "version": "7.25.0",
+  "version": "8.0.6",
   "description": "Babel command line",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-node",
@@ -24,19 +24,18 @@
   ],
   "dependencies": {
     "@babel/register": "workspace:^",
-    "commander": "condition:BABEL_8_BREAKING ? ^12.1.0 : ^6.2.0 (esm:program|default)",
-    "core-js": "^3.30.2",
-    "node-environment-flags": "condition:BABEL_8_BREAKING ? : ^1.0.5",
-    "regenerator-runtime": "^0.14.0",
-    "v8flags": "condition:BABEL_8_BREAKING ? ^4.0.0 : ^3.1.1"
+    "commander": "catalog:",
+    "core-js": "catalog:",
+    "v8flags": "^4.0.1"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0"
+    "@babel/core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@babel/preset-env": "workspace:^",
+    "@babel/preset-react": "workspace:^",
     "@babel/runtime": "workspace:^",
     "@types/v8flags": "^3.1.1"
   },
@@ -44,31 +43,9 @@
     "babel-node": "./bin/babel-node.js"
   },
   "engines": {
-    "node": ">=6.9.0"
-  },
-  "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ],
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ]
+    "node": "^22.18.0 || >=24.11.0"
   },
   "exports": {
-    ".": {
-      "types": "./lib/index.d.ts",
-      "default": "./lib/index.js"
-    },
     "./package.json": "./package.json"
   },
   "type": "module"

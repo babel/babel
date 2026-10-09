@@ -1,15 +1,15 @@
 import { declare } from "@babel/helper-plugin-utils";
 import type { NodePath, Scope, Visitor, PluginPass } from "@babel/core";
-import { types as t, traverse } from "@babel/core";
+import { types as t } from "@babel/core";
 
 import {
   getLoopBodyBindings,
   getUsageInBody,
   isVarInLoopHead,
+  isVarInForStatementInit,
   wrapLoopBody,
 } from "./loop.ts";
 import { validateUsage } from "./validation.ts";
-import { annexB33FunctionsVisitor, isVarScope } from "./annex-B_3_3.ts";
 
 export interface Options {
   tdz?: boolean;
@@ -17,7 +17,7 @@ export interface Options {
 }
 
 export default declare((api, opts: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const { throwIfClosureRequired = false, tdz: tdzEnabled = false } = opts;
   if (typeof throwIfClosureRequired !== "boolean") {
@@ -30,134 +30,167 @@ export default declare((api, opts: Options) => {
   return {
     name: "transform-block-scoping",
 
-    visitor: traverse.visitors.merge<PluginPass>([
-      // TODO: Consider adding an option to control Annex B behavior.
-      annexB33FunctionsVisitor,
-      {
-        Loop(path: NodePath<t.Loop>, state) {
-          const isForStatement = path.isForStatement();
-          const headPath = isForStatement
-            ? path.get("init")
-            : path.isForXStatement()
-              ? path.get("left")
-              : null;
+    visitor: {
+      Loop(path: NodePath<t.Loop>, state) {
+        const isForStatement = path.isForStatement();
+        const headPath = isForStatement
+          ? path.get("init")
+          : path.isForXStatement()
+            ? path.get("left")
+            : null;
 
-          let needsBodyWrap = false;
-          const markNeedsBodyWrap = () => {
-            if (throwIfClosureRequired) {
-              throw path.buildCodeFrameError(
-                "Compiling let/const in this block would add a closure " +
-                  "(throwIfClosureRequired).",
+        let needsBodyWrap = false;
+        const markNeedsBodyWrap = () => {
+          if (throwIfClosureRequired) {
+            throw path.buildCodeFrameError(
+              "Compiling let/const in this block would add a closure " +
+                "(throwIfClosureRequired).",
+            );
+          }
+          needsBodyWrap = true;
+        };
+
+        const body = path.get("body");
+        let bodyScope: Scope | null | undefined;
+        if (body.isBlockStatement()) {
+          bodyScope = body.scope;
+        }
+        const bindings = getLoopBodyBindings(path);
+        for (const binding of bindings) {
+          const { capturedInClosure } = getUsageInBody(binding, path);
+          if (capturedInClosure) markNeedsBodyWrap();
+        }
+
+        const captured: string[] = [];
+        const updatedBindingsUsages = new Map<
+          string,
+          NodePath<t.Identifier>[]
+        >();
+
+        if (headPath && isBlockScoped(headPath)) {
+          const names = Object.keys(headPath.getBindingIdentifiers());
+          const headScope = headPath.scope;
+
+          for (let name of names) {
+            if (bodyScope?.hasOwnBinding(name)) continue; // shadowed
+
+            let binding = headScope.getOwnBinding(name);
+            if (!binding) {
+              headScope.crawl();
+              binding = headScope.getOwnBinding(name)!;
+            }
+            const {
+              usages,
+              capturedInClosure,
+              hasConstantViolations,
+              capturedInHeadClosure,
+              headUsages,
+            } = getUsageInBody(binding, path);
+
+            if (
+              headScope.parent!.hasBinding(name) ||
+              headScope.parent!.hasGlobal(name)
+            ) {
+              // If the binding is not captured, there is no need
+              // of adding it to the closure param. However, rename
+              // it if it shadows an outer binding, because the
+              // closure will be moved to an outer level.
+              const newName = headScope.generateUid(name);
+              headScope.rename(name, newName);
+              name = newName;
+            }
+
+            if (capturedInHeadClosure && binding.constantViolations.length) {
+              // A closure created in the loop head (e.g. the `f` in
+              // `for (let i = 0, f = () => i; ...)`) closes over the
+              // one-time environment used to evaluate the head, which is
+              // never updated again once the loop starts iterating. Rename
+              // the binding's uses in the head to a separate binding, and
+              // only copy it to the per-iteration binding after the whole
+              // initializer has run:
+              //   for (let _i = 0, f = () => _i, i = _i; ...)
+              const headName = headScope.generateUid(name);
+              const declarationIds = (
+                binding.path as NodePath<t.VariableDeclarator>
+              )
+                .get("id")
+                .getBindingIdentifierPaths(true)[name];
+              for (const usage of [...declarationIds, ...headUsages]) {
+                usage.replaceWith(t.identifier(headName));
+              }
+              headPath.pushContainer(
+                "declarations",
+                t.variableDeclarator(
+                  t.identifier(name),
+                  t.identifier(headName),
+                ),
               );
-            }
-            needsBodyWrap = true;
-          };
-
-          const body = path.get("body");
-          let bodyScope: Scope | null;
-          if (body.isBlockStatement()) {
-            bodyScope = body.scope;
-          }
-          const bindings = getLoopBodyBindings(path);
-          for (const binding of bindings) {
-            const { capturedInClosure } = getUsageInBody(binding, path);
-            if (capturedInClosure) markNeedsBodyWrap();
-          }
-
-          const captured: string[] = [];
-          const updatedBindingsUsages: Map<string, NodePath<t.Identifier>[]> =
-            new Map();
-
-          if (headPath && isBlockScoped(headPath.node)) {
-            const names = Object.keys(headPath.getBindingIdentifiers());
-            const headScope = headPath.scope;
-
-            for (let name of names) {
-              if (bodyScope?.hasOwnBinding(name)) continue; // shadowed
-
-              let binding = headScope.getOwnBinding(name);
-              if (!binding) {
-                headScope.crawl();
-                binding = headScope.getOwnBinding(name);
-              }
-              const { usages, capturedInClosure, hasConstantViolations } =
-                getUsageInBody(binding, path);
-
-              if (
-                headScope.parent.hasBinding(name) ||
-                headScope.parent.hasGlobal(name)
-              ) {
-                // If the binding is not captured, there is no need
-                // of adding it to the closure param. However, rename
-                // it if it shadows an outer binding, because the
-                // closure will be moved to an outer level.
-                const newName = headScope.generateUid(name);
-                headScope.rename(name, newName);
-                name = newName;
-              }
-
-              if (capturedInClosure) {
-                markNeedsBodyWrap();
-                captured.push(name);
-              }
-
-              if (isForStatement && hasConstantViolations) {
-                updatedBindingsUsages.set(name, usages);
-              }
-            }
-          }
-
-          if (needsBodyWrap) {
-            const varPath = wrapLoopBody(path, captured, updatedBindingsUsages);
-
-            if (headPath?.isVariableDeclaration()) {
-              // If we wrap the loop body, we transform the var
-              // declaration in the loop head now, to avoid
-              // invalid references that break other plugins:
-              //
-              //  for (let head of x) {
-              //    let i = head;
-              //    setTimeout(() => i);
-              //  }
-              //
-              // would become
-              //
-              //  function _loop() {
-              //    let i = head;
-              //    setTimeout(() => i);
-              //  }
-              //  for (let head of x) _loop();
-              //
-              // which references `head` in a scope where it's not visible.
-              transformBlockScopedVariable(headPath, state, tdzEnabled);
+              headScope.crawl();
             }
 
-            varPath.get("declarations.0.init").unwrapFunctionEnvironment();
+            if (capturedInClosure) {
+              markNeedsBodyWrap();
+              captured.push(name);
+            }
+
+            if (isForStatement && hasConstantViolations) {
+              updatedBindingsUsages.set(name, usages);
+            }
           }
-        },
+        }
 
-        VariableDeclaration(path, state) {
-          transformBlockScopedVariable(path, state, tdzEnabled);
-        },
+        if (needsBodyWrap) {
+          const varPath = wrapLoopBody(path, captured, updatedBindingsUsages);
 
-        // Class declarations are block-scoped: if there is
-        // a class declaration in a nested block that conflicts
-        // with an outer block-scoped binding, rename it.
-        // TODO: Should this be moved to the classes plugin?
-        ClassDeclaration(path) {
-          const { id } = path.node;
-          if (!id) return;
-
-          const { scope } = path.parentPath;
-          if (
-            !isVarScope(scope) &&
-            scope.parent.hasBinding(id.name, { noUids: true })
-          ) {
-            path.scope.rename(id.name);
+          if (headPath?.isVariableDeclaration()) {
+            // If we wrap the loop body, we transform the var
+            // declaration in the loop head now, to avoid
+            // invalid references that break other plugins:
+            //
+            //  for (let head of x) {
+            //    let i = head;
+            //    setTimeout(() => i);
+            //  }
+            //
+            // would become
+            //
+            //  function _loop() {
+            //    let i = head;
+            //    setTimeout(() => i);
+            //  }
+            //  for (let head of x) _loop();
+            //
+            // which references `head` in a scope where it's not visible.
+            transformBlockScopedVariable(headPath, state, tdzEnabled);
           }
-        },
+
+          (
+            varPath.get("declarations.0.init") as NodePath<t.FunctionExpression>
+          ).unwrapFunctionEnvironment();
+        }
       },
-    ]),
+
+      VariableDeclaration(path, state) {
+        transformBlockScopedVariable(path, state, tdzEnabled);
+      },
+
+      // Class declarations are block-scoped: if there is
+      // a class declaration in a nested block that conflicts
+      // with an outer block-scoped binding, rename it.
+      // TODO: Should this be moved to the classes plugin?
+      ClassDeclaration(path) {
+        const { id } = path.node;
+        if (!id) return;
+
+        const { scope } = path.parentPath;
+        if (
+          !isVarScope(scope) &&
+          scope.parent!.hasBinding(id.name, { noUids: true })
+        ) {
+          path.scope.rename(id.name);
+        }
+      },
+    },
   };
 });
 
@@ -165,7 +198,7 @@ const conflictingFunctionsVisitor: Visitor<{ names: string[] }> = {
   Scope(path, { names }) {
     for (const name of names) {
       const binding = path.scope.getOwnBinding(name);
-      if (binding && binding.kind === "hoisted") {
+      if (binding?.kind === "hoisted") {
         path.scope.rename(name);
       }
     }
@@ -180,7 +213,7 @@ function transformBlockScopedVariable(
   state: PluginPass,
   tdzEnabled: boolean,
 ) {
-  if (!isBlockScoped(path.node)) return;
+  if (!isBlockScoped(path)) return;
 
   const dynamicTDZNames = validateUsage(path, state, tdzEnabled);
 
@@ -193,16 +226,19 @@ function transformBlockScopedVariable(
     binding.kind = "var";
   }
 
-  if (
-    (isInLoop(path) && !isVarInLoopHead(path)) ||
-    dynamicTDZNames.length > 0
-  ) {
+  const isLoopBodyDeclaration = isInLoop(path) && !isVarInLoopHead(path);
+  const isNestedForStatementInit =
+    isVarInForStatementInit(path) && isInLoop(path.parentPath);
+  const shouldInitLoopDeclaration =
+    isLoopBodyDeclaration || isNestedForStatementInit;
+
+  if (shouldInitLoopDeclaration || dynamicTDZNames.length > 0) {
     for (const decl of path.node.declarations) {
       // We explicitly add `void 0` to cases like
       //  for (;;) { let a; }
       // to make sure that `a` doesn't keep the value from
       // the previous iteration.
-      decl.init ??= path.scope.buildUndefinedNode();
+      decl.init ??= t.buildUndefinedNode();
     }
   }
 
@@ -218,8 +254,8 @@ function transformBlockScopedVariable(
         // UID, it has been used to declare the current variable in
         // a nested scope and thus we don't need to assume that it
         // may be declared (but not registered yet) in an upper one.
-        blockScope.parent.hasBinding(name, { noUids: true }) ||
-        blockScope.parent.hasGlobal(name)
+        blockScope.parent!.hasBinding(name, { noUids: true }) ||
+        blockScope.parent!.hasGlobal(name)
       ) {
         newName = blockScope.generateUid(name);
         blockScope.rename(name, newName);
@@ -241,7 +277,9 @@ function transformBlockScopedVariable(
   }
 }
 
-function isLetOrConst(kind: string): kind is "let" | "const" {
+function isLetOrConst(
+  kind: t.VariableDeclaration["kind"],
+): kind is "let" | "const" {
   return kind === "let" || kind === "const";
 }
 
@@ -252,18 +290,23 @@ function isInLoop(path: NodePath<t.Node>): boolean {
   return isInLoop(path.parentPath);
 }
 
-function isBlockScoped(node: t.Node): node is t.VariableDeclaration {
+function isBlockScoped(
+  path: NodePath<t.Node | null>,
+): path is NodePath<t.VariableDeclaration> {
+  const { node } = path;
   if (!t.isVariableDeclaration(node)) return false;
-  if (
-    // @ts-expect-error Fixme: document symbol properties
-    node[t.BLOCK_SCOPED_SYMBOL]
-  ) {
-    return true;
-  }
-
-  if (!isLetOrConst(node.kind) && node.kind !== "using") {
+  const { kind } = node;
+  if (kind === "using" || kind === "await using") {
+    throw path.buildCodeFrameError(
+      `The ${kind} declaration should be first transformed by \`@babel/plugin-transform-explicit-resource-management\`.`,
+    );
+  } else if (!isLetOrConst(kind)) {
     return false;
   }
 
   return true;
+}
+
+export function isVarScope(scope: Scope) {
+  return scope.path.isFunctionParent() || scope.path.isProgram();
 }

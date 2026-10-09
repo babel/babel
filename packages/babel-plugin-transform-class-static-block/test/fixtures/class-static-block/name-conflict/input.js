@@ -1,5 +1,5 @@
 class Foo {
-  static #_ = 42;
+  static #_() {};
   // static block can not be transformed as `#_` here
   static {
     this.foo = this.#_;

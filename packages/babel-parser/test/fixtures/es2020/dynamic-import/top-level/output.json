@@ -21,7 +21,8 @@
               "raw": "'testing.js'"
             },
             "value": "testing.js"
-          }
+          },
+          "options": null
         }
       },
       {
@@ -85,7 +86,8 @@
                 "tail": true
               }
             ]
-          }
+          },
+          "options": null
         }
       },
       {
@@ -108,7 +110,8 @@
                   "raw": "'testing.js'"
                 },
                 "value": "testing.js"
-              }
+              },
+              "options": null
             },
             "computed": false,
             "property": {

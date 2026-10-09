@@ -90,9 +90,9 @@ var twelve = function () {
   var arguments = 2;
   return class {
     m() {
-      var _arguments10 = arguments;
+      var _arguments0 = arguments;
       return function () {
-        return _arguments10;
+        return _arguments0;
       };
     }
   };

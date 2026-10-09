@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { basename, extname } from "path";
+import { basename, extname } from "node:path";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
@@ -45,6 +45,7 @@ export interface Options extends PluginOptions {
   exactGlobals?: boolean;
   globals?: Record<string, string>;
   importInterop?: RewriteModuleStatementsAndPrepareHeaderOptions["importInterop"];
+  /** @deprecated Use the `constantReexports` and `enumerableModuleMeta` assumptions instead. */
   loose?: boolean;
   noInterop?: boolean;
   strict?: boolean;
@@ -52,7 +53,14 @@ export interface Options extends PluginOptions {
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  if ("loose" in options) {
+    console.warn(
+      "@babel/plugin-transform-modules-umd: The 'loose' option has been deprecated, " +
+        "use the `constantReexports` and `enumerableModuleMeta` assumptions instead (https://babeljs.io/assumptions).",
+    );
+  }
 
   const {
     globals,
@@ -74,9 +82,9 @@ export default declare((api, options: Options) => {
    */
   function buildBrowserInit(
     browserGlobals: Record<string, string>,
-    exactGlobals: boolean,
+    exactGlobals: boolean | undefined,
     filename: string,
-    moduleName: t.StringLiteral | void,
+    moduleName: t.StringLiteral | undefined,
   ) {
     const moduleNameOrBasename = moduleName
       ? moduleName.value
@@ -126,7 +134,7 @@ export default declare((api, options: Options) => {
    */
   function buildBrowserArg(
     browserGlobals: Record<string, string>,
-    exactGlobals: boolean,
+    exactGlobals: boolean | undefined,
     source: string,
   ) {
     let memberExpression: t.MemberExpression;
@@ -168,7 +176,7 @@ export default declare((api, options: Options) => {
           const browserGlobals = globals || {};
 
           const moduleName = getModuleName(this.file.opts, options);
-          let moduleNameLiteral: void | t.StringLiteral;
+          let moduleNameLiteral: t.StringLiteral | undefined;
           if (moduleName) moduleNameLiteral = t.stringLiteral(moduleName);
 
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
@@ -265,7 +273,7 @@ export default declare((api, options: Options) => {
             }) as t.Statement,
           ])[0] as NodePath<t.ExpressionStatement>;
           const umdFactory = (
-            umdWrapper.get("expression.arguments")[1] as NodePath<t.Function>
+            umdWrapper.get("expression.arguments.1") as NodePath<t.Function>
           ).get("body") as NodePath<t.BlockStatement>;
           umdFactory.pushContainer("directives", directives);
           umdFactory.pushContainer("body", body);

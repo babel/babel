@@ -1,39 +1,23 @@
-import type { types as t, NodePath, Visitor } from "@babel/core";
-import { visitors } from "@babel/traverse";
+import type { types as t, NodePath } from "@babel/core";
 import { declare } from "@babel/helper-plugin-utils";
 
 export default declare(({ types: t, assertVersion }) => {
-  assertVersion(REQUIRED_VERSION(7));
+  assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
-  const containsClassExpressionVisitor: Visitor<{ found: boolean }> = {
-    ClassExpression(path, state) {
-      state.found = true;
-      path.stop();
-    },
-    Function(path) {
-      path.skip();
-    },
-  };
-
-  const containsYieldOrAwaitVisitor = visitors.environmentVisitor<{
-    yield: boolean;
-    await: boolean;
-  }>({
-    YieldExpression(path, state) {
-      state.yield = true;
-      if (state.await) path.stop();
-    },
-    AwaitExpression(path, state) {
-      state.await = true;
-      if (state.yield) path.stop();
-    },
-  });
-
-  function containsClassExpression(path: NodePath<t.Node>) {
+  function containsClassExpression(path: NodePath<t.Node | null>) {
     if (t.isClassExpression(path.node)) return true;
     if (t.isFunction(path.node)) return false;
     const state = { found: false };
-    path.traverse(containsClassExpressionVisitor, state);
+
+    t.traverseFast(path.node, node => {
+      if (t.isClassExpression(node)) {
+        state.found = true;
+        return t.traverseFast.stop;
+      } else if (t.isFunction(node)) {
+        return t.traverseFast.skip;
+      }
+    });
+
     return state.found;
   }
 
@@ -42,7 +26,16 @@ export default declare(({ types: t, assertVersion }) => {
       yield: t.isYieldExpression(path.node),
       await: t.isAwaitExpression(path.node),
     };
-    path.traverse(containsYieldOrAwaitVisitor, context);
+
+    t.traverseFast(path.node, node => {
+      if (t.isYieldExpression(node)) {
+        context.yield = true;
+        if (context.await) return t.traverseFast.stop;
+      } else if (t.isAwaitExpression(node)) {
+        context.await = true;
+        if (context.yield) return t.traverseFast.stop;
+      }
+    });
 
     let replacement;
 

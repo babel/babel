@@ -1,13 +1,19 @@
 {
   "validateLogs": true,
   "presets": [
-    ["env", {
-      "debug": true,
-      "bugfixes": true,
-      "targets": {
-        "chrome": "40"
-      },
-      "exclude": ["transform-destructuring", "transform-arrow-functions"]
-    }]
+    [
+      "env",
+      {
+        "debug": true,
+        "targets": {
+          "chrome": "40"
+        },
+        "exclude": [
+          "bugfix/transform-safari-rest-destructuring-rhs-array",
+          "transform-destructuring",
+          "transform-arrow-functions"
+        ]
+      }
+    ]
   ]
 }

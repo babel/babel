@@ -19,7 +19,7 @@ function getBindingIdentifiers(
   duplicates: true,
   outerOnly?: boolean,
   newBindingsOnly?: boolean,
-): Record<string, Array<t.Identifier>>;
+): Record<string, t.Identifier[]>;
 
 function getBindingIdentifiers(
   node: t.Node,
@@ -33,7 +33,7 @@ function getBindingIdentifiers(
   duplicates?: boolean,
   outerOnly?: boolean,
   newBindingsOnly?: boolean,
-): Record<string, t.Identifier> | Record<string, Array<t.Identifier>>;
+): Record<string, t.Identifier> | Record<string, t.Identifier[]>;
 
 /**
  * Return a list of binding identifiers associated with the input `node`.
@@ -43,7 +43,8 @@ function getBindingIdentifiers(
   duplicates?: boolean,
   outerOnly?: boolean,
   newBindingsOnly?: boolean,
-): Record<string, t.Identifier> | Record<string, Array<t.Identifier>> {
+): Record<string, t.Identifier> | Record<string, t.Identifier[]> {
+  // @ts-expect-error FIXME: disallow Node[]
   const search: t.Node[] = [].concat(node);
   const ids = Object.create(null);
 
@@ -84,14 +85,11 @@ function getBindingIdentifiers(
 
     if (outerOnly) {
       if (isFunctionDeclaration(id)) {
-        search.push(id.id);
+        search.push(id.id!);
         continue;
       }
 
-      if (
-        isFunctionExpression(id) ||
-        (process.env.BABEL_8_BREAKING && isClassExpression(id))
-      ) {
+      if (isFunctionExpression(id) || isClassExpression(id)) {
         continue;
       }
     }
@@ -145,6 +143,7 @@ const keys: KeysMap = {
   ImportNamespaceSpecifier: ["local"],
   ImportDefaultSpecifier: ["local"],
   ImportDeclaration: ["specifiers"],
+  TSImportEqualsDeclaration: ["id"],
 
   ExportSpecifier: ["exported"],
   ExportNamespaceSpecifier: ["exported"],

@@ -1,5 +1,4 @@
 import { parse } from "../lib/index.js";
-import { itBabel8 } from "$repo-utils";
 
 function getParser(code, plugins) {
   return () => parse(code, { plugins, sourceType: "module" });
@@ -7,9 +6,6 @@ function getParser(code, plugins) {
 
 describe("plugin options", function () {
   describe("the first options are used", function () {
-    // NOTE: This test is not specific about decorators, it can be applied
-    // to any plugin with options.
-
     it("when they aren't specified", function () {
       const WITHOUT_FLAG = "flow";
       const WITH_FLAG = ["flow", { all: true }];
@@ -53,12 +49,14 @@ describe("plugin options", function () {
       ).toMatchObject(AST_WITH_FLAG);
     });
 
+    // NOTE: This test is not specific about pipelineOperator, it can be applied
+    // to any plugin with options.
     it("when they are specified", function () {
-      const NAME = "decorators";
-      const OPT_1 = [NAME, { decoratorsBeforeExport: true }];
-      const OPT_2 = [NAME, { decoratorsBeforeExport: false }];
-      const SYNTAX_1 = "@dec export class C {}";
-      const SYNTAX_2 = "export @dec class C {}";
+      const NAME = "pipelineOperator";
+      const OPT_1 = [NAME, { proposal: "hack", topicToken: "^" }];
+      const OPT_2 = [NAME, { proposal: "hack", topicToken: "%" }];
+      const SYNTAX_1 = "0 |> ^";
+      const SYNTAX_2 = "0 |> %";
 
       expect(getParser(SYNTAX_1, [OPT_1, OPT_2])).not.toThrow();
       expect(getParser(SYNTAX_2, [OPT_2, OPT_1])).not.toThrow();
@@ -67,11 +65,11 @@ describe("plugin options", function () {
     });
   });
   describe("'moduleAttributes' plugin", () => {
-    itBabel8("removed in Babel 8", () => {
+    it("removed in Babel 8", () => {
       expect(
         getParser("", ["moduleAttributes"]),
       ).toThrowErrorMatchingInlineSnapshot(
-        `"\`moduleAttributes\` has been removed in Babel 8, please use \`importAttributes\` parser plugin, or \`@babel/plugin-syntax-import-attributes\`."`,
+        `"\`moduleAttributes\` has been removed in Babel 8, please migrate to import attributes instead."`,
       );
     });
   });

@@ -1,5 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "BABEL_8_BREAKING": false,
-  "plugins": [["transform-runtime", { "corejs": 3 }], "transform-regenerator"]
-}

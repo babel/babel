@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-partial-application"],
+  "throws": "The partial application plugin requires a \"version\" option. \"version\" must be one of: 2018-07."
+}

@@ -1,7 +1,5 @@
-import _checkDuplicateNodes from "../lib/index.js";
+import checkDuplicateNodes from "../lib/index.js";
 import { parseSync, traverse, types as t } from "@babel/core";
-const checkDuplicateNodes =
-  _checkDuplicateNodes.default || _checkDuplicateNodes;
 
 describe("checkDuplicateNodes", () => {
   it("should throw on duplicate AST nodes within same parent", () => {

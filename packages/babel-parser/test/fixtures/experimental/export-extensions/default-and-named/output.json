@@ -44,7 +44,8 @@
           },
           "value": "bar"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

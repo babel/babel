@@ -2,19 +2,13 @@ import { declare } from "@babel/helper-plugin-utils";
 import { types as t, type NodePath } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const surrogate = /[\ud800-\udfff]/g;
   const unicodeEscape = /(\\+)u\{([0-9a-fA-F]+)\}/g;
 
   function escape(code: number) {
-    if (process.env.BABEL_8_BREAKING) {
-      return "\\u" + code.toString(16).padStart(4, "0");
-    } else {
-      let str = code.toString(16);
-      while (str.length < 4) str = "0" + str;
-      return "\\u" + str;
-    }
+    return "\\u" + code.toString(16).padStart(4, "0");
   }
 
   function replacer(match: string, backslashes: string, code: string) {
@@ -52,7 +46,7 @@ export default declare(api => {
       }
       generatorOpts.jsescOption.minimal ??= false;
     },
-    visitor: {
+    visitor: api.traverse.explode({
       Identifier(path) {
         const { node, key } = path;
         const { name } = node;
@@ -114,6 +108,6 @@ export default declare(api => {
 
         value.raw = replaceUnicodeEscapes(value.raw);
       },
-    },
+    }),
   };
 });

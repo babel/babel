@@ -1,4 +1,4 @@
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 
 // Basic smoke tests for @babel/standalone
@@ -11,7 +11,7 @@ describe("@babel/standalone", () => {
   describe("export packages", () => {
     it("list", () => {
       expect(Object.keys(Babel.packages)).toMatchInlineSnapshot(`
-        Array [
+        [
           "generator",
           "parser",
           "template",
@@ -58,7 +58,7 @@ describe("@babel/standalone", () => {
     }).code;
     expect(output).toBe("var a;");
   });
-  it("can translate simple ast", () => {
+  it("can synchronously translate simple ast", () => {
     const ast = {
       type: "Program",
       start: 0,
@@ -85,12 +85,50 @@ describe("@babel/standalone", () => {
     }).code;
     expect(output).toBe("42;");
   });
+  it("can asynchronously translate simple ast", async () => {
+    const ast = {
+      type: "Program",
+      start: 0,
+      end: 2,
+      directives: [],
+      body: [
+        {
+          type: "ExpressionStatement",
+          start: 0,
+          end: 1,
+          expression: {
+            type: "NumericLiteral",
+            start: 0,
+            end: 2,
+            value: 42,
+            raw: "42",
+          },
+        },
+      ],
+      sourceType: "script",
+    };
+    const output = (
+      await Babel.transformFromAstAsync(ast, "42", {
+        presets: ["es2015"],
+      })
+    ).code;
+    expect(output).toBe("42;");
+  });
+  it("can asynchronously translate simple code", async () => {
+    const output = (
+      await Babel.transformAsync("const a = 42;", {
+        presets: ["es2015"],
+      })
+    ).code;
+    expect(output).toBe(`"use strict";\n\nvar a = 42;`);
+  });
 
   it("handles the react preset", () => {
     const output = Babel.transform(
       "const someDiv = <div>{getMessage()}</div>",
       {
         presets: [["react", { runtime: "classic" }]],
+        envName: "production",
       },
     ).code;
     expect(output).toBe(
@@ -128,9 +166,37 @@ describe("@babel/standalone", () => {
     );
   });
 
+  it("throws on invalid preset name with options", () => {
+    expect(() =>
+      Babel.transform("var foo", {
+        presets: [["lolfail", { option: function () {} }]],
+      }),
+    ).toThrow(/Invalid preset specified in Babel options: "lolfail"/);
+  });
+
+  it("throws on falsy preset", () => {
+    expect(() => Babel.transform("var foo", { presets: [null] })).toThrow(
+      /Invalid preset specified in Babel options: "null"/,
+    );
+  });
+
   it("throws on invalid plugin name", () => {
     expect(() => Babel.transform("var foo", { plugins: ["lolfail"] })).toThrow(
       /Invalid plugin specified in Babel options: "lolfail"/,
+    );
+  });
+
+  it("throws on invalid plugin name with options", () => {
+    expect(() =>
+      Babel.transform("var foo", {
+        plugins: [["lolfail", { option: function () {} }]],
+      }),
+    ).toThrow(/Invalid plugin specified in Babel options: "lolfail"/);
+  });
+
+  it("throws on falsy plugin", () => {
+    expect(() => Babel.transform("var foo", { plugins: [null] })).toThrow(
+      /Invalid plugin specified in Babel options: "null"/,
     );
   });
 
@@ -188,21 +254,6 @@ describe("@babel/standalone", () => {
       );
     });
 
-    it("useBuiltIns works", () => {
-      const output = Babel.transform("[].includes(2)", {
-        sourceType: "module",
-        targets: { ie: 11 },
-        presets: [
-          ["env", { useBuiltIns: "usage", corejs: "3.0", modules: false }],
-        ],
-      }).code;
-
-      expect(output).toMatchInlineSnapshot(`
-        "import \\"core-js/modules/es.array.includes.js\\";
-        [].includes(2);"
-      `);
-    });
-
     it("regenerator works", () => {
       const output = Babel.transform("function* fn() {}", {
         sourceType: "module",
@@ -210,7 +261,7 @@ describe("@babel/standalone", () => {
         presets: ["env"],
       }).code;
 
-      expect(output).toMatch("regeneratorRuntime().mark(fn)");
+      expect(output).toMatch("regenerator().m(fn)");
     });
   });
 
@@ -266,13 +317,6 @@ describe("@babel/standalone", () => {
         }),
       ).not.toThrow();
     });
-    it("#12815 - unicode property letter short alias should be transformed (legacy package)", () => {
-      expect(() =>
-        Babel.transform("/\\p{L}/u", {
-          plugins: ["proposal-unicode-property-regex"],
-        }),
-      ).not.toThrow();
-    });
     it("#12815 - unicode property letter short alias should be transformed", () => {
       expect(() =>
         Babel.transform("/\\p{L}/u", {
@@ -302,7 +346,7 @@ describe("@babel/standalone", () => {
           targets: { chrome: 113 },
           presets: [["env", { modules: false }]],
         }).code,
-      ).toMatchInlineSnapshot(`"/[\\\\w--[b]]/v;"`);
+      ).toMatchInlineSnapshot(`"/[\\w--[b]]/v;"`);
     });
   });
 });

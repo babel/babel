@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-async-do-expressions",
-  "version": "7.25.6",
+  "version": "8.0.1",
   "description": "Transform async do expressions to ES2021",
   "repository": {
     "type": "git",
@@ -23,12 +23,10 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-syntax-async-do-expressions": "workspace:^",
-    "@babel/traverse": "condition:BABEL_8_BREAKING ? : workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.13.0"
+    "@babel/core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
@@ -36,24 +34,8 @@
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-async-do-expressions",
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "type": "module",
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ],
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        }
-      },
-      {}
-    ]
-  }
+  "type": "module"
 }

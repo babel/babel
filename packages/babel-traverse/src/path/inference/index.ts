@@ -28,7 +28,9 @@ import type * as t from "@babel/types";
  * Infer the type of the current `NodePath`.
  */
 
-export function getTypeAnnotation(this: NodePath): t.FlowType | t.TSType {
+export function getTypeAnnotation(
+  this: NodePath<t.Node | null>,
+): t.FlowType | t.TSType {
   let type = this.getData("typeAnnotation");
   if (type != null) {
     return type;
@@ -50,7 +52,7 @@ const typeAnnotationInferringNodes = new WeakSet();
  * todo: split up this method
  */
 
-export function _getTypeAnnotation(this: NodePath): any {
+function _getTypeAnnotation(this: NodePath<t.Node | null>): any {
   const node = this.node;
 
   if (!node) {

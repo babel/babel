@@ -1,8 +1,8 @@
-export type DeepArray<T> = Array<T | ReadonlyDeepArray<T>>;
+export type DeepArray<T> = (T | ReadonlyDeepArray<T>)[];
 
 // Just to make sure that DeepArray<T> is not assignable to ReadonlyDeepArray<T>
 declare const __marker: unique symbol;
-export type ReadonlyDeepArray<T> = ReadonlyArray<T | ReadonlyDeepArray<T>> & {
+export type ReadonlyDeepArray<T> = readonly (T | ReadonlyDeepArray<T>)[] & {
   [__marker]: true;
 };
 
@@ -16,7 +16,7 @@ export function flattenToSet<T extends string>(
   const result = new Set<T>();
   const stack = [arr];
   while (stack.length > 0) {
-    for (const el of stack.pop()) {
+    for (const el of stack.pop()!) {
       if (Array.isArray(el)) stack.push(el as ReadonlyDeepArray<T>);
       else result.add(el as T);
     }

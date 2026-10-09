@@ -1,4 +1,4 @@
-import semver from "semver";
+import { satisfies } from "verkit";
 import type { Targets } from "@babel/helper-compilation-targets";
 
 import { version as coreVersion } from "../../index.ts";
@@ -9,15 +9,20 @@ import type {
   SimpleType,
 } from "../caching.ts";
 
-import type { AssumptionName, CallerMetadata } from "../validation/options.ts";
+import type {
+  AssumptionName,
+  CallerMetadata,
+  InputOptions,
+} from "../validation/options.ts";
 
 import type * as Context from "../cache-contexts";
 
+type EnvName = NonNullable<InputOptions["envName"]>;
 type EnvFunction = {
   (): string;
-  <T>(extractor: (babelEnv: string) => T): T;
+  <T extends SimpleType>(extractor: (envName: EnvName) => T): T;
   (envVar: string): boolean;
-  (envVars: Array<string>): boolean;
+  (envVars: string[]): boolean;
 };
 
 type CallerFactory = {
@@ -37,7 +42,7 @@ export type ConfigAPI = {
   env: EnvFunction;
   async: () => boolean;
   assertVersion: typeof assertVersion;
-  caller?: CallerFactory;
+  caller: CallerFactory;
 };
 
 export type PresetAPI = {
@@ -60,7 +65,7 @@ export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
     value: string | string[] | (<T>(babelEnv: string) => T),
   ) =>
     cache.using(data => {
-      if (typeof value === "undefined") return data.envName;
+      if (value === undefined) return data.envName;
       if (typeof value === "function") {
         return assertSimpleType(value(data.envName));
       }
@@ -82,14 +87,14 @@ export function makeConfigAPI<SideChannel extends Context.SimpleConfig>(
     // Expose ".env()" so people can easily get the same env that we expose using the "env" key.
     env,
     async: () => false,
-    caller,
+    caller: caller as CallerFactory,
     assertVersion,
   };
 }
 
 export function makePresetAPI<SideChannel extends Context.SimplePreset>(
   cache: CacheConfigurator<SideChannel>,
-  externalDependencies: Array<string>,
+  externalDependencies: string[],
 ): PresetAPI {
   const targets = () =>
     // We are using JSON.parse/JSON.stringify because it's only possible to cache
@@ -107,7 +112,7 @@ export function makePresetAPI<SideChannel extends Context.SimplePreset>(
 
 export function makePluginAPI<SideChannel extends Context.SimplePlugin>(
   cache: CacheConfigurator<SideChannel>,
-  externalDependencies: Array<string>,
+  externalDependencies: string[],
 ): PluginAPI {
   const assumption = (name: string) =>
     cache.using(data => data.assumptions[name]);
@@ -127,9 +132,25 @@ function assertVersion(range: string | number): void {
   }
 
   // We want "*" to also allow any pre-release, but we do not pass
-  // the includePrerelease option to semver.satisfies because we
+  // the includePrerelease option to satisfies because we
   // do not want ^7.0.0 to match 8.0.0-alpha.1.
-  if (range === "*" || semver.satisfies(coreVersion, range)) return;
+  if (range === "*" || satisfies(coreVersion, range)) return;
+
+  const message =
+    `Requires Babel "${range}", but was loaded with "${coreVersion}". ` +
+    `If you are sure you have a compatible version of @babel/core, ` +
+    `it is likely that something in your build process is loading the ` +
+    `wrong version. Inspect the stack trace of this error to look for ` +
+    `the first entry that doesn't mention "@babel/core" or "babel-core" ` +
+    `to see what is calling Babel.`;
+
+  if (
+    typeof process !== "undefined" &&
+    process.env.BABEL_7_TO_8_DANGEROUSLY_DISABLE_VERSION_CHECK
+  ) {
+    console.warn(message);
+    return;
+  }
 
   const limit = Error.stackTraceLimit;
 
@@ -139,14 +160,7 @@ function assertVersion(range: string | number): void {
     Error.stackTraceLimit = 25;
   }
 
-  const err = new Error(
-    `Requires Babel "${range}", but was loaded with "${coreVersion}". ` +
-      `If you are sure you have a compatible version of @babel/core, ` +
-      `it is likely that something in your build process is loading the ` +
-      `wrong version. Inspect the stack trace of this error to look for ` +
-      `the first entry that doesn't mention "@babel/core" or "babel-core" ` +
-      `to see what is calling Babel.`,
-  );
+  const err = new Error(message);
 
   if (typeof limit === "number") {
     Error.stackTraceLimit = limit;

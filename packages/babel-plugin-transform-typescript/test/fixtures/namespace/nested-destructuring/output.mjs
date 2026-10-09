@@ -5,6 +5,8 @@ let N;
     a
   } = C;
   _N.a = a;
+  const [b] = C;
+  _N.b = b;
   const [{
       a: [{
         b: c

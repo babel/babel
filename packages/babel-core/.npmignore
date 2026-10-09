@@ -1,4 +1,5 @@
 src
 test
 *.log
-cjs-proxy-dev.cjs
+tsconfig.json
+tsconfig.tsbuildinfo

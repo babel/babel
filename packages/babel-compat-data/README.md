@@ -1,6 +1,6 @@
 # @babel/compat-data
 
-> 
+> The compat-data to determine required Babel plugins
 
 See our website [@babel/compat-data](https://babeljs.io/docs/babel-compat-data) for more information.
 

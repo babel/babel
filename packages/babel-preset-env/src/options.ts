@@ -1,5 +1,4 @@
 export const TopLevelOptions = {
-  bugfixes: "bugfixes",
   configPath: "configPath",
   corejs: "corejs",
   debug: "debug",
@@ -13,13 +12,6 @@ export const TopLevelOptions = {
   useBuiltIns: "useBuiltIns",
   browserslistEnv: "browserslistEnv",
 } as const;
-
-if (!process.env.BABEL_8_BREAKING) {
-  Object.assign(TopLevelOptions, {
-    loose: "loose",
-    spec: "spec",
-  });
-}
 
 export const ModulesOption = {
   false: false,

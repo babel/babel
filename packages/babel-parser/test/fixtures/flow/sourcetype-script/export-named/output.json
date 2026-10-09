@@ -10,9 +10,10 @@
       {
         "type": "ExportNamedDeclaration",
         "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":25,"index":25}},
+        "exportKind": "type",
         "specifiers": [],
         "source": null,
-        "exportKind": "type",
+        "attributes": [],
         "declaration": {
           "type": "TypeAlias",
           "start":7,"end":25,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":25,"index":25}},
@@ -31,9 +32,10 @@
       {
         "type": "ExportNamedDeclaration",
         "start":26,"end":59,"loc":{"start":{"line":2,"column":0,"index":26},"end":{"line":2,"column":33,"index":59}},
+        "exportKind": "type",
         "specifiers": [],
         "source": null,
-        "exportKind": "type",
+        "attributes": [],
         "declaration": {
           "type": "OpaqueType",
           "start":33,"end":59,"loc":{"start":{"line":2,"column":7,"index":33},"end":{"line":2,"column":33,"index":59}},

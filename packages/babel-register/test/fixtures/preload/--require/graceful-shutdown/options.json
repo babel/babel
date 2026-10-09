@@ -1,0 +1,8 @@
+{
+  "args": [
+    "--require",
+    "<rootDir>/packages/babel-register/lib/index.js",
+    "index.js"
+  ],
+  "stdout": "graceful\n"
+}

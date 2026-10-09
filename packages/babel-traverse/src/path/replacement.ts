@@ -47,16 +47,19 @@ import { resync, setScope } from "./context.ts";
  *  - Remove the current node.
  */
 
-export function replaceWithMultiple(
-  this: NodePath,
-  nodes: t.Node | t.Node[],
-): NodePath[] {
+import type { NodeOrNodeList, NodePaths } from "./index.ts";
+
+export function replaceWithMultiple<Nodes extends NodeOrNodeList<t.Node>>(
+  this: NodePath<t.Node | null>,
+  nodes: Nodes,
+): NodePaths<Nodes> {
   resync.call(this);
 
-  nodes = _verifyNodeList.call(this, nodes);
-  inheritLeadingComments(nodes[0], this.node);
-  inheritTrailingComments(nodes[nodes.length - 1], this.node);
-  getCachedPaths(this.hub, this.parent)?.delete(this.node);
+  const verifiedNodes = _verifyNodeList.call(this, nodes);
+  inheritLeadingComments(verifiedNodes[0], this.node);
+  inheritTrailingComments(verifiedNodes[verifiedNodes.length - 1], this.node);
+  // @ts-expect-error TODO: better types
+  getCachedPaths(this)?.delete(this.node);
   this.node =
     // @ts-expect-error this.key must present in this.container
     this.container[this.key] = null;
@@ -78,13 +81,15 @@ export function replaceWithMultiple(
  * easier to use, your transforms will be extremely brittle.
  */
 
-export function replaceWithSourceString(this: NodePath, replacement: string) {
+export function replaceWithSourceString(
+  this: NodePath<t.Node | null>,
+  replacement: string,
+) {
   resync.call(this);
   let ast: t.File;
 
   try {
     replacement = `(${replacement})`;
-    // @ts-expect-error todo: use babel-types ast typings in Babel parser
     ast = parse(replacement);
   } catch (err) {
     const loc = err.loc;
@@ -94,7 +99,7 @@ export function replaceWithSourceString(this: NodePath, replacement: string) {
         codeFrameColumns(replacement, {
           start: {
             line: loc.line,
-            column: loc.column + 1,
+            column: loc.column,
           },
         });
       err.code = "BABEL_REPLACE_SOURCE_ERROR";
@@ -112,17 +117,17 @@ export function replaceWithSourceString(this: NodePath, replacement: string) {
  * Replace the current node with another.
  */
 export function replaceWith<R extends t.Node>(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   replacementPath: R,
 ): [NodePath<R>];
-export function replaceWith<R extends NodePath>(
-  this: NodePath,
+export function replaceWith<R extends NodePath<t.Node>>(
+  this: NodePath<t.Node | null>,
   replacementPath: R,
 ): [R];
 export function replaceWith(
-  this: NodePath,
-  replacementPath: t.Node | NodePath,
-): [NodePath] {
+  this: NodePath<t.Node | null>,
+  replacementPath: t.Node | NodePath<t.Node>,
+): [NodePath<t.Node>] {
   resync.call(this);
 
   if (this.removed) {
@@ -197,15 +202,19 @@ export function replaceWith(
   this.type = replacement.type;
 
   // potentially create new scope
-  setScope.call(this);
+  setScope.call(this as NodePath<t.Node>);
 
   // requeue for visiting
   this.requeue();
 
+  // @ts-expect-error TODO: better types
   return [nodePath ? this.get(nodePath) : this];
 }
 
-export function _replaceWith(this: NodePath, node: t.Node) {
+export function _replaceWith(
+  this: NodePath<t.Node | null>,
+  node: t.Node | null,
+) {
   if (!this.container) {
     throw new ReferenceError("Container is falsy");
   }
@@ -218,11 +227,12 @@ export function _replaceWith(this: NodePath, node: t.Node) {
   }
 
   this.debug(`Replace with ${node?.type}`);
-  getCachedPaths(this.hub, this.parent)?.set(node, this).delete(this.node);
+  // @ts-expect-error TODO: better types
+  getCachedPaths(this)?.set(node, this).delete(this.node);
 
-  this.node =
-    // @ts-expect-error this.key must present in this.container
-    this.container[this.key] = node;
+  this.node = node;
+  // @ts-expect-error this.key must present in this.container
+  this.container[this.key] = node;
 }
 
 /**
@@ -232,8 +242,8 @@ export function _replaceWith(this: NodePath, node: t.Node) {
  */
 
 export function replaceExpressionWithStatements(
-  this: NodePath,
-  nodes: Array<t.Statement>,
+  this: NodePath<t.Node | null>,
+  nodes: t.Statement[],
 ) {
   resync.call(this);
 
@@ -264,7 +274,7 @@ export function replaceExpressionWithStatements(
   callee.get("body").scope.hoistVariables(id => this.scope.push({ id }));
 
   // add implicit returns to all ending expression statements
-  const completionRecords: Array<NodePath> = callee.getCompletionRecords();
+  const completionRecords: NodePath[] = callee.getCompletionRecords();
   for (const path of completionRecords) {
     if (!path.isExpressionStatement()) continue;
 
@@ -297,22 +307,13 @@ export function replaceExpressionWithStatements(
   // Fixme: we can not `assert this is NodePath<t.FunctionExpression>` in `arrowFunctionToExpression`
   // because it is not a class method known at compile time.
   const newCallee = callee as unknown as NodePath<t.FunctionExpression>;
-
   // (() => await xxx)() -> await (async () => await xxx)();
   const needToAwaitFunction =
     isParentAsync &&
-    traverse.hasType(
-      (this.get("callee.body") as NodePath<t.BlockStatement>).node,
-      "AwaitExpression",
-      FUNCTION_TYPES,
-    );
+    traverse.hasType(newCallee.node.body, "AwaitExpression", FUNCTION_TYPES);
   const needToYieldFunction =
     isParentGenerator &&
-    traverse.hasType(
-      (this.get("callee.body") as NodePath<t.BlockStatement>).node,
-      "YieldExpression",
-      FUNCTION_TYPES,
-    );
+    traverse.hasType(newCallee.node.body, "YieldExpression", FUNCTION_TYPES);
   if (needToAwaitFunction) {
     newCallee.set("async", true);
     // yield* will await the generator return result
@@ -329,8 +330,8 @@ export function replaceExpressionWithStatements(
 }
 
 function gatherSequenceExpressions(
-  nodes: ReadonlyArray<t.Node>,
-  declars: Array<t.Identifier>,
+  nodes: readonly t.Node[],
+  declars: t.Identifier[],
 ) {
   const exprs: t.Expression[] = [];
   let ensureLastUndefined = true;
@@ -356,7 +357,14 @@ function gatherSequenceExpressions(
         }
 
         if (declar.init) {
-          exprs.push(assignmentExpression("=", declar.id, declar.init));
+          exprs.push(
+            assignmentExpression(
+              "=",
+              // var declarator must not be a void pattern
+              declar.id as Exclude<t.VariableDeclarator["id"], t.VoidPattern>,
+              declar.init,
+            ),
+          );
         }
       }
 
@@ -397,7 +405,10 @@ function gatherSequenceExpressions(
   }
 }
 
-export function replaceInline(this: NodePath, nodes: t.Node | Array<t.Node>) {
+export function replaceInline(
+  this: NodePath<t.Node | null>,
+  nodes: t.Node | t.Node[],
+) {
   resync.call(this);
 
   if (Array.isArray(nodes)) {

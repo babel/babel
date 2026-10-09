@@ -1,1 +1,0 @@
-regeneratorRuntime.mark(function () {});

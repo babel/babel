@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":38,"index":38}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":38,"index":38}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":38,"index":38}},
+        "expression": {
+          "type": "ImportExpression",
+          "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":37,"index":37}},
+          "phase": "source",
+          "source": {
+            "type": "StringLiteral",
+            "start":14,"end":19,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":19,"index":19}},
+            "extra": {
+              "rawValue": "foo",
+              "raw": "\"foo\""
+            },
+            "value": "foo"
+          },
+          "options": {
+            "type": "ObjectExpression",
+            "start":21,"end":36,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":36,"index":36}},
+            "properties": [
+              {
+                "type": "ObjectProperty",
+                "start":23,"end":34,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":34,"index":34}},
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":23,"end":27,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":27,"index":27},"identifierName":"type"},
+                  "name": "type"
+                },
+                "computed": false,
+                "shorthand": false,
+                "value": {
+                  "type": "StringLiteral",
+                  "start":29,"end":34,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":34,"index":34}},
+                  "extra": {
+                    "rawValue": "bar",
+                    "raw": "\"bar\""
+                  },
+                  "value": "bar"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

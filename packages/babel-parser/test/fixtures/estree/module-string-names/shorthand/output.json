@@ -35,7 +35,8 @@
           "value": "module-a",
           "raw": "\"module-a\""
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "extra": {

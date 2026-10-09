@@ -1,0 +1,71 @@
+{
+  "type": "File",
+  "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":38}},
+  "errors": [
+    "SyntaxError: 'yield' is only allowed within generator functions. (4:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":38}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+        "expression": {
+          "type": "YieldExpression",
+          "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
+          "delegate": false,
+          "argument": {
+            "type": "NumericLiteral",
+            "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":10,"end":38,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":5,"column":1,"index":38}},
+        "id": {
+          "type": "Identifier",
+          "start":19,"end":21,"loc":{"start":{"line":3,"column":9,"index":19},"end":{"line":3,"column":11,"index":21},"identifierName":"fn"},
+          "name": "fn"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":24,"end":38,"loc":{"start":{"line":3,"column":14,"index":24},"end":{"line":5,"column":1,"index":38}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":28,"end":36,"loc":{"start":{"line":4,"column":2,"index":28},"end":{"line":4,"column":10,"index":36}},
+              "expression": {
+                "type": "YieldExpression",
+                "start":28,"end":35,"loc":{"start":{"line":4,"column":2,"index":28},"end":{"line":4,"column":9,"index":35}},
+                "delegate": false,
+                "argument": {
+                  "type": "NumericLiteral",
+                  "start":34,"end":35,"loc":{"start":{"line":4,"column":8,"index":34},"end":{"line":4,"column":9,"index":35}},
+                  "extra": {
+                    "rawValue": 1,
+                    "raw": "1"
+                  },
+                  "value": 1
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

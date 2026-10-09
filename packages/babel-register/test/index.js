@@ -1,8 +1,8 @@
-import { Module } from "module";
-import path from "path";
-import fs from "fs";
-import child from "child_process";
-import { USE_ESM, commonJS, describeGte } from "$repo-utils";
+import { Module } from "node:module";
+import path from "node:path";
+import fs from "node:fs";
+import child from "node:child_process";
+import { commonJS } from "$repo-utils";
 
 const { __dirname, require } = commonJS(import.meta.url);
 
@@ -14,19 +14,13 @@ const testFileContent = fs.readFileSync(testFile, "utf-8");
 const testFileMjsContent = fs.readFileSync(testFileMjs, "utf-8");
 
 const piratesPath = require.resolve("pirates");
-const smsPath = require.resolve("source-map-support");
-const sms2Path = require.resolve("@cspotcode/source-map-support");
-
-const defaultOptions = {
-  exts: [".js", ".jsx", ".es6", ".es", ".mjs", ".cjs"],
-  ignoreNodeModules: false,
-};
+const smsPath = require.resolve("@cspotcode/source-map-support");
 
 function cleanCache() {
   try {
-    fs.unlinkSync(testCacheFilename);
+    fs.rmSync(testCacheFilename, { recursive: true, force: true });
   } catch (e) {
-    // It is convenient to always try to clear
+    // It is convenient to always try to clean
   }
 }
 
@@ -34,13 +28,11 @@ function resetCache() {
   process.env.BABEL_CACHE_PATH = null;
 }
 
-const OLD_JEST_MOCKS = !!jest.doMock;
-
 describe("@babel/register", function () {
   let currentHook, currentOptions, sourceMapSupport;
 
   const mocks = {
-    ["pirates"]: {
+    pirates: {
       addHook(hook, opts) {
         currentHook = hook;
         currentOptions = opts;
@@ -52,9 +44,12 @@ describe("@babel/register", function () {
       },
     },
 
-    ["source-map-support"]: {
+    "source-map-support": {
       install() {
         sourceMapSupport = true;
+      },
+      uninstall() {
+        sourceMapSupport = false;
       },
     },
   };
@@ -62,116 +57,32 @@ describe("@babel/register", function () {
   beforeEach(() => {
     currentHook = null;
     currentOptions = null;
-    sourceMapSupport = false;
   });
 
   let originalRequireCacheDescriptor;
-  if (OLD_JEST_MOCKS) {
-    jest.doMock("pirates", () => mocks["pirates"]);
-    jest.doMock("source-map-support", () => mocks["source-map-support"]);
-    jest.doMock(
-      "@cspotcode/source-map-support",
-      () => mocks["source-map-support"],
+  beforeAll(() => {
+    originalRequireCacheDescriptor = Object.getOwnPropertyDescriptor(
+      Module,
+      "_cache",
     );
+  });
 
-    afterEach(() => {
-      jest.resetModules();
-    });
-  } else {
-    beforeAll(() => {
-      originalRequireCacheDescriptor = Object.getOwnPropertyDescriptor(
-        Module,
-        "_cache",
-      );
-    });
+  afterAll(() => {
+    Object.defineProperty(Module, "_cache", originalRequireCacheDescriptor);
+  });
 
-    afterAll(() => {
-      Object.defineProperty(Module, "_cache", originalRequireCacheDescriptor);
-    });
-  }
-
-  if (!USE_ESM && !process.env.BABEL_8_BREAKING) {
-    describe("babel 7", () => {
-      if (!OLD_JEST_MOCKS) {
-        beforeEach(() => {
-          const isEmptyObj = obj =>
-            Object.getPrototypeOf(obj) === null &&
-            Object.keys(obj).length === 0;
-
-          // This setter intercepts the Module._cache assignment in
-          // packages/babel-register/src/nodeWrapper.js to install in the
-          // internal isolated cache.
-          const emptyInitialCache = {};
-          Object.defineProperty(Module, "_cache", {
-            get: () => emptyInitialCache,
-            set(value) {
-              // eslint-disable-next-line jest/no-standalone-expect
-              expect(isEmptyObj(value)).toBe(true);
-
-              Object.defineProperty(Module, "_cache", {
-                value,
-                enumerable: originalRequireCacheDescriptor.enumerable,
-                configurable: originalRequireCacheDescriptor.configurable,
-                writable: originalRequireCacheDescriptor.writable,
-              });
-              value[piratesPath] = { exports: mocks["pirates"] };
-              value[smsPath] = { exports: mocks["source-map-support"] };
-            },
-            enumerable: originalRequireCacheDescriptor.enumerable,
-            configurable: originalRequireCacheDescriptor.configurable,
-          });
-        });
-      }
-
-      const { setupRegister } = buildTests(require.resolve(".."));
-
-      it("does not mutate options", () => {
-        const proxyHandler = {
-          defineProperty: jest.fn(Reflect.defineProperty),
-          deleteProperty: jest.fn(Reflect.deleteProperty),
-          set: jest.fn(Reflect.set),
-        };
-
-        setupRegister(
-          new Proxy(
-            {
-              babelrc: true,
-              sourceMaps: false,
-              cwd: path.dirname(testFileMjs),
-              extensions: [".js"],
-            },
-            proxyHandler,
-          ),
-        );
-
-        currentHook(testFileContent, testFile);
-
-        expect(proxyHandler.defineProperty).not.toHaveBeenCalled();
-        expect(proxyHandler.deleteProperty).not.toHaveBeenCalled();
-        expect(proxyHandler.set).not.toHaveBeenCalled();
+  describe("worker", () => {
+    beforeEach(() => {
+      Object.defineProperty(Module, "_cache", {
+        ...originalRequireCacheDescriptor,
+        value: {
+          [piratesPath]: { exports: mocks.pirates },
+          [smsPath]: { exports: mocks["source-map-support"] },
+        },
       });
     });
-  }
 
-  describeGte("12.0.0")("worker", () => {
-    if (!OLD_JEST_MOCKS) {
-      beforeEach(() => {
-        Object.defineProperty(Module, "_cache", {
-          ...originalRequireCacheDescriptor,
-          value: {
-            [piratesPath]: { exports: mocks["pirates"] },
-            [smsPath]: { exports: mocks["source-map-support"] },
-            [sms2Path]: {
-              exports: mocks["source-map-support"],
-            },
-          },
-        });
-      });
-    }
-
-    const { setupRegister } = buildTests(
-      require.resolve("../experimental-worker"),
-    );
+    const { setupRegister } = buildTests(require.resolve("../lib/index.js"));
 
     it("works with mjs config files", () => {
       setupRegister({
@@ -203,7 +114,6 @@ describe("@babel/register", function () {
     function revertRegister() {
       if (babelRegister) {
         babelRegister.revert();
-        delete require.cache[registerFile];
         babelRegister = null;
       }
       cleanCache();
@@ -227,7 +137,20 @@ describe("@babel/register", function () {
       setupRegister();
 
       expect(typeof currentHook).toBe("function");
-      expect(currentOptions).toEqual(defaultOptions);
+      expect(currentOptions).toMatchInlineSnapshot(`
+        {
+          "exts": [
+            ".js",
+            ".jsx",
+            ".es6",
+            ".es",
+            ".mjs",
+            ".cjs",
+          ],
+          "ignoreNodeModules": false,
+          "matcher": [Function],
+        }
+      `);
     });
 
     test("unregisters hook correctly", () => {
@@ -244,6 +167,14 @@ describe("@babel/register", function () {
       currentHook("const a = 1;", testFile);
 
       expect(sourceMapSupport).toBe(true);
+    });
+
+    test("uninstalls source map support when reverting", () => {
+      setupRegister();
+      currentHook("const a = 1;", testFile);
+      revertRegister();
+
+      expect(sourceMapSupport).toBe(false);
     });
 
     test("installs source map support when requested", () => {
@@ -295,7 +226,11 @@ describe("@babel/register", function () {
         const output = await spawnNodeAsync(
           [testFileLog],
           path.dirname(testFileLog),
-          { NODE_OPTIONS: `-r ${registerFile}` },
+          {
+            ...process.env,
+            NODE_OPTIONS:
+              `-r ${registerFile} ` + (process.env.NODE_OPTIONS || ""),
+          },
         );
 
         expect(output.trim()).toMatchInlineSnapshot(
@@ -307,7 +242,11 @@ describe("@babel/register", function () {
         const output = await spawnNodeAsync(
           [testFileLog],
           path.dirname(testFileLog),
-          { NODE_OPTIONS: `--require ${registerFile}` },
+          {
+            ...process.env,
+            NODE_OPTIONS:
+              `--require ${registerFile} ` + (process.env.NODE_OPTIONS || ""),
+          },
         );
 
         expect(output.trim()).toMatchInlineSnapshot(
@@ -398,17 +337,45 @@ describe("@babel/register", function () {
       expect(proxyHandler.set).not.toHaveBeenCalled();
     });
 
+    describe("hook skip ignored files", () => {
+      // We can't use the test runner because the mocked `pirates`
+      // does not support the `matcher` option.
+      test("via programmatic options ignored", async () => {
+        const entryFile =
+          require.resolve("./fixtures/ignore-programmatic/index.ts");
+        const output = await spawnNodeAsync(
+          [entryFile],
+          path.dirname(entryFile),
+        );
+        expect(output).toBe(
+          "SyntaxError is thrown as expected from ignored-throw.ts",
+        );
+      });
+      test("via programmatic options only", async () => {
+        const entryFile =
+          require.resolve("./fixtures/only-programmatic/index.ts");
+        const output = await spawnNodeAsync(
+          [entryFile],
+          path.dirname(entryFile),
+        );
+        expect(output).toBe(
+          "SyntaxError is thrown as expected from ignored-throw.ts",
+        );
+      });
+    });
+
     return { setupRegister, revertRegister };
   }
 });
 
-function spawnNodeAsync(args, cwd = __dirname, env) {
+function spawnNodeAsync(args, cwd = __dirname, env = process.env) {
   const spawn = child.spawn(process.execPath, args, {
     cwd,
     env: {
       ...env,
-      ...(process.env.BABEL_8_BREAKING && {
-        BABEL_8_BREAKING: process.env.BABEL_8_BREAKING,
+      ...(parseInt(process.versions.node) >= 22 && {
+        NODE_OPTIONS:
+          "--disable-warning=ExperimentalWarning " + (env.NODE_OPTIONS || ""),
       }),
     },
   });

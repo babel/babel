@@ -1,0 +1,23 @@
+export const enum ACTIONS {
+  GET_DEFAULT_EXTENSIONS = "GET_DEFAULT_EXTENSIONS",
+  SET_OPTIONS = "SET_OPTIONS",
+  TRANSFORM = "TRANSFORM",
+  TRANSFORM_SYNC = "TRANSFORM_SYNC",
+  IS_FILE_IGNORED = "IS_FILE_IGNORED",
+  SAVE = "SAVE",
+}
+
+export type Options = {
+  extensions?: string[];
+};
+
+export interface IClient {
+  getDefaultExtensions(): string[];
+  setOptions(options: Options): void;
+  transform(
+    code: string,
+    filename: string,
+  ): { code: string; map: object } | null;
+  isFileIgnored(filename: string): boolean;
+  save(): void;
+}

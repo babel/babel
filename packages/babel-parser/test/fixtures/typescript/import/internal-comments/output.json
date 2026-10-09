@@ -124,6 +124,7 @@
             }
           ]
         },
+        "attributes": [],
         "innerComments": [
           {
             "type": "CommentBlock",
@@ -210,6 +211,7 @@
             }
           ]
         },
+        "attributes": [],
         "leadingComments": [
           {
             "type": "CommentBlock",

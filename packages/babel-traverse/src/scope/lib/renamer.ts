@@ -1,76 +1,69 @@
 import type Binding from "../binding.ts";
 import * as t from "@babel/types";
-import type { NodePath, Visitor } from "../../index.ts";
+import type { NodePath, ExplodedVisitor } from "../../index.ts";
 import { traverseNode } from "../../traverse-node.ts";
 import { explode } from "../../visitors.ts";
 import { getAssignmentIdentifiers, type Identifier } from "@babel/types";
-import { requeueComputedKeyAndDecorators } from "../../path/context.ts";
 
-const renameVisitor: Visitor<Renamer> = {
-  ReferencedIdentifier({ node }, state) {
-    if (node.name === state.oldName) {
-      node.name = state.newName;
-    }
-  },
+let renameVisitor: ExplodedVisitor<Renamer>;
+const getRenameVisitor = () =>
+  (renameVisitor ??= explode({
+    ReferencedIdentifier({ node }, state) {
+      if (node.name === state.oldName) {
+        node.name = state.newName;
+      }
+    },
 
-  Scope(path, state) {
-    if (
-      !path.scope.bindingIdentifierEquals(
-        state.oldName,
-        state.binding.identifier,
-      )
-    ) {
-      path.skip();
-      if (path.isMethod()) {
-        if (
-          !process.env.BABEL_8_BREAKING &&
-          !path.requeueComputedKeyAndDecorators
-        ) {
-          // See https://github.com/babel/babel/issues/16694
-          requeueComputedKeyAndDecorators.call(path);
-        } else {
+    Scope(path, state) {
+      if (
+        !path.scope.bindingIdentifierEquals(
+          state.oldName,
+          state.binding.identifier,
+        )
+      ) {
+        path.skip();
+        if (path.isMethod()) {
           path.requeueComputedKeyAndDecorators();
         }
+        if (path.isSwitchStatement()) {
+          path.context.maybeQueue(path.get("discriminant"));
+        }
       }
-    }
-  },
+    },
 
-  ObjectProperty({ node, scope }, state) {
-    const { name } = node.key as Identifier;
-    if (
-      node.shorthand &&
-      // In destructuring the identifier is already renamed by the
-      // AssignmentExpression|Declaration|VariableDeclarator visitor,
-      // while in object literals it's renamed later by the
-      // ReferencedIdentifier visitor.
-      (name === state.oldName || name === state.newName) &&
-      // Ignore shadowed bindings
-      scope.getBindingIdentifier(name) === state.binding.identifier
+    ObjectProperty({ node, scope }, state) {
+      const { name } = node.key as Identifier;
+      if (
+        node.shorthand &&
+        // In destructuring the identifier is already renamed by the
+        // AssignmentExpression|Declaration|VariableDeclarator visitor,
+        // while in object literals it's renamed later by the
+        // ReferencedIdentifier visitor.
+        (name === state.oldName || name === state.newName) &&
+        // Ignore shadowed bindings
+        scope.getBindingIdentifier(name) === state.binding.identifier
+      ) {
+        node.shorthand = false;
+      }
+    },
+
+    "AssignmentExpression|Declaration|VariableDeclarator"(
+      path: NodePath<
+        t.AssignmentExpression | t.Declaration | t.VariableDeclarator
+      >,
+      state,
     ) {
-      node.shorthand = false;
-      if (!process.env.BABEL_8_BREAKING) {
-        if (node.extra?.shorthand) node.extra.shorthand = false;
+      if (path.isVariableDeclaration()) return;
+      const ids = path.isAssignmentExpression()
+        ? // See https://github.com/babel/babel/issues/16694
+          getAssignmentIdentifiers(path.node)
+        : path.getOuterBindingIdentifiers();
+
+      for (const name in ids) {
+        if (name === state.oldName) ids[name].name = state.newName;
       }
-    }
-  },
-
-  "AssignmentExpression|Declaration|VariableDeclarator"(
-    path: NodePath<
-      t.AssignmentExpression | t.Declaration | t.VariableDeclarator
-    >,
-    state,
-  ) {
-    if (path.isVariableDeclaration()) return;
-    const ids = path.isAssignmentExpression()
-      ? // See https://github.com/babel/babel/issues/16694
-        getAssignmentIdentifiers(path.node)
-      : path.getOuterBindingIdentifiers();
-
-    for (const name in ids) {
-      if (name === state.oldName) ids[name].name = state.newName;
-    }
-  },
-};
+    },
+  }));
 
 export default class Renamer {
   constructor(binding: Binding, oldName: string, newName: string) {
@@ -141,7 +134,7 @@ export default class Renamer {
     // );
   }
 
-  rename(/* Babel 7 - block?: t.Pattern | t.Scopable */) {
+  rename() {
     const { binding, oldName, newName } = this;
     const { scope, path } = binding;
 
@@ -160,10 +153,7 @@ export default class Renamer {
       }
     }
 
-    const blockToTraverse = process.env.BABEL_8_BREAKING
-      ? scope.block
-      : (arguments[0] as t.Pattern | t.Scopable) || scope.block;
-
+    const blockToTraverse = scope.block;
     // When blockToTraverse is a SwitchStatement, the discriminant
     // is not part of the current scope and thus should be skipped.
 
@@ -184,22 +174,16 @@ export default class Renamer {
 
     traverseNode(
       blockToTraverse,
-      explode(renameVisitor),
+      getRenameVisitor(),
       scope,
       this,
       scope.path,
       skipKeys,
     );
 
-    if (process.env.BABEL_8_BREAKING) {
-      scope.removeOwnBinding(oldName);
-      scope.bindings[newName] = binding;
-      this.binding.identifier.name = newName;
-    } else if (!arguments[0]) {
-      scope.removeOwnBinding(oldName);
-      scope.bindings[newName] = binding;
-      this.binding.identifier.name = newName;
-    }
+    scope.removeOwnBinding(oldName);
+    scope.bindings[newName] = binding;
+    this.binding.identifier.name = newName;
 
     if (parentDeclar) {
       this.maybeConvertFromClassFunctionDeclaration(path);

@@ -1,6 +1,6 @@
 import * as babel from "@babel/core";
-import fs from "fs";
-import { createRequire } from "module";
+import fs from "node:fs";
+import { createRequire } from "node:module";
 
 import transformTypeofSymbol from "../lib/index.js";
 
@@ -19,8 +19,6 @@ describe("@babel/plugin-transform-typeof-symbol", () => {
     runtime                     | type
     ${"@babel/runtime"}         | ${"esm"}
     ${"@babel/runtime"}         | ${"cjs"}
-    ${"@babel/runtime-corejs2"} | ${"esm"}
-    ${"@babel/runtime-corejs2"} | ${"cjs"}
     ${"@babel/runtime-corejs3"} | ${"esm"}
     ${"@babel/runtime-corejs3"} | ${"cjs"}
   `(

@@ -1,6 +1,6 @@
 {
   "name": "@babel/types",
-  "version": "7.25.6",
+  "version": "8.0.6",
   "description": "Babel Types is a Lodash-esque utility library for AST nodes",
   "author": "The Babel Team (https://babel.dev/team)",
   "homepage": "https://babel.dev/docs/en/next/babel-types",
@@ -15,49 +15,21 @@
     "directory": "packages/babel-types"
   },
   "main": "./lib/index.js",
-  "types": "./lib/index-legacy.d.ts",
-  "typesVersions": {
-    ">=4.1": {
-      "lib/index-legacy.d.ts": [
-        "lib/index.d.ts"
-      ]
-    }
-  },
   "dependencies": {
     "@babel/helper-string-parser": "workspace:^",
-    "@babel/helper-validator-identifier": "workspace:^",
-    "to-fast-properties": "condition:BABEL_8_BREAKING ? ^3.0.0 : ^2.0.0"
+    "@babel/helper-validator-identifier": "workspace:^"
   },
   "devDependencies": {
     "@babel/generator": "workspace:^",
-    "@babel/parser": "workspace:^",
-    "glob": "^7.2.0"
+    "@babel/helper-fixtures": "workspace:^",
+    "@babel/parser": "workspace:^"
   },
   "engines": {
-    "node": ">=6.9.0"
-  },
-  "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ],
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ]
+    "node": "^22.18.0 || >=24.11.0"
   },
   "exports": {
     ".": {
-      "types@>=4.1": "./lib/index.d.ts",
-      "types": "./lib/index-legacy.d.ts",
+      "types": "./lib/index.d.ts",
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"

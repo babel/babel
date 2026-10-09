@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":22,"index":38}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":22,"index":38}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":12,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":12,"index":12},"identifierName":"as"},
+          "name": "as"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":13,"end":15,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":15,"index":15}},
+          "body": []
+        }
+      },
+      {
+        "type": "TSInterfaceDeclaration",
+        "start":16,"end":38,"loc":{"start":{"line":2,"column":0,"index":16},"end":{"line":2,"column":22,"index":38}},
+        "id": {
+          "type": "Identifier",
+          "start":26,"end":35,"loc":{"start":{"line":2,"column":10,"index":26},"end":{"line":2,"column":19,"index":35},"identifierName":"satisfies"},
+          "name": "satisfies"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start":36,"end":38,"loc":{"start":{"line":2,"column":20,"index":36},"end":{"line":2,"column":22,"index":38}},
+          "body": []
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

@@ -1,5 +1,5 @@
 /*
-import { types as t } from "../../../../cjs-proxy.cjs";
+import { types as t } from "../../../../lib/index.js";
 
 export default function () {
   return {
@@ -20,7 +20,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true,
 });
 exports["default"] = _default;
-var _core = require("../../../../cjs-proxy.cjs");
+var _core = require("../../../../lib/index.js");
 function _default() {
   return {
     visitor: {

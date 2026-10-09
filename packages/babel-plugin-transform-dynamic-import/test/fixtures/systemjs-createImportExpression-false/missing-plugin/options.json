@@ -1,5 +1,4 @@
 {
   "plugins": ["transform-modules-systemjs"],
-  "BABEL_8_BREAKING": true,
   "throws": "ERROR: Dynamic import() transformation must be enabled using the\n       @babel/plugin-transform-dynamic-import plugin. Babel 8\n       no longer transforms import() without using that plugin."
 }

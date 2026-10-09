@@ -1,5 +1,7 @@
-import rule from "../../lib/rules/no-unused-expressions.cjs";
+import plugin from "../../lib/index.js";
 import RuleTester from "../../../babel-eslint-shared-fixtures/utils/RuleTester.js";
+
+const rule = plugin.rules["no-unused-expressions"];
 
 const ruleTester = new RuleTester();
 ruleTester.run("@babel/no-unused-expressions", rule, {
@@ -19,7 +21,6 @@ ruleTester.run("@babel/no-unused-expressions", rule, {
         {
           message:
             "Expected an assignment or function call and instead saw an expression.",
-          type: "ExpressionStatement",
         },
       ],
     },
@@ -29,7 +30,6 @@ ruleTester.run("@babel/no-unused-expressions", rule, {
         {
           message:
             "Expected an assignment or function call and instead saw an expression.",
-          type: "ExpressionStatement",
         },
       ],
     },

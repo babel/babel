@@ -1,0 +1,26 @@
+import type { ESLint, Rule } from "eslint";
+import newCap from "./rules/new-cap.ts";
+import noUndef from "./rules/no-undef.ts";
+import noUnusedExpressions from "./rules/no-unused-expressions.ts";
+
+const meta: ESLint.Plugin["meta"] = {
+  name: PACKAGE_JSON.name,
+  version: PACKAGE_JSON.version,
+};
+
+type Rules = "new-cap" | "no-undef" | "no-unused-expressions";
+
+const rules: Record<Rules, Rule.RuleModule> = {
+  "new-cap": newCap,
+  "no-undef": noUndef,
+  "no-unused-expressions": noUnusedExpressions,
+};
+
+const rulesConfig = {
+  "new-cap": "off",
+  "no-undef": "off",
+  "no-unused-expressions": "off",
+};
+
+// @ts-expect-error TODO(Babel 9): Remove rulesConfig in favor of configs
+export default { meta, rules, rulesConfig } satisfies ESLint.Plugin;

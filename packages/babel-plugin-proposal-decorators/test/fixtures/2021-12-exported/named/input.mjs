@@ -1,1 +1,0 @@
-export @dec class A {}

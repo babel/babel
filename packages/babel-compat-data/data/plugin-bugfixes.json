@@ -35,6 +35,7 @@
     "deno": "1",
     "ios": "10",
     "samsung": "5",
+    "rhino": "1.9",
     "opera_mobile": "41",
     "electron": "1.2"
   },
@@ -80,6 +81,19 @@
     "opera_mobile": "36",
     "electron": "0.37"
   },
+  "bugfix/transform-safari-rest-destructuring-rhs-array": {
+    "chrome": "49",
+    "opera": "36",
+    "edge": "14",
+    "firefox": "34",
+    "safari": "14.1",
+    "node": "6",
+    "deno": "1",
+    "ios": "14.5",
+    "samsung": "5",
+    "opera_mobile": "36",
+    "electron": "0.37"
+  },
   "bugfix/transform-tagged-template-caching": {
     "chrome": "41",
     "opera": "28",
@@ -107,18 +121,6 @@
     "opera_mobile": "64",
     "electron": "13.0"
   },
-  "bugfix/transform-firefox-class-in-computed-class-key": {
-    "chrome": "74",
-    "opera": "62",
-    "edge": "79",
-    "safari": "16",
-    "node": "12",
-    "deno": "1",
-    "ios": "16",
-    "samsung": "11",
-    "opera_mobile": "53",
-    "electron": "6.0"
-  },
   "transform-optional-chaining": {
     "chrome": "80",
     "opera": "67",
@@ -129,19 +131,7 @@
     "deno": "1",
     "ios": "13.4",
     "samsung": "13",
-    "opera_mobile": "57",
-    "electron": "8.0"
-  },
-  "proposal-optional-chaining": {
-    "chrome": "80",
-    "opera": "67",
-    "edge": "80",
-    "firefox": "74",
-    "safari": "13.1",
-    "node": "14",
-    "deno": "1",
-    "ios": "13.4",
-    "samsung": "13",
+    "rhino": "1.8",
     "opera_mobile": "57",
     "electron": "8.0"
   },
@@ -149,7 +139,7 @@
     "chrome": "49",
     "opera": "36",
     "edge": "15",
-    "firefox": "53",
+    "firefox": "52",
     "safari": "10",
     "node": "6",
     "deno": "1",
@@ -181,6 +171,7 @@
     "deno": "1",
     "ios": "9",
     "samsung": "3.4",
+    "rhino": "1.9",
     "opera_mobile": "28",
     "electron": "0.21"
   },
@@ -188,6 +179,19 @@
     "chrome": "51",
     "opera": "38",
     "edge": "14",
+    "firefox": "53",
+    "safari": "10",
+    "node": "6.5",
+    "deno": "1",
+    "ios": "10",
+    "samsung": "5",
+    "opera_mobile": "41",
+    "electron": "1.2"
+  },
+  "transform-destructuring": {
+    "chrome": "51",
+    "opera": "38",
+    "edge": "15",
     "firefox": "53",
     "safari": "10",
     "node": "6.5",

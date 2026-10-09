@@ -20,7 +20,7 @@ import type { Formatter } from "./formatters.ts";
 
 export type Metadata = {
   ast: t.File;
-  placeholders: Array<Placeholder>;
+  placeholders: Placeholder[];
   placeholderNames: Set<string>;
 };
 
@@ -40,9 +40,9 @@ export default function parseAndBuildMetadata<T>(
   opts: TemplateOpts,
 ): Metadata {
   const {
-    placeholderWhitelist,
+    placeholderAllowlist,
     placeholderPattern,
-    preserveComments,
+    preserveComments = false,
     syntacticPlaceholders,
   } = opts;
 
@@ -57,7 +57,7 @@ export default function parseAndBuildMetadata<T>(
   const state: MetadataState = {
     syntactic: { placeholders: [], placeholderNames: new Set() },
     legacy: { placeholders: [], placeholderNames: new Set() },
-    placeholderWhitelist,
+    placeholderAllowlist,
     placeholderPattern,
     syntacticPlaceholders,
   };
@@ -100,12 +100,12 @@ function placeholderVisitorHandler(
 
   if (
     hasSyntacticPlaceholders &&
-    (state.placeholderPattern != null || state.placeholderWhitelist != null)
+    (state.placeholderPattern != null || state.placeholderAllowlist != null)
   ) {
     // This check is also in options.js. We need it there to handle the default
     // .syntacticPlaceholders behavior.
     throw new Error(
-      "'.placeholderWhitelist' and '.placeholderPattern' aren't compatible" +
+      "'.placeholderAllowlist' and '.placeholderPattern' aren't compatible" +
         " with '.syntacticPlaceholders: true'",
     );
   }
@@ -114,7 +114,7 @@ function placeholderVisitorHandler(
     !hasSyntacticPlaceholders &&
     (state.placeholderPattern === false ||
       !(state.placeholderPattern || PATTERN).test(name)) &&
-    !state.placeholderWhitelist?.has(name)
+    !state.placeholderAllowlist?.has(name)
   ) {
     return;
   }
@@ -177,14 +177,14 @@ function resolveAncestors(ast: t.File, ancestors: TraversalAncestors) {
 
 type MetadataState = {
   syntactic: {
-    placeholders: Array<Placeholder>;
+    placeholders: Placeholder[];
     placeholderNames: Set<string>;
   };
   legacy: {
-    placeholders: Array<Placeholder>;
+    placeholders: Placeholder[];
     placeholderNames: Set<string>;
   };
-  placeholderWhitelist?: Set<string>;
+  placeholderAllowlist?: Set<string>;
   placeholderPattern?: RegExp | false;
   syntacticPlaceholders?: boolean;
 };
@@ -200,15 +200,17 @@ function parseWithCodeFrame(
   }
 
   parserOpts = {
+    allowAwaitOutsideFunction: true,
     allowReturnOutsideFunction: true,
+    allowNewTargetOutsideFunction: true,
     allowSuperOutsideMethod: true,
+    allowYieldOutsideFunction: true,
     sourceType: "module",
     ...parserOpts,
     plugins,
   };
 
   try {
-    // @ts-expect-error todo: use babel-types ast typings in Babel parser
     return parse(code, parserOpts);
   } catch (err) {
     const loc = err.loc;

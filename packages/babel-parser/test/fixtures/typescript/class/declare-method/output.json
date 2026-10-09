@@ -2,7 +2,8 @@
   "type": "File",
   "start":0,"end":30,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":30}},
   "errors": [
-    "SyntaxError: Class methods cannot have the 'declare' modifier. (2:2)"
+    "SyntaxError: Class methods cannot have the 'declare' modifier. (2:2)",
+    "SyntaxError: An implementation cannot be declared in ambient contexts. (2:16)"
   ],
   "program": {
     "type": "Program",

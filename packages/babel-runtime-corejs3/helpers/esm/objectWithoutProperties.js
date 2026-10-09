@@ -1,5 +1,5 @@
 import _Object$getOwnPropertySymbols from "core-js-pure/features/object/get-own-property-symbols.js";
-import _includesInstanceProperty from "core-js-pure/features/instance/includes.js";
+import _indexOfInstanceProperty from "core-js-pure/features/instance/index-of.js";
 import objectWithoutPropertiesLoose from "./objectWithoutPropertiesLoose.js";
 function _objectWithoutProperties(e, t) {
   if (null == e) return {};
@@ -7,8 +7,8 @@ function _objectWithoutProperties(e, t) {
     r,
     i = objectWithoutPropertiesLoose(e, t);
   if (_Object$getOwnPropertySymbols) {
-    var s = _Object$getOwnPropertySymbols(e);
-    for (r = 0; r < s.length; r++) o = s[r], _includesInstanceProperty(t).call(t, o) || {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    var n = _Object$getOwnPropertySymbols(e);
+    for (r = 0; r < n.length; r++) o = n[r], -1 === _indexOfInstanceProperty(t).call(t, o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
   }
   return i;
 }

@@ -2,16 +2,11 @@ import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   return {
     name: "transform-logical-assignment-operators",
-    inherits:
-      USE_ESM || IS_STANDALONE || api.version[0] === "8"
-        ? undefined
-        : // eslint-disable-next-line no-restricted-globals
-          require("@babel/plugin-syntax-logical-assignment-operators").default,
-
+    manipulateOptions: undefined,
     visitor: {
       AssignmentExpression(path) {
         const { node, scope } = path;
@@ -31,7 +26,6 @@ export default declare(api => {
               "=",
               t.cloneNode(memo),
               // object must not be Super when `memo` is an identifier
-              // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
               object as t.Expression,
             );
           }
@@ -43,7 +37,7 @@ export default declare(api => {
               (lhs as t.MemberExpression).property = t.assignmentExpression(
                 "=",
                 t.cloneNode(memo),
-                // @ts-expect-error todo(flow->ts): property can be t.PrivateName
+
                 property,
               );
             }

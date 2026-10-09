@@ -40,7 +40,7 @@ jobs:
             fs.appendFileSync(GITHUB_OUTPUT, `repository=${repository}\n`);
 
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ steps.pr-meta.outputs.repository }}
           ref: ${{ steps.pr-meta.outputs.branch }}
@@ -48,7 +48,7 @@ jobs:
           persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
 
       - name: Use Node.js latest
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: "*"
           cache: "yarn"

@@ -1,4 +1,0 @@
-{
-  "plugins": ["importAttributes"],
-  "sourceType": "module"
-}

@@ -1,18 +1,18 @@
 {
   "type": "File",
-  "start":0,"end":112,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":4,"index":112}},
+  "start":0,"end":127,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":4,"index":127}},
   "program": {
     "type": "Program",
-    "start":0,"end":112,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":4,"index":112}},
+    "start":0,"end":127,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":4,"index":127}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
       {
         "type": "ExpressionStatement",
-        "start":0,"end":112,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":4,"index":112}},
+        "start":0,"end":127,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":4,"index":127}},
         "expression": {
           "type": "JSXElement",
-          "start":0,"end":112,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":4,"index":112}},
+          "start":0,"end":127,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":4,"index":127}},
           "openingElement": {
             "type": "JSXOpeningElement",
             "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3}},
@@ -26,22 +26,22 @@
           },
           "closingElement": {
             "type": "JSXClosingElement",
-            "start":108,"end":112,"loc":{"start":{"line":7,"column":0,"index":108},"end":{"line":7,"column":4,"index":112}},
+            "start":123,"end":127,"loc":{"start":{"line":8,"column":0,"index":123},"end":{"line":8,"column":4,"index":127}},
             "name": {
               "type": "JSXIdentifier",
-              "start":110,"end":111,"loc":{"start":{"line":7,"column":2,"index":110},"end":{"line":7,"column":3,"index":111}},
+              "start":125,"end":126,"loc":{"start":{"line":8,"column":2,"index":125},"end":{"line":8,"column":3,"index":126}},
               "name": "a"
             }
           },
           "children": [
             {
               "type": "JSXText",
-              "start":3,"end":108,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":7,"column":0,"index":108}},
+              "start":3,"end":123,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":8,"column":0,"index":123}},
               "extra": {
-                "rawValue": "\n    Ӓ\n    ઼\n    Ӓ\n    ઼\n    \u0000\n",
-                "raw": "\n    &#1234;\n    &#xABC;\n    &#00000000000000000000001234;\n    &#x0000000000000000000000ABC;\n    &#0000;\n"
+                "rawValue": "\n    Ӓ\n    ઼\n    Ӓ\n    ઼\n    \u0000\n    􏿿\n",
+                "raw": "\n    &#1234;\n    &#xABC;\n    &#00000000000000000000001234;\n    &#x0000000000000000000000ABC;\n    &#0000;\n    &#x10ffff;\n"
               },
-              "value": "\n    Ӓ\n    ઼\n    Ӓ\n    ઼\n    \u0000\n"
+              "value": "\n    Ӓ\n    ઼\n    Ӓ\n    ઼\n    \u0000\n    􏿿\n"
             }
           ]
         }

@@ -30,10 +30,6 @@ cd ../..
 
 export YARN_ENABLE_IMMUTABLE_INSTALLS=false
 
-# Build
-BABEL_CORE_DEV_DEP_VERSION= make -j use-cjs
-
-
 make clean-node-modules
 yarn constraints --fix
 yarn

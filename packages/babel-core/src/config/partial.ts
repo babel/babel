@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import type { Handler } from "gensync";
 import Plugin from "./plugin.ts";
 import { mergeOptions } from "./util.ts";
@@ -9,18 +9,21 @@ import { getEnv } from "./helpers/environment.ts";
 import { validate } from "./validation/options.ts";
 
 import type {
-  ValidatedOptions,
-  NormalizedOptions,
   RootMode,
+  InputOptions,
+  NormalizedOptions,
 } from "./validation/options.ts";
 
 import {
   findConfigUpwards,
   resolveShowConfigPath,
   ROOT_CONFIG_FILENAMES,
-} from "./files/index.ts";
-import type { ConfigFile, IgnoreFile } from "./files/index.ts";
-import { resolveTargets } from "./resolve-targets.ts";
+  type ConfigFile,
+  type IgnoreFile,
+  // eslint-disable-next-line import/no-unresolved, import/extensions
+} from "#config/files";
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import { resolveTargets } from "#config/resolve-targets";
 
 function resolveRootMode(rootDir: string, rootMode: RootMode): string {
   switch (rootMode) {
@@ -54,18 +57,19 @@ function resolveRootMode(rootDir: string, rootMode: RootMode): string {
   }
 }
 
-type PrivPartialConfig = {
+export type PrivPartialConfig = {
+  showIgnoredFiles?: boolean;
   options: NormalizedOptions;
   context: ConfigContext;
+  babelrc: ConfigFile | undefined;
+  config: ConfigFile | undefined;
+  ignore: IgnoreFile | undefined;
   fileHandling: FileHandling;
-  ignore: IgnoreFile | void;
-  babelrc: ConfigFile | void;
-  config: ConfigFile | void;
   files: Set<string>;
 };
 
 export default function* loadPrivatePartialConfig(
-  inputOpts: unknown,
+  inputOpts: InputOptions | null | undefined,
 ): Handler<PrivPartialConfig | null> {
   if (
     inputOpts != null &&
@@ -109,11 +113,11 @@ export default function* loadPrivatePartialConfig(
   const configChain = yield* buildRootChain(args, context);
   if (!configChain) return null;
 
-  const merged: ValidatedOptions = {
+  const merged = {
     assumptions: {},
   };
   configChain.options.forEach(opts => {
-    mergeOptions(merged as any, opts);
+    mergeOptions(merged, opts);
   });
 
   const options: NormalizedOptions = {
@@ -154,14 +158,10 @@ export default function* loadPrivatePartialConfig(
   };
 }
 
-type LoadPartialConfigOpts = {
-  showIgnoredFiles?: boolean;
-};
-
 export function* loadPartialConfig(
-  opts?: LoadPartialConfigOpts,
+  opts?: InputOptions,
 ): Handler<PartialConfig | null> {
-  let showIgnoredFiles = false;
+  let showIgnoredFiles: boolean | undefined = false;
   // We only extract showIgnoredFiles if opts is an object, so that
   // loadPrivatePartialConfig can throw the appropriate error if it's not.
   if (typeof opts === "object" && opts !== null && !Array.isArray(opts)) {
@@ -179,7 +179,6 @@ export function* loadPartialConfig(
   }
 
   (options.plugins || []).forEach(item => {
-    // @ts-expect-error todo(flow->ts): better type annotation for `item.value`
     if (item.value instanceof Plugin) {
       throw new Error(
         "Passing cached plugin instances is not supported in " +
@@ -206,17 +205,17 @@ class PartialConfig {
    * a breaking change to Babel's API.
    */
   options: NormalizedOptions;
-  babelrc: string | void;
-  babelignore: string | void;
-  config: string | void;
+  babelrc: string | undefined;
+  babelignore: string | undefined;
+  config: string | undefined;
   fileHandling: FileHandling;
   files: Set<string>;
 
   constructor(
     options: NormalizedOptions,
-    babelrc: string | void,
-    ignore: string | void,
-    config: string | void,
+    babelrc: string | undefined,
+    ignore: string | undefined,
+    config: string | undefined,
     fileHandling: FileHandling,
     files: Set<string>,
   ) {

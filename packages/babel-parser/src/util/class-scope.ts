@@ -5,20 +5,19 @@ import type Tokenizer from "../tokenizer/index.ts";
 
 export class ClassScope {
   // A list of private named declared in the current class
-  privateNames: Set<string> = new Set();
+  privateNames = new Set<string>();
 
   // A list of private getters of setters without their counterpart
-  loneAccessors: Map<string, ClassElementType> = new Map();
+  loneAccessors = new Map<string, ClassElementType>();
 
   // A list of private names used before being defined, mapping to
   // their position.
-  undefinedPrivateNames: Map<string, Position> = new Map();
+  undefinedPrivateNames = new Map<string, Position | number>();
 }
 
 export default class ClassScopeHandler {
   parser: Tokenizer;
-  stack: Array<ClassScope> = [];
-  undefinedPrivateNames: Map<string, Position> = new Map();
+  stack: ClassScope[] = [];
 
   constructor(parser: Tokenizer) {
     this.parser = parser;
@@ -33,7 +32,7 @@ export default class ClassScopeHandler {
   }
 
   exit() {
-    const oldClassScope = this.stack.pop();
+    const oldClassScope = this.stack.pop()!;
 
     // Migrate the usage of not yet defined private names to the outer
     // class scope, or raise an error if we reached the top-level scope.
@@ -54,11 +53,7 @@ export default class ClassScopeHandler {
     }
   }
 
-  declarePrivateName(
-    name: string,
-    elementType: ClassElementType,
-    loc: Position,
-  ) {
+  declarePrivateName(name: string, elementType: ClassElementType, loc: number) {
     const { privateNames, loneAccessors, undefinedPrivateNames } =
       this.current();
     let redefined = privateNames.has(name);
@@ -93,7 +88,7 @@ export default class ClassScopeHandler {
     undefinedPrivateNames.delete(name);
   }
 
-  usePrivateName(name: string, loc: Position) {
+  usePrivateName(name: string, loc: Position | number) {
     let classScope;
     for (classScope of this.stack) {
       if (classScope.privateNames.has(name)) return;

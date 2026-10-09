@@ -42,7 +42,9 @@ export function willPathCastToBoolean(path: NodePath): boolean {
   return (
     parentPath.isConditional({ test: node }) ||
     parentPath.isUnaryExpression({ operator: "!" }) ||
-    parentPath.isLoop({ test: node })
+    // @ts-expect-error FIXME: test should allow t.Node
+    parentPath.isForStatement({ test: node }) ||
+    parentPath.isWhile({ test: node })
   );
 }
 
@@ -61,6 +63,7 @@ export function findOutermostTransparentParent(path: NodePath): NodePath {
   path.findParent(p => {
     if (!isTransparentExprWrapper(p.node)) return true;
     maybeWrapped = p;
+    return false;
   });
   return maybeWrapped;
 }

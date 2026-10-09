@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   return {
     name: "transform-instanceof",
@@ -16,21 +16,14 @@ export default declare(api => {
             return (
               (path.isVariableDeclarator() && path.node.id === helper) ||
               (path.isFunctionDeclaration() &&
-                path.node.id &&
-                path.node.id.name === helper.name)
+                path.node.id?.name === helper.name)
             );
           });
 
           if (isUnderHelper) {
             return;
           } else {
-            path.replaceWith(
-              t.callExpression(helper, [
-                // @ts-expect-error node.left can be PrivateName only when node.operator is "in"
-                node.left,
-                node.right,
-              ]),
-            );
+            path.replaceWith(t.callExpression(helper, [node.left, node.right]));
           }
         }
       },

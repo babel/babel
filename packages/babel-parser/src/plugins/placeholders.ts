@@ -3,11 +3,10 @@ import * as charCodes from "charcodes";
 import { tokenLabelName, tt } from "../tokenizer/types.ts";
 import type Parser from "../parser/index.ts";
 import type * as N from "../types.ts";
-import { ParseErrorEnum } from "../parse-error.ts";
+import { ParseErrorEnum, type ParseErrorTemplates } from "../parse-error.ts";
 import type { Undone } from "../parser/node.ts";
 import type { ExpressionErrors } from "../parser/util.ts";
 import type { BindingFlag } from "../util/scopeflags.ts";
-import type { Position } from "../util/location.ts";
 
 type PossiblePlaceholders = {
   Identifier: N.Identifier;
@@ -17,7 +16,7 @@ type PossiblePlaceholders = {
   Declaration: N.Declaration;
   BlockStatement: N.BlockStatement;
   ClassBody: N.ClassBody;
-  Pattern: N.Pattern;
+  Pattern: Exclude<N.Pattern, N.AssignmentPattern>;
 };
 export type PlaceholderTypes = keyof PossiblePlaceholders;
 
@@ -30,10 +29,14 @@ type NodeOf<T extends keyof PossiblePlaceholders> = PossiblePlaceholders[T];
 type MaybePlaceholder<T extends PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
 
 /* eslint sort-keys: "error" */
-const PlaceholderErrors = ParseErrorEnum`placeholders`({
+export const PlaceholderErrorTemplates = {
   ClassNameIsRequired: "A class name is required.",
   UnexpectedSpace: "Unexpected space in placeholder.",
-});
+} satisfies ParseErrorTemplates;
+
+const PlaceholderErrors = ParseErrorEnum`placeholders`(
+  PlaceholderErrorTemplates,
+);
 
 export default (superClass: typeof Parser) =>
   class PlaceholdersParserMixin extends superClass implements Parser {
@@ -69,11 +72,13 @@ export default (superClass: typeof Parser) =>
       }
 
       placeholder.expectedNode = expectedNode;
+      // avoid TS2590: Expression produces a union type that is too complex to represent.
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       return placeholder as unknown as MaybePlaceholder<T>;
     }
 
     /* ============================================================ *
-     * tokenizer/index.js                                           *
+     * tokenizer/index.ts                                           *
      * ============================================================ */
 
     getTokenFromCode(code: number) {
@@ -88,12 +93,12 @@ export default (superClass: typeof Parser) =>
     }
 
     /* ============================================================ *
-     * parser/expression.js                                         *
+     * parser/expression.ts                                         *
      * ============================================================ */
 
     parseExprAtom(
       refExpressionErrors?: ExpressionErrors | null,
-    ): MaybePlaceholder<"Expression"> {
+    ): MaybePlaceholder<"Expression"> | N.Super | N.Import {
       return (
         this.parsePlaceholder("Expression") ||
         super.parseExprAtom(refExpressionErrors)
@@ -112,7 +117,7 @@ export default (superClass: typeof Parser) =>
 
     checkReservedWord(
       word: string,
-      startLoc: Position,
+      startLoc: number,
       checkKeywords: boolean,
       isBinding: boolean,
     ) {
@@ -125,17 +130,48 @@ export default (superClass: typeof Parser) =>
     }
 
     /* ============================================================ *
-     * parser/lval.js                                               *
+     * parser/node.ts                                               *
      * ============================================================ */
 
-    parseBindingAtom(): MaybePlaceholder<"Pattern"> {
+    cloneIdentifier<T extends N.Identifier | N.Placeholder>(node: T): T {
+      const cloned = super.cloneIdentifier(node);
+      if (cloned.type === "Placeholder") {
+        cloned.expectedNode = (node as N.Placeholder).expectedNode;
+      }
+      return cloned;
+    }
+
+    cloneStringLiteral<
+      T extends N.EstreeLiteral | N.StringLiteral | N.Placeholder,
+    >(node: T): T {
+      if (node.type === "Placeholder") {
+        return this.cloneIdentifier(node) as T;
+      }
+      return super.cloneStringLiteral(node);
+    }
+
+    /* ============================================================ *
+     * parser/lval.ts                                               *
+     * ============================================================ */
+
+    parseBindingAtom(): MaybePlaceholder<"Pattern" | "Identifier"> {
       return this.parsePlaceholder("Pattern") || super.parseBindingAtom();
     }
 
-    isValidLVal(type: string, isParenthesized: boolean, binding: BindingFlag) {
+    isValidLVal(
+      type: string,
+      disallowCallExpression: boolean,
+      isParenthesized: boolean,
+      binding: BindingFlag,
+    ) {
       return (
         type === "Placeholder" ||
-        super.isValidLVal(type, isParenthesized, binding)
+        super.isValidLVal(
+          type,
+          disallowCallExpression,
+          isParenthesized,
+          binding,
+        )
       );
     }
 
@@ -152,7 +188,7 @@ export default (superClass: typeof Parser) =>
     }
 
     /* ============================================================ *
-     * parser/statement.js                                          *
+     * parser/statement.ts                                          *
      * ============================================================ */
 
     chStartsBindingIdentifier(ch: number, pos: number): boolean {
@@ -162,8 +198,11 @@ export default (superClass: typeof Parser) =>
 
       // Accept "let %%" as the start of "let %%placeholder%%", as though the
       // placeholder were an identifier.
-      const nextToken = this.lookahead();
-      if (nextToken.type === tt.placeholder) {
+      const next = this.nextTokenStart();
+      if (
+        this.input.charCodeAt(next) === charCodes.percentSign &&
+        this.input.charCodeAt(next + 1) === charCodes.percentSign
+      ) {
         return true;
       }
 
@@ -175,7 +214,7 @@ export default (superClass: typeof Parser) =>
       isBreak: boolean,
     ) {
       // @ts-expect-error: node.label could be Placeholder
-      if (node.label && node.label.type === "Placeholder") return;
+      if (node.label?.type === "Placeholder") return;
       super.verifyBreakContinue(node, isBreak);
     }
 
@@ -284,6 +323,7 @@ export default (superClass: typeof Parser) =>
         // export %%DECL%%;
         node2.specifiers = [];
         node2.source = null;
+        // @ts-expect-error Consider refine placeholder types here to ExportNamedDeclaration["declaration"].
         node2.declaration = this.finishPlaceholder(placeholder, "Declaration");
         return this.finishNode(node2, "ExportNamedDeclaration");
       }
@@ -332,21 +372,22 @@ export default (superClass: typeof Parser) =>
       );
     }
 
-    checkExport(node: N.ExportNamedDeclaration): void {
-      const { specifiers } = node;
-      if (specifiers?.length) {
-        node.specifiers = specifiers.filter(
-          // @ts-expect-error placeholder typings
-          node => node.exported.type === "Placeholder",
-        );
-      }
-      super.checkExport(node);
-      node.specifiers = specifiers;
+    // TODO: Enable this
+    checkNamedExport(): void {
+      // const { specifiers } = node;
+      // if (specifiers?.length) {
+      //   node.specifiers = specifiers.filter(
+      //     // @ts-expect-error placeholder typings
+      //     node => node.exported.type === "Placeholder",
+      //   );
+      // }
+      // super.checkNamedExport(node);
+      // node.specifiers = specifiers;
     }
 
     parseImport(
       node: Undone<N.ImportDeclaration>,
-    ): N.ImportDeclaration | N.TsImportEqualsDeclaration {
+    ): N.ImportDeclaration | N.TSImportEqualsDeclaration {
       const placeholder = this.parsePlaceholder("Identifier");
       if (!placeholder) return super.parseImport(node);
 
@@ -391,8 +432,14 @@ export default (superClass: typeof Parser) =>
 
     // Throws if the current token and the prev one are separated by a space.
     assertNoSpace(): void {
-      if (this.state.start > this.state.lastTokEndLoc.index) {
-        this.raise(PlaceholderErrors.UnexpectedSpace, this.state.lastTokEndLoc);
+      if (
+        this.state.start >
+        this.offsetToSourcePos(this.state.lastTokEndLoc!.index)
+      ) {
+        this.raise(
+          PlaceholderErrors.UnexpectedSpace,
+          this.state.lastTokEndLoc!,
+        );
       }
     }
   };

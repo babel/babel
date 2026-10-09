@@ -22,18 +22,6 @@ const apiPolyfills: APIPolyfills = {
     throwVersionError(range, api.version);
   },
 };
-if (!process.env.BABEL_8_BREAKING) {
-  Object.assign(apiPolyfills, {
-    // This is supported starting from Babel 7.13
-    targets: () => () => {
-      return {};
-    },
-    // This is supported starting from Babel 7.13
-    assumption: () => () => {
-      return undefined;
-    },
-  });
-}
 
 export function declare<State = object, Option = object>(
   builder: (
@@ -63,7 +51,7 @@ export function declare<State = object, Option = object>(
   };
 }
 
-export const declarePreset = declare as <Option = object>(
+export const declarePreset = declare as unknown as <Option = object>(
   builder: (api: PresetAPI, options: Option, dirname: string) => PresetObject,
 ) => (api: PresetAPI, options: Option, dirname: string) => PresetObject;
 
@@ -74,7 +62,7 @@ function copyApiObject(api: PluginAPI): PluginAPI {
   // keep complexity, the Babel 6 behavior has been reverted and this
   // normalizes all that for Babel 7.
   let proto = null;
-  if (typeof api.version === "string" && /^7\./.test(api.version)) {
+  if (typeof api.version === "string" && api.version.startsWith("7.")) {
     proto = Object.getPrototypeOf(api);
     if (
       proto &&
@@ -113,7 +101,7 @@ function throwVersionError(range: string | number, version: string) {
   }
 
   let err;
-  if (version.slice(0, 2) === "7.") {
+  if (version.startsWith("7.")) {
     err = new Error(
       `Requires Babel "^7.0.0-beta.41", but was loaded with "${version}". ` +
         `You'll need to update your @babel/core version.`,

@@ -1,7 +1,7 @@
 import type { Handler } from "gensync";
-import type { PluginTarget, PluginOptions } from "./validation/options.ts";
+import type { PluginItem, PresetItem } from "./validation/options.ts";
 
-import path from "path";
+import path from "node:path";
 import { createDescriptor } from "./config-descriptors.ts";
 
 import type { UnloadedDescriptor } from "./config-descriptors.ts";
@@ -19,10 +19,7 @@ export function createItemFromDescriptor<API>(
  * and re-evaluating the plugin/preset function.
  */
 export function* createConfigItem<API>(
-  value:
-    | PluginTarget
-    | [PluginTarget, PluginOptions]
-    | [PluginTarget, PluginOptions, string | void],
+  value: PluginItem | PresetItem,
   {
     dirname = ".",
     type,
@@ -39,7 +36,7 @@ export function* createConfigItem<API>(
   return createItemFromDescriptor(descriptor);
 }
 
-const CONFIG_ITEM_BRAND = Symbol.for("@babel/core@7 - ConfigItem");
+const CONFIG_ITEM_BRAND = Symbol.for("@babel/core@8 - ConfigItem");
 
 export function getItemDescriptor<API>(
   item: unknown,
@@ -68,7 +65,6 @@ class ConfigItem<API> {
    */
   _descriptor: UnloadedDescriptor<API>;
 
-  // TODO(Babel 9): Check if this symbol needs to be updated
   /**
    * Used to detect ConfigItem instances from other Babel instances.
    */

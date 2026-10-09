@@ -1,3 +1,5 @@
+/* c8 ignore start */
+
 import type { Handler } from "gensync";
 
 import type {
@@ -74,13 +76,17 @@ export function* resolveShowConfigPath(
 
 export const ROOT_CONFIG_FILENAMES: string[] = [];
 
+type Resolved =
+  | { loader: "require"; filepath: string }
+  | { loader: "import"; filepath: string };
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function resolvePlugin(name: string, dirname: string): string | null {
+export function resolvePlugin(name: string, dirname: string): Resolved | null {
   return null;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function resolvePreset(name: string, dirname: string): string | null {
+export function resolvePreset(name: string, dirname: string): Resolved | null {
   return null;
 }
 

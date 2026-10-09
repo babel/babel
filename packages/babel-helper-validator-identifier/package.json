@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-validator-identifier",
-  "version": "7.24.7",
+  "version": "8.0.6",
   "description": "Validate identifier/keywords name",
   "repository": {
     "type": "git",
@@ -19,29 +19,27 @@
     },
     "./package.json": "./package.json"
   },
+  "imports": {
+    "#identifier": {
+      "babel-src": {
+        "browser": "./src/identifier-browser.ts",
+        "default": "./src/identifier.ts"
+      },
+      "types": "./lib/identifier.d.ts",
+      "browser": "./lib/identifier-browser.js",
+      "default": "./lib/identifier.js"
+    }
+  },
   "devDependencies": {
-    "@unicode/unicode-15.1.0": "^1.5.2",
-    "charcodes": "^0.2.0"
+    "@types/regenerate": "^1.4.0",
+    "@unicode/unicode-16.0.0": "^2.0.7",
+    "@unicode/unicode-18.0.0": "^2.0.7",
+    "charcodes": "catalog:dev",
+    "regenerate": "^1.4.0"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "type": "module",
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ],
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        }
-      },
-      {}
-    ]
-  }
+  "type": "module"
 }

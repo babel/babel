@@ -1,7 +1,10 @@
-import {
+import annotateAsPure from "@babel/helper-annotate-as-pure";
+import type { PluginPass, NodePath, Visitor } from "@babel/core";
+import { types as t } from "@babel/core";
+
+const {
   booleanLiteral,
   callExpression,
-  identifier,
   inherits,
   isIdentifier,
   isJSXExpressionContainer,
@@ -9,7 +12,6 @@ import {
   isJSXMemberExpression,
   isJSXNamespacedName,
   isJSXSpreadAttribute,
-  isObjectExpression,
   isReferenced,
   isStringLiteral,
   isValidIdentifier,
@@ -21,14 +23,12 @@ import {
   spreadElement,
   stringLiteral,
   thisExpression,
-} from "@babel/types";
-import annotateAsPure from "@babel/helper-annotate-as-pure";
-import type { PluginPass, NodePath, Visitor, types as t } from "@babel/core";
+} = t;
 
 type ElementState = {
   tagExpr: t.Expression; // tag node,
   tagName: string | undefined | null; // raw string tag name,
-  args: Array<any>; // array of call arguments,
+  args: any[]; // array of call arguments,
   call?: any; // optional call property that can be set to override the call expression returned,
   pure: boolean; // true if the element can be marked with a #__PURE__ annotation
   callee?: any;
@@ -186,7 +186,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
     const state: ElementState = {
       tagExpr: tagExpr,
-      tagName: tagName,
+      tagName: tagName!,
       args: args,
       pure: false,
     };
@@ -198,11 +198,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     const attribs = openingPath.node.attributes;
     let convertedAttributes: t.Expression;
     if (attribs.length) {
-      if (process.env.BABEL_8_BREAKING) {
-        convertedAttributes = objectExpression(attribs.map(convertAttribute));
-      } else {
-        convertedAttributes = buildOpeningElementAttributes(attribs, pass);
-      }
+      convertedAttributes = objectExpression(attribs.map(convertAttribute));
     } else {
       convertedAttributes = nullLiteral();
     }
@@ -221,91 +217,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     if (state.pure) annotateAsPure(call);
 
     return call;
-  }
-
-  function pushProps(
-    _props: (t.ObjectProperty | t.SpreadElement)[],
-    objs: t.Expression[],
-  ) {
-    if (!_props.length) return _props;
-
-    objs.push(objectExpression(_props));
-    return [];
-  }
-
-  /**
-   * The logic for this is quite terse. It's because we need to
-   * support spread elements. We loop over all attributes,
-   * breaking on spreads, we then push a new object containing
-   * all prior attributes to an array for later processing.
-   */
-
-  function buildOpeningElementAttributes(
-    attribs: (t.JSXAttribute | t.JSXSpreadAttribute)[],
-    pass: PluginPass<Options>,
-  ): t.Expression {
-    let _props: (t.ObjectProperty | t.SpreadElement)[] = [];
-    const objs: t.Expression[] = [];
-
-    const { useSpread = false } = pass.opts;
-    if (typeof useSpread !== "boolean") {
-      throw new Error(
-        "transform-react-jsx currently only accepts a boolean option for " +
-          "useSpread (defaults to false)",
-      );
-    }
-
-    const useBuiltIns = pass.opts.useBuiltIns || false;
-    if (typeof useBuiltIns !== "boolean") {
-      throw new Error(
-        "transform-react-jsx currently only accepts a boolean option for " +
-          "useBuiltIns (defaults to false)",
-      );
-    }
-
-    if (useSpread && useBuiltIns) {
-      throw new Error(
-        "transform-react-jsx currently only accepts useBuiltIns or useSpread " +
-          "but not both",
-      );
-    }
-
-    if (useSpread) {
-      const props = attribs.map(convertAttribute);
-      return objectExpression(props);
-    }
-
-    while (attribs.length) {
-      const prop = attribs.shift();
-      if (isJSXSpreadAttribute(prop)) {
-        _props = pushProps(_props, objs);
-        objs.push(prop.argument);
-      } else {
-        _props.push(convertAttribute(prop));
-      }
-    }
-
-    pushProps(_props, objs);
-    let convertedAttribs: t.Expression;
-
-    if (objs.length === 1) {
-      // only one object
-      convertedAttribs = objs[0];
-    } else {
-      // looks like we have multiple objects
-      if (!isObjectExpression(objs[0])) {
-        objs.unshift(objectExpression([]));
-      }
-
-      const helper = useBuiltIns
-        ? memberExpression(identifier("Object"), identifier("assign"))
-        : pass.addHelper("extends");
-
-      // spread it
-      convertedAttribs = callExpression(helper, objs);
-    }
-
-    return convertedAttribs;
   }
 
   function buildFragmentCall(path: NodePath<t.JSXFragment>, pass: PluginPass) {

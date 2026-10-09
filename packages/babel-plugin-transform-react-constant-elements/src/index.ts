@@ -13,7 +13,7 @@ interface VisitorState {
   targetScope: Scope;
 }
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const { allowMutablePropsOnTags } = options;
 
@@ -48,7 +48,7 @@ export default declare((api, options: Options) => {
   }
 
   function getHoistingScope(scope: Scope) {
-    while (!isHoistingScope(scope)) scope = scope.parent;
+    while (!isHoistingScope(scope)) scope = scope.parent!;
     return scope;
   }
 
@@ -61,7 +61,7 @@ export default declare((api, options: Options) => {
         // If a binding is declared in an inner function, it doesn't affect hoisting.
         if (declares(node, scope)) return;
 
-        scope = scope.parent;
+        scope = scope.parent!;
       }
 
       while (scope) {
@@ -74,7 +74,7 @@ export default declare((api, options: Options) => {
         // higher.
         if (declares(node, scope)) break;
 
-        scope = scope.parent;
+        scope = scope.parent!;
       }
 
       state.targetScope = getHoistingScope(scope);
@@ -171,7 +171,7 @@ export default declare((api, options: Options) => {
   return {
     name: "transform-react-constant-elements",
 
-    visitor: {
+    visitor: api.traverse.explode({
       "JSXElement|JSXFragment"(path: NodePath<t.JSXElement | t.JSXFragment>) {
         if (HOISTED.has(path.node)) return;
         let mutablePropsAllowed = false;
@@ -224,7 +224,7 @@ export default declare((api, options: Options) => {
 
         const { targetScope } = visitorState;
         // Only hoist if it would give us an advantage.
-        for (let currentScope = jsxScope; ; ) {
+        for (let currentScope = jsxScope; ;) {
           if (targetScope === currentScope) return;
           if (isHoistingScope(currentScope)) break;
 
@@ -257,6 +257,6 @@ export default declare((api, options: Options) => {
 
         path.replaceWith(replacement);
       },
-    },
+    }),
   };
 });

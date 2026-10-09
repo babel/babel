@@ -1,7 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "plugins": [
-    "transform-typescript",
-    ["transform-class-properties", { "loose": true }]
-  ]
-}

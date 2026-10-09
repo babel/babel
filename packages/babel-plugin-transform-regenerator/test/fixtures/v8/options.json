@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "transform-regenerator",
+    "transform-block-scoping"
+  ],
+  "minNodeVersion": "12.0.0"
+}

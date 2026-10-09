@@ -1,0 +1,30 @@
+name: AgentScan
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+  issues:
+    types:
+      - opened
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  agentscan:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+      contents: read
+    steps:
+      - name: AgentScan
+        uses: MatteoGabriele/agentscan-action@cf7615ba9f4fa86beab3323bc84b803ab430f8dc # v2.3.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          allowed-users: "nicolo-ribaudo,JLHwung,liuxingbaoyu,babel-bot,fisker"
+          trusted-author-associations: "owner,member,collaborator"
+          honeypot: true
+          scan-issues: true

@@ -1,0 +1,39 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":27}},
+  "errors": [
+    "SyntaxError: 'type' declarations can only be declared inside a block. (2:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":27}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForStatement",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":27}},
+        "init": null,
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "TSTypeAliasDeclaration",
+          "start":11,"end":27,"loc":{"start":{"line":2,"column":2,"index":11},"end":{"line":2,"column":18,"index":27}},
+          "id": {
+            "type": "Identifier",
+            "start":16,"end":17,"loc":{"start":{"line":2,"column":7,"index":16},"end":{"line":2,"column":8,"index":17},"identifierName":"T"},
+            "name": "T"
+          },
+          "typeAnnotation": {
+            "type": "TSNumberKeyword",
+            "start":20,"end":26,"loc":{"start":{"line":2,"column":11,"index":20},"end":{"line":2,"column":17,"index":26}}
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

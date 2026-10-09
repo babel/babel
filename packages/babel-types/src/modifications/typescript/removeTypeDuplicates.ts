@@ -1,5 +1,6 @@
 import {
   isIdentifier,
+  isThisExpression,
   isTSAnyKeyword,
   isTSTypeReference,
   isTSUnionType,
@@ -10,15 +11,17 @@ import type * as t from "../../index.ts";
 function getQualifiedName(node: t.TSTypeReference["typeName"]): string {
   return isIdentifier(node)
     ? node.name
-    : `${node.right.name}.${getQualifiedName(node.left)}`;
+    : isThisExpression(node)
+      ? "this"
+      : `${node.right.name}.${getQualifiedName(node.left)}`;
 }
 
 /**
  * Dedupe type annotations.
  */
 export default function removeTypeDuplicates(
-  nodesIn: ReadonlyArray<t.TSType>,
-): Array<t.TSType> {
+  nodesIn: readonly t.TSType[],
+): t.TSType[] {
   const nodes = Array.from(nodesIn);
 
   const generics = new Map<string, t.TSTypeReference>();
@@ -58,20 +61,18 @@ export default function removeTypeDuplicates(
     }
 
     // todo: support merging tuples: number[]
-    if (isTSTypeReference(node) && node.typeParameters) {
+    const typeArgumentsKey = "typeArguments";
+    if (isTSTypeReference(node) && node[typeArgumentsKey]) {
+      const typeArguments = node[typeArgumentsKey];
       const name = getQualifiedName(node.typeName);
 
       if (generics.has(name)) {
-        let existing: t.TypeScript = generics.get(name);
-        if (existing.typeParameters) {
-          if (node.typeParameters) {
-            existing.typeParameters.params.push(...node.typeParameters.params);
-            existing.typeParameters.params = removeTypeDuplicates(
-              existing.typeParameters.params,
-            );
-          }
-        } else {
-          existing = node.typeParameters;
+        const existingTypeArguments = generics.get(name)![typeArgumentsKey];
+        if (existingTypeArguments) {
+          existingTypeArguments.params.push(...typeArguments.params);
+          existingTypeArguments.params = removeTypeDuplicates(
+            existingTypeArguments.params,
+          );
         }
       } else {
         generics.set(name, node);

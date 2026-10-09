@@ -1,1 +1,0 @@
-export function resolve(specifier: string, parent: string): string;

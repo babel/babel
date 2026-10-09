@@ -19,7 +19,7 @@ export default function toBlock(
     return node;
   }
 
-  let blockNodes: t.Statement[] = [];
+  let blockNodes: t.Statement[];
 
   if (isEmptyStatement(node)) {
     blockNodes = [];

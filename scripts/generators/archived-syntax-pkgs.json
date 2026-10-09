@@ -1,4 +1,8 @@
 [
+  "@babel/plugin-transform-react-jsx-compat",
+  "@babel/plugin-transform-react-jsx-self",
+  "@babel/plugin-transform-react-jsx-source",
+  "@babel/plugin-proposal-record-and-tuple",
   "@babel/plugin-syntax-async-functions",
   "@babel/plugin-syntax-async-generators",
   "@babel/plugin-syntax-bigint",
@@ -18,7 +22,10 @@
   "@babel/plugin-syntax-optional-catch-binding",
   "@babel/plugin-syntax-optional-chaining",
   "@babel/plugin-syntax-private-property-in-object",
+  "@babel/plugin-syntax-record-and-tuple",
   "@babel/plugin-syntax-top-level-await",
   "@babel/plugin-syntax-trailing-function-commas",
-  "@babel/plugin-syntax-unicode-sets-regex"
+  "@babel/plugin-syntax-unicode-sets-regex",
+  "@babel/plugin-syntax-decimal",
+  "@babel/plugin-syntax-import-reflection"
 ]

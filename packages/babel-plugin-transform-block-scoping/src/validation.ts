@@ -177,10 +177,7 @@ function injectTDZChecks(binding: Scope.Binding, state: PluginPass) {
       }
     } else if (path.isAssignmentExpression()) {
       const nodes = [];
-      const ids = process.env.BABEL_8_BREAKING
-        ? path.getAssignmentIdentifiers()
-        : path.getBindingIdentifiers();
-
+      const ids = path.getAssignmentIdentifiers();
       for (const name of Object.keys(ids)) {
         const replacement = getTDZReplacement(path, state, ids[name]);
         if (replacement) {
@@ -197,7 +194,7 @@ function injectTDZChecks(binding: Scope.Binding, state: PluginPass) {
   for (const path of binding.referencePaths as NodePath<t.Identifier>[]) {
     if (path.parentPath.isUpdateExpression()) continue;
     // It will be handled after transforming the loop
-    if (path.parentPath.isFor({ left: path.node })) continue;
+    if (path.parentPath.isForXStatement({ left: path.node })) continue;
 
     const replacement = getTDZReplacement(path, state);
     if (!replacement) continue;

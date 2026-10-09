@@ -1,4 +1,0 @@
-class A {
-  @foo
-  y;
-}

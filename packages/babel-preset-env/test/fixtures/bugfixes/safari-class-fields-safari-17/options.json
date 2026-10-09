@@ -2,6 +2,12 @@
   "validateLogs": true,
   "targets": "safari 17",
   "presets": [
-    ["env", { "debug": true, "modules": false }]
+    [
+      "env",
+      {
+        "debug": true,
+        "modules": false
+      }
+    ]
   ]
 }

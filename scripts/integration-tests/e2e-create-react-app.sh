@@ -17,11 +17,6 @@ set -x
 git clone --depth=1 https://github.com/facebook/create-react-app.git tmp/create-react-app
 cd tmp/create-react-app || exit
 
-# CircleCI already has npm 7
-if [ "$BABEL_8_BREAKING" != true ] ; then
-  npm i -g npm@7
-fi
-
 #==============================================================================#
 #                                   TEST                                       #
 #==============================================================================#
@@ -39,11 +34,6 @@ for d in ./packages/*/
 do
   (cd "$d"; node "$bump_deps" resolutions)
 done
-
-if [[ "$(node --version)" == v17.* ]]; then
-  # Remove this when https://github.com/webpack/webpack/issues/14532 is fixed
-  export NODE_OPTIONS=--openssl-legacy-provider
-fi
 
 startLocalRegistry "$PWD"/../../verdaccio-config.yml
 

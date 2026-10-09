@@ -1,3 +1,6 @@
 {
-  "plugins": ["exportDefaultFrom", "typescript"]
+  "plugins": [
+    "exportDefaultFrom",
+    "typescript"
+  ]
 }

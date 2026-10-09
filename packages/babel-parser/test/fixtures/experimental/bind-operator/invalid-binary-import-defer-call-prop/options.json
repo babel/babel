@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "functionBind",
+    "deferredImportEvaluation"
+  ],
+  "throws": "The right-hand side of binding can not be super or import. (1:3)"
+}

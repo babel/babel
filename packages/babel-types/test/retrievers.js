@@ -1,7 +1,3 @@
-import {
-  describeBabel7,
-  describeBabel8,
-} from "../../../scripts/repo-utils/index.cjs";
 import * as t from "../lib/index.js";
 import { parse } from "@babel/parser";
 
@@ -237,19 +233,8 @@ describe("retrievers", function () {
       expect(Object.keys(ids)).toEqual(bindingNames);
     });
   });
-  describeBabel7("getOuterBindingIdentifiers - Babel 7", function () {
-    it.each([
-      [
-        "class expressions",
-        getBody("(class C { a(b) { let c } })")[0].expression,
-        ["C"],
-      ],
-    ])("%s", (_, program, bindingNames) => {
-      const ids = t.getOuterBindingIdentifiers(program);
-      expect(Object.keys(ids)).toEqual(bindingNames);
-    });
-  });
-  describeBabel8("getOuterBindingIdentifiers - Babel 8", function () {
+
+  describe("getOuterBindingIdentifiers - Babel 8", function () {
     it.each([
       [
         "class expressions",

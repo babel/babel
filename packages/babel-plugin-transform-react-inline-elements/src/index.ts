@@ -3,7 +3,7 @@ import helper from "@babel/helper-builder-react-jsx";
 import { types as t } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   function hasRefOrSpread(attrs: t.JSXOpeningElement["attributes"]) {
     for (let i = 0; i < attrs.length; i++) {
@@ -31,7 +31,7 @@ export default declare(api => {
       const tagName = state.tagName;
       const args = state.args;
       if (t.react.isCompatTag(tagName)) {
-        args.push(t.stringLiteral(tagName));
+        args.push(t.stringLiteral(tagName!));
       } else {
         args.push(state.tagExpr);
       }
@@ -61,7 +61,7 @@ export default declare(api => {
       }
 
       if (!hasKey && state.args.length > 2) {
-        state.args.splice(2, 0, t.unaryExpression("void", t.numericLiteral(0)));
+        state.args.splice(2, 0, t.buildUndefinedNode());
       }
 
       state.pure = true;

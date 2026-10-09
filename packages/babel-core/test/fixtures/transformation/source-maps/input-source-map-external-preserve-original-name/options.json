@@ -1,0 +1,6 @@
+{
+  "inputSourceMap": true,
+  "sourceType": "module",
+  "sourceMaps": true,
+  "plugins": ["./plugin.js"]
+}

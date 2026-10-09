@@ -1,6 +1,5 @@
 import verifyAndAssertMessages from "../../helpers/verifyAndAssertMessages.js";
-import path from "path";
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 
 function verifyDecoratorsLegacyAndAssertMessages(
   code,
@@ -12,9 +11,11 @@ function verifyDecoratorsLegacyAndAssertMessages(
     parserOptions: {
       sourceType,
       babelOptions: {
-        configFile: path.resolve(
-          path.dirname(fileURLToPath(import.meta.url)),
-          "../../../../babel-eslint-shared-fixtures/config/babel.config.decorators-legacy.js",
+        configFile: fileURLToPath(
+          new URL(
+            "../../../../babel-eslint-shared-fixtures/config/babel.config.decorators-legacy.js",
+            import.meta.url,
+          ),
         ),
       },
     },
@@ -1294,22 +1295,23 @@ describe("verify", () => {
     ]);
   });
 
-  // This two tests are disabled, as the feature to visit properties when
-  // there is a spread/rest operator has been removed as it caused problems
-  // with other rules #249
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip("visits excluded properties left of spread #95", () => {
+  it("visits excluded properties left of spread #95", () => {
     verifyAndAssertMessages(
       "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
       { "no-unused-vars": 1 },
+      [
+        "1:31 'field1' is assigned a value but never used. no-unused-vars",
+        "1:39 'field2' is assigned a value but never used. no-unused-vars",
+        "1:50 'clone' is assigned a value but never used. no-unused-vars",
+      ],
     );
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip("visits excluded properties left of spread #210", () => {
+  it("visits excluded properties left of spread #210", () => {
     verifyAndAssertMessages(
       "const props = { yo: 'yo' }; const { ...otherProps } = props;",
       { "no-unused-vars": 1 },
+      ["1:40 'otherProps' is assigned a value but never used. no-unused-vars"],
     );
   });
 
@@ -1591,29 +1593,6 @@ describe("verify", () => {
     );
   });
 
-  const babel7 = process.env.BABEL_8_BREAKING ? it.skip : it;
-
-  babel7("allowImportExportEverywhere option (#327)", () => {
-    verifyAndAssertMessages(
-      `
-        if (true) { import Foo from 'foo'; }
-        function foo() { import Bar from 'bar'; }
-        switch (a) { case 1: import FooBar from 'foobar'; }
-      `,
-      {},
-      [],
-      "module",
-      {
-        env: {},
-        parserOptions: {
-          ecmaVersion: 6,
-          sourceType: "module",
-          allowImportExportEverywhere: true,
-        },
-      },
-    );
-  });
-
   it("allowImportExportEverywhere @babel/parser option (#327)", () => {
     verifyAndAssertMessages(
       `
@@ -1833,6 +1812,41 @@ describe("verify", () => {
             #p: Array<number>
           }`,
           { "no-undef": 1 },
+        );
+      });
+    });
+
+    describe("accessor declarations", () => {
+      it("should not be undefined", () => {
+        verifyAndAssertMessages(
+          `
+              class C {
+                accessor d = 1;
+              }
+          `,
+          { "no-undef": 1 },
+        );
+      });
+
+      it("should not be unused", () => {
+        verifyAndAssertMessages(
+          `
+              export class C {
+                accessor d = 1;
+              }
+          `,
+          { "no-unused-vars": 1 },
+        );
+      });
+
+      it("no-use-before-define allows referencing the class in an accessor", () => {
+        verifyAndAssertMessages(
+          `
+            class C {
+              accessor d = C.name;
+            }
+          `,
+          { "no-use-before-define": 1 },
         );
       });
     });

@@ -6,10 +6,7 @@ import {
 import type {
   ConfigFileSearch,
   BabelrcSearch,
-  IgnoreList,
-  IgnoreItem,
-  PluginList,
-  PluginItem,
+  MatchItem,
   PluginTarget,
   ConfigApplicableTest,
   SourceMapsOption,
@@ -21,15 +18,14 @@ import type {
   RootMode,
   TargetsListOrObject,
   AssumptionName,
+  PluginItem,
 } from "./options.ts";
 
 import { assumptionsNames } from "./options.ts";
 
 export type { RootPath } from "./options.ts";
 
-export type ValidatorSet = {
-  [name: string]: Validator<any>;
-};
+export type ValidatorSet = Record<string, Validator<any>>;
 
 export type Validator<T> = (loc: OptionPath, value: unknown) => T;
 
@@ -74,7 +70,7 @@ type GeneralPath = OptionPath | AccessPath;
 export function assertRootMode(
   loc: OptionPath,
   value: unknown,
-): RootMode | void {
+): RootMode | undefined {
   if (
     value !== undefined &&
     value !== "root" &&
@@ -85,14 +81,13 @@ export function assertRootMode(
       `${msg(loc)} must be a "root", "upward", "upward-optional" or undefined`,
     );
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertSourceMaps(
   loc: OptionPath,
   value: unknown,
-): SourceMapsOption | void {
+): SourceMapsOption | undefined {
   if (
     value !== undefined &&
     typeof value !== "boolean" &&
@@ -103,36 +98,34 @@ export function assertSourceMaps(
       `${msg(loc)} must be a boolean, "inline", "both", or undefined`,
     );
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertCompact(
   loc: OptionPath,
   value: unknown,
-): CompactOption | void {
+): CompactOption | undefined {
   if (value !== undefined && typeof value !== "boolean" && value !== "auto") {
     throw new Error(`${msg(loc)} must be a boolean, "auto", or undefined`);
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertSourceType(
   loc: OptionPath,
   value: unknown,
-): SourceTypeOption | void {
+): SourceTypeOption | undefined {
   if (
     value !== undefined &&
     value !== "module" &&
+    value !== "commonjs" &&
     value !== "script" &&
     value !== "unambiguous"
   ) {
     throw new Error(
-      `${msg(loc)} must be "module", "script", "unambiguous", or undefined`,
+      `${msg(loc)} must be "module", "commonjs", "script", "unambiguous", or undefined`,
     );
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
@@ -186,40 +179,40 @@ export function assertInputSourceMap(
   return value as RootInputSourceMapOption;
 }
 
-export function assertString(loc: GeneralPath, value: unknown): string | void {
+export function assertString(
+  loc: GeneralPath,
+  value: unknown,
+): string | undefined {
   if (value !== undefined && typeof value !== "string") {
     throw new Error(`${msg(loc)} must be a string, or undefined`);
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertFunction(
   loc: GeneralPath,
   value: unknown,
-): Function | void {
+): Function | undefined {
   if (value !== undefined && typeof value !== "function") {
     throw new Error(`${msg(loc)} must be a function, or undefined`);
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertBoolean(
   loc: GeneralPath,
   value: unknown,
-): boolean | void {
+): boolean | undefined {
   if (value !== undefined && typeof value !== "boolean") {
     throw new Error(`${msg(loc)} must be a boolean, or undefined`);
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertObject(
   loc: GeneralPath,
   value: unknown,
-): { readonly [key: string]: unknown } | void {
+): Readonly<Record<string, unknown>> | undefined {
   if (
     value !== undefined &&
     (typeof value !== "object" || Array.isArray(value) || !value)
@@ -232,8 +225,8 @@ export function assertObject(
 
 export function assertArray<T>(
   loc: GeneralPath,
-  value: Array<T> | undefined | null,
-): ReadonlyArray<T> | undefined | null {
+  value: T[] | undefined | null,
+): T[] | undefined | null {
   if (value != null && !Array.isArray(value)) {
     throw new Error(`${msg(loc)} must be an array, or undefined`);
   }
@@ -243,13 +236,13 @@ export function assertArray<T>(
 export function assertIgnoreList(
   loc: OptionPath,
   value: unknown[] | undefined,
-): IgnoreList | void {
+): MatchItem[] | undefined {
   const arr = assertArray(loc, value);
   arr?.forEach((item, i) => assertIgnoreItem(access(loc, i), item));
   // @ts-expect-error todo(flow->ts)
   return arr;
 }
-function assertIgnoreItem(loc: GeneralPath, value: unknown): IgnoreItem {
+function assertIgnoreItem(loc: GeneralPath, value: unknown): MatchItem {
   if (
     typeof value !== "string" &&
     typeof value !== "function" &&
@@ -261,15 +254,14 @@ function assertIgnoreItem(loc: GeneralPath, value: unknown): IgnoreItem {
       )} must be an array of string/Function/RegExp values, or undefined`,
     );
   }
-  return value as IgnoreItem;
+  return value as MatchItem;
 }
 
 export function assertConfigApplicableTest(
   loc: OptionPath,
   value: unknown,
-): ConfigApplicableTest | void {
+): ConfigApplicableTest | undefined {
   if (value === undefined) {
-    // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
     return value;
   }
 
@@ -300,7 +292,7 @@ function checkValidTest(value: unknown): value is string | Function | RegExp {
 export function assertConfigFileSearch(
   loc: OptionPath,
   value: unknown,
-): ConfigFileSearch | void {
+): ConfigFileSearch | undefined {
   if (
     value !== undefined &&
     typeof value !== "boolean" &&
@@ -311,16 +303,14 @@ export function assertConfigFileSearch(
         `got ${JSON.stringify(value)}`,
     );
   }
-  // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
   return value;
 }
 
 export function assertBabelrcSearch(
   loc: OptionPath,
   value: unknown,
-): BabelrcSearch | void {
+): BabelrcSearch | undefined {
   if (value === undefined || typeof value === "boolean") {
-    // @ts-expect-error: TS can only narrow down the type when "strictNullCheck" is true
     return value;
   }
 
@@ -344,14 +334,14 @@ export function assertBabelrcSearch(
 export function assertPluginList(
   loc: OptionPath,
   value: unknown[] | null | undefined,
-): PluginList | void {
+): PluginItem[] {
   const arr = assertArray(loc, value);
   if (arr) {
     // Loop instead of using `.map` in order to preserve object identity
     // for plugin array for use during config chain processing.
     arr.forEach((item, i) => assertPluginItem(access(loc, i), item));
   }
-  return arr as any;
+  return arr as PluginItem[];
 }
 function assertPluginItem(loc: GeneralPath, value: unknown): PluginItem {
   if (Array.isArray(value)) {
@@ -389,8 +379,7 @@ function assertPluginItem(loc: GeneralPath, value: unknown): PluginItem {
     assertPluginTarget(loc, value);
   }
 
-  // @ts-expect-error todo(flow->ts)
-  return value;
+  return value as PluginItem;
 }
 function assertPluginTarget(loc: GeneralPath, value: unknown): PluginTarget {
   if (
@@ -400,7 +389,7 @@ function assertPluginTarget(loc: GeneralPath, value: unknown): PluginTarget {
   ) {
     throw new Error(`${msg(loc)} must be a string, object, function`);
   }
-  return value;
+  return value as PluginTarget;
 }
 
 export function assertTargets(
@@ -457,16 +446,15 @@ function assertBrowserVersion(loc: GeneralPath, value: unknown) {
 
 export function assertAssumptions(
   loc: GeneralPath,
-  value: { [key: string]: unknown },
-): { [name: string]: boolean } | void {
+  value: Record<string, unknown>,
+): Record<string, boolean> | undefined {
   if (value === undefined) return;
 
   if (typeof value !== "object" || value === null) {
     throw new Error(`${msg(loc)} must be an object or undefined.`);
   }
 
-  // todo(flow->ts): remove any
-  let root: any = loc;
+  let root: GeneralPath | NestingPath = loc;
   do {
     root = root.parent;
   } while (root.type !== "root");

@@ -2,17 +2,16 @@ import {
   buildProcessTests,
   buildParallelProcessTests,
 } from "@babel/helper-transform-fixture-test-runner";
-import path from "path";
+import path from "node:path";
 import { commonJS } from "$repo-utils";
 
 const { __dirname } = commonJS(import.meta.url);
 
-const fixtureLoc = path.join(__dirname, "../fixtures");
 const rootDir = path.resolve(__dirname, "../../../..");
 
 const getPath = name => path.join(rootDir, "packages", name, "lib/index.js");
 
-const presetLocs = [getPath("babel-preset-react")];
+const presetLocs = ["babel-preset-react"].map(getPath).join(",");
 
 const pluginLocs = [
   "babel-plugin-transform-arrow-functions",
@@ -22,24 +21,17 @@ const pluginLocs = [
   .map(getPath)
   .join(",");
 
-function escapeRegExp(string) {
-  return string.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
-}
-
 const normalizeOutput = function (str, cwd) {
   let result = str
-    .replace(/\(\d+ms\)/g, "(123ms)")
-    .replace(new RegExp(escapeRegExp(cwd), "g"), "<CWD>")
+    .replaceAll(/\(\d+ms\)/g, "(123ms)")
+    .replaceAll(cwd, "<CWD>")
     // (non-win32) /foo/babel/packages -> <CWD>/packages
     // (win32) C:\foo\babel\packages -> <CWD>\packages
-    .replace(new RegExp(escapeRegExp(rootDir), "g"), "<ROOTDIR>");
+    .replaceAll(rootDir, "<ROOTDIR>");
   if (process.platform === "win32") {
     result = result
       // C:\\foo\\babel\\packages -> <CWD>\\packages (in js string literal)
-      .replace(
-        new RegExp(escapeRegExp(rootDir.replace(/\\/g, "\\\\")), "g"),
-        "<ROOTDIR>",
-      );
+      .replaceAll(rootDir.replaceAll("\\", "\\\\"), "<ROOTDIR>");
   }
   return result;
 };
@@ -47,13 +39,10 @@ const normalizeOutput = function (str, cwd) {
 export const runParallel = buildParallelProcessTests(
   "babel-cli",
   buildProcessTests(
-    fixtureLoc,
+    new URL("../fixtures", import.meta.url),
     function (test) {
       test.binLoc = path.join(__dirname, "../../lib", test.suiteName);
-      if (
-        test.suiteName !== "babel-external-helpers" &&
-        !test.opts.noDefaultPlugins
-      ) {
+      if (!test.opts.noDefaultPlugins) {
         test.opts.args.push("--presets", presetLocs, "--plugins", pluginLocs);
       }
     },

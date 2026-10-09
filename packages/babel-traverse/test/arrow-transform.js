@@ -2,10 +2,7 @@ import { NodePath } from "../lib/index.js";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
-import _generate from "@babel/generator";
-const generate = _generate.default || _generate;
-
-import { itBabel7 } from "$repo-utils";
+import generate from "@babel/generator";
 
 function assertConversion(
   input,
@@ -179,43 +176,6 @@ describe("arrow function conversion", () => {
     );
   });
 
-  itBabel7(
-    "should convert this references in constructors with spec compliance",
-    () => {
-      assertConversion(
-        `
-          () => {
-            this;
-          };
-          super();
-          this;
-          () => super();
-          () => this;
-        `,
-        `
-          var _this,
-              _arrowCheckId = {};
-
-          (function () {
-            babelHelpers.newArrowCheck(this, _arrowCheckId);
-
-            _this;
-          }).bind(_arrowCheckId);
-          super();
-          _this = this;
-          this;
-          () => (super(), _this = this);
-          () => this;
-        `,
-        {
-          methodName: "constructor",
-          extend: true,
-          arrowOpts: { specCompliant: true },
-        },
-      );
-    },
-  );
-
   it("should convert this references in constructors with `noNewArrows: false`", () => {
     assertConversion(
       `
@@ -272,33 +232,6 @@ describe("arrow function conversion", () => {
     );
   });
 
-  itBabel7(
-    "should convert this references in constructors with spec compliance without extension",
-    () => {
-      assertConversion(
-        `
-          () => {
-            this;
-          };
-          this;
-          () => this;
-        `,
-        `
-          var _this = this;
-
-          (function () {
-            babelHelpers.newArrowCheck(this, _this);
-
-            this;
-          }).bind(this);
-          this;
-          () => this;
-        `,
-        { methodName: "constructor", arrowOpts: { specCompliant: true } },
-      );
-    },
-  );
-
   it("should convert this references in constructors with `noNewArrows: false` without extension", () => {
     assertConversion(
       `
@@ -343,33 +276,6 @@ describe("arrow function conversion", () => {
     `,
     );
   });
-
-  itBabel7(
-    "should convert this references in methods with spec compliance",
-    () => {
-      assertConversion(
-        `
-          () => {
-            this;
-          };
-          this;
-          () => this;
-        `,
-        `
-          var _this = this;
-
-          (function () {
-            babelHelpers.newArrowCheck(this, _this);
-
-            this;
-          }).bind(this);
-          this;
-          () => this;
-        `,
-        { arrowOpts: { specCompliant: true } },
-      );
-    },
-  );
 
   it("should convert this references in methods with `noNewArrows: false`", () => {
     assertConversion(

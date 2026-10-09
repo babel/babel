@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":332,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":18,"column":1,"index":332}},
+  "start":0,"end":329,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":18,"column":1,"index":329}},
   "program": {
     "type": "Program",
-    "start":0,"end":332,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":18,"column":1,"index":332}},
+    "start":0,"end":329,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":18,"column":1,"index":329}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -238,7 +238,7 @@
       },
       {
         "type": "ClassDeclaration",
-        "start":262,"end":332,"loc":{"start":{"line":16,"column":0,"index":262},"end":{"line":18,"column":1,"index":332}},
+        "start":262,"end":329,"loc":{"start":{"line":16,"column":0,"index":262},"end":{"line":18,"column":1,"index":329}},
         "declare": true,
         "id": {
           "type": "Identifier",
@@ -252,11 +252,11 @@
         },
         "body": {
           "type": "ClassBody",
-          "start":308,"end":332,"loc":{"start":{"line":16,"column":46,"index":308},"end":{"line":18,"column":1,"index":332}},
+          "start":308,"end":329,"loc":{"start":{"line":16,"column":46,"index":308},"end":{"line":18,"column":1,"index":329}},
           "body": [
             {
-              "type": "ClassMethod",
-              "start":312,"end":330,"loc":{"start":{"line":17,"column":2,"index":312},"end":{"line":17,"column":20,"index":330}},
+              "type": "TSDeclareMethod",
+              "start":312,"end":327,"loc":{"start":{"line":17,"column":2,"index":312},"end":{"line":17,"column":17,"index":327}},
               "override": true,
               "static": false,
               "key": {
@@ -269,13 +269,7 @@
               "id": null,
               "generator": false,
               "async": false,
-              "params": [],
-              "body": {
-                "type": "BlockStatement",
-                "start":328,"end":330,"loc":{"start":{"line":17,"column":18,"index":328},"end":{"line":17,"column":20,"index":330}},
-                "body": [],
-                "directives": []
-              }
+              "params": []
             }
           ]
         }

@@ -2,23 +2,36 @@ import { declare } from "@babel/helper-plugin-utils";
 import { isRequired } from "@babel/helper-compilation-targets";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import { types as t } from "@babel/core";
-import globals from "globals";
+import globalsBrowserUpper from "@babel/helper-globals/data/browser-upper.json" with { type: "json" };
+import globalsBuiltinUpper from "@babel/helper-globals/data/builtin-upper.json" with { type: "json" };
 import transformClass from "./transformClass.ts";
 
-const getBuiltinClasses = (category: keyof typeof globals) =>
-  Object.keys(globals[category]).filter(name => /^[A-Z]/.test(name));
-
 const builtinClasses = new Set([
-  ...getBuiltinClasses("builtin"),
-  ...getBuiltinClasses("browser"),
+  ...globalsBrowserUpper,
+  ...globalsBuiltinUpper,
 ]);
 
+// The "Iterator" global is removed because the Babel construct helper
+// packages/babel-helpers/src/helpers/construct.ts, emitted from the wrapNativeSuper helper,
+// // will invoke it with `new Iterator()` when native Reflect.construct is not available.
+// However, the abstract class Iterator can not be invoked with new. Since the `builtinClasses`
+// is used for the superIsCallableConstructor assumption, we should prioritize the spec mode
+builtinClasses.delete("Iterator");
+
 export interface Options {
+  /** @deprecated Use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead. */
   loose?: boolean;
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  if ("loose" in options) {
+    console.warn(
+      "@babel/plugin-transform-classes: The 'loose' option has been deprecated, " +
+        "use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead (https://babeljs.io/assumptions).",
+    );
+  }
 
   const { loose = false } = options;
 
@@ -41,19 +54,15 @@ export default declare((api, options: Options) => {
     visitor: {
       ExportDefaultDeclaration(path) {
         if (!path.get("declaration").isClassDeclaration()) return;
-        if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-          // polyfill when being run by an older Babel version
-          path.splitExportDeclaration ??=
-            // eslint-disable-next-line no-restricted-globals
-            require("@babel/traverse").NodePath.prototype.splitExportDeclaration;
-        }
+
         path.splitExportDeclaration();
       },
-
       ClassDeclaration(path) {
         const { node } = path;
 
-        const ref = node.id || path.scope.generateUidIdentifier("class");
+        const ref = node.id
+          ? t.cloneNode(node.id)
+          : path.scope.generateUidIdentifier("class");
 
         path.replaceWith(
           t.variableDeclaration("let", [
@@ -66,12 +75,6 @@ export default declare((api, options: Options) => {
         const { node } = path;
         if (VISITED.has(node)) return;
 
-        if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-          // polyfill when being run by an older Babel version
-          path.ensureFunctionName ??=
-            // eslint-disable-next-line no-restricted-globals
-            require("@babel/traverse").NodePath.prototype.ensureFunctionName;
-        }
         const replacement = path.ensureFunctionName(supportUnicodeId);
         if (replacement && replacement.node !== node) return;
 

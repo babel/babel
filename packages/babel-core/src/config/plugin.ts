@@ -4,13 +4,13 @@ import type { PluginObject } from "./validation/plugins.ts";
 
 export default class Plugin {
   key: string | undefined | null;
-  manipulateOptions?: (options: unknown, parserOpts: unknown) => void;
+  manipulateOptions?: PluginObject["manipulateOptions"];
   post?: PluginObject["post"];
   pre?: PluginObject["pre"];
   visitor: PluginObject["visitor"];
 
-  parserOverride?: Function;
-  generatorOverride?: Function;
+  parserOverride?: PluginObject["parserOverride"];
+  generatorOverride?: PluginObject["generatorOverride"];
 
   options: object;
 

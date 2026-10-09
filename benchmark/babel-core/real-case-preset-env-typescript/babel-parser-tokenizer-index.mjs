@@ -1,5 +1,5 @@
 import Benchmark from "benchmark";
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 import {
   report,
   currentCore,

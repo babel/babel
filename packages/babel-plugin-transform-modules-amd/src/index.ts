@@ -48,6 +48,7 @@ function injectWrapper(
 export interface Options extends PluginOptions {
   allowTopLevelThis?: boolean;
   importInterop?: RewriteModuleStatementsAndPrepareHeaderOptions["importInterop"];
+  /** @deprecated Use the `constantReexports` and `enumerableModuleMeta` assumptions instead. */
   loose?: boolean;
   noInterop?: boolean;
   strict?: boolean;
@@ -60,8 +61,15 @@ type State = {
   rejectId?: t.Identifier;
 };
 
-export default declare<State>((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+export default declare<State, Options>((api, options: Options) => {
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  if ("loose" in options) {
+    console.warn(
+      "@babel/plugin-transform-modules-amd: The 'loose' option has been deprecated, " +
+        "use the `constantReexports` and `enumerableModuleMeta` assumptions instead (https://babeljs.io/assumptions).",
+    );
+  }
 
   const { allowTopLevelThis, strict, strictMode, importInterop, noInterop } =
     options;
@@ -78,9 +86,8 @@ export default declare<State>((api, options: Options) => {
       this.file.set("@babel/plugin-transform-modules-*", "amd");
     },
 
-    visitor: {
-      ["CallExpression" +
-        (api.types.importExpression ? "|ImportExpression" : "")](
+    visitor: api.traverse.explode({
+      "CallExpression|ImportExpression"(
         this: State & PluginPass,
         path: NodePath<t.CallExpression | t.ImportExpression>,
         state: State,
@@ -100,7 +107,7 @@ export default declare<State>((api, options: Options) => {
           state.rejectId = rejectId;
         }
 
-        let result: t.Node = t.identifier("imported");
+        let result: t.Node | null = t.identifier("imported");
         if (!noInterop) {
           result = wrapInterop(this.file.path, result, "namespace");
         }
@@ -213,6 +220,6 @@ export default declare<State>((api, options: Options) => {
           );
         },
       },
-    },
+    }),
   };
 });

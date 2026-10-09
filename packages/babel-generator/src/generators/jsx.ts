@@ -82,21 +82,23 @@ function spaceSeparator(this: Printer) {
 export function JSXOpeningElement(this: Printer, node: t.JSXOpeningElement) {
   this.token("<");
   this.print(node.name);
-  this.print(node.typeParameters); // TS
+
+  this.print(node.typeArguments);
+
   if (node.attributes.length > 0) {
     this.space();
-    this.printJoin(node.attributes, { separator: spaceSeparator });
+    this.printJoin(node.attributes, undefined, undefined, spaceSeparator);
   }
   if (node.selfClosing) {
     this.space();
-    this.token("/>");
-  } else {
-    this.token(">");
+    this.token("/");
   }
+  this.token(">");
 }
 
 export function JSXClosingElement(this: Printer, node: t.JSXClosingElement) {
-  this.token("</");
+  this.token("<");
+  this.token("/");
   this.print(node.name);
   this.token(">");
 }

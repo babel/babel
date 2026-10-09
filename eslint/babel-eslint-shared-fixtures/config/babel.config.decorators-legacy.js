@@ -1,6 +1,3 @@
-"use strict";
-
-module.exports = {
-  presets: [["@babel/preset-env", { forceAllTransforms: true }]],
-  plugins: [["@babel/plugin-proposal-decorators", { version: "legacy" }]],
+export default {
+  plugins: [["@babel/plugin-syntax-decorators", { version: "legacy" }]],
 };

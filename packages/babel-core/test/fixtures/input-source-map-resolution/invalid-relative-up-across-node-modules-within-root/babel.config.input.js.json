@@ -1,0 +1,7 @@
+{
+  "sourceMaps": true,
+  "inputSourceMap": true,
+  "generatorOpts": {
+    "compact": true
+  }
+}

@@ -1,8 +1,6 @@
-import path from "path";
-import { fileURLToPath } from "url";
-import { createRequire } from "module";
-import * as babelESLint from "@babel/eslint-parser";
-import { itGte } from "$repo-utils";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 
 describe("parserOverride", () => {
   const expectedAST = {
@@ -18,25 +16,9 @@ describe("parserOverride", () => {
     ],
   };
 
-  it("works when parsing in the main thread", () => {
-    const { ast } = babelESLint.parseForESLint(`27`, {
-      filename: "input.js",
-      babelOptions: {
-        configFile: path.resolve(
-          path.dirname(fileURLToPath(import.meta.url)),
-          "../fixtures/parser-override/babel.config.json",
-        ),
-      },
-    });
-
-    expect(ast).toMatchObject(expectedAST);
-  });
-
-  const nodeGte12 = itGte("12.0.0");
-  nodeGte12("works when parsing in a worker", async () => {
+  it("works when parsing in a worker", async () => {
     const require = createRequire(import.meta.url);
-    // eslint-disable-next-line import/extensions
-    const babelESLintWorker = require("@babel/eslint-parser/experimental-worker");
+    const babelESLintWorker = require("@babel/eslint-parser");
 
     const { ast } = babelESLintWorker.parseForESLint(`27`, {
       filename: "input.js",

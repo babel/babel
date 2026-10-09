@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-parameters"
+  ],
+  "minNodeVersion": "10.0.0"
+}

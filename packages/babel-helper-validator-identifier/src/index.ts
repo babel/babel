@@ -2,7 +2,8 @@ export {
   isIdentifierName,
   isIdentifierChar,
   isIdentifierStart,
-} from "./identifier.ts";
+  // eslint-disable-next-line import/no-unresolved
+} from "#identifier";
 export {
   isReservedWord,
   isStrictBindOnlyReservedWord,

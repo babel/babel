@@ -1,4 +1,0 @@
-{
-  "throws": "When using the `useBuiltIns` option you must specify the code-js version you are using, such as `\"corejs\": \"3.32.0\"`.",
-  "presets": [["env", { "debug": true, "useBuiltIns": "entry" }]]
-}

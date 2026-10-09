@@ -1,0 +1,14 @@
+{
+  "validateLogs": true,
+  "targets": "safari 15",
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "exclude": ["bugfix/transform-firefox-class-in-computed-class-key"],
+        "modules": false
+      }
+    ]
+  ]
+}

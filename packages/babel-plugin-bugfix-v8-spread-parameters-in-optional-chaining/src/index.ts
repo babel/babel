@@ -4,7 +4,7 @@ import { shouldTransform } from "./util.ts";
 import type { NodePath, types as t } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const noDocumentAll = api.assumption("noDocumentAll") ?? false;
   const pureGetters = api.assumption("pureGetters") ?? false;
@@ -12,7 +12,7 @@ export default declare(api => {
   return {
     name: "bugfix-v8-spread-parameters-in-optional-chaining",
 
-    visitor: {
+    visitor: api.traverse.explode({
       "OptionalCallExpression|OptionalMemberExpression"(
         path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
       ) {
@@ -20,6 +20,6 @@ export default declare(api => {
           transform(path, { noDocumentAll, pureGetters });
         }
       },
-    },
+    }),
   };
 });

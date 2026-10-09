@@ -1,3 +1,5 @@
+/* c8 ignore start */
+
 // duplicated from transform-file so we do not have to import anything here
 type TransformFile = {
   (filename: string, callback: (error: Error, file: null) => void): void;
@@ -17,7 +19,7 @@ export const transformFile: TransformFile = function transformFile(
     callback = opts;
   }
 
-  callback(new Error("Transforming files is not supported in browsers"), null);
+  callback!(new Error("Transforming files is not supported in browsers"), null);
 };
 
 export function transformFileSync(): never {

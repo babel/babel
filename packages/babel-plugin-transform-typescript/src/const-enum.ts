@@ -2,6 +2,9 @@ import type { NodePath, types as t } from "@babel/core";
 
 import { translateEnumValues } from "./enum.ts";
 
+export const EXPORTED_CONST_ENUMS_IN_NAMESPACE =
+  new WeakSet<t.TSEnumDeclaration>();
+
 export type NodePathConstEnum = NodePath<t.TSEnumDeclaration & { const: true }>;
 export default function transpileConstEnum(
   path: NodePathConstEnum,
@@ -21,14 +24,14 @@ export default function transpileConstEnum(
           spec =>
             t.isExportSpecifier(spec) &&
             spec.exportKind !== "type" &&
-            spec.local.name === name,
+            (spec.local as t.Identifier).name === name,
         ),
     );
   }
 
   const { enumValues: entries } = translateEnumValues(path, t);
 
-  if (isExported) {
+  if (isExported || EXPORTED_CONST_ENUMS_IN_NAMESPACE.has(path.node)) {
     const obj = t.objectExpression(
       entries.map(([name, value]) =>
         t.objectProperty(
@@ -51,7 +54,7 @@ export default function transpileConstEnum(
       );
     } else {
       path.replaceWith(
-        t.variableDeclaration(process.env.BABEL_8_BREAKING ? "const" : "var", [
+        t.variableDeclaration("const", [
           t.variableDeclarator(path.node.id, obj),
         ]),
       );
@@ -87,7 +90,7 @@ export default function transpileConstEnum(
       }
       if (!entriesMap.has(key)) return;
 
-      path.replaceWith(t.cloneNode(entriesMap.get(key)));
+      path.replaceWith(t.cloneNode(entriesMap.get(key)!));
     },
   });
 

@@ -1,5 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "targets": "chrome 44",
-  "plugins": ["transform-classes"]
-}

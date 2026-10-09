@@ -1,3 +1,3 @@
 {
-  "plugins": ["./plugin", ["syntax-decorators", { "version": "2021-12" }]]
+  "plugins": ["./plugin", ["syntax-decorators", { "version": "2023-11" }]]
 }

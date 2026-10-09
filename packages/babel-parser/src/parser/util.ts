@@ -12,7 +12,7 @@ import type {
   ObjectMethod,
   ObjectProperty,
   PrivateName,
-} from "../types.d.ts";
+} from "../types.ts";
 import { hasNewLine } from "../util/whitespace.ts";
 import { isIdentifierChar } from "../util/identifier.ts";
 import ClassScopeHandler from "../util/class-scope.ts";
@@ -29,6 +29,7 @@ import {
 import type Parser from "./index.ts";
 
 import type ScopeHandler from "../util/scope.ts";
+import { OptionFlags } from "../options.ts";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   node: Node;
@@ -72,9 +73,8 @@ export default abstract class UtilParser extends Tokenizer {
   }
 
   isUnparsedContextual(nameStart: number, name: string): boolean {
-    const nameEnd = nameStart + name.length;
-    if (this.input.slice(nameStart, nameEnd) === name) {
-      const nextCh = this.input.charCodeAt(nameEnd);
+    if (this.input.startsWith(name, nameStart)) {
+      const nextCh = this.input.charCodeAt(nameStart + name.length);
       return !(
         isIdentifierChar(nextCh) ||
         // check if `nextCh is between 0xd800 - 0xdbff,
@@ -128,7 +128,7 @@ export default abstract class UtilParser extends Tokenizer {
   hasPrecedingLineBreak(): boolean {
     return hasNewLine(
       this.input,
-      this.state.lastTokEndLoc.index,
+      this.offsetToSourcePos(this.state.lastTokEndLoc!.index),
       this.state.start,
     );
   }
@@ -146,7 +146,7 @@ export default abstract class UtilParser extends Tokenizer {
 
   semicolon(allowAsi: boolean = true): void {
     if (allowAsi ? this.isLineTerminator() : this.eat(tt.semi)) return;
-    this.raise(Errors.MissingSemicolon, this.state.lastTokEndLoc);
+    this.raise(Errors.MissingSemicolon, this.state.lastTokEndLoc!);
   }
 
   // Expect a token of a given type. If found, consume it, otherwise,
@@ -160,18 +160,18 @@ export default abstract class UtilParser extends Tokenizer {
 
   // tryParse will clone parser state.
   // It is expensive and should be used with cautions
-  tryParse<T extends Node | ReadonlyArray<Node>>(
+  tryParse<T extends Node | readonly Node[] | null>(
     fn: (abort: (node?: T) => never) => T,
     oldState: State = this.state.clone(),
   ):
     | TryParse<T, null, false, false, null>
-    | TryParse<T | null, ParseError<any>, boolean, false, State>
+    | TryParse<T | null, ParseError, boolean, false, State>
     | TryParse<T | null, null, false, true, State> {
     const abortSignal: {
       node: T | null;
     } = { node: null };
     try {
-      const node = fn((node = null) => {
+      const node = fn((node = null as T) => {
         abortSignal.node = node;
         // eslint-disable-next-line @typescript-eslint/only-throw-error
         throw abortSignal;
@@ -193,7 +193,7 @@ export default abstract class UtilParser extends Tokenizer {
       }
 
       return {
-        node,
+        node: node!,
         error: null,
         thrown: false,
         aborted: false,
@@ -230,13 +230,15 @@ export default abstract class UtilParser extends Tokenizer {
       doubleProtoLoc,
       privateKeyLoc,
       optionalParametersLoc,
+      voidPatternLoc,
     } = refExpressionErrors;
 
     const hasErrors =
       !!shorthandAssignLoc ||
       !!doubleProtoLoc ||
       !!optionalParametersLoc ||
-      !!privateKeyLoc;
+      !!privateKeyLoc ||
+      !!voidPatternLoc;
 
     if (!andThrow) {
       return hasErrors;
@@ -256,6 +258,10 @@ export default abstract class UtilParser extends Tokenizer {
 
     if (optionalParametersLoc != null) {
       this.unexpected(optionalParametersLoc);
+    }
+
+    if (voidPatternLoc != null) {
+      this.raise(Errors.InvalidCoverDiscardElement, voidPatternLoc);
     }
   }
 
@@ -356,11 +362,35 @@ export default abstract class UtilParser extends Tokenizer {
 
   enterInitialScopes() {
     let paramFlags = ParamKind.PARAM;
-    if (this.inModule) {
+    if (
+      this.inModule ||
+      this.optionFlags & OptionFlags.AllowAwaitOutsideFunction
+    ) {
       paramFlags |= ParamKind.PARAM_AWAIT;
     }
-    this.scope.enter(ScopeFlag.PROGRAM);
+    if (this.optionFlags & OptionFlags.AllowYieldOutsideFunction) {
+      paramFlags |= ParamKind.PARAM_YIELD;
+    }
+    // The inModule flag ensures that the module block within a CommonJS source
+    // will be treated as an ES module.
+    const isCommonJS = !this.inModule && this.options.sourceType === "commonjs";
+    if (
+      isCommonJS ||
+      this.optionFlags & OptionFlags.AllowReturnOutsideFunction
+    ) {
+      paramFlags |= ParamKind.PARAM_RETURN;
+    }
     this.prodParam.enter(paramFlags);
+    let scopeFlags = isCommonJS ? ScopeFlag.FUNCTION : ScopeFlag.PROGRAM;
+    if (this.optionFlags & OptionFlags.AllowNewTargetOutsideFunction) {
+      scopeFlags |= ScopeFlag.NEW_TARGET;
+    }
+
+    if (this.optionFlags & OptionFlags.AllowSuperOutsideMethod) {
+      scopeFlags |= ScopeFlag.SUPER | ScopeFlag.DIRECT_SUPER;
+    }
+
+    this.scope.enter(scopeFlags);
   }
 
   checkDestructuringPrivate(refExpressionErrors: ExpressionErrors) {
@@ -374,19 +404,20 @@ export default abstract class UtilParser extends Tokenizer {
 /**
  * The ExpressionErrors is a context struct used to track ambiguous patterns
  * When we are sure the parsed pattern is a RHS, which means it is not a pattern,
- * we will throw on this position on invalid assign syntax, otherwise it will be reset to -1
+ * we will throw on this position on invalid assign syntax, otherwise it will be reset to null
  *
  * Types of ExpressionErrors:
  *
  * - **shorthandAssignLoc**: track initializer `=` position
  * - **doubleProtoLoc**: track the duplicate `__proto__` key position
- * - **privateKey**: track private key `#p` position
+ * - **privateKeyLoc**: track private key `#p` position
  * - **optionalParametersLoc**: track the optional parameter (`?`).
- * It's only used by typescript and flow plugins
+ *   It's only used by typescript and flow plugins
  */
 export class ExpressionErrors {
   shorthandAssignLoc: Position | undefined | null = null;
   doubleProtoLoc: Position | undefined | null = null;
   privateKeyLoc: Position | undefined | null = null;
   optionalParametersLoc: Position | undefined | null = null;
+  voidPatternLoc: Position | undefined | null = null;
 }

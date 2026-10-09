@@ -2,8 +2,7 @@ import {
   defineAliasedType,
   assertNodeType,
   assertValueType,
-  chain,
-  assertEach,
+  validateArrayOfType,
 } from "./utils.ts";
 
 const defineType = defineAliasedType("JSX");
@@ -42,9 +41,7 @@ defineType("JSXClosingElement", {
 });
 
 defineType("JSXElement", {
-  builder: process.env.BABEL_8_BREAKING
-    ? ["openingElement", "closingElement", "children"]
-    : ["openingElement", "closingElement", "children", "selfClosing"],
+  builder: ["openingElement", "closingElement", "children"],
   visitor: ["openingElement", "children", "closingElement"],
   aliases: ["Immutable", "Expression"],
   fields: {
@@ -55,28 +52,13 @@ defineType("JSXElement", {
       optional: true,
       validate: assertNodeType("JSXClosingElement"),
     },
-    children: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(
-          assertNodeType(
-            "JSXText",
-            "JSXExpressionContainer",
-            "JSXSpreadChild",
-            "JSXElement",
-            "JSXFragment",
-          ),
-        ),
-      ),
-    },
-    ...(process.env.BABEL_8_BREAKING
-      ? {}
-      : {
-          selfClosing: {
-            validate: assertValueType("boolean"),
-            optional: true,
-          },
-        }),
+    children: validateArrayOfType(
+      "JSXText",
+      "JSXExpressionContainer",
+      "JSXSpreadChild",
+      "JSXElement",
+      "JSXFragment",
+    ),
   },
 });
 
@@ -137,7 +119,7 @@ defineType("JSXNamespacedName", {
 
 defineType("JSXOpeningElement", {
   builder: ["name", "attributes", "selfClosing"],
-  visitor: ["name", "attributes"],
+  visitor: ["name", "typeArguments", "attributes"],
   aliases: ["Immutable"],
   fields: {
     name: {
@@ -150,13 +132,8 @@ defineType("JSXOpeningElement", {
     selfClosing: {
       default: false,
     },
-    attributes: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("JSXAttribute", "JSXSpreadAttribute")),
-      ),
-    },
-    typeParameters: {
+    attributes: validateArrayOfType("JSXAttribute", "JSXSpreadAttribute"),
+    typeArguments: {
       validate: assertNodeType(
         "TypeParameterInstantiation",
         "TSTypeParameterInstantiation",
@@ -196,20 +173,13 @@ defineType("JSXFragment", {
     closingFragment: {
       validate: assertNodeType("JSXClosingFragment"),
     },
-    children: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(
-          assertNodeType(
-            "JSXText",
-            "JSXExpressionContainer",
-            "JSXSpreadChild",
-            "JSXElement",
-            "JSXFragment",
-          ),
-        ),
-      ),
-    },
+    children: validateArrayOfType(
+      "JSXText",
+      "JSXExpressionContainer",
+      "JSXSpreadChild",
+      "JSXElement",
+      "JSXFragment",
+    ),
   },
 });
 

@@ -1,5 +1,0 @@
-{
-  "args": ["--filename", "test.js"],
-  "stderrContains": true,
-  "os": ["win32"]
-}

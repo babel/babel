@@ -1,22 +1,19 @@
 {
   "name": "@babel/eslint-shared-fixtures",
-  "version": "7.25.1",
+  "version": "8.0.6",
   "description": "Shared fixtures for testing @babel/eslint-* packages",
   "private": true,
   "dependencies": {
     "@babel/core": "workspace:^",
     "@babel/eslint-parser": "workspace:^",
-    "@babel/plugin-proposal-decorators": "workspace:^",
-    "@babel/plugin-proposal-do-expressions": "workspace:^",
-    "@babel/plugin-proposal-explicit-resource-management": "workspace:^",
-    "@babel/plugin-proposal-pipeline-operator": "workspace:^",
+    "@babel/plugin-syntax-async-do-expressions": "workspace:^",
+    "@babel/plugin-syntax-decorators": "workspace:^",
+    "@babel/plugin-syntax-do-expressions": "workspace:^",
     "@babel/plugin-syntax-export-default-from": "workspace:^",
-    "@babel/plugin-transform-class-properties": "workspace:^",
-    "@babel/plugin-transform-private-methods": "workspace:^",
-    "@babel/preset-env": "workspace:^",
-    "@babel/preset-flow": "workspace:^",
-    "@babel/preset-react": "workspace:^",
-    "eslint": "^9.7.0"
+    "@babel/plugin-syntax-flow": "workspace:^",
+    "@babel/plugin-syntax-jsx": "workspace:^",
+    "@babel/plugin-syntax-pipeline-operator": "workspace:^",
+    "eslint": "catalog:babel-eslint"
   },
-  "type": "commonjs"
+  "type": "module"
 }

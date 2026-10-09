@@ -1,0 +1,1 @@
+{"version":3,"file":"input.js","names":["Msg"],"sources":["input.ts"],"sourcesContent":["const enum Msg {\n  ThisMapShouldBeLoaded = \"This map should be loaded\"\n}\n"],"mappings":"IAAWA,GAAG,0BAAHA,GAAG;EAAHA,GAAG;EAAA,OAAHA,GAAG;AAAA,EAAHA,GAAG","ignoreList":[]}

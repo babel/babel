@@ -1,7 +1,6 @@
-import _reactPreset from "../lib/index.js";
-const reactPreset = _reactPreset.default || _reactPreset;
+import * as babel from "@babel/core";
 
-import { itBabel8 } from "$repo-utils";
+import reactPreset from "../lib/index.js";
 
 describe("react preset", () => {
   it("does throw clear error when no options passed for Babel 6", () => {
@@ -9,7 +8,7 @@ describe("react preset", () => {
       reactPreset({ version: "6.5.0" });
     }).toThrow(Error, /Requires Babel "\^7.0.0-0"/);
   });
-  itBabel8("throws when unknown option is passed", () => {
+  it("throws when unknown option is passed", () => {
     expect(() => {
       reactPreset({ assertVersion() {} }, { runtine: true });
     }).toThrowErrorMatchingInlineSnapshot(`
@@ -17,11 +16,35 @@ describe("react preset", () => {
         - Did you mean 'runtime'?"
       `);
   });
-  itBabel8("throws when option is of incorrect type", () => {
+  it("throws when option is of incorrect type", () => {
     expect(() => {
       reactPreset({ assertVersion() {} }, { runtime: true });
     }).toThrowErrorMatchingInlineSnapshot(
       `"@babel/preset-react: 'runtime' option must be a string."`,
     );
+  });
+
+  it("respects envName", () => {
+    expect(
+      babel.transformSync("<a />", {
+        configFile: false,
+        presets: [reactPreset],
+        envName: "development",
+      }).code,
+    ).toMatchInlineSnapshot(`
+      "import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+      /*#__PURE__*/_jsxDEV("a", {}, void 0, false);"
+    `);
+
+    expect(
+      babel.transformSync("<a />", {
+        configFile: false,
+        presets: [reactPreset],
+        envName: "production",
+      }).code,
+    ).toMatchInlineSnapshot(`
+      "import { jsx as _jsx } from "react/jsx-runtime";
+      /*#__PURE__*/_jsx("a", {});"
+    `);
   });
 });

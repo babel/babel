@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-regenerator",
+    ["babel-plugin-polyfill-regenerator", { "method": "usage-pure" }]
+  ]
+}

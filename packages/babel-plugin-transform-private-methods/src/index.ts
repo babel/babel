@@ -7,11 +7,19 @@ import {
 } from "@babel/helper-create-class-features-plugin";
 
 export interface Options {
+  /** @deprecated Use the `privateFieldsAsProperties`(or `privateFieldsAsSymbols`), and `setPublicClassFields` assumptions instead. */
   loose?: boolean;
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  if ("loose" in options) {
+    console.warn(
+      "@babel/plugin-transform-private-methods: The 'loose' option has been deprecated, " +
+        "use the `privateFieldsAsProperties`(or `privateFieldsAsSymbols`), and `setPublicClassFields` assumptions instead (https://babeljs.io/assumptions).",
+    );
+  }
 
   return createClassFeaturePlugin({
     name: "transform-private-methods",
@@ -19,12 +27,5 @@ export default declare((api, options: Options) => {
     api,
     feature: FEATURES.privateMethods,
     loose: options.loose,
-
-    manipulateOptions(opts, parserOpts) {
-      if (!process.env.BABEL_8_BREAKING) {
-        // @ts-ignore(Babel 7 vs Babel 8) This plugin has been removed
-        parserOpts.plugins.push("classPrivateMethods");
-      }
-    },
   });
 });

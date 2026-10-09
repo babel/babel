@@ -4,7 +4,7 @@ import type * as t from "../index.ts";
  * Check if the input `node` is a reference to a bound variable.
  */
 export default function isReferenced(
-  node: t.Node,
+  node: t.Node | null | undefined,
   parent: t.Node,
   grandparent?: t.Node,
 ): boolean {
@@ -58,7 +58,7 @@ export default function isReferenced(
         return !!parent.computed;
       }
       // parent.value === node
-      return !grandparent || grandparent.type !== "ObjectPattern";
+      return grandparent?.type !== "ObjectPattern";
     // no: class { NODE = value; }
     // yes: class { [NODE] = value; }
     // yes: class { key = NODE; }

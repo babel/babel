@@ -1,7 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "plugins": [
-    ["transform-runtime", { "useESModules": true }],
-    "transform-classes"
-  ]
-}

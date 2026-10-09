@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import { types as t, type File } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   function isProtoKey(node: t.ObjectExpression["properties"][number]) {
     return (
@@ -32,7 +32,7 @@ export default declare(api => {
   ) {
     return t.expressionStatement(
       t.callExpression(file.addHelper("defaults"), [
-        // @ts-ignore(Babel 7 vs Babel 8) Fixme: support `super.__proto__ = ...`
+        // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
         ref,
         expr.right,
       ]),
@@ -57,7 +57,6 @@ export default declare(api => {
                 "=",
                 temp,
                 // left must not be Super when `temp` is an identifier
-                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 left as t.Expression,
               ),
             ),

@@ -1,1 +1,0 @@
-var abstract = 1;

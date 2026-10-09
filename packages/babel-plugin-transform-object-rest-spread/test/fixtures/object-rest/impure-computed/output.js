@@ -1,3 +1,4 @@
+var _key, _key2, _key3;
 var key, x, y, z;
 // impure
 key = 1;
@@ -5,9 +6,8 @@ var _$a = {
     1: 1,
     a: 1
   },
-  _key = key++,
   {
-    [_key]: y
+    [_key = key++]: y
   } = _$a,
   x = babelHelpers.objectWithoutProperties(_$a, [_key].map(babelHelpers.toPropertyKey));
 expect(x).toEqual({
@@ -23,11 +23,9 @@ var _$ = {
     2: 2,
     3: 3
   },
-  _key2 = ++key,
-  _key3 = ++key,
   {
-    [_key2]: y,
-    [_key3]: z
+    [_key2 = ++key]: y,
+    [_key3 = ++key]: z
   } = _$,
   rest = babelHelpers.objectWithoutProperties(_$, [_key2, _key3].map(babelHelpers.toPropertyKey));
 expect(y).toBe(2);

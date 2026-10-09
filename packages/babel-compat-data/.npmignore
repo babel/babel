@@ -1,6 +1,7 @@
-build
-scripts
 src
 test
 *.log
-yarn.lock
+tsconfig.json
+tsconfig.tsbuildinfo
+build
+scripts

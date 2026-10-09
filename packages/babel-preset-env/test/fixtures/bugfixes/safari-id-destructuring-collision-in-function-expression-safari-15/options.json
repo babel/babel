@@ -5,7 +5,6 @@
       "env",
       {
         "debug": true,
-        "bugfixes": false,
         "targets": {
           "safari": "15"
         }

@@ -65,11 +65,11 @@ export default function _usingCtx(): UsingCtxReturn {
         // Try AsyncDisposable first
         var dispose: DisposeLike | null | undefined = (
           value as AsyncDisposable
-        )[Symbol.asyncDispose || Symbol.for("Symbol.asyncDispose")];
+        )[Symbol.asyncDispose || Symbol["for"]("Symbol.asyncDispose")];
       }
       if (dispose === undefined) {
         dispose = (value as Disposable)[
-          Symbol.dispose || Symbol.for("Symbol.dispose")
+          Symbol.dispose || Symbol["for"]("Symbol.dispose")
         ];
         if (isAwait) {
           var inner = dispose;
@@ -78,6 +78,7 @@ export default function _usingCtx(): UsingCtxReturn {
       if (typeof dispose !== "function") {
         throw new TypeError("Object is not disposable.");
       }
+      // @ts-expect-error use before assignment
       if (inner) {
         dispose = function () {
           try {
@@ -144,7 +145,7 @@ export default function _usingCtx(): UsingCtxReturn {
           }
         }
 
-        if (error !== empty) throw error;
+        if (error !== empty) throw error as Error;
       }
 
       function err(e: Error): Promise<void> | void {

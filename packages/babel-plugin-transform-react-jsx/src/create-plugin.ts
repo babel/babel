@@ -1,7 +1,7 @@
 import jsx from "@babel/plugin-syntax-jsx";
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t } from "@babel/core";
-import type { PluginPass, NodePath, Scope, Visitor } from "@babel/core";
+import type { PluginPass, NodePath } from "@babel/core";
 import { addNamed, addNamespace, isModule } from "@babel/helper-module-imports";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import type {
@@ -55,17 +55,21 @@ export interface Options {
   pure?: string;
   runtime?: "automatic" | "classic";
   throwIfNamespace?: boolean;
-  useBuiltIns: boolean;
-  useSpread?: boolean;
 }
-export default function createPlugin({
+
+export interface OptionsDevelopment extends Options {
+  sourceSelf?: boolean;
+}
+
+export default function createPlugin<const Development extends boolean>({
   name,
   development,
 }: {
   name: string;
-  development: boolean;
+  development: Development;
 }) {
-  return declare((_, options: Options) => {
+  type Opts = Development extends true ? OptionsDevelopment : Options;
+  return declare((_, options: Opts) => {
     const {
       pure: PURE_ANNOTATION,
 
@@ -73,28 +77,27 @@ export default function createPlugin({
 
       filter,
 
-      runtime: RUNTIME_DEFAULT = process.env.BABEL_8_BREAKING
-        ? "automatic"
-        : development
-          ? "automatic"
-          : "classic",
+      runtime: RUNTIME_DEFAULT = "automatic",
 
       importSource: IMPORT_SOURCE_DEFAULT = DEFAULT.importSource,
       pragma: PRAGMA_DEFAULT = DEFAULT.pragma,
       pragmaFrag: PRAGMA_FRAG_DEFAULT = DEFAULT.pragmaFrag,
     } = options;
 
-    if (process.env.BABEL_8_BREAKING) {
-      if ("useSpread" in options) {
-        throw new Error(
-          '@babel/plugin-transform-react-jsx: Since Babel 8, an inline object with spread elements is always used, and the "useSpread" option is no longer available. Please remove it from your config.',
-        );
-      }
+    const sourceSelf = development
+      ? (options as OptionsDevelopment).sourceSelf
+      : undefined;
 
-      if ("useBuiltIns" in options) {
-        const useBuiltInsFormatted = JSON.stringify(options.useBuiltIns);
-        throw new Error(
-          `@babel/plugin-transform-react-jsx: Since "useBuiltIns" is removed in Babel 8, you can remove it from the config.
+    if ("useSpread" in options) {
+      throw new Error(
+        '@babel/plugin-transform-react-jsx: Since Babel 8, an inline object with spread elements is always used, and the "useSpread" option is no longer available. Please remove it from your config.',
+      );
+    }
+
+    if ("useBuiltIns" in options) {
+      const useBuiltInsFormatted = JSON.stringify(options.useBuiltIns);
+      throw new Error(
+        `@babel/plugin-transform-react-jsx: Since "useBuiltIns" is removed in Babel 8, you can remove it from the config.
 - Babel 8 now transforms JSX spread to object spread. If you need to transpile object spread with
 \`useBuiltIns: ${useBuiltInsFormatted}\`, you can use the following config
 {
@@ -103,62 +106,16 @@ export default function createPlugin({
     ["@babel/plugin-transform-object-rest-spread", { "loose": true, "useBuiltIns": ${useBuiltInsFormatted} }]
   ]
 }`,
-        );
-      }
-
-      if (filter != null && RUNTIME_DEFAULT === "automatic") {
-        throw new Error(
-          '@babel/plugin-transform-react-jsx: "filter" option can not be used with automatic runtime. If you are upgrading from Babel 7, please specify `runtime: "classic"`.',
-        );
-      }
-    } else {
-      // eslint-disable-next-line no-var
-      var { useSpread = false, useBuiltIns = false } = options;
-
-      if (RUNTIME_DEFAULT === "classic") {
-        if (typeof useSpread !== "boolean") {
-          throw new Error(
-            "transform-react-jsx currently only accepts a boolean option for " +
-              "useSpread (defaults to false)",
-          );
-        }
-
-        if (typeof useBuiltIns !== "boolean") {
-          throw new Error(
-            "transform-react-jsx currently only accepts a boolean option for " +
-              "useBuiltIns (defaults to false)",
-          );
-        }
-
-        if (useSpread && useBuiltIns) {
-          throw new Error(
-            "transform-react-jsx currently only accepts useBuiltIns or useSpread " +
-              "but not both",
-          );
-        }
-      }
+      );
     }
 
-    const injectMetaPropertiesVisitor: Visitor<PluginPass> = {
-      JSXOpeningElement(path, state) {
-        const attributes = [];
-        if (isThisAllowed(path.scope)) {
-          attributes.push(
-            t.jsxAttribute(
-              t.jsxIdentifier("__self"),
-              t.jsxExpressionContainer(t.thisExpression()),
-            ),
-          );
-        }
-        attributes.push(
-          t.jsxAttribute(
-            t.jsxIdentifier("__source"),
-            t.jsxExpressionContainer(makeSource(path, state)),
-          ),
-        );
-        path.pushContainer("attributes", attributes);
-      },
-    };
+    if (filter != null && RUNTIME_DEFAULT === "automatic") {
+      throw new Error(
+        '@babel/plugin-transform-react-jsx: "filter" option can not be used with automatic runtime. If you are upgrading from Babel 7, please specify `runtime: "classic"`.',
+      );
+    }
+
+    let commentsNode: t.Node | null = null;
 
     return {
       name,
@@ -261,34 +218,126 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
               );
             }
 
-            if (development) {
-              path.traverse(injectMetaPropertiesVisitor, state);
+            if (development && sourceSelf) {
+              // Returns whether the class has specified a superclass.
+              function isDerivedClass(classNode: Class) {
+                return classNode.superClass !== null;
+              }
+
+              // Returns whether `this` is allowed at given scope.
+              function isThisAllowed(parents: t.TraversalAncestors) {
+                let i = parents.length - 1;
+
+                // This specifically skips arrow functions as they do not rewrite `this`.
+                do {
+                  const { node } = parents[i];
+                  if (
+                    t.isFunctionParent(node) &&
+                    !t.isArrowFunctionExpression(node)
+                  ) {
+                    if (!t.isMethod(node)) {
+                      // If the closest parent is a regular function, `this` will be rebound, therefore it is fine to use `this`.
+                      return true;
+                    }
+                    // Current node is within a method, so we need to check if the method is a constructor.
+                    if (node.kind !== "constructor") {
+                      // We are not in a constructor, therefore it is always fine to use `this`.
+                      return true;
+                    }
+                    // Now we are in a constructor. If it is a derived class, we do not reference `this`.
+                    return !isDerivedClass(parents[i - 2].node as Class);
+                  }
+                  if (t.isTSModuleBlock(node)) {
+                    // If the closest parent is a TS Module block, `this` will not be allowed.
+                    return false;
+                  }
+                } while (i-- > 0);
+                // We are not in a method or function. It is fine to use `this`.
+                return true;
+              }
+
+              let fileNameIdentifier: Identifier | undefined;
+              function makeSource(node: t.Node) {
+                const location = node.loc;
+                if (!location) {
+                  // the element was generated and doesn't have location information
+                  return t.buildUndefinedNode();
+                }
+
+                if (!fileNameIdentifier) {
+                  fileNameIdentifier =
+                    path.scope.generateUidIdentifier("_jsxFileName");
+                }
+
+                return makeTrace(
+                  t.cloneNode(fileNameIdentifier),
+                  location.start.line,
+                  location.start.column,
+                );
+              }
+
+              function makeTrace(
+                fileNameIdentifier: Identifier,
+                lineNumber?: number,
+                column0Based?: number,
+              ) {
+                const fileLineLiteral =
+                  lineNumber != null
+                    ? t.numericLiteral(lineNumber)
+                    : t.nullLiteral();
+
+                const fileColumnLiteral =
+                  column0Based != null
+                    ? t.numericLiteral(column0Based + 1)
+                    : t.nullLiteral();
+
+                return template.expression.ast`{
+                    fileName: ${fileNameIdentifier},
+                    lineNumber: ${fileLineLiteral},
+                    columnNumber: ${fileColumnLiteral},
+                  }`;
+              }
+
+              t.traverse(path.node, {
+                enter(node, parents) {
+                  if (!t.isJSXOpeningElement(node)) {
+                    return;
+                  }
+                  const attributes = node.attributes;
+                  if (isThisAllowed(parents)) {
+                    attributes.push(
+                      t.jsxAttribute(
+                        t.jsxIdentifier("__self"),
+                        t.jsxExpressionContainer(t.thisExpression()),
+                      ),
+                    );
+                  }
+                  attributes.push(
+                    t.jsxAttribute(
+                      t.jsxIdentifier("__source"),
+                      t.jsxExpressionContainer(makeSource(node)),
+                    ),
+                  );
+                },
+              });
+
+              if (fileNameIdentifier) {
+                const { filename = "" } = state;
+
+                path.scope.push({
+                  id: fileNameIdentifier,
+                  init: t.stringLiteral(filename),
+                });
+              }
             }
           },
-
-          // TODO(Babel 8): Decide if this should be removed or brought back.
-          // see: https://github.com/babel/babel/pull/12253#discussion_r513086528
-          //
-          // exit(path, state) {
-          //   if (
-          //     get(state, "runtime") === "classic" &&
-          //     get(state, "pragmaSet") &&
-          //     get(state, "usedFragment") &&
-          //     !get(state, "pragmaFragSet")
-          //   ) {
-          //     throw new Error(
-          //       "transform-react-jsx: pragma has been set but " +
-          //         "pragmaFrag has not been set",
-          //     );
-          //   }
-          // },
         },
 
         JSXFragment: {
           exit(path, file) {
             let callExpr;
             if (get(file, "runtime") === "classic") {
-              callExpr = buildCreateElementFragmentCall(path, file);
+              callExpr = buildCreateElementFragmentCall(path, file)!;
             } else {
               callExpr = buildJSXFragmentCall(path, file);
             }
@@ -320,38 +369,6 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         },
       },
     };
-
-    // Returns whether the class has specified a superclass.
-    function isDerivedClass(classPath: NodePath<Class>) {
-      return classPath.node.superClass !== null;
-    }
-
-    // Returns whether `this` is allowed at given scope.
-    function isThisAllowed(scope: Scope) {
-      // This specifically skips arrow functions as they do not rewrite `this`.
-      do {
-        const { path } = scope;
-        if (path.isFunctionParent() && !path.isArrowFunctionExpression()) {
-          if (!path.isMethod()) {
-            // If the closest parent is a regular function, `this` will be rebound, therefore it is fine to use `this`.
-            return true;
-          }
-          // Current node is within a method, so we need to check if the method is a constructor.
-          if (path.node.kind !== "constructor") {
-            // We are not in a constructor, therefore it is always fine to use `this`.
-            return true;
-          }
-          // Now we are in a constructor. If it is a derived class, we do not reference `this`.
-          return !isDerivedClass(path.parentPath.parentPath as NodePath<Class>);
-        }
-        if (path.isTSModuleBlock()) {
-          // If the closest parent is a TS Module block, `this` will not be allowed.
-          return false;
-        }
-      } while ((scope = scope.parent));
-      // We are not in a method or function. It is fine to use `this`.
-      return true;
-    }
 
     function call(
       pass: PluginPass,
@@ -426,6 +443,18 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         return node.expression;
       } else {
         return node;
+      }
+    }
+
+    function processComments(
+      attribs: NodePath<JSXAttribute | JSXSpreadAttribute>[],
+    ) {
+      commentsNode = null;
+      if (attribs.length && attribs[0].isJSXSpreadAttribute()) {
+        const node = attribs[0].node.argument;
+        if (node.leadingComments || node.trailingComments) {
+          commentsNode = t.cloneNode(node);
+        }
       }
     }
 
@@ -559,6 +588,9 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
           // which will be thrown later
           children,
         );
+        if (commentsNode) {
+          t.inheritsComments(attribs, commentsNode);
+        }
       } else {
         // attributes should never be null
         attribs = t.objectExpression([]);
@@ -571,14 +603,16 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         // automatically include __source and __self in this plugin
         // so we can eliminate the need for separate Babel plugins in Babel 8
         args.push(
-          extracted.key ?? path.scope.buildUndefinedNode(),
+          extracted.key ?? t.buildUndefinedNode(),
           t.booleanLiteral(children.length > 1),
         );
-        if (extracted.__source) {
-          args.push(extracted.__source);
-          if (extracted.__self) args.push(extracted.__self);
-        } else if (extracted.__self) {
-          args.push(path.scope.buildUndefinedNode(), extracted.__self);
+        if (sourceSelf) {
+          if (extracted.__source) {
+            args.push(extracted.__source);
+            if (extracted.__self) args.push(extracted.__self);
+          } else if (extracted.__self) {
+            args.push(t.buildUndefinedNode(), extracted.__self);
+          }
         }
       } else if (extracted.key !== undefined) {
         args.push(extracted.key);
@@ -593,12 +627,13 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       attribs: NodePath<JSXAttribute | JSXSpreadAttribute>[],
       children: Expression[],
     ) {
+      processComments(attribs);
       const props = attribs.reduce(accumulateAttribute, []);
 
       // In React.jsx, children is no longer a separate argument, but passed in
       // through the argument object
       if (children?.length > 0) {
-        props.push(buildChildrenProperty(children));
+        props.push(buildChildrenProperty(children)!);
       }
 
       return t.objectExpression(props);
@@ -623,7 +658,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
                   //@ts-expect-error The children here contains JSXSpreadChild,
                   // which will be thrown later
                   children,
-                ),
+                )!,
               ]
             : [],
         ),
@@ -631,7 +666,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
 
       if (development) {
         args.push(
-          path.scope.buildUndefinedNode(),
+          t.buildUndefinedNode(),
           t.booleanLiteral(children.length > 1),
         );
       }
@@ -681,7 +716,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         openingPath.node,
       );
 
-      let tagName: string;
+      let tagName: string | undefined;
       if (t.isIdentifier(tagExpr)) {
         tagName = tagExpr.name;
       } else if (t.isStringLiteral(tagExpr)) {
@@ -689,7 +724,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       }
 
       if (t.react.isCompatTag(tagName)) {
-        return t.stringLiteral(tagName);
+        return t.stringLiteral(tagName!);
       } else {
         return tagExpr;
       }
@@ -707,65 +742,11 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
       attribs: NodePath<JSXAttribute | JSXSpreadAttribute>[],
     ) {
       const runtime = get(file, "runtime");
-      if (!process.env.BABEL_8_BREAKING) {
-        if (runtime !== "automatic") {
-          const objs = [];
-          const props = attribs.reduce(accumulateAttribute, []);
-
-          if (!useSpread) {
-            // Convert syntax to use multiple objects instead of spread
-            let start = 0;
-            props.forEach((prop, i) => {
-              if (t.isSpreadElement(prop)) {
-                if (i > start) {
-                  objs.push(t.objectExpression(props.slice(start, i)));
-                }
-                objs.push(prop.argument);
-                start = i + 1;
-              }
-            });
-            if (props.length > start) {
-              objs.push(t.objectExpression(props.slice(start)));
-            }
-          } else if (props.length) {
-            objs.push(t.objectExpression(props));
-          }
-
-          if (!objs.length) {
-            return t.nullLiteral();
-          }
-
-          if (objs.length === 1) {
-            if (
-              !(
-                t.isSpreadElement(props[0]) &&
-                // If an object expression is spread element's argument
-                // it is very likely to contain __proto__ and we should stop
-                // optimizing spread element
-                t.isObjectExpression(props[0].argument)
-              )
-            ) {
-              return objs[0];
-            }
-          }
-
-          // looks like we have multiple objects
-          if (!t.isObjectExpression(objs[0])) {
-            objs.unshift(t.objectExpression([]));
-          }
-
-          const helper = useBuiltIns
-            ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
-            : file.addHelper("extends");
-
-          // spread it
-          return t.callExpression(helper, objs);
-        }
-      }
 
       const props: ObjectExpression["properties"] = [];
       const found = Object.create(null);
 
+      processComments(attribs);
       for (const attr of attribs) {
         const { node } = attr;
         const name =
@@ -784,16 +765,21 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
         accumulateAttribute(props, attr);
       }
 
-      return props.length === 1 &&
+      const ret =
+        props.length === 1 &&
         t.isSpreadElement(props[0]) &&
         // If an object expression is spread element's argument
         // it is very likely to contain __proto__ and we should stop
         // optimizing spread element
         !t.isObjectExpression(props[0].argument)
-        ? props[0].argument
-        : props.length > 0
-          ? t.objectExpression(props)
-          : t.nullLiteral();
+          ? props[0].argument
+          : props.length > 0
+            ? t.objectExpression(props)
+            : t.nullLiteral();
+      if (commentsNode) {
+        t.inheritsComments(ret, commentsNode);
+      }
+      return ret;
     }
   });
 
@@ -818,7 +804,7 @@ You can set \`throwIfNamespace: false\` to bypass this warning.`,
     source: string,
   ): () => Identifier | MemberExpression {
     return () => {
-      const actualSource = getSource(source, importName);
+      const actualSource = getSource(source, importName)!;
       if (isModule(path)) {
         let reference = get(pass, `imports/${importName}`);
         if (reference) return t.cloneNode(reference);
@@ -856,54 +842,6 @@ function toMemberExpression(id: string): Identifier | MemberExpression {
       // where the type of initial value differs from callback return type
       .reduce((object, property) => t.memberExpression(object, property))
   );
-}
-
-function makeSource(path: NodePath, state: PluginPass) {
-  const location = path.node.loc;
-  if (!location) {
-    // the element was generated and doesn't have location information
-    return path.scope.buildUndefinedNode();
-  }
-
-  // @ts-expect-error todo: avoid mutating PluginPass
-  if (!state.fileNameIdentifier) {
-    const { filename = "" } = state;
-
-    const fileNameIdentifier = path.scope.generateUidIdentifier("_jsxFileName");
-    path.scope.getProgramParent().push({
-      id: fileNameIdentifier,
-      init: t.stringLiteral(filename),
-    });
-    // @ts-expect-error todo: avoid mutating PluginPass
-    state.fileNameIdentifier = fileNameIdentifier;
-  }
-
-  return makeTrace(
-    t.cloneNode(
-      // @ts-expect-error todo: avoid mutating PluginPass
-      state.fileNameIdentifier,
-    ),
-    location.start.line,
-    location.start.column,
-  );
-}
-
-function makeTrace(
-  fileNameIdentifier: Identifier,
-  lineNumber?: number,
-  column0Based?: number,
-) {
-  const fileLineLiteral =
-    lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
-
-  const fileColumnLiteral =
-    column0Based != null ? t.numericLiteral(column0Based + 1) : t.nullLiteral();
-
-  return template.expression.ast`{
-    fileName: ${fileNameIdentifier},
-    lineNumber: ${fileLineLiteral},
-    columnNumber: ${fileColumnLiteral},
-  }`;
 }
 
 function sourceSelfError(path: NodePath, name: string) {

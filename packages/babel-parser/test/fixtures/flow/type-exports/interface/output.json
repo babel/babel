@@ -13,6 +13,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "InterfaceDeclaration",
           "start":7,"end":34,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":34,"index":34}},
@@ -64,6 +65,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "InterfaceDeclaration",
           "start":43,"end":68,"loc":{"start":{"line":2,"column":7,"index":43},"end":{"line":2,"column":32,"index":68}},

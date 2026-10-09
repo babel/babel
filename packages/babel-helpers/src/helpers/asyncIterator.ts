@@ -37,9 +37,11 @@ export default function _asyncIterator<T>(
 }
 
 // AsyncFromSyncIterator is actually a class that implements AsyncIterator interface
-declare class AsyncFromSyncIterator<T = any, TReturn = any, TNext = undefined>
-  implements AsyncIterator<T, TReturn, TNext>
-{
+declare class AsyncFromSyncIterator<
+  T = any,
+  TReturn = any,
+  TNext = undefined,
+> implements AsyncIterator<T, TReturn, TNext> {
   s: Iterator<T>;
   n: Iterator<T>["next"];
   constructor(s: Iterator<T>);
@@ -56,7 +58,6 @@ declare class AsyncFromSyncIterator<T = any, TReturn = any, TNext = undefined>
 // This makes ESLint and TypeScript complain a lot, but it's the only way
 function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
   // @ts-expect-error - Intentionally overriding the constructor.
-  // eslint-disable-next-line no-class-assign
   AsyncFromSyncIterator = function (
     this: AsyncFromSyncIterator,
     s: Iterator<T>,
@@ -71,12 +72,12 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
     next: function () {
       return AsyncFromSyncIteratorContinuation<T, TReturn>(
         // Use "arguments" here for better compatibility and smaller bundle size
-        // Itentionally casting "arguments" to an array for the type of func.apply
+        // Intentionally casting "arguments" to an array for the type of func.apply
         this.n.apply(this.s, arguments as any as [] | [undefined]),
       );
     },
     return: function (value) {
-      var ret = this.s.return;
+      var ret = this.s["return"];
       if (ret === undefined) {
         return Promise.resolve<IteratorReturnResult<TReturn>>({
           // "TReturn | PromiseLike<TReturn>" should have been unwrapped by Awaited<T>,
@@ -89,20 +90,20 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
         ret.apply(
           this.s,
           // Use "arguments" here for better compatibility and smaller bundle size
-          // Itentionally casting "arguments" to an array for the type of func.apply
+          // Intentionally casting "arguments" to an array for the type of func.apply
           arguments as any as [] | [TReturn | PromiseLike<TReturn>],
         ),
       );
     },
     throw: function (maybeError?: any) {
-      var thr = this.s.return;
+      var thr = this.s["throw"];
       if (thr === undefined) {
         // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         return Promise.reject(maybeError);
       }
       return AsyncFromSyncIteratorContinuation<T, TReturn>(
         // Use "arguments" here for better compatibility and smaller bundle size
-        // Itentionally casting "arguments" to an array for the type of func.apply
+        // Intentionally casting "arguments" to an array for the type of func.apply
         thr.apply(this.s, arguments as any as [any]),
       );
     },

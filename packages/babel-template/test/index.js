@@ -1,9 +1,7 @@
 import * as t from "@babel/types";
 
-import _generator from "../../babel-generator/lib/index.js";
-import _template from "../lib/index.js";
-const generator = _generator.default || _generator;
-const template = _template.default || _template;
+import generator from "../../babel-generator/lib/index.js";
+import template from "../lib/index.js";
 
 const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
 
@@ -36,6 +34,29 @@ describe("@babel/template", function () {
     const output2 = template({ preserveComments: true }).ast(comments);
     expect(generator(output1).code).toBe(comments);
     expect(generator(output2).code).toBe(comments);
+  });
+
+  it("should allow yield outside generator function by default", function () {
+    expect(template.ast("yield 1")).toMatchInlineSnapshot(`
+      {
+        "expression": {
+          "argument": {
+            "extra": {
+              "raw": "1",
+              "rawValue": 1,
+            },
+            "loc": undefined,
+            "type": "NumericLiteral",
+            "value": 1,
+          },
+          "delegate": false,
+          "loc": undefined,
+          "type": "YieldExpression",
+        },
+        "loc": undefined,
+        "type": "ExpressionStatement",
+      }
+    `);
   });
 
   describe("string-based", () => {
@@ -98,13 +119,34 @@ describe("@babel/template", function () {
       expect(result[1].expression).toEqual(id);
     });
 
-    it("should allow passing in a whitelist of replacement names", () => {
+    it("should allow passing in an allowlist of replacement names", () => {
       const id = t.identifier("someIdent");
       const result = template(
         `
           some_id;
         `,
-        { placeholderWhitelist: new Set(["some_id"]) },
+        { placeholderAllowlist: new Set(["some_id"]) },
+      )({ some_id: id });
+
+      expect(result.type).toBe("ExpressionStatement");
+      expect(result.expression).toBe(id);
+    });
+    it("should throw when using deprecated placeholderWhitelist without placeholderAllowlist", () => {
+      expect(() => {
+        template("FOO;", { placeholderWhitelist: new Set(["FOO"]) });
+      }).toThrow(/placeholderWhitelist.*renamed.*placeholderAllowlist/);
+    });
+
+    it("should not throw when both placeholderWhitelist and placeholderAllowlist are provided", () => {
+      const id = t.identifier("someIdent");
+      const result = template(
+        `
+          some_id;
+        `,
+        {
+          placeholderWhitelist: new Set(["some_id"]),
+          placeholderAllowlist: new Set(["some_id"]),
+        },
       )({ some_id: id });
 
       expect(result.type).toBe("ExpressionStatement");
@@ -136,6 +178,14 @@ describe("@babel/template", function () {
       }).toThrow('Unknown substitution "ANOTHER_ID" given');
     });
 
+    it("should throw if VariableDeclaration without init", () => {
+      expect(() => {
+        template(`
+          const %%ID%%;
+        `)({ ID: t.identifier("someIdent") });
+      }).toThrow("Missing initializer in destructuring declaration. (3:22)");
+    });
+
     it("should throw if placeholders are not given explicit values", () => {
       expect(() => {
         template(`
@@ -145,7 +195,7 @@ describe("@babel/template", function () {
       }).toThrow(
         `Error: No substitution given for "ANOTHER_ID". If this is not meant to be a
             placeholder you may want to consider passing one of the following options to @babel/template:
-            - { placeholderPattern: false, placeholderWhitelist: new Set(['ANOTHER_ID'])}
+            - { placeholderPattern: false, placeholderAllowlist: new Set(['ANOTHER_ID'])}
             - { placeholderPattern: /^ANOTHER_ID$/ }`,
       );
     });
@@ -213,48 +263,53 @@ describe("@babel/template", function () {
       expect(result.test.left).toBe(value);
     });
 
+    it("should correctly handle empty string as computed property key", () => {
+      const result = template.ast`obj["${""}"] = 1`;
+      expect(result.type).toBe("ExpressionStatement");
+    });
+
     it("should return assertions in ImportDeclaration when using .ast", () => {
       const result = template.ast(
-        `import json from "./foo.json" assert { type: "json" };`,
+        `import json from "./foo.json" with { type: "json" };`,
         {
-          plugins: ["importAssertions"],
+          plugins: ["importAttributes"],
         },
       );
 
-      expect(result.assertions[0].type).toBe("ImportAttribute");
+      expect(result.attributes[0].type).toBe("ImportAttribute");
     });
 
     it("should return assertions in ExportNamedDeclaration when using .ast", () => {
       const result = template.ast(
-        `export { default as foo2 } from "foo.json" assert { type: "json" };`,
+        `export { default as foo2 } from "foo.json" with { type: "json" };`,
         {
-          plugins: ["importAssertions"],
+          plugins: ["importAttributes"],
         },
       );
 
-      expect(result.assertions[0].type).toBe("ImportAttribute");
+      expect(result.attributes[0].type).toBe("ImportAttribute");
     });
 
     it("should return assertions in ExportDefaultDeclaration when using .ast", () => {
       const result = template.ast(
-        `export foo2 from "foo.json" assert { type: "json" };`,
+        `export foo2 from "foo.json" with { type: "json" };`,
         {
-          plugins: ["importAssertions", "exportDefaultFrom"],
+          plugins: ["importAttributes", "exportDefaultFrom"],
         },
       );
 
-      expect(result.assertions[0].type).toBe("ImportAttribute");
+      expect(result.attributes[0].type).toBe("ImportAttribute");
     });
 
     it("should return assertions in ExportAllDeclaration when using .ast", () => {
       const result = template.ast(
-        `export * from "foo.json" assert { type: "json" };`,
+        `export * from "foo.json" with { type: "json" };`,
         {
-          plugins: ["importAssertions"],
+          plugins: ["importAttributes"],
         },
       );
 
-      expect(result.assertions[0].type).toBe("ImportAttribute");
+      expect(result.attributes[0].type).toBe("ImportAttribute");
     });
 
     it("should replace JSX placeholder", () => {
@@ -278,19 +333,20 @@ describe("@babel/template", function () {
         $$$$BABEL_TPL$0;
       `;
       expect(result).toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
+            "attributes": [],
             "declaration": null,
             "loc": undefined,
             "source": null,
-            "specifiers": Array [
-              Object {
-                "exported": Object {
+            "specifiers": [
+              {
+                "exported": {
                   "name": "x",
                   "type": "Identifier",
                 },
                 "loc": undefined,
-                "local": Object {
+                "local": {
                   "name": "x",
                   "type": "Identifier",
                 },
@@ -299,8 +355,8 @@ describe("@babel/template", function () {
             ],
             "type": "ExportNamedDeclaration",
           },
-          Object {
-            "expression": Object {
+          {
+            "expression": {
               "loc": undefined,
               "name": "$$$$BABEL_TPL$0",
               "type": "Identifier",
@@ -329,6 +385,24 @@ describe("@babel/template", function () {
         }"
       `);
     });
+  });
+
+  it("error stack", () => {
+    let error;
+    try {
+      function create() {
+        return template(``);
+      }
+      function call(tpl) {
+        tpl({
+          FOO: t.numericLiteral(1),
+        });
+      }
+      call(create());
+    } catch (e) {
+      error = e;
+    }
+    expect(error.stack).toMatch("=============\n    at create");
   });
 
   describe(".syntacticPlaceholders", () => {
@@ -361,11 +435,11 @@ describe("@babel/template", function () {
       }).toThrow(/aren't compatible with '.syntacticPlaceholders: true'/);
     });
 
-    it("whitelist", () => {
+    it("allowlist", () => {
       expect(() => {
         template(`%%A%% + %%B%%`, {
           placeholderPattern: false,
-          placeholderWhitelist: new Set(["B"]),
+          placeholderAllowlist: new Set(["B"]),
         })();
       }).toThrow(/aren't compatible with '.syntacticPlaceholders: true'/);
     });
@@ -466,6 +540,20 @@ describe("@babel/template", function () {
       expect(generator(output).code).toMatchInlineSnapshot(`"const x = 7;"`);
     });
 
+    it("works in const declaration inside for-of without init", () => {
+      const output = template("for (const %%LHS%% of %%RHS%%){}")({
+        LHS: t.objectPattern([
+          t.objectProperty(t.identifier("x"), t.identifier("x")),
+        ]),
+        RHS: t.identifier("y"),
+      });
+      expect(generator(output).code).toMatchInlineSnapshot(`
+        "for (const {
+          x: x
+        } of y) {}"
+      `);
+    });
+
     it("works in let declaration", () => {
       const output = template("let %%LHS%% = %%RHS%%")({
         LHS: t.identifier("x"),
@@ -504,7 +592,7 @@ describe("@babel/template", function () {
       ];
 
       expect(outputs.map(ast => generator(ast).code)).toMatchInlineSnapshot(`
-        Array [
+        [
           "const greeting: string = 'Hello';",
           "var {}: string = x;",
           "class X {
@@ -518,6 +606,26 @@ describe("@babel/template", function () {
           x?) {}
         }",
           "function f(x: number) {}",
+        ]
+      `);
+    });
+
+    it("should keep node props with syntacticPlaceholders", () => {
+      const outputs = [
+        template({ plugins: ["typescript"] })(`const %%x%%: string = 'Hello'`)({
+          x: t.identifier("x"),
+        }),
+        template({ plugins: ["typescript"] })(`
+          var %%x%%: string = x;
+        `)({
+          x: t.objectPattern([]),
+        }),
+      ];
+
+      expect(outputs.map(ast => generator(ast).code)).toMatchInlineSnapshot(`
+        [
+          "const x: string = 'Hello';",
+          "var {}: string = x;",
         ]
       `);
     });

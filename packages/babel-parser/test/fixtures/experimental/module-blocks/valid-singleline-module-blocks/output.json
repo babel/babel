@@ -33,6 +33,7 @@
                     "start":19,"end":43,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":43,"index":43}},
                     "specifiers": [],
                     "source": null,
+                    "attributes": [],
                     "declaration": {
                       "type": "VariableDeclaration",
                       "start":26,"end":43,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":43,"index":43}},

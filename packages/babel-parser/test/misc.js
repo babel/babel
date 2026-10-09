@@ -31,7 +31,7 @@ describe("misc", () => {
     ])("true for %p", code => {
       const ast = parse(code, {
         sourceType: "module",
-        plugins: ["explicitResourceManagement", "decorators"],
+        plugins: ["decorators"],
       });
       expect(ast.program.extra.topLevelAwait).toBe(true);
     });
@@ -48,7 +48,6 @@ describe("misc", () => {
     ])("false for %p", code => {
       const ast = parse(code, {
         sourceType: "module",
-        plugins: ["explicitResourceManagement"],
       });
       expect(ast.program.extra.topLevelAwait).toBe(false);
     });

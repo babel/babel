@@ -1,7 +1,7 @@
 import * as babel from "@babel/core";
 import transformAmd from "../lib/index.js";
 import externalHelpers from "@babel/plugin-external-helpers";
-import path from "path";
+import path from "node:path";
 
 describe("'importInterop'", () => {
   function transform(code, importInterop, filename) {
@@ -34,8 +34,8 @@ describe("'importInterop'", () => {
     };
 
     expect(transform(code, importInterop)).toMatchInlineSnapshot(`
-      "define([\\"a\\", \\"b\\", \\"c\\"], function (_a, _b, _c) {
-        \\"use strict\\";
+      "define(["a", "b", "c"], function (_a, _b, _c) {
+        "use strict";
 
         _a = babelHelpers.interopRequireDefault(_a);
         (0, _a.default)();

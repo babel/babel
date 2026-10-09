@@ -46,7 +46,8 @@
           },
           "expectedNode": "StringLiteral"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

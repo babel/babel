@@ -1,0 +1,61 @@
+{
+  "type": "File",
+  "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":51,"index":51}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":51,"index":51}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":51,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":51,"index":51}},
+        "phase": "defer",
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start":13,"end":20,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":20,"index":20}},
+            "local": {
+              "type": "Identifier",
+              "start":18,"end":20,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":20,"index":20},"identifierName":"ns"},
+              "name": "ns"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":26,"end":29,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":29,"index":29}},
+          "extra": {
+            "rawValue": "x",
+            "raw": "\"x\""
+          },
+          "value": "x"
+        },
+        "attributes": [
+          {
+            "type": "ImportAttribute",
+            "start":37,"end":48,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":48,"index":48}},
+            "key": {
+              "type": "Identifier",
+              "start":37,"end":41,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":41,"index":41},"identifierName":"attr"},
+              "name": "attr"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":43,"end":48,"loc":{"start":{"line":1,"column":43,"index":43},"end":{"line":1,"column":48,"index":48}},
+              "extra": {
+                "rawValue": "val",
+                "raw": "\"val\""
+              },
+              "value": "val"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

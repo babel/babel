@@ -1,17 +1,22 @@
 // Each scope gets a bitset that may contain these flags
 /* prettier-ignore */
 export const enum ScopeFlag {
-  OTHER        = 0b000000000,
-  PROGRAM      = 0b000000001,
-  FUNCTION     = 0b000000010,
-  ARROW        = 0b000000100,
-  SIMPLE_CATCH = 0b000001000,
-  SUPER        = 0b000010000,
-  DIRECT_SUPER = 0b000100000,
-  CLASS        = 0b001000000,
-  STATIC_BLOCK = 0b010000000,
-  TS_MODULE    = 0b100000000,
-  VAR          = PROGRAM | FUNCTION | STATIC_BLOCK | TS_MODULE,
+  OTHER         = 0b000000000000,
+  PROGRAM       = 0b000000000001,
+  FUNCTION_BASE = 0b000000000010,
+  ARROW         = 0b000000000100,
+  SIMPLE_CATCH  = 0b000000001000,
+  SUPER         = 0b000000010000,
+  DIRECT_SUPER  = 0b000000100000,
+  CLASS_BASE    = 0b000001000000,
+  STATIC_BLOCK  = 0b000010000000,
+  SWITCH        = 0b000100000000,
+  NEW_TARGET    = 0b001000000000,
+  TS_MODULE     = 0b010000000000,
+  TS_NAMESPACE  = 0b100000000000,
+  FUNCTION      = FUNCTION_BASE | NEW_TARGET,
+  CLASS         = CLASS_BASE | NEW_TARGET,
+  VAR           = PROGRAM | FUNCTION | STATIC_BLOCK | TS_MODULE | TS_NAMESPACE,
 }
 
 /* prettier-ignore */
@@ -52,7 +57,7 @@ export const enum BindingFlag {
   // function expressions IDs.
   TYPE_NONE            = 0          | 0         | 0              | FLAG_NONE,
   TYPE_OUTSIDE         = KIND_VALUE | 0         | 0              | FLAG_NONE,
-  TYPE_TS_CONST_ENUM   = TYPE_TS_ENUM | FLAG_TS_CONST_ENUM,
+  TYPE_TS_CONST_ENUM   = TYPE_TS_ENUM                            | FLAG_TS_CONST_ENUM,
   TYPE_TS_NAMESPACE    = 0          | 0         | 0              | FLAG_TS_EXPORT_ONLY,
   TYPE_TS_TYPE_IMPORT  = 0          | KIND_TYPE | 0              | FLAG_TS_IMPORT,
   TYPE_TS_VALUE_IMPORT = 0          | 0         | 0              | FLAG_TS_IMPORT,

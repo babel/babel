@@ -1,15 +1,15 @@
 {
   "type": "File",
-  "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":84}},
+  "start":0,"end":76,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":76}},
   "program": {
     "type": "Program",
-    "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":84}},
+    "start":0,"end":76,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":76}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
       {
         "type": "ClassDeclaration",
-        "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":1,"index":84}},
+        "start":0,"end":76,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":76}},
         "id": {
           "type": "Identifier",
           "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
@@ -18,7 +18,7 @@
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start":8,"end":84,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":8,"column":1,"index":84}},
+          "start":8,"end":76,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":7,"column":1,"index":76}},
           "body": [
             {
               "type": "ClassProperty",
@@ -95,7 +95,7 @@
             },
             {
               "type": "ClassProperty",
-              "start":63,"end":66,"loc":{"start":{"line":6,"column":4,"index":63},"end":{"line":6,"column":7,"index":66}},
+              "start":63,"end":74,"loc":{"start":{"line":6,"column":4,"index":63},"end":{"line":6,"column":15,"index":74}},
               "static": false,
               "key": {
                 "type": "Identifier",
@@ -104,25 +104,12 @@
               },
               "computed": false,
               "definite": true,
-              "value": null
-            },
-            {
-              "type": "ClassProperty",
-              "start":71,"end":82,"loc":{"start":{"line":7,"column":4,"index":71},"end":{"line":7,"column":15,"index":82}},
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start":71,"end":72,"loc":{"start":{"line":7,"column":4,"index":71},"end":{"line":7,"column":5,"index":72},"identifierName":"x"},
-                "name": "x"
-              },
-              "computed": false,
-              "definite": true,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
-                "start":73,"end":81,"loc":{"start":{"line":7,"column":6,"index":73},"end":{"line":7,"column":14,"index":81}},
+                "start":65,"end":73,"loc":{"start":{"line":6,"column":6,"index":65},"end":{"line":6,"column":14,"index":73}},
                 "typeAnnotation": {
                   "type": "TSNumberKeyword",
-                  "start":75,"end":81,"loc":{"start":{"line":7,"column":8,"index":75},"end":{"line":7,"column":14,"index":81}}
+                  "start":67,"end":73,"loc":{"start":{"line":6,"column":8,"index":67},"end":{"line":6,"column":14,"index":73}}
                 }
               },
               "value": null

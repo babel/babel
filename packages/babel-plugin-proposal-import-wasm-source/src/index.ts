@@ -4,14 +4,14 @@ import syntaxImportSourcePhase from "@babel/plugin-syntax-import-source";
 
 import {
   importToPlatformApi,
-  buildParallelStaticImports,
+  injectParallelStaticImports,
   type Pieces,
   type Builders,
 } from "@babel/helper-import-to-platform-api";
 
 export default declare(api => {
   const { types: t, template } = api;
-  api.assertVersion(REQUIRED_VERSION("^7.23.0"));
+  api.assertVersion(REQUIRED_VERSION("^7.23.0 || ^8.0.0"));
 
   const targets = api.targets();
 
@@ -23,7 +23,7 @@ export default declare(api => {
       template.expression.ast`WebAssembly.compileStreaming(${fetch})`,
     nodeFsSync: (read: t.Expression) =>
       template.expression.ast`new WebAssembly.Module(${read})`,
-    nodeFsAsync: template.expression`WebAssembly.compile`,
+    nodeFsAsync: () => template.expression.ast`WebAssembly.compile`,
   };
 
   const getHelper = (file: File) => {
@@ -63,7 +63,7 @@ export default declare(api => {
         for (const decl of path.get("body")) {
           if (!decl.isImportDeclaration({ phase: "source" })) continue;
 
-          if (decl.node.attributes?.length || decl.node.assertions?.length) {
+          if (decl.node.attributes?.length) {
             throw path.buildCodeFrameError(
               "`import source` with import attributes cannot be compiled.",
             );
@@ -74,13 +74,12 @@ export default declare(api => {
 
           data.push({
             id: specifier.local,
-            fetch: helper.buildFetch(decl.node.source, path),
+            fetch: helper.buildFetch(decl.node.source, this.file),
           });
           decl.remove();
         }
 
-        const decl = buildParallelStaticImports(data, helper.needsAwait);
-        if (decl) path.unshiftContainer("body", decl);
+        injectParallelStaticImports(path, data, helper.needsAwait);
       },
 
       ImportExpression(path) {
@@ -93,7 +92,7 @@ export default declare(api => {
         }
 
         path.replaceWith(
-          getHelper(this.file).buildFetchAsync(path.node.source, path),
+          getHelper(this.file).buildFetchAsync(path.node.source, this.file),
         );
       },
     },

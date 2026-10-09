@@ -1,9 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "plugins": [
-    ["proposal-decorators", { "version": "2023-05" }],
-    "transform-class-properties",
-    "transform-private-methods",
-    "transform-class-static-block"
-  ]
-}

@@ -1,17 +1,10 @@
-import { Linter, ESLint } from "eslint";
-import fs from "fs";
-import path from "path";
-import * as parser from "../../../../../babel-eslint-parser/lib/index.cjs";
-import { fileURLToPath } from "url";
-import {
-  babelESLintParserPath,
-  eslintConfigCompat,
-} from "../../../helpers/eslintConfigCompat.cjs";
+import { Linter } from "eslint";
+import fs from "node:fs";
+import path from "node:path";
+import * as parser from "../../../../../babel-eslint-parser/lib/index.js";
+import { fileURLToPath } from "node:url";
 
 const linter = new Linter();
-if (parseInt(ESLint.version, 10) < 9) {
-  linter.defineParser(babelESLintParserPath, parser);
-}
 
 const paths = {
   fixtures: path.join(
@@ -44,7 +37,7 @@ function lint(opts) {
   return new Promise((resolve, reject) => {
     readFixture(opts.fixture, (err, src) => {
       if (err) return reject(err);
-      resolve(linter.verify(src, eslintConfigCompat(opts.eslint)));
+      resolve(linter.verify(src, opts.eslint));
     });
   });
 }
@@ -118,11 +111,6 @@ function strictSuite() {
         eslint: eslintOpts,
       });
       expect(report[0].ruleId).toBe(ruleId);
-      // This is to make sure the test fails prior to adapting Babel AST
-      // directive representation to ESLint format. Otherwise it reports an
-      // error for missing global directive that masquerades as the expected
-      // result of the previous assertion.
-      expect(report[0].nodeType).not.toBe("Program");
     });
 
     it("should error on no directive", async () => {
@@ -173,7 +161,6 @@ function strictSuite() {
         eslint: eslintOpts,
       });
       expect(report[0].ruleId).toBe(ruleId);
-      expect(report[0].nodeType.indexOf("Function")).toBe(-1);
     });
   });
 }

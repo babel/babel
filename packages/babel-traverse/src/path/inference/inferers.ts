@@ -123,7 +123,7 @@ export function ConditionalExpression(this: NodePath<t.ConditionalExpression>) {
 }
 
 export function SequenceExpression(this: NodePath<t.SequenceExpression>) {
-  return this.get("expressions").pop().getTypeAnnotation();
+  return this.get("expressions").pop()!.getTypeAnnotation();
 }
 
 export function ParenthesizedExpression(

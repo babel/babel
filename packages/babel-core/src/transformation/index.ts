@@ -1,4 +1,4 @@
-import traverse from "@babel/traverse";
+import traverse, { type ExplodedVisitor, type Visitor } from "@babel/traverse";
 import type * as t from "@babel/types";
 import type { GeneratorResult } from "@babel/generator";
 
@@ -15,6 +15,8 @@ import generateCode from "./file/generate.ts";
 import type File from "./file/file.ts";
 
 import { flattenToSet } from "../config/helpers/deep-array.ts";
+import { isAsync, maybeAsync } from "../gensync-utils/async.ts";
+import type { SourceTypeOption } from "../config/validation/options.ts";
 
 export type FileResultCallback = {
   (err: Error, file: null): void;
@@ -22,12 +24,12 @@ export type FileResultCallback = {
 };
 
 export type FileResult = {
-  metadata: { [key: string]: any };
-  options: { [key: string]: any };
+  metadata: Record<string, any>;
+  options: Record<string, any>;
   ast: t.File | null;
   code: string | null;
-  map: GeneratorResult["map"] | null;
-  sourceType: "script" | "module";
+  map: GeneratorResult["map"];
+  sourceType: Exclude<SourceTypeOption, "unambiguous">;
   externalDependencies: Set<string>;
 };
 
@@ -79,78 +81,54 @@ export function* run(
 }
 
 function* transformFile(file: File, pluginPasses: PluginPasses): Handler<void> {
+  const async = yield* isAsync();
+
   for (const pluginPairs of pluginPasses) {
     const passPairs: [Plugin, PluginPass][] = [];
     const passes = [];
-    const visitors = [];
+    const visitors: Visitor<PluginPass<object>>[] = [];
 
     for (const plugin of pluginPairs.concat([loadBlockHoistPlugin()])) {
-      const pass = new PluginPass(file, plugin.key, plugin.options);
+      const pass = new PluginPass(file, plugin.key, plugin.options, async);
 
       passPairs.push([plugin, pass]);
       passes.push(pass);
-      visitors.push(plugin.visitor);
+      // FIXME: plugin.visitor may be undefined
+      visitors.push(plugin.visitor!);
     }
 
     for (const [plugin, pass] of passPairs) {
-      const fn = plugin.pre;
-      if (fn) {
-        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
-        const result = fn.call(pass, file);
+      if (plugin.pre) {
+        const fn = maybeAsync(
+          plugin.pre,
+          `You appear to be using an async plugin/preset, but Babel has been called synchronously`,
+        );
 
-        // @ts-expect-error - If we want to support async .pre
-        yield* [];
-
-        if (isThenable(result)) {
-          throw new Error(
-            `You appear to be using an plugin with an async .pre, ` +
-              `which your current version of Babel does not support. ` +
-              `If you're using a published plugin, you may need to upgrade ` +
-              `your @babel/core version.`,
-          );
-        }
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        yield* fn.call(pass, file);
       }
     }
 
     // merge all plugin visitors into a single visitor
-    const visitor = traverse.visitors.merge(
-      visitors,
-      passes,
-      file.opts.wrapPluginVisitorMethod,
-    );
-    if (process.env.BABEL_8_BREAKING) {
-      traverse(file.ast.program, visitor, file.scope, null, file.path, true);
-    } else {
-      traverse(file.ast, visitor, file.scope);
-    }
+    const visitor: ExplodedVisitor<PluginPass<object>> =
+      traverse.visitors.merge(
+        visitors,
+        passes,
+        file.opts.wrapPluginVisitorMethod,
+      );
+
+    traverse(file.ast.program, visitor, file.scope, null, file.path, true);
 
     for (const [plugin, pass] of passPairs) {
-      const fn = plugin.post;
-      if (fn) {
-        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
-        const result = fn.call(pass, file);
+      if (plugin.post) {
+        const fn = maybeAsync(
+          plugin.post,
+          `You appear to be using an async plugin/preset, but Babel has been called synchronously`,
+        );
 
-        // @ts-expect-error - If we want to support async .post
-        yield* [];
-
-        if (isThenable(result)) {
-          throw new Error(
-            `You appear to be using an plugin with an async .post, ` +
-              `which your current version of Babel does not support. ` +
-              `If you're using a published plugin, you may need to upgrade ` +
-              `your @babel/core version.`,
-          );
-        }
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        yield* fn.call(pass, file);
       }
     }
   }
-}
-
-function isThenable<T extends PromiseLike<any>>(val: any): val is T {
-  return (
-    !!val &&
-    (typeof val === "object" || typeof val === "function") &&
-    !!val.then &&
-    typeof val.then === "function"
-  );
 }

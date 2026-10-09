@@ -14,7 +14,7 @@
 
 # Contributing
 
-Contributions are always welcome, no matter how large or small! Before contributing, please read the [code of conduct](https://github.com/babel/babel/blob/main/CODE_OF_CONDUCT.md).
+Contributions are always welcome, no matter how large or small! Before contributing, please read the [code of conduct](https://github.com/babel/babel/blob/main/CODE_OF_CONDUCT.md) and the [AI policy](https://github.com/babel/babel/blob/main/AI_POLICY.md).
 
 If you want an already configured online IDE to contribute to Babel, you can use [Gitpod](https://gitpod.io/#https://github.com/babel/babel)!
 
@@ -37,7 +37,7 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 ## Developing
 
-_Node_: Check that Node is [installed](https://nodejs.org/en/download/) with version `^20.10.0 || >=22.0.0`. You can check this with `node -v`.
+_Node_: Check that Node is [installed](https://nodejs.org/en/download/) with version `>=22.18.0`. You can check this with `node -v`.
 
 _Yarn_: Make sure that Yarn is [installed](https://yarnpkg.com/getting-started/install) with version `>=4.0.0`.
 
@@ -79,23 +79,6 @@ If you wish to build a copy of Babel for distribution, then run:
 ```sh
 $ make build-dist
 ```
-
-### Develop compiling to CommonJS or to ECMAScript modules
-
-Babel can currently be compiled both to CJS and to ESM. You can toggle between those two
-modes by running one of the following commands:
-
-```sh
-make use-esm
-```
-
-```sh
-make use-cjs
-```
-
-Note that they need to recompile the whole monorepo, so please make sure to stop any running `make watch` process before running them.
-
-If you never run a `make use-*` (or if you delete the `.module-type` file that they generate), our build process defaults to CJS.
 
 ### Running linting/tests
 
@@ -244,9 +227,6 @@ In case you're not able to reproduce an error on CI locally, it may be due to
 
 - Node Version: Travis CI runs the tests against all major node versions. If your tests use JavaScript features unsupported by lower versions of node, then use [minNodeVersion option](#writing-tests) in options.json.
 - Timeout: Check the CI log and if the only errors are timeout errors and you are sure that it's not related to the changes you made, ask someone in the slack channel to trigger rebuild on the CI build and it might be resolved
-- Some `@babel/cli` tests are known to be flaky and thus we do not run them by
-  default locally. You can run them by setting the `BABEL_CLI_FLAKY_TESTS=true`
-  env variable.
 
 In case you're locally getting errors which are not on the CI, it may be due to
 
@@ -265,15 +245,15 @@ For example, in [`@babel/plugin-transform-exponentiation-operator/test`](https:/
 - There is an `index.js` file. It imports our [test helper](https://github.com/babel/babel/tree/main/packages/babel-helper-plugin-test-runner). (You don't have to worry about this).
 - There can be multiple folders under [`/fixtures`](https://github.com/babel/babel/tree/main/packages/babel-plugin-transform-exponentiation-operator/test/fixtures)
 
-  - There is an [`options.json`](https://github.com/babel/babel/blob/main/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/options.json) file whose function is similar to a `.babelrc` file, allowing you to pass in the plugins and settings you need for your tests.
+  - There is an [`options.json`](https://github.com/babel/babel/blob/main/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentiation-operator/options.json) file whose function is similar to a `.babelrc` file, allowing you to pass in the plugins and settings you need for your tests.
   - For this test, we only need the relevant plugin, so it's just `{ "plugins": ["@babel/plugin-transform-exponentiation-operator"] }`.
   - If necessary, you can have an `options.json` with different options in each subfolder.
 
 - In each subfolder, you can organize your directory structure by categories of tests. (Example: these folders can be named after the feature you are testing or can reference the issue number they fix)
 - Generally, there are two kinds of tests for plugins
-    - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`input.js`](https://github.com/babel/babel/blob/main/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/input.js) file and an [`output.js`](https://github.com/babel/babel/blob/main/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/output.js) file. This kind of test only works in sub-subdirectories of `/fixtures`, i.e. `/fixtures/exponentiation-operator/binary/input.js` and **not** `/fixtures/exponentiation-operator/input.js`.
+    - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`input.js`](https://github.com/babel/babel/blob/main/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentiation-operator/binary/input.js) file and an [`output.js`](https://github.com/babel/babel/blob/main/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentiation-operator/binary/output.js) file. This kind of test only works in sub-subdirectories of `/fixtures`, i.e. `/fixtures/exponentiation-operator/binary/input.js` and **not** `/fixtures/exponentiation-operator/input.js`.
   - If you need to expect an error, you can ignore creating the `output.js` file and pass a new `throws` key to the `options.json` that contains the error string that is created.
-  - The second and preferred type is a test that actually evaluates the produced code and asserts that certain properties are true or false. We do this by creating an [`exec.js`](https://github.com/babel/babel/blob/main/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/comprehensive/exec.js) file.
+  - The second and preferred type is a test that actually evaluates the produced code and asserts that certain properties are true or false. We do this by creating an [`exec.js`](https://github.com/babel/babel/blob/main/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentiation-operator/comprehensive/exec.js) file.
 
 In a fixture test, you simply write out the code you want to transform in `input.js`.
 
@@ -432,13 +412,13 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 
 > Example: https://github.com/babel/babel/pull/11640
 
-- Create a new PR that describes the proposed AST shape in [ESTree](https://github.com/estree/estree) (ex: [Decimal AST](https://github.com/estree/estree/pull/220)). The new AST should follow ESTree's [design philosophy](https://github.com/estree/estree#philosophy).
+- Create a new PR that describes the proposed AST shape in [ESTree](https://github.com/estree/estree) (ex: [Import Attributes AST](https://github.com/estree/estree/pull/302)). The new AST should follow ESTree's [design philosophy](https://github.com/estree/estree#philosophy).
 - After the ESTree PR is accepted, update [ast/spec.md](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md). Note that there are differences between Babel AST and ESTree. In these cases, consistency with current Babel AST outweighs alignment to ESTree. Otherwise it should follow ESTree.
 
-- [ ] Implement parser plugins based on the new AST. The parser plugin name should be the unprefixed slug of the TC39 proposal URL in _camelcase_, i.e. `exportDefaultFrom` from `https://github.com/tc39/proposal-export-default-from`.
+- [ ] Implement parser plugins based on the new AST. The parser plugin name should be the unprefixed slug of the TC39 proposal URL in _camelcase_, i.e. `pipelineOperator` from `https://github.com/tc39/proposal-pipeline-operator`.
   - [ ] Use the `this.expectPlugin("pluginName")` check within `@babel/parser` to ensure your new plugin code only runs when that flag is turned on (not default behavior), and a friendly error is thrown if users forget to enable a plugin. You can also supply an array pair to require certain configuration options, e.g., `this.expectPlugin(["pluginName", { configOption: value }])`.
   - [ ] Add failing/passing tests according to spec behavior
-  - [ ] Add `@babel/syntax-new-syntax` package. You can copy `packages/babel-plugin-syntax-decimal` and replace `decimal` to `new-syntax`.
+  - [ ] Add `@babel/syntax-new-syntax` package. You can copy `packages/babel-plugin-syntax-jsx` and replace `jsx` to `new-syntax`.
   - [ ] Add `@babel/syntax-new-syntax` to `@babel/standalone`.
     - [ ] Add `@babel/syntax-new-syntax` to `package.json`
     - [ ] Add `@babel/syntax-new-syntax` to [`pluginsConfig.json`](https://github.com/babel/babel/blob/master/packages/babel-standalone/scripts/pluginConfig.json), run `make build-standalone`.

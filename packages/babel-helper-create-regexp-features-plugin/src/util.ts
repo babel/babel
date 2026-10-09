@@ -7,13 +7,8 @@ export function generateRegexpuOptions(
   pattern: string,
   toTransform: number,
 ): RegexpuOptions {
-  type Experimental = 1;
-
-  const feat = <Stability extends 0 | 1 = 0>(
-    name: keyof typeof FEATURES,
-    ok: "transform" | (Stability extends 0 ? never : "parse") = "transform",
-  ) => {
-    return hasFeature(toTransform, FEATURES[name]) ? ok : false;
+  const feat = (name: keyof typeof FEATURES) => {
+    return hasFeature(toTransform, FEATURES[name]) ? "transform" : false;
   };
 
   const featDuplicateNamedGroups = (): "transform" | false => {
@@ -23,9 +18,14 @@ export function generateRegexpuOptions(
     // However, it's such a rare occurrence that it's ok to compile
     // the regexp even if we only need to compile regexps with
     // duplicate named capturing groups.
-    const regex = /\(\?<([^>]+)>/g;
+    // The $ is to exit early for malicious input such as \(?<\(?<\(?<...
+    const regex = /\(\?<([^>]+)(>|$)/g;
     const seen = new Set();
-    for (let match; (match = regex.exec(pattern)); seen.add(match[1])) {
+    for (
+      let match;
+      (match = regex.exec(pattern)) && match[2];
+      seen.add(match[1])
+    ) {
       if (seen.has(match[1])) return "transform";
     }
     return false;
@@ -33,7 +33,7 @@ export function generateRegexpuOptions(
 
   return {
     unicodeFlag: feat("unicodeFlag"),
-    unicodeSetsFlag: feat<Experimental>("unicodeSetsFlag") || "parse",
+    unicodeSetsFlag: feat("unicodeSetsFlag"),
     dotAllFlag: feat("dotAllFlag"),
     unicodePropertyEscapes: feat("unicodePropertyEscape"),
     namedGroups: feat("namedCaptureGroups") || featDuplicateNamedGroups(),

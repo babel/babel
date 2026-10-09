@@ -1,15 +1,12 @@
 {
   "version": 3,
-  "names": [
-    "t",
-    "x"
-  ],
+  "names": [],
   "sources": [
     "source-maps/arrow-function/input.js"
   ],
   "sourcesContent": [
     "var t = x => x * x;"
   ],
-  "mappings": "AAAA,IAAIA,CAAC,GAAG,SAAJA,CAACA,CAAGC,CAAC;EAAA,OAAIA,CAAC,GAAGA,CAAC;AAAA",
+  "mappings": "AAAA,IAAI,CAAC,GAAG,SAAJ,CAAC,CAAG,CAAC;EAAA,OAAI,CAAC,GAAG,CAAC;AAAA",
   "ignoreList": []
 }

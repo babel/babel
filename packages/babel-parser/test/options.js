@@ -55,5 +55,63 @@ describe("options", () => {
         expectToFail({ sourceType: "script", strictMode: true });
       });
     });
+
+    describe("locations", () => {
+      it("false", () => {
+        expect(parse(CODE, { locations: false })).toMatchInlineSnapshot(`
+          Node {
+            "comments": [],
+            "end": 19,
+            "errors": [],
+            "program": Node {
+              "body": [
+                Node {
+                  "async": false,
+                  "body": Node {
+                    "body": [],
+                    "directives": [],
+                    "end": 19,
+                    "start": 17,
+                    "type": "BlockStatement",
+                  },
+                  "end": 19,
+                  "generator": false,
+                  "id": Node {
+                    "end": 10,
+                    "name": "f",
+                    "start": 9,
+                    "type": "Identifier",
+                  },
+                  "params": [
+                    Node {
+                      "end": 12,
+                      "name": "x",
+                      "start": 11,
+                      "type": "Identifier",
+                    },
+                    Node {
+                      "end": 15,
+                      "name": "x",
+                      "start": 14,
+                      "type": "Identifier",
+                    },
+                  ],
+                  "start": 0,
+                  "type": "FunctionDeclaration",
+                },
+              ],
+              "directives": [],
+              "end": 19,
+              "interpreter": null,
+              "sourceType": "script",
+              "start": 0,
+              "type": "Program",
+            },
+            "start": 0,
+            "type": "File",
+          }
+        `);
+      });
+    });
   });
 });

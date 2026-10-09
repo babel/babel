@@ -30,7 +30,8 @@
             "raw": "'./somewhere.js'"
           },
           "value": "./somewhere.js"
-        }
+        },
+        "attributes": []
       },
       {
         "type": "ClassDeclaration",

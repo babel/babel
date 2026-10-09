@@ -28,7 +28,7 @@ export default function populatePlaceholders(
         throw new Error(
           `Error: No substitution given for "${placeholderName}". If this is not meant to be a
             placeholder you may want to consider passing one of the following options to @babel/template:
-            - { placeholderPattern: false, placeholderWhitelist: new Set(['${placeholderName}'])}
+            - { placeholderPattern: false, placeholderAllowlist: new Set(['${placeholderName}'])}
             - { placeholderPattern: /^${placeholderName}$/ }`,
         );
       }
@@ -50,7 +50,7 @@ export default function populatePlaceholders(
         applyReplacement(
           placeholder,
           ast,
-          (replacements && replacements[placeholder.name]) || null,
+          (replacements && replacements[placeholder.name]) ?? null,
         );
       } catch (e) {
         e.message = `@babel/template placeholder "${placeholder.name}": ${e.message}`;
@@ -124,7 +124,7 @@ function applyReplacement(
   function set(parent: any, key: any, value: any) {
     const node = parent[key] as t.Node;
     parent[key] = value;
-    if (node.type === "Identifier") {
+    if (node.type === "Identifier" || node.type === "Placeholder") {
       if (node.typeAnnotation) {
         value.typeAnnotation = node.typeAnnotation;
       }
@@ -142,7 +142,7 @@ function applyReplacement(
 
     set(parent, key, replacement);
   } else {
-    const items: Array<t.Node> = (parent as any)[key].slice();
+    const items: t.Node[] = (parent as any)[key].slice();
 
     if (placeholder.type === "statement" || placeholder.type === "param") {
       if (replacement == null) {

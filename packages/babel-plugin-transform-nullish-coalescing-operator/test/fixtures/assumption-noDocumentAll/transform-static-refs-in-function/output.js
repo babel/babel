@@ -1,3 +1,4 @@
 function foo() {
-  var foo = this != null ? this : {};
+  var _this;
+  var foo = (_this = this) != null ? _this : {};
 }

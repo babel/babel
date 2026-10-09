@@ -1,9 +1,8 @@
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
-import { commonJS } from "$repo-utils";
+import { describeNoCITGM } from "$repo-utils";
 
-import _traverse from "../lib/index.js";
-const traverse = _traverse.default || _traverse;
+import traverse from "../lib/index.js";
 
 import { callFromAtBabelPackage } from "./helpers/@babel/fake-babel-package/index.js";
 
@@ -352,6 +351,84 @@ describe("traverse", function () {
       );
       expect(contextLevel).toBe(2);
     });
+
+    it("regression - #17563", () => {
+      const ast = parse("const a = 1;");
+      traverse(ast, {
+        noScope: true,
+        Identifier() {},
+      });
+
+      let result;
+
+      traverse(ast, {
+        Identifier(path) {
+          result = path.scope.hasOwnBinding("a");
+        },
+      });
+
+      expect(result).toBe(true);
+    });
+
+    it("#11350: this.hub should not be undefined while traversing a program or file", function () {
+      const ast = parse("try {} catch (e) {}");
+      traverse(ast, {
+        enter(path) {
+          expect(
+            path.hub.buildError(path.node, "This should work"),
+          ).toStrictEqual(TypeError("This should work"));
+          // otherwise, this throws '"Cannot read properties of undefined (reading 'buildError')"'
+          expect(path.getPathLocation()).toBe("program");
+          path.stop();
+        },
+      });
+    });
+
+    it("traverse no parent path", function () {
+      const code = `
+        var foo = {
+            "files": []
+        }
+      `;
+      const ast = parse(code);
+      let result;
+      traverse(ast, {
+        ObjectProperty(path) {
+          traverse(path.node, {
+            noScope: true,
+            ArrayExpression(path) {
+              result = path.node;
+            },
+          });
+        },
+      });
+
+      expect(ast.program.body[0].declarations[0].init.properties[0].value).toBe(
+        result,
+      );
+    });
+
+    it("#18121: `replaceWith` in `Visitor#exit` should not stop traversal", function () {
+      const ast = parse("const a = 1;");
+      const log = [];
+      traverse(ast.program, {
+        exit(path) {
+          log.push(path.getPathLocation());
+          if (path.type === "Identifier" && path.node.name === "a") {
+            path.replaceWith(t.identifier("b"));
+          }
+        },
+      });
+      expect(log).toMatchInlineSnapshot(`
+        [
+          "body[0].declarations[0].id",
+          "body[0].declarations[0].id",
+          "body[0].declarations[0].init",
+          "body[0].declarations[0]",
+          "body[0]",
+        ]
+      `);
+    });
   });
   describe("path.stop()", () => {
     it("should stop the traversal when a grand child is stopped", () => {
@@ -414,68 +491,62 @@ describe("traverse", function () {
     });
   });
   describe("traverse.explode", () => {
-    const { __dirname } = commonJS(import.meta.url);
     // These tests fail if the monorepo is in a folder named `@babel`, due to
     // https://github.com/babel/babel/blob/24106296d4e80ff2c7cb7f956bab66aa819b2c35/packages/babel-types/src/utils/deprecationWarning.ts#L40
     // This happens, for example, in nodejs/citgm.
-    const shuoldSkip = /[\\/]@babel[\\/]/.test(__dirname);
+    describeNoCITGM("deprecated types and aliases", () => {
+      beforeAll(() => {
+        jest.spyOn(console, "warn").mockImplementation(() => {});
+      });
+      afterEach(() => {
+        console.warn.mockClear();
+      });
+      afterAll(() => {
+        console.warn.mockRestore();
+      });
+      it("should warn for deprecated node types", function testFn1() {
+        const visitNumericLiteral = () => {};
+        const visitor = {
+          NumberLiteral: visitNumericLiteral,
+        };
+        traverse.explode(visitor);
+        expect(console.warn).toHaveBeenCalledWith(
+          expect.stringMatching(
+            /Visitor `NumberLiteral` has been deprecated, please migrate to `NumericLiteral`[^]+at.+testFn1/,
+          ),
+        );
+        expect(visitor).toHaveProperty("NumericLiteral.enter", [
+          visitNumericLiteral,
+        ]);
+      });
 
-    (shuoldSkip ? describe.skip : describe)(
-      "deprecated types and aliases",
-      () => {
-        beforeAll(() => {
-          jest.spyOn(console, "warn").mockImplementation(() => {});
-        });
-        afterEach(() => {
-          console.warn.mockClear();
-        });
-        afterAll(() => {
-          console.warn.mockRestore();
-        });
-        it("should warn for deprecated node types", function testFn1() {
-          const visitNumericLiteral = () => {};
-          const visitor = {
-            NumberLiteral: visitNumericLiteral,
-          };
-          traverse.explode(visitor);
-          expect(console.warn).toHaveBeenCalledWith(
-            expect.stringMatching(
-              /Visitor `NumberLiteral` has been deprecated, please migrate to `NumericLiteral`[^]+at.+testFn1/,
-            ),
-          );
-          expect(visitor).toHaveProperty("NumericLiteral.enter", [
-            visitNumericLiteral,
-          ]);
-        });
+      it("should warn for deprecated aliases", function testFn2() {
+        const visitImportOrExportDeclaration = () => {};
+        const visitor = {
+          ModuleDeclaration: visitImportOrExportDeclaration,
+        };
+        traverse.explode(visitor);
+        expect(console.warn).toHaveBeenCalledWith(
+          expect.stringMatching(
+            /Visitor `ModuleDeclaration` has been deprecated, please migrate to `ImportOrExportDeclaration`[^]+at.+testFn2/,
+          ),
+        );
+        expect(visitor).toHaveProperty("ImportDeclaration.enter", [
+          visitImportOrExportDeclaration,
+        ]);
+      });
 
-        it("should warn for deprecated aliases", function testFn2() {
-          const visitImportOrExportDeclaration = () => {};
-          const visitor = {
-            ModuleDeclaration: visitImportOrExportDeclaration,
-          };
-          traverse.explode(visitor);
-          expect(console.warn).toHaveBeenCalledWith(
-            expect.stringMatching(
-              /Visitor `ModuleDeclaration` has been deprecated, please migrate to `ImportOrExportDeclaration`[^]+at.+testFn2/,
-            ),
-          );
-          expect(visitor).toHaveProperty("ImportDeclaration.enter", [
-            visitImportOrExportDeclaration,
-          ]);
-        });
-
-        it("should not warn deprecations if usage comes from a @babel/* package", () => {
-          const visitImportOrExportDeclaration = () => {};
-          const visitor = {
-            ModuleDeclaration: visitImportOrExportDeclaration,
-          };
-          callFromAtBabelPackage(traverse.explode, visitor);
-          expect(console.warn).not.toHaveBeenCalled();
-          expect(visitor).toHaveProperty("ImportDeclaration.enter", [
-            visitImportOrExportDeclaration,
-          ]);
-        });
-      },
-    );
+      it("should not warn deprecations if usage comes from a @babel/* package", () => {
+        const visitImportOrExportDeclaration = () => {};
+        const visitor = {
+          ModuleDeclaration: visitImportOrExportDeclaration,
+        };
+        callFromAtBabelPackage(traverse.explode, visitor);
+        expect(console.warn).not.toHaveBeenCalled();
+        expect(visitor).toHaveProperty("ImportDeclaration.enter", [
+          visitImportOrExportDeclaration,
+        ]);
+      });
+    });
   });
 });

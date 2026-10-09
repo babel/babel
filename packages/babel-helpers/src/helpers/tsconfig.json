@@ -4,6 +4,7 @@
     "target": "ESNext",
     "module": "Preserve",
     "lib": ["ESNext"],
+    "types": ["node"],
     "declaration": false,
     "noEmit": true,
     "moduleResolution": "Bundler",
@@ -13,5 +14,5 @@
     "strict": true
   },
   "include": ["./*.ts"],
-  "exclude": ["./applyDecs2305.ts", "./construct.ts", "./usingCtx.ts"]
+  "exclude": ["./applyDecs2305.ts"]
 }

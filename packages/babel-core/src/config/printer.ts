@@ -7,15 +7,14 @@ import type {
   UnloadedDescriptor,
 } from "./config-descriptors.ts";
 
-// todo: Use flow enums when @babel/transform-flow-types supports it
-export const ChainFormatter = {
-  Programmatic: 0,
-  Config: 1,
-};
+export const enum ChainFormatter {
+  Programmatic = 0,
+  Config = 1,
+}
 
 type PrintableConfig = {
   content: OptionsAndDescriptors;
-  type: (typeof ChainFormatter)[keyof typeof ChainFormatter];
+  type: ChainFormatter;
   callerName: string | undefined | null;
   filepath: string | undefined | null;
   index: number | undefined | null;
@@ -24,11 +23,11 @@ type PrintableConfig = {
 
 const Formatter = {
   title(
-    type: (typeof ChainFormatter)[keyof typeof ChainFormatter],
+    type: ChainFormatter,
     callerName?: string | null,
     filepath?: string | null,
   ): string {
-    let title = "";
+    let title: string;
     if (type === ChainFormatter.Programmatic) {
       title = "programmatic options";
       if (callerName) {
@@ -70,10 +69,11 @@ const Formatter = {
 
 function descriptorToConfig<API>(
   d: UnloadedDescriptor<API>,
-): object | string | [string, unknown] | [string, unknown, string] {
-  let name: object | string = d.file?.request;
+): string | [string, object] | [string, object, string] {
+  let name: string | undefined = d.file?.request;
   if (name == null) {
     if (typeof d.value === "object") {
+      // @ts-expect-error FIXME
       name = d.value;
     } else if (typeof d.value === "function") {
       // If the unloaded descriptor is a function, i.e. `plugins: [ require("my-plugin") ]`,
@@ -95,10 +95,10 @@ function descriptorToConfig<API>(
 }
 
 export class ConfigPrinter {
-  _stack: Array<PrintableConfig> = [];
+  _stack: PrintableConfig[] = [];
   configure(
     enabled: boolean,
-    type: (typeof ChainFormatter)[keyof typeof ChainFormatter],
+    type: ChainFormatter,
     {
       callerName,
       filepath,

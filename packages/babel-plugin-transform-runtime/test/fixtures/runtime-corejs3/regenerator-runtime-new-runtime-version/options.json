@@ -1,7 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "plugins": [
-    ["transform-runtime", { "version": "7.100.0", "corejs": 3 }],
-    "transform-regenerator"
-  ]
-}

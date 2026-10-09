@@ -1,4 +1,4 @@
-import assert from "assert";
+import assert from "node:assert";
 import { template, types as t } from "@babel/core";
 
 import { isModule } from "@babel/helper-module-imports";
@@ -21,13 +21,6 @@ import type { NodePath } from "@babel/core";
 
 export { buildDynamicImport } from "./dynamic-import.ts";
 
-if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-  // eslint-disable-next-line no-restricted-globals
-  exports.getDynamicImportSource =
-    // eslint-disable-next-line no-restricted-globals, import/extensions
-    require("./dynamic-import").getDynamicImportSource;
-}
-
 export { default as getModuleName } from "./get-module-name.ts";
 export type { PluginOptions } from "./get-module-name.ts";
 
@@ -35,9 +28,9 @@ export { hasExports, isSideEffectImport, isModule, rewriteThis };
 
 export interface RewriteModuleStatementsAndPrepareHeaderOptions {
   exportName?: string;
-  strict: boolean;
+  strict?: boolean;
   allowTopLevelThis?: boolean;
-  strictMode: boolean;
+  strictMode?: boolean;
   loose?: boolean;
   importInterop?: ImportInterop;
   noInterop?: boolean;
@@ -70,7 +63,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     strictMode,
     noInterop,
     importInterop = noInterop ? "none" : "babel",
-    // TODO(Babel 8): After that `lazy` implementation is moved to the CJS
+    // TODO(Babel 9): After that `lazy` implementation is moved to the CJS
     // transform, remove this parameter.
     lazy,
     getWrapperPayload = Lazy.toGetWrapperPayload(lazy ?? false),
@@ -78,12 +71,8 @@ export function rewriteModuleStatementsAndPrepareHeader(
     esNamespaceOnly,
     filename,
 
-    constantReexports = process.env.BABEL_8_BREAKING
-      ? undefined
-      : arguments[1].loose,
-    enumerableModuleMeta = process.env.BABEL_8_BREAKING
-      ? undefined
-      : arguments[1].loose,
+    constantReexports = undefined,
+    enumerableModuleMeta = undefined,
     noIncompleteNsImportDetection,
   }: RewriteModuleStatementsAndPrepareHeaderOptions,
 ) {
@@ -132,7 +121,6 @@ export function rewriteModuleStatementsAndPrepareHeader(
   // Create all of the statically known named exports.
   headers.push(
     ...buildExportInitializationStatements(
-      path,
       meta,
       wrapReference,
       constantReexports,
@@ -163,7 +151,7 @@ export function wrapInterop(
   programPath: NodePath<t.Program>,
   expr: t.Expression,
   type: InteropType,
-): t.CallExpression {
+): t.CallExpression | null {
   if (type === "none") {
     return null;
   }
@@ -291,7 +279,7 @@ function buildReexportsFromMeta(
   meta: ModuleMetadata,
   metadata: SourceModuleMetadata,
   constantReexports: boolean,
-  wrapReference: (ref: t.Expression, payload: unknown) => t.Expression | null,
+  wrapReference: (ref: t.Identifier, payload: unknown) => t.Expression | null,
 ): t.Statement[] {
   let namespace: t.Expression = t.identifier(metadata.name);
   namespace = wrapReference(namespace, metadata.wrap) ?? namespace;
@@ -447,13 +435,12 @@ function buildExportNameListDeclaration(
  * export names with their expected values.
  */
 function buildExportInitializationStatements(
-  programPath: NodePath,
   metadata: ModuleMetadata,
   wrapReference: (ref: t.Expression, payload: unknown) => t.Expression | null,
   constantReexports: boolean | void = false,
   noIncompleteNsImportDetection: boolean | void = false,
 ) {
-  const initStatements: Array<[string, t.Statement | null]> = [];
+  const initStatements: [string, t.Statement | null][] = [];
 
   for (const [localName, data] of metadata.local) {
     if (data.kind === "import") {
@@ -504,7 +491,7 @@ function buildExportInitializationStatements(
   const results = [];
   if (noIncompleteNsImportDetection) {
     for (const [, initStatement] of initStatements) {
-      results.push(initStatement);
+      results.push(initStatement!);
     }
   } else {
     // We generate init statements (`exports.a = exports.b = ... = void 0`)
@@ -520,7 +507,7 @@ function buildExportInitializationStatements(
               buildInitStatement(
                 metadata,
                 uninitializedExportNames,
-                programPath.scope.buildUndefinedNode(),
+                t.buildUndefinedNode(),
               ),
             );
             // reset after uninitializedExportNames has been transformed
@@ -537,7 +524,7 @@ function buildExportInitializationStatements(
           buildInitStatement(
             metadata,
             uninitializedExportNames,
-            programPath.scope.buildUndefinedNode(),
+            t.buildUndefinedNode(),
           ),
         );
       }

@@ -1,0 +1,136 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`builders core templateElement should validate 1`] = `
+{
+  "tail": false,
+  "type": "TemplateElement",
+  "value": {
+    "cooked": "foo",
+    "raw": "foo",
+  },
+}
+`;
+
+exports[`builders core templateElement should validate 2`] = `
+{
+  "tail": false,
+  "type": "TemplateElement",
+  "value": {
+    "cooked": "foo",
+    "raw": "foo",
+  },
+}
+`;
+
+exports[`builders core templateElement should validate 3`] = `
+"Property value of TemplateElement expected to have the following:
+Property raw expected type of string but got number"
+`;
+
+exports[`builders core templateElement should validate 4`] = `
+"Property value of TemplateElement expected to have the following:
+Property cooked expected type of string but got number"
+`;
+
+exports[`builders core templateElement should validate 5`] = `
+"Property value of TemplateElement expected to have the following:
+Property raw expected type of string but got undefined"
+`;
+
+exports[`builders core templateElement should validate 6`] = `
+{
+  "tail": false,
+  "type": "TemplateElement",
+  "value": {
+    "cooked": null,
+    "raw": "\\u",
+  },
+}
+`;
+
+exports[`builders core templateElement should validate 7`] = `
+{
+  "tail": false,
+  "type": "TemplateElement",
+  "value": {
+    "cooked": "B",
+    "raw": "\\x42",
+  },
+}
+`;
+
+exports[`builders core templateElement should validate 8`] = `
+{
+  "tail": false,
+  "type": "TemplateElement",
+  "value": {
+    "cooked": "B",
+    "raw": "\\x42",
+  },
+}
+`;
+
+exports[`builders core templateElement should validate 9`] = `"Invalid raw"`;
+
+exports[`builders core templateElement should validate 10`] = `"Invalid raw"`;
+
+exports[`builders core templateLiteral should validate 1`] = `
+{
+  "expressions": [],
+  "quasis": [
+    {
+      "tail": false,
+      "type": "TemplateElement",
+      "value": {
+        "cooked": "foo",
+        "raw": "foo",
+      },
+    },
+  ],
+  "type": "TemplateLiteral",
+}
+`;
+
+exports[`builders core templateLiteral should validate 2`] = `
+{
+  "expressions": [
+    {
+      "type": "StringLiteral",
+      "value": "baz",
+    },
+  ],
+  "quasis": [
+    {
+      "tail": false,
+      "type": "TemplateElement",
+      "value": {
+        "cooked": "foo",
+        "raw": "foo",
+      },
+    },
+    {
+      "tail": false,
+      "type": "TemplateElement",
+      "value": {
+        "cooked": "bar",
+        "raw": "bar",
+      },
+    },
+  ],
+  "type": "TemplateLiteral",
+}
+`;
+
+exports[`builders core templateLiteral should validate 3`] = `
+"Number of TemplateLiteral quasis should be exactly one more than the number of expressions.
+Expected 3 quasis but got 2"
+`;
+
+exports[`builders core templateLiteral should validate 4`] = `
+"Number of TemplateLiteral quasis should be exactly one more than the number of expressions.
+Expected 1 quasis but got 2"
+`;
+
+exports[`builders core templateLiteral should validate 5`] = `"Property quasis expected type of array but got object"`;
+
+exports[`builders core templateLiteral should validate 6`] = `"Property expressions expected type of array but got undefined"`;

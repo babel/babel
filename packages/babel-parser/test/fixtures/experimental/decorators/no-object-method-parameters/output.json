@@ -43,7 +43,7 @@
                   "params": [
                     {
                       "type": "Identifier",
-                      "start":26,"end":27,"loc":{"start":{"line":2,"column":14,"index":26},"end":{"line":2,"column":15,"index":27},"identifierName":"x"},
+                      "start":21,"end":27,"loc":{"start":{"line":2,"column":9,"index":21},"end":{"line":2,"column":15,"index":27},"identifierName":"x"},
                       "name": "x",
                       "decorators": [
                         {

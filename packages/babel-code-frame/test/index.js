@@ -1,41 +1,12 @@
-import stripAnsi from "strip-ansi";
-import colors, { createColors } from "picocolors";
-import _codeFrame, { codeFrameColumns } from "../lib/index.js";
-const codeFrame = _codeFrame.default || _codeFrame;
-
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const babelHighlightPicocolors = require(
-  require.resolve("picocolors", {
-    paths: [require.resolve("@babel/highlight")],
-  }),
-);
-
-const compose = (f, g) => v => f(g(v));
+import { stripVTControlCharacters } from "node:util";
+import { codeFrameColumns, highlight } from "../lib/index.js";
 
 describe("@babel/code-frame", function () {
-  function stubColorSupport(colors, supported) {
-    let originalColorsCopy;
-
-    beforeEach(function () {
-      if (supported === colors.isColorSupported) {
-        originalColorsCopy = null;
-      } else {
-        originalColorsCopy = { ...colors };
-        Object.assign(colors, createColors(supported));
-      }
-    });
-
-    afterEach(function () {
-      if (originalColorsCopy) {
-        Object.assign(colors, originalColorsCopy);
-      }
-    });
-  }
-
   test("basic usage", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
-    expect(codeFrame(rawLines, 2, 16)).toEqual(
+    expect(
+      codeFrameColumns(rawLines, { start: { line: 2, column: 15 } }),
+    ).toEqual(
       [
         "  1 | class Foo {",
         "> 2 |   constructor()",
@@ -47,7 +18,9 @@ describe("@babel/code-frame", function () {
 
   test("optional column number", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
-    expect(codeFrame(rawLines, 2, null)).toEqual(
+    expect(
+      codeFrameColumns(rawLines, { start: { line: 2, column: null } }),
+    ).toEqual(
       ["  1 | class Foo {", "> 2 |   constructor()", "  3 | };"].join("\n"),
     );
   });
@@ -66,7 +39,9 @@ describe("@babel/code-frame", function () {
       "  return a + b",
       "}",
     ].join("\n");
-    expect(codeFrame(rawLines, 7, 2)).toEqual(
+    expect(
+      codeFrameColumns(rawLines, { start: { line: 7, column: 1 } }),
+    ).toEqual(
       [
         "   5 |  * @param b Number",
         "   6 |  * @returns Number",
@@ -93,7 +68,9 @@ describe("@babel/code-frame", function () {
       "  return a + b",
       "}",
     ].join("\n");
-    expect(codeFrame(rawLines, 6, 2)).toEqual(
+    expect(
+      codeFrameColumns(rawLines, { start: { line: 6, column: 1 } }),
+    ).toEqual(
       [
         "  4 |  * @param a Number",
         "  5 |  * @param b Number",
@@ -112,7 +89,9 @@ describe("@babel/code-frame", function () {
       "\t  \t\t    constructor\t(\t)",
       "\t};",
     ].join("\n");
-    expect(codeFrame(rawLines, 2, 25)).toEqual(
+    expect(
+      codeFrameColumns(rawLines, { start: { line: 2, column: 24 } }),
+    ).toEqual(
       [
         "  1 | \tclass Foo {",
         "> 2 | \t  \t\t    constructor\t(\t)",
@@ -120,112 +99,6 @@ describe("@babel/code-frame", function () {
         "  3 | \t};",
       ].join("\n"),
     );
-  });
-
-  describe("when colors are supported", () => {
-    stubColorSupport(colors, true);
-    stubColorSupport(babelHighlightPicocolors, true);
-
-    test("opts.highlightCode", function () {
-      const rawLines = "console.log('babel')";
-      const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
-      const stripped = stripAnsi(result);
-      expect(result.length).toBeGreaterThan(stripped.length);
-      expect(stripped).toEqual(
-        ["> 1 | console.log('babel')", "    |         ^"].join("\n"),
-      );
-    });
-
-    test("opts.highlightCode with multiple columns and lines", function () {
-      // prettier-ignore
-      const rawLines = [
-        "function a(b, c) {",
-        "  return b + c;",
-        "}"
-      ].join("\n");
-
-      const result = codeFrameColumns(
-        rawLines,
-        {
-          start: {
-            line: 1,
-            column: 1,
-          },
-          end: {
-            line: 3,
-            column: 1,
-          },
-        },
-        {
-          highlightCode: true,
-          message: "Message about things",
-        },
-      );
-      const stripped = stripAnsi(result);
-      expect(result.length).toBeGreaterThan(stripped.length);
-      expect(stripped).toEqual(
-        // prettier-ignore
-        [
-          "> 1 | function a(b, c) {",
-          "    | ^^^^^^^^^^^^^^^^^^",
-          "> 2 |   return b + c;",
-          "    | ^^^^^^^^^^^^^^^",
-          "> 3 | }",
-          "    | ^ Message about things",
-        ].join('\n'),
-      );
-    });
-    test("opts.forceColor", function () {
-      const marker = compose(colors.red, colors.bold);
-      const gutter = colors.gray;
-
-      const rawLines = ["", "", "", ""].join("\n");
-      expect(
-        codeFrame(rawLines, 3, null, {
-          linesAbove: 1,
-          linesBelow: 1,
-          forceColor: true,
-        }),
-      ).toEqual(
-        colors.reset(
-          [
-            " " + gutter(" 2 |"),
-            marker(">") + gutter(" 3 |"),
-            " " + gutter(" 4 |"),
-          ].join("\n"),
-        ),
-      );
-    });
-
-    test("jsx", function () {
-      const gutter = colors.gray;
-      const yellow = colors.yellow;
-
-      const rawLines = ["<div />"].join("\n");
-
-      expect(
-        JSON.stringify(
-          codeFrame(rawLines, 0, null, {
-            linesAbove: 1,
-            linesBelow: 1,
-            forceColor: true,
-          }),
-        ),
-      ).toEqual(
-        JSON.stringify(
-          colors.reset(
-            " " +
-              gutter(" 1 |") +
-              " " +
-              yellow("<") +
-              yellow("div") +
-              " " +
-              yellow("/") +
-              yellow(">"),
-          ),
-        ),
-      );
-    });
   });
 
   test("opts.linesAbove", function () {
@@ -242,7 +115,13 @@ describe("@babel/code-frame", function () {
       "  return a + b",
       "}",
     ].join("\n");
-    expect(codeFrame(rawLines, 7, 2, { linesAbove: 1 })).toEqual(
+    expect(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: 7, column: 1 } },
+        { linesAbove: 1 },
+      ),
+    ).toEqual(
       [
         "   6 |  * @returns Number",
         ">  7 |  */",
@@ -268,7 +147,13 @@ describe("@babel/code-frame", function () {
       "  return a + b",
       "}",
     ].join("\n");
-    expect(codeFrame(rawLines, 7, 2, { linesBelow: 1 })).toEqual(
+    expect(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: 7, column: 1 } },
+        { linesBelow: 1 },
+      ),
+    ).toEqual(
       [
         "  5 |  * @param b Number",
         "  6 |  * @returns Number",
@@ -293,7 +178,13 @@ describe("@babel/code-frame", function () {
       "  return a + b",
       "}",
     ].join("\n");
-    expect(codeFrame(rawLines, 7, 2, { linesAbove: 1, linesBelow: 1 })).toEqual(
+    expect(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: 7, column: 1 } },
+        { linesAbove: 1, linesBelow: 1 },
+      ),
+    ).toEqual(
       ["  6 |  * @returns Number", "> 7 |  */", "    |  ^", "  8 |"].join("\n"),
     );
   });
@@ -351,7 +242,7 @@ describe("@babel/code-frame", function () {
   test("basic usage, new API", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(
-      codeFrameColumns(rawLines, { start: { line: 2, column: 16 } }),
+      codeFrameColumns(rawLines, { start: { line: 2, column: 15 } }),
     ).toEqual(
       [
         "  1 | class Foo {",
@@ -366,8 +257,8 @@ describe("@babel/code-frame", function () {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     expect(
       codeFrameColumns(rawLines, {
-        start: { line: 2, column: 3 },
-        end: { line: 2, column: 16 },
+        start: { line: 2, column: 2 },
+        end: { line: 2, column: 15 },
       }),
     ).toEqual(
       [
@@ -385,7 +276,7 @@ describe("@babel/code-frame", function () {
     );
     expect(
       codeFrameColumns(rawLines, {
-        start: { line: 2, column: 17 },
+        start: { line: 2, column: 16 },
         end: { line: 3, column: 3 },
       }),
     ).toEqual(
@@ -410,7 +301,7 @@ describe("@babel/code-frame", function () {
     ].join("\n");
     expect(
       codeFrameColumns(rawLines, {
-        start: { line: 2, column: 17 },
+        start: { line: 2, column: 16 },
         end: { line: 4, column: 3 },
       }),
     ).toEqual(
@@ -453,7 +344,7 @@ describe("@babel/code-frame", function () {
     expect(
       codeFrameColumns(
         rawLines,
-        { start: { line: 2, column: 16 } },
+        { start: { line: 2, column: 15 } },
         {
           message: "Missing {",
         },
@@ -500,7 +391,7 @@ describe("@babel/code-frame", function () {
       codeFrameColumns(
         rawLines,
         {
-          start: { line: 2, column: 17 },
+          start: { line: 2, column: 16 },
           end: { line: 4, column: 3 },
         },
         {
@@ -545,6 +436,81 @@ describe("@babel/code-frame", function () {
         "> 3 |     console.log(arguments);",
         "> 4 |   }",
         "  5 | };",
+      ].join("\n"),
+    );
+  });
+
+  test("highlight works", function () {
+    const raw = "const a = 1";
+    const highlighted = highlight(raw);
+
+    expect(stripVTControlCharacters(highlighted)).toBe(raw);
+    expect(highlighted.length).toBeGreaterThan(raw.length);
+  });
+
+  test("opts.startLine", function () {
+    const rawLines = "const a = 1;\nconst b = 1";
+    expect(
+      codeFrameColumns(rawLines, { start: { line: 102 } }, { startLine: 101 }),
+    ).toMatchInlineSnapshot(`
+      "  101 | const a = 1;
+      > 102 | const b = 1"
+    `);
+  });
+
+  test("should handle 0-based columns from Babel AST locations", function () {
+    const code = 'x = "foobar";';
+    // "foobar" (with quotes) starts at column 4 (0-based), ends at column 12 (0-based exclusive)
+    const loc = {
+      start: { line: 1, column: 4 },
+      end: { line: 1, column: 12 },
+    };
+    const result = codeFrameColumns(code, loc);
+    // The underline should cover "foobar" (with quotes) starting at the correct position
+    expect(result).toEqual(
+      ['> 1 | x = "foobar";', "    |     ^^^^^^^^"].join("\n"),
+    );
+  });
+
+  test("should handle 0-based column 0", function () {
+    const code = '"foobar";';
+    const loc = {
+      start: { line: 1, column: 0 },
+      end: { line: 1, column: 8 },
+    };
+    const result = codeFrameColumns(code, loc);
+    expect(result).toEqual(['> 1 | "foobar";', "    | ^^^^^^^^"].join("\n"));
+  });
+
+  test("middle lines in a 4+ line range use each line's own length", function () {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    short",
+      "    a much longer middle line here",
+      "    end",
+      "  }",
+      "};",
+    ].join("\n");
+    expect(
+      codeFrameColumns(rawLines, {
+        start: { line: 2, column: 16 },
+        end: { line: 6, column: 3 },
+      }),
+    ).toEqual(
+      [
+        "  1 | class Foo {",
+        "> 2 |   constructor() {",
+        "    |                 ^",
+        "> 3 |     short",
+        "    | ^^^^^^^^^",
+        "> 4 |     a much longer middle line here",
+        "    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "> 5 |     end",
+        "    | ^^^^^^^",
+        "> 6 |   }",
+        "    | ^^^",
+        "  7 | };",
       ].join("\n"),
     );
   });

@@ -1,88 +1,28 @@
-import * as commander from "commander";
-import Module from "module";
-import { inspect } from "util";
-import path from "path";
-import repl from "repl";
+import Module from "node:module";
+import { inspect } from "node:util";
+import path from "node:path";
+import repl from "node:repl";
 import * as babel from "@babel/core";
-import vm from "vm";
+import vm from "node:vm";
 import "core-js/stable/index.js";
-import "regenerator-runtime/runtime.js";
-// @ts-expect-error @babel/register is a CommonJS module
 import register from "@babel/register";
-import { fileURLToPath } from "url";
-import { createRequire } from "module";
-
+import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 import type { PluginAPI, PluginObject } from "@babel/core";
+
+import { program } from "./program-setup.ts";
 
 const require = createRequire(import.meta.url);
 
-const program = process.env.BABEL_8_BREAKING
-  ? commander.program
-  : commander.default.program;
-
-function collect(value: unknown, previousValue: string[]): Array<string> {
-  // If the user passed the option with no value, like "babel-node file.js --presets", do nothing.
-  if (typeof value !== "string") return previousValue;
-
-  const values = value.split(",");
-
-  if (previousValue) {
-    previousValue.push(...values);
-    return previousValue;
-  }
-  return values;
-}
-
-program.name("babel-node");
-program.option("-e, --eval [script]", "Evaluate script");
-program.option(
-  "--no-babelrc",
-  "Specify whether or not to use .babelrc and .babelignore files",
-);
-program.option("-r, --require [module]", "Require module");
-program.option("-p, --print [code]", "Evaluate script and print result");
-program.option(
-  "-o, --only [globs]",
-  "A comma-separated list of glob patterns to compile",
-  collect,
-);
-program.option(
-  "-i, --ignore [globs]",
-  "A comma-separated list of glob patterns to skip compiling",
-  collect,
-);
-program.option(
-  "-x, --extensions [extensions]",
-  "List of extensions to hook into [.es6,.js,.es,.jsx,.mjs]",
-  collect,
-);
-program.option(
-  "--config-file [path]",
-  "Path to the babel config file to use. Defaults to working directory babel.config.js",
-);
-program.option(
-  "--env-name [name]",
-  "The name of the 'env' to use when loading configs and plugins. " +
-    "Defaults to the value of BABEL_ENV, or else NODE_ENV, or else 'development'.",
-);
-program.option(
-  "--root-mode [mode]",
-  "The project-root resolution mode. " +
-    "One of 'root' (the default), 'upward', or 'upward-optional'.",
-);
-program.option("-w, --plugins [string]", "", collect);
-program.option("-b, --presets [string]", "", collect);
-
-program.allowUnknownOption(true);
-
-program.version(PACKAGE_JSON.version);
-program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
 const opts = program.opts();
 
 const babelOptions = {
   caller: {
     name: "@babel/node",
+    supportsStaticESM: false,
+    supportsDynamicImport: false,
+    supportsExportNamespaceFrom: false,
   },
   extensions: opts.extensions,
   ignore: opts.ignore,
@@ -99,9 +39,7 @@ const babelOptions = {
   babelrc: opts.babelrc === true ? undefined : opts.babelrc,
 };
 
-for (const key of Object.keys(babelOptions) as Array<
-  keyof typeof babelOptions
->) {
+for (const key of Object.keys(babelOptions) as (keyof typeof babelOptions)[]) {
   if (babelOptions[key] === undefined) {
     delete babelOptions[key];
   }
@@ -109,10 +47,14 @@ for (const key of Object.keys(babelOptions) as Array<
 
 register(babelOptions);
 
+let hasTopLevelAwait = false;
+
 const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
   visitor: {
     Program(path) {
-      let hasExpressionStatement: boolean;
+      hasTopLevelAwait = path.node.extra?.topLevelAwait as boolean;
+
+      let hasExpressionStatement: boolean | undefined;
       for (const bodyPath of path.get("body")) {
         if (bodyPath.isExpressionStatement()) {
           hasExpressionStatement = true;
@@ -125,6 +67,21 @@ const replPlugin = ({ types: t }: PluginAPI): PluginObject => ({
           );
         }
       }
+
+      if (hasTopLevelAwait) {
+        const body = path.node.body;
+        for (let i = body.length - 1; i >= 0; i--) {
+          if (t.isExpressionStatement(body[i])) {
+            body[i] = t.returnStatement(
+              (body[i] as babel.types.ExpressionStatement).expression,
+            );
+            break;
+          }
+        }
+
+        return;
+      }
+
       if (hasExpressionStatement) return;
 
       // If the executed code doesn't evaluate to a value,
@@ -141,11 +98,20 @@ const _eval = function (code: string, filename: string) {
   code = code.trim();
   if (!code) return undefined;
 
+  hasTopLevelAwait = false;
+
   code = babel.transformSync(code, {
     filename: filename,
     ...babelOptions,
+    parserOpts: {
+      allowAwaitOutsideFunction: true,
+    },
     plugins: (opts.plugins || []).concat([replPlugin]),
-  }).code;
+  })!.code!;
+
+  if (hasTopLevelAwait) {
+    code = `(async () => { ${code} })()`;
+  }
 
   return vm.runInThisContext(code, {
     filename: filename,
@@ -166,6 +132,7 @@ if (opts.eval || opts.print) {
 
   global.exports = module.exports;
   global.module = module;
+  // @ts-expect-error missing require.extensions
   global.require = module.require.bind(module);
 
   const result = _eval(code, global.__filename);
@@ -186,7 +153,7 @@ if (opts.eval || opts.print) {
         return;
       }
 
-      if (arg[0] === "-") {
+      if (arg.startsWith("-")) {
         const parsedOption = program.options.find((option: any) => {
           return option.long === arg || option.short === arg;
         });
@@ -245,7 +212,7 @@ function replEval(
   let result;
 
   try {
-    if (code[0] === "(" && code[code.length - 1] === ")") {
+    if (code.startsWith("(") && code.endsWith(")")) {
       code = code.slice(1, -1); // remove "(" and ")"
     }
 
@@ -254,7 +221,17 @@ function replEval(
     err = e;
   }
 
-  callback(err, result);
+  if (hasTopLevelAwait && !err) {
+    (result as Promise<any>)
+      .then(v => {
+        callback(null, v);
+      })
+      .catch(e => {
+        callback(e, null);
+      });
+  } else {
+    callback(err, result);
+  }
 }
 
 function replStart() {
@@ -267,9 +244,7 @@ function replStart() {
     preview: true,
   });
   const NODE_REPL_HISTORY = process.env.NODE_REPL_HISTORY;
-  if (process.env.BABEL_8_BREAKING) {
-    replServer.setupHistory(NODE_REPL_HISTORY, () => {});
-  } else {
-    replServer.setupHistory?.(NODE_REPL_HISTORY, () => {});
-  }
+
+  // @ts-expect-error setupHistory may be undefined
+  replServer.setupHistory(NODE_REPL_HISTORY, () => {});
 }

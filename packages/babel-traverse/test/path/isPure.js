@@ -1,16 +1,11 @@
 import { parse } from "@babel/parser";
-import { IS_BABEL_8 } from "$repo-utils";
 
-import _traverse from "../../lib/index.js";
-const traverse = _traverse.default || _traverse;
+import traverse from "../../lib/index.js";
 
 function getPath(code) {
   const ast = parse(code, {
     plugins: [
       ["decorators", { version: "2023-11", decoratorsBeforeExport: true }],
-      IS_BABEL_8()
-        ? "recordAndTuple"
-        : ["recordAndTuple", { syntaxType: "hash" }],
       "decoratorAutoAccessors",
       ["pipelineOperator", { proposal: "hack", topicToken: "%" }],
     ],
@@ -45,8 +40,6 @@ describe("isPure() returns true", () => {
     "String.raw`foo`",
     `"a" + "b"`,
     `[function () {}]`,
-    `#{ 0: 0, 1n: 1, two: "two"}`,
-    `#[0, 1n, "2", \`3\`]`,
     `[,]`,
     `-1 || void 0`,
     `null ?? (true && false)`,

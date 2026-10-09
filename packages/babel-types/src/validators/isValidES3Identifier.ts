@@ -1,6 +1,6 @@
 import isValidIdentifier from "./isValidIdentifier.ts";
 
-const RESERVED_WORDS_ES3_ONLY: Set<string> = new Set([
+const RESERVED_WORDS_ES3_ONLY = new Set<string>([
   "abstract",
   "boolean",
   "byte",

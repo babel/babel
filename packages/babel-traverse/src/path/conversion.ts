@@ -9,7 +9,6 @@ import {
   conditionalExpression,
   expressionStatement,
   identifier,
-  isIdentifier,
   jsxIdentifier,
   logicalExpression,
   LOGICAL_OPERATORS,
@@ -37,31 +36,15 @@ import {
   exportNamedDeclaration,
   exportSpecifier,
   inherits,
+  buildUndefinedNode,
 } from "@babel/types";
 import type * as t from "@babel/types";
 import template from "@babel/template";
-import { environmentVisitor } from "../visitors.ts";
+import { environmentVisitor, explode } from "../visitors.ts";
 import type NodePath from "./index.ts";
 import type { Visitor } from "../types.ts";
 import { setup } from "./context.ts";
-
-export function toComputedKey(this: NodePath) {
-  let key;
-  if (this.isMemberExpression()) {
-    key = this.node.property;
-  } else if (this.isProperty() || this.isMethod()) {
-    key = this.node.key;
-  } else {
-    throw new ReferenceError("todo");
-  }
-
-  // @ts-expect-error todo(flow->ts) computed does not exist in ClassPrivateProperty
-  if (!this.node.computed) {
-    if (isIdentifier(key)) key = stringLiteral(key.name);
-  }
-
-  return key;
-}
+import type Scope from "../scope/index.ts";
 
 export function ensureBlock(
   this: NodePath<
@@ -87,7 +70,7 @@ export function ensureBlock(
     return bodyNode;
   }
 
-  const statements: Array<t.Statement> = [];
+  const statements: t.Statement[] = [];
 
   let stringPath = "body";
   let key;
@@ -100,10 +83,10 @@ export function ensureBlock(
     stringPath += ".body.0";
     if (this.isFunction()) {
       key = "argument";
-      statements.push(returnStatement(body.node as t.Expression));
+      statements.push(returnStatement(body.node));
     } else {
       key = "expression";
-      statements.push(expressionStatement(body.node as t.Expression));
+      statements.push(expressionStatement(body.node));
     }
   }
 
@@ -128,25 +111,17 @@ export function ensureBlock(
   return this.node;
 }
 
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  /**
-   * Keeping this for backward-compatibility. You should use arrowFunctionToExpression() for >=7.x.
-   */
-  // eslint-disable-next-line no-restricted-globals
-  exports.arrowFunctionToShadowed = function (this: NodePath) {
-    if (!this.isArrowFunctionExpression()) return;
-
-    this.arrowFunctionToExpression();
-  };
-}
-
 /**
  * Given an arbitrary function, process its content as if it were an arrow function, moving references
  * to "this", "arguments", "super", and such into the function's parent scope. This method is useful if
  * you have wrapped some set of items in an IIFE or other function, but want "this", "arguments", and super"
  * to continue behaving as expected.
  */
-export function unwrapFunctionEnvironment(this: NodePath) {
+export function unwrapFunctionEnvironment(
+  this: NodePath<
+    t.ArrayExpression | t.FunctionExpression | t.FunctionDeclaration
+  >,
+) {
   if (
     !this.isArrowFunctionExpression() &&
     !this.isFunctionExpression() &&
@@ -175,13 +150,11 @@ export function arrowFunctionToExpression(
   {
     allowInsertArrow = true,
     allowInsertArrowWithRest = allowInsertArrow,
-    noNewArrows = process.env.BABEL_8_BREAKING
-      ? // TODO(Babel 8): Consider defaulting to `false` for spec compliance
-        true
-      : !arguments[0]?.specCompliant,
+    // TODO(Babel 9): Consider defaulting to `false` for spec compliance
+    noNewArrows = true,
   }: {
-    allowInsertArrow?: boolean | void;
-    allowInsertArrowWithRest?: boolean | void;
+    allowInsertArrow?: boolean;
+    allowInsertArrowWithRest?: boolean;
     noNewArrows?: boolean;
   } = {},
 ): NodePath<
@@ -234,13 +207,13 @@ export function arrowFunctionToExpression(
       ),
     );
 
-    fn.replaceWith(
-      callExpression(memberExpression(fn.node, identifier("bind")), [
-        checkBinding ? identifier(checkBinding.name) : thisExpression(),
-      ]),
-    );
-
-    return fn.get("callee.object");
+    return fn
+      .replaceWith(
+        callExpression(memberExpression(fn.node, identifier("bind")), [
+          checkBinding ? identifier(checkBinding.name) : thisExpression(),
+        ]),
+      )[0]
+      .get("callee.object") as NodePath<t.FunctionExpression>;
   }
 
   return fn;
@@ -265,10 +238,10 @@ const getSuperCallsVisitor = environmentVisitor<{
  */
 function hoistFunctionEnvironment(
   fnPath: NodePath<t.Function>,
-  // TODO(Babel 8): Consider defaulting to `false` for spec compliance
-  noNewArrows: boolean | void = true,
-  allowInsertArrow: boolean | void = true,
-  allowInsertArrowWithRest: boolean | void = true,
+  // TODO(Babel 9): Consider defaulting to `false` for spec compliance
+  noNewArrows: boolean = true,
+  allowInsertArrow: boolean = true,
+  allowInsertArrowWithRest: boolean = true,
 ): { thisBinding: string; fnPath: NodePath<t.Function> } {
   let arrowParent;
   let thisEnvFn: NodePath<t.Function> = fnPath.findParent(p => {
@@ -293,13 +266,14 @@ function hoistFunctionEnvironment(
       // top level because the 'this' binding is constant in class
       // properties (since 'super()' has already been called), so we don't
       // need to capture/reassign it at the top level.
-      fnPath.replaceWith(
-        callExpression(
-          arrowFunctionExpression([], toExpression(fnPath.node)),
-          [],
-        ),
-      );
-      thisEnvFn = fnPath.get("callee") as NodePath<t.ArrowFunctionExpression>;
+      thisEnvFn = fnPath
+        .replaceWith(
+          callExpression(
+            arrowFunctionExpression([], toExpression(fnPath.node)),
+            [],
+          ),
+        )[0]
+        .get("callee") as NodePath<t.ArrowFunctionExpression>;
       fnPath = thisEnvFn.get("body") as NodePath<t.FunctionExpression>;
     } else {
       throw fnPath.buildCodeFrameError(
@@ -350,7 +324,7 @@ function hoistFunctionEnvironment(
             unaryExpression("typeof", args()),
             stringLiteral("undefined"),
           ),
-          thisEnvFn.scope.buildUndefinedNode(),
+          buildUndefinedNode(),
           args(),
         );
       } else {
@@ -390,9 +364,9 @@ function hoistFunctionEnvironment(
       );
     }
 
-    const flatSuperProps: NodePath<t.MemberExpression>[] = superProps.reduce(
+    const flatSuperProps = superProps.reduce(
       (acc, superProp) => acc.concat(standardizeSuperProperty(superProp)),
-      [],
+      [] as NodePath<t.MemberExpression>[],
     );
 
     flatSuperProps.forEach(superProp => {
@@ -438,14 +412,15 @@ function hoistFunctionEnvironment(
         // Replace not only the super.prop, but the whole assignment
         superParentPath.replaceWith(call);
       } else if (isTaggedTemplate) {
-        superProp.replaceWith(
-          callExpression(memberExpression(call, identifier("bind"), false), [
-            thisExpression(),
-          ]),
-        );
-
         thisPaths.push(
-          superProp.get("arguments.0") as NodePath<t.ThisExpression>,
+          superProp
+            .replaceWith(
+              callExpression(
+                memberExpression(call, identifier("bind"), false),
+                [thisExpression()],
+              ),
+            )[0]
+            .get("arguments.0") as NodePath<t.ThisExpression>,
         );
       } else {
         superProp.replaceWith(call);
@@ -466,8 +441,8 @@ function hoistFunctionEnvironment(
     ) {
       thisPaths.forEach(thisChild => {
         const thisRef = thisChild.isJSX()
-          ? jsxIdentifier(thisBinding)
-          : identifier(thisBinding);
+          ? jsxIdentifier(thisBinding!)
+          : identifier(thisBinding!);
 
         thisRef.loc = thisChild.node.loc;
         thisChild.replaceWith(thisRef);
@@ -477,7 +452,7 @@ function hoistFunctionEnvironment(
     }
   }
 
-  return { thisBinding, fnPath };
+  return { thisBinding: thisBinding!, fnPath };
 }
 
 type LogicalOp = Parameters<typeof logicalExpression>[0];
@@ -499,8 +474,7 @@ function standardizeSuperProperty(
     const assignmentPath = superProp.parentPath;
 
     const op = assignmentPath.node.operator.slice(0, -1) as
-      | LogicalOp
-      | BinaryOp;
+      LogicalOp | BinaryOp;
 
     const value = assignmentPath.node.right;
 
@@ -515,18 +489,16 @@ function standardizeSuperProperty(
 
       const tmp = superProp.scope.generateDeclaredUidIdentifier("tmp");
 
-      const object = superProp.node.object;
-      const property = superProp.node.property as t.Expression;
+      const { object, property } = superProp.node;
 
-      assignmentPath
-        .get("left")
-        .replaceWith(
-          memberExpression(
-            object,
-            assignmentExpression("=", tmp, property),
-            true /* computed */,
-          ),
-        );
+      assignmentPath.get("left").replaceWith(
+        memberExpression(
+          object,
+
+          assignmentExpression("=", tmp, property),
+          true /* computed */,
+        ),
+      );
 
       assignmentPath
         .get("right")
@@ -622,12 +594,12 @@ function standardizeSuperProperty(
       parts.push(identifier(tmp.name));
     }
 
-    updateExpr.replaceWith(sequenceExpression(parts));
+    const sequenceExpr = updateExpr.replaceWith(sequenceExpression(parts))[0];
 
-    const left = updateExpr.get(
+    const left = sequenceExpr.get(
       "expressions.0.right",
     ) as NodePath<t.MemberExpression>;
-    const right = updateExpr.get(
+    const right = sequenceExpr.get(
       "expressions.1.left",
     ) as NodePath<t.MemberExpression>;
     return [left, right];
@@ -651,7 +623,7 @@ function standardizeSuperProperty(
 function hasSuperClass(thisEnvFn: NodePath<t.Function>) {
   return (
     thisEnvFn.isClassMethod() &&
-    !!(thisEnvFn.parentPath.parentPath.node as t.Class).superClass
+    !!thisEnvFn.parentPath.parentPath.node.superClass
   );
 }
 
@@ -737,7 +709,7 @@ function getSuperPropBinding(
 function getBinding(
   thisEnvFn: NodePath,
   key: string,
-  init: (name: string) => t.Expression,
+  init: (name: string) => t.Expression | undefined,
 ) {
   const cacheKey = "binding:" + key;
   let data: string | undefined = thisEnvFn.getData(cacheKey);
@@ -787,7 +759,7 @@ const getScopeInformationVisitor = environmentVisitor<ScopeInfo>({
   Identifier(child, { argumentsPaths }) {
     if (!child.isReferencedIdentifier({ name: "arguments" })) return;
 
-    let curr = child.scope;
+    let curr: Scope | undefined = child.scope;
     do {
       if (curr.hasOwnBinding("arguments")) {
         curr.rename("arguments");
@@ -851,7 +823,7 @@ export function splitExportDeclaration(
       declaration.isFunctionExpression() || declaration.isClassExpression();
 
     const scope = declaration.isScope()
-      ? declaration.scope.parent
+      ? declaration.scope.parent!
       : declaration.scope;
 
     // @ts-expect-error id is not defined in expressions other than function/class
@@ -907,29 +879,27 @@ export function splitExportDeclaration(
   const aliasDeclar = exportNamedDeclaration(null, specifiers);
 
   this.insertAfter(aliasDeclar);
-  this.replaceWith(declaration.node);
+  this.replaceWith(declaration.node!);
   return this;
 }
 
-const refersOuterBindingVisitor: Visitor<{
+const getRefersOuterBindingVisitor = (): Visitor<{
   needsRename: boolean;
   name: string;
-}> = {
-  "ReferencedIdentifier|BindingIdentifier"(
-    path: NodePath<t.Identifier>,
-    state,
-  ) {
-    // check if this node matches our function id
-    if (path.node.name !== state.name) return;
-    state.needsRename = true;
-    path.stop();
-  },
-  Scope(path, state) {
-    if (path.scope.hasOwnBinding(state.name)) {
-      path.skip();
-    }
-  },
-};
+}> =>
+  explode({
+    "ReferencedIdentifier|BindingIdentifier"(path, state) {
+      // check if this node matches our function id
+      if (path.node.name !== state.name) return;
+      state.needsRename = true;
+      path.stop();
+    },
+    Scope(path, state) {
+      if (path.scope.hasOwnBinding(state.name)) {
+        path.skip();
+      }
+    },
+  });
 
 export function ensureFunctionName<
   N extends t.FunctionExpression | t.ClassExpression,
@@ -985,13 +955,15 @@ export function ensureFunctionName<
       // so we can safely just set the id and move along as it shadows the
       // bound function id
     }
-  } else if (scope.parent.hasBinding(name) || scope.hasGlobal(name)) {
-    this.traverse(refersOuterBindingVisitor, state);
+  } else if (scope.parent!.hasBinding(name) || scope.hasGlobal(name)) {
+    this.traverse(getRefersOuterBindingVisitor(), state);
   }
 
   if (!state.needsRename) {
     this.node.id = id;
-    scope.getProgramParent().references[id.name] = true;
+
+    scope.getProgramParent().referencesSet.add(id.name);
+
     return this;
   }
 
@@ -999,7 +971,9 @@ export function ensureFunctionName<
     // we can just munge the local binding
     scope.rename(id.name);
     this.node.id = id;
-    scope.getProgramParent().references[id.name] = true;
+
+    scope.getProgramParent().referencesSet.add(id.name);
+
     return this;
   }
 

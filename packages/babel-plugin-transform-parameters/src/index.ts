@@ -4,11 +4,19 @@ import convertFunctionRest from "./rest.ts";
 export { convertFunctionParams };
 
 export interface Options {
+  /** @deprecated Use the `ignoreFunctionLength` assumption instead. */
   loose?: boolean;
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  if ("loose" in options) {
+    console.warn(
+      "@babel/plugin-transform-parameters: The 'loose' option has been deprecated, " +
+        "use the `ignoreFunctionLength` assumption instead (https://babeljs.io/assumptions).",
+    );
+  }
 
   const ignoreFunctionLength =
     api.assumption("ignoreFunctionLength") ?? options.loose;

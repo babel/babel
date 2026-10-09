@@ -6,12 +6,13 @@
  * and `registerPreset` respectively.
  */
 
-/* global VERSION */
 /// <reference lib="dom" />
 
 import {
   transformFromAstSync as babelTransformFromAstSync,
+  transformFromAstAsync as babelTransformFromAstAsync,
   transformSync as babelTransformSync,
+  transformAsync as babelTransformAsync,
   buildExternalHelpers as babelBuildExternalHelpers,
   type PluginObject,
   type PresetObject,
@@ -26,7 +27,8 @@ import presetEnv from "@babel/preset-env";
 import presetFlow from "@babel/preset-flow";
 import presetReact from "@babel/preset-react";
 import presetTypescript from "@babel/preset-typescript";
-import type { InputOptions } from "@babel/core";
+import type { InputOptions, PluginItem } from "@babel/core";
+type PresetItem = NonNullable<InputOptions["presets"]>[number];
 
 import { runScripts } from "./transformScriptTags.ts";
 
@@ -37,7 +39,7 @@ export * as packages from "./packages.ts";
 // bundled anyway.
 // TODO: Remove this in Babel 8
 // @ts-expect-error TS complains about importing a JS file without type declarations
-import legacyPluginAliases from "../../babel-compat-data/scripts/data/legacy-plugin-aliases.js";
+import legacyPluginAliases from "../../babel-compat-data/scripts/data/legacy-plugin-aliases.mjs";
 // eslint-disable-next-line guard-for-in
 for (const name in legacyPluginAliases) {
   all[legacyPluginAliases[name]] = all[name];
@@ -85,7 +87,9 @@ export const availablePresets = {
 
 const isArray =
   Array.isArray ||
-  (arg => Object.prototype.toString.call(arg) === "[object Array]");
+  ((arg =>
+    Object.prototype.toString.call(arg) ===
+    "[object Array]") as typeof Array.isArray);
 
 /**
  * Loads the given name (or [name, options] pair) from the given table object
@@ -105,6 +109,22 @@ function loadBuiltin(builtinTable: Record<string, unknown>, name: any) {
   }
   // Could be an actual preset/plugin module
   return name;
+}
+
+/**
+ * This function will be called only when the preset or plugin, specified via string or [string, object],
+ * is not available in the builtin table. Therefore we do not handle the case when the plugin/preset is an
+ * object or a function here.
+ * @param item
+ * @returns
+ */
+function getPluginOrPresetName(item: PluginItem | PresetItem) {
+  if (typeof item === "string") {
+    return item;
+  } else if (isArray(item)) {
+    return getPluginOrPresetName(item[0]);
+  }
+  return JSON.stringify(item);
 }
 
 /**
@@ -128,7 +148,7 @@ function processOptions(options: InputOptions) {
       }
     } else {
       throw new Error(
-        `Invalid preset specified in Babel options: "${presetName}"`,
+        `Invalid preset specified in Babel options: "${getPluginOrPresetName(presetName)}"`,
       );
     }
     return preset;
@@ -140,7 +160,7 @@ function processOptions(options: InputOptions) {
 
     if (!plugin) {
       throw new Error(
-        `Invalid plugin specified in Babel options: "${pluginName}"`,
+        `Invalid plugin specified in Babel options: "${getPluginOrPresetName(pluginName)}"`,
       );
     }
     return plugin;
@@ -158,12 +178,24 @@ export function transform(code: string, options: InputOptions) {
   return babelTransformSync(code, processOptions(options));
 }
 
+export function transformAsync(code: string, options: InputOptions) {
+  return babelTransformAsync(code, processOptions(options));
+}
+
 export function transformFromAst(
   ast: Parameters<typeof babelTransformFromAstSync>[0],
   code: string,
   options: InputOptions,
 ) {
   return babelTransformFromAstSync(ast, code, processOptions(options));
+}
+
+export function transformFromAstAsync(
+  ast: Parameters<typeof babelTransformFromAstAsync>[0],
+  code: string,
+  options: InputOptions,
+) {
+  return babelTransformFromAstAsync(ast, code, processOptions(options));
 }
 
 export const buildExternalHelpers = babelBuildExternalHelpers;
@@ -182,9 +214,9 @@ export function registerPlugin(name: string, plugin: () => PluginObject): void {
  * Registers multiple plugins for use with Babel. `newPlugins` should be an object where the key
  * is the name of the plugin, and the value is the plugin itself.
  */
-export function registerPlugins(newPlugins: {
-  [x: string]: () => PluginObject;
-}): void {
+export function registerPlugins(
+  newPlugins: Record<string, () => PluginObject>,
+): void {
   Object.keys(newPlugins).forEach(name =>
     registerPlugin(name, newPlugins[name]),
   );
@@ -213,16 +245,16 @@ export function registerPreset(name: string, preset: () => PresetObject): void {
  * Registers multiple presets for use with Babel. `newPresets` should be an object where the key
  * is the name of the preset, and the value is the preset itself.
  */
-export function registerPresets(newPresets: {
-  [x: string]: () => PresetObject;
-}): void {
+export function registerPresets(
+  newPresets: Record<string, () => PresetObject>,
+): void {
   Object.keys(newPresets).forEach(name =>
     registerPreset(name, newPresets[name]),
   );
 }
 
-// @ts-expect-error VERSION is to be replaced by rollup
-export const version: string = VERSION;
+declare const VERSION: string;
+export const version = VERSION;
 
 function onDOMContentLoaded() {
   transformScriptTags();

@@ -8,13 +8,16 @@ import type { types as t } from "@babel/core";
  * on further optimizations.
  */
 export default function shouldStoreRHSInTemporaryVariable(
-  node: t.LVal,
+  node: t.LVal | t.PatternLike,
 ): boolean {
   if (!node) return false;
   if (node.type === "ArrayPattern") {
-    const nonNullElements = node.elements.filter(element => element !== null);
+    const nonNullElements = node.elements.filter(
+      (element): element is Exclude<(typeof node.elements)[0], t.VoidPattern> =>
+        element !== null && element.type !== "VoidPattern",
+    );
     if (nonNullElements.length > 1) return true;
-    else return shouldStoreRHSInTemporaryVariable(nonNullElements[0]);
+    else return shouldStoreRHSInTemporaryVariable(nonNullElements[0]!);
   } else if (node.type === "ObjectPattern") {
     const { properties } = node;
     if (properties.length > 1) return true;

@@ -1,9 +1,0 @@
-{
-  "plugins": [
-    "flow",
-    "jsx",
-    "estree",
-    "importAssertions"
-  ],
-  "sourceType": "module"
-}

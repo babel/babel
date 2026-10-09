@@ -1,17 +1,25 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
 import type { File, NodePath, Scope } from "@babel/core";
 
-type ListElement = t.SpreadElement | t.Expression;
+type ListElement = t.SpreadElement | t.Expression | null;
 
 export interface Options {
   allowArrayLike?: boolean;
+  /** @deprecated Use the `iterableIsArray` assumption instead. */
   loose?: boolean;
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  if ("loose" in options) {
+    console.warn(
+      "@babel/plugin-transform-spread: The 'loose' option has been deprecated, " +
+        "use the `iterableIsArray` assumption instead (https://babeljs.io/assumptions).",
+    );
+  }
 
   const iterableIsArray = api.assumption("iterableIsArray") ?? options.loose;
   const arrayLikeIsIterable =
@@ -27,15 +35,42 @@ export default declare((api, options: Options) => {
     ) {
       return spread.argument;
     } else {
-      return scope.toArray(spread.argument, true, arrayLikeIsIterable);
+      const node = spread.argument;
+
+      if (t.isIdentifier(node)) {
+        const binding = scope.getBinding(node.name);
+        if (binding?.constant && binding.path.isGenericType("Array")) {
+          return node;
+        }
+      }
+
+      if (t.isArrayExpression(node)) {
+        return node;
+      }
+
+      if (t.isIdentifier(node, { name: "arguments" })) {
+        return template.expression.ast`
+          Array.prototype.slice.call(${node})
+        `;
+      }
+
+      const args = [node];
+      let helperName = "toConsumableArray";
+
+      if (arrayLikeIsIterable) {
+        args.unshift(scope.path.hub.addHelper(helperName));
+        helperName = "maybeArrayLike";
+      }
+
+      return t.callExpression(scope.path.hub.addHelper(helperName), args);
     }
   }
 
   function hasHole(spread: t.ArrayExpression): boolean {
-    return spread.elements.some(el => el === null);
+    return spread.elements.includes(null);
   }
 
-  function hasSpread(nodes: Array<t.Node>): boolean {
+  function hasSpread(nodes: (t.Node | null)[]): boolean {
     for (let i = 0; i < nodes.length; i++) {
       if (t.isSpreadElement(nodes[i])) {
         return true;
@@ -44,19 +79,19 @@ export default declare((api, options: Options) => {
     return false;
   }
 
-  function push(_props: Array<ListElement>, nodes: Array<t.Expression>) {
+  function push(_props: ListElement[], nodes: t.Expression[]) {
     if (!_props.length) return _props;
     nodes.push(t.arrayExpression(_props));
     return [];
   }
 
   function build(
-    props: Array<ListElement>,
+    props: ListElement[],
     scope: Scope,
     file: File,
   ): t.Expression[] {
-    const nodes: Array<t.Expression> = [];
-    let _props: Array<ListElement> = [];
+    const nodes: t.Expression[] = [];
+    let _props: ListElement[] = [];
 
     for (const prop of props) {
       if (t.isSpreadElement(prop)) {
@@ -64,14 +99,9 @@ export default declare((api, options: Options) => {
         let spreadLiteral = getSpreadLiteral(prop, scope);
 
         if (t.isArrayExpression(spreadLiteral) && hasHole(spreadLiteral)) {
-          spreadLiteral = t.callExpression(
-            file.addHelper(
-              process.env.BABEL_8_BREAKING
-                ? "arrayLikeToArray"
-                : "arrayWithoutHoles",
-            ),
-            [spreadLiteral],
-          );
+          spreadLiteral = t.callExpression(file.addHelper("arrayLikeToArray"), [
+            spreadLiteral,
+          ]);
         }
 
         nodes.push(spreadLiteral);
@@ -131,7 +161,7 @@ export default declare((api, options: Options) => {
       CallExpression(path): void {
         const { node, scope } = path;
 
-        const args = node.arguments as Array<ListElement>;
+        const args = node.arguments as ListElement[];
         if (!hasSpread(args)) return;
         const calleePath = skipTransparentExprWrappers(
           path.get("callee") as NodePath<t.Expression>,
@@ -143,7 +173,7 @@ export default declare((api, options: Options) => {
               "Please add '@babel/plugin-transform-classes' to your Babel configuration.",
           );
         }
-        let contextLiteral: t.Expression | t.Super = scope.buildUndefinedNode();
+        let contextLiteral: t.Expression | t.Super = t.buildUndefinedNode();
         node.arguments = [];
 
         let nodes: t.Expression[];
@@ -158,7 +188,7 @@ export default declare((api, options: Options) => {
           nodes = build(args, scope, this.file);
         }
 
-        const first = nodes.shift();
+        const first = nodes.shift()!;
         if (nodes.length) {
           node.arguments.push(
             t.callExpression(
@@ -179,7 +209,6 @@ export default declare((api, options: Options) => {
               "=",
               temp,
               // object must not be Super when `temp` is an identifier
-              // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
               callee.object as t.Expression,
             );
             contextLiteral = temp;
@@ -204,13 +233,9 @@ export default declare((api, options: Options) => {
         const { node, scope } = path;
         if (!hasSpread(node.arguments)) return;
 
-        const nodes = build(
-          node.arguments as Array<ListElement>,
-          scope,
-          this.file,
-        );
+        const nodes = build(node.arguments as ListElement[], scope, this.file);
 
-        const first = nodes.shift();
+        const first = nodes.shift()!;
 
         let args: t.Expression;
         if (nodes.length) {

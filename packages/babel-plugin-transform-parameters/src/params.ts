@@ -1,7 +1,7 @@
 import { template, types as t, type NodePath } from "@babel/core";
 
 import {
-  iifeVisitor,
+  getIIFEVisitor,
   collectShadowedParamsNames,
   buildScopeIIFE,
 } from "./shadow-utils.ts";
@@ -46,7 +46,7 @@ export default function convertFunctionParams(
 
   const { node, scope } = path;
 
-  const body = [];
+  const body: t.Statement[] = [];
   const shadowedParams = new Set<string>();
 
   for (const param of params) {
@@ -59,7 +59,7 @@ export default function convertFunctionParams(
   };
   if (shadowedParams.size === 0) {
     for (const param of params) {
-      if (!param.isIdentifier()) param.traverse(iifeVisitor, state);
+      if (!param.isIdentifier()) param.traverse(getIIFEVisitor(), state);
       if (state.needsOuterBinding) break;
     }
   }
@@ -85,7 +85,7 @@ export default function convertFunctionParams(
       const left = param.get("left");
       const right = param.get("right");
 
-      const undefinedNode = scope.buildUndefinedNode();
+      const undefinedNode = t.buildUndefinedNode();
 
       if (left.isIdentifier()) {
         body.push(
@@ -158,7 +158,7 @@ export default function convertFunctionParams(
   if (generator || state.needsOuterBinding || shadowedParams.size > 0) {
     body.push(buildScopeIIFE(shadowedParams, path2.node.body));
 
-    path.set("body", t.blockStatement(body as t.Statement[]));
+    path.set("body", t.blockStatement(body));
 
     // We inject an arrow and then transform it to a normal function, to be
     // sure that we correctly handle this and arguments.
@@ -175,7 +175,7 @@ export default function convertFunctionParams(
 
     node.generator = false;
     node.async = false;
-    if (async) {
+    if (async && !generator) {
       // If the default value of a parameter throws, it must reject asynchronously.
       path2.node.body = template.statement.ast`{
         try {

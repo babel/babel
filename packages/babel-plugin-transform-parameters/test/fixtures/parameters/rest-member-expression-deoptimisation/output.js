@@ -73,32 +73,32 @@ function forIn() {
   }
 }
 function inc() {
-  for (var _len10 = arguments.length, rest = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
-    rest[_key10] = arguments[_key10];
+  for (var _len0 = arguments.length, rest = new Array(_len0), _key0 = 0; _key0 < _len0; _key0++) {
+    rest[_key0] = arguments[_key0];
   }
   ++rest[0];
 }
 function dec() {
-  for (var _len11 = arguments.length, rest = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
-    rest[_key11] = arguments[_key11];
+  for (var _len1 = arguments.length, rest = new Array(_len1), _key1 = 0; _key1 < _len1; _key1++) {
+    rest[_key1] = arguments[_key1];
   }
   --rest[0];
 }
 function del() {
-  for (var _len12 = arguments.length, rest = new Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
-    rest[_key12] = arguments[_key12];
+  for (var _len10 = arguments.length, rest = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+    rest[_key10] = arguments[_key10];
   }
   delete rest[0];
 }
 function method() {
-  for (var _len13 = arguments.length, rest = new Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
-    rest[_key13] = arguments[_key13];
+  for (var _len11 = arguments.length, rest = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
+    rest[_key11] = arguments[_key11];
   }
   rest[0]();
 }
 function newExp() {
-  for (var _len14 = arguments.length, rest = new Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
-    rest[_key14] = arguments[_key14];
+  for (var _len12 = arguments.length, rest = new Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
+    rest[_key12] = arguments[_key12];
   }
   new rest[0]();
 }
@@ -106,16 +106,16 @@ function newExp() {
 // In addition to swap() above because at some point someone tried checking
 // grandparent path for isArrayExpression() to deopt.
 function arrayDestructure() {
-  for (var _len15 = arguments.length, rest = new Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
-    rest[_key15] = arguments[_key15];
+  for (var _len13 = arguments.length, rest = new Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+    rest[_key13] = arguments[_key13];
   }
   var _x = x;
   var _x2 = babelHelpers.slicedToArray(_x, 1);
   rest[0] = _x2[0];
 }
 function forOf() {
-  for (var _len16 = arguments.length, rest = new Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
-    rest[_key16] = arguments[_key16];
+  for (var _len14 = arguments.length, rest = new Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
+    rest[_key14] = arguments[_key14];
   }
   var _iterator = babelHelpers.createForOfIteratorHelper(this),
     _step;
@@ -130,14 +130,14 @@ function forOf() {
   }
 }
 function postfixIncrement() {
-  for (var _len17 = arguments.length, rest = new Array(_len17), _key17 = 0; _key17 < _len17; _key17++) {
-    rest[_key17] = arguments[_key17];
+  for (var _len15 = arguments.length, rest = new Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
+    rest[_key15] = arguments[_key15];
   }
   rest[0]++;
 }
 function postfixDecrement() {
-  for (var _len18 = arguments.length, rest = new Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
-    rest[_key18] = arguments[_key18];
+  for (var _len16 = arguments.length, rest = new Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
+    rest[_key16] = arguments[_key16];
   }
   rest[0]--;
 }

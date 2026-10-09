@@ -2,21 +2,26 @@ import { declare } from "@babel/helper-plugin-utils";
 import { types as t, template } from "@babel/core";
 
 export interface Options {
+  /** @deprecated Use the `noDocumentAll` assumption instead. */
   loose?: boolean;
 }
 
-export default declare((api, { loose = false }: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
-  const noDocumentAll = api.assumption("noDocumentAll") ?? loose;
+export default declare((api, options: Options) => {
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  if ("loose" in options) {
+    console.warn(
+      "@babel/plugin-transform-nullish-coalescing-operator: The 'loose' option has been deprecated, " +
+        "use the `noDocumentAll` assumption instead (https://babeljs.io/assumptions).",
+    );
+  }
+
+  const noDocumentAll = api.assumption("noDocumentAll") ?? options.loose;
+  const pureGetters = api.assumption("pureGetters") ?? false;
 
   return {
     name: "transform-nullish-coalescing-operator",
-    inherits:
-      USE_ESM || IS_STANDALONE || api.version[0] === "8"
-        ? undefined
-        : // eslint-disable-next-line no-restricted-globals
-          require("@babel/plugin-syntax-nullish-coalescing-operator").default,
-
+    manipulateOptions: undefined,
     visitor: {
       LogicalExpression(path) {
         const { node, scope } = path;
@@ -26,8 +31,19 @@ export default declare((api, { loose = false }: Options) => {
 
         let ref;
         let assignment;
-        // skip creating extra reference when `left` is static
-        if (scope.isStatic(node.left)) {
+        // skip creating extra reference when `left` is pure
+        if (
+          (pureGetters &&
+            scope.path.isPattern() &&
+            t.isMemberExpression(node.left) &&
+            !node.left.computed &&
+            t.isIdentifier(node.left.object) &&
+            t.isIdentifier(node.left.property)) ||
+          (t.isIdentifier(node.left) &&
+            (pureGetters ||
+              // globalThis
+              scope.hasBinding(node.left.name)))
+        ) {
           ref = node.left;
           assignment = t.cloneNode(node.left);
         } else if (scope.path.isPattern()) {
@@ -54,7 +70,7 @@ export default declare((api, { loose = false }: Options) => {
                   t.binaryExpression(
                     "!==",
                     t.cloneNode(ref),
-                    scope.buildUndefinedNode(),
+                    t.buildUndefinedNode(),
                   ),
                 ),
             t.cloneNode(ref),

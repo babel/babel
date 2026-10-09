@@ -7,15 +7,12 @@
         "excludeFixtures": ["2021-12-*", "2022-03-*", "2023-01-*", "2023-05-*"]
       }
     ],
-    "babel-plugin-proposal-explicit-resource-management",
-    "babel-plugin-proposal-import-attributes-to-assertions",
+    "babel-plugin-transform-explicit-resource-management",
     "babel-plugin-proposal-import-wasm-source",
-    "babel-plugin-proposal-json-modules",
-    "babel-plugin-proposal-regexp-modifiers",
+    "babel-plugin-transform-json-modules",
     "babel-plugin-syntax-decorators",
     "babel-plugin-syntax-explicit-resource-management",
     "babel-plugin-syntax-import-source",
-    "babel-plugin-syntax-import-attributes",
     "babel-plugin-transform-async-generator-functions",
     "babel-plugin-transform-async-to-generator",
     [
@@ -36,9 +33,10 @@
     "babel-plugin-transform-object-rest-spread",
     "babel-plugin-transform-optional-catch-binding",
     "babel-plugin-transform-optional-chaining",
-    "babel-plugin-transform-unicode-property-regex",
     "babel-plugin-transform-private-methods",
     "babel-plugin-transform-private-property-in-object",
-    "babel-plugin-transform-unicode-sets-regex"
+    "babel-plugin-transform-regexp-modifiers",
+    "babel-plugin-transform-unicode-sets-regex",
+    "babel-plugin-transform-unicode-property-regex"
   ]
 }

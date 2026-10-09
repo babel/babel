@@ -2,12 +2,12 @@
   "type": "File",
   "start":0,"end":127,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":127}},
   "errors": [
-    "SyntaxError: Accessibility modifier already seen. (2:9)",
-    "SyntaxError: Accessibility modifier already seen. (3:10)",
-    "SyntaxError: Accessibility modifier already seen. (4:12)",
-    "SyntaxError: Accessibility modifier already seen. (5:9)",
-    "SyntaxError: Accessibility modifier already seen. (6:9)",
-    "SyntaxError: Accessibility modifier already seen. (6:19)"
+    "SyntaxError: Accessibility modifier already seen: 'public'. (2:9)",
+    "SyntaxError: Accessibility modifier already seen: 'public'. (3:10)",
+    "SyntaxError: Accessibility modifier already seen: 'private'. (4:12)",
+    "SyntaxError: Accessibility modifier already seen: 'protected'. (5:9)",
+    "SyntaxError: Accessibility modifier already seen: 'protected'. (6:9)",
+    "SyntaxError: Accessibility modifier already seen: 'private'. (6:19)"
   ],
   "program": {
     "type": "Program",

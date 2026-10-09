@@ -1,51 +1,13 @@
-import fs from "fs";
-import os from "os";
-import path from "path";
-import { fileURLToPath } from "url";
+import fs from "node:fs";
+import pfs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import * as babel from "../lib/index.js";
-import rimraf from "rimraf";
 
-import _getTargets from "@babel/helper-compilation-targets";
-const getTargets = _getTargets.default || _getTargets;
+import getTargets from "@babel/helper-compilation-targets";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-
-import { isMJS, loadOptionsAsync, skipUnsupportedESM } from "./helpers/esm.js";
-
-// TODO: In Babel 8, we can directly uses fs.promises which is supported by
-// node 8+
-const pfs =
-  fs.promises ||
-  new Proxy(fs, {
-    get(target, name) {
-      if (name === "copyFile") {
-        // fs.copyFile is only supported since node 8.5
-        // https://stackoverflow.com/a/30405105/2359289
-        return function copyFile(source, target) {
-          const rd = fs.createReadStream(source);
-          const wr = fs.createWriteStream(target);
-          return new Promise(function (resolve, reject) {
-            rd.on("error", reject);
-            wr.on("error", reject);
-            wr.on("finish", resolve);
-            rd.pipe(wr);
-          }).catch(function (error) {
-            rd.destroy();
-            wr.end();
-            throw error;
-          });
-        };
-      }
-
-      return (...args) =>
-        new Promise((resolve, reject) =>
-          target[name](...args, (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          }),
-        );
-    },
-  });
 
 function fixture(...args) {
   return path.join(dirname, "fixtures", "config", ...args);
@@ -83,7 +45,7 @@ async function getTemp(name) {
 
 afterAll(() => {
   for (const dir of tempDirs) {
-    rimraf.sync(dir);
+    fs.rmSync(dir, { recursive: true, force: true });
   }
 });
 
@@ -1164,7 +1126,7 @@ describe("buildConfigChain", function () {
         },
       );
 
-      test("should not load babel.config.mjs synchronously", async () => {
+      it("should load babel.config.mjs synchronously", async () => {
         const { cwd, tmp, config } = await getTemp(
           "babel-test-load-config-sync-babel.config.mjs",
         );
@@ -1172,9 +1134,13 @@ describe("buildConfigChain", function () {
 
         await config("babel.config.mjs");
 
-        expect(() => loadOptionsSync({ filename, cwd })).toThrow(
-          /is only supported when running Babel asynchronously/,
-        );
+        expect(loadOptionsSync({ filename, cwd })).toEqual({
+          ...getDefaults(),
+          filename,
+          cwd,
+          root: cwd,
+          comments: true,
+        });
       });
 
       test.each([
@@ -1183,11 +1149,6 @@ describe("buildConfigChain", function () {
         "babel.config.cjs",
         "babel.config.mjs",
       ])("should load %s asynchronously", async name => {
-        const esm = isMJS(name);
-        if (esm && skipUnsupportedESM(`should load ${name} asynchronously`)) {
-          return;
-        }
-
         const { cwd, tmp, config } = await getTemp(
           `babel-test-load-config-async-${name}`,
         );
@@ -1195,15 +1156,15 @@ describe("buildConfigChain", function () {
 
         await config(name);
 
-        await expect(loadOptionsAsync({ filename, cwd }, esm)).resolves.toEqual(
-          {
-            ...getDefaults(),
-            filename,
-            cwd,
-            root: cwd,
-            comments: true,
-          },
-        );
+        await expect(
+          babel.loadOptionsAsync({ filename, cwd }),
+        ).resolves.toEqual({
+          ...getDefaults(),
+          filename,
+          cwd,
+          root: cwd,
+          comments: true,
+        });
       });
 
       test.each(
@@ -1214,16 +1175,6 @@ describe("buildConfigChain", function () {
           "babel.config.mjs",
         ]),
       )("should throw if both %s and %s are used", async (name1, name2) => {
-        const esm = isMJS(name1) || isMJS(name2);
-        if (
-          esm &&
-          skipUnsupportedESM(
-            `should throw if both ${name1} and ${name2} are used`,
-          )
-        ) {
-          return;
-        }
-
         const { cwd, tmp, config } = await getTemp(
           `babel-test-dup-config-${name1}-${name2}`,
         );
@@ -1231,7 +1182,7 @@ describe("buildConfigChain", function () {
         await Promise.all([config(name1), config(name2)]);
 
         await expect(
-          loadOptionsAsync({ filename: tmp("src.js"), cwd }, esm),
+          babel.loadOptionsAsync({ filename: tmp("src.js"), cwd }),
         ).rejects.toThrow(/Multiple configuration files found/);
       });
     });
@@ -1260,7 +1211,7 @@ describe("buildConfigChain", function () {
         });
       });
 
-      test("should not load .babelrc.mjs synchronously", async () => {
+      it("should load .babelrc.mjs synchronously", async () => {
         const { cwd, tmp, config } = await getTemp(
           "babel-test-load-config-sync-.babelrc.mjs",
         );
@@ -1268,9 +1219,13 @@ describe("buildConfigChain", function () {
 
         await config(".babelrc.mjs");
 
-        expect(() => loadOptionsSync({ filename, cwd })).toThrow(
-          /is only supported when running Babel asynchronously/,
-        );
+        expect(loadOptionsSync({ filename, cwd })).toEqual({
+          ...getDefaults(),
+          filename,
+          cwd,
+          root: cwd,
+          comments: true,
+        });
       });
 
       test.each(
@@ -1282,11 +1237,6 @@ describe("buildConfigChain", function () {
           ".babelrc.mjs",
         ].filter(Boolean),
       )("should load %s asynchronously", async name => {
-        const esm = isMJS(name);
-        if (esm && skipUnsupportedESM(`should load ${name} asynchronously`)) {
-          return;
-        }
-
         const { cwd, tmp, config } = await getTemp(
           `babel-test-load-config-${name}`,
         );
@@ -1294,23 +1244,29 @@ describe("buildConfigChain", function () {
 
         await config(name);
 
-        await expect(loadOptionsAsync({ filename, cwd }, esm)).resolves.toEqual(
-          {
-            ...getDefaults(),
-            filename,
-            cwd,
-            root: cwd,
-            comments: true,
-          },
-        );
+        await expect(
+          babel.loadOptionsAsync({ filename, cwd }),
+        ).resolves.toEqual({
+          ...getDefaults(),
+          filename,
+          cwd,
+          root: cwd,
+          comments: true,
+        });
       });
 
       it("should load .babelignore", () => {
-        const filename = fixture("config-files", "babelignore", "src.js");
+        const loadOptions = name => {
+          const filename = fixture("config-files", "babelignore", name);
+          return loadOptionsSync({ filename, cwd: path.dirname(filename) });
+        };
 
-        expect(
-          loadOptionsSync({ filename, cwd: path.dirname(filename) }),
-        ).toBeNull();
+        expect(loadOptions("src.js")).toBeNull();
+        expect(loadOptions("bar.js")).not.toBeNull();
+        expect(loadOptions("#baz.js")).not.toBeNull();
+
+        expect(loadOptions("foo.js#.js")).toBeNull();
+        expect(loadOptions("foo.js")).not.toBeNull();
       });
 
       test.each(
@@ -1323,16 +1279,6 @@ describe("buildConfigChain", function () {
           ".babelrc.json",
         ]),
       )("should throw if both %s and %s are used", async (name1, name2) => {
-        const esm = isMJS(name1) || isMJS(name2);
-        if (
-          esm &&
-          skipUnsupportedESM(
-            `should throw if both ${name1} and ${name2} are used`,
-          )
-        ) {
-          return;
-        }
-
         const { cwd, tmp, config } = await getTemp(
           `babel-test-dup-config-${name1}-${name2}`,
         );
@@ -1340,7 +1286,7 @@ describe("buildConfigChain", function () {
         await Promise.all([config(name1), config(name2)]);
 
         await expect(
-          loadOptionsAsync({ filename: tmp("src.js"), cwd }, esm),
+          babel.loadOptionsAsync({ filename: tmp("src.js"), cwd }),
         ).rejects.toThrow(/Multiple configuration files found/);
       });
 
@@ -1366,24 +1312,13 @@ describe("buildConfigChain", function () {
         ${".babelrc.cjs"}  | ${"babelrc-cjs-error"}  | ${/Babelrc threw an error/}
         ${".babelrc.mjs"}  | ${"babelrc-mjs-error"}  | ${/Babelrc threw an error/}
         ${"package.json"}  | ${"pkg-error"}          | ${/Error while parsing JSON - /}
-      `(
-        "should show helpful errors for $config",
-        async ({ config, dir, error }) => {
-          const esm = isMJS(config);
-          if (
-            esm &&
-            skipUnsupportedESM(`should show helpful errors for ${config}`)
-          ) {
-            return;
-          }
+      `("should show helpful errors for $config", async ({ dir, error }) => {
+        const filename = fixture("config-files", dir, "src.js");
 
-          const filename = fixture("config-files", dir, "src.js");
-
-          await expect(
-            loadOptionsAsync({ filename, cwd: path.dirname(filename) }, esm),
-          ).rejects.toThrow(error);
-        },
-      );
+        await expect(
+          babel.loadOptionsAsync({ filename, cwd: path.dirname(filename) }),
+        ).rejects.toThrow(error);
+      });
 
       it("loadPartialConfigSync should return a list of files that were extended", () => {
         const filename = fixture("config-files", "babelrc-extended", "src.js");

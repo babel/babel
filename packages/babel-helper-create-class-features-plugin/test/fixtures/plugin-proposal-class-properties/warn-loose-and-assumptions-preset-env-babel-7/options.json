@@ -1,9 +1,0 @@
-{
-  "BABEL_8_BREAKING": false,
-  "validateLogs": true,
-  "presets": [["env", { "loose": true, "shippedProposals": true }]],
-  "assumptions": {
-    "setPublicClassFields": true
-  },
-  "targets": "chrome 70"
-}

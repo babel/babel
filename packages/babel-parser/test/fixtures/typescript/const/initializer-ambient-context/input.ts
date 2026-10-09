@@ -1,4 +1,4 @@
-declare module N {
+declare namespace N {
   enum E {
     ok = 0
   }

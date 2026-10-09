@@ -1,14 +1,7 @@
 import type Printer from "../printer.ts";
-import {
-  isFor,
-  isForStatement,
-  isIfStatement,
-  isStatement,
-} from "@babel/types";
+import { isFor, isIfStatement, isStatement, isVoidPattern } from "@babel/types";
 import type * as t from "@babel/types";
 
-// We inline this package
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 import { TokenContext } from "../node/index.ts";
 
@@ -18,7 +11,7 @@ export function WithStatement(this: Printer, node: t.WithStatement) {
   this.token("(");
   this.print(node.object);
   this.token(")");
-  this.printBlock(node);
+  this.printBlock(node.body);
 }
 
 export function IfStatement(this: Printer, node: t.IfStatement) {
@@ -69,12 +62,10 @@ export function ForStatement(this: Printer, node: t.ForStatement) {
   this.space();
   this.token("(");
 
-  {
-    const exit = this.enterForStatementInit();
-    this.tokenContext |= TokenContext.forHead;
-    this.print(node.init);
-    exit();
-  }
+  this.tokenContext |=
+    TokenContext.forInitHead | TokenContext.forInOrInitHeadAccumulate;
+  this.print(node.init);
+  this.tokenContext = TokenContext.normal;
 
   this.token(";");
 
@@ -82,7 +73,7 @@ export function ForStatement(this: Printer, node: t.ForStatement) {
     this.space();
     this.print(node.test);
   }
-  this.token(";");
+  this.tokenChar(charCodes.semicolon, 1);
 
   if (node.update) {
     this.space();
@@ -90,7 +81,7 @@ export function ForStatement(this: Printer, node: t.ForStatement) {
   }
 
   this.token(")");
-  this.printBlock(node);
+  this.printBlock(node.body);
 }
 
 export function WhileStatement(this: Printer, node: t.WhileStatement) {
@@ -99,37 +90,44 @@ export function WhileStatement(this: Printer, node: t.WhileStatement) {
   this.token("(");
   this.print(node.test);
   this.token(")");
-  this.printBlock(node);
+  this.printBlock(node.body);
 }
 
-function ForXStatement(this: Printer, node: t.ForXStatement) {
+export function ForInStatement(this: Printer, node: t.ForInStatement) {
   this.word("for");
   this.space();
-  const isForOf = node.type === "ForOfStatement";
-  if (isForOf && node.await) {
+  this.noIndentInnerCommentsHere();
+  this.token("(");
+  this.tokenContext |=
+    TokenContext.forInHead | TokenContext.forInOrInitHeadAccumulate;
+  this.print(node.left);
+  this.tokenContext = TokenContext.normal;
+  this.space();
+  this.word("in");
+  this.space();
+  this.print(node.right);
+  this.token(")");
+  this.printBlock(node.body);
+}
+
+export function ForOfStatement(this: Printer, node: t.ForOfStatement) {
+  this.word("for");
+  this.space();
+  if (node.await) {
     this.word("await");
     this.space();
   }
   this.noIndentInnerCommentsHere();
   this.token("(");
-  {
-    const exit = isForOf ? null : this.enterForStatementInit();
-    this.tokenContext |= isForOf
-      ? TokenContext.forOfHead
-      : TokenContext.forInHead;
-    this.print(node.left);
-    exit?.();
-  }
+  this.tokenContext |= TokenContext.forOfHead;
+  this.print(node.left);
   this.space();
-  this.word(isForOf ? "of" : "in");
+  this.word("of");
   this.space();
   this.print(node.right);
   this.token(")");
-  this.printBlock(node);
+  this.printBlock(node.body);
 }
-
-export const ForInStatement = ForXStatement;
-export const ForOfStatement = ForXStatement;
 
 export function DoWhileStatement(this: Printer, node: t.DoWhileStatement) {
   this.word("do");
@@ -146,12 +144,11 @@ export function DoWhileStatement(this: Printer, node: t.DoWhileStatement) {
 
 function printStatementAfterKeyword(
   printer: Printer,
-  node: t.Node,
-  isLabel: boolean,
+  node: t.Node | null | undefined,
 ) {
   if (node) {
     printer.space();
-    printer.printTerminatorless(node, isLabel);
+    printer.printTerminatorless(node);
   }
 
   printer.semicolon();
@@ -159,22 +156,22 @@ function printStatementAfterKeyword(
 
 export function BreakStatement(this: Printer, node: t.ContinueStatement) {
   this.word("break");
-  printStatementAfterKeyword(this, node.label, true);
+  printStatementAfterKeyword(this, node.label);
 }
 
 export function ContinueStatement(this: Printer, node: t.ContinueStatement) {
   this.word("continue");
-  printStatementAfterKeyword(this, node.label, true);
+  printStatementAfterKeyword(this, node.label);
 }
 
 export function ReturnStatement(this: Printer, node: t.ReturnStatement) {
   this.word("return");
-  printStatementAfterKeyword(this, node.argument, false);
+  printStatementAfterKeyword(this, node.argument);
 }
 
 export function ThrowStatement(this: Printer, node: t.ThrowStatement) {
   this.word("throw");
-  printStatementAfterKeyword(this, node.argument, false);
+  printStatementAfterKeyword(this, node.argument);
 }
 
 export function LabeledStatement(this: Printer, node: t.LabeledStatement) {
@@ -231,12 +228,7 @@ export function SwitchStatement(this: Printer, node: t.SwitchStatement) {
   this.space();
   this.token("{");
 
-  this.printSequence(node.cases, {
-    indent: true,
-    addNewlines(leading, cas) {
-      if (!leading && node.cases[node.cases.length - 1] === cas) return -1;
-    },
-  });
+  this.printSequence(node.cases, true);
 
   this.rightBrace(node);
 }
@@ -254,13 +246,18 @@ export function SwitchCase(this: Printer, node: t.SwitchCase) {
 
   if (node.consequent.length) {
     this.newline();
-    this.printSequence(node.consequent, { indent: true });
+    this.printSequence(node.consequent, true);
   }
 }
 
 export function DebuggerStatement(this: Printer) {
   this.word("debugger");
   this.semicolon();
+}
+
+function commaSeparatorWithNewline(this: Printer, occurrenceCount: number) {
+  this.tokenChar(charCodes.comma, occurrenceCount);
+  this.newline();
 }
 
 export function VariableDeclaration(
@@ -275,12 +272,16 @@ export function VariableDeclaration(
   }
 
   const { kind } = node;
-  if (kind === "await using") {
-    this.word("await");
-    this.space();
-    this.word("using", true);
-  } else {
-    this.word(kind, kind === "using");
+  switch (kind) {
+    case "await using":
+      this.word("await");
+      this.space();
+    // fallthrough
+    case "using":
+      this.word("using", true);
+      break;
+    default:
+      this.word(kind);
   }
   this.space();
 
@@ -291,6 +292,7 @@ export function VariableDeclaration(
       if (declar.init) {
         // has an init so let's split it up over multiple lines
         hasInits = true;
+        break;
       }
     }
   }
@@ -307,22 +309,26 @@ export function VariableDeclaration(
   //       bar = "foo";
   //
 
-  this.printList(node.declarations, {
-    separator: hasInits
-      ? function (this: Printer) {
-          this.token(",");
-          this.newline();
-        }
-      : undefined,
-    indent: node.declarations.length > 1 ? true : false,
-  });
+  this.printList(
+    node.declarations,
+    undefined,
+    undefined,
+    node.declarations.length > 1,
+    hasInits ? commaSeparatorWithNewline : undefined,
+  );
 
-  if (isFor(parent)) {
-    // don't give semicolons to these nodes since they'll be inserted in the parent generator
-    if (isForStatement(parent)) {
-      if (parent.init === node) return;
-    } else {
-      if (parent.left === node) return;
+  if (parent != null) {
+    switch (parent.type) {
+      case "ForStatement":
+        if (parent.init === node) {
+          return;
+        }
+        break;
+      case "ForInStatement":
+      case "ForOfStatement":
+        if (parent.left === node) {
+          return;
+        }
     }
   }
 
@@ -332,8 +338,11 @@ export function VariableDeclaration(
 export function VariableDeclarator(this: Printer, node: t.VariableDeclarator) {
   this.print(node.id);
   if (node.definite) this.token("!"); // TS
-  // @ts-expect-error todo(flow-ts) Property 'typeAnnotation' does not exist on type 'MemberExpression'.
-  this.print(node.id.typeAnnotation);
+
+  if (!isVoidPattern(node.id)) {
+    this.print(node.id.typeAnnotation);
+  }
+
   if (node.init) {
     this.space();
     this.token("=");

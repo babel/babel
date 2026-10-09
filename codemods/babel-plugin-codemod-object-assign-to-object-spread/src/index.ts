@@ -2,11 +2,7 @@ import type { PluginAPI, PluginObject } from "@babel/core";
 
 export default function ({ types: t }: PluginAPI): PluginObject {
   return {
-    inherits: USE_ESM
-      ? undefined
-      : // eslint-disable-next-line no-restricted-globals
-        require("@babel/plugin-syntax-object-rest-spread").default,
-
+    manipulateOptions: undefined,
     visitor: {
       CallExpression(path) {
         if (!path.get("callee").matchesPattern("Object.assign")) return;

@@ -13,6 +13,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSTypeAliasDeclaration",
           "start":7,"end":18,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":18,"index":18}},
@@ -42,6 +43,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSInterfaceDeclaration",
           "start":26,"end":40,"loc":{"start":{"line":2,"column":7,"index":26},"end":{"line":2,"column":21,"index":40}},
@@ -63,6 +65,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSDeclareFunction",
           "start":48,"end":77,"loc":{"start":{"line":3,"column":7,"index":48},"end":{"line":3,"column":36,"index":77}},
@@ -91,6 +94,7 @@
         "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "VariableDeclaration",
           "start":85,"end":107,"loc":{"start":{"line":4,"column":7,"index":85},"end":{"line":4,"column":29,"index":107}},

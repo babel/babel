@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`builders core classProperty should validate 1`] = `
+{
+  "computed": false,
+  "decorators": null,
+  "key": {
+    "type": "StringLiteral",
+    "value": "test",
+  },
+  "static": false,
+  "type": "ClassProperty",
+  "typeAnnotation": null,
+  "value": {
+    "type": "NumericLiteral",
+    "value": 1,
+  },
+}
+`;
+
+exports[`builders core classProperty should validate 2`] = `
+{
+  "computed": false,
+  "decorators": null,
+  "key": {
+    "type": "StringLiteral",
+    "value": "test",
+  },
+  "static": true,
+  "type": "ClassProperty",
+  "typeAnnotation": null,
+  "value": {
+    "type": "NumericLiteral",
+    "value": 1,
+  },
+}
+`;

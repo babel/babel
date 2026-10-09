@@ -10,50 +10,64 @@ import type * as t from "@babel/types";
 import * as cache from "./cache.ts";
 import type NodePath from "./path/index.ts";
 import type { default as Scope, Binding } from "./scope/index.ts";
-import type { ExplodedVisitor, Visitor, VisitorBase } from "./types.ts";
+import type {
+  ExplodedVisitor,
+  Visitor,
+  VisitorBase,
+  VisitorProp,
+  TraverseOptions,
+} from "./types.ts";
 import { traverseNode } from "./traverse-node.ts";
 
-export type { ExplodedVisitor, Visitor, VisitorBase, Binding };
+export type { ExplodedVisitor, Visitor, VisitorBase, Binding, TraverseOptions };
 export { default as NodePath } from "./path/index.ts";
-export { default as Scope } from "./scope/index.ts";
+export { default as Scope, type BindingKind } from "./scope/index.ts";
 export { default as Hub } from "./hub.ts";
 export type { HubInterface } from "./hub.ts";
+export type { VisitWrapper } from "./visitors.ts";
 
 export { visitors };
 
-export type TraverseOptions<S = t.Node> = {
-  scope?: Scope;
-  noScope?: boolean;
-  denylist?: string[];
-  shouldSkip?: (node: NodePath) => boolean;
-} & Visitor<S>;
-
-export type ExplodedTraverseOptions<S = t.Node> = TraverseOptions<S> &
-  ExplodedVisitor<S>;
-
-function traverse<S>(
+function traverse<S, T extends object>(
   parent: t.Node,
-  opts: TraverseOptions<S>,
-  scope: Scope | undefined,
+  opts: {
+    [P in keyof T]: VisitorProp<S, P & string>;
+  },
+  scope: Scope | null | undefined,
   state: S,
   parentPath?: NodePath,
   visitSelf?: boolean,
 ): void;
-
-function traverse(
+function traverse<T extends object>(
   parent: t.Node,
-  opts: TraverseOptions,
-  scope?: Scope,
+  opts: {
+    [P in keyof T]: VisitorProp<any, P & string>;
+  },
+  scope?: Scope | null,
   state?: any,
   parentPath?: NodePath,
   visitSelf?: boolean,
 ): void;
-
-function traverse<Options extends TraverseOptions>(
+function traverse<S>(
   parent: t.Node,
-  // @ts-expect-error provide {} as default value for Options
-  opts: Options = {},
-  scope?: Scope,
+  opts: TraverseOptions & Visitor<S>,
+  scope: Scope | null | undefined,
+  state: S,
+  parentPath?: NodePath,
+  visitSelf?: boolean,
+): void;
+function traverse(
+  parent: t.Node,
+  opts: TraverseOptions & Visitor<any>,
+  scope?: Scope | null,
+  state?: any,
+  parentPath?: NodePath,
+  visitSelf?: boolean,
+): void;
+function traverse(
+  parent: t.Node,
+  opts: any = {},
+  scope?: Scope | null,
   state?: any,
   parentPath?: NodePath,
   visitSelf?: boolean,
@@ -78,15 +92,15 @@ function traverse<Options extends TraverseOptions>(
     return;
   }
 
-  visitors.explode(opts as Visitor);
+  visitors.explode(opts);
 
   traverseNode(
     parent,
-    opts as ExplodedVisitor,
+    opts,
     scope,
     state,
     parentPath,
-    /* skipKeys */ null,
+    /* skipKeys */ undefined,
     visitSelf,
   );
 }
@@ -104,7 +118,7 @@ traverse.cheap = function (node: t.Node, enter: (node: t.Node) => void) {
 
 traverse.node = function (
   node: t.Node,
-  opts: ExplodedTraverseOptions,
+  opts: TraverseOptions & ExplodedVisitor,
   scope?: Scope,
   state?: any,
   path?: NodePath,
@@ -126,21 +140,10 @@ traverse.removeProperties = function (
   return tree;
 };
 
-type HasDenylistedTypeState = {
-  has: boolean;
-  type: t.Node["type"];
-};
-function hasDenylistedType(path: NodePath, state: HasDenylistedTypeState) {
-  if (path.node.type === state.type) {
-    state.has = true;
-    path.stop();
-  }
-}
-
 traverse.hasType = function (
   tree: t.Node,
   type: t.Node["type"],
-  denylistTypes?: Array<string>,
+  denylistTypes?: string[],
 ): boolean {
   // the node we're searching in is denylisted
   if (denylistTypes?.includes(tree.type)) return false;
@@ -148,23 +151,14 @@ traverse.hasType = function (
   // the type we're looking for is the same as the passed node
   if (tree.type === type) return true;
 
-  const state: HasDenylistedTypeState = {
-    has: false,
-    type: type,
-  };
-
-  traverse(
-    tree,
-    {
-      noScope: true,
-      denylist: denylistTypes,
-      enter: hasDenylistedType,
-    },
-    null,
-    state,
-  );
-
-  return state.has;
+  return traverseFast(tree, function (node) {
+    if (denylistTypes?.includes(node.type)) {
+      return traverseFast.skip;
+    }
+    if (node.type === type) {
+      return traverseFast.stop;
+    }
+  });
 };
 
 traverse.cache = cache;

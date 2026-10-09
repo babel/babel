@@ -4,7 +4,7 @@ import { inherits } from "../../index.ts";
 
 export default function cleanJSXElementLiteralChild(
   child: t.JSXText,
-  args: Array<t.Node>,
+  args: t.Node[],
 ) {
   const lines = child.value.split(/\r\n|\n|\r/);
 

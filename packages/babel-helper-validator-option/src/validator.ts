@@ -35,7 +35,7 @@ export class OptionValidator {
     defaultValue?: T,
   ): boolean | T {
     if (value === undefined) {
-      return defaultValue;
+      return defaultValue!;
     } else {
       this.invariant(
         typeof value === "boolean",
@@ -51,7 +51,7 @@ export class OptionValidator {
     defaultValue?: T,
   ): string | T {
     if (value === undefined) {
-      return defaultValue;
+      return defaultValue!;
     } else {
       this.invariant(
         typeof value === "string",

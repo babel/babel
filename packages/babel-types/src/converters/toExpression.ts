@@ -37,6 +37,8 @@ function toExpression(
   if (isClass(node)) {
     // @ts-expect-error todo(flow->ts): avoid type unsafe mutations
     node.type = "ClassExpression";
+    // abstract modifiers are only allowed on class declarations
+    node.abstract = false;
   } else if (isFunction(node)) {
     // @ts-expect-error todo(flow->ts): avoid type unsafe mutations
     node.type = "FunctionExpression";

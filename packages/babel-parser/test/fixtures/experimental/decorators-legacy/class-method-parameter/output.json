@@ -37,7 +37,7 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start":33,"end":34,"loc":{"start":{"line":2,"column":21,"index":33},"end":{"line":2,"column":22,"index":34},"identifierName":"x"},
+                  "start":26,"end":34,"loc":{"start":{"line":2,"column":14,"index":26},"end":{"line":2,"column":22,"index":34},"identifierName":"x"},
                   "name": "x",
                   "decorators": [
                     {
@@ -58,7 +58,7 @@
                 },
                 {
                   "type": "Identifier",
-                  "start":60,"end":61,"loc":{"start":{"line":2,"column":48,"index":60},"end":{"line":2,"column":49,"index":61},"identifierName":"y"},
+                  "start":36,"end":61,"loc":{"start":{"line":2,"column":24,"index":36},"end":{"line":2,"column":49,"index":61},"identifierName":"y"},
                   "name": "y",
                   "decorators": [
                     {

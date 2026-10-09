@@ -1,8 +1,8 @@
 import convertSourceMap from "convert-source-map";
 import { AnyMap, encodedMap } from "@jridgewell/trace-mapping";
 import slash from "slash";
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
 
 import * as util from "./util.ts";
 import type { CmdOptions } from "./options.ts";
@@ -26,7 +26,7 @@ export default async function ({
   cliOptions,
   babelOptions,
 }: CmdOptions): Promise<void> {
-  function buildResult(fileResults: Array<FileResult>): CompilationOutput {
+  function buildResult(fileResults: FileResult[]): CompilationOutput {
     const mapSections: SectionedSourceMap["sections"] = [];
 
     let code = "";
@@ -50,7 +50,7 @@ export default async function ({
       });
 
       code += result.code + "\n";
-      offset += countNewlines(result.code) + 1;
+      offset += countNewlines(result.code!) + 1;
     }
 
     const map = new AnyMap({
@@ -91,7 +91,7 @@ export default async function ({
     return count;
   }
 
-  function output(fileResults: Array<FileResult>): void {
+  function output(fileResults: FileResult[]): void {
     const result = buildResult(fileResults);
 
     if (cliOptions.outFile) {
@@ -150,7 +150,7 @@ export default async function ({
     output([res]);
   }
 
-  async function walk(filenames: Array<string>): Promise<void> {
+  async function walk(filenames: string[]): Promise<void> {
     const _filenames: string[] = [];
 
     filenames.forEach(function (filename) {
@@ -207,9 +207,9 @@ export default async function ({
     output(results);
   }
 
-  async function files(filenames: Array<string>): Promise<void> {
+  async function files(filenames: string[]): Promise<void> {
     if (cliOptions.watch) {
-      watcher.enable({ enableGlobbing: false });
+      watcher.enable();
     }
 
     if (!cliOptions.skipInitialBuild) {

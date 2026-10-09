@@ -8,7 +8,9 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  transform-explicit-resource-management { firefox < 141 }
   transform-duplicate-named-capturing-groups-regex { firefox < 129 }
+  transform-regexp-modifiers { firefox < 132 }
   transform-unicode-sets-regex { firefox < 116 }
   transform-class-static-block { firefox < 93 }
   transform-private-property-in-object { firefox < 90 }
@@ -20,7 +22,7 @@ Using plugins:
   transform-optional-chaining { firefox < 74 }
   transform-json-strings { firefox < 62 }
   transform-optional-catch-binding { firefox < 58 }
-  transform-parameters { firefox < 53 }
+  transform-parameters { firefox < 52 }
   transform-async-generator-functions { firefox < 57 }
   transform-object-rest-spread { firefox < 55 }
   transform-dotall-regex { firefox < 78 }
@@ -36,9 +38,5 @@ Using plugins:
   transform-block-scoping { firefox < 53 }
   transform-regenerator { firefox < 53 }
   transform-export-namespace-from { firefox < 80 }
-  transform-modules-commonjs
-  transform-dynamic-import
-  syntax-top-level-await
-  syntax-import-meta
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

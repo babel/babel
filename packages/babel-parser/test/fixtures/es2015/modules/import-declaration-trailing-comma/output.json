@@ -54,6 +54,7 @@
           },
           "value": "foo"
         },
+        "attributes": [],
         "innerComments": [
           {
             "type": "CommentBlock",

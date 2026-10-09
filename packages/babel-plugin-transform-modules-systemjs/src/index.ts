@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t } from "@babel/core";
-import type { PluginPass, NodePath, Scope, Visitor } from "@babel/core";
+import type { PluginPass, NodePath, Scope } from "@babel/core";
 import {
   buildDynamicImport,
   getModuleName,
@@ -25,12 +25,6 @@ const buildExportAll = template.statement(`
     if (KEY !== "default" && KEY !== "__esModule") EXPORT_OBJ[KEY] = TARGET[KEY];
   }
 `);
-
-const MISSING_PLUGIN_WARNING = `\
-WARNING: Dynamic import() transformation must be enabled using the
-         @babel/plugin-transform-dynamic-import plugin. Babel 8 will
-         no longer transform import() without using that plugin.
-`;
 
 const MISSING_PLUGIN_ERROR = `\
 ERROR: Dynamic import() transformation must be enabled using the
@@ -80,6 +74,8 @@ type ModuleMetadata = {
   exports: any[];
 };
 
+const protoKey = "__proto__";
+
 function constructExportCall(
   path: NodePath<t.Program>,
   exportIdent: t.Identifier,
@@ -103,14 +99,14 @@ function constructExportCall(
       const objectProperties = [];
       for (let i = 0; i < exportNames.length; i++) {
         const exportName = exportNames[i];
+        const computed = exportName === protoKey;
+        const exportNameNode =
+          stringSpecifiers.has(exportName) || computed
+            ? t.stringLiteral(exportName)
+            : t.identifier(exportName);
         const exportValue = exportValues[i];
         objectProperties.push(
-          t.objectProperty(
-            stringSpecifiers.has(exportName)
-              ? t.stringLiteral(exportName)
-              : t.identifier(exportName),
-            exportValue,
-          ),
+          t.objectProperty(exportNameNode, exportValue, computed),
         );
       }
       statements.push(
@@ -124,7 +120,12 @@ function constructExportCall(
 
     statements.push(
       t.variableDeclaration("var", [
-        t.variableDeclarator(t.identifier(exportObj), t.objectExpression([])),
+        t.variableDeclarator(
+          t.identifier(exportObj),
+          t.objectExpression([
+            t.objectProperty(t.identifier(protoKey), t.nullLiteral()),
+          ]),
+        ),
       ]),
     );
 
@@ -138,6 +139,10 @@ function constructExportCall(
 
     for (let i = 0; i < exportNames.length; i++) {
       const exportName = exportNames[i];
+      const computed = stringSpecifiers.has(exportName);
+      const exportNameNode = computed
+        ? t.stringLiteral(exportName)
+        : t.identifier(exportName);
       const exportValue = exportValues[i];
 
       statements.push(
@@ -146,7 +151,8 @@ function constructExportCall(
             "=",
             t.memberExpression(
               t.identifier(exportObj),
-              t.identifier(exportName),
+              exportNameNode,
+              computed,
             ),
             exportValue,
           ),
@@ -174,85 +180,11 @@ type ReassignmentVisitorState = {
   buildCall: (name: string, value: t.Expression) => t.ExpressionStatement;
 };
 
-export default declare<PluginState>((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+export default declare<PluginState, Options>((api, options: Options) => {
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const { systemGlobal = "System", allowTopLevelThis = false } = options;
   const reassignmentVisited = new WeakSet();
-
-  const reassignmentVisitor: Visitor<ReassignmentVisitorState> = {
-    "AssignmentExpression|UpdateExpression"(
-      path: NodePath<t.AssignmentExpression | t.UpdateExpression>,
-    ) {
-      if (reassignmentVisited.has(path.node)) return;
-      reassignmentVisited.add(path.node);
-
-      const arg = path.isAssignmentExpression()
-        ? path.get("left")
-        : path.get("argument");
-
-      if (arg.isObjectPattern() || arg.isArrayPattern()) {
-        const exprs: t.SequenceExpression["expressions"] = [path.node];
-        for (const name of Object.keys(arg.getBindingIdentifiers())) {
-          if (this.scope.getBinding(name) !== path.scope.getBinding(name)) {
-            return;
-          }
-          const exportedNames = this.exports[name];
-          if (!exportedNames) continue;
-          for (const exportedName of exportedNames) {
-            exprs.push(
-              this.buildCall(exportedName, t.identifier(name)).expression,
-            );
-          }
-        }
-        path.replaceWith(t.sequenceExpression(exprs));
-        return;
-      }
-
-      if (!arg.isIdentifier()) return;
-
-      const name = arg.node.name;
-
-      // redeclared in this scope
-      if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
-
-      const exportedNames = this.exports[name];
-      if (!exportedNames) return;
-
-      let node: t.Expression = path.node;
-
-      // if it is a non-prefix update expression (x++ etc)
-      // then we must replace with the expression (_export('x', x + 1), x++)
-      // in order to ensure the same update expression value
-      const isPostUpdateExpression = t.isUpdateExpression(node, {
-        prefix: false,
-      });
-      if (isPostUpdateExpression) {
-        node = t.binaryExpression(
-          // @ts-expect-error The operator of a post-update expression must be "++" | "--"
-          node.operator[0],
-          t.unaryExpression(
-            "+",
-            t.cloneNode(
-              // @ts-expect-error node is UpdateExpression
-              node.argument,
-            ),
-          ),
-          t.numericLiteral(1),
-        );
-      }
-
-      for (const exportedName of exportedNames) {
-        node = this.buildCall(exportedName, node).expression;
-      }
-
-      if (isPostUpdateExpression) {
-        node = t.sequenceExpression([node, path.node]);
-      }
-
-      path.replaceWith(node);
-    },
-  };
 
   return {
     name: "transform-modules-systemjs",
@@ -261,9 +193,8 @@ export default declare<PluginState>((api, options: Options) => {
       this.file.set("@babel/plugin-transform-modules-*", "systemjs");
     },
 
-    visitor: {
-      ["CallExpression" +
-        (api.types.importExpression ? "|ImportExpression" : "")](
+    visitor: api.traverse.explode({
+      "CallExpression|ImportExpression"(
         this: PluginPass & PluginState,
         path: NodePath<t.CallExpression | t.ImportExpression>,
         state: PluginState,
@@ -271,11 +202,7 @@ export default declare<PluginState>((api, options: Options) => {
         if (path.isCallExpression() && !t.isImport(path.node.callee)) return;
         if (path.isCallExpression()) {
           if (!this.file.has("@babel/plugin-proposal-dynamic-import")) {
-            if (process.env.BABEL_8_BREAKING) {
-              throw new Error(MISSING_PLUGIN_ERROR);
-            } else {
-              console.warn(MISSING_PLUGIN_WARNING);
-            }
+            throw new Error(MISSING_PLUGIN_ERROR);
           }
         } else {
           // when createImportExpressions is true, we require the dynamic import transform
@@ -296,7 +223,7 @@ export default declare<PluginState>((api, options: Options) => {
         );
       },
 
-      MetaProperty(path, state: PluginState) {
+      MetaProperty(path, state) {
         if (
           path.node.meta.name === "import" &&
           path.node.property.name === "meta"
@@ -343,7 +270,7 @@ export default declare<PluginState>((api, options: Options) => {
           const beforeBody = [];
           const setters: t.Expression[] = [];
           const sources: t.StringLiteral[] = [];
-          const variableIds = [];
+          const variableIds: t.Identifier[] = [];
           const removedPaths = [];
 
           function addExportName(key: string, val: string) {
@@ -356,7 +283,7 @@ export default declare<PluginState>((api, options: Options) => {
             key: "imports" | "exports",
             specifiers: t.ModuleSpecifier[] | t.ExportAllDeclaration,
           ) {
-            let module: ModuleMetadata;
+            let module: ModuleMetadata | undefined;
             modules.forEach(function (m) {
               if (m.key === source) {
                 module = m;
@@ -389,12 +316,12 @@ export default declare<PluginState>((api, options: Options) => {
               beforeBody.push(path.node);
               removedPaths.push(path);
             } else if (path.isClassDeclaration()) {
-              variableIds.push(t.cloneNode(path.node.id));
+              variableIds.push(t.cloneNode(path.node.id!));
               path.replaceWith(
                 t.expressionStatement(
                   t.assignmentExpression(
                     "=",
-                    t.cloneNode(path.node.id),
+                    t.cloneNode(path.node.id!),
                     t.toExpression(path.node),
                   ),
                 ),
@@ -420,7 +347,7 @@ export default declare<PluginState>((api, options: Options) => {
                 const id = declar.id;
                 if (id) {
                   exportNames.push("default");
-                  exportValues.push(scope.buildUndefinedNode());
+                  exportValues.push(t.buildUndefinedNode());
                   variableIds.push(t.cloneNode(id));
                   addExportName(id.name, "default");
                   path.replaceWith(
@@ -460,22 +387,22 @@ export default declare<PluginState>((api, options: Options) => {
                 path.replaceWith(declar);
 
                 if (t.isFunction(declar)) {
-                  const name = declar.id.name;
+                  const name = declar.id!.name;
                   addExportName(name, name);
                   beforeBody.push(declar);
                   exportNames.push(name);
-                  exportValues.push(t.cloneNode(declar.id));
+                  exportValues.push(t.cloneNode(declar.id!));
                   removedPaths.push(path);
                 } else if (t.isClass(declar)) {
-                  const name = declar.id.name;
+                  const name = declar.id!.name;
                   exportNames.push(name);
-                  exportValues.push(scope.buildUndefinedNode());
-                  variableIds.push(t.cloneNode(declar.id));
+                  exportValues.push(t.buildUndefinedNode());
+                  variableIds.push(t.cloneNode(declar.id!));
                   path.replaceWith(
                     t.expressionStatement(
                       t.assignmentExpression(
                         "=",
-                        t.cloneNode(declar.id),
+                        t.cloneNode(declar.id!),
                         t.toExpression(declar),
                       ),
                     ),
@@ -628,13 +555,6 @@ export default declare<PluginState>((api, options: Options) => {
           // @ts-expect-error todo(flow->ts): do not reuse variables
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-            // polyfill when being run by an older Babel version
-            path.scope.hoistVariables ??=
-              // eslint-disable-next-line no-restricted-globals
-              require("@babel/traverse").Scope.prototype.hoistVariables;
-          }
-
           path.scope.hoistVariables((id, hasInit) => {
             variableIds.push(id);
             if (!hasInit && id.name in exportMap) {
@@ -667,27 +587,103 @@ export default declare<PluginState>((api, options: Options) => {
             );
           }
 
-          path.traverse(reassignmentVisitor, {
-            exports: exportMap,
-            buildCall: buildExportCall,
-            scope,
-          });
+          path.traverse(
+            {
+              "AssignmentExpression|UpdateExpression"(
+                path: NodePath<t.AssignmentExpression | t.UpdateExpression>,
+              ) {
+                if (reassignmentVisited.has(path.node)) return;
+                reassignmentVisited.add(path.node);
+
+                const arg = path.isAssignmentExpression()
+                  ? path.get("left")
+                  : path.get("argument");
+
+                if (arg.isObjectPattern() || arg.isArrayPattern()) {
+                  const exprs: t.SequenceExpression["expressions"] = [
+                    path.node,
+                  ];
+                  for (const name of Object.keys(arg.getBindingIdentifiers())) {
+                    if (
+                      this.scope.getBinding(name) !==
+                      path.scope.getBinding(name)
+                    ) {
+                      return;
+                    }
+                    const exportedNames = this.exports[name];
+                    if (!exportedNames) continue;
+                    for (const exportedName of exportedNames) {
+                      exprs.push(
+                        this.buildCall(exportedName, t.identifier(name))
+                          .expression,
+                      );
+                    }
+                  }
+                  path.replaceWith(t.sequenceExpression(exprs));
+                  return;
+                }
+
+                if (!arg.isIdentifier()) return;
+
+                const name = arg.node.name;
+
+                // redeclared in this scope
+                if (this.scope.getBinding(name) !== path.scope.getBinding(name))
+                  return;
+
+                const exportedNames = this.exports[name];
+                if (!exportedNames) return;
+
+                let node: t.Expression = path.node;
+
+                // if it is a non-prefix update expression (x++ etc)
+                // then we must replace with the expression (_export('x', x + 1), x++)
+                // in order to ensure the same update expression value
+                const isPostUpdateExpression = t.isUpdateExpression(node, {
+                  prefix: false,
+                });
+                if (isPostUpdateExpression) {
+                  node = t.binaryExpression(
+                    // @ts-expect-error The operator of a post-update expression must be "++" | "--"
+                    node.operator[0],
+                    t.unaryExpression(
+                      "+",
+                      t.cloneNode(
+                        // @ts-expect-error node is UpdateExpression
+                        node.argument,
+                      ),
+                    ),
+                    t.numericLiteral(1),
+                  );
+                }
+
+                for (const exportedName of exportedNames) {
+                  node = this.buildCall(exportedName, node).expression;
+                }
+
+                if (isPostUpdateExpression) {
+                  node = t.sequenceExpression([node, path.node]);
+                }
+
+                path.replaceWith(node);
+              },
+            },
+            {
+              exports: exportMap,
+              buildCall: buildExportCall,
+              scope,
+            } satisfies ReassignmentVisitorState,
+          );
 
           for (const path of removedPaths) {
             path.remove();
           }
 
-          let hasTLA = false;
-          path.traverse({
-            AwaitExpression(path) {
-              hasTLA = true;
-              path.stop();
-            },
-            Function(path) {
-              path.skip();
-            },
-            // @ts-expect-error - todo: add noScope to type definitions
-            noScope: true,
+          const hasTLA = t.traverseFast(path.node, node => {
+            if (t.isFunction(node)) return t.traverseFast.skip;
+            if (t.isAwaitExpression(node)) {
+              return t.traverseFast.stop;
+            }
           });
 
           path.node.body = [
@@ -714,6 +710,6 @@ export default declare<PluginState>((api, options: Options) => {
           path.requeue(path.get("body.0"));
         },
       },
-    },
+    }),
   };
 });

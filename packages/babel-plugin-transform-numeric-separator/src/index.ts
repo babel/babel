@@ -17,16 +17,11 @@ function remover({ node }: NodePath<t.BigIntLiteral | t.NumericLiteral>) {
 }
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   return {
     name: "transform-numeric-separator",
-    inherits:
-      USE_ESM || IS_STANDALONE || api.version[0] === "8"
-        ? undefined
-        : // eslint-disable-next-line no-restricted-globals
-          require("@babel/plugin-syntax-numeric-separator").default,
-
+    manipulateOptions: undefined,
     visitor: {
       NumericLiteral: remover,
       BigIntLiteral: remover,

@@ -1,3 +1,4 @@
+import type * as t from "../index.ts";
 import {
   defineAliasedType,
   arrayOfType,
@@ -6,15 +7,16 @@ import {
   assertOneOf,
   assertValueType,
   chain,
-  validate,
   validateArrayOfType,
   validateOptional,
   validateOptionalType,
   validateType,
+  combine,
 } from "./utils.ts";
 import {
   functionDeclarationCommon,
   classMethodOrDeclareMethodCommon,
+  classMethodOrPropertyUnionShapeCommon,
 } from "./core.ts";
 import is from "../validators/is.ts";
 
@@ -24,23 +26,19 @@ const bool = assertValueType("boolean");
 
 const tSFunctionTypeAnnotationCommon = () => ({
   returnType: {
-    validate: process.env.BABEL_8_BREAKING
-      ? assertNodeType("TSTypeAnnotation")
-      : // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-        assertNodeType("TSTypeAnnotation", "Noop"),
+    validate: assertNodeType("TSTypeAnnotation"),
+
     optional: true,
   },
   typeParameters: {
-    validate: process.env.BABEL_8_BREAKING
-      ? assertNodeType("TSTypeParameterDeclaration")
-      : // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
-        assertNodeType("TSTypeParameterDeclaration", "Noop"),
+    validate: assertNodeType("TSTypeParameterDeclaration"),
+
     optional: true,
   },
 });
 
 defineType("TSParameterProperty", {
-  aliases: ["LVal"], // TODO: This isn't usable in general as an LVal. Should have a "Parameter" alias.
+  aliases: [],
   visitor: ["parameter"],
   fields: {
     accessibility: {
@@ -59,10 +57,7 @@ defineType("TSParameterProperty", {
       optional: true,
     },
     decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
+      validate: arrayOfType("Decorator"),
       optional: true,
     },
   },
@@ -78,9 +73,10 @@ defineType("TSDeclareFunction", {
 });
 
 defineType("TSDeclareMethod", {
-  visitor: ["decorators", "key", "typeParameters", "params", "returnType"],
+  visitor: ["key", "typeParameters", "params", "returnType"],
+  ...classMethodOrPropertyUnionShapeCommon(true),
   fields: {
-    ...classMethodOrDeclareMethodCommon(),
+    ...classMethodOrDeclareMethodCommon(false),
     ...tSFunctionTypeAnnotationCommon(),
   },
 });
@@ -96,20 +92,18 @@ defineType("TSQualifiedName", {
 
 const signatureDeclarationCommon = () => ({
   typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
-  [process.env.BABEL_8_BREAKING ? "params" : "parameters"]: validateArrayOfType(
-    ["ArrayPattern", "Identifier", "ObjectPattern", "RestElement"],
+  params: validateArrayOfType(
+    "ArrayPattern",
+    "Identifier",
+    "ObjectPattern",
+    "RestElement",
   ),
-  [process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation"]:
-    validateOptionalType("TSTypeAnnotation"),
+  returnType: validateOptionalType("TSTypeAnnotation"),
 });
 
 const callConstructSignatureDeclaration = {
   aliases: ["TSTypeElement"],
-  visitor: [
-    "typeParameters",
-    process.env.BABEL_8_BREAKING ? "params" : "parameters",
-    process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
-  ],
+  visitor: ["typeParameters", "params", "returnType"],
   fields: signatureDeclarationCommon(),
 };
 
@@ -133,6 +127,7 @@ defineType("TSPropertySignature", {
     readonly: validateOptional(bool),
     typeAnnotation: validateOptionalType("TSTypeAnnotation"),
     kind: {
+      optional: true,
       validate: assertOneOf("get", "set"),
     },
   },
@@ -140,17 +135,13 @@ defineType("TSPropertySignature", {
 
 defineType("TSMethodSignature", {
   aliases: ["TSTypeElement"],
-  visitor: [
-    "key",
-    "typeParameters",
-    process.env.BABEL_8_BREAKING ? "params" : "parameters",
-    process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
-  ],
+  visitor: ["key", "typeParameters", "params", "returnType"],
   fields: {
     ...signatureDeclarationCommon(),
     ...namedTypeElementCommon(),
     kind: {
       validate: assertOneOf("method", "get", "set"),
+      default: "method",
     },
   },
 });
@@ -198,11 +189,7 @@ defineType("TSThisType", {
 
 const fnOrCtrBase = {
   aliases: ["TSType"],
-  visitor: [
-    "typeParameters",
-    process.env.BABEL_8_BREAKING ? "params" : "parameters",
-    process.env.BABEL_8_BREAKING ? "returnType" : "typeAnnotation",
-  ],
+  visitor: ["typeParameters", "params", "returnType"],
 };
 
 defineType("TSFunctionType", {
@@ -219,10 +206,10 @@ defineType("TSConstructorType", {
 
 defineType("TSTypeReference", {
   aliases: ["TSType"],
-  visitor: ["typeName", "typeParameters"],
+  visitor: ["typeName", "typeArguments"],
   fields: {
     typeName: validateType("TSEntityName"),
-    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
+    typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 
@@ -231,7 +218,7 @@ defineType("TSTypePredicate", {
   visitor: ["parameterName", "typeAnnotation"],
   builder: ["parameterName", "typeAnnotation", "asserts"],
   fields: {
-    parameterName: validateType(["Identifier", "TSThisType"]),
+    parameterName: validateType("Identifier", "TSThisType"),
     typeAnnotation: validateOptionalType("TSTypeAnnotation"),
     asserts: validateOptional(bool),
   },
@@ -239,10 +226,10 @@ defineType("TSTypePredicate", {
 
 defineType("TSTypeQuery", {
   aliases: ["TSType"],
-  visitor: ["exprName", "typeParameters"],
+  visitor: ["exprName", "typeArguments"],
   fields: {
-    exprName: validateType(["TSEntityName", "TSImportType"]),
-    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
+    exprName: validateType("TSEntityName", "TSImportType"),
+    typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 
@@ -266,7 +253,7 @@ defineType("TSTupleType", {
   aliases: ["TSType"],
   visitor: ["elementTypes"],
   fields: {
-    elementTypes: validateArrayOfType(["TSType", "TSNamedTupleMember"]),
+    elementTypes: validateArrayOfType("TSType", "TSNamedTupleMember"),
   },
 });
 
@@ -287,6 +274,7 @@ defineType("TSRestType", {
 });
 
 defineType("TSNamedTupleMember", {
+  aliases: ["TSType"],
   visitor: ["label", "elementType"],
   builder: ["label", "elementType", "optional"],
   fields: {
@@ -340,8 +328,12 @@ defineType("TSParenthesizedType", {
 defineType("TSTypeOperator", {
   aliases: ["TSType"],
   visitor: ["typeAnnotation"],
+  builder: ["typeAnnotation", "operator"],
   fields: {
-    operator: validate(assertValueType("string")),
+    operator: {
+      validate: assertOneOf("keyof", "readonly", "unique"),
+      default: undefined,
+    },
     typeAnnotation: validateType("TSType"),
   },
 });
@@ -357,25 +349,41 @@ defineType("TSIndexedAccessType", {
 
 defineType("TSMappedType", {
   aliases: ["TSType"],
-  visitor: process.env.BABEL_8_BREAKING
-    ? ["key", "constraint", "nameType", "typeAnnotation"]
-    : ["typeParameter", "nameType", "typeAnnotation"],
-  builder: process.env.BABEL_8_BREAKING
-    ? ["key", "constraint", "nameType", "typeAnnotation"]
-    : ["typeParameter", "typeAnnotation", "nameType"],
+  visitor: ["key", "constraint", "nameType", "typeAnnotation"],
+  builder: ["key", "constraint", "nameType", "typeAnnotation"],
   fields: {
-    ...(process.env.BABEL_8_BREAKING
-      ? {
-          key: validateType("Identifier"),
-          constraint: validateType("TSType"),
-        }
-      : {
-          typeParameter: validateType("TSTypeParameter"),
-        }),
+    key: validateType("Identifier"),
+    constraint: validateType("TSType"),
+
     readonly: validateOptional(assertOneOf(true, false, "+", "-")),
     optional: validateOptional(assertOneOf(true, false, "+", "-")),
     typeAnnotation: validateOptionalType("TSType"),
     nameType: validateOptionalType("TSType"),
+  },
+});
+
+defineType("TSTemplateLiteralType", {
+  aliases: ["TSType", "TSBaseType"],
+  visitor: ["quasis", "types"],
+  fields: {
+    quasis: validateArrayOfType("TemplateElement"),
+    types: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("TSType")),
+        function (node: t.TSTemplateLiteralType, key, val) {
+          if (node.quasis.length !== val.length + 1) {
+            throw new TypeError(
+              `Number of ${
+                node.type
+              } quasis should be exactly one more than the number of types.\nExpected ${
+                val.length + 1
+              } quasis but got ${node.quasis.length}`,
+            );
+          }
+        },
+      ),
+    },
   },
 });
 
@@ -398,39 +406,49 @@ defineType("TSLiteralType", {
           "BigIntLiteral",
           "TemplateLiteral",
         );
-        function validator(parent: any, key: string, node: any) {
-          // type A = -1 | 1;
-          if (is("UnaryExpression", node)) {
-            // check operator first
-            unaryOperator(node, "operator", node.operator);
-            unaryExpression(node, "argument", node.argument);
-          } else {
-            // type A = 'foo' | 'bar' | false | 1;
-            literal(parent, key, node);
-          }
-        }
-
-        validator.oneOfNodeTypes = [
-          "NumericLiteral",
-          "StringLiteral",
-          "BooleanLiteral",
-          "BigIntLiteral",
-          "TemplateLiteral",
-          "UnaryExpression",
-        ];
-
+        const validator = combine(
+          function validator(parent, key, node: t.Node) {
+            // type A = -1 | 1;
+            if (is("UnaryExpression", node)) {
+              // check operator first
+              unaryOperator(node, "operator", node.operator);
+              unaryExpression(node, "argument", node.argument);
+            } else {
+              // type A = 'foo' | 'bar' | false | 1;
+              literal(parent, key, node);
+            }
+          },
+          {
+            oneOfNodeTypes: [
+              "NumericLiteral",
+              "StringLiteral",
+              "BooleanLiteral",
+              "BigIntLiteral",
+              "TemplateLiteral",
+              "UnaryExpression",
+            ],
+          },
+        );
         return validator;
       })(),
     },
   },
 });
 
-defineType("TSExpressionWithTypeArguments", {
+defineType("TSClassImplements", {
   aliases: ["TSType"],
-  visitor: ["expression", "typeParameters"],
+  visitor: ["expression", "typeArguments"],
   fields: {
-    expression: validateType("TSEntityName"),
-    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
+    expression: validateType("Expression"),
+    typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
+  },
+});
+defineType("TSInterfaceHeritage", {
+  aliases: ["TSType"],
+  visitor: ["expression", "typeArguments"],
+  fields: {
+    expression: validateType("Expression"),
+    typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 
@@ -442,7 +460,7 @@ defineType("TSInterfaceDeclaration", {
     declare: validateOptional(bool),
     id: validateType("Identifier"),
     typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
-    extends: validateOptional(arrayOfType("TSExpressionWithTypeArguments")),
+    extends: validateOptional(arrayOfType("TSInterfaceHeritage")),
     body: validateType("TSInterfaceBody"),
   },
 });
@@ -467,10 +485,10 @@ defineType("TSTypeAliasDeclaration", {
 
 defineType("TSInstantiationExpression", {
   aliases: ["Expression"],
-  visitor: ["expression", "typeParameters"],
+  visitor: ["expression", "typeArguments"],
   fields: {
     expression: validateType("Expression"),
-    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
+    typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 
@@ -495,23 +513,30 @@ defineType("TSTypeAssertion", {
   },
 });
 
+defineType("TSEnumBody", {
+  visitor: ["members"],
+  fields: {
+    members: validateArrayOfType("TSEnumMember"),
+  },
+});
+
 defineType("TSEnumDeclaration", {
   // "Statement" alias prevents a semicolon from appearing after it in an export declaration.
   aliases: ["Statement", "Declaration"],
-  visitor: ["id", "members"],
+  visitor: ["id", "body"],
   fields: {
     declare: validateOptional(bool),
     const: validateOptional(bool),
     id: validateType("Identifier"),
-    members: validateArrayOfType("TSEnumMember"),
-    initializer: validateOptionalType("Expression"),
+
+    body: validateType("TSEnumBody"),
   },
 });
 
 defineType("TSEnumMember", {
   visitor: ["id", "initializer"],
   fields: {
-    id: validateType(["Identifier", "StringLiteral"]),
+    id: validateType("Identifier", "StringLiteral"),
     initializer: validateOptionalType("Expression"),
   },
 });
@@ -520,10 +545,31 @@ defineType("TSModuleDeclaration", {
   aliases: ["Statement", "Declaration"],
   visitor: ["id", "body"],
   fields: {
+    kind: {
+      validate: assertOneOf("global", "namespace", "module"),
+      default: "namespace",
+    },
     declare: validateOptional(bool),
-    global: validateOptional(bool),
-    id: validateType(["Identifier", "StringLiteral"]),
-    body: validateType(["TSModuleBlock", "TSModuleDeclaration"]),
+    id: {
+      validate: chain(
+        assertNodeType("TSEntityName", "StringLiteral"),
+        combine(
+          function (
+            node: t.TSModuleDeclaration,
+            key,
+            val: t.TSEntityName | t.StringLiteral,
+          ) {
+            if (node.kind === "namespace" && is("StringLiteral", val)) {
+              throw new TypeError(
+                `TSModuleDeclaration of kind 'namespace' cannot have a StringLiteral id.`,
+              );
+            }
+          },
+          { oneOfNodeTypes: ["TSEntityName", "StringLiteral"] },
+        ),
+      ),
+    },
+    body: validateType("TSModuleBlock"),
   },
 });
 
@@ -537,28 +583,27 @@ defineType("TSModuleBlock", {
 
 defineType("TSImportType", {
   aliases: ["TSType"],
-  visitor: ["argument", "qualifier", "typeParameters"],
+  builder: ["source", "qualifier", "typeArguments"],
+  visitor: ["source", "options", "qualifier", "typeArguments"],
   fields: {
-    argument: validateType("StringLiteral"),
+    source: validateType("StringLiteral"),
     qualifier: validateOptionalType("TSEntityName"),
-    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
+
+    typeArguments: validateOptionalType("TSTypeParameterInstantiation"),
+
     options: {
-      validate: assertNodeType("Expression"),
+      validate: assertNodeType("ObjectExpression"),
       optional: true,
     },
   },
 });
 
 defineType("TSImportEqualsDeclaration", {
-  aliases: ["Statement"],
+  aliases: ["Statement", "Declaration"],
   visitor: ["id", "moduleReference"],
   fields: {
-    isExport: validate(bool),
     id: validateType("Identifier"),
-    moduleReference: validateType([
-      "TSEntityName",
-      "TSExternalModuleReference",
-    ]),
+    moduleReference: validateType("TSEntityName", "TSExternalModuleReference"),
     importKind: {
       validate: assertOneOf("type", "value"),
       optional: true,
@@ -609,35 +654,23 @@ defineType("TSTypeAnnotation", {
 defineType("TSTypeParameterInstantiation", {
   visitor: ["params"],
   fields: {
-    params: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("TSType")),
-      ),
-    },
+    params: validateArrayOfType("TSType"),
   },
 });
 
 defineType("TSTypeParameterDeclaration", {
   visitor: ["params"],
   fields: {
-    params: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("TSTypeParameter")),
-      ),
-    },
+    params: validateArrayOfType("TSTypeParameter"),
   },
 });
 
 defineType("TSTypeParameter", {
   builder: ["constraint", "default", "name"],
-  visitor: ["constraint", "default"],
+  visitor: ["name", "constraint", "default"],
   fields: {
     name: {
-      validate: !process.env.BABEL_8_BREAKING
-        ? assertValueType("string")
-        : assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier"),
     },
     in: {
       validate: assertValueType("boolean"),

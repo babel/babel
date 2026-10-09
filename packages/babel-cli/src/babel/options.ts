@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "node:fs";
 
 import * as commander from "commander";
 import { version, DEFAULT_EXTENSIONS } from "@babel/core";
@@ -7,10 +7,7 @@ import { alphasort } from "./util.ts";
 
 import type { InputOptions } from "@babel/core";
 
-const program = process.env.BABEL_8_BREAKING
-  ? commander.program
-  : commander.default.program;
-
+const program = commander.program;
 // Standard Babel input configs.
 program.option(
   "-f, --filename [filename]",
@@ -108,19 +105,6 @@ program.option(
   "The root from which all sources are relative.",
 );
 
-if (!process.env.BABEL_8_BREAKING) {
-  // Config params for certain module output formats.
-  program.option(
-    "--module-root [filename]",
-    "Optional prefix for the AMD module formatter that will be prepended to the filename on module definitions.",
-  );
-  program.option("-M, --module-ids", "Insert an explicit id for modules.");
-  program.option(
-    "--module-id [string]",
-    "Specify a custom name for module ids.",
-  );
-}
-
 // "babel" command specific arguments that are not passed to @babel/core.
 program.option(
   "-x, --extensions [extensions]",
@@ -177,13 +161,10 @@ program.option(
   "--out-file-extension [string]",
   "Use a specific extension for the output files",
 );
+program.argument("[files...]", "List of files to compile.");
 
 program.version(PACKAGE_JSON.version + " (@babel/core " + version + ")");
-program.usage("[options] <files ...>");
-// register an empty action handler so that program.js can throw on
-// unknown options _after_ args
-// see https://github.com/tj/program.js/issues/561#issuecomment-522209408
-program.action(() => {});
+program.usage("[options] [files...]");
 
 export type CmdOptions = {
   babelOptions: InputOptions;
@@ -208,7 +189,7 @@ export type CmdOptions = {
   };
 };
 
-export default function parseArgv(args: Array<string>): CmdOptions | null {
+export default function parseArgv(args: string[]): CmdOptions | null {
   //
   program.parse(args);
 
@@ -217,13 +198,11 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   const errors: string[] = [];
 
   let filenames = program.args.reduce(function (globbed: string[], input) {
-    let files = process.env.BABEL_8_BREAKING
-      ? // glob 9+ no longer sorts the result, here we maintain the glob 7 behaviour
-        // https://github.com/isaacs/node-glob/blob/c3cd57ae128faa0e9190492acc743bb779ac4054/common.js#L151
-        glob.sync(input, { dotRelative: true }).sort(alphasort)
-      : // @ts-expect-error When USE_ESM is true and BABEL_8_BREAKING is off,
-        // the glob package is an ESM wrapper of the CJS glob 7
-        (USE_ESM ? glob.default.sync : glob.sync)(input);
+    let files =
+      // glob 9+ no longer sorts the result, here we maintain the glob 7 behaviour
+      // https://github.com/isaacs/node-glob/blob/c3cd57ae128faa0e9190492acc743bb779ac4054/common.js#L151
+      glob.sync(input, { dotRelative: true }).sort(alphasort);
+
     if (!files.length) files = [input];
     globbed.push(...files);
     return globbed;
@@ -321,21 +300,13 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
     comments: opts.comments === true ? undefined : opts.comments,
   };
 
-  if (!process.env.BABEL_8_BREAKING) {
-    Object.assign(babelOptions, {
-      moduleRoot: opts.moduleRoot,
-      moduleIds: opts.moduleIds,
-      moduleId: opts.moduleId,
-    });
-  }
-
   // If the @babel/cli version is newer than the @babel/core version, and we have added
   // new options for @babel/core, we'll potentially get option validation errors from
   // @babel/core. To avoid that, we delete undefined options, so @babel/core will only
   // give the error if users actually pass an unsupported CLI option.
-  for (const key of Object.keys(babelOptions) as Array<
-    keyof typeof babelOptions
-  >) {
+  for (const key of Object.keys(
+    babelOptions,
+  ) as (keyof typeof babelOptions)[]) {
     if (babelOptions[key] === undefined) {
       delete babelOptions[key];
     }
@@ -365,8 +336,6 @@ export default function parseArgv(args: Array<string>): CmdOptions | null {
   };
 }
 
-function booleanify(val: "false" | "0" | ""): false;
-function booleanify(val: "true" | "1"): true;
 function booleanify(val: string): boolean | string {
   if (val === "true" || val === "1") {
     return true;
@@ -380,7 +349,7 @@ function booleanify(val: string): boolean | string {
   return val;
 }
 
-function collect(value: unknown, previousValue: Array<string>): Array<string> {
+function collect(value: unknown, previousValue: string[]): string[] {
   // If the user passed the option with no value, like "babel file.js --presets", do nothing.
   if (typeof value !== "string") return previousValue;
 

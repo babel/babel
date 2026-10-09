@@ -6,8 +6,7 @@ import {
   getAssignmentIdentifiers as _getAssignmentIdentifiers,
   getBindingIdentifiers as _getBindingIdentifiers,
   getOuterBindingIdentifiers as _getOuterBindingIdentifiers,
-  numericLiteral,
-  unaryExpression,
+  buildUndefinedNode,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -29,6 +28,8 @@ type CompletionContext = {
   // when a `break` statement is an immediate descendant of a block statement, e.g.
   // `{ break }`, it can influence the control flow in the upper levels.
   shouldPopulateBreak: boolean;
+  // Whether the `break` statement should be preserved.
+  shouldPreserveBreak: boolean;
 };
 
 function NormalCompletion(path: NodePath): Completion {
@@ -39,7 +40,7 @@ function BreakCompletion(path: NodePath): Completion {
   return { type: BREAK_COMPLETION, path };
 }
 
-export function getOpposite(this: NodePath): NodePath | null {
+export function getOpposite(this: NodePath): NodePath<t.Node | null> | null {
   if (this.key === "left") {
     return this.getSibling("right");
   } else if (this.key === "right") {
@@ -49,11 +50,12 @@ export function getOpposite(this: NodePath): NodePath | null {
 }
 
 function addCompletionRecords(
-  path: NodePath | null | undefined,
+  path: NodePath<t.Node | null> | null | undefined,
   records: Completion[],
   context: CompletionContext,
 ): Completion[] {
   if (path) {
+    // @ts-expect-error FIXME: path may be NodePath<null>
     records.push(..._getCompletionRecords(path, context));
   }
   return records;
@@ -114,7 +116,7 @@ function replaceBreakStatementInBreakCompletion(
   completions.forEach(c => {
     if (c.path.isBreakStatement({ label: null })) {
       if (reachable) {
-        c.path.replaceWith(unaryExpression("void", numericLiteral(0)));
+        c.path.replaceWith(buildUndefinedNode());
       } else {
         c.path.remove();
       }
@@ -169,18 +171,22 @@ function getStatementListCompletion(
           // directly in return statement, i.e. `return (var a = 1)` is invalid.
           if (lastNormalCompletions.some(c => c.path.isDeclaration())) {
             completions.push(...statementCompletions);
+            if (!context.shouldPreserveBreak) {
+              replaceBreakStatementInBreakCompletion(
+                statementCompletions,
+                /* reachable */ true,
+              );
+            }
+          }
+          if (!context.shouldPreserveBreak) {
             replaceBreakStatementInBreakCompletion(
               statementCompletions,
-              /* reachable */ true,
+              /* reachable */ false,
             );
           }
-          replaceBreakStatementInBreakCompletion(
-            statementCompletions,
-            /* reachable */ false,
-          );
         } else {
           completions.push(...statementCompletions);
-          if (!context.shouldPopulateBreak) {
+          if (!context.shouldPopulateBreak && !context.shouldPreserveBreak) {
             replaceBreakStatementInBreakCompletion(
               statementCompletions,
               /* reachable */ true,
@@ -213,7 +219,8 @@ function getStatementListCompletion(
       if (
         pathCompletions.length > 1 ||
         (pathCompletions.length === 1 &&
-          !pathCompletions[0].path.isVariableDeclaration())
+          !pathCompletions[0].path.isVariableDeclaration() &&
+          !pathCompletions[0].path.isEmptyStatement())
       ) {
         completions.push(...pathCompletions);
         break;
@@ -254,6 +261,7 @@ function _getCompletionRecords(
       canHaveBreak: true,
       shouldPopulateBreak: false,
       inCaseClause: true,
+      shouldPreserveBreak: context.shouldPreserveBreak,
     });
   } else if (path.isBreakStatement()) {
     records.push(BreakCompletion(path));
@@ -272,63 +280,82 @@ function _getCompletionRecords(
  *
  * @export
  * @param {NodePath} this
+ * @param {boolean} [shouldPreserveBreak=false] Whether the `break` statement should be preserved.
  * @returns {NodePath[]} Completion records
  */
-export function getCompletionRecords(this: NodePath): NodePath[] {
+export function getCompletionRecords(
+  this: NodePath,
+  shouldPreserveBreak = false,
+): NodePath[] {
   const records = _getCompletionRecords(this, {
     canHaveBreak: false,
     shouldPopulateBreak: false,
     inCaseClause: false,
+    shouldPreserveBreak,
   });
   return records.map(r => r.path);
 }
 
-export function getSibling(this: NodePath, key: string | number): NodePath {
+export function getSibling(
+  this: NodePath<t.Node | null>,
+  key: string | number,
+): NodePath<t.Node | null> {
   return NodePath.get({
     parentPath: this.parentPath,
     parent: this.parent,
-    container: this.container,
-    listKey: this.listKey,
+    container: this.container!,
+    listKey: this.listKey!,
     key: key,
   }).setContext(this.context);
 }
 
-export function getPrevSibling(this: NodePath): NodePath {
+export function getPrevSibling(
+  this: NodePath<t.Node | null>,
+): NodePath<t.Node | null> {
   // @ts-expect-error todo(flow->ts) this.key could be a string
   return this.getSibling(this.key - 1);
 }
 
-export function getNextSibling(this: NodePath): NodePath {
+export function getNextSibling(
+  this: NodePath<t.Node | null>,
+): NodePath<t.Node | null> {
   // @ts-expect-error todo(flow->ts) this.key could be a string
   return this.getSibling(this.key + 1);
 }
 
-export function getAllNextSiblings(this: NodePath): NodePath[] {
-  // @ts-expect-error todo(flow->ts) this.key could be a string
-  let _key: number = this.key;
-  let sibling = this.getSibling(++_key);
-  const siblings = [];
-  while (sibling.node) {
-    siblings.push(sibling);
-    sibling = this.getSibling(++_key);
+export function getAllNextSiblings(
+  this: NodePath<t.Node | null>,
+): NodePath<t.Node | null>[] {
+  // @ts-expect-error the Number.isInteger check ensures that this.key is a number
+  const _key: number = this.key;
+  if (!Number.isInteger(_key)) {
+    return [];
+  }
+  const siblings = [],
+    containerLength = (this.container as t.Node[]).length;
+  for (let key = _key + 1; key < containerLength; key++) {
+    siblings.push(this.getSibling(key));
   }
   return siblings;
 }
 
-export function getAllPrevSiblings(this: NodePath): NodePath[] {
-  // @ts-expect-error todo(flow->ts) this.key could be a string
-  let _key: number = this.key;
-  let sibling = this.getSibling(--_key);
+export function getAllPrevSiblings(
+  this: NodePath<t.Node | null>,
+): NodePath<t.Node | null>[] {
+  // @ts-expect-error the Number.isInteger check ensures that this.key is a number
+  const _key: number = this.key;
+  if (!Number.isInteger(_key)) {
+    return [];
+  }
   const siblings = [];
-  while (sibling.node) {
-    siblings.push(sibling);
-    sibling = this.getSibling(--_key);
+  for (let key = _key - 1; key >= 0; key--) {
+    siblings.push(this.getSibling(key));
   }
   return siblings;
 }
 
 // convert "1" to 1 (string index to number index)
-type MaybeToIndex<T extends string> = T extends `${bigint}` ? number : T;
+type MaybeToIndex<T extends string> = T extends `${number}` ? number : T;
 
 type Pattern<Obj extends string, Prop extends string> = `${Obj}.${Prop}`;
 
@@ -345,44 +372,58 @@ type Trav<
   Path extends unknown[],
 > = Path extends [infer K, ...infer R]
   ? K extends keyof Node
-    ? Node[K] extends t.Node | t.Node[]
-      ? R extends []
-        ? Node[K]
-        : Trav<Node[K], R>
-      : never
-    : never
+    ? R extends []
+      ? Node[K]
+      : Node[K] extends t.Node | t.Node[] | null | undefined
+        ? null | undefined extends Node[K]
+          ? TravD<Node[K] & {}, R> | null
+          : TravD<Node[K] & {}, R>
+        : never
+    : string extends K
+      ? t.Node | null
+      : null
   : never;
 
-type ToNodePath<T> =
-  T extends Array<t.Node | null | undefined>
-    ? Array<NodePath<T[number]>>
+type TravD<
+  Node extends t.Node | t.Node[],
+  Path extends unknown[],
+> = Node extends any ? Trav<Node, Path> : never;
+
+type ToNodePath<T> = T extends undefined | null
+  ? NodePath<null>
+  : T extends (infer U extends t.Node | null)[]
+    ? NodePath<U>[]
     : T extends t.Node | null | undefined
-      ? NodePath<T>
+      ? NodePath<T & {}>
       : never;
 
 function get<T extends NodePath, K extends keyof T["node"]>(
   this: T,
   key: K,
-  context?: boolean | TraversalContext,
+  context?: true | TraversalContext,
 ): T extends any
-  ? T["node"][K] extends Array<t.Node | null | undefined>
-    ? Array<NodePath<T["node"][K][number]>>
-    : T["node"][K] extends t.Node | null | undefined
-      ? NodePath<T["node"][K]>
+  ? T["node"][K] extends (infer U extends t.Node | null)[] | null | undefined
+    ? NodePath<U>[]
+    : T["node"][K] extends (infer U extends t.Node | null) | undefined
+      ? NodePath<U>
       : never
   : never;
 
-function get<T extends NodePath, K extends string>(
+function get<T extends NodePath<t.Node>, K extends string>(
   this: T,
   key: K,
-  context?: boolean | TraversalContext,
-): T extends any ? ToNodePath<Trav<T["node"], Split<K>>> : never;
+  context?: true | TraversalContext,
+): string extends K
+  ? NodePath<t.Node | null> | NodePath<t.Node | null>[]
+  : T extends any
+    ? ToNodePath<Trav<T["node"], Split<K>>>
+    : never;
 
 function get(
   this: NodePath,
   key: string,
   context?: true | TraversalContext,
-): NodePath | NodePath[];
+): NodePath<t.Node | null> | NodePath<t.Node | null>[];
 
 function get(
   this: NodePath,
@@ -397,17 +438,18 @@ function get(
     return _getKey.call(this, key, context);
   } else {
     // "foo.bar"
+    // @ts-expect-error this may be NodePath<null>
     return _getPattern.call(this, parts, context);
   }
 }
 
 export { get };
 
-export function _getKey<T extends t.Node>(
+function _getKey<T extends t.Node>(
   this: NodePath<T>,
   key: keyof T & string,
   context?: TraversalContext,
-): NodePath | NodePath[] {
+): NodePath<t.Node | null> | NodePath<t.Node | null>[] {
   const node = this.node as T;
   const container = node[key];
 
@@ -432,12 +474,12 @@ export function _getKey<T extends t.Node>(
   }
 }
 
-export function _getPattern(
+function _getPattern(
   this: NodePath,
   parts: string[],
   context?: TraversalContext,
-): NodePath | NodePath[] {
-  let path: NodePath | NodePath[] = this;
+) {
+  let path: NodePath<t.Node | null> | NodePath<t.Node | null>[] = this;
   for (const part of parts) {
     if (part === ".") {
       // @ts-expect-error todo(flow-ts): Can path be an array here?
@@ -447,6 +489,7 @@ export function _getPattern(
         // @ts-expect-error part may not index path
         path = path[part];
       } else {
+        // @ts-expect-error path may be NodePath<null>
         path = path.get(part, context);
       }
     }
@@ -512,7 +555,7 @@ function getBindingIdentifierPaths(
 // original source - https://github.com/babel/babel/blob/main/packages/babel-types/src/retrievers/getBindingIdentifiers.js
 // path.getBindingIdentifiers returns nodes where the following re-implementation returns paths
 function getBindingIdentifierPaths(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   duplicates: boolean = false,
   outerOnly: boolean = false,
 ): Record<string, NodePath<t.Identifier> | NodePath<t.Identifier>[]> {

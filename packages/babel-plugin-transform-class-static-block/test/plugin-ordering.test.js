@@ -1,6 +1,6 @@
 import * as babel from "@babel/core";
-import proposalClassStaticBlock from "../lib/index.js";
-import proposalClassProperties from "@babel/plugin-transform-class-properties";
+import transformClassStaticBlock from "../lib/index.js";
+import transformClassProperties from "@babel/plugin-transform-class-properties";
 import externalHelpers from "@babel/plugin-external-helpers";
 
 describe("plugin ordering", () => {
@@ -19,8 +19,8 @@ describe("plugin ordering", () => {
         configFile: false,
         babelrc: false,
         plugins: [
-          proposalClassProperties,
-          proposalClassStaticBlock,
+          transformClassProperties,
+          transformClassStaticBlock,
           externalHelpers,
         ],
       }).code,
@@ -29,7 +29,7 @@ describe("plugin ordering", () => {
       class Foo {}
       _Foo = Foo;
       _Foo.foo = _Foo.bar;
-      babelHelpers.defineProperty(Foo, \\"bar\\", 42);"
+      babelHelpers.defineProperty(Foo, "bar", 42);"
     `);
   });
 });

@@ -5,7 +5,7 @@ export interface HubInterface {
   getCode(): string | void;
   getScope(): Scope | void;
   addHelper(name: string): any;
-  buildError(node: Node, msg: string, Error: new () => Error): Error;
+  buildError(node: Node, msg: string, Error: new (msg: string) => Error): Error;
 }
 
 export default class Hub implements HubInterface {
@@ -17,7 +17,11 @@ export default class Hub implements HubInterface {
     throw new Error("Helpers are not supported by the default hub.");
   }
 
-  buildError(node: Node, msg: string, Error = TypeError): Error {
+  buildError(
+    node: Node,
+    msg: string,
+    Error: new (msg: string) => Error = TypeError,
+  ): Error {
     return new Error(msg);
   }
 }

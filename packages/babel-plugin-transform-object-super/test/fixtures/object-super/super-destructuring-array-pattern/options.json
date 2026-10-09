@@ -1,4 +1,3 @@
 {
-  "plugins": ["transform-object-super", "transform-shorthand-properties"],
   "throws": "Destructuring to a super field is not supported yet."
 }

@@ -25,6 +25,7 @@
               },
               "value": "foo"
             },
+            "options": null,
             "extra": {
               "parenthesized": true,
               "parenStart": 4

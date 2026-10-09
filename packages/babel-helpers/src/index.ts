@@ -8,10 +8,10 @@ type GetDependency = (name: string) => t.Expression;
 function deep(obj: any, path: string, value?: unknown) {
   try {
     const parts = path.split(".");
-    let last = parts.shift();
+    let last = parts.shift()!;
     while (parts.length > 0) {
       obj = obj[last];
-      last = parts.shift();
+      last = parts.shift()!;
     }
     if (arguments.length > 2) {
       obj[last] = value;
@@ -136,17 +136,6 @@ export function get(
   localBindings?: string[],
   adjustAst?: AdjustAst,
 ) {
-  if (!process.env.BABEL_8_BREAKING) {
-    // In older versions, bindingName was a t.Identifier | t.MemberExpression
-    if (typeof bindingName === "object") {
-      const id = bindingName as t.Identifier | t.MemberExpression | null;
-      if (id?.type === "Identifier") {
-        bindingName = id.name;
-      } else {
-        bindingName = undefined;
-      }
-    }
-  }
   return loadHelper(name).build(
     getDependency,
     bindingName,
@@ -159,15 +148,12 @@ export function minVersion(name: string) {
   return loadHelper(name).minVersion;
 }
 
-export function getDependencies(name: string): ReadonlyArray<string> {
+export function getDependencies(name: string): readonly string[] {
   return loadHelper(name).getDependencies();
 }
 
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  // eslint-disable-next-line no-restricted-globals
-  exports.ensure = (name: string) => {
-    loadHelper(name);
-  };
+export function isInternal(name: string): boolean {
+  return helpers[name]?.metadata.internal;
 }
 
 export const list = Object.keys(helpers).map(name => name.replace(/^_/, ""));

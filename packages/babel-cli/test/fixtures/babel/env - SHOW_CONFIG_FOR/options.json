@@ -3,6 +3,5 @@
   "env": {
     "BABEL_ENV": "test",
     "BABEL_SHOW_CONFIG_FOR": "./src/index.js"
-  },
-  "os": ["darwin", "linux"]
+  }
 }

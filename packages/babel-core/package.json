@@ -1,6 +1,6 @@
 {
   "name": "@babel/core",
-  "version": "7.25.2",
+  "version": "8.0.7",
   "description": "Babel compiler core.",
   "main": "./lib/index.js",
   "author": "The Babel Team (https://babel.dev/team)",
@@ -31,95 +31,91 @@
     "compiler"
   ],
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "funding": {
     "type": "opencollective",
     "url": "https://opencollective.com/babel"
   },
-  "browser": {
-    "./lib/config/files/index.js": "./lib/config/files/index-browser.js",
-    "./lib/config/resolve-targets.js": "./lib/config/resolve-targets-browser.js",
-    "./lib/transform-file.js": "./lib/transform-file-browser.js",
-    "./src/config/files/index.ts": "./src/config/files/index-browser.ts",
-    "./src/config/resolve-targets.ts": "./src/config/resolve-targets-browser.ts",
-    "./src/transform-file.ts": "./src/transform-file-browser.ts"
-  },
   "dependencies": {
-    "@ampproject/remapping": "^2.2.0",
     "@babel/code-frame": "workspace:^",
     "@babel/generator": "workspace:^",
     "@babel/helper-compilation-targets": "workspace:^",
-    "@babel/helper-module-transforms": "condition:BABEL_8_BREAKING ? : workspace:^",
     "@babel/helpers": "workspace:^",
     "@babel/parser": "workspace:^",
     "@babel/template": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",
-    "convert-source-map": "^2.0.0",
-    "debug": "^4.1.0",
+    "@types/gensync": "^1.0.5",
+    "convert-source-map": "catalog:",
+    "empathic": "catalog:",
     "gensync": "^1.0.0-beta.2",
+    "import-meta-resolve": "^4.2.0",
     "json5": "^2.2.3",
-    "semver": "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
+    "obug": "catalog:",
+    "verkit": "catalog:"
   },
   "devDependencies": {
     "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@babel/plugin-syntax-flow": "workspace:^",
+    "@babel/plugin-syntax-jsx": "workspace:^",
     "@babel/plugin-transform-flow-strip-types": "workspace:^",
     "@babel/plugin-transform-modules-commonjs": "workspace:^",
     "@babel/preset-env": "workspace:^",
     "@babel/preset-typescript": "workspace:^",
-    "@jridgewell/trace-mapping": "^0.3.25",
+    "@cspotcode/source-map-support": "catalog:",
+    "@jridgewell/trace-mapping": "catalog:",
     "@types/convert-source-map": "^2.0.0",
-    "@types/debug": "^4.1.0",
-    "@types/gensync": "^1.0.0",
     "@types/resolve": "^1.3.2",
-    "@types/semver": "^5.4.0",
-    "rimraf": "^3.0.0",
-    "ts-node": "^11.0.0-beta.1"
-  },
-  "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "peerDependencies": {
-          "@babel/preset-typescript": "^7.21.4 || ^8.0.0-0"
-        },
-        "peerDependenciesMeta": {
-          "@babel/preset-typescript": {
-            "optional": true
-          }
-        },
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        }
-      },
-      {
-        "exports": null
-      }
-    ],
-    "USE_ESM": [
-      {
-        "exports": {
-          ".": {
-            "types": "./lib/index.d.ts",
-            "require": "./cjs-proxy.cjs",
-            "default": "./lib/index.js"
-          },
-          "./package.json": "./package.json"
-        }
-      },
-      {
-        "type": "commonjs"
-      }
-    ]
+    "ts-node": "^11.0.0-beta.1",
+    "tsx": "^4.20.3"
   },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",
-      "require": "./cjs-proxy-dev.cjs",
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
+  },
+  "imports": {
+    "#config/files": {
+      "babel-src": {
+        "browser": "./src/config/files/index-browser.ts",
+        "default": "./src/config/files/index.ts"
+      },
+      "types": "./lib/config/files/index.d.ts",
+      "browser": "./lib/config/files/index-browser.js",
+      "default": "./lib/config/files/index.js"
+    },
+    "#config/resolve-targets": {
+      "babel-src": {
+        "browser": "./src/config/resolve-targets-browser.ts",
+        "default": "./src/config/resolve-targets.ts"
+      },
+      "types": "./lib/config/resolve-targets.d.ts",
+      "browser": "./lib/config/resolve-targets-browser.js",
+      "default": "./lib/config/resolve-targets.js"
+    },
+    "#transform-file": {
+      "babel-src": {
+        "browser": "./src/transform-file-browser.ts",
+        "default": "./src/transform-file.ts"
+      },
+      "types": "./lib/transform-file.d.ts",
+      "browser": "./lib/transform-file-browser.js",
+      "default": "./lib/transform-file.js"
+    },
+    "#transformation/read-input-source-map-file": {
+      "babel-src": {
+        "browser": "./src/transformation/read-input-source-map-file-browser.ts",
+        "default": "./src/transformation/read-input-source-map-file.ts"
+      },
+      "types": "./lib/index.d.ts",
+      "browser": "./lib/transformation/read-input-source-map-file-browser.js",
+      "default": "./lib/transformation/read-input-source-map-file.js"
+    },
+    "#hack-for-rollup-inlining-order-1": "./lib/errors/rewrite-stack-trace.js",
+    "#hack-for-rollup-inlining-order-2": "./lib/config/caching.js"
   },
   "type": "module"
 }

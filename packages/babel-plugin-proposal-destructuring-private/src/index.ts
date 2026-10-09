@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxDestructuringPrivate from "@babel/plugin-syntax-destructuring-private";
 import {
   hasPrivateKeys,
   hasPrivateClassElement,
@@ -12,10 +11,11 @@ import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring"
 import type { PluginPass, NodePath, Visitor, types as t } from "@babel/core";
 
 export default declare(function ({ assertVersion, assumption, types: t }) {
-  assertVersion(REQUIRED_VERSION("^7.17.0"));
+  assertVersion(REQUIRED_VERSION("^7.17.0 || ^8.0.0"));
   const {
     assignmentExpression,
     assignmentPattern,
+    buildUndefinedNode,
     cloneNode,
     expressionStatement,
     isExpressionStatement,
@@ -35,7 +35,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
       // transforms to:
       // (b, p1) => { var { #x: x } = p1 === undefined ? I : p1; body; }
       const firstPrivateIndex = path.node.params.findIndex(param =>
-        hasPrivateKeys(param),
+        hasPrivateKeys(param as t.FunctionParameter),
       );
       if (firstPrivateIndex === -1) return;
       // wrap function body within IIFE if any param is shadowed
@@ -54,7 +54,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
         "body",
         variableDeclaration,
       );
-      params.push(...transformedParams);
+      params.push(...(transformedParams as (t.Identifier | t.RestElement)[]));
       // preserve function.length
       // (b, p1) => {}
       // transforms to
@@ -63,7 +63,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
         params[firstAssignmentPatternIndex] = assignmentPattern(
           // @ts-expect-error The transformed assignment pattern must not be a RestElement
           params[firstAssignmentPatternIndex],
-          scope.buildUndefinedNode(),
+          buildUndefinedNode(),
         );
       }
       scope.crawl();
@@ -81,7 +81,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
         .get("body")
         .unshiftContainer(
           "body",
-          variableDeclaration("let", [variableDeclarator(node.param, ref)]),
+          variableDeclaration("let", [variableDeclarator(node.param!, ref)]),
         );
       node.param = cloneNode(ref);
       scope.crawl();
@@ -136,7 +136,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
       const newDeclarations = [];
       for (const declarator of declarations) {
         for (const { left, right } of transformPrivateKeyDestructuring(
-          // @ts-expect-error The id of a variable declarator must not be a RestElement
+          // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
           declarator.id,
           declarator.init,
           scope,
@@ -146,7 +146,12 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
           objectRestNoSymbols,
           /* useBuiltIns */ true,
         )) {
-          newDeclarations.push(variableDeclarator(left, right));
+          newDeclarations.push(
+            variableDeclarator(
+              left as t.Identifier | t.ArrayPattern | t.ObjectPattern,
+              right,
+            ),
+          );
         }
       }
       node.declarations = newDeclarations;
@@ -161,7 +166,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
         (!isExpressionStatement(parent) && !isSequenceExpression(parent)) ||
         path.isCompletionRecord();
       for (const { left, right } of transformPrivateKeyDestructuring(
-        // @ts-expect-error The left of an assignment expression must not be a RestElement
+        // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
         node.left,
         node.right,
         scope,
@@ -210,7 +215,7 @@ export default declare(function ({ assertVersion, assumption, types: t }) {
 
   return {
     name: "proposal-destructuring-private",
-    inherits: syntaxDestructuringPrivate,
+    manipulateOptions: (_, p) => p.plugins.push("destructuringPrivate"),
     visitor: visitor,
   };
 });

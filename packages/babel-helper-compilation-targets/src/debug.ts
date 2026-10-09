@@ -1,23 +1,23 @@
-import semver from "semver";
+import { isLessThan } from "verkit";
 import { prettifyVersion } from "./pretty.ts";
 import {
   semverify,
   isUnreleasedVersion,
   getLowestImplementedVersion,
 } from "./utils.ts";
-import type { Target, Targets } from "./types.ts";
+import type { Target, Targets } from "./types.d.ts";
 
 export function getInclusionReasons(
   item: string,
   targetVersions: Targets,
-  list: { [key: string]: Targets },
+  list: Record<string, Targets>,
 ) {
   const minVersions = list[item] || {};
 
   return (Object.keys(targetVersions) as Target[]).reduce(
     (result, env) => {
       const minVersion = getLowestImplementedVersion(minVersions, env);
-      const targetVersion = targetVersions[env];
+      const targetVersion = targetVersions[env]!;
 
       if (!minVersion) {
         result[env] = prettifyVersion(targetVersion);
@@ -28,7 +28,7 @@ export function getInclusionReasons(
         if (
           !targetIsUnreleased &&
           (minIsUnreleased ||
-            semver.lt(targetVersion.toString(), semverify(minVersion)))
+            isLessThan(targetVersion.toString(), semverify(minVersion)))
         ) {
           result[env] = prettifyVersion(targetVersion);
         }

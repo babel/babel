@@ -26,10 +26,18 @@ mkdir tmp && cd tmp
 npx -p @angular/cli ng new --defaults ngx --package-manager yarn --skip-git --skip-install
 cd ngx
 node "$dir"/utils/bump-babel-dependencies.js resolutions
+# Disable yarn minimal age gate because npx will fetch the latest version of Angular CLI
+echo "npmMinimalAgeGate: 0" >> .yarnrc.yml
 touch yarn.lock
 yarn set version stable
-YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn
+export YARN_ENABLE_IMMUTABLE_INSTALLS=false
+yarn install
+# Install browser-playwright for ChromiumHeadless testing
+yarn add playwright @vitest/browser-playwright --dev
+yarn playwright install --with-deps
+# Angular CLI uses oxc linker by default. This ensures that Babel is used for the build
+export NG_BUILD_BABEL_LINKER=1
 yarn run build
-yarn run ng test --watch=false --browsers ChromeHeadless
+yarn run ng test --watch=false --browsers ChromiumHeadless
 
 cleanup

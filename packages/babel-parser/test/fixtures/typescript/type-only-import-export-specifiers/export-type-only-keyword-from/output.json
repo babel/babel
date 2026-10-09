@@ -37,7 +37,8 @@
           },
           "value": "./mode.js"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

@@ -1,0 +1,283 @@
+{
+  "type": "File",
+  "start":0,"end":282,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":20,"column":1,"index":282}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":282,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":20,"column":1,"index":282}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":49}},
+        "body": [
+          {
+            "type": "FunctionDeclaration",
+            "start":28,"end":47,"loc":{"start":{"line":3,"column":2,"index":28},"end":{"line":3,"column":21,"index":47}},
+            "id": {
+              "type": "Identifier",
+              "start":37,"end":38,"loc":{"start":{"line":3,"column":11,"index":37},"end":{"line":3,"column":12,"index":38},"identifierName":"f"},
+              "name": "f"
+            },
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "VoidPattern",
+                "start":39,"end":43,"loc":{"start":{"line":3,"column":13,"index":39},"end":{"line":3,"column":17,"index":43}}
+              }
+            ],
+            "body": {
+              "type": "BlockStatement",
+              "start":45,"end":47,"loc":{"start":{"line":3,"column":19,"index":45},"end":{"line":3,"column":21,"index":47}},
+              "body": [],
+              "directives": []
+            },
+            "leadingComments": [
+              {
+                "type": "CommentLine",
+                "value": " function parameter",
+                "start":4,"end":25,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":23,"index":25}}
+              }
+            ]
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":50,"end":101,"loc":{"start":{"line":5,"column":0,"index":50},"end":{"line":8,"column":1,"index":101}},
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start":84,"end":99,"loc":{"start":{"line":7,"column":2,"index":84},"end":{"line":7,"column":17,"index":99}},
+            "expression": {
+              "type": "ArrowFunctionExpression",
+              "start":84,"end":99,"loc":{"start":{"line":7,"column":2,"index":84},"end":{"line":7,"column":17,"index":99}},
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":85,"end":86,"loc":{"start":{"line":7,"column":3,"index":85},"end":{"line":7,"column":4,"index":86},"identifierName":"x"},
+                  "name": "x"
+                },
+                {
+                  "type": "VoidPattern",
+                  "start":88,"end":92,"loc":{"start":{"line":7,"column":6,"index":88},"end":{"line":7,"column":10,"index":92}}
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":97,"end":99,"loc":{"start":{"line":7,"column":15,"index":97},"end":{"line":7,"column":17,"index":99}},
+                "body": [],
+                "directives": []
+              }
+            },
+            "leadingComments": [
+              {
+                "type": "CommentLine",
+                "value": " arrow function parameter",
+                "start":54,"end":81,"loc":{"start":{"line":6,"column":2,"index":54},"end":{"line":6,"column":29,"index":81}}
+              }
+            ]
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":102,"end":165,"loc":{"start":{"line":9,"column":0,"index":102},"end":{"line":12,"column":1,"index":165}},
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start":142,"end":163,"loc":{"start":{"line":11,"column":2,"index":142},"end":{"line":11,"column":23,"index":163}},
+            "expression": {
+              "type": "ArrowFunctionExpression",
+              "start":142,"end":163,"loc":{"start":{"line":11,"column":2,"index":142},"end":{"line":11,"column":23,"index":163}},
+              "id": null,
+              "generator": false,
+              "async": true,
+              "params": [
+                {
+                  "type": "VoidPattern",
+                  "start":149,"end":153,"loc":{"start":{"line":11,"column":9,"index":149},"end":{"line":11,"column":13,"index":153}}
+                },
+                {
+                  "type": "Identifier",
+                  "start":155,"end":156,"loc":{"start":{"line":11,"column":15,"index":155},"end":{"line":11,"column":16,"index":156},"identifierName":"x"},
+                  "name": "x"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":161,"end":163,"loc":{"start":{"line":11,"column":21,"index":161},"end":{"line":11,"column":23,"index":163}},
+                "body": [],
+                "directives": []
+              }
+            },
+            "leadingComments": [
+              {
+                "type": "CommentLine",
+                "value": " async arrow function parameter",
+                "start":106,"end":139,"loc":{"start":{"line":10,"column":2,"index":106},"end":{"line":10,"column":35,"index":139}}
+              }
+            ]
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":166,"end":224,"loc":{"start":{"line":13,"column":0,"index":166},"end":{"line":16,"column":1,"index":224}},
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start":199,"end":222,"loc":{"start":{"line":15,"column":2,"index":199},"end":{"line":15,"column":25,"index":222}},
+            "expression": {
+              "type": "ObjectExpression",
+              "start":200,"end":220,"loc":{"start":{"line":15,"column":3,"index":200},"end":{"line":15,"column":23,"index":220}},
+              "properties": [
+                {
+                  "type": "ObjectMethod",
+                  "start":202,"end":218,"loc":{"start":{"line":15,"column":5,"index":202},"end":{"line":15,"column":21,"index":218}},
+                  "method": true,
+                  "key": {
+                    "type": "Identifier",
+                    "start":202,"end":203,"loc":{"start":{"line":15,"column":5,"index":202},"end":{"line":15,"column":6,"index":203},"identifierName":"f"},
+                    "name": "f"
+                  },
+                  "computed": false,
+                  "kind": "method",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "start":204,"end":205,"loc":{"start":{"line":15,"column":7,"index":204},"end":{"line":15,"column":8,"index":205},"identifierName":"x"},
+                      "name": "x"
+                    },
+                    {
+                      "type": "VoidPattern",
+                      "start":207,"end":211,"loc":{"start":{"line":15,"column":10,"index":207},"end":{"line":15,"column":14,"index":211}}
+                    },
+                    {
+                      "type": "Identifier",
+                      "start":213,"end":214,"loc":{"start":{"line":15,"column":16,"index":213},"end":{"line":15,"column":17,"index":214},"identifierName":"y"},
+                      "name": "y"
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":216,"end":218,"loc":{"start":{"line":15,"column":19,"index":216},"end":{"line":15,"column":21,"index":218}},
+                    "body": [],
+                    "directives": []
+                  }
+                }
+              ],
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 199
+              }
+            },
+            "leadingComments": [
+              {
+                "type": "CommentLine",
+                "value": " object method parameter",
+                "start":170,"end":196,"loc":{"start":{"line":14,"column":2,"index":170},"end":{"line":14,"column":28,"index":196}}
+              }
+            ]
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":225,"end":282,"loc":{"start":{"line":17,"column":0,"index":225},"end":{"line":20,"column":1,"index":282}},
+        "body": [
+          {
+            "type": "ClassDeclaration",
+            "start":257,"end":280,"loc":{"start":{"line":19,"column":2,"index":257},"end":{"line":19,"column":25,"index":280}},
+            "id": {
+              "type": "Identifier",
+              "start":263,"end":264,"loc":{"start":{"line":19,"column":8,"index":263},"end":{"line":19,"column":9,"index":264},"identifierName":"C"},
+              "name": "C"
+            },
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start":265,"end":280,"loc":{"start":{"line":19,"column":10,"index":265},"end":{"line":19,"column":25,"index":280}},
+              "body": [
+                {
+                  "type": "ClassMethod",
+                  "start":267,"end":278,"loc":{"start":{"line":19,"column":12,"index":267},"end":{"line":19,"column":23,"index":278}},
+                  "static": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":267,"end":268,"loc":{"start":{"line":19,"column":12,"index":267},"end":{"line":19,"column":13,"index":268},"identifierName":"m"},
+                    "name": "m"
+                  },
+                  "computed": false,
+                  "kind": "method",
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "VoidPattern",
+                      "start":269,"end":273,"loc":{"start":{"line":19,"column":14,"index":269},"end":{"line":19,"column":18,"index":273}}
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start":276,"end":278,"loc":{"start":{"line":19,"column":21,"index":276},"end":{"line":19,"column":23,"index":278}},
+                    "body": [],
+                    "directives": []
+                  }
+                }
+              ]
+            },
+            "leadingComments": [
+              {
+                "type": "CommentLine",
+                "value": " class method parameter",
+                "start":229,"end":254,"loc":{"start":{"line":18,"column":2,"index":229},"end":{"line":18,"column":27,"index":254}}
+              }
+            ]
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " function parameter",
+      "start":4,"end":25,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":23,"index":25}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " arrow function parameter",
+      "start":54,"end":81,"loc":{"start":{"line":6,"column":2,"index":54},"end":{"line":6,"column":29,"index":81}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " async arrow function parameter",
+      "start":106,"end":139,"loc":{"start":{"line":10,"column":2,"index":106},"end":{"line":10,"column":35,"index":139}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " object method parameter",
+      "start":170,"end":196,"loc":{"start":{"line":14,"column":2,"index":170},"end":{"line":14,"column":28,"index":196}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " class method parameter",
+      "start":229,"end":254,"loc":{"start":{"line":18,"column":2,"index":229},"end":{"line":18,"column":27,"index":254}}
+    }
+  ]
+}

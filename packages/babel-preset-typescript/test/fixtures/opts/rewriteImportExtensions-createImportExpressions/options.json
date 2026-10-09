@@ -1,0 +1,7 @@
+{
+  "sourceType": "module",
+  "presets": [["typescript", { "rewriteImportExtensions": true }]],
+  "parserOpts": {
+    "createImportExpressions": true
+  }
+}

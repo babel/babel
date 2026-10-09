@@ -69,7 +69,7 @@ function CallSite(filename: string): CallSite {
     getMethodName: () => undefined,
     getTypeName: () => undefined,
     toString: () => filename,
-  } as CallSite);
+  });
 }
 
 export function injectVirtualStackFrame(error: Error, filename: string) {
@@ -151,7 +151,7 @@ function setupPrepareStackTrace() {
         if (status === "hiding") {
           status = "showing";
           if (virtualFrames.has(err)) {
-            newTrace.unshift(...virtualFrames.get(err));
+            newTrace.unshift(...virtualFrames.get(err)!);
           }
         } else if (status === "unknown") {
           // Unexpected internal error, show the full stack trace
@@ -169,5 +169,6 @@ function setupPrepareStackTrace() {
 
 function defaultPrepareStackTrace(err: Error, trace: CallSite[]) {
   if (trace.length === 0) return ErrorToString(err);
+  // eslint-disable-next-line @typescript-eslint/no-base-to-string
   return `${ErrorToString(err)}\n    at ${trace.join("\n    at ")}`;
 }

@@ -1,0 +1,14 @@
+{
+  "validateLogs": true,
+  "targets": "firefox 149",
+  "presets": [
+    [
+      "env",
+      {
+        "debug": true,
+        "include": ["bugfix/.+"],
+        "modules": false
+      }
+    ]
+  ]
+}

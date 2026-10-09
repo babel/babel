@@ -1,7 +1,6 @@
 {
-  "BABEL_8_BREAKING": true,
   "plugins": [
-    "transform-react-jsx-development",
+    ["transform-react-jsx-development", { "sourceSelf": true }],
     "syntax-typescript",
     "syntax-jsx"
   ],

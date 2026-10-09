@@ -1,4 +1,4 @@
-import { types as t } from "@babel/core";
+import { types as t, template } from "@babel/core";
 import type { File, Scope, NodePath } from "@babel/core";
 
 function isPureVoid(node: t.Node) {
@@ -79,15 +79,19 @@ const arrayUnpackVisitor = (
 };
 
 export type DestructuringTransformerNode =
-  | t.VariableDeclaration
-  | t.ExpressionStatement
-  | t.ReturnStatement;
+  t.VariableDeclaration | t.ExpressionStatement | t.ReturnStatement;
+
+// using/await using declaration must not contain pattern as its id.
+export type VariableDeclarationKindAllowsPattern = Exclude<
+  t.VariableDeclaration["kind"],
+  "using" | "await using"
+>;
 
 interface DestructuringTransformerOption {
   blockHoist?: number;
   operator?: t.AssignmentExpression["operator"];
   nodes?: DestructuringTransformerNode[];
-  kind?: t.VariableDeclaration["kind"];
+  kind?: VariableDeclarationKindAllowsPattern;
   scope: Scope;
   arrayLikeIsIterable: boolean;
   iterableIsArray: boolean;
@@ -96,12 +100,12 @@ interface DestructuringTransformerOption {
   addHelper: File["addHelper"];
 }
 export class DestructuringTransformer {
-  private blockHoist: number;
-  private operator: t.AssignmentExpression["operator"];
+  private blockHoist: number | undefined;
+  private operator: t.AssignmentExpression["operator"] | undefined;
   arrayRefSet: Set<string>;
   private nodes: DestructuringTransformerNode[];
   private scope: Scope;
-  private kind: t.VariableDeclaration["kind"];
+  private kind: VariableDeclarationKindAllowsPattern | undefined;
   private iterableIsArray: boolean;
   private arrayLikeIsIterable: boolean;
   private objectRestNoSymbols: boolean;
@@ -141,20 +145,23 @@ export class DestructuringTransformer {
         t.assignmentExpression(
           op,
           id,
-          t.cloneNode(init) || this.scope.buildUndefinedNode(),
+          t.cloneNode(init) || t.buildUndefinedNode(),
         ),
       );
     } else {
       let nodeInit: t.Expression;
 
-      if ((this.kind === "const" || this.kind === "using") && init === null) {
-        nodeInit = this.scope.buildUndefinedNode();
+      if (this.kind === "const" && init === null) {
+        nodeInit = t.buildUndefinedNode();
       } else {
         nodeInit = t.cloneNode(init);
       }
 
-      node = t.variableDeclaration(this.kind, [
-        t.variableDeclarator(id as t.LVal, nodeInit),
+      node = t.variableDeclaration(this.kind!, [
+        t.variableDeclarator(
+          id as t.Identifier | t.ArrayPattern | t.ObjectPattern,
+          nodeInit,
+        ),
       ]);
     }
 
@@ -173,7 +180,7 @@ export class DestructuringTransformer {
     return declar;
   }
 
-  push(id: t.LVal, _init: t.Expression | null) {
+  push(id: t.LVal | t.PatternLike | null, _init: t.Expression) {
     const init = t.cloneNode(_init);
     if (t.isObjectPattern(id)) {
       this.pushObjectPattern(id, init);
@@ -182,24 +189,66 @@ export class DestructuringTransformer {
     } else if (t.isAssignmentPattern(id)) {
       this.pushAssignmentPattern(id, init);
     } else {
-      this.nodes.push(this.buildVariableAssignment(id, init));
+      this.nodes.push(
+        this.buildVariableAssignment(
+          id as t.AssignmentExpression["left"],
+          init,
+        ),
+      );
     }
   }
 
-  toArray(node: t.Expression, count?: boolean | number) {
+  toArray(node: t.Expression, count?: false | number) {
     if (
       this.iterableIsArray ||
       (t.isIdentifier(node) && this.arrayRefSet.has(node.name))
     ) {
       return node;
     } else {
-      return this.scope.toArray(node, count, this.arrayLikeIsIterable);
+      const { scope, arrayLikeIsIterable } = this;
+
+      if (t.isIdentifier(node)) {
+        const binding = scope.getBinding(node.name);
+        if (binding?.constant && binding.path.isGenericType("Array")) {
+          return node;
+        }
+      }
+
+      if (t.isArrayExpression(node)) {
+        return node;
+      }
+
+      if (t.isIdentifier(node, { name: "arguments" })) {
+        return template.expression.ast`
+          Array.prototype.slice.call(${node})
+        `;
+      }
+
+      let helperName;
+      const args = [node];
+      if (typeof count === "number") {
+        args.push(t.numericLiteral(count));
+
+        // Used in array-rest to create an array from a subset of an iterable.
+        helperName = "slicedToArray";
+        // TODO if (this.hub.isLoose("es6.forOf")) helperName += "-loose";
+      } else {
+        // Used in array-rest to create an array
+        helperName = "toArray";
+      }
+
+      if (arrayLikeIsIterable) {
+        args.unshift(scope.path.hub.addHelper(helperName));
+        helperName = "maybeArrayLike";
+      }
+
+      return t.callExpression(scope.path.hub.addHelper(helperName), args);
     }
   }
 
   pushAssignmentPattern(
     { left, right }: t.AssignmentPattern,
-    valueRef: t.Expression | null,
+    valueRef: t.Expression,
   ) {
     // handle array init with void 0. This also happens when
     // the value was originally a hole.
@@ -217,11 +266,7 @@ export class DestructuringTransformer {
     this.nodes.push(this.buildVariableDeclaration(tempId, valueRef));
 
     const tempConditional = t.conditionalExpression(
-      t.binaryExpression(
-        "===",
-        t.cloneNode(tempId),
-        this.scope.buildUndefinedNode(),
-      ),
+      t.binaryExpression("===", t.cloneNode(tempId), t.buildUndefinedNode()),
       right,
       t.cloneNode(tempId),
     );
@@ -230,11 +275,7 @@ export class DestructuringTransformer {
       let patternId;
       let node;
 
-      if (
-        this.kind === "const" ||
-        this.kind === "let" ||
-        this.kind === "using"
-      ) {
+      if (this.kind === "const" || this.kind === "let") {
         patternId = this.scope.generateUidIdentifier(tempId.name);
         node = this.buildVariableDeclaration(patternId, tempConditional);
       } else {
@@ -272,7 +313,7 @@ export class DestructuringTransformer {
   pushObjectProperty(prop: t.ObjectProperty, propRef: t.Expression) {
     if (t.isLiteral(prop.key)) prop.computed = true;
 
-    const pattern = prop.value as t.LVal;
+    const pattern = prop.value as t.AssignmentExpression["left"];
     const objRef = t.memberExpression(
       t.cloneNode(propRef),
       prop.key,
@@ -313,7 +354,7 @@ export class DestructuringTransformer {
 
     // Replace impure computed key expressions if we have a rest parameter
     if (hasObjectRest(pattern)) {
-      let copiedPattern: t.ObjectPattern;
+      let copiedPattern: t.ObjectPattern | undefined;
       for (let i = 0; i < pattern.properties.length; i++) {
         const prop = pattern.properties[i];
         if (t.isRestElement(prop)) {
@@ -359,7 +400,7 @@ export class DestructuringTransformer {
 
     // pattern has less elements than the array and doesn't have a rest so some
     // elements won't be evaluated
-    if (pattern.elements.length > arr.elements.length) return;
+    if (pattern.elements.length > arr.elements.length) return false;
     if (
       pattern.elements.length < arr.elements.length &&
       !hasArrayRest(pattern)
@@ -403,8 +444,8 @@ export class DestructuringTransformer {
     pattern: t.ArrayPattern,
     arr: UnpackableArrayExpression,
   ) {
-    const holeToUndefined = (el: t.Expression) =>
-      el ?? this.scope.buildUndefinedNode();
+    const holeToUndefined = (el: t.Expression | null) =>
+      el ?? t.buildUndefinedNode();
 
     for (let i = 0; i < pattern.elements.length; i++) {
       const elem = pattern.elements[i];
@@ -469,21 +510,27 @@ export class DestructuringTransformer {
       // hole
       if (!elem) continue;
 
-      let elemRef;
-
       if (t.isRestElement(elem)) {
-        elemRef = this.toArray(arrayRef);
-        elemRef = t.callExpression(
-          t.memberExpression(elemRef, t.identifier("slice")),
-          [t.numericLiteral(i)],
-        );
-
         // set the element to the rest element argument since we've dealt with it
         // being a rest already
-        this.push(elem.argument, elemRef);
+        this.push(
+          elem.argument,
+          t.callExpression(
+            t.memberExpression(
+              t.callExpression(
+                this.scope.path.hub.addHelper("arrayLikeToArray"),
+                [arrayRef],
+              ),
+              t.identifier("slice"),
+            ),
+            [t.numericLiteral(i)],
+          ),
+        );
       } else {
-        elemRef = t.memberExpression(arrayRef, t.numericLiteral(i), true);
-        this.push(elem, elemRef);
+        this.push(
+          elem,
+          t.memberExpression(arrayRef, t.numericLiteral(i), true),
+        );
       }
     }
   }
@@ -604,7 +651,7 @@ export function convertVariableDeclaration(
   for (let i = 0; i < node.declarations.length; i++) {
     const declar = node.declarations[i];
 
-    const patternId = declar.init;
+    const patternId = declar.init!;
     const pattern = declar.id;
 
     const destructuring: DestructuringTransformer =
@@ -613,7 +660,7 @@ export function convertVariableDeclaration(
         blockHoist: node._blockHoist,
         nodes: nodes,
         scope: scope,
-        kind: node.kind,
+        kind: node.kind as VariableDeclarationKindAllowsPattern,
         iterableIsArray,
         arrayLikeIsIterable,
         useBuiltIns,
@@ -622,7 +669,8 @@ export function convertVariableDeclaration(
       });
 
     if (t.isPattern(pattern)) {
-      destructuring.init(pattern, patternId);
+      // variableDeclarationHasDestructuringPattern ensures that the pattern is not a VoidPattern
+      destructuring.init(pattern as Exclude<t.LVal, t.VoidPattern>, patternId);
 
       if (+i !== node.declarations.length - 1) {
         // we aren't the last declarator so let's just make the
@@ -667,7 +715,10 @@ export function convertVariableDeclaration(
     t.isVariableDeclaration(nodesOut[0]) &&
     t.isExpressionStatement(nodesOut[1]) &&
     t.isCallExpression(nodesOut[1].expression) &&
-    nodesOut[0].declarations.length === 1
+    nodesOut[0].declarations.length === 1 &&
+    t.isIdentifier(nodesOut[1].expression.arguments[0], {
+      name: (nodesOut[0].declarations[0].id as t.Identifier).name,
+    })
   ) {
     // This can only happen when we generate this code:
     //    var _ref = DESTRUCTURED_VALUE;
@@ -676,7 +727,7 @@ export function convertVariableDeclaration(
     // we can optimize them to
     //     babelHelpers.objectDestructuringEmpty(DESTRUCTURED_VALUE);
     const expr = nodesOut[1].expression;
-    expr.arguments = [nodesOut[0].declarations[0].init];
+    expr.arguments = [nodesOut[0].declarations[0].init!];
     nodesOut = [expr];
   } else {
     // We must keep nodes all are expressions or statements, so `replaceWithMultiple` can work.
@@ -724,7 +775,7 @@ export function convertAssignmentExpression(
     addHelper,
   });
 
-  let ref: t.Identifier | void;
+  let ref: t.Identifier | undefined;
   if (
     (!parentPath.isExpressionStatement() &&
       !parentPath.isSequenceExpression()) ||

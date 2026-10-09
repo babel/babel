@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import path from "path";
+import path from "node:path";
 import { types as t } from "@babel/core";
 
 type ReactCreateClassCall = t.CallExpression & {
@@ -7,7 +7,7 @@ type ReactCreateClassCall = t.CallExpression & {
 };
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   function addDisplayName(id: string, call: ReactCreateClassCall) {
     const props = call.arguments[0].properties;
@@ -82,7 +82,13 @@ export default declare(api => {
         const { node } = path;
         if (!isCreateClass(node)) return;
 
-        let id: t.LVal | t.Expression | t.PrivateName | null;
+        let id:
+          | t.LVal
+          | t.Expression
+          | t.PrivateName
+          | t.VoidPattern
+          | null
+          | undefined;
 
         // crawl up the ancestry looking for possible candidates for displayName inference
         path.find(function (path) {
@@ -99,6 +105,7 @@ export default declare(api => {
 
           // we've got an id! no need to continue
           if (id) return true;
+          return false;
         });
 
         // ensure that we have an identifier we can inherit from

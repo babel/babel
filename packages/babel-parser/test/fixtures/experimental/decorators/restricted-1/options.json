@@ -1,4 +1,3 @@
 {
-  "plugins": ["decorators"],
   "throws": "Leading decorators must be attached to a class declaration. (1:6)"
 }

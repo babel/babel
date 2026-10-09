@@ -14,6 +14,6 @@ export default function addComment<T extends t.Node>(
     {
       type: line ? "CommentLine" : "CommentBlock",
       value: content,
-    } as t.Comment,
+    },
   ]);
 }

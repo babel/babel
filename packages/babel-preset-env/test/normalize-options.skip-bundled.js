@@ -1,11 +1,8 @@
-import _normalizeOptions, {
+import normalizeOptions, {
   checkDuplicateIncludeExcludes,
   validateModulesOption,
-  validateUseBuiltInsOption,
   normalizePluginName,
 } from "../lib/normalize-options.js";
-const normalizeOptions = _normalizeOptions.default || _normalizeOptions;
-import { itBabel7, itBabel8 } from "$repo-utils";
 
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {
@@ -64,42 +61,6 @@ describe("normalize-options", () => {
       },
     );
 
-    it("should not throw if corejs version is valid", () => {
-      ["3.5", "3.5.5"].forEach(corejs => {
-        ["entry", "usage"].forEach(useBuiltIns => {
-          expect(() => normalizeOptions({ useBuiltIns, corejs })).not.toThrow();
-        });
-      });
-    });
-
-    itBabel7("should not throw if corejs version is valid (babel 7)", () => {
-      [2, 2.1, 3].forEach(corejs => {
-        ["entry", "usage"].forEach(useBuiltIns => {
-          expect(() => normalizeOptions({ useBuiltIns, corejs })).not.toThrow();
-        });
-      });
-    });
-
-    itBabel7("should throw if corejs version is invalid (babel 7)", () => {
-      [1, 1.2, 4, 4.5].forEach(corejs => {
-        ["entry", "usage"].forEach(useBuiltIns => {
-          expect(() => normalizeOptions({ useBuiltIns, corejs })).toThrow(
-            /The version passed to `corejs` is invalid./,
-          );
-        });
-      });
-    });
-
-    itBabel8("should throw if corejs version is invalid", () => {
-      [1, 1.2, 4, 4.5, 3, 3.1, "3"].forEach(corejs => {
-        ["entry", "usage"].forEach(useBuiltIns => {
-          expect(() => normalizeOptions({ useBuiltIns, corejs })).toThrow(
-            /The version passed to `corejs` is invalid./,
-          );
-        });
-      });
-    });
-
     it("throws when including module plugins", () => {
       expect(() =>
         normalizeOptions({ include: ["transform-dynamic-import"] }),
@@ -152,68 +113,6 @@ describe("normalize-options", () => {
         "transform-spread",
         "transform-classes",
       ]);
-    });
-
-    it("should expand regular expressions in `exclude`", () => {
-      const normalized = normalizeOptions({
-        useBuiltIns: "entry",
-        corejs: "3.0",
-        exclude: ["es.math.log.*"],
-      });
-      expect(normalized.exclude).toEqual([
-        "es.math.log10",
-        "es.math.log1p",
-        "es.math.log2",
-      ]);
-    });
-
-    itBabel7("should work both with proposal-* and transform-*", () => {
-      expect(
-        normalizeOptions({ include: ["proposal-.*-regex"] }).include,
-      ).toEqual([
-        "transform-duplicate-named-capturing-groups-regex",
-        "transform-unicode-sets-regex",
-        "transform-dotall-regex",
-        "transform-unicode-property-regex",
-        "transform-named-capturing-groups-regex",
-        "transform-sticky-regex",
-        "transform-unicode-regex",
-      ]);
-
-      expect(
-        normalizeOptions({ include: ["transform-.*-regex"] }).include,
-      ).toEqual([
-        "transform-duplicate-named-capturing-groups-regex",
-        "transform-unicode-sets-regex",
-        "transform-dotall-regex",
-        "transform-unicode-property-regex",
-        "transform-named-capturing-groups-regex",
-        "transform-sticky-regex",
-        "transform-unicode-regex",
-      ]);
-    });
-
-    it("should not allow the same modules in `include` and `exclude`", () => {
-      const normalizeWithNonExistingPlugin = () => {
-        normalizeOptions({
-          useBuiltIns: "entry",
-          corejs: "3.0",
-          include: ["es.math.log2"],
-          exclude: ["es.math.log.*"],
-        });
-      };
-      expect(normalizeWithNonExistingPlugin).toThrow(Error);
-    });
-
-    it("should not do partial match if not explicitly defined `include` and `exclude`", () => {
-      const normalized = normalizeOptions({
-        useBuiltIns: "entry",
-        corejs: "3.0",
-        include: ["es.reflect.set-prototype-of"],
-        exclude: ["es.reflect.set"],
-      });
-      expect(normalized.include).toEqual(["es.reflect.set-prototype-of"]);
-      expect(normalized.exclude).toEqual(["es.reflect.set"]);
     });
   });
 
@@ -278,26 +177,6 @@ describe("normalize-options", () => {
     it("array option is invalid", () => {
       expect(() => {
         validateModulesOption([]);
-      }).toThrow();
-    });
-  });
-
-  describe("validateUseBuiltInsOptions", () => {
-    it("usage option is valid", () => {
-      expect(validateUseBuiltInsOption("usage")).toBe("usage");
-    });
-
-    it("entry option is valid", () => {
-      expect(validateUseBuiltInsOption("entry")).toBe("entry");
-    });
-
-    it("`false` option returns false", () => {
-      expect(validateUseBuiltInsOption(false)).toBe(false);
-    });
-
-    it("`'false'` option is invalid", () => {
-      expect(() => {
-        validateUseBuiltInsOption("false");
       }).toThrow();
     });
   });

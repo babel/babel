@@ -4,7 +4,6 @@ import type { GeneratorResult } from "@babel/generator";
 import generate from "@babel/generator";
 
 import type File from "./file.ts";
-import mergeSourceMap from "./merge-map.ts";
 
 export default function generateCode(
   pluginPasses: PluginPasses,
@@ -14,7 +13,7 @@ export default function generateCode(
   outputMap: GeneratorResult["map"] | null;
 } {
   const { opts, ast, code, inputMap } = file;
-  const { generatorOpts } = opts;
+  const generatorOpts = opts.generatorOpts!;
 
   generatorOpts.inputSourceMap = inputMap?.toObject();
 
@@ -36,6 +35,7 @@ export default function generateCode(
   } else if (results.length === 1) {
     result = results[0];
 
+    // @ts-expect-error check if generatorOverride returned a promise
     if (typeof result.then === "function") {
       throw new Error(
         `You appear to be using an async codegen plugin, ` +
@@ -48,33 +48,9 @@ export default function generateCode(
     throw new Error("More than one plugin attempted to override codegen.");
   }
 
-  // Decoded maps are faster to merge, so we attempt to get use the decodedMap
-  // first. But to preserve backwards compat with older Generator, we'll fall
-  // back to the encoded map.
-  let { code: outputCode, decodedMap: outputMap = result.map } = result;
+  let { code: outputCode } = result;
 
-  // For backwards compat.
-  if (result.__mergedMap) {
-    /**
-     * @see mergeSourceMap
-     */
-    outputMap = { ...result.map };
-  } else {
-    if (outputMap) {
-      if (inputMap) {
-        // mergeSourceMap returns an encoded map
-        outputMap = mergeSourceMap(
-          inputMap.toObject(),
-          outputMap,
-          generatorOpts.sourceFileName,
-        );
-      } else {
-        // We cannot output a decoded map, so retrieve the encoded form. Because
-        // the decoded form is free, it's fine to prioritize decoded first.
-        outputMap = result.map;
-      }
-    }
-  }
+  let outputMap = result.map;
 
   if (opts.sourceMaps === "inline" || opts.sourceMaps === "both") {
     outputCode += "\n" + convertSourceMap.fromObject(outputMap).toComment();

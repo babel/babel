@@ -13,6 +13,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "VariableDeclaration",
           "start":7,"end":19,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":19,"index":19}},
@@ -45,9 +46,11 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "TSModuleDeclaration",
           "start":27,"end":66,"loc":{"start":{"line":2,"column":7,"index":27},"end":{"line":4,"column":1,"index":66}},
+          "kind": "namespace",
           "id": {
             "type": "Identifier",
             "start":37,"end":38,"loc":{"start":{"line":2,"column":17,"index":37},"end":{"line":2,"column":18,"index":38},"identifierName":"N"},
@@ -63,6 +66,7 @@
                 "exportKind": "value",
                 "specifiers": [],
                 "source": null,
+                "attributes": [],
                 "declaration": {
                   "type": "VariableDeclaration",
                   "start":52,"end":64,"loc":{"start":{"line":3,"column":11,"index":52},"end":{"line":3,"column":23,"index":64}},

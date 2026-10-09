@@ -1,0 +1,26 @@
+diff --git a/dist/cjs/index.js b/dist/cjs/index.js
+index 082f85b39c190322df9d231618e798554dadbc30..98c33e6003646468e89adf7cbfcf6fd25a69362d 100644
+--- a/dist/cjs/index.js
++++ b/dist/cjs/index.js
+@@ -383,7 +383,7 @@ export function getAugmentedNamespace(n) {
+ 			var isInstance = false;
+       try {
+         isInstance = this instanceof a;
+-      } catch {}
++      } catch (e) {}
+ 			if (isInstance) {
+         return Reflect.construct(f, arguments, this.constructor);
+ 			}
+diff --git a/dist/es/index.js b/dist/es/index.js
+index 3137453ce7adf2e3dac6197ff1655d5c5bd038e9..28456f4933736859719a547750c04cfaaea63557 100644
+--- a/dist/es/index.js
++++ b/dist/es/index.js
+@@ -379,7 +379,7 @@ export function getAugmentedNamespace(n) {
+ 			var isInstance = false;
+       try {
+         isInstance = this instanceof a;
+-      } catch {}
++      } catch (e) {}
+ 			if (isInstance) {
+         return Reflect.construct(f, arguments, this.constructor);
+ 			}

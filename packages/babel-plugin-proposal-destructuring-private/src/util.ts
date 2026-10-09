@@ -9,17 +9,12 @@ const {
   isObjectProperty,
   isPrivateName,
   memberExpression,
-  numericLiteral,
   objectPattern,
   restElement,
   variableDeclarator,
   variableDeclaration,
-  unaryExpression,
+  buildUndefinedNode,
 } = t;
-
-function buildUndefinedNode() {
-  return unaryExpression("void", numericLiteral(0));
-}
 
 function transformAssignmentPattern(
   initializer: t.Expression,
@@ -32,7 +27,9 @@ function transformAssignmentPattern(
   );
 }
 
-function initRestExcludingKeys(pattern: t.LVal): ExcludingKey[] | null {
+function initRestExcludingKeys(
+  pattern: t.LVal | t.PatternLike,
+): ExcludingKey[] | null {
   if (pattern.type === "ObjectPattern") {
     const { properties } = pattern;
     if (properties[properties.length - 1].type === "RestElement") {
@@ -51,7 +48,7 @@ function initRestExcludingKeys(pattern: t.LVal): ExcludingKey[] | null {
  * @param {Scope} scope Where should we register the memoised id
  */
 function growRestExcludingKeys(
-  excludingKeys: ExcludingKey[],
+  excludingKeys: ExcludingKey[] | null,
   properties: t.ObjectProperty[],
   scope: Scope,
 ) {
@@ -64,7 +61,40 @@ function growRestExcludingKeys(
       property.key = assignmentExpression("=", tempId, propertyKey);
       excludingKeys.push({ key: tempId, computed: true });
     } else if (propertyKey.type !== "PrivateName") {
-      excludingKeys.push(property);
+      const isDuplicate = excludingKeys.some(existing => {
+        if (existing.computed || property.computed) return false;
+
+        // Helper function to get the string representation of a key
+        // Handles LiteralPropertyName (IdentifierName | StringLiteral | NumericLiteral)
+        // https://tc39.es/ecma262/#prod-LiteralPropertyName
+        // Also handles BigIntLiteral from computed property names
+        const getKeyString = (key: t.ObjectProperty["key"]): string | null => {
+          switch (key.type) {
+            case "Identifier":
+              return key.name;
+            case "StringLiteral":
+              return key.value;
+            case "NumericLiteral":
+              return String(key.value);
+            case "BigIntLiteral":
+              return String(key.value);
+            default:
+              return null;
+          }
+        };
+
+        const existingKeyStr = getKeyString(existing.key);
+        const propertyKeyStr = getKeyString(propertyKey);
+
+        if (existingKeyStr !== null && propertyKeyStr !== null) {
+          return existingKeyStr === propertyKeyStr;
+        }
+
+        return false;
+      });
+      if (!isDuplicate) {
+        excludingKeys.push(property);
+      }
     }
   }
 }
@@ -84,7 +114,7 @@ export function buildVariableDeclarationFromParams(
   params: t.Function["params"],
   scope: Scope,
 ): {
-  params: (t.Identifier | t.RestElement)[];
+  params: (t.Identifier | t.RestElement | null)[];
   variableDeclaration: t.VariableDeclaration;
 } {
   const { elements, transformed } = buildAssignmentsFromPatternList(
@@ -96,7 +126,12 @@ export function buildVariableDeclarationFromParams(
     params: elements,
     variableDeclaration: variableDeclaration(
       "var",
-      transformed.map(({ left, right }) => variableDeclarator(left, right)),
+      (transformed as Transformed[]).map(({ left, right }) =>
+        variableDeclarator(
+          left as t.Identifier | t.ArrayPattern | t.ObjectPattern,
+          right,
+        ),
+      ),
     ),
   };
 }
@@ -107,17 +142,14 @@ interface Transformed {
 }
 
 function buildAssignmentsFromPatternList(
-  elements: (t.LVal | null)[],
+  elements: (t.LVal | t.PatternLike | t.TSParameterProperty | null)[],
   scope: Scope,
   isAssignment: boolean,
-): {
-  elements: (t.Identifier | t.RestElement | null)[];
-  transformed: Transformed[];
-} {
-  const newElements: (t.Identifier | t.RestElement)[] = [],
-    transformed: Transformed[] = [];
+) {
+  const newElements: (t.Identifier | t.RestElement | null)[] = [],
+    transformed: (Transformed | null)[] = [];
   for (let element of elements) {
-    if (element === null) {
+    if (element === null || element.type === "VoidPattern") {
       newElements.push(null);
       transformed.push(null);
       continue;
@@ -129,7 +161,7 @@ function buildAssignmentsFromPatternList(
     if (element.type === "RestElement") {
       newElements.push(restElement(tempId));
       // The argument of a RestElement within a BindingPattern must be either Identifier or BindingPattern
-      element = element.argument as t.Identifier | t.Pattern;
+      element = element.argument;
     } else {
       newElements.push(tempId);
     }
@@ -149,7 +181,14 @@ function buildAssignmentsFromPatternList(
 }
 
 type StackItem = {
-  node: t.AssignmentExpression["left"] | t.ObjectProperty | null;
+  node:
+    | t.LVal
+    | t.PatternLike
+    | t.ObjectProperty
+    | t.TSParameterProperty
+    | t.OptionalMemberExpression
+    | null
+    | undefined;
   index: number;
   depth: number;
 };
@@ -163,23 +202,35 @@ type StackItem = {
  * - ObjectPattern
  * - ObjectProperty
  * - RestElement
- * @param root
- * @param visitor
+ *
+ * NOTE: When running `yarn knip`, this export is marked as unused. It's actually used
+ * in ../../test/normalize-options.skip-bundled.js.
  */
 export function* traversePattern(
-  root: t.AssignmentExpression["left"],
+  root:
+    | t.LVal
+    | t.PatternLike
+    | t.TSParameterProperty
+    | t.OptionalMemberExpression
+    | null
+    | undefined,
   visitor: (
-    node: t.AssignmentExpression["left"] | t.ObjectProperty,
+    node:
+      | t.LVal
+      | t.PatternLike
+      | t.TSParameterProperty
+      | t.ObjectProperty
+      | t.OptionalMemberExpression,
     index: number,
     depth: number,
   ) => Generator<any, void, any>,
 ) {
   const stack: StackItem[] = [];
   stack.push({ node: root, index: 0, depth: 0 });
-  let item: StackItem;
+  let item: StackItem | undefined;
   while ((item = stack.pop()) !== undefined) {
     const { node, index } = item;
-    if (node === null) continue;
+    if (node == null) continue;
     yield* visitor(node, index, item.depth);
     const depth = item.depth + 1;
     switch (node.type) {
@@ -219,7 +270,10 @@ export function* traversePattern(
   }
 }
 
-export function hasPrivateKeys(pattern: t.AssignmentExpression["left"]) {
+export function hasPrivateKeys(
+  pattern:
+    t.LVal | t.PatternLike | t.OptionalMemberExpression | null | undefined,
+) {
   let result = false;
   traversePattern(pattern, function* (node) {
     if (isObjectProperty(node) && isPrivateName(node.key)) {
@@ -246,10 +300,10 @@ export function hasPrivateClassElement(node: t.ClassBody): boolean {
  * A private key path is analogous to an array of `key` from the pattern NodePath
  * to the private key NodePath. See also test/util.skip-bundled.js for an example output
  *
- * @export
- * @param {t.LVal} pattern
+ * NOTE: When running `yarn knip`, this export is marked as unused. It's actually used
+ * in ../../test/util.skip-bundled.js.
  */
-export function* privateKeyPathIterator(pattern: t.LVal) {
+export function* privateKeyPathIterator(pattern: t.LVal | t.PatternLike) {
   const indexPath: number[] = [];
   yield* traversePattern(pattern, function* (node, index, depth) {
     indexPath[depth] = index;
@@ -262,7 +316,9 @@ export function* privateKeyPathIterator(pattern: t.LVal) {
   });
 }
 
-type LHS = Exclude<t.LVal, t.RestElement | t.TSParameterProperty>;
+type LHS =
+  | Exclude<t.LVal, t.RestElement | t.TSParameterProperty | t.VoidPattern>
+  | t.AssignmentPattern;
 
 type ExcludingKey = {
   key: t.ObjectProperty["key"];
@@ -317,22 +373,66 @@ export function* transformPrivateKeyDestructuring(
     right,
     restExcludingKeys: initRestExcludingKeys(left),
   });
-  let item: Item;
+  let item: Item | undefined;
   while ((item = stack.pop()) !== undefined) {
     const { restExcludingKeys } = item;
     let { left, right } = item;
     const searchPrivateKey = privateKeyPathIterator(left).next();
     if (searchPrivateKey.done) {
-      if (restExcludingKeys?.length > 0) {
+      if (restExcludingKeys?.length) {
         // optimize out the rest element because `objectWithoutProperties`
         // returns a new object
         // `{ ...z } = babelHelpers.objectWithoutProperties(m, ["x"])`
         // to
         // `z = babelHelpers.objectWithoutProperties(m, ["x"])`
+
+        // Split the trailing segment `{ ...r }` from explicit properties so that:
+        // - explicit properties are bound from the original `right`,
+        // - only the Rest identifier receives the excluded object.
+        const objPat = left as t.ObjectPattern;
+        const props = objPat.properties;
+        const last = props[props.length - 1];
+
+        if (last?.type === "RestElement") {
+          // Split explicit properties and the Rest element.
+          const nonRestProps = props.slice(0, -1) as t.ObjectProperty[];
+          const rest = last;
+
+          // Important: add explicit properties to excluding keys so the subsequent Rest excludes them.
+          // This also memoises non-static computed keys with declared temps.
+          if (restExcludingKeys) {
+            growRestExcludingKeys(restExcludingKeys, nonRestProps, scope);
+          }
+
+          // Bind explicit properties from the original `right`.
+          if (nonRestProps.length > 0) {
+            yield {
+              left: objectPattern(nonRestProps),
+              right: cloneNode(right),
+            };
+          }
+
+          // Bind the Rest identifier from the excluded object.
+          // Only the Rest receives the filtered object so that named properties are unaffected.
+          yield {
+            // The argument of an object rest element must be an Identifier
+            left: rest.argument,
+            right: buildObjectExcludingKeys(
+              restExcludingKeys,
+              right,
+              scope,
+              addHelper,
+              objectRestNoSymbols,
+              useBuiltIns,
+            ),
+          };
+          continue;
+        }
+
         const { properties } = left as t.ObjectPattern;
         if (properties.length === 1) {
           // The argument of an object rest element must be an Identifier
-          left = (properties[0] as t.RestElement).argument as t.Identifier;
+          left = (properties[0] as t.RestElement).argument;
         }
         yield {
           left: left as t.ObjectPattern,
@@ -396,7 +496,7 @@ export function* transformPrivateKeyDestructuring(
               // the first level, otherwise initialize a new restExcludingKeys
               const nextRestExcludingKeys =
                 indexPathIndex === 0
-                  ? restExcludingKeys
+                  ? (restExcludingKeys as ExcludingKey[] | null)
                   : initRestExcludingKeys(left);
               growRestExcludingKeys(
                 nextRestExcludingKeys,
@@ -413,6 +513,13 @@ export function* transformPrivateKeyDestructuring(
             }
             // An object rest element must not contain a private key
             const property = properties[index] as t.ObjectProperty;
+            if (property.value.type === "VoidPattern") {
+              const tempId = scope.generateUidIdentifier("_");
+              if (isAssignment) {
+                scope.push({ id: cloneNode(tempId) });
+              }
+              property.value = tempId;
+            }
             // The value of ObjectProperty under ObjectPattern must be an LHS
             left = property.value as LHS;
             const { key } = property;
@@ -451,10 +558,10 @@ export function* transformPrivateKeyDestructuring(
             for (let i = transformed.length - 1; i > 0; i--) {
               // skipping array holes
               if (transformed[i] !== null) {
-                stack.push(transformed[i]);
+                stack.push(transformed[i]!);
               }
             }
-            ({ left, right } = transformed[0]);
+            ({ left, right } = transformed[0]!);
             break;
           }
           default:

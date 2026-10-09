@@ -40,11 +40,14 @@ export function skipTransparentExprWrappers(
   path: NodePath<t.Expression>,
 ): NodePath<t.Expression> {
   while (isTransparentExprWrapper(path.node)) {
-    path = path.get("expression");
+    path = (path as NodePath<TransparentExprWrapper>).get("expression");
   }
   return path;
 }
 
+export function skipTransparentExprWrapperNodes<T extends t.Node>(
+  node: T,
+): T extends t.Expression ? t.Expression : T;
 export function skipTransparentExprWrapperNodes(
   node: t.Expression | t.Super,
 ): t.Expression | t.Super {

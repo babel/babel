@@ -1,11 +1,14 @@
 {
   "name": "@babel/eslint-plugin",
-  "version": "7.25.1",
+  "version": "8.0.6",
   "description": "Companion rules for @babel/eslint-parser",
-  "main": "./lib/index.cjs",
+  "main": "./lib/index.js",
   "type": "module",
   "exports": {
-    ".": "./lib/index.cjs",
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
     "./package.json": "./package.json"
   },
   "publishConfig": {
@@ -26,35 +29,19 @@
   "author": "The Babel Team (https://babel.dev/team)",
   "license": "MIT",
   "engines": {
-    "node": "^10.13.0 || ^12.13.0 || >=14.0.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },
   "homepage": "https://babel.dev/",
   "peerDependencies": {
-    "@babel/eslint-parser": "^7.11.0",
-    "eslint": "^7.5.0 || ^8.0.0 || ^9.0.0"
-  },
-  "dependencies": {
-    "eslint-rule-composer": "^0.3.0"
+    "@babel/core": "^8.0.0",
+    "@babel/eslint-parser": "^8.0.0",
+    "eslint": "^9.0.0 || ^10.0.0"
   },
   "devDependencies": {
-    "clone-deep": "^4.0.1",
-    "eslint": "^9.7.0"
-  },
-  "conditions": {
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        },
-        "peerDependencies": {
-          "@babel/eslint-parser": "^7.11.0",
-          "eslint": "^8.9.0 || ^9.0.0"
-        }
-      },
-      {}
-    ]
+    "@babel/core": "workspace:^",
+    "eslint": "catalog:babel-eslint"
   }
 }

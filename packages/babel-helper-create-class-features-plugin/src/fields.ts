@@ -29,44 +29,23 @@ type PrivateNamesMapGeneric<V> = Map<string, V>;
 
 type PrivateNamesMap = PrivateNamesMapGeneric<PrivateNameMetadata>;
 
-if (!process.env.BABEL_8_BREAKING) {
-  // eslint-disable-next-line no-var
-  var newHelpers = (file: File) => {
-    if (!process.env.IS_PUBLISH) {
-      const { comments } = file.ast;
-      // This is needed for the test in
-      // babel-plugin-transform-class-properties/test/fixtures/regression/old-helpers
-      if (comments?.some(c => c.value.includes("@force-old-private-helpers"))) {
-        return false;
-      }
-    }
-    return file.availableHelper("classPrivateFieldGet2");
-  };
-}
-
 export function buildPrivateNamesMap(
   className: string,
   privateFieldsAsSymbolsOrProperties: boolean,
   props: PropPath[],
-  file: File,
 ) {
   const privateNamesMap: PrivateNamesMap = new Map();
-  let classBrandId: t.Identifier;
+  let classBrandId: t.Identifier | undefined;
   for (const prop of props) {
     if (prop.isPrivate()) {
       const { name } = prop.node.key.id;
-      let update: PrivateNameMetadata = privateNamesMap.get(name);
+      let update: PrivateNameMetadata = privateNamesMap.get(name)!;
       if (!update) {
         const isMethod = !prop.isProperty();
         const isStatic = prop.node.static;
         let initAdded = false;
         let id: t.Identifier;
-        if (
-          !privateFieldsAsSymbolsOrProperties &&
-          (process.env.BABEL_8_BREAKING || newHelpers(file)) &&
-          isMethod &&
-          !isStatic
-        ) {
+        if (!privateFieldsAsSymbolsOrProperties && isMethod && !isStatic) {
           initAdded = !!classBrandId;
           classBrandId ??= prop.scope.generateUidIdentifier(
             `${className}_brand`,
@@ -75,13 +54,18 @@ export function buildPrivateNamesMap(
         } else {
           id = prop.scope.generateUidIdentifier(name);
         }
-        update = { id, static: isStatic, method: isMethod, initAdded };
+        update = {
+          id,
+          static: isStatic,
+          method: isMethod,
+          initAdded,
+        };
         privateNamesMap.set(name, update);
       }
       if (prop.isClassPrivateMethod()) {
         if (prop.node.kind === "get") {
           const { body } = prop.node.body;
-          let $: t.Node;
+          let $: t.Node | undefined | null;
           if (
             // If we have
             //   get #foo() { return _some_fn(this); }
@@ -152,11 +136,10 @@ export function buildPrivateNamesNodes(
     // - In spec mode, only instance fields need a "private name" initializer
     //   because static fields are directly assigned to a variable in the
     //   buildPrivateStaticFieldInitSpec function.
-    const { static: isStatic, method: isMethod, getId, setId } = value;
-    const isGetterOrSetter = getId || setId;
+    const { static: isStatic, method: isMethod } = value;
     const id = t.cloneNode(value.id);
 
-    let init: t.Expression;
+    let init: t.Expression | undefined;
 
     if (privateFieldsAsProperties) {
       init = t.callExpression(state.addHelper("classPrivateFieldLooseKey"), [
@@ -169,14 +152,7 @@ export function buildPrivateNamesNodes(
       injectedIds.add(id.name);
 
       init = t.newExpression(
-        t.identifier(
-          isMethod &&
-            (process.env.BABEL_8_BREAKING ||
-              !isGetterOrSetter ||
-              newHelpers(state))
-            ? "WeakSet"
-            : "WeakMap",
-        ),
+        t.identifier(isMethod ? "WeakSet" : "WeakMap"),
         [],
       );
     }
@@ -258,7 +234,7 @@ interface PrivateNameState {
   file: File;
   noDocumentAll: boolean;
   noUninitializedPrivateFieldAccess: boolean;
-  innerBinding?: t.Identifier;
+  innerBinding?: t.Identifier | null;
 }
 
 const privateNameVisitor = privateNameVisitorFactory<
@@ -287,16 +263,17 @@ const privateNameVisitor = privateNameVisitorFactory<
 function unshadow(
   name: string,
   scope: Scope,
-  innerBinding: t.Identifier | undefined,
+  innerBinding: t.Identifier | undefined | null,
 ) {
   // in some cases, scope.getBinding(name) === undefined
   // so we check hasBinding to avoid keeping looping
   // see: https://github.com/babel/babel/pull/13656#discussion_r686030715
   while (
     scope?.hasBinding(name) &&
-    !scope.bindingIdentifierEquals(name, innerBinding)
+    scope.getBindingIdentifier(name) !== innerBinding
   ) {
     scope.rename(name);
+    // @ts-expect-error scope.parent can be null
     scope = scope.parent;
   }
 }
@@ -314,8 +291,9 @@ const privateInVisitor = privateNameVisitorFactory<
   {
     classRef: t.Identifier;
     file: File;
-    innerBinding?: t.Identifier;
+    innerBinding?: t.Identifier | null;
     privateFieldsAsProperties: boolean;
+    noUninitializedPrivateFieldAccess: boolean;
   },
   PrivateNameMetadata
 >({
@@ -324,7 +302,12 @@ const privateInVisitor = privateNameVisitorFactory<
     if (operator !== "in") return;
     if (!t.isPrivateName(left)) return;
 
-    const { privateFieldsAsProperties, privateNamesMap, redeclared } = this;
+    const {
+      privateFieldsAsProperties,
+      noUninitializedPrivateFieldAccess,
+      privateNamesMap,
+      redeclared,
+    } = this;
 
     const { name } = left.id;
 
@@ -336,7 +319,7 @@ const privateInVisitor = privateNameVisitorFactory<
     unshadow(this.classRef.name, path.scope, this.innerBinding);
 
     if (privateFieldsAsProperties) {
-      const { id } = privateNamesMap.get(name);
+      const { id } = privateNamesMap.get(name)!;
       path.replaceWith(template.expression.ast`
         Object.prototype.hasOwnProperty.call(${buildCheckInRHS(
           right,
@@ -346,15 +329,25 @@ const privateInVisitor = privateNameVisitorFactory<
       return;
     }
 
-    const { id, static: isStatic } = privateNamesMap.get(name);
+    const { id, static: isStatic, method } = privateNamesMap.get(name)!;
 
     if (isStatic) {
-      path.replaceWith(
-        template.expression.ast`${buildCheckInRHS(
-          right,
-          file,
-        )} === ${t.cloneNode(this.classRef)}`,
-      );
+      let replacement: t.Expression = template.expression.ast`${buildCheckInRHS(
+        right,
+        file,
+      )} === ${t.cloneNode(this.classRef)}`;
+      // Static methods and accessors are added before any field initializer
+      // runs, but a static field only once its initializer has. Its storage
+      // is `{ _: value }` (see buildPrivateStaticFieldInitSpec), so it is
+      // undefined exactly until then.
+      if (!method && !noUninitializedPrivateFieldAccess) {
+        replacement = t.logicalExpression(
+          "&&",
+          replacement,
+          t.unaryExpression("!", t.unaryExpression("!", t.cloneNode(id))),
+        );
+      }
+      path.replaceWith(replacement);
       return;
     }
 
@@ -381,15 +374,6 @@ function readOnlyError(file: File, name: string) {
 }
 
 function writeOnlyError(file: File, name: string) {
-  if (
-    !process.env.BABEL_8_BREAKING &&
-    !file.availableHelper("writeOnlyError")
-  ) {
-    console.warn(
-      `@babel/helpers is outdated, update it to silence this warning.`,
-    );
-    return t.buildUndefinedNode();
-  }
   return t.callExpression(file.addHelper("writeOnlyError"), [
     t.stringLiteral(`#${name}`),
   ]);
@@ -404,9 +388,12 @@ function buildStaticPrivateFieldAccess<N extends t.Expression>(
 }
 
 function autoInherits<
-  Member extends { node: t.Node },
   Result extends t.Node,
-  Fn extends (member: Member, ...args: unknown[]) => Result,
+  Fn extends (
+    this: HandlerState<PrivateNameState> & PrivateNameState & Receiver,
+    member: NodePath<t.OptionalMemberExpression | t.MemberExpression>,
+    ...args: any[]
+  ) => Result,
 >(fn: Fn): Fn {
   return function (this: ThisParameterType<Fn>, member) {
     return t.inherits(fn.apply(this, arguments as any), member.node);
@@ -431,7 +418,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
       const { object } = member.node as { object: t.Expression };
 
       if (this.memoiser.has(object)) {
-        return t.cloneNode(this.memoiser.get(object));
+        return t.cloneNode(this.memoiser.get(object)!);
       }
 
       return t.cloneNode(object);
@@ -454,7 +441,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         methodId,
         getId,
         setId,
-      } = privateNamesMap.get(name);
+      } = privateNamesMap.get(name)!;
       const isGetterOrSetter = getId || setId;
 
       const cloneId = (id: t.Identifier) =>
@@ -464,21 +451,6 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         // if there are any local variable shadowing classRef, unshadow it
         // see #12960
         unshadow(classRef.name, member.scope, innerBinding);
-
-        if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-          // NOTE: This package has a peerDependency on @babel/core@^7.0.0, but these
-          // helpers have been introduced in @babel/helpers@7.1.0.
-          const helperName =
-            isMethod && !isGetterOrSetter
-              ? "classStaticPrivateMethodGet"
-              : "classStaticPrivateFieldSpecGet";
-
-          return t.callExpression(file.addHelper(helperName), [
-            this.receiver(member),
-            t.cloneNode(classRef),
-            cloneId(id),
-          ]);
-        }
 
         const receiver = this.receiver(member);
         const skipCheck =
@@ -541,46 +513,29 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
               writeOnlyError(file, name),
             ]);
           }
-          if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-            return t.callExpression(file.addHelper("classPrivateFieldGet"), [
-              this.receiver(member),
-              cloneId(id),
-            ]);
-          }
+
           return t.callExpression(file.addHelper("classPrivateGetter"), [
             t.cloneNode(id),
             this.receiver(member),
             cloneId(getId),
           ]);
         }
-        if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-          return t.callExpression(file.addHelper("classPrivateMethodGet"), [
-            this.receiver(member),
-            t.cloneNode(id),
-            cloneId(methodId),
-          ]);
-        }
+
         return t.callExpression(file.addHelper("assertClassBrand"), [
           t.cloneNode(id),
           this.receiver(member),
-          cloneId(methodId),
-        ]);
-      }
-      if (process.env.BABEL_8_BREAKING || newHelpers(file)) {
-        return t.callExpression(file.addHelper("classPrivateFieldGet2"), [
-          cloneId(id),
-          this.receiver(member),
+          cloneId(methodId!),
         ]);
       }
 
-      return t.callExpression(file.addHelper("classPrivateFieldGet"), [
-        this.receiver(member),
+      return t.callExpression(file.addHelper("classPrivateFieldGet2"), [
         cloneId(id),
+        this.receiver(member),
       ]);
     }),
 
     boundGet(member) {
-      this.memoise(member, 1);
+      this.memoise!(member, 1);
 
       return t.callExpression(
         t.memberExpression(this.get(member), t.identifier("bind")),
@@ -602,28 +557,12 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         static: isStatic,
         method: isMethod,
         setId,
-        getId,
-      } = privateNamesMap.get(name);
-      const isGetterOrSetter = getId || setId;
+      } = privateNamesMap.get(name)!;
 
       const cloneId = (id: t.Identifier) =>
         t.inherits(t.cloneNode(id), privateName);
 
       if (isStatic) {
-        if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-          const helperName =
-            isMethod && !isGetterOrSetter
-              ? "classStaticPrivateMethodSet"
-              : "classStaticPrivateFieldSpecSet";
-
-          return t.callExpression(file.addHelper(helperName), [
-            this.receiver(member),
-            t.cloneNode(classRef),
-            cloneId(id),
-            value,
-          ]);
-        }
-
         const receiver = this.receiver(member);
         const skipCheck =
           t.isIdentifier(receiver) && receiver.name === classRef.name;
@@ -667,15 +606,9 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
               ]),
         );
       }
+
       if (isMethod) {
         if (setId) {
-          if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-            return t.callExpression(file.addHelper("classPrivateFieldSet"), [
-              this.receiver(member),
-              cloneId(id),
-              value,
-            ]);
-          }
           return t.callExpression(file.addHelper("classPrivateSetter"), [
             t.cloneNode(id),
             cloneId(setId),
@@ -683,6 +616,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
             value,
           ]);
         }
+
         return t.sequenceExpression([
           this.receiver(member),
           value,
@@ -690,78 +624,31 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         ]);
       }
 
-      if (process.env.BABEL_8_BREAKING || newHelpers(file)) {
-        return t.callExpression(file.addHelper("classPrivateFieldSet2"), [
-          cloneId(id),
-          this.receiver(member),
-          value,
-        ]);
-      }
-
-      return t.callExpression(file.addHelper("classPrivateFieldSet"), [
-        this.receiver(member),
+      return t.callExpression(file.addHelper("classPrivateFieldSet2"), [
         cloneId(id),
+        this.receiver(member),
         value,
       ]);
     }),
 
     destructureSet(member) {
-      const {
-        classRef,
-        privateNamesMap,
-        file,
-        noUninitializedPrivateFieldAccess,
-      } = this;
+      const { privateNamesMap, file, noUninitializedPrivateFieldAccess } = this;
       const privateName = member.node.property as t.PrivateName;
       const { name } = privateName.id;
       const {
-        id,
         static: isStatic,
         method: isMethod,
         setId,
-      } = privateNamesMap.get(name);
-
-      const cloneId = (id: t.Identifier) =>
-        t.inherits(t.cloneNode(id), privateName);
-
-      if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-        if (isStatic) {
-          try {
-            // classStaticPrivateFieldDestructureSet was introduced in 7.13.10
-            // eslint-disable-next-line no-var
-            var helper = file.addHelper(
-              "classStaticPrivateFieldDestructureSet",
-            );
-          } catch {
-            throw new Error(
-              "Babel can not transpile `[C.#p] = [0]` with @babel/helpers < 7.13.10, \n" +
-                "please update @babel/helpers to the latest version.",
-            );
-          }
-          return t.memberExpression(
-            t.callExpression(helper, [
-              this.receiver(member),
-              t.cloneNode(classRef),
-              cloneId(id),
-            ]),
-            t.identifier("value"),
-          );
-        }
-
-        return t.memberExpression(
-          t.callExpression(file.addHelper("classPrivateFieldDestructureSet"), [
-            this.receiver(member),
-            cloneId(id),
-          ]),
-          t.identifier("value"),
-        );
-      }
+      } = privateNamesMap.get(name)!;
 
       if (isMethod && !setId) {
         return t.memberExpression(
           t.sequenceExpression([
-            // @ts-ignore(Babel 7 vs Babel 8) member.node.object is not t.Super
-            member.node.object,
+            // The object must not be super since the property is a private name
+            member.node.object as Exclude<
+              t.MemberExpression["object"],
+              t.Super
+            >,
             readOnlyError(file, name),
           ]),
           t.identifier("_"),
@@ -806,7 +693,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         setCall.callee.property.name === "call"
       ) {
         args = [
-          // @ts-ignore(Babel 7 vs Babel 8) member.node.object is not t.Super
+          // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
           setCall.callee.object,
           t.arrayExpression(
             // Remove '_'
@@ -829,16 +716,15 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         t.identifier("_"),
       );
     },
-
     call(member, args: (t.Expression | t.SpreadElement)[]) {
       // The first access (the get) should do the memo assignment.
-      this.memoise(member, 1);
+      this.memoise!(member, 1);
 
       return optimiseCall(this.get(member), this.receiver(member), args, false);
     },
 
     optionalCall(member, args: (t.Expression | t.SpreadElement)[]) {
-      this.memoise(member, 1);
+      this.memoise!(member, 1);
 
       return optimiseCall(this.get(member), this.receiver(member), args, true);
     },
@@ -859,7 +745,7 @@ const privateNameHandlerLoose: Handler<PrivateNameState> = {
     return template.expression`BASE(REF, PROP)[PROP]`({
       BASE: file.addHelper("classPrivateFieldLooseBase"),
       REF: t.cloneNode(object),
-      PROP: t.cloneNode(privateNamesMap.get(name).id),
+      PROP: t.cloneNode(privateNamesMap.get(name)!.id),
     });
   },
 
@@ -871,7 +757,6 @@ const privateNameHandlerLoose: Handler<PrivateNameState> = {
   boundGet(member) {
     return t.callExpression(
       t.memberExpression(this.get(member), t.identifier("bind")),
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       [t.cloneNode(member.node.object as t.Expression)],
     );
   },
@@ -912,7 +797,7 @@ export function transformPrivateNamesUsage(
     privateFieldsAsProperties: boolean;
     noUninitializedPrivateFieldAccess: boolean;
     noDocumentAll: boolean;
-    innerBinding: t.Identifier;
+    innerBinding: t.Identifier | undefined | null;
   },
   state: File,
 ) {
@@ -937,6 +822,7 @@ export function transformPrivateNamesUsage(
     classRef: ref,
     file: state,
     privateFieldsAsProperties,
+    noUninitializedPrivateFieldAccess,
     innerBinding,
   });
 }
@@ -946,8 +832,8 @@ function buildPrivateFieldInitLoose(
   prop: NodePath<t.ClassPrivateProperty>,
   privateNamesMap: PrivateNamesMap,
 ) {
-  const { id } = privateNamesMap.get(prop.node.key.id.name);
-  const value = prop.node.value || prop.scope.buildUndefinedNode();
+  const { id } = privateNamesMap.get(prop.node.key.id.name)!;
+  const value = prop.node.value || t.buildUndefinedNode();
 
   return inheritPropComments(
     template.statement.ast`
@@ -968,22 +854,8 @@ function buildPrivateInstanceFieldInitSpec(
   privateNamesMap: PrivateNamesMap,
   state: File,
 ) {
-  const { id } = privateNamesMap.get(prop.node.key.id.name);
-  const value = prop.node.value || prop.scope.buildUndefinedNode();
-
-  if (!process.env.BABEL_8_BREAKING) {
-    if (!state.availableHelper("classPrivateFieldInitSpec")) {
-      return inheritPropComments(
-        template.statement.ast`${t.cloneNode(id)}.set(${ref}, {
-          // configurable is always false for private elements
-          // enumerable is always false for private elements
-          writable: true,
-          value: ${value},
-        })` as t.ExpressionStatement,
-        prop,
-      );
-    }
-  }
+  const { id } = privateNamesMap.get(prop.node.key.id.name)!;
+  const value = prop.node.value || t.buildUndefinedNode();
 
   const helper = state.addHelper("classPrivateFieldInitSpec");
   return inheritLoc(
@@ -992,9 +864,8 @@ function buildPrivateInstanceFieldInitSpec(
         t.callExpression(helper, [
           t.thisExpression(),
           inheritLoc(t.cloneNode(id), prop.node.key),
-          process.env.BABEL_8_BREAKING || newHelpers(state)
-            ? value
-            : template.expression.ast`{ writable: true, value: ${value} }`,
+
+          value,
         ]),
       ),
       prop,
@@ -1008,7 +879,7 @@ function buildPrivateStaticFieldInitSpec(
   privateNamesMap: PrivateNamesMap,
   noUninitializedPrivateFieldAccess: boolean,
 ) {
-  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name)!;
 
   const value = noUninitializedPrivateFieldAccess
     ? prop.node.value
@@ -1024,59 +895,12 @@ function buildPrivateStaticFieldInitSpec(
   );
 }
 
-if (!process.env.BABEL_8_BREAKING) {
-  // eslint-disable-next-line no-var
-  var buildPrivateStaticFieldInitSpecOld = function (
-    prop: NodePath<t.ClassPrivateProperty>,
-    privateNamesMap: PrivateNamesMap,
-  ) {
-    const privateName = privateNamesMap.get(prop.node.key.id.name);
-    const { id, getId, setId, initAdded } = privateName;
-    const isGetterOrSetter = getId || setId;
-
-    if (!prop.isProperty() && (initAdded || !isGetterOrSetter)) return;
-
-    if (isGetterOrSetter) {
-      privateNamesMap.set(prop.node.key.id.name, {
-        ...privateName,
-        initAdded: true,
-      });
-
-      return inheritPropComments(
-        template.statement.ast`
-          var ${t.cloneNode(id)} = {
-            // configurable is false by default
-            // enumerable is false by default
-            // writable is false by default
-            get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-            set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
-          }
-        `,
-        prop,
-      );
-    }
-
-    const value = prop.node.value || prop.scope.buildUndefinedNode();
-    return inheritPropComments(
-      template.statement.ast`
-        var ${t.cloneNode(id)} = {
-          // configurable is false by default
-          // enumerable is false by default
-          writable: true,
-          value: ${value}
-        };
-      `,
-      prop,
-    );
-  };
-}
-
 function buildPrivateMethodInitLoose(
   ref: t.Expression,
   prop: NodePath<t.ClassPrivateMethod>,
   privateNamesMap: PrivateNamesMap,
 ) {
-  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name)!;
   const { methodId, id, getId, setId, initAdded } = privateName;
   if (initAdded) return;
 
@@ -1106,8 +930,8 @@ function buildPrivateMethodInitLoose(
           // configurable is false by default
           // enumerable is false by default
           // writable is false by default
-          get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-          set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+          get: ${getId ? getId.name : t.buildUndefinedNode()},
+          set: ${setId ? setId.name : t.buildUndefinedNode()}
         });
       ` as t.ExpressionStatement,
       prop,
@@ -1121,21 +945,9 @@ function buildPrivateInstanceMethodInitSpec(
   privateNamesMap: PrivateNamesMap,
   state: File,
 ) {
-  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name)!;
 
   if (privateName.initAdded) return;
-
-  if (!process.env.BABEL_8_BREAKING && !newHelpers(state)) {
-    const isGetterOrSetter = privateName.getId || privateName.setId;
-    if (isGetterOrSetter) {
-      return buildPrivateAccessorInitialization(
-        ref,
-        prop,
-        privateNamesMap,
-        state,
-      );
-    }
-  }
 
   return buildPrivateInstanceMethodInitialization(
     ref,
@@ -1145,68 +957,14 @@ function buildPrivateInstanceMethodInitSpec(
   );
 }
 
-function buildPrivateAccessorInitialization(
-  ref: t.Expression,
-  prop: NodePath<t.ClassPrivateMethod>,
-  privateNamesMap: PrivateNamesMap,
-  state: File,
-) {
-  const privateName = privateNamesMap.get(prop.node.key.id.name);
-  const { id, getId, setId } = privateName;
-
-  privateNamesMap.set(prop.node.key.id.name, {
-    ...privateName,
-    initAdded: true,
-  });
-
-  if (!process.env.BABEL_8_BREAKING) {
-    if (!state.availableHelper("classPrivateFieldInitSpec")) {
-      return inheritPropComments(
-        template.statement.ast`
-          ${id}.set(${ref}, {
-            get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-            set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
-          });
-        ` as t.ExpressionStatement,
-        prop,
-      );
-    }
-  }
-
-  const helper = state.addHelper("classPrivateFieldInitSpec");
-  return inheritLoc(
-    inheritPropComments(
-      template.statement.ast`${helper}(
-      ${t.thisExpression()},
-      ${t.cloneNode(id)},
-      {
-        get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-        set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
-      },
-    )` as t.ExpressionStatement,
-      prop,
-    ),
-    prop.node,
-  );
-}
-
 function buildPrivateInstanceMethodInitialization(
   ref: t.Expression,
   prop: NodePath<t.ClassPrivateMethod>,
   privateNamesMap: PrivateNamesMap,
   state: File,
 ) {
-  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name)!;
   const { id } = privateName;
-
-  if (!process.env.BABEL_8_BREAKING) {
-    if (!state.availableHelper("classPrivateMethodInitSpec")) {
-      return inheritPropComments(
-        template.statement.ast`${id}.add(${ref})` as t.ExpressionStatement,
-        prop,
-      );
-    }
-  }
 
   const helper = state.addHelper("classPrivateMethodInitSpec");
   return inheritPropComments(
@@ -1223,7 +981,7 @@ function buildPublicFieldInitLoose(
   prop: NodePath<t.ClassProperty>,
 ) {
   const { key, computed } = prop.node;
-  const value = prop.node.value || prop.scope.buildUndefinedNode();
+  const value = prop.node.value || t.buildUndefinedNode();
 
   return inheritPropComments(
     t.expressionStatement(
@@ -1243,15 +1001,13 @@ function buildPublicFieldInitSpec(
   state: File,
 ) {
   const { key, computed } = prop.node;
-  const value = prop.node.value || prop.scope.buildUndefinedNode();
+  const value = prop.node.value || t.buildUndefinedNode();
 
   return inheritPropComments(
     t.expressionStatement(
       t.callExpression(state.addHelper("defineProperty"), [
         ref,
-        computed || t.isLiteral(key)
-          ? key
-          : t.stringLiteral((key as t.Identifier).name),
+        computed || t.isLiteral(key) ? key : t.stringLiteral(key.name),
         value,
       ]),
     ),
@@ -1262,10 +1018,9 @@ function buildPublicFieldInitSpec(
 function buildPrivateStaticMethodInitLoose(
   ref: t.Expression,
   prop: NodePath<t.ClassPrivateMethod>,
-  state: File,
   privateNamesMap: PrivateNamesMap,
 ) {
-  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name)!;
   const { id, methodId, getId, setId, initAdded } = privateName;
 
   if (initAdded) return;
@@ -1283,8 +1038,8 @@ function buildPrivateStaticMethodInitLoose(
           // configurable is false by default
           // enumerable is false by default
           // writable is false by default
-          get: ${getId ? getId.name : prop.scope.buildUndefinedNode()},
-          set: ${setId ? setId.name : prop.scope.buildUndefinedNode()}
+          get: ${getId ? getId.name : t.buildUndefinedNode()},
+          set: ${setId ? setId.name : t.buildUndefinedNode()}
         })
       `,
       prop,
@@ -1297,7 +1052,7 @@ function buildPrivateStaticMethodInitLoose(
         // configurable is false by default
         // enumerable is false by default
         // writable is false by default
-        value: ${methodId.name}
+        value: ${methodId!.name}
       });
     `,
     prop,
@@ -1305,12 +1060,11 @@ function buildPrivateStaticMethodInitLoose(
 }
 
 function buildPrivateMethodDeclaration(
-  file: File,
   prop: NodePath<t.ClassPrivateMethod>,
   privateNamesMap: PrivateNamesMap,
   privateFieldsAsSymbolsOrProperties = false,
 ) {
-  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name)!;
   const {
     id,
     methodId,
@@ -1332,11 +1086,7 @@ function buildPrivateMethodDeclaration(
     return null;
   }
 
-  if (
-    (process.env.BABEL_8_BREAKING || newHelpers(file)) &&
-    (isGetter || isSetter) &&
-    !privateFieldsAsSymbolsOrProperties
-  ) {
+  if ((isGetter || isSetter) && !privateFieldsAsSymbolsOrProperties) {
     const scope = prop.get("body").scope;
     const thisArg = scope.generateUidIdentifier("this");
     const state: ReplaceThisState = {
@@ -1345,13 +1095,13 @@ function buildPrivateMethodDeclaration(
     };
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     prop.traverse(thisContextVisitor, state);
-    if (state.argumentsPath.length) {
+    if (state.argumentsPath!.length) {
       const argumentsId = scope.generateUidIdentifier("arguments");
       scope.push({
         id: argumentsId,
         init: template.expression.ast`[].slice.call(arguments, 1)`,
       });
-      for (const path of state.argumentsPath) {
+      for (const path of state.argumentsPath!) {
         path.replaceWith(t.cloneNode(argumentsId));
       }
     }
@@ -1422,11 +1172,11 @@ const thisContextVisitor = visitors.environmentVisitor<ReplaceThisState>({
     path.replaceWith(t.cloneNode(state.thisRef));
   },
   MetaProperty(path) {
-    const { node, scope } = path;
+    const { node } = path;
     // if there are `new.target` in static field
     // we should replace it with `undefined`
     if (node.meta.name === "new" && node.property.name === "target") {
-      path.replaceWith(scope.buildUndefinedNode());
+      path.replaceWith(t.buildUndefinedNode());
     }
   },
 });
@@ -1434,7 +1184,7 @@ const thisContextVisitor = visitors.environmentVisitor<ReplaceThisState>({
 const innerReferencesVisitor: Visitor<ReplaceInnerBindingReferenceState> = {
   ReferencedIdentifier(path, state) {
     if (
-      path.scope.bindingIdentifierEquals(path.node.name, state.innerBinding)
+      path.scope.getBindingIdentifier(path.node.name) === state.innerBinding
     ) {
       state.needsClassRef = true;
       path.node.name = state.thisRef.name;
@@ -1445,7 +1195,7 @@ const innerReferencesVisitor: Visitor<ReplaceInnerBindingReferenceState> = {
 function replaceThisContext(
   path: PropPath,
   ref: t.Identifier,
-  innerBindingRef: t.Identifier | null,
+  innerBindingRef: t.Identifier | null | undefined,
 ) {
   const state: ReplaceThisState = {
     thisRef: ref,
@@ -1469,12 +1219,12 @@ function replaceThisContext(
   return state.needsClassRef;
 }
 
-export type PropNode =
+export type PropPath = NodePath<
   | t.ClassProperty
   | t.ClassPrivateMethod
   | t.ClassPrivateProperty
-  | t.StaticBlock;
-export type PropPath = NodePath<PropNode>;
+  | t.StaticBlock
+>;
 
 function isNameOrLength({ key, computed }: t.ClassProperty) {
   if (key.type === "Identifier") {
@@ -1534,8 +1284,8 @@ const enum ClassRefFlag {
 }
 
 export function buildFieldsInitNodes(
-  ref: t.Identifier | null,
-  superRef: t.Expression | undefined,
+  ref: t.Identifier | undefined | null,
+  superRef: t.Expression | undefined | null,
   props: PropPath[],
   privateNamesMap: PrivateNamesMap,
   file: File,
@@ -1543,15 +1293,15 @@ export function buildFieldsInitNodes(
   privateFieldsAsSymbolsOrProperties: boolean,
   noUninitializedPrivateFieldAccess: boolean,
   constantSuper: boolean,
-  innerBindingRef: t.Identifier | null,
+  innerBindingRef: t.Identifier | undefined | null,
 ) {
   let classRefFlags = ClassRefFlag.None;
   let injectSuperRef: t.Identifier;
-  const staticNodes: t.Statement[] = [];
-  const instanceNodes: t.ExpressionStatement[] = [];
+  const staticNodes: (t.Statement | undefined)[] = [];
+  const instanceNodes: (t.ExpressionStatement | undefined)[] = [];
   let lastInstanceNodeReturnsThis = false;
   // These nodes are pure and can be moved to the closest statement position
-  const pureStaticNodes: t.FunctionDeclaration[] = [];
+  const pureStaticNodes: (t.FunctionDeclaration | null)[] = [];
   let classBindingNode: t.ExpressionStatement | null = null;
 
   const getSuperRef = t.isIdentifier(superRef)
@@ -1564,7 +1314,7 @@ export function buildFieldsInitNodes(
 
   const classRefForInnerBinding =
     ref ??
-    props[0].scope.generateUidIdentifier(innerBindingRef?.name || "Class");
+    props[0].scope.generateUidIdentifier(innerBindingRef!.name || "Class");
   ref ??= t.cloneNode(innerBindingRef);
 
   for (const prop of props) {
@@ -1572,14 +1322,13 @@ export function buildFieldsInitNodes(
       ts.assertFieldTransformed(prop);
     }
 
-    // @ts-expect-error: TS doesn't infer that prop.node is not a StaticBlock
-    const isStatic = !t.isStaticBlock?.(prop.node) && prop.node.static;
+    const isStatic = !t.isStaticBlock(prop.node) && prop.node.static;
     const isInstance = !isStatic;
     const isPrivate = prop.isPrivate();
     const isPublic = !isPrivate;
     const isField = prop.isProperty();
     const isMethod = !isField;
-    const isStaticBlock = prop.isStaticBlock?.();
+    const isStaticBlock = prop.isStaticBlock();
 
     if (isStatic) classRefFlags |= ClassRefFlag.ForDefine;
 
@@ -1642,26 +1391,21 @@ export function buildFieldsInitNodes(
         isField &&
         privateFieldsAsSymbolsOrProperties:
         staticNodes.push(
-          buildPrivateFieldInitLoose(t.cloneNode(ref), prop, privateNamesMap),
+          buildPrivateFieldInitLoose(t.cloneNode(ref!), prop, privateNamesMap),
         );
         break;
       case isStatic &&
         isPrivate &&
         isField &&
         !privateFieldsAsSymbolsOrProperties:
-        if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-          staticNodes.push(
-            buildPrivateStaticFieldInitSpecOld(prop, privateNamesMap),
-          );
-        } else {
-          staticNodes.push(
-            buildPrivateStaticFieldInitSpec(
-              prop,
-              privateNamesMap,
-              noUninitializedPrivateFieldAccess,
-            ),
-          );
-        }
+        staticNodes.push(
+          buildPrivateStaticFieldInitSpec(
+            prop,
+            privateNamesMap,
+            noUninitializedPrivateFieldAccess,
+          ),
+        );
+
         break;
       case isStatic && isPublic && isField && setPublicClassFields:
         // Functions always have non-writable .name and .length properties,
@@ -1670,13 +1414,13 @@ export function buildFieldsInitNodes(
         // key is "name" or "length", but the assumption is telling us that it's
         // not going to happen.
         if (!isNameOrLength(prop.node)) {
-          staticNodes.push(buildPublicFieldInitLoose(t.cloneNode(ref), prop));
+          staticNodes.push(buildPublicFieldInitLoose(t.cloneNode(ref!), prop));
           break;
         }
       // falls through
       case isStatic && isPublic && isField && !setPublicClassFields:
         staticNodes.push(
-          buildPublicFieldInitSpec(t.cloneNode(ref), prop, file),
+          buildPublicFieldInitSpec(t.cloneNode(ref!), prop, file),
         );
         break;
       case isInstance &&
@@ -1713,7 +1457,6 @@ export function buildFieldsInitNodes(
         );
         pureStaticNodes.push(
           buildPrivateMethodDeclaration(
-            file,
             prop,
             privateNamesMap,
             privateFieldsAsSymbolsOrProperties,
@@ -1734,7 +1477,6 @@ export function buildFieldsInitNodes(
         );
         pureStaticNodes.push(
           buildPrivateMethodDeclaration(
-            file,
             prop,
             privateNamesMap,
             privateFieldsAsSymbolsOrProperties,
@@ -1745,15 +1487,8 @@ export function buildFieldsInitNodes(
         isPrivate &&
         isMethod &&
         !privateFieldsAsSymbolsOrProperties:
-        if (!process.env.BABEL_8_BREAKING && !newHelpers(file)) {
-          staticNodes.unshift(
-            // @ts-expect-error checked in switch
-            buildPrivateStaticFieldInitSpecOld(prop, privateNamesMap),
-          );
-        }
         pureStaticNodes.push(
           buildPrivateMethodDeclaration(
-            file,
             prop,
             privateNamesMap,
             privateFieldsAsSymbolsOrProperties,
@@ -1766,15 +1501,13 @@ export function buildFieldsInitNodes(
         privateFieldsAsSymbolsOrProperties:
         staticNodes.unshift(
           buildPrivateStaticMethodInitLoose(
-            t.cloneNode(ref),
+            t.cloneNode(ref!),
             prop,
-            file,
             privateNamesMap,
           ),
         );
         pureStaticNodes.push(
           buildPrivateMethodDeclaration(
-            file,
             prop,
             privateNamesMap,
             privateFieldsAsSymbolsOrProperties,
@@ -1806,10 +1539,10 @@ export function buildFieldsInitNodes(
   }
 
   return {
-    staticNodes: staticNodes.filter(Boolean),
-    instanceNodes: instanceNodes.filter(Boolean),
+    staticNodes: staticNodes.filter(Boolean) as t.Statement[],
+    instanceNodes: instanceNodes.filter(Boolean) as t.ExpressionStatement[],
     lastInstanceNodeReturnsThis,
-    pureStaticNodes: pureStaticNodes.filter(Boolean),
+    pureStaticNodes: pureStaticNodes.filter(Boolean) as t.Statement[],
     classBindingNode,
     wrapClass(path: NodePath<t.Class>) {
       for (const prop of props) {
@@ -1826,15 +1559,15 @@ export function buildFieldsInitNodes(
         path.scope.push({ id: t.cloneNode(injectSuperRef) });
         path.set(
           "superClass",
-          t.assignmentExpression("=", injectSuperRef, path.node.superClass),
+          t.assignmentExpression("=", injectSuperRef, path.node.superClass!),
         );
       }
 
       if (classRefFlags !== ClassRefFlag.None) {
         if (path.isClassExpression()) {
-          path.scope.push({ id: ref });
+          path.scope.push({ id: ref! });
           path.replaceWith(
-            t.assignmentExpression("=", t.cloneNode(ref), path.node),
+            t.assignmentExpression("=", t.cloneNode(ref!), path.node),
           );
         } else {
           if (innerBindingRef == null) {

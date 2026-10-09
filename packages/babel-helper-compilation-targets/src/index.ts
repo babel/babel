@@ -1,7 +1,7 @@
 import browserslist from "browserslist";
 import { findSuggestion } from "@babel/helper-validator-option";
-import browserModulesData from "@babel/compat-data/native-modules";
-import LruCache from "lru-cache";
+import browserModulesData from "@babel/compat-data/native-modules" with { type: "json" };
+import flru from "flru";
 
 import {
   semverify,
@@ -20,7 +20,7 @@ import type {
   Browsers,
   BrowserslistBrowserName,
   TargetsTuple,
-} from "./types.ts";
+} from "./types.d.ts";
 
 export type { Target, Targets, InputTargets };
 
@@ -64,7 +64,7 @@ function validateBrowsers(browsers: Browsers | undefined) {
   return browsers;
 }
 
-function getLowestVersions(browsers: Array<string>): Targets {
+function getLowestVersions(browsers: string[]): Targets {
   return browsers.reduce(
     (all, browser) => {
       const [browserName, browserVersion] = browser.split(" ") as [
@@ -110,7 +110,7 @@ function getLowestVersions(browsers: Array<string>): Targets {
 }
 
 function outputDecimalWarning(
-  decimalTargets: Array<{ target: string; value: number }>,
+  decimalTargets: { target: string; value: number }[],
 ) {
   if (!decimalTargets.length) {
     return;
@@ -129,11 +129,12 @@ getting parsed as 6.1, which can lead to unexpected behavior.
 function semverifyTarget(target: Target, value: string) {
   try {
     return semverify(value);
-  } catch (_) {
+  } catch (e) {
     throw new Error(
       v.formatMessage(
         `'${value}' is not a valid value for 'targets.${target}'.`,
       ),
+      { cause: e },
     );
   }
 }
@@ -142,7 +143,8 @@ function semverifyTarget(target: Target, value: string) {
 function nodeTargetParser(value: true | string) {
   const parsed =
     value === true || value === "current"
-      ? process.versions.node
+      ? // Align with `browserslist` and strip prerelease tag.
+        process.versions.node.split("-")[0]
       : semverifyTarget("node", value);
   return ["node", parsed] as const;
 }
@@ -172,11 +174,11 @@ function resolveTargets(queries: Browsers, env?: string): Targets {
   return getLowestVersions(resolved);
 }
 
-const targetsCache = new LruCache({ max: 64 });
+const targetsCache = flru<Targets>(64);
 
 function resolveTargetsCached(queries: Browsers, env?: string): Targets {
   const cacheKey = typeof queries === "string" ? queries : queries.join() + env;
-  let cached = targetsCache.get(cacheKey) as Targets | undefined;
+  let cached = targetsCache.get(cacheKey);
   if (!cached) {
     cached = resolveTargets(queries, env);
     targetsCache.set(cacheKey, cached);
@@ -193,6 +195,8 @@ type GetTargetsOption = {
   browserslistEnv?: string;
   // true to disable config loading
   ignoreBrowserslistConfig?: boolean;
+  // custom hook when browserslist config is found
+  onBrowserslistConfigFound?: (configFile: string) => void;
 };
 
 export default function getTargets(
@@ -200,7 +204,7 @@ export default function getTargets(
   options: GetTargetsOption = {},
 ): Targets {
   let { browsers, esmodules } = inputTargets;
-  const { configPath = "." } = options;
+  const { configPath = ".", onBrowserslistConfigFound } = options;
 
   validateBrowsers(browsers);
 
@@ -213,33 +217,38 @@ export default function getTargets(
     !options.ignoreBrowserslistConfig && !hasTargets;
 
   if (!browsers && shouldSearchForConfig) {
-    browsers = browserslist.loadConfig({
-      config: options.configFile,
-      path: configPath,
-      env: options.browserslistEnv,
-    });
-    if (browsers == null) {
-      if (process.env.BABEL_8_BREAKING) {
-        // In Babel 8, if no targets are passed, we use browserslist's defaults.
-        browsers = ["defaults"];
-      } else {
-        // If no targets are passed, we need to overwrite browserslist's defaults
-        // so that we enable all transforms (acting like the now deprecated
-        // preset-latest).
-        browsers = [];
+    // https://github.com/browserslist/browserslist/blob/8ae85caa905d130f4ca86f7a998a5b63abbbe582/node.js#L243
+    browsers = process.env.BROWSERSLIST;
+    if (!browsers) {
+      const configFile =
+        options.configFile ||
+        process.env.BROWSERSLIST_CONFIG ||
+        browserslist.findConfigFile(configPath);
+      if (configFile != null) {
+        onBrowserslistConfigFound?.(configFile);
+        browsers = browserslist.loadConfig({
+          config: configFile,
+          env: options.browserslistEnv,
+        });
       }
+    }
+
+    if (browsers == null) {
+      // If no targets are passed, we use browserslist's defaults.
+      browsers = ["defaults"];
     }
   }
 
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
-  // These values OVERRIDE the `browsers` field.
-  if (esmodules && (esmodules !== "intersect" || !browsers?.length)) {
-    browsers = Object.keys(ESM_SUPPORT)
+  // These values offer defaults of the `browsers` field.
+  if (esmodules && !browsers?.length) {
+    browsers = (Object.keys(ESM_SUPPORT) as (keyof typeof ESM_SUPPORT)[])
       .map(
         (browser: keyof typeof ESM_SUPPORT) =>
           `${browser} >= ${ESM_SUPPORT[browser]}`,
       )
       .join(", ");
+    // skip `esmodules` processing below since `browsers` is already set
     esmodules = false;
   }
 
@@ -252,14 +261,14 @@ export default function getTargets(
       options.browserslistEnv,
     );
 
-    if (esmodules === "intersect") {
+    if (esmodules) {
       for (const browser of Object.keys(queryBrowsers) as Target[]) {
         if (browser !== "deno" && browser !== "ie") {
           const esmSupportVersion =
             ESM_SUPPORT[browser === "opera_mobile" ? "op_mob" : browser];
 
           if (esmSupportVersion) {
-            const version = queryBrowsers[browser];
+            const version = queryBrowsers[browser]!;
             queryBrowsers[browser] = getHighestUnreleased(
               version,
               semverify(esmSupportVersion),
@@ -281,7 +290,7 @@ export default function getTargets(
   const result: Targets = {};
   const decimalWarnings = [];
   for (const target of Object.keys(targets).sort() as Target[]) {
-    const value = targets[target];
+    const value = targets[target]!;
 
     // Warn when specifying minor/patch as a decimal
     if (typeof value === "number" && value % 1 !== 0) {

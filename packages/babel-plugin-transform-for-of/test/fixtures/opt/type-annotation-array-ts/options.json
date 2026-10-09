@@ -1,4 +1,0 @@
-{
-  "plugins": ["transform-for-of"],
-  "presets": ["typescript"]
-}

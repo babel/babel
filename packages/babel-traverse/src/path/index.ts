@@ -1,10 +1,14 @@
 import type { HubInterface } from "../hub.ts";
 import type TraversalContext from "../context.ts";
-import type { ExplodedTraverseOptions } from "../index.ts";
 import * as virtualTypes from "./lib/virtual-types.ts";
-import buildDebug from "debug";
+import { createDebug } from "obug";
 import traverse from "../index.ts";
-import type { Visitor } from "../types.ts";
+import type {
+  Visitor,
+  VisitorProp,
+  TraverseOptions,
+  ExplodedVisitor,
+} from "../types.ts";
 import Scope from "../scope/index.ts";
 import { validate } from "@babel/types";
 import * as t from "@babel/types";
@@ -24,51 +28,71 @@ import * as NodePath_modification from "./modification.ts";
 import * as NodePath_family from "./family.ts";
 import * as NodePath_comments from "./comments.ts";
 import * as NodePath_virtual_types_validator from "./lib/virtual-types-validator.ts";
-import type { NodePathAssertions } from "./generated/asserts.ts";
-import type { NodePathValidators } from "./generated/validators.ts";
+import type { NodePathAssertions } from "./generated/asserts.d.ts";
+import type { NodePathValidators } from "./generated/validators.d.ts";
 import { setup } from "./context.ts";
 
-const debug = buildDebug("babel");
+const debug = createDebug("babel");
 
 export const REMOVED = 1 << 0;
 export const SHOULD_STOP = 1 << 1;
 export const SHOULD_SKIP = 1 << 2;
 
-declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.d.ts").BitDecorator<any>;
+declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.d.ts").BitDecorator<
+  NodePath_Final<t.Node>
+>;
+
+export type NodePaths<T extends t.Node | t.Node[]> = T extends t.Node[]
+  ? { [K in keyof T]: NodePath_Final<Extract<T[K], t.Node>> }
+  : T extends t.Node
+    ? [NodePath_Final<T>]
+    : never;
+
+export type NodeListType<N, K extends keyof N> = N[K] extends (infer P extends
+  t.Node)[]
+  ? P
+  : never;
+
+export type NodeOrNodeList<T extends t.Node> = T | NodeList<T>;
+
+export type NodeList<T extends t.Node> = T[] | [T, ...T[]];
 
 const NodePath_Final = class NodePath {
-  constructor(hub: HubInterface, parent: t.Node | null) {
+  constructor(hub: HubInterface | undefined, parent: t.Node) {
     this.parent = parent;
-    this.hub = hub;
+    this.hub = hub!;
     this.data = null;
 
+    // @ts-expect-error Set it in setContext
     this.context = null;
+    // @ts-expect-error Set it in setContext
     this.scope = null;
   }
 
   declare parent: t.Node;
   declare hub: HubInterface;
-  declare data: Record<string | symbol, unknown>;
+  declare data: Record<string | symbol, unknown> | null;
   // TraversalContext is configured by setContext
   declare context: TraversalContext;
   declare scope: Scope;
 
-  contexts: Array<TraversalContext> = [];
+  contexts: TraversalContext[] = [];
   state: any = null;
-  opts: ExplodedTraverseOptions | null = null;
+  declare opts: TraverseOptions & ExplodedVisitor;
 
-  @bit.storage _traverseFlags: number;
+  @bit.storage _traverseFlags: number = 0;
   @bit(REMOVED) accessor removed = false;
   @bit(SHOULD_STOP) accessor shouldStop = false;
   @bit(SHOULD_SKIP) accessor shouldSkip = false;
 
   skipKeys: Record<string, boolean> | null = null;
   parentPath: NodePath_Final | null = null;
-  container: t.Node | Array<t.Node> | null = null;
-  listKey: string | null = null;
+  container: t.Node | t.Node[] | null = null;
+  listKey: string | null | undefined = null;
   key: string | number | null = null;
   node: t.Node | null = null;
   type: t.Node["type"] | null = null;
+  _store: Map<t.Node, NodePath_Final> | null = null;
 
   static get({
     hub,
@@ -79,10 +103,10 @@ const NodePath_Final = class NodePath {
     key,
   }: {
     hub?: HubInterface;
-    parentPath: NodePath_Final | null;
+    parentPath: NodePath_Final | null | undefined;
     parent: t.Node;
     container: t.Node | t.Node[];
-    listKey?: string;
+    listKey?: string | null;
     key: string | number;
   }): NodePath_Final {
     if (!hub && parentPath) {
@@ -97,7 +121,7 @@ const NodePath_Final = class NodePath {
       // @ts-expect-error key must present in container
       container[key];
 
-    const paths = cache.getOrCreateCachedPaths(hub, parent);
+    const paths = cache.getOrCreateCachedPaths(parent, parentPath);
 
     let path = paths.get(targetNode);
     if (!path) {
@@ -114,19 +138,19 @@ const NodePath_Final = class NodePath {
     return this.isScope() ? new Scope(this) : scope;
   }
 
-  setData(key: string | symbol, val: any): any {
+  setData<T>(key: string | symbol, val: T): T {
     if (this.data == null) {
       this.data = Object.create(null);
     }
-    return (this.data[key] = val);
+    return (this.data![key] = val);
   }
 
   getData(key: string | symbol, def?: any): any {
     if (this.data == null) {
       this.data = Object.create(null);
     }
-    let val = this.data[key];
-    if (val === undefined && def !== undefined) val = this.data[key] = def;
+    let val = this.data![key];
+    if (val === undefined && def !== undefined) val = this.data![key] = def;
     return val;
   }
 
@@ -138,11 +162,28 @@ const NodePath_Final = class NodePath {
     msg: string,
     Error: new () => Error = SyntaxError,
   ): Error {
-    return this.hub.buildError(this.node, msg, Error);
+    return this.hub.buildError(this.node!, msg, Error);
   }
 
-  traverse<T>(this: NodePath_Final, visitor: Visitor<T>, state: T): void;
-  traverse(this: NodePath_Final, visitor: Visitor): void;
+  traverse<S, T extends object>(
+    this: NodePath_Final,
+    visitor: {
+      [P in keyof T]: VisitorProp<S, P & string>;
+    },
+    state: S,
+  ): void;
+  traverse<T extends object>(
+    this: NodePath_Final,
+    visitor: {
+      [P in keyof T]: VisitorProp<any, P & string>;
+    },
+  ): void;
+  traverse<S>(
+    this: NodePath_Final,
+    visitor: TraverseOptions & Visitor<S>,
+    state: S,
+  ): void;
+  traverse(this: NodePath_Final, visitor: TraverseOptions & Visitor<any>): void;
   traverse(this: NodePath_Final, visitor: any, state?: any) {
     traverse(this.node, visitor, this.scope, state, this);
   }
@@ -153,9 +194,9 @@ const NodePath_Final = class NodePath {
     this.node[key] = node;
   }
 
-  getPathLocation(this: NodePath_Final): string {
+  getPathLocation(this: NodePath_Final<t.Node | null>): string {
     const parts = [];
-    let path: NodePath_Final = this;
+    let path: NodePath_Final<t.Node | null> = this;
     do {
       let key = path.key;
       if (path.inList) key = `${path.listKey}[${key}]`;
@@ -164,13 +205,13 @@ const NodePath_Final = class NodePath {
     return parts.join(".");
   }
 
-  debug(this: NodePath_Final, message: string) {
+  debug(this: NodePath_Final<t.Node | null>, message: string) {
     if (!debug.enabled) return;
     debug(`${this.getPathLocation()} ${this.type}: ${message}`);
   }
 
   toString() {
-    return generator(this.node).code;
+    return generator(this.node!).code;
   }
 
   get inList() {
@@ -223,7 +264,6 @@ const methods = {
   evaluate: NodePath_evaluation.evaluate,
 
   // NodePath_conversion
-  toComputedKey: NodePath_conversion.toComputedKey,
   ensureBlock: NodePath_conversion.ensureBlock,
   unwrapFunctionEnvironment: NodePath_conversion.unwrapFunctionEnvironment,
   arrowFunctionToExpression: NodePath_conversion.arrowFunctionToExpression,
@@ -251,7 +291,6 @@ const methods = {
 
   // NodePath_context
   isDenylisted: NodePath_context.isDenylisted,
-  visit: NodePath_context.visit,
   skip: NodePath_context.skip,
   skipKey: NodePath_context.skipKey,
   stop: NodePath_context.stop,
@@ -293,86 +332,6 @@ const methods = {
 
 Object.assign(NodePath_Final.prototype, methods);
 
-if (!process.env.BABEL_8_BREAKING && !USE_ESM) {
-  // String(x) is workaround for rollup
-
-  // @ts-expect-error babel 7 only
-  NodePath_Final.prototype.arrowFunctionToShadowed =
-    // @ts-expect-error babel 7 only
-    NodePath_conversion[String("arrowFunctionToShadowed")];
-
-  Object.assign(NodePath_Final.prototype, {
-    // @ts-expect-error Babel 7 only
-    has: NodePath_introspection[String("has")],
-    // @ts-expect-error Babel 7 only
-    is: NodePath_introspection[String("is")],
-    // @ts-expect-error Babel 7 only
-    isnt: NodePath_introspection[String("isnt")],
-    // @ts-expect-error Babel 7 only
-    equals: NodePath_introspection[String("equals")],
-    // @ts-expect-error Babel 7 only
-    hoist: NodePath_modification[String("hoist")],
-    updateSiblingKeys: NodePath_modification.updateSiblingKeys,
-    call: NodePath_context.call,
-    // @ts-expect-error Babel 7 only
-    isBlacklisted: NodePath_context[String("isBlacklisted")],
-    setScope: NodePath_context.setScope,
-    resync: NodePath_context.resync,
-    popContext: NodePath_context.popContext,
-    pushContext: NodePath_context.pushContext,
-    setup: NodePath_context.setup,
-    setKey: NodePath_context.setKey,
-  });
-}
-
-if (!process.env.BABEL_8_BREAKING) {
-  // @ts-expect-error The original _guessExecutionStatusRelativeToDifferentFunctions only worked for paths in
-  // different functions, but _guessExecutionStatusRelativeTo works as a replacement in those cases.
-  NodePath_Final.prototype._guessExecutionStatusRelativeToDifferentFunctions =
-    NodePath_introspection._guessExecutionStatusRelativeTo;
-
-  // @ts-expect-error The original _guessExecutionStatusRelativeToDifferentFunctions only worked for paths in
-  // different functions, but _guessExecutionStatusRelativeTo works as a replacement in those cases.
-  NodePath_Final.prototype._guessExecutionStatusRelativeToDifferentFunctions =
-    NodePath_introspection._guessExecutionStatusRelativeTo;
-
-  Object.assign(NodePath_Final.prototype, {
-    // NodePath_inference
-    _getTypeAnnotation: NodePath_inference._getTypeAnnotation,
-
-    // NodePath_replacement
-    _replaceWith: NodePath_replacement._replaceWith,
-
-    // NodePath_introspection
-    _resolve: NodePath_introspection._resolve,
-
-    // NodePath_context
-    _call: NodePath_context._call,
-    _resyncParent: NodePath_context._resyncParent,
-    _resyncKey: NodePath_context._resyncKey,
-    _resyncList: NodePath_context._resyncList,
-    _resyncRemoved: NodePath_context._resyncRemoved,
-    _getQueueContexts: NodePath_context._getQueueContexts,
-
-    // NodePath_removal
-    _removeFromScope: NodePath_removal._removeFromScope,
-    _callRemovalHooks: NodePath_removal._callRemovalHooks,
-    _remove: NodePath_removal._remove,
-    _markRemoved: NodePath_removal._markRemoved,
-    _assertUnremoved: NodePath_removal._assertUnremoved,
-
-    // NodePath_modification
-    _containerInsert: NodePath_modification._containerInsert,
-    _containerInsertBefore: NodePath_modification._containerInsertBefore,
-    _containerInsertAfter: NodePath_modification._containerInsertAfter,
-    _verifyNodeList: NodePath_modification._verifyNodeList,
-
-    // NodePath_family
-    _getKey: NodePath_family._getKey,
-    _getPattern: NodePath_family._getPattern,
-  });
-}
-
 // we can not use `import { TYPES } from "@babel/types"` here
 // because the transformNamedBabelTypesImportToDestructuring plugin in babel.config.js
 // does not offer live bindings for `TYPES`
@@ -398,7 +357,7 @@ for (const type of t.TYPES) {
 Object.assign(NodePath_Final.prototype, NodePath_virtual_types_validator);
 
 for (const type of Object.keys(virtualTypes) as (keyof typeof virtualTypes)[]) {
-  if (type[0] === "_") continue;
+  if (type.startsWith("_")) continue;
   if (!t.TYPES.includes(type)) t.TYPES.push(type);
 }
 
@@ -418,40 +377,46 @@ interface NodePathOverwrites {
     this: NodePath_Final,
   ): asserts this is NodePath_Final<
     (
-      | t.Loop
-      | t.WithStatement
-      | t.Function
-      | t.LabeledStatement
-      | t.CatchClause
+      t.Loop | t.WithStatement | t.Function | t.LabeledStatement | t.CatchClause
     ) & { body: t.BlockStatement }
   >;
   /**
    * @see ./introspection.ts for implementation.
    */
   isStatementOrBlock(
-    this: NodePath_Final,
+    this: NodePath_Final<t.Node | null>,
   ): this is NodePath_Final<t.Statement | t.Block>;
 }
 
 type NodePathMixins = Omit<typeof methods, keyof NodePathOverwrites>;
 
-interface NodePath<T extends t.Node>
-  extends InstanceType<typeof NodePath_Final>,
+interface NodePath<
+  N extends t.Node | null,
+  T extends t.Node["type"] | null = N extends null
+    ? null
+    : NonNullable<N>["type"],
+  P extends t.Node = T extends null
+    ? t.Node
+    : NonNullable<t.ParentMaps[NonNullable<T>]>,
+>
+  extends
+    InstanceType<typeof NodePath_Final>,
     NodePathAssertions,
     NodePathValidators,
     NodePathMixins,
     NodePathOverwrites {
-  type: T["type"] | null;
-  node: T;
-  parent: t.ParentMaps[T["type"]];
-  parentPath: t.ParentMaps[T["type"]] extends null
-    ? null
-    : NodePath_Final<t.ParentMaps[T["type"]]> | null;
+  type: T;
+  node: N;
+  // .parent is only null for File nodes, which are not traversed by @babel/traverse
+  // You can technically create a path that contains one, but it's so rare that
+  // we can ignore it to avoid having non-null assertions everywhere.
+  parent: P;
+  parentPath: NodePath_Final<P>;
 }
 
 // This trick is necessary so that
 // NodePath_Final<A | B> is the same as NodePath_Final<A> | NodePath_Final<B>
-type NodePath_Final<T extends t.Node = t.Node> = T extends any
+type NodePath_Final<T extends t.Node | null = t.Node> = T extends any
   ? NodePath<T>
   : never;
 

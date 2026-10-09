@@ -18,6 +18,7 @@ If you are making a change that should have a docs update: submit another PR to 
 | Tests Added + Pass?      | Yes
 | Documentation PR Link    | <!-- If only readme change, add `[skip ci]` to your commits -->
 | Any Dependency Changes?  |
+| Need backport? | No <!-- Add 7.x if this is a bug fix and you want to backport it to Babel 7 !-->
 | License                  | MIT
 
 <!-- Describe your changes below in as much detail as possible -->

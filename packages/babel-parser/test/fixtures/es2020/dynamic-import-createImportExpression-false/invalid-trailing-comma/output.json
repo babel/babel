@@ -1,9 +1,6 @@
 {
   "type": "File",
   "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
-  "errors": [
-    "SyntaxError: Trailing comma is disallowed inside import(...) arguments. (1:12)"
-  ],
   "program": {
     "type": "Program",
     "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},

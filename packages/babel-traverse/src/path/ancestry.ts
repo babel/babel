@@ -12,7 +12,7 @@ import type NodePath from "./index.ts";
  */
 
 export function findParent(
-  this: NodePath,
+  this: NodePath<t.Node | null>,
   callback: (path: NodePath) => boolean,
 ): NodePath | null {
   let path = this;
@@ -43,7 +43,9 @@ export function find(
  * Get the parent function of the current path.
  */
 
-export function getFunctionParent(this: NodePath): NodePath<t.Function> | null {
+export function getFunctionParent(
+  this: NodePath<t.Node | null>,
+): NodePath<t.Function> | null {
   return this.findParent(p => p.isFunction()) as NodePath<t.Function> | null;
 }
 
@@ -51,7 +53,9 @@ export function getFunctionParent(this: NodePath): NodePath<t.Function> | null {
  * Walk up the tree until we hit a parent node path in a list.
  */
 
-export function getStatementParent(this: NodePath): NodePath<t.Statement> {
+export function getStatementParent(
+  this: NodePath<t.Node | null>,
+): NodePath<t.Statement> {
   let path = this;
 
   do {
@@ -84,7 +88,7 @@ export function getStatementParent(this: NodePath): NodePath<t.Statement> {
 
 export function getEarliestCommonAncestorFrom(
   this: NodePath,
-  paths: Array<NodePath>,
+  paths: NodePath[],
 ): NodePath {
   return this.getDeepestCommonAncestorFrom(
     paths,
@@ -104,7 +108,7 @@ export function getEarliestCommonAncestorFrom(
         // handle containers
         if (path.listKey && earliest.listKey === path.listKey) {
           // we're in the same container so check if we're earlier
-          if (path.key < earliest.key) {
+          if (path.key! < earliest.key!) {
             earliest = path;
             continue;
           }
@@ -119,7 +123,8 @@ export function getEarliestCommonAncestorFrom(
         }
       }
 
-      return earliest;
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      return earliest!;
     },
   );
 }
@@ -132,7 +137,7 @@ export function getEarliestCommonAncestorFrom(
 
 export function getDeepestCommonAncestorFrom(
   this: NodePath,
-  paths: Array<NodePath>,
+  paths: NodePath[],
   filter?: (deepest: NodePath, i: number, ancestries: NodePath[][]) => NodePath,
 ): NodePath {
   if (!paths.length) {
@@ -186,7 +191,8 @@ export function getDeepestCommonAncestorFrom(
 
   if (lastCommon) {
     if (filter) {
-      return filter(lastCommon, lastCommonIndex, ancestries);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      return filter(lastCommon, lastCommonIndex!, ancestries);
     } else {
       return lastCommon;
     }
@@ -201,7 +207,7 @@ export function getDeepestCommonAncestorFrom(
  * NOTE: The current node path is included in this.
  */
 
-export function getAncestry(this: NodePath): Array<NodePath> {
+export function getAncestry(this: NodePath): NodePath[] {
   let path = this;
   const paths = [];
   do {
@@ -227,9 +233,7 @@ export function isDescendant(this: NodePath, maybeAncestor: NodePath): boolean {
 export function inType(this: NodePath, ...candidateTypes: string[]): boolean {
   let path = this;
   while (path) {
-    for (const type of candidateTypes) {
-      if (path.node.type === type) return true;
-    }
+    if (candidateTypes.includes(path.node.type)) return true;
     path = path.parentPath;
   }
 

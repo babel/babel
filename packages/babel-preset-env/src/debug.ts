@@ -3,31 +3,17 @@ import {
   type Targets,
   type Target,
 } from "@babel/helper-compilation-targets";
-import compatData from "@babel/compat-data/plugins";
 
 // Outputs a message that shows which target(s) caused an item to be included:
 // transform-foo { "edge":"13", "firefox":"49", "ie":"10" }
 export const logPlugin = (
   item: string,
   targetVersions: Targets,
-  list: { [key: string]: Targets },
+  list: Record<string, Targets>,
 ) => {
   const filteredList = getInclusionReasons(item, targetVersions, list);
 
   const support = list[item];
-
-  if (!process.env.BABEL_8_BREAKING) {
-    // It's needed to keep outputting proposal- in the debug log.
-    if (item.startsWith("transform-")) {
-      const proposalName = `proposal-${item.slice(10)}`;
-      if (
-        proposalName === "proposal-dynamic-import" ||
-        Object.hasOwn(compatData, proposalName)
-      ) {
-        item = proposalName;
-      }
-    }
-  }
 
   if (!support) {
     console.log(`  ${item}`);

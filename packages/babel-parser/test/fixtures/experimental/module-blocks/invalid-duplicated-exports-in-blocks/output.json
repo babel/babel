@@ -36,6 +36,7 @@
                     "start":21,"end":46,"loc":{"start":{"line":2,"column":2,"index":21},"end":{"line":2,"column":27,"index":46}},
                     "specifiers": [],
                     "source": null,
+                    "attributes": [],
                     "declaration": {
                       "type": "VariableDeclaration",
                       "start":28,"end":46,"loc":{"start":{"line":2,"column":9,"index":28},"end":{"line":2,"column":27,"index":46}},
@@ -82,7 +83,8 @@
                       }
                     ],
                     "source": null,
-                    "declaration": null
+                    "declaration": null,
+                    "attributes": []
                   }
                 ],
                 "directives": [],

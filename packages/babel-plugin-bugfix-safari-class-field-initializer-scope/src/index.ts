@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 import type { NodePath } from "@babel/core";
 
-function needsWrapping(node: t.Node): boolean {
+function needsWrapping(node: t.Node | null): boolean {
   if (t.isLiteral(node) && !t.isTemplateLiteral(node)) {
     return false;
   }
@@ -83,7 +83,7 @@ function wrapInitializer(
 }
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION("^7.16.0"));
+  api.assertVersion(REQUIRED_VERSION("^7.16.0 || ^8.0.0"));
 
   return {
     name: "plugin-bugfix-safari-class-field-initializer-scope",

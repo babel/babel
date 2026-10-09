@@ -1,5 +1,5 @@
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   loadOptionsSync as loadOptionsSyncOrig,
   transformSync,
@@ -152,7 +152,7 @@ describe("assumptions", () => {
       });
 
       expect(code).toMatchInlineSnapshot(`
-        "\\"use strict\\";
+        ""use strict";
 
         exports.__esModule = true;
         exports.foo = void 0;

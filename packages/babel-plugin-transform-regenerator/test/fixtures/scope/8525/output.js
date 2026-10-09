@@ -1,16 +1,15 @@
 /*#__PURE__*/React.createElement(Component, null, () => {
   const saveSession = () => {
     var newSessionId;
-    return babelHelpers.regeneratorRuntime().async(function _callee$(_context) {
-      while (1) switch (_context.prev = _context.next) {
+    return babelHelpers.regeneratorAsync(function (_context) {
+      while (1) switch (_context.n) {
         case 0:
-          _context.next = 2;
-          return babelHelpers.regeneratorRuntime().awrap(someAsyncFunc());
+          _context.n = 1;
+          return babelHelpers.awaitAsyncGenerator(someAsyncFunc());
+        case 1:
+          newSessionId = _context.v;
         case 2:
-          newSessionId = _context.sent;
-        case 3:
-        case "end":
-          return _context.stop();
+          return _context.a(2);
       }
     }, null, null, null, Promise);
   };

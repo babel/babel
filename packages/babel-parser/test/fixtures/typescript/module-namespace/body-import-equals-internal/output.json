@@ -1,0 +1,95 @@
+{
+  "type": "File",
+  "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":80}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":80}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":80,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":1,"index":80}},
+        "kind": "namespace",
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"N"},
+          "name": "N"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":12,"end":80,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":6,"column":1,"index":80}},
+          "body": [
+            {
+              "type": "TSImportEqualsDeclaration",
+              "start":16,"end":30,"loc":{"start":{"line":2,"column":2,"index":16},"end":{"line":2,"column":16,"index":30}},
+              "importKind": "value",
+              "id": {
+                "type": "Identifier",
+                "start":23,"end":25,"loc":{"start":{"line":2,"column":9,"index":23},"end":{"line":2,"column":11,"index":25},"identifierName":"_N"},
+                "name": "_N"
+              },
+              "moduleReference": {
+                "type": "Identifier",
+                "start":28,"end":29,"loc":{"start":{"line":2,"column":14,"index":28},"end":{"line":2,"column":15,"index":29},"identifierName":"N"},
+                "name": "N"
+              }
+            },
+            {
+              "type": "ExportNamedDeclaration",
+              "start":33,"end":78,"loc":{"start":{"line":3,"column":2,"index":33},"end":{"line":5,"column":3,"index":78}},
+              "exportKind": "value",
+              "specifiers": [],
+              "source": null,
+              "attributes": [],
+              "declaration": {
+                "type": "TSModuleDeclaration",
+                "start":40,"end":78,"loc":{"start":{"line":3,"column":9,"index":40},"end":{"line":5,"column":3,"index":78}},
+                "kind": "namespace",
+                "id": {
+                  "type": "Identifier",
+                  "start":50,"end":51,"loc":{"start":{"line":3,"column":19,"index":50},"end":{"line":3,"column":20,"index":51},"identifierName":"X"},
+                  "name": "X"
+                },
+                "body": {
+                  "type": "TSModuleBlock",
+                  "start":52,"end":78,"loc":{"start":{"line":3,"column":21,"index":52},"end":{"line":5,"column":3,"index":78}},
+                  "body": [
+                    {
+                      "type": "TSImportEqualsDeclaration",
+                      "start":58,"end":74,"loc":{"start":{"line":4,"column":4,"index":58},"end":{"line":4,"column":20,"index":74}},
+                      "importKind": "value",
+                      "id": {
+                        "type": "Identifier",
+                        "start":65,"end":67,"loc":{"start":{"line":4,"column":11,"index":65},"end":{"line":4,"column":13,"index":67},"identifierName":"_X"},
+                        "name": "_X"
+                      },
+                      "moduleReference": {
+                        "type": "TSQualifiedName",
+                        "start":70,"end":73,"loc":{"start":{"line":4,"column":16,"index":70},"end":{"line":4,"column":19,"index":73}},
+                        "left": {
+                          "type": "Identifier",
+                          "start":70,"end":71,"loc":{"start":{"line":4,"column":16,"index":70},"end":{"line":4,"column":17,"index":71},"identifierName":"N"},
+                          "name": "N"
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "start":72,"end":73,"loc":{"start":{"line":4,"column":18,"index":72},"end":{"line":4,"column":19,"index":73},"identifierName":"X"},
+                          "name": "X"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

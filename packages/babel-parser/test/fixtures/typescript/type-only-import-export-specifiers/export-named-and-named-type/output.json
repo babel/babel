@@ -52,7 +52,8 @@
           },
           "value": "./exports.js"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

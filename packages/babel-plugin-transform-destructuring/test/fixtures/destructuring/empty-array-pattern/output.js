@@ -11,14 +11,13 @@ var _Symbol$iterator = {
 var _ref6 = [0, 1, 2];
 var _foo = "foo",
   _foo2 = babelHelpers.slicedToArray(_foo, 0);
-var _ref7 = /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
-    return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
-      while (1) switch (_context.prev = _context.next) {
+var _ref7 = /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
+    return babelHelpers.regenerator().w(function (_context) {
+      while (1) switch (_context.n) {
         case 0:
           throw new Error("Should not throw");
         case 1:
-        case "end":
-          return _context.stop();
+          return _context.a(2);
       }
     }, _callee);
   })(),
@@ -32,12 +31,11 @@ var _Symbol$iterator5 = {
   },
   _Symbol$iterator6 = babelHelpers.slicedToArray(_Symbol$iterator5, 0);
 var _Symbol$iterator7 = {
-    [Symbol.iterator]: /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee2() {
-      return babelHelpers.regeneratorRuntime().async(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
+    [Symbol.iterator]: /*#__PURE__*/babelHelpers.regenerator().m(function _callee2() {
+      return babelHelpers.regeneratorAsyncGen(function (_context2) {
+        while (1) switch (_context2.n) {
           case 0:
-          case "end":
-            return _context2.stop();
+            return _context2.a(2);
         }
       }, _callee2, null, null, Promise);
     })
@@ -56,24 +54,23 @@ var _Symbol$iterator9 = {
       };
     }
   },
-  _Symbol$iterator10 = babelHelpers.slicedToArray(_Symbol$iterator9, 0);
+  _Symbol$iterator0 = babelHelpers.slicedToArray(_Symbol$iterator9, 0);
 
 // #15154
-var _Symbol$iterator11 = {
+var _Symbol$iterator1 = {
     [Symbol.iterator]: () => []
   },
-  _Symbol$iterator12 = babelHelpers.slicedToArray(_Symbol$iterator11, 0);
+  _Symbol$iterator10 = babelHelpers.slicedToArray(_Symbol$iterator1, 0);
 
 // #15168
-var _Symbol$iterator13 = {
-    [Symbol.iterator]: () => /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee3() {
-      return babelHelpers.regeneratorRuntime().async(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
+var _Symbol$iterator11 = {
+    [Symbol.iterator]: () => /*#__PURE__*/babelHelpers.regenerator().m(function _callee3() {
+      return babelHelpers.regeneratorAsyncGen(function (_context3) {
+        while (1) switch (_context3.n) {
           case 0:
-          case "end":
-            return _context3.stop();
+            return _context3.a(2);
         }
       }, _callee3, null, null, Promise);
     })
   },
-  _Symbol$iterator14 = babelHelpers.slicedToArray(_Symbol$iterator13, 0);
+  _Symbol$iterator12 = babelHelpers.slicedToArray(_Symbol$iterator11, 0);

@@ -1,4 +1,0 @@
-{
-  "sourceType": "module",
-  "plugins": ["proposal-import-attributes-to-assertions"]
-}

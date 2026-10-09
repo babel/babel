@@ -1,0 +1,1 @@
+class SharedListBuffer extends SharedArrayBuffer {}

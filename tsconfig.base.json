@@ -5,11 +5,13 @@
     "target": "ESNext",
     "module": "Preserve",
     "lib": ["ESNext"],
+    "types": ["node", "jest"],
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": true,
     "declarationDir": "./dts",
     "moduleResolution": "Bundler",
+    "customConditions": ["babel-src"],
     "esModuleInterop": true,
     "isolatedModules": true,
     "allowImportingTsExtensions": true,
@@ -17,11 +19,23 @@
     "resolveJsonModule": true,
     "noImplicitThis": true,
     "noImplicitAny": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
     "strictBindCallApply": true,
-    "incremental": true
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "strictFunctionTypes": true,
+    "useUnknownInCatchVariables": false,
+    "incremental": true,
+    "stripInternal": true
   },
   "exclude": ["./packages/babel-helpers/src/helpers/**/*"],
-  "references": [{
-    "path": "./packages/babel-helpers/src/helpers/**/tsconfig.json"
-  }]
+  "references": [
+    {
+      "path": "./packages/babel-helpers/src/helpers/**/tsconfig.json"
+    },
+    {
+      "path": "./tsconfig.tstyche.json"
+    }
+  ]
 }

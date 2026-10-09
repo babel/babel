@@ -6,7 +6,9 @@ export function TaggedTemplateExpression(
   node: t.TaggedTemplateExpression,
 ) {
   this.print(node.tag);
-  this.print(node.typeParameters); // TS
+
+  this.print(node.typeArguments);
+
   this.print(node.quasi);
 }
 
@@ -14,20 +16,28 @@ export function TemplateElement(this: Printer) {
   throw new Error("TemplateElement printing is handled in TemplateLiteral");
 }
 
-export function TemplateLiteral(this: Printer, node: t.TemplateLiteral) {
+export type TemplateLiteralBase = t.Node & {
+  quasis: t.TemplateElement[];
+};
+
+export function _printTemplate<T extends t.Node>(
+  this: Printer,
+  node: TemplateLiteralBase,
+  substitutions: T[],
+) {
   const quasis = node.quasis;
-
   let partRaw = "`";
-
-  for (let i = 0; i < quasis.length; i++) {
+  for (let i = 0; i < quasis.length - 1; i++) {
     partRaw += quasis[i].value.raw;
-
-    if (i + 1 < quasis.length) {
-      this.token(partRaw + "${", true);
-      this.print(node.expressions[i]);
-      partRaw = "}";
-    }
+    this.token(partRaw + "${", true);
+    this.print(substitutions[i]);
+    partRaw = "}";
   }
 
+  partRaw += quasis[quasis.length - 1].value.raw;
   this.token(partRaw + "`", true);
+}
+
+export function TemplateLiteral(this: Printer, node: t.TemplateLiteral) {
+  _printTemplate.call(this, node, node.expressions);
 }

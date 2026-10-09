@@ -1,0 +1,26 @@
+name: Package Manager
+
+on:
+  pull_request:
+    paths:
+      # Ensure packageManager field contains the correct yarn version and integrity hash.
+      - package.json
+      - .yarn/releases/*
+      - .yarnrc.yml
+
+permissions:
+  contents: read
+
+jobs:
+  yarn_integrity:
+    name: Ensure yarn integrity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Use Node.js latest
+        uses: actions/setup-node@v6
+        with:
+          node-version: latest
+      - run: |
+          node ./scripts/ensure-yarn-version-integrity.ts

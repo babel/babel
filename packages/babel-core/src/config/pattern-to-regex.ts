@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 
 const sep = `\\${path.sep}`;
 const endSep = `(?:${sep}|$)`;
@@ -39,7 +39,7 @@ export default function pathToPattern(
         if (part === "*") return last ? starPatLast : starPat;
 
         // *.ext matches a wildcard with an extension.
-        if (part.indexOf("*.") === 0) {
+        if (part.startsWith("*.")) {
           return (
             substitution + escapeRegExp(part.slice(1)) + (last ? endSep : sep)
           );

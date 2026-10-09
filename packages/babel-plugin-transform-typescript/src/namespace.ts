@@ -1,6 +1,16 @@
 import { template, types as t, type NodePath } from "@babel/core";
 
 import { registerGlobalType } from "./global-types.ts";
+import { EXPORTED_CONST_ENUMS_IN_NAMESPACE } from "./const-enum.ts";
+
+export function getFirstIdentifier(node: t.TSEntityName): t.Identifier {
+  if (t.isIdentifier(node)) {
+    return node;
+  }
+  // In Babel 8 TSEntityName also includes ThisExpression, however, a namespace
+  // id must not be a ThisExpression or a TSQualifiedName { left: ThisExpression }.
+  return getFirstIdentifier((node as t.TSQualifiedName).left);
+}
 
 export default function transpileNamespace(
   path: NodePath<t.TSModuleDeclaration>,
@@ -22,12 +32,12 @@ export default function transpileNamespace(
       );
   }
 
-  const name = path.node.id.name;
-  const value = handleNested(path, t.cloneNode(path.node, true));
+  const name = getFirstIdentifier(path.node.id).name;
+  const value = handleNested(path, path.node);
   if (value === null) {
     // This means that `path` is a type-only namespace.
     // We call `registerGlobalType` here to allow it to be stripped.
-    const program = path.findParent(p => p.isProgram());
+    const program = path.findParent(p => p.isProgram())!;
     registerGlobalType(program.scope, name);
 
     path.remove();
@@ -83,7 +93,7 @@ function handleVariableDeclaration(
       declarator.init = t.assignmentExpression(
         "=",
         getMemberExpression(name, declarator.id.name),
-        declarator.init,
+        declarator.init!,
       );
     }
     return [node];
@@ -120,18 +130,33 @@ function handleNested(
   parentExport?: t.Expression,
 ): t.Statement | null {
   const names = new Set();
-  const realName = node.id;
-  t.assertIdentifier(realName);
+  const realName = t.isIdentifier(node.id)
+    ? node.id
+    : getFirstIdentifier(node.id as unknown as t.TSQualifiedName);
 
   const name = path.scope.generateUid(realName.name);
 
-  const namespaceTopLevel: t.Statement[] = t.isTSModuleBlock(node.body)
-    ? node.body.body
-    : // We handle `namespace X.Y {}` as if it was
-      //   namespace X {
-      //     export namespace Y {}
-      //   }
-      [t.exportNamedDeclaration(node.body)];
+  const body = node.body;
+  let id = node.id;
+  let namespaceTopLevel: t.Statement[];
+
+  if (t.isTSQualifiedName(id)) {
+    namespaceTopLevel = body.body;
+    while (t.isTSQualifiedName(id)) {
+      namespaceTopLevel = [
+        t.exportNamedDeclaration(
+          t.tsModuleDeclaration(
+            t.cloneNode(id.right),
+            t.tsModuleBlock(namespaceTopLevel),
+          ),
+        ),
+      ];
+
+      id = id.left;
+    }
+  } else {
+    namespaceTopLevel = body.body;
+  }
 
   let isEmpty = true;
 
@@ -168,7 +193,7 @@ function handleNested(
       case "FunctionDeclaration":
       case "ClassDeclaration":
         isEmpty = false;
-        names.add(subNode.id.name);
+        names.add(subNode.id!.name);
         continue;
       case "VariableDeclaration": {
         isEmpty = false;
@@ -187,17 +212,19 @@ function handleNested(
       // Export declarations get parsed using the next switch.
     }
 
-    if ("declare" in subNode.declaration && subNode.declaration.declare) {
+    if ("declare" in subNode.declaration! && subNode.declaration.declare) {
       continue;
     }
 
     // Transform the export declarations that occur inside of a namespace.
-    switch (subNode.declaration.type) {
+    switch (subNode.declaration!.type) {
       case "TSEnumDeclaration":
+        EXPORTED_CONST_ENUMS_IN_NAMESPACE.add(subNode.declaration);
+      // fallthrough
       case "FunctionDeclaration":
       case "ClassDeclaration": {
         isEmpty = false;
-        const itemName = subNode.declaration.id.name;
+        const itemName = subNode.declaration.id!.name;
         names.add(itemName);
         namespaceTopLevel.splice(
           i++,
@@ -220,7 +247,7 @@ function handleNested(
           name,
           path.hub,
         );
-        namespaceTopLevel.splice(i, nodes.length, ...nodes);
+        namespaceTopLevel.splice(i, 1, ...nodes);
         i += nodes.length - 1;
         break;
       }

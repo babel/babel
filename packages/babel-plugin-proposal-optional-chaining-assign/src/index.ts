@@ -5,7 +5,7 @@ import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expr
 import { transformOptionalChain } from "@babel/plugin-transform-optional-chaining";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION("^7.22.5"));
+  api.assertVersion(REQUIRED_VERSION("^7.22.5 || ^8.0.0"));
 
   const assumptions = {
     noDocumentAll: api.assumption("noDocumentAll") ?? false,
@@ -31,7 +31,7 @@ export default declare(api => {
         >;
         if (!lhs.isOptionalMemberExpression()) return;
 
-        let ifNullish: t.Expression = path.scope.buildUndefinedNode();
+        let ifNullish: t.Expression = t.buildUndefinedNode();
         if (isParenthesized) {
           ifNullish = t.callExpression(
             state.addHelper("nullishReceiverError"),

@@ -1,0 +1,160 @@
+{
+  "type": "File",
+  "start":0,"end":156,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":156}},
+  "errors": [
+    "SyntaxError: Import declarations in a namespace cannot reference a module. (2:2)",
+    "SyntaxError: Import declarations in a namespace cannot reference a module. (3:2)",
+    "SyntaxError: Import declarations in a namespace cannot reference a module. (4:2)",
+    "SyntaxError: Import declarations in a namespace cannot reference a module. (5:2)",
+    "SyntaxError: Import declarations in a namespace cannot reference a module. (6:2)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":156,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":156}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":156,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":1,"index":156}},
+        "kind": "namespace",
+        "id": {
+          "type": "Identifier",
+          "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"N"},
+          "name": "N"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":20,"end":156,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":7,"column":1,"index":156}},
+          "body": [
+            {
+              "type": "ImportDeclaration",
+              "start":24,"end":37,"loc":{"start":{"line":2,"column":2,"index":24},"end":{"line":2,"column":15,"index":37}},
+              "importKind": "value",
+              "specifiers": [],
+              "source": {
+                "type": "StringLiteral",
+                "start":31,"end":36,"loc":{"start":{"line":2,"column":9,"index":31},"end":{"line":2,"column":14,"index":36}},
+                "extra": {
+                  "rawValue": "foo",
+                  "raw": "\"foo\""
+                },
+                "value": "foo"
+              },
+              "attributes": []
+            },
+            {
+              "type": "ImportDeclaration",
+              "start":40,"end":64,"loc":{"start":{"line":3,"column":2,"index":40},"end":{"line":3,"column":26,"index":64}},
+              "importKind": "value",
+              "specifiers": [
+                {
+                  "type": "ImportSpecifier",
+                  "start":49,"end":50,"loc":{"start":{"line":3,"column":11,"index":49},"end":{"line":3,"column":12,"index":50}},
+                  "imported": {
+                    "type": "Identifier",
+                    "start":49,"end":50,"loc":{"start":{"line":3,"column":11,"index":49},"end":{"line":3,"column":12,"index":50},"identifierName":"x"},
+                    "name": "x"
+                  },
+                  "importKind": "value",
+                  "local": {
+                    "type": "Identifier",
+                    "start":49,"end":50,"loc":{"start":{"line":3,"column":11,"index":49},"end":{"line":3,"column":12,"index":50},"identifierName":"x"},
+                    "name": "x"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":58,"end":63,"loc":{"start":{"line":3,"column":20,"index":58},"end":{"line":3,"column":25,"index":63}},
+                "extra": {
+                  "rawValue": "foo",
+                  "raw": "\"foo\""
+                },
+                "value": "foo"
+              },
+              "attributes": []
+            },
+            {
+              "type": "ImportDeclaration",
+              "start":67,"end":93,"loc":{"start":{"line":4,"column":2,"index":67},"end":{"line":4,"column":28,"index":93}},
+              "importKind": "value",
+              "specifiers": [
+                {
+                  "type": "ImportNamespaceSpecifier",
+                  "start":74,"end":81,"loc":{"start":{"line":4,"column":9,"index":74},"end":{"line":4,"column":16,"index":81}},
+                  "local": {
+                    "type": "Identifier",
+                    "start":79,"end":81,"loc":{"start":{"line":4,"column":14,"index":79},"end":{"line":4,"column":16,"index":81},"identifierName":"ns"},
+                    "name": "ns"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":87,"end":92,"loc":{"start":{"line":4,"column":22,"index":87},"end":{"line":4,"column":27,"index":92}},
+                "extra": {
+                  "rawValue": "foo",
+                  "raw": "\"foo\""
+                },
+                "value": "foo"
+              },
+              "attributes": []
+            },
+            {
+              "type": "TSImportEqualsDeclaration",
+              "start":96,"end":122,"loc":{"start":{"line":5,"column":2,"index":96},"end":{"line":5,"column":28,"index":122}},
+              "importKind": "value",
+              "id": {
+                "type": "Identifier",
+                "start":103,"end":104,"loc":{"start":{"line":5,"column":9,"index":103},"end":{"line":5,"column":10,"index":104},"identifierName":"y"},
+                "name": "y"
+              },
+              "moduleReference": {
+                "type": "TSExternalModuleReference",
+                "start":107,"end":121,"loc":{"start":{"line":5,"column":13,"index":107},"end":{"line":5,"column":27,"index":121}},
+                "expression": {
+                  "type": "StringLiteral",
+                  "start":115,"end":120,"loc":{"start":{"line":5,"column":21,"index":115},"end":{"line":5,"column":26,"index":120}},
+                  "extra": {
+                    "rawValue": "foo",
+                    "raw": "\"foo\""
+                  },
+                  "value": "foo"
+                }
+              }
+            },
+            {
+              "type": "TSImportEqualsDeclaration",
+              "start":125,"end":154,"loc":{"start":{"line":6,"column":2,"index":125},"end":{"line":6,"column":31,"index":154}},
+              "importKind": "value",
+              "id": {
+                "type": "Identifier",
+                "start":132,"end":136,"loc":{"start":{"line":6,"column":9,"index":132},"end":{"line":6,"column":13,"index":136},"identifierName":"type"},
+                "name": "type"
+              },
+              "moduleReference": {
+                "type": "TSExternalModuleReference",
+                "start":139,"end":153,"loc":{"start":{"line":6,"column":16,"index":139},"end":{"line":6,"column":30,"index":153}},
+                "expression": {
+                  "type": "StringLiteral",
+                  "start":147,"end":152,"loc":{"start":{"line":6,"column":24,"index":147},"end":{"line":6,"column":29,"index":152}},
+                  "extra": {
+                    "rawValue": "foo",
+                    "raw": "\"foo\""
+                  },
+                  "value": "foo"
+                }
+              }
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

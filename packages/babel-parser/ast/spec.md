@@ -60,8 +60,6 @@ These are the core @babel/parser (babylon) AST node types.
     - [ObjectMember](#objectmember)
       - [ObjectProperty](#objectproperty)
       - [ObjectMethod](#objectmethod)
-  - [RecordExpression](#recordexpression)
-  - [TupleExpression](#tupleexpression)
   - [FunctionExpression](#functionexpression)
   - [Unary operations](#unary-operations)
     - [UnaryExpression](#unaryexpression)
@@ -97,6 +95,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [ArrayPattern](#arraypattern)
   - [RestElement](#restelement)
   - [AssignmentPattern](#assignmentpattern)
+  - [VoidPattern](#voidpattern)
 - [Classes](#classes)
   - [ClassBody](#classbody)
   - [ClassMethod](#classmethod)
@@ -120,6 +119,7 @@ These are the core @babel/parser (babylon) AST node types.
     - [ExportNamedDeclaration](#exportnameddeclaration)
     - [ExportSpecifier](#exportspecifier)
     - [ExportNamespaceSpecifier](#exportnamespacespecifier)
+    - [ExportDefaultSpecifier](#exportdefaultspecifier)
     - [ExportDefaultDeclaration](#exportdefaultdeclaration)
     - [ExportAllDeclaration](#exportalldeclaration)
 
@@ -251,11 +251,9 @@ interface NumericLiteral <: Literal {
 ```js
 interface BigIntLiteral <: Literal {
   type: "BigIntLiteral";
-  value: string;
+  value: bigint;
 }
 ```
-
-The `value` property is the string representation of the `BigInt` value. It doesn't include the suffix `n`.
 
 ## DecimalLiteral
 
@@ -572,7 +570,7 @@ A function declaration. Note that unlike in the parent interface `Function`, the
 interface VariableDeclaration <: Declaration {
   type: "VariableDeclaration";
   declarations: [ VariableDeclarator ];
-  kind: "var" | "let" | "const" | "using";
+  kind: "var" | "let" | "const" | "using" | "await using";
 }
 ```
 
@@ -746,24 +744,6 @@ interface ObjectProperty <: ObjectMember {
 interface ObjectMethod <: ObjectMember, Function {
   type: "ObjectMethod";
   kind: "get" | "set" | "method";
-}
-```
-
-## RecordExpression
-
-```js
-interface RecordExpression <: Expression {
-  type: "RecordExpression";
-  properties: [ ObjectProperty | ObjectMethod | SpreadElement ];
-}
-```
-
-## TupleExpression
-
-```js
-interface TupleExpression <: Expression {
-  type: "TupleExpression";
-  elements: [ Expression | SpreadElement | null ];
 }
 ```
 
@@ -1145,6 +1125,16 @@ interface AssignmentPattern <: Pattern {
 }
 ```
 
+## VoidPattern
+
+```js
+interface VoidPattern <: Pattern {
+  type: "VoidPattern";
+}
+```
+
+A `void` binding used in the [discard binding proposal](https://github.com/tc39/proposal-discard-binding).
+
 # Classes
 
 ```js
@@ -1285,7 +1275,7 @@ interface ImportDeclaration <: Node {
   importKind: null | "type" | "typeof" | "value";
   specifiers: [ ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier ];
   source: StringLiteral;
-  assertions?: [ ImportAttribute ];
+  attribtues?: [ ImportAttribute ];
 }
 ```
 
@@ -1354,7 +1344,7 @@ interface ExportNamedDeclaration <: ExportDeclaration {
   declaration: Declaration | null;
   specifiers: [ ExportSpecifier | ExportNamespaceSpecifier ];
   source: StringLiteral | null;
-  assertions?: [ ImportAttribute ];
+  attributes?: [ ImportAttribute ];
 }
 ```
 
@@ -1389,6 +1379,17 @@ interface ExportNamespaceSpecifier <: ModuleSpecifier {
 
 A namespace export specifier, e.g., `* as foo` in `export * as foo from "mod.js"`.
 
+### ExportDefaultSpecifier
+
+```js
+interface ExportDefaultSpecifier <: ModuleSpecifier {
+  type: "ExportDefaultSpecifier";
+  exported: Identifier;
+}
+```
+
+A default export specifier used in the [export default from proposal](https://github.com/tc39/proposal-export-default-from).
+
 ### ExportDefaultDeclaration
 
 ```js
@@ -1414,59 +1415,8 @@ An export default declaration, e.g., `export default function () {};` or `export
 interface ExportAllDeclaration <: ExportDeclaration {
   type: "ExportAllDeclaration";
   source: StringLiteral;
-  assertions?: [ ImportAttribute ];
+  attributes?: [ ImportAttribute ];
 }
 ```
 
 An export batch declaration, e.g., `export * from "mod";`.
-
-### Smart-mix pipelines
-
-These types are **deprecated**.
-They are used by the deprecated smart-mix pipe operator to determine
-the type of a pipe expression's the body expression.
-The Hack and F# pipe operators use simple `BinaryExpression`s.
-
-#### PipelineBody
-
-```js
-interface PipelineBody <: NodeBase {
-    type: "PipelineBody";
-}
-```
-
-#### PipelineBareFunctionBody
-
-```js
-interface PipelineBody <: NodeBase {
-    type: "PipelineBareFunctionBody";
-    callee: Expression;
-}
-```
-
-#### PipelineBareConstructorBody
-
-```js
-interface PipelineBareConstructorBody <: NodeBase {
-    type: "PipelineBareConstructorBody";
-    callee: Expression;
-}
-```
-
-#### PipelineBareAwaitedFunctionBody
-
-```js
-interface PipelineBareConstructorBody <: NodeBase {
-    type: "PipelineTopicBody";
-    expression: Expression;
-}
-```
-
-#### PipelineTopicBody
-
-```js
-interface PipelineBareConstructorBody <: NodeBase {
-    type: "PipelineBareAwaitedFunctionBody";
-    callee: Expression;
-}
-```

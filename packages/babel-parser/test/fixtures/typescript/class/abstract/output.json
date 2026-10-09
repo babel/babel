@@ -46,6 +46,7 @@
         "exportKind": "value",
         "specifiers": [],
         "source": null,
+        "attributes": [],
         "declaration": {
           "type": "ClassDeclaration",
           "start":57,"end":77,"loc":{"start":{"line":3,"column":7,"index":57},"end":{"line":3,"column":27,"index":77}},

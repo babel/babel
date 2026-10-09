@@ -12,8 +12,8 @@ type State = {
   methodWrapper?: t.Identifier | t.SequenceExpression;
 };
 
-export default declare<State>((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+export default declare<State, Options>((api, options: Options) => {
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const { method, module } = options;
   // Todo(BABEL 8): Consider default it to false

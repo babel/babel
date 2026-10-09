@@ -9,12 +9,20 @@ import annotateAsPure from "@babel/helper-annotate-as-pure";
 import type { NodePath, Scope, types as t } from "@babel/core";
 
 export interface Options {
+  /** @deprecated Use the `privateFieldsAsProperties`(or `privateFieldsAsSymbols`), and `setPublicClassFields` assumptions instead. */
   loose?: boolean;
 }
 export default declare((api, opt: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
   const { types: t, template } = api;
   const { loose } = opt;
+
+  if ("loose" in opt) {
+    console.warn(
+      "@babel/plugin-transform-private-property-in-object: The 'loose' option has been deprecated, " +
+        "use the `privateFieldsAsProperties`(or `privateFieldsAsSymbols`), and `setPublicClassFields` assumptions instead (https://babeljs.io/assumptions).",
+    );
+  }
 
   // NOTE: When using the class fields or private methods plugins,
   // they will also take care of '#priv in obj' checks when visiting
@@ -22,16 +30,16 @@ export default declare((api, opt: Options) => {
   // The visitor of this plugin is only effective when not compiling
   // private fields and methods.
 
-  const classWeakSets: WeakMap<t.Class, t.Identifier> = new WeakMap();
-  const fieldsWeakSets: WeakMap<
+  const classWeakSets = new WeakMap<t.Class, t.Identifier>();
+  const fieldsWeakSets = new WeakMap<
     t.ClassPrivateProperty | t.ClassPrivateMethod,
     t.Identifier
-  > = new WeakMap();
+  >();
 
   function unshadow(name: string, targetScope: Scope, scope: Scope) {
     while (scope !== targetScope) {
       if (scope.hasOwnBinding(name)) scope.rename(name);
-      scope = scope.parent;
+      scope = scope.parent!;
     }
   }
 
@@ -111,15 +119,11 @@ export default declare((api, opt: Options) => {
 
   return {
     name: "transform-private-property-in-object",
-    inherits:
-      USE_ESM || IS_STANDALONE || api.version[0] === "8"
-        ? undefined
-        : // eslint-disable-next-line no-restricted-globals
-          require("@babel/plugin-syntax-private-property-in-object").default,
+    manipulateOptions: undefined,
     pre() {
       // Enable this in @babel/helper-create-class-features-plugin, so that it
       // can be handled by the private fields and methods transform.
-      enableFeature(this.file, FEATURES.privateIn, loose);
+      enableFeature(this.file, FEATURES.privateIn, loose ?? false);
     },
     visitor: {
       BinaryExpression(path, state) {
@@ -130,9 +134,8 @@ export default declare((api, opt: Options) => {
 
         const { name } = node.left.id;
 
-        let privateElement: NodePath<
-          t.ClassPrivateMethod | t.ClassPrivateProperty
-        >;
+        let privateElement:
+          NodePath<t.ClassPrivateMethod | t.ClassPrivateProperty> | undefined;
         const outerClass = path.findParent(path => {
           if (!path.isClass()) return false;
 
@@ -153,8 +156,8 @@ export default declare((api, opt: Options) => {
           return;
         }
 
-        if (privateElement.node.type === "ClassPrivateMethod") {
-          if (privateElement.node.static) {
+        if (privateElement!.node.type === "ClassPrivateMethod") {
+          if (privateElement!.node.static) {
             if (outerClass.node.id) {
               unshadow(outerClass.node.id.name, outerClass.scope, path.scope);
             } else {
@@ -192,7 +195,7 @@ export default declare((api, opt: Options) => {
             fieldsWeakSets,
             outerClass,
             privateElement as NodePath<t.ClassPrivateProperty>,
-            privateElement.node.key.id.name,
+            privateElement!.node.key.id.name,
             injectToFieldInit,
           );
 

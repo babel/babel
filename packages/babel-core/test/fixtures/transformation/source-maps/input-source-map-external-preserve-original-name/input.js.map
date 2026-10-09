@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "sources": ["../../../node_modules/dep/index.js"],
+  "sourcesContent": [
+    "export const marker = \"react/jsx-runtime\";\nexport let root = { outer: 1 };\n\nexport function test() {\n  let root = { inner: 2 };\n  return root;\n}\n"
+  ],
+  "mappings": ";;;AAAO,IAAM,SAAS;AACf,IAAI,OAAO,EAAE,OAAO,EAAE;AAEtB,SAAS,OAAO;AACrB,MAAIA,QAAO,EAAE,OAAO,EAAE;AACtB,SAAOA;AACT;",
+  "names": ["root"]
+}

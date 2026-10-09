@@ -1,12 +1,12 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { template, types as t, type NodePath } from "@babel/core";
 
-import transformWithoutHelper from "./no-helper-implementation.ts";
 import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";
 
 export interface Options {
   allowArrayLike?: boolean;
   assumeArray?: boolean;
+  /** @deprecated Use the 'iterableIsArray' and 'skipForOfIteratorClosing' assumptions instead. */
   loose?: boolean;
 }
 
@@ -33,7 +33,14 @@ function buildLoopBody(
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  if ("loose" in options) {
+    console.warn(
+      "@babel/plugin-transform-for-of: The 'loose' option has been deprecated, " +
+        "use the 'iterableIsArray' and 'skipForOfIteratorClosing' assumptions instead (https://babeljs.io/assumptions).",
+    );
+  }
 
   {
     const { assumeArray, allowArrayLike, loose } = options;
@@ -48,15 +55,6 @@ export default declare((api, options: Options) => {
       throw new Error(
         `The assumeArray and allowArrayLike options cannot be used together in @babel/plugin-transform-for-of`,
       );
-    }
-
-    if (!process.env.BABEL_8_BREAKING) {
-      // TODO: Remove in Babel 8
-      if (allowArrayLike && /^7\.\d\./.test(api.version)) {
-        throw new Error(
-          `The allowArrayLike is only supported when using @babel/core@^7.10.0`,
-        );
-      }
     }
   }
 
@@ -89,12 +87,10 @@ export default declare((api, options: Options) => {
           if (isAwait) {
             return;
           }
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-          const right = skipTransparentExprWrapperNodes(
-            path.node.right,
-          ) as t.Expression;
+
+          const right = skipTransparentExprWrapperNodes(path.node.right);
           const i = scope.generateUidIdentifier("i");
-          let array: t.Identifier | t.ThisExpression =
+          let array: t.Identifier | t.ThisExpression | null =
             scope.maybeGenerateMemoised(right, true);
           if (
             !array &&
@@ -218,24 +214,12 @@ export default declare((api, options: Options) => {
     name: "transform-for-of",
     visitor: {
       ForOfStatement(path, state) {
+        if (path.node.await) return;
+
         const right = path.get("right");
-        if (
-          right.isArrayExpression() ||
-          (process.env.BABEL_8_BREAKING
-            ? right.isGenericType("Array")
-            : right.isGenericType("Array") ||
-              t.isArrayTypeAnnotation(right.getTypeAnnotation()))
-        ) {
+        if (right.isArrayExpression() || right.isGenericType("Array")) {
           path.replaceWith(_ForOfStatementArray(path));
           return;
-        }
-
-        if (!process.env.BABEL_8_BREAKING) {
-          if (!state.availableHelper(builder.helper)) {
-            // Babel <7.9.0 doesn't support this helper
-            transformWithoutHelper(skipIteratorClosing, path, state);
-            return;
-          }
         }
 
         const { node, parent, scope } = path;

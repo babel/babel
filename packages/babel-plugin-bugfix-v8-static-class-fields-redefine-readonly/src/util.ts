@@ -48,23 +48,14 @@ const hasReferenceOrThisVisitor: Visitor<{ name?: string; ref: () => void }> = {
   FunctionParent(path, state) {
     if (path.isArrowFunctionExpression()) return;
     if (state.name && !path.scope.hasOwnBinding(state.name)) {
-      path.traverse(hasReferenceVisitor, state);
+      path.traverse(
+        hasReferenceVisitor,
+        state as { name: string; ref: () => void },
+      );
     }
     path.skip();
     if (path.isMethod()) {
-      if (
-        process.env.BABEL_8_BREAKING ||
-        USE_ESM ||
-        IS_STANDALONE ||
-        path.requeueComputedKeyAndDecorators
-      ) {
-        path.requeueComputedKeyAndDecorators();
-      } else {
-        // eslint-disable-next-line no-restricted-globals
-        require("@babel/traverse").NodePath.prototype.requeueComputedKeyAndDecorators.call(
-          path,
-        );
-      }
+      path.requeueComputedKeyAndDecorators();
     }
   },
 };
@@ -106,7 +97,7 @@ type ClassElementWithComputedKeySupport = Extract<
  * To avoid unconditionally compiling every public static field, we track how
  * the class is referenced during definition & static evaluation: any side
  * effect after a reference to the class can potentially define a non-writable
- * conficting property, so subsequent public static fields must be compiled.
+ * conflicting property, so subsequent public static fields must be compiled.
  * The class could be referenced using the class name in computed keys, which
  * run before static fields, or using either the class name or 'this' in static
  * fields (both public and private) and static blocks.
@@ -129,7 +120,7 @@ export function getPotentiallyBuggyFieldsIndexes(path: NodePath<t.Class>) {
   const className = path.node.id?.name;
 
   const hasReferenceState = {
-    name: className,
+    name: className!,
     ref: () => (classReferenced = true),
   };
 
@@ -161,7 +152,7 @@ export function getPotentiallyBuggyFieldsIndexes(path: NodePath<t.Class>) {
         nextPotentiallyBuggy = true;
       } else if (isStaticFieldWithValue(node)) {
         if (!classReferenced) {
-          if (isReferenceOrThis(node.value, className)) {
+          if (isReferenceOrThis(node.value!, className)) {
             classReferenced = true;
           } else {
             (

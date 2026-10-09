@@ -54,21 +54,18 @@ function applyEnsureOrdering(
   path: NodePath<t.ClassExpression | t.ObjectExpression>,
 ) {
   // TODO: This should probably also hoist computed properties.
-  const decorators: t.Decorator[] = (
-    path.isClass()
+  const decorators = (
+    (path.isClass()
       ? [
           path,
           ...(path.get("body.body") as NodePath<ClassDecoratableElement>[]),
         ]
-      : path.get("properties")
+      : path.get("properties")) as NodePath<
+      t.ObjectMember | t.ClassExpression | ClassDecoratableElement
+    >[]
   ).reduce(
-    (
-      acc: t.Decorator[],
-      prop: NodePath<
-        t.ObjectMember | t.ClassExpression | ClassDecoratableElement
-      >,
-    ) => acc.concat(prop.node.decorators || []),
-    [],
+    (acc, prop) => acc.concat(prop.node.decorators || []),
+    [] as t.Decorator[],
   );
 
   const identDecorators = decorators.filter(
@@ -275,7 +272,7 @@ function applyTargetDecorators(
     }
 
     return acc;
-  }, []);
+  }, [] as t.Expression[]);
 
   return t.sequenceExpression([
     t.assignmentExpression("=", t.cloneNode(name), path.node),
@@ -330,7 +327,7 @@ const visitor: Visitor<PluginPass> = {
       const id = decl.node.id as t.Identifier;
 
       // TODO: Maybe add this logic to @babel/traverse
-      const binding = path.scope.getOwnBinding(id.name);
+      const binding = path.scope.getOwnBinding(id.name)!;
       binding.identifier = id;
       binding.path = decl;
     }
@@ -357,7 +354,7 @@ const visitor: Visitor<PluginPass> = {
 
     path.replaceWith(
       t.callExpression(state.addHelper("initializerDefineProperty"), [
-        // @ts-expect-error todo(flow->ts) typesafe NodePath.get
+        // @ts-expect-error(Babel 7 vs Babel 8) TODO(Babel 8)
         t.cloneNode(path.get("left.object").node),
         t.stringLiteral(
           // @ts-expect-error todo(flow->ts) typesafe NodePath.get
@@ -365,10 +362,8 @@ const visitor: Visitor<PluginPass> = {
             // @ts-expect-error todo(flow->ts) typesafe NodePath.get
             path.get("left.property").node.value,
         ),
-        // @ts-expect-error todo(flow->ts)
-        t.cloneNode(path.get("right.arguments")[0].node),
-        // @ts-expect-error todo(flow->ts)
-        t.cloneNode(path.get("right.arguments")[1].node),
+        t.cloneNode(path.get("right.arguments.0").node!),
+        t.cloneNode(path.get("right.arguments.1").node!),
       ]),
     );
   },
@@ -386,12 +381,10 @@ const visitor: Visitor<PluginPass> = {
 
     path.replaceWith(
       t.callExpression(state.addHelper("initializerDefineProperty"), [
-        t.cloneNode(path.get("arguments")[0].node),
-        t.cloneNode(path.get("arguments")[1].node),
-        // @ts-expect-error todo(flow->ts)
-        t.cloneNode(path.get("arguments.2.arguments")[0].node),
-        // @ts-expect-error todo(flow->ts)
-        t.cloneNode(path.get("arguments.2.arguments")[1].node),
+        t.cloneNode(path.get("arguments.0").node),
+        t.cloneNode(path.get("arguments.1").node),
+        t.cloneNode(path.get("arguments.2.arguments.0").node!),
+        t.cloneNode(path.get("arguments.2.arguments.1").node!),
       ]),
     );
   },

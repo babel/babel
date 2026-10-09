@@ -1,4 +1,0 @@
-{
-  "plugins": [["proposal-record-and-tuple", { "syntaxType": "hash" }]],
-  "throws": "@babel/plugin-proposal-record-and-tuple: The syntaxType option is no longer supported. You can safely remove { syntaxType: \"hash\" } from your Babel config."
-}

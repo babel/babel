@@ -1,14 +1,6 @@
 {
   "externalHelpers": false,
-  "presets": [
-    [
-      "env",
-      {
-        "corejs": "3.0",
-        "useBuiltIns": "entry"
-      }
-    ]
-  ],
+  "presets": ["env"],
   "plugins": [
     [
       "transform-runtime",
@@ -18,6 +10,5 @@
         "version": "7.100.0"
       }
     ]
-  ],
-  "BABEL_8_BREAKING": true
+  ]
 }

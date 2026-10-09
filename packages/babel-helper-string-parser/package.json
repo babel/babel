@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-string-parser",
-  "version": "7.24.8",
+  "version": "8.0.6",
   "description": "A utility package to parse strings",
   "repository": {
     "type": "git",
@@ -14,28 +14,12 @@
   },
   "main": "./lib/index.js",
   "devDependencies": {
-    "charcodes": "^0.2.0"
+    "charcodes": "catalog:dev"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ],
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        }
-      },
-      {}
-    ]
-  },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",

@@ -6,16 +6,19 @@ import {
   convertAssignmentExpression,
   unshiftForXStatementBody,
   type DestructuringTransformerNode,
+  type VariableDeclarationKindAllowsPattern,
 } from "./util.ts";
 export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util.ts";
 
 /**
- * Test if a VariableDeclaration's declarations contains any Patterns.
+ * Test if a VariableDeclaration's declarations contains any destructuring patterns.
+ * @param node VariableDeclaration node to test
  */
-
-function variableDeclarationHasPattern(node: t.VariableDeclaration) {
+function variableDeclarationHasDestructuringPattern(
+  node: t.VariableDeclaration,
+) {
   for (const declar of node.declarations) {
-    if (t.isPattern(declar.id)) {
+    if (t.isPattern(declar.id) && declar.id.type !== "VoidPattern") {
       return true;
     }
   }
@@ -24,12 +27,20 @@ function variableDeclarationHasPattern(node: t.VariableDeclaration) {
 
 export interface Options {
   allowArrayLike?: boolean;
+  /** @deprecated Use the `iterableIsArray` and `objectRestNoSymbols` assumptions instead. */
   loose?: boolean;
   useBuiltIns?: boolean;
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+
+  if ("loose" in options) {
+    console.warn(
+      "@babel/plugin-transform-destructuring: The 'loose' option has been deprecated, " +
+        "use the `iterableIsArray` and `objectRestNoSymbols` assumptions instead (https://babeljs.io/assumptions).",
+    );
+  }
 
   const { useBuiltIns = false } = options;
 
@@ -47,24 +58,15 @@ export default declare((api, options: Options) => {
       ExportNamedDeclaration(path) {
         const declaration = path.get("declaration");
         if (!declaration.isVariableDeclaration()) return;
-        if (!variableDeclarationHasPattern(declaration.node)) return;
-
-        const specifiers = [];
-
-        for (const name of Object.keys(path.getOuterBindingIdentifiers())) {
-          specifiers.push(
-            t.exportSpecifier(t.identifier(name), t.identifier(name)),
-          );
-        }
+        if (!variableDeclarationHasDestructuringPattern(declaration.node))
+          return;
 
         // Split the declaration and export list into two declarations so that the variable
         // declaration can be split up later without needing to worry about not being a
         // top-level statement.
-        path.replaceWith(declaration.node);
-        path.insertAfter(t.exportNamedDeclaration(null, specifiers));
-        path.scope.crawl();
-      },
 
+        path.splitExportDeclaration();
+      },
       ForXStatement(path: NodePath<t.ForXStatement>) {
         const { node, scope } = path;
         const left = node.left;
@@ -86,7 +88,7 @@ export default declare((api, options: Options) => {
           // but the new do-expression proposal plans to ban iteration ends in the
           // do block, maybe we can get rid of this
           if (statementBody.length === 0 && path.isCompletionRecord()) {
-            nodes.unshift(t.expressionStatement(scope.buildUndefinedNode()));
+            nodes.unshift(t.expressionStatement(t.buildUndefinedNode()));
           }
 
           nodes.unshift(
@@ -103,7 +105,7 @@ export default declare((api, options: Options) => {
         if (!t.isVariableDeclaration(left)) return;
 
         const pattern = left.declarations[0].id;
-        if (!t.isPattern(pattern)) return;
+        if (!t.isPattern(pattern) || pattern.type === "VoidPattern") return;
 
         const key = scope.generateUidIdentifier("ref");
         node.left = t.variableDeclaration(left.kind, [
@@ -113,7 +115,7 @@ export default declare((api, options: Options) => {
         const nodes: DestructuringTransformerNode[] = [];
 
         const destructuring = new DestructuringTransformer({
-          kind: left.kind,
+          kind: left.kind as VariableDeclarationKindAllowsPattern,
           scope: scope,
           nodes: nodes,
           arrayLikeIsIterable,
@@ -170,7 +172,7 @@ export default declare((api, options: Options) => {
         const { node, parent } = path;
         if (t.isForXStatement(parent)) return;
         if (!parent || !path.container) return; // i don't know why this is necessary - TODO
-        if (!variableDeclarationHasPattern(node)) return;
+        if (!variableDeclarationHasDestructuringPattern(node)) return;
         convertVariableDeclaration(
           path,
           name => state.addHelper(name),

@@ -1,10 +1,8 @@
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
-import _traverse from "../lib/index.js";
-import _generate from "@babel/generator";
-const traverse = _traverse.default || _traverse;
-const generate = _generate.default || _generate;
+import traverse from "../lib/index.js";
+import generate from "@babel/generator";
 
 function getPath(code) {
   const ast = parse(code);
@@ -178,7 +176,8 @@ describe("path/replacement", function () {
         VariableDeclaration(path) {
           visitCounter++;
           if (visitCounter > 1) {
-            return true;
+            path.stop();
+            return;
           }
           path.replaceWithMultiple([path.node, t.emptyStatement()]);
         },
@@ -193,7 +192,8 @@ describe("path/replacement", function () {
         VariableDeclaration(path) {
           visitCounter++;
           if (visitCounter > 1) {
-            return true;
+            path.stop();
+            return;
           }
           path.replaceWithMultiple([t.emptyStatement(), path.node]);
         },
@@ -304,7 +304,7 @@ describe("path/replacement", function () {
       expect(path.get("expressions.1").toString()).toBe("true");
     });
     describe("return", function () {
-      // TODO: These tests veryfy wrong behavior. It's not possible to
+      // TODO: These tests verify wrong behavior. It's not possible to
       // replace an expression with `return`, as wrapping it in a IIFE changes
       // semantics.
       // They are here because it's how @babel/traverse currently behaves, but

@@ -1,3 +1,3 @@
 var z = [];
 var x = z[0],
-  y = z.slice(1);
+  y = babelHelpers.arrayLikeToArray(z).slice(1);

@@ -1,4 +1,5 @@
 import { types as t } from "@babel/core";
+import type { TraverseOptions, ExplodedVisitor } from "@babel/traverse";
 import traverse, { visitors, type NodePath } from "@babel/traverse";
 
 /**
@@ -6,13 +7,13 @@ import traverse, { visitors, type NodePath } from "@babel/traverse";
  * top-level scope to be `void 0` (undefined).
  *
  */
-let rewriteThisVisitor: Parameters<typeof traverse>[1];
+let rewriteThisVisitor: TraverseOptions & ExplodedVisitor;
 
 export default function rewriteThis(programPath: NodePath) {
   if (!rewriteThisVisitor) {
     rewriteThisVisitor = visitors.environmentVisitor({
       ThisExpression(path) {
-        path.replaceWith(t.unaryExpression("void", t.numericLiteral(0), true));
+        path.replaceWith(t.buildUndefinedNode());
       },
     });
     rewriteThisVisitor.noScope = true;

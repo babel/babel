@@ -174,7 +174,8 @@
           }
         ],
         "source": null,
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+  "errors": [
+    "SyntaxError: Missing initializer in using declaration. (1:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForStatement",
+        "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":27,"index":27}},
+        "init": {
+          "type": "VariableDeclaration",
+          "start":5,"end":13,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":13,"index":13}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":11,"end":13,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":13,"index":13}},
+              "id": {
+                "type": "Identifier",
+                "start":11,"end":13,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":13,"index":13},"identifierName":"of"},
+                "name": "of"
+              },
+              "init": null
+            }
+          ],
+          "kind": "using"
+        },
+        "test": {
+          "type": "MemberExpression",
+          "start":14,"end":24,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":24,"index":24}},
+          "object": {
+            "type": "Identifier",
+            "start":14,"end":16,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":16,"index":16},"identifierName":"of"},
+            "name": "of"
+          },
+          "computed": false,
+          "property": {
+            "type": "Identifier",
+            "start":17,"end":24,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":24,"index":24},"identifierName":"isValid"},
+            "name": "isValid"
+          }
+        },
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start":26,"end":27,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":27,"index":27}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

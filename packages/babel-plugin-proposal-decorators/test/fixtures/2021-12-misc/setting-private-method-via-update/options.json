@@ -1,3 +1,0 @@
-{
-  "throws": "Decorated private methods are read-only, but \"#x\" is updated via this expression."
-}

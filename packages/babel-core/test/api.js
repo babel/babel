@@ -1,18 +1,16 @@
 import * as babel from "../lib/index.js";
 import { TraceMap, originalPositionFor } from "@jridgewell/trace-mapping";
-import path from "path";
+import path from "node:path";
 import generator from "@babel/generator";
-
-import _Plugin from "../lib/config/plugin.js";
-const Plugin = _Plugin.default || _Plugin;
 
 import presetEnv from "@babel/preset-env";
 import pluginSyntaxFlow from "@babel/plugin-syntax-flow";
 import pluginSyntaxJSX from "@babel/plugin-syntax-jsx";
 import pluginFlowStripTypes from "@babel/plugin-transform-flow-strip-types";
-import { itBabel8, commonJS } from "$repo-utils";
+import { commonJS } from "$repo-utils";
+import { itBabel9 } from "$repo-utils";
 
-const { __dirname } = commonJS(import.meta.url);
+const { __dirname, require } = commonJS(import.meta.url);
 const cwd = __dirname;
 
 function assertIgnored(result) {
@@ -75,7 +73,7 @@ describe("parser and generator options", function () {
       return opts.parser.parse(code);
     },
     print: function (ast) {
-      return (generator.default || generator)(ast);
+      return generator(ast);
     },
   };
 
@@ -174,13 +172,13 @@ describe("api", function () {
     expect(babel.tokTypes).toBeDefined();
   });
 
-  itBabel8("parse throws on undefined callback", () => {
+  it("parse throws on undefined callback", () => {
     expect(() => parse("", {})).toThrowErrorMatchingInlineSnapshot(
       `"Starting from Babel 8.0.0, the 'parse' function expects a callback. If you need to call it synchronously, please use 'parseSync'."`,
     );
   });
 
-  itBabel8("transform throws on undefined callback", () => {
+  it("transform throws on undefined callback", () => {
     const options = {
       filename: "example.js",
     };
@@ -222,6 +220,7 @@ describe("api", function () {
     // keep user options untouched
     expect(options).toEqual({ babelrc: false });
   });
+
   it("transformFile throws on undefined callback", () => {
     const options = {
       babelrc: false,
@@ -244,7 +243,7 @@ describe("api", function () {
     expect(options).toEqual({ babelrc: false });
   });
 
-  itBabel8("transformFromAst throws on undefined callback", () => {
+  it("transformFromAst throws on undefined callback", () => {
     const program = "const identifier = 1";
     const node = parseSync(program);
     expect(() =>
@@ -362,13 +361,23 @@ describe("api", function () {
   it("options merge backwards", async function () {
     const result = await transformAsync("", {
       cwd,
-      presets: ["@babel/preset-env"],
-      plugins: ["@babel/plugin-syntax-jsx"],
+      presets: [
+        () => ({
+          plugins: [() => ({ name: "plugin-4" }), () => ({ name: "plugin-5" })],
+        }),
+        () => ({
+          plugins: [() => ({ name: "plugin-2" }), () => ({ name: "plugin-3" })],
+        }),
+      ],
+      plugins: [() => ({ name: "plugin-0" }), () => ({ name: "plugin-1" })],
     });
 
-    expect(result.options.plugins[0].manipulateOptions.toString()).toEqual(
-      expect.stringContaining("jsx"),
-    );
+    expect(result.options.plugins[0].key).toBe("plugin-0");
+    expect(result.options.plugins[1].key).toBe("plugin-1");
+    expect(result.options.plugins[2].key).toBe("plugin-2");
+    expect(result.options.plugins[3].key).toBe("plugin-3");
+    expect(result.options.plugins[4].key).toBe("plugin-4");
+    expect(result.options.plugins[5].key).toBe("plugin-5");
   });
 
   it("option wrapPluginVisitorMethod", function () {
@@ -390,7 +399,7 @@ describe("api", function () {
       },
 
       plugins: [
-        new Plugin({
+        () => ({
           name: "foobar",
           visitor: {
             "Program|Identifier": function () {
@@ -417,7 +426,7 @@ describe("api", function () {
           function () {
             return {
               plugins: [
-                new Plugin({
+                () => ({
                   visitor: {
                     Function: function (path) {
                       const alias = path.scope
@@ -639,7 +648,7 @@ describe("api", function () {
         column: 4,
       }),
     ).toEqual({
-      name: "Foo",
+      name: null,
       source: "stdout",
       line: 1,
       column: 6,
@@ -870,7 +879,7 @@ describe("api", function () {
           "(function (global) {
             var babelHelpers = global.babelHelpers = {};
             function _get() {
-              return babelHelpers.get = _get = \\"undefined\\" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
+              return babelHelpers.get = _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
                 var p = babelHelpers.superPropBase(e, t);
                 if (p) {
                   var n = Object.getOwnPropertyDescriptor(p, t);
@@ -879,7 +888,7 @@ describe("api", function () {
               }, _get.apply(null, arguments);
             }
             babelHelpers.get = _get;
-          })(typeof global === \\"undefined\\" ? self : global);"
+          })(typeof global === "undefined" ? self : global);"
         `);
       });
 
@@ -887,9 +896,9 @@ describe("api", function () {
         const script = babel.buildExternalHelpers(["get"], "umd");
         expect(script).toMatchInlineSnapshot(`
           "(function (root, factory) {
-            if (typeof define === \\"function\\" && define.amd) {
-              define([\\"exports\\"], factory);
-            } else if (typeof exports === \\"object\\") {
+            if (typeof define === "function" && define.amd) {
+              define(["exports"], factory);
+            } else if (typeof exports === "object") {
               factory(exports);
             } else {
               factory(root.babelHelpers = {});
@@ -897,7 +906,7 @@ describe("api", function () {
           })(this, function (global) {
             var babelHelpers = global;
             function _get() {
-              return babelHelpers.get = _get = \\"undefined\\" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
+              return babelHelpers.get = _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
                 var p = babelHelpers.superPropBase(e, t);
                 if (p) {
                   var n = Object.getOwnPropertyDescriptor(p, t);
@@ -915,7 +924,7 @@ describe("api", function () {
         expect(script).toMatchInlineSnapshot(`
           "var babelHelpers = {};
           function _get() {
-            return babelHelpers.get = _get = \\"undefined\\" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
+            return babelHelpers.get = _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
               var p = babelHelpers.superPropBase(e, t);
               if (p) {
                 var n = Object.getOwnPropertyDescriptor(p, t);
@@ -933,7 +942,7 @@ describe("api", function () {
         expect(script).toMatchInlineSnapshot(`
           "export { _get as get };
           function _get() {
-            return _get = \\"undefined\\" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
+            return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
               var p = _superPropBase(e, t);
               if (p) {
                 var n = Object.getOwnPropertyDescriptor(p, t);
@@ -1020,5 +1029,26 @@ describe("api", function () {
         `"unknown file: Unknown helper fooBar"`,
       );
     });
+  });
+
+  it("exports the version", function () {
+    expect(babel.version[0]).toBe("8");
+  });
+
+  itBabel9("the version ends with 999999999", () => {
+    expect(babel.version.endsWith("999999999")).toBe(true);
+  });
+});
+
+describe("cjs-proxy", function () {
+  it("error should be caught", () => {
+    let err;
+    try {
+      const cjs = require("../lib/index.js");
+      cjs.parse("foo");
+    } catch (error) {
+      err = error;
+    }
+    expect(err).toBeInstanceOf(Error);
   });
 });

@@ -4,23 +4,20 @@ import {
   isLiteral,
   isMemberExpression,
   isNewExpression,
+  isPattern,
 } from "@babel/types";
+import * as charCodes from "charcodes";
 import type * as t from "@babel/types";
 import { TokenContext } from "../node/index.ts";
 
 export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
   const { operator } = node;
-  if (
-    operator === "void" ||
-    operator === "delete" ||
-    operator === "typeof" ||
-    // throwExpressions
-    operator === "throw"
-  ) {
+  const firstChar = operator.charCodeAt(0);
+  if (firstChar >= charCodes.lowercaseA && firstChar <= charCodes.lowercaseZ) {
     this.word(operator);
     this.space();
   } else {
-    this.token(operator);
+    this.tokenChar(firstChar);
   }
 
   this.print(node.argument);
@@ -41,19 +38,19 @@ export function ParenthesizedExpression(
   node: t.ParenthesizedExpression,
 ) {
   this.token("(");
-  const exit = this.enterDelimited();
-  this.print(node.expression);
-  exit();
+  const oldNoLineTerminatorAfterNode = this.enterDelimited();
+  this.print(node.expression, undefined, true);
+  this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
   this.rightParens(node);
 }
 
 export function UpdateExpression(this: Printer, node: t.UpdateExpression) {
   if (node.prefix) {
-    this.token(node.operator);
+    this.token(node.operator, false, 0, true);
     this.print(node.argument);
   } else {
     this.print(node.argument, true);
-    this.token(node.operator);
+    this.token(node.operator, false, 0, true);
   }
 }
 
@@ -72,6 +69,24 @@ export function ConditionalExpression(
   this.print(node.alternate);
 }
 
+function _printExpressionArguments(
+  this: Printer,
+  node: t.CallExpression | t.NewExpression | t.OptionalCallExpression,
+) {
+  this.token("(");
+  const oldNoLineTerminatorAfterNode = this.enterDelimited();
+  this.printList(
+    node.arguments,
+    this.shouldPrintTrailingComma(")"),
+    undefined,
+    undefined,
+    undefined,
+    true,
+  );
+  this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
+  this.rightParens(node);
+}
+
 export function NewExpression(
   this: Printer,
   node: t.NewExpression,
@@ -83,7 +98,6 @@ export function NewExpression(
   if (
     this.format.minified &&
     node.arguments.length === 0 &&
-    !node.optional &&
     !isCallExpression(parent, { callee: node }) &&
     !isMemberExpression(parent) &&
     !isNewExpression(parent)
@@ -91,18 +105,17 @@ export function NewExpression(
     return;
   }
 
-  this.print(node.typeArguments); // Flow
-  this.print(node.typeParameters); // TS
+  this.print(node.typeArguments);
 
-  if (node.optional) {
-    // TODO: This can never happen
-    this.token("?.");
+  if (
+    node.arguments.length === 0 &&
+    this.tokenMap &&
+    !this.tokenMap.endMatches(node, ")")
+  ) {
+    return;
   }
-  this.token("(");
-  const exit = this.enterDelimited();
-  this.printList(node.arguments);
-  exit();
-  this.rightParens(node);
+
+  _printExpressionArguments.call(this, node);
 }
 
 export function SequenceExpression(this: Printer, node: t.SequenceExpression) {
@@ -121,9 +134,6 @@ export function _shouldPrintDecoratorsBeforeExport(
   this: Printer,
   node: t.ExportDeclaration & { declaration: t.ClassDeclaration },
 ) {
-  if (typeof this.format.decoratorsBeforeExport === "boolean") {
-    return this.format.decoratorsBeforeExport;
-  }
   return (
     typeof node.start === "number" && node.start === node.declaration.start
   );
@@ -131,7 +141,8 @@ export function _shouldPrintDecoratorsBeforeExport(
 
 export function Decorator(this: Printer, node: t.Decorator) {
   this.token("@");
-  this.print(node.expression);
+  const { expression } = node;
+  this.print(expression);
   this.newline();
 }
 
@@ -174,31 +185,21 @@ export function OptionalCallExpression(
 ) {
   this.print(node.callee);
 
-  this.print(node.typeParameters); // TS
-
   if (node.optional) {
     this.token("?.");
   }
 
-  this.print(node.typeArguments); // Flow
+  this.print(node.typeArguments);
 
-  this.token("(");
-  const exit = this.enterDelimited();
-  this.printList(node.arguments);
-  exit();
-  this.rightParens(node);
+  _printExpressionArguments.call(this, node);
 }
 
 export function CallExpression(this: Printer, node: t.CallExpression) {
   this.print(node.callee);
 
-  this.print(node.typeArguments); // Flow
-  this.print(node.typeParameters); // TS
-  this.token("(");
-  const exit = this.enterDelimited();
-  this.printList(node.arguments);
-  exit();
-  this.rightParens(node);
+  this.print(node.typeArguments);
+
+  _printExpressionArguments.call(this, node);
 }
 
 export function Import(this: Printer) {
@@ -207,28 +208,25 @@ export function Import(this: Printer) {
 
 export function AwaitExpression(this: Printer, node: t.AwaitExpression) {
   this.word("await");
-
-  if (node.argument) {
-    this.space();
-    this.printTerminatorless(node.argument, false);
-  }
+  this.space();
+  this.print(node.argument);
 }
 
 export function YieldExpression(this: Printer, node: t.YieldExpression) {
-  this.word("yield", true);
-
   if (node.delegate) {
+    this.word("yield", true);
     this.token("*");
     if (node.argument) {
       this.space();
       // line terminators are allowed after yield*
       this.print(node.argument);
     }
+  } else if (node.argument) {
+    this.word("yield", true);
+    this.space();
+    this.print(node.argument);
   } else {
-    if (node.argument) {
-      this.space();
-      this.printTerminatorless(node.argument, false);
-    }
+    this.word("yield");
   }
 }
 
@@ -247,7 +245,7 @@ export function ExpressionStatement(
 
 export function AssignmentPattern(this: Printer, node: t.AssignmentPattern) {
   this.print(node.left);
-  if (node.left.type === "Identifier") {
+  if (node.left.type === "Identifier" || isPattern(node.left)) {
     if (node.left.optional) this.token("?");
     this.print(node.left.typeAnnotation);
   }
@@ -259,16 +257,29 @@ export function AssignmentPattern(this: Printer, node: t.AssignmentPattern) {
 
 export function AssignmentExpression(
   this: Printer,
-  node: t.AssignmentExpression,
+  node: t.AssignmentExpression | t.LogicalExpression,
 ) {
   this.print(node.left);
 
   this.space();
-  if (node.operator === "in" || node.operator === "instanceof") {
-    this.word(node.operator);
+  this.token(node.operator, false, 0, true);
+  this.space();
+
+  this.print(node.right);
+}
+
+export { AssignmentExpression as LogicalExpression };
+
+export function BinaryExpression(this: Printer, node: t.BinaryExpression) {
+  this.print(node.left);
+
+  this.space();
+  const { operator } = node;
+  if (operator.charCodeAt(0) === charCodes.lowercaseI) {
+    this.word(operator);
   } else {
-    this.token(node.operator);
-    this._endsWithDiv = node.operator === "/";
+    this.token(operator, false, 0, true);
+    this.setLastChar(operator.charCodeAt(operator.length - 1));
   }
   this.space();
 
@@ -280,11 +291,6 @@ export function BindExpression(this: Printer, node: t.BindExpression) {
   this.token("::");
   this.print(node.callee);
 }
-
-export {
-  AssignmentExpression as BinaryExpression,
-  AssignmentExpression as LogicalExpression,
-};
 
 export function MemberExpression(this: Printer, node: t.MemberExpression) {
   this.print(node.object);
@@ -300,11 +306,11 @@ export function MemberExpression(this: Printer, node: t.MemberExpression) {
   }
 
   if (computed) {
-    const exit = this.enterDelimited();
+    const oldNoLineTerminatorAfterNode = this.enterDelimited();
     this.token("[");
-    this.print(node.property);
+    this.print(node.property, undefined, true);
     this.token("]");
-    exit();
+    this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
   } else {
     this.token(".");
     this.print(node.property);

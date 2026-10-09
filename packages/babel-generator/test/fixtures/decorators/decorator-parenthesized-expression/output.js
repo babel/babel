@@ -17,10 +17,6 @@ class C extends class {} {
       @decs.two()
       p;
     }
-    class ShouldAddParens {
-      @(decs[three]())
-      p;
-    }
     class ShouldRemoveParens {
       @decs
       @decs.one

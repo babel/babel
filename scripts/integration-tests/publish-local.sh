@@ -29,9 +29,10 @@ startLocalRegistry "$PWD"/scripts/integration-tests/verdaccio-config.yml
 loginLocalRegistry
 
 # This script gets the last root package.json version,
-# and then increases by one the patch number
+# and then increases by one the patch number, after
+# stripping pre-release info
 VERSION=$(
-  node -p "require('./package.json').version.replace(/(?<=\\d+\\.\\d+\\.)\\d+/, x => ++x)"
+  node -p "require('./package.json').version.replace(/-.*/, '').replace(/(?<=\\d+\\.\\d+\\.)\\d+/, x => ++x)"
 )
 
 I_AM_USING_VERDACCIO=I_AM_SURE VERSION="$VERSION" make publish-test

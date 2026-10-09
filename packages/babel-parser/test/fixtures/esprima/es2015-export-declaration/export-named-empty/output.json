@@ -12,7 +12,8 @@
         "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
         "specifiers": [],
         "source": null,
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

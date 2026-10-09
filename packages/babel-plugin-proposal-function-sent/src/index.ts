@@ -1,10 +1,9 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
 import wrapFunction from "@babel/helper-wrap-function";
 import { types as t, type Visitor } from "@babel/core";
 
 export default declare(api => {
-  api.assertVersion(REQUIRED_VERSION(7));
+  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
   const isFunctionSent = (node: t.MetaProperty) =>
     t.isIdentifier(node.meta, { name: "function" }) &&
@@ -39,13 +38,13 @@ export default declare(api => {
 
   return {
     name: "proposal-function-sent",
-    inherits: syntaxFunctionSent,
+    manipulateOptions: (_, parser) => parser.plugins.push("functionSent"),
 
     visitor: {
       MetaProperty(path, state) {
         if (!isFunctionSent(path.node)) return;
 
-        const fnPath = path.getFunctionParent();
+        const fnPath = path.getFunctionParent()!;
 
         if (!fnPath.node.generator) {
           throw new Error("Parent generator function not found");

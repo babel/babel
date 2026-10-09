@@ -1,0 +1,43 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":36,"index":36}},
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start":15,"end":36,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":36,"index":36}},
+          "id": null,
+          "superClass": null,
+          "implements": [
+            {
+              "type": "ClassImplements",
+              "start":32,"end":33,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":33,"index":33}},
+              "id": {
+                "type": "Identifier",
+                "start":32,"end":33,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":33,"index":33},"identifierName":"I"},
+                "name": "I"
+              },
+              "typeParameters": null
+            }
+          ],
+          "body": {
+            "type": "ClassBody",
+            "start":34,"end":36,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":36,"index":36}},
+            "body": []
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

@@ -13,9 +13,11 @@ export default function _wrapAsyncGenerator(fn: GeneratorFunction) {
 
 type AsyncIteratorMethod = "next" | "throw" | "return";
 
-declare class AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>
-  implements globalThis.AsyncGenerator<T, TReturn, TNext>
-{
+declare class AsyncGenerator<
+  T = unknown,
+  TReturn = any,
+  TNext = unknown,
+> implements globalThis.AsyncGenerator<T, TReturn, TNext> {
   _invoke: (
     key: AsyncIteratorMethod,
     arg: IteratorResult<T>,
@@ -29,6 +31,7 @@ declare class AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>
   ): Promise<IteratorResult<T, TReturn>>;
   throw(e: any): Promise<IteratorResult<T, TReturn>>;
   [Symbol.asyncIterator](): AsyncGenerator<T, TReturn, TNext>;
+  [Symbol.asyncDispose](): Promise<void>;
 }
 
 interface AsyncGeneratorRequest<T = unknown, TReturn = any, TNext = unknown> {
@@ -89,7 +92,10 @@ function AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>(
             //      not visible to the (sync) yield*.
             //      The other part of this implementation is in asyncGeneratorDelegate.
             var nextKey: "return" | "next" =
-              key === "return" ? "return" : "next";
+              key === "return" &&
+              (value as OverloadYield<IteratorReturnResult<T>>).k
+                ? key
+                : "next";
             if (
               !(value as OverloadYield<IteratorReturnResult<T>>).k ||
               arg.done
@@ -103,28 +109,27 @@ function AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>(
             }
           }
 
-          settle(result.done ? "return" : "normal", arg);
+          settle(!!result.done, arg);
         },
         function (err) {
           resume("throw", err);
         },
       );
     } catch (err) {
-      settle("throw", err);
+      settle(2, err);
     }
   }
 
-  function settle(type: AsyncIteratorMethod | "normal", value: any) {
-    switch (type) {
-      case "return":
-        front!.resolve({ value: value, done: true });
-        break;
-      case "throw":
-        front!.reject(value);
-        break;
-      default:
-        front!.resolve({ value: value, done: false });
-        break;
+  /**
+   * type == true -> return
+   * type == false -> normal
+   * type == 2 -> throw
+   */
+  function settle(type: true | false | 2, value: any) {
+    if (type === 2) {
+      front!.reject(value);
+    } else {
+      front!.resolve({ value: value, done: type });
     }
 
     front = front!.next;
@@ -138,9 +143,9 @@ function AsyncGenerator<T = unknown, TReturn = any, TNext = unknown>(
   this._invoke = send;
 
   // Hide "return" method if generator return is not supported
-  if (typeof gen.return !== "function") {
+  if (typeof gen["return"] !== "function") {
     // @ts-expect-error -- intentionally remove "return" when not supported
-    this.return = undefined;
+    this["return"] = undefined;
   }
 }
 
@@ -154,9 +159,9 @@ AsyncGenerator.prototype[
 AsyncGenerator.prototype.next = function (arg: IteratorResult<any>) {
   return this._invoke("next", arg);
 };
-AsyncGenerator.prototype.throw = function (arg: IteratorResult<any>) {
+AsyncGenerator.prototype["throw"] = function (arg: IteratorResult<any>) {
   return this._invoke("throw", arg);
 };
-AsyncGenerator.prototype.return = function (arg: IteratorResult<any>) {
+AsyncGenerator.prototype["return"] = function (arg: IteratorResult<any>) {
   return this._invoke("return", arg);
 };

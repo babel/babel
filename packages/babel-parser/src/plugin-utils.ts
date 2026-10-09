@@ -1,15 +1,8 @@
-import type Parser from "./parser/index.ts";
-import type { PluginConfig } from "./typings.ts";
+import type { PluginConfig } from "./typings.d.ts";
 
 export type Plugin = PluginConfig;
 
-export type PluginList = PluginConfig[];
-
-export type MixinPlugin = (
-  superClass: new (...args: any) => Parser,
-) => new (...args: any) => Parser;
-
-const PIPELINE_PROPOSALS = ["minimal", "fsharp", "hack", "smart"];
+const PIPELINE_PROPOSALS = ["fsharp", "hack"];
 const TOPIC_TOKENS = ["^^", "@@", "^", "%", "#"];
 
 export function validatePlugins(pluginsMap: Map<string, any>) {
@@ -18,26 +11,6 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
       throw new Error(
         "Cannot use the decorators and decorators-legacy plugin together",
       );
-    }
-
-    const decoratorsBeforeExport =
-      pluginsMap.get("decorators").decoratorsBeforeExport;
-    if (
-      decoratorsBeforeExport != null &&
-      typeof decoratorsBeforeExport !== "boolean"
-    ) {
-      throw new Error(
-        "'decoratorsBeforeExport' must be a boolean, if specified.",
-      );
-    }
-
-    const allowCallParenthesized =
-      pluginsMap.get("decorators").allowCallParenthesized;
-    if (
-      allowCallParenthesized != null &&
-      typeof allowCallParenthesized !== "boolean"
-    ) {
-      throw new Error("'allowCallParenthesized' must be a boolean.");
     }
   }
 
@@ -58,10 +31,6 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
         `"pipelineOperator" requires "proposal" option whose value must be one of: ${proposalList}.`,
       );
     }
-
-    const tupleSyntaxIsHash = process.env.BABEL_8_BREAKING
-      ? pluginsMap.has("recordAndTuple")
-      : pluginsMap.get("recordAndTuple")?.syntaxType === "hash";
 
     if (proposal === "hack") {
       if (pluginsMap.has("placeholders")) {
@@ -85,76 +54,38 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
           `"pipelineOperator" in "proposal": "hack" mode also requires a "topicToken" option whose value must be one of: ${tokenList}.`,
         );
       }
-
-      if (topicToken === "#" && tupleSyntaxIsHash) {
-        throw new Error(
-          `Plugin conflict between \`["pipelineOperator", { proposal: "hack", topicToken: "#" }]\` and \`${JSON.stringify(["recordAndTuple", pluginsMap.get("recordAndTuple")])}\`.`,
-        );
-      }
-    } else if (proposal === "smart" && tupleSyntaxIsHash) {
-      throw new Error(
-        `Plugin conflict between \`["pipelineOperator", { proposal: "smart" }]\` and \`${JSON.stringify(["recordAndTuple", pluginsMap.get("recordAndTuple")])}\`.`,
-      );
     }
   }
 
   if (pluginsMap.has("moduleAttributes")) {
-    if (process.env.BABEL_8_BREAKING) {
-      throw new Error(
-        "`moduleAttributes` has been removed in Babel 8, please use `importAttributes` parser plugin, or `@babel/plugin-syntax-import-attributes`.",
-      );
-    } else {
-      if (
-        pluginsMap.has("importAttributes") ||
-        pluginsMap.has("importAssertions")
-      ) {
-        throw new Error(
-          "Cannot combine importAssertions, importAttributes and moduleAttributes plugins.",
-        );
-      }
-      const moduleAttributesVersionPluginOption =
-        pluginsMap.get("moduleAttributes").version;
-      if (moduleAttributesVersionPluginOption !== "may-2020") {
-        throw new Error(
-          "The 'moduleAttributes' plugin requires a 'version' option," +
-            " representing the last proposal update. Currently, the" +
-            " only supported value is 'may-2020'.",
-        );
-      }
-    }
-  }
-  if (
-    pluginsMap.has("importAttributes") &&
-    pluginsMap.has("importAssertions")
-  ) {
     throw new Error(
-      "Cannot combine importAssertions and importAttributes plugins.",
+      "`moduleAttributes` has been removed in Babel 8, please migrate to import attributes instead.",
+    );
+  }
+
+  if (pluginsMap.has("importAssertions")) {
+    throw new Error(
+      "`importAssertions` has been removed in Babel 8, please use import attributes instead.",
+    );
+  }
+
+  if (pluginsMap.has("deprecatedImportAssert")) {
+    console.warn(
+      "`deprecatedImportAssert` has been removed in Babel 8, please use import attributes instead.",
+    );
+  } else if (
+    pluginsMap.has("importAttributes") &&
+    pluginsMap.get("importAttributes").deprecatedAssertSyntax
+  ) {
+    console.warn(
+      "The 'importAttributes' plugin has been removed in Babel 8. Please migrate any usage of `assert`-style attributes to `with`.",
     );
   }
 
   if (pluginsMap.has("recordAndTuple")) {
-    const syntaxType = pluginsMap.get("recordAndTuple").syntaxType;
-    if (syntaxType != null) {
-      if (process.env.BABEL_8_BREAKING) {
-        if (syntaxType === "hash") {
-          throw new Error(
-            'The syntaxType option is no longer required in Babel 8. You can safely remove { syntaxType: "hash" } from the recordAndTuple config.',
-          );
-        } else {
-          throw new Error(
-            'The syntaxType option is no longer required in Babel 8. Please remove { syntaxType: "bar" } from the recordAndTuple config and migrate to the hash syntax #{} and #[].',
-          );
-        }
-      } else {
-        const RECORD_AND_TUPLE_SYNTAX_TYPES = ["hash", "bar"];
-        if (!RECORD_AND_TUPLE_SYNTAX_TYPES.includes(syntaxType)) {
-          throw new Error(
-            "The 'syntaxType' option of the 'recordAndTuple' plugin must be one of: " +
-              RECORD_AND_TUPLE_SYNTAX_TYPES.map(p => `'${p}'`).join(", "),
-          );
-        }
-      }
-    }
+    throw new Error(
+      "The 'recordAndTuple' plugin has been removed in Babel 8. Please remove it from your configuration.",
+    );
   }
 
   if (
@@ -179,6 +110,27 @@ export function validatePlugins(pluginsMap: Map<string, any>) {
         " only supported value is '2023-07'.",
     );
   }
+
+  if (
+    pluginsMap.has("discardBinding") &&
+    pluginsMap.get("discardBinding").syntaxType !== "void"
+  ) {
+    throw new Error(
+      "The 'discardBinding' plugin requires a 'syntaxType' option. Currently the only supported value is 'void'.",
+    );
+  }
+
+  if (pluginsMap.has("decimal")) {
+    throw new Error(
+      "The 'decimal' plugin has been removed in Babel 8. Please remove it from your configuration.",
+    );
+  }
+  if (pluginsMap.has("importReflection")) {
+    throw new Error(
+      "The 'importReflection' plugin has been removed in Babel 8. Use 'sourcePhaseImports' instead, and " +
+        "replace 'import module' with 'import source' in your code.",
+    );
+  }
 }
 
 // These plugins are defined using a mixin which extends the parser class.
@@ -200,6 +152,6 @@ export const mixinPlugins = {
   placeholders,
 };
 
-export const mixinPluginNames = Object.keys(mixinPlugins) as ReadonlyArray<
+export const mixinPluginNames = Object.keys(mixinPlugins) as readonly (
   "estree" | "jsx" | "flow" | "typescript" | "v8intrinsic" | "placeholders"
->;
+)[];

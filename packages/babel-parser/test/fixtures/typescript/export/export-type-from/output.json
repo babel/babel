@@ -37,7 +37,8 @@
           },
           "value": "./mod"
         },
-        "declaration": null
+        "declaration": null,
+        "attributes": []
       }
     ],
     "directives": [],

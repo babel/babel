@@ -1,10 +1,8 @@
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
-import _traverse from "../lib/index.js";
-import _generate from "@babel/generator";
-const traverse = _traverse.default || _traverse;
-const generate = _generate.default || _generate;
+import traverse from "../lib/index.js";
+import generate from "@babel/generator";
 
 function getPath(code, parserOpts) {
   const ast = parse(code, parserOpts);
@@ -345,6 +343,51 @@ describe("modification", function () {
         expect(generateCode({ parentPath: bodyPath })).toBe(
           "var _temp;\nexport default (_temp = fn(), x, _temp);",
         );
+      });
+
+      it("edge case for babel-plugin-jest-hoist", function () {
+        let varsHoistPoint;
+        let i = 0;
+        const logs = [[], []];
+        traverse(parse(`{a;}`), {
+          BlockStatement(path) {
+            [varsHoistPoint] = path.unshiftContainer(
+              "body",
+              t.emptyStatement(),
+            );
+            path.traverse({
+              Identifier(path) {
+                if (i++ >= 5) {
+                  return;
+                }
+                logs[0].push(path.node.name);
+                varsHoistPoint.insertBefore(t.identifier("b"));
+              },
+            });
+          },
+        });
+        i = 0;
+        traverse(parse(`{a;}`), {
+          BlockStatement(path) {
+            [varsHoistPoint] = path.unshiftContainer(
+              "body",
+              t.emptyStatement(),
+            );
+            path.traverse({
+              enter() {},
+              Identifier(path) {
+                if (i++ >= 5) {
+                  return;
+                }
+                logs[1].push(path.node.name);
+                varsHoistPoint.insertBefore(t.identifier("b"));
+              },
+            });
+          },
+        });
+
+        expect(logs[0]).toEqual(["a", "b", "b", "b", "b"]);
+        expect(logs[1]).toEqual(["a", "b", "b", "b", "b"]);
       });
     });
   });

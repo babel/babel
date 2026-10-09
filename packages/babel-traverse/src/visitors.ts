@@ -9,8 +9,13 @@ import {
   __internal__deprecationWarning as deprecationWarning,
 } from "@babel/types";
 import type { ExplodedVisitor, NodePath, Visitor } from "./index.ts";
-import type { ExplVisitNode, VisitNodeFunction, VisitPhase } from "./types.ts";
-import { requeueComputedKeyAndDecorators } from "./path/context.ts";
+import type {
+  ExplVisitNode,
+  VisitNodeFunction,
+  VisitPhase,
+  VisitorBase,
+  VisitorProp,
+} from "./types.ts";
 
 type VIRTUAL_TYPES = keyof typeof virtualTypes;
 function isVirtualType(type: string): type is VIRTUAL_TYPES {
@@ -23,7 +28,7 @@ export type VisitWrapper<S = any> = (
 ) => VisitNodeFunction<S, Node>;
 
 export function isExplodedVisitor(
-  visitor: Visitor,
+  visitor: Visitor<any>,
 ): visitor is ExplodedVisitor {
   // @ts-expect-error _exploded is not defined on non-exploded Visitor
   return visitor?._exploded;
@@ -50,16 +55,33 @@ export { explode$1 as explode };
  * * `enter` and `exit` functions are wrapped in arrays, to ease merging of
  *   visitors
  */
+function explode$1<S, T extends object>(visitor: {
+  [P in keyof T]: VisitorProp<S, P & string>;
+}): ExplodedVisitor<S>;
+function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S>;
 function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
   if (isExplodedVisitor(visitor)) return visitor;
   // @ts-expect-error `visitor` will be cast to ExplodedVisitor by this function
   visitor._exploded = true;
 
+  // Handle deprecated 'blacklist' option: only error if 'denylist' is not also provided.
+  // If both are present, 'denylist' takes precedence (supports Babel 7/8 cross-version compat).
+  if (Object.hasOwn(visitor, "blacklist")) {
+    if (!Object.hasOwn(visitor, "denylist")) {
+      throw new Error(
+        "The 'blacklist' visitor option has been renamed to 'denylist'. " +
+          "Please update your configuration.",
+      );
+    }
+    // Both provided — 'denylist' will be used; 'blacklist' key is silently ignored.
+    delete (visitor as any).blacklist;
+  }
+
   // normalise pipes
   for (const nodeType of Object.keys(visitor) as (keyof Visitor)[]) {
     if (shouldIgnoreKey(nodeType)) continue;
 
-    const parts: Array<string> = nodeType.split("|");
+    const parts: string[] = nodeType.split("|");
     if (parts.length === 1) continue;
 
     const fns = visitor[nodeType];
@@ -85,6 +107,8 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
   // ensure enter/exit callbacks are arrays
   ensureCallbackArrays(visitor);
 
+  const visitorBase = visitor as VisitorBase<any>;
+
   // add type wrappers
   for (const nodeType of Object.keys(visitor)) {
     if (shouldIgnoreKey(nodeType)) continue;
@@ -92,25 +116,21 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
     if (!isVirtualType(nodeType)) continue;
 
     // wrap all the functions
-    const fns = visitor[nodeType];
+    const fns = visitorBase[nodeType]!;
     for (const type of Object.keys(fns)) {
       // @ts-expect-error normalised as VisitNodeObject
       fns[type] = wrapCheck(nodeType, fns[type]);
     }
 
     // clear it from the visitor
-    delete visitor[nodeType];
+    delete visitorBase[nodeType];
 
     const types = virtualTypes[nodeType];
     if (types !== null) {
       for (const type of types) {
-        // merge the visitor if necessary or just put it back in
-        if (visitor[type]) {
-          mergePair(visitor[type], fns);
-        } else {
-          // @ts-expect-error Expression produces too complex union
-          visitor[type] = fns;
-        }
+        // @ts-expect-error Expression produces too complex union
+        visitorBase[type] ??= {};
+        mergePair(visitorBase[type], fns);
       }
     } else {
       mergePair(visitor, fns);
@@ -141,11 +161,11 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
     delete visitor[nodeType];
 
     for (const alias of aliases) {
-      const existing = visitor[alias];
+      const existing = visitorBase[alias];
       if (existing) {
         mergePair(existing, fns);
       } else {
-        visitor[alias] = { ...fns };
+        visitorBase[alias] = { ...fns };
       }
     }
   }
@@ -159,7 +179,6 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
     );
   }
 
-  // @ts-expect-error explosion has been performed
   return visitor as ExplodedVisitor;
 }
 
@@ -169,7 +188,7 @@ function explode$1<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
 // TODO: Just call it `verify` once https://github.com/Swatinem/rollup-plugin-dts/issues/307
 // is fixed.
 export { verify$1 as verify };
-function verify$1(visitor: Visitor) {
+function verify$1(visitor: Visitor<any>) {
   // @ts-expect-error _verified is not defined on non-verified Visitor.
   // TODO: unify _verified and _exploded.
   if (visitor._verified) return;
@@ -235,24 +254,17 @@ function validateVisitorMethods(
 export function merge<State>(
   visitors: Visitor<State>[],
 ): ExplodedVisitor<State>;
-export function merge(
-  visitors: Visitor<unknown>[],
-  states?: any[],
-  wrapper?: Function | null,
-): ExplodedVisitor<unknown>;
+export function merge<State>(
+  visitors: Visitor<State>[],
+  states?: State[],
+  wrapper?: VisitWrapper<State> | null,
+): ExplodedVisitor<State>;
 export function merge(
   visitors: any[],
   states: any[] = [],
   wrapper?: VisitWrapper | null,
 ): ExplodedVisitor {
   const mergedVisitor: ExplodedVisitor = { _verified: true, _exploded: true };
-  if (!process.env.BABEL_8_BREAKING) {
-    // For compatibility with old Babel versions, we must hide _verified and _exploded.
-    // Otherwise, old versions of the validator will throw sayng that `true` is not
-    // a function, because it tries to validate it as a visitor.
-    Object.defineProperty(mergedVisitor, "_exploded", { enumerable: false });
-    Object.defineProperty(mergedVisitor, "_verified", { enumerable: false });
-  }
 
   for (let i = 0; i < visitors.length; i++) {
     const visitor = explode$1(visitors[i]);
@@ -267,11 +279,15 @@ export function merge(
     for (const key of Object.keys(visitor) as (keyof ExplodedVisitor)[]) {
       if (shouldIgnoreKey(key)) continue;
 
-      let typeVisitor = visitor[key];
+      let typeVisitor = visitor[key]!;
 
       // if we have state or wrapper then overload the callbacks to take it
       if (state || wrapper) {
-        typeVisitor = wrapWithStateOrWrapper(typeVisitor, state, wrapper);
+        typeVisitor = wrapWithStateOrWrapper(
+          typeVisitor as ExplVisitNode<unknown, Node>,
+          state,
+          wrapper,
+        );
       }
 
       const nodeVisitor = (mergedVisitor[key] ||= {});
@@ -299,7 +315,7 @@ function wrapWithStateOrWrapper<State>(
       let newFn = fn;
 
       if (state) {
-        newFn = function (path: NodePath) {
+        newFn = function (path: NodePath<Node>) {
           fn.call(state, path, state);
         };
       }
@@ -323,7 +339,7 @@ function wrapWithStateOrWrapper<State>(
   return newVisitor;
 }
 
-function ensureEntranceObjects(obj: Visitor) {
+function ensureEntranceObjects(obj: Visitor<any>) {
   for (const key of Object.keys(obj) as (keyof Visitor)[]) {
     if (shouldIgnoreKey(key)) continue;
 
@@ -335,7 +351,7 @@ function ensureEntranceObjects(obj: Visitor) {
   }
 }
 
-function ensureCallbackArrays(obj: Visitor) {
+function ensureCallbackArrays(obj: Visitor<any>) {
   if (obj.enter && !Array.isArray(obj.enter)) obj.enter = [obj.enter];
   if (obj.exit && !Array.isArray(obj.exit)) obj.exit = [obj.exit];
 }
@@ -360,10 +376,9 @@ function shouldIgnoreKey(key: string): key is
   | "shouldSkip"
   | "denylist"
   | "noScope"
-  | "skipKeys"
-  | "blacklist" {
+  | "skipKeys" {
   // internal/hidden key
-  if (key[0] === "_") return true;
+  if (key.startsWith("_")) return true;
 
   // ignore function keys
   if (key === "enter" || key === "exit" || key === "shouldSkip") return true;
@@ -373,10 +388,11 @@ function shouldIgnoreKey(key: string): key is
     return true;
   }
 
-  if (!process.env.BABEL_8_BREAKING) {
-    if (key === "blacklist") {
-      return true;
-    }
+  if (key === "blacklist") {
+    throw new Error(
+      "The 'blacklist' visitor option has been renamed to 'denylist'. " +
+        "Please update your configuration.",
+    );
   }
 
   return false;
@@ -405,32 +421,17 @@ const _environmentVisitor: Visitor = {
 
     path.skip();
     if (path.isMethod()) {
-      if (
-        !process.env.BABEL_8_BREAKING &&
-        !path.requeueComputedKeyAndDecorators
-      ) {
-        // See https://github.com/babel/babel/issues/16694
-        requeueComputedKeyAndDecorators.call(path);
-      } else {
-        path.requeueComputedKeyAndDecorators();
-      }
+      path.requeueComputedKeyAndDecorators();
     }
   },
   Property(path) {
     if (path.isObjectProperty()) return;
     path.skip();
-    if (
-      !process.env.BABEL_8_BREAKING &&
-      !path.requeueComputedKeyAndDecorators
-    ) {
-      // See https://github.com/babel/babel/issues/16694
-      requeueComputedKeyAndDecorators.call(path);
-    } else {
-      path.requeueComputedKeyAndDecorators();
-    }
+
+    path.requeueComputedKeyAndDecorators();
   },
 };
 
-export function environmentVisitor<S>(visitor: Visitor<S>): Visitor<S> {
+export function environmentVisitor<S>(visitor: Visitor<S>): ExplodedVisitor<S> {
   return merge([_environmentVisitor, visitor]);
 }

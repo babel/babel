@@ -1,11 +1,6 @@
 {
   "version": 3,
   "names": [
-    "_foo",
-    "babelHelpers",
-    "interopRequireWildcard",
-    "require",
-    "foo4",
     "foo",
     "foo2",
     "foo3"
@@ -16,6 +11,6 @@
   "sourcesContent": [
     "import foo from \"foo\";\nimport { default as foo2 } from \"foo\";\nimport { foo3 } from \"foo\";\nimport * as foo4 from \"foo\";\n\nfoo;\nfoo2;\nfoo3;\nfoo3();\nfoo3``;\nfoo3?.();"
   ],
-  "mappings": ";;AAAA,IAAAA,IAAA,GAAAC,YAAA,CAAAC,sBAAA,CAAAC,OAAA;AAAsB,IAAAC,IAAA,GAAAJ,IAAA;AAKtBK,YAAG;AACHC,YAAI;AACJC,SAAI;AACJ,IAAAA,SAAI,EAAC,CAAC;AACN,IAAAA,SAAI,GAAE;AACN,IAAAA,SAAI,IAAG,CAAC",
+  "mappings": ";;AAAA;AAAsB;AAKtBA,YAAG;AACHC,YAAI;AACJC,KAAA,IAAI;AACJ,IAAAA,KAAA,IAAI,EAAC,CAAC;AACN,IAAAA,KAAA,IAAI,GAAE;AACN,IAAAA,KAAA,IAAI,IAAG,CAAC",
   "ignoreList": []
 }

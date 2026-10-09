@@ -1,7 +1,8 @@
 import gensync, { type Handler } from "gensync";
 import { once } from "../gensync-utils/functional.ts";
 
-import { loadPlugin, loadPreset } from "./files/index.ts";
+// eslint-disable-next-line import/no-unresolved, import/extensions
+import { loadPlugin, loadPreset } from "#config/files";
 
 import { getItemDescriptor } from "./item.ts";
 
@@ -13,9 +14,9 @@ import {
 import type { CacheConfigurator } from "./caching.ts";
 
 import type {
-  ValidatedOptions,
-  PluginList,
   PluginItem,
+  InputOptions,
+  PresetItem,
 } from "./validation/options.ts";
 
 import { resolveBrowserslistConfigFile } from "./resolve-targets.ts";
@@ -25,15 +26,15 @@ import type { PluginAPI, PresetAPI } from "./helpers/config-api.ts";
 // for the plugins and presets so we don't load the plugins/presets unless
 // the options object actually ends up being applicable.
 export type OptionsAndDescriptors = {
-  options: ValidatedOptions;
-  plugins: () => Handler<Array<UnloadedDescriptor<PluginAPI>>>;
-  presets: () => Handler<Array<UnloadedDescriptor<PresetAPI>>>;
+  options: InputOptions;
+  plugins: () => Handler<UnloadedDescriptor<PluginAPI>[]>;
+  presets: () => Handler<UnloadedDescriptor<PresetAPI>[]>;
 };
 
 // Represents a plugin or presets at a given location in a config object.
 // At this point these have been resolved to a specific object or function,
 // but have not yet been executed to call functions with options.
-export interface UnloadedDescriptor<API, Options = object | undefined | false> {
+export interface UnloadedDescriptor<API, Options = object | undefined> {
   name: string | undefined;
   value: object | ((api: API, options: Options, dirname: string) => unknown);
   options: Options;
@@ -65,7 +66,7 @@ function isEqualDescriptor<API>(
 export type ValidatedFile = {
   filepath: string;
   dirname: string;
-  options: ValidatedOptions;
+  options: InputOptions;
 };
 
 // eslint-disable-next-line require-yield
@@ -74,9 +75,9 @@ function* handlerOf<T>(value: T): Handler<T> {
 }
 
 function optionsWithResolvedBrowserslistConfigFile(
-  options: ValidatedOptions,
+  options: InputOptions,
   dirname: string,
-): ValidatedOptions {
+): InputOptions {
   if (typeof options.browserslistConfigFile === "string") {
     options.browserslistConfigFile = resolveBrowserslistConfigFile(
       options.browserslistConfigFile,
@@ -93,7 +94,7 @@ function optionsWithResolvedBrowserslistConfigFile(
  */
 export function createCachedDescriptors(
   dirname: string,
-  options: ValidatedOptions,
+  options: InputOptions,
   alias: string,
 ): OptionsAndDescriptors {
   const { plugins, presets, passPerPreset } = options;
@@ -101,13 +102,11 @@ export function createCachedDescriptors(
     options: optionsWithResolvedBrowserslistConfigFile(options, dirname),
     plugins: plugins
       ? () =>
-          // @ts-expect-error todo(flow->ts) ts complains about incorrect arguments
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
           createCachedPluginDescriptors(plugins, dirname)(alias)
       : () => handlerOf([]),
     presets: presets
       ? () =>
-          // @ts-expect-error todo(flow->ts) ts complains about incorrect arguments
           // eslint-disable-next-line @typescript-eslint/no-use-before-define
           createCachedPresetDescriptors(presets, dirname)(alias)(
             !!passPerPreset,
@@ -122,7 +121,7 @@ export function createCachedDescriptors(
  */
 export function createUncachedDescriptors(
   dirname: string,
-  options: ValidatedOptions,
+  options: InputOptions,
   alias: string,
 ): OptionsAndDescriptors {
   return {
@@ -144,14 +143,17 @@ export function createUncachedDescriptors(
   };
 }
 
-const PRESET_DESCRIPTOR_CACHE = new WeakMap();
+const PRESET_DESCRIPTOR_CACHE = new WeakMap<
+  object | Function,
+  WeakMap<object, UnloadedDescriptor<PresetAPI>[]>
+>();
 const createCachedPresetDescriptors = makeWeakCacheSync(
-  (items: PluginList, cache: CacheConfigurator<string>) => {
-    const dirname = cache.using(dir => dir);
+  (items: PresetItem[], cache?: CacheConfigurator<string>) => {
+    const dirname = cache!.using(dir => dir);
     return makeStrongCacheSync((alias: string) =>
       makeStrongCache(function* (
         passPerPreset: boolean,
-      ): Handler<Array<UnloadedDescriptor<PresetAPI>>> {
+      ): Handler<UnloadedDescriptor<PresetAPI>[]> {
         const descriptors = yield* createPresetDescriptors(
           items,
           dirname,
@@ -169,13 +171,16 @@ const createCachedPresetDescriptors = makeWeakCacheSync(
   },
 );
 
-const PLUGIN_DESCRIPTOR_CACHE = new WeakMap();
+const PLUGIN_DESCRIPTOR_CACHE = new WeakMap<
+  object | Function,
+  WeakMap<object, UnloadedDescriptor<PluginAPI>[]>
+>();
 const createCachedPluginDescriptors = makeWeakCacheSync(
-  (items: PluginList, cache: CacheConfigurator<string>) => {
-    const dirname = cache.using(dir => dir);
+  (items: PluginItem[], cache?: CacheConfigurator<string>) => {
+    const dirname = cache!.using(dir => dir);
     return makeStrongCache(function* (
       alias: string,
-    ): Handler<Array<UnloadedDescriptor<PluginAPI>>> {
+    ): Handler<UnloadedDescriptor<PluginAPI>[]> {
       const descriptors = yield* createPluginDescriptors(items, dirname, alias);
       return descriptors.map(
         // Items are cached using the overall plugin array identity when
@@ -199,10 +204,7 @@ const DEFAULT_OPTIONS = {};
  * next time.
  */
 function loadCachedDescriptor<API>(
-  cache: WeakMap<
-    object | Function,
-    WeakMap<object, Array<UnloadedDescriptor<API>>>
-  >,
+  cache: WeakMap<object | Function, WeakMap<object, UnloadedDescriptor<API>[]>>,
   desc: UnloadedDescriptor<API>,
 ) {
   const { value, options = DEFAULT_OPTIONS } = desc;
@@ -235,11 +237,11 @@ function loadCachedDescriptor<API>(
 }
 
 function* createPresetDescriptors(
-  items: PluginList,
+  items: PresetItem[],
   dirname: string,
   alias: string,
   passPerPreset: boolean,
-): Handler<Array<UnloadedDescriptor<PresetAPI>>> {
+): Handler<UnloadedDescriptor<PresetAPI>[]> {
   return yield* createDescriptors(
     "preset",
     items,
@@ -250,20 +252,22 @@ function* createPresetDescriptors(
 }
 
 function* createPluginDescriptors(
-  items: PluginList,
+  items: PluginItem[],
   dirname: string,
   alias: string,
-): Handler<Array<UnloadedDescriptor<PluginAPI>>> {
+): Handler<UnloadedDescriptor<PluginAPI>[]> {
   return yield* createDescriptors("plugin", items, dirname, alias);
 }
 
-function* createDescriptors<API>(
-  type: "plugin" | "preset",
-  items: PluginList,
+function* createDescriptors<const Type extends "plugin" | "preset">(
+  type: Type,
+  items: Type extends "plugin" ? PluginItem[] : PresetItem[],
   dirname: string,
   alias: string,
   ownPass?: boolean,
-): Handler<Array<UnloadedDescriptor<API>>> {
+): Handler<
+  UnloadedDescriptor<Type extends "plugin" ? PluginAPI : PresetAPI>[]
+> {
   const descriptors = yield* gensync.all(
     items.map((item, index) =>
       createDescriptor(item, dirname, {
@@ -283,7 +287,7 @@ function* createDescriptors<API>(
  * Given a plugin/preset item, resolve it into a standard format.
  */
 export function* createDescriptor<API>(
-  pair: PluginItem,
+  pair: PluginItem | PresetItem,
   dirname: string,
   {
     type,
@@ -302,8 +306,7 @@ export function* createDescriptor<API>(
 
   let name;
   let options;
-  // todo(flow->ts) better type annotation
-  let value: any = pair;
+  let value = pair;
   if (Array.isArray(value)) {
     if (value.length === 3) {
       [value, options, name] = value;
@@ -323,6 +326,7 @@ export function* createDescriptor<API>(
     const resolver = type === "plugin" ? loadPlugin : loadPreset;
     const request = value;
 
+    // @ts-expect-error value must be a PluginItem
     ({ filepath, value } = yield* resolver(value, dirname));
 
     file = {
@@ -335,8 +339,11 @@ export function* createDescriptor<API>(
     throw new Error(`Unexpected falsy value: ${String(value)}`);
   }
 
+  // @ts-expect-error Handle transpiled ES6 modules.
   if (typeof value === "object" && value.__esModule) {
+    // @ts-expect-error Handle transpiled ES6 modules.
     if (value.default) {
+      // @ts-expect-error Handle transpiled ES6 modules.
       value = value.default;
     } else {
       throw new Error("Must export a default export when using ES6 modules.");
@@ -369,7 +376,7 @@ export function* createDescriptor<API>(
   };
 }
 
-function assertNoDuplicates<API>(items: Array<UnloadedDescriptor<API>>): void {
+function assertNoDuplicates<API>(items: UnloadedDescriptor<API>[]): void {
   const map = new Map();
 
   for (const item of items) {

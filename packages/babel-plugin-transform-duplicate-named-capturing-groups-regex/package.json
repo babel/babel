@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-duplicate-named-capturing-groups-regex",
-  "version": "7.25.0",
+  "version": "8.0.1",
   "description": "Compile regular expressions using duplicate named groups to index-based groups.",
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-transform-duplicate-named-capturing-groups-regex",
   "license": "MIT",
@@ -25,33 +25,17 @@
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0"
+    "@babel/core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
-    "core-js": "^3.30.2"
+    "core-js": "catalog:"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": "^22.18.0 || >=24.11.0"
   },
   "author": "The Babel Team (https://babel.dev/team)",
-  "conditions": {
-    "USE_ESM": [
-      null,
-      {
-        "type": "commonjs"
-      }
-    ],
-    "BABEL_8_BREAKING": [
-      {
-        "engines": {
-          "node": "^18.20.0 || ^20.10.0 || >=21.0.0"
-        }
-      },
-      {}
-    ]
-  },
   "exports": {
     ".": {
       "types": "./lib/index.d.ts",

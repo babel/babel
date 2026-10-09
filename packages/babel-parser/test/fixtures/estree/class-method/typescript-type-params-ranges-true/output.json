@@ -1,0 +1,134 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+  "range": [
+    0,
+    33
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+    "range": [
+      0,
+      33
+    ],
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":33,"loc":{"start":{"line":1,"column":0},"end":{"line":4,"column":1}},
+        "range": [
+          0,
+          33
+        ],
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":11,"loc":{"start":{"line":1,"column":6},"end":{"line":1,"column":11},"identifierName":"Class"},
+          "range": [
+            6,
+            11
+          ],
+          "name": "Class",
+          "decorators": [],
+          "optional": false
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":12,"end":33,"loc":{"start":{"line":1,"column":12},"end":{"line":4,"column":1}},
+          "range": [
+            12,
+            33
+          ],
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "start":16,"end":31,"loc":{"start":{"line":2,"column":2},"end":{"line":3,"column":8}},
+              "range": [
+                16,
+                31
+              ],
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":16,"end":22,"loc":{"start":{"line":2,"column":2},"end":{"line":2,"column":8},"identifierName":"method"},
+                "range": [
+                  16,
+                  22
+                ],
+                "name": "method",
+                "decorators": [],
+                "optional": false
+              },
+              "computed": false,
+              "kind": "method",
+              "value": {
+                "type": "FunctionExpression",
+                "start":23,"end":31,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":8}},
+                "range": [
+                  23,
+                  31
+                ],
+                "id": null,
+                "generator": false,
+                "async": false,
+                "expression": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":29,"end":31,"loc":{"start":{"line":3,"column":6},"end":{"line":3,"column":8}},
+                  "range": [
+                    29,
+                    31
+                  ],
+                  "body": []
+                },
+                "declare": false,
+                "typeParameters": {
+                  "type": "TSTypeParameterDeclaration",
+                  "start":23,"end":26,"loc":{"start":{"line":3,"column":0},"end":{"line":3,"column":3}},
+                  "range": [
+                    23,
+                    26
+                  ],
+                  "params": [
+                    {
+                      "type": "TSTypeParameter",
+                      "start":24,"end":25,"loc":{"start":{"line":3,"column":1},"end":{"line":3,"column":2}},
+                      "range": [
+                        24,
+                        25
+                      ],
+                      "name": {
+                        "type": "Identifier",
+                        "start":24,"end":25,"loc":{"start":{"line":3,"column":1},"end":{"line":3,"column":2},"identifierName":"T"},
+                        "range": [
+                          24,
+                          25
+                        ],
+                        "name": "T",
+                        "decorators": [],
+                        "optional": false
+                      },
+                      "const": false,
+                      "in": false,
+                      "out": false
+                    }
+                  ]
+                }
+              },
+              "decorators": [],
+              "override": false,
+              "optional": false
+            }
+          ]
+        },
+        "abstract": false,
+        "declare": false,
+        "decorators": [],
+        "implements": []
+      }
+    ]
+  }
+}

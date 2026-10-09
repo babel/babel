@@ -1,0 +1,93 @@
+{
+  "type": "File",
+  "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+  "errors": [
+    "SyntaxError: `...` is not allowed in `import.defer()`. (1:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+        "expression": {
+          "type": "ImportExpression",
+          "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":52,"index":52}},
+          "phase": "defer",
+          "source": {
+            "type": "SpreadElement",
+            "start":13,"end":51,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":51,"index":51}},
+            "argument": {
+              "type": "ArrayExpression",
+              "start":16,"end":51,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":51,"index":51}},
+              "elements": [
+                {
+                  "type": "StringLiteral",
+                  "start":17,"end":22,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":22,"index":22}},
+                  "extra": {
+                    "rawValue": "foo",
+                    "raw": "\"foo\""
+                  },
+                  "value": "foo"
+                },
+                {
+                  "type": "ObjectExpression",
+                  "start":24,"end":50,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":50,"index":50}},
+                  "properties": [
+                    {
+                      "type": "ObjectProperty",
+                      "start":26,"end":48,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":48,"index":48}},
+                      "method": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start":26,"end":30,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":30,"index":30},"identifierName":"with"},
+                        "name": "with"
+                      },
+                      "computed": false,
+                      "shorthand": false,
+                      "value": {
+                        "type": "ObjectExpression",
+                        "start":32,"end":48,"loc":{"start":{"line":1,"column":32,"index":32},"end":{"line":1,"column":48,"index":48}},
+                        "properties": [
+                          {
+                            "type": "ObjectProperty",
+                            "start":34,"end":46,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":46,"index":46}},
+                            "method": false,
+                            "key": {
+                              "type": "Identifier",
+                              "start":34,"end":38,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":38,"index":38},"identifierName":"type"},
+                              "name": "type"
+                            },
+                            "computed": false,
+                            "shorthand": false,
+                            "value": {
+                              "type": "StringLiteral",
+                              "start":40,"end":46,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":46,"index":46}},
+                              "extra": {
+                                "rawValue": "json",
+                                "raw": "\"json\""
+                              },
+                              "value": "json"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "options": null
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

@@ -5,6 +5,7 @@ import {
   nullLiteral,
   stringLiteral,
   numericLiteral,
+  bigIntLiteral,
   regExpLiteral,
   arrayExpression,
   objectProperty,
@@ -21,8 +22,9 @@ export default valueToNode as {
   (value: string): t.StringLiteral;
   // Infinities and NaN need to use a BinaryExpression; negative values must be wrapped in UnaryExpression
   (value: number): t.NumericLiteral | t.BinaryExpression | t.UnaryExpression;
+  (value: bigint): t.BigIntLiteral;
   (value: RegExp): t.RegExpLiteral;
-  (value: ReadonlyArray<unknown>): t.ArrayExpression;
+  (value: readonly unknown[]): t.ArrayExpression;
 
   // this throws with objects that are not plain objects,
   // or if there are non-valueToNode-able values
@@ -101,10 +103,19 @@ function valueToNode(value: unknown): t.Expression {
     return result;
   }
 
+  // bigints
+  if (typeof value === "bigint") {
+    if (value < 0) {
+      return unaryExpression("-", bigIntLiteral(-value));
+    } else {
+      return bigIntLiteral(value);
+    }
+  }
+
   // regexes
   if (isRegExp(value)) {
     const pattern = value.source;
-    const flags = /\/([a-z]*)$/.exec(value.toString())[1];
+    const flags = /\/([a-z]*)$/.exec(value.toString())![1];
     return regExpLiteral(pattern, flags);
   }
 
@@ -117,9 +128,15 @@ function valueToNode(value: unknown): t.Expression {
   if (isPlainObject(value)) {
     const props = [];
     for (const key of Object.keys(value)) {
-      let nodeKey;
+      let nodeKey,
+        computed = false;
       if (isValidIdentifier(key)) {
-        nodeKey = identifier(key);
+        if (key === "__proto__") {
+          computed = true;
+          nodeKey = stringLiteral(key);
+        } else {
+          nodeKey = identifier(key);
+        }
       } else {
         nodeKey = stringLiteral(key);
       }
@@ -130,6 +147,7 @@ function valueToNode(value: unknown): t.Expression {
             // @ts-expect-error key must present in value
             value[key],
           ),
+          computed,
         ),
       );
     }

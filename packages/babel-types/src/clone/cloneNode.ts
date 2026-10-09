@@ -2,10 +2,7 @@ import { NODE_FIELDS } from "../definitions/index.ts";
 import type * as t from "../index.ts";
 import { isFile, isIdentifier } from "../validators/generated/index.ts";
 
-const { hasOwn } = process.env.BABEL_8_BREAKING
-  ? Object
-  : { hasOwn: Function.call.bind(Object.prototype.hasOwnProperty) };
-
+const { hasOwn } = Object;
 type CommentCache = Map<t.Comment, t.Comment>;
 
 // This function will never be called for comments, only for real nodes.
@@ -39,15 +36,16 @@ function cloneIfNodeOrArray(
  * If the second parameter is `false`, cloneNode performs a shallow clone.
  * If the third parameter is true, the cloned nodes exclude location properties.
  */
-export default function cloneNode<T extends t.Node>(
+export default function cloneNode<T extends t.Node | undefined | null>(
   node: T,
   deep: boolean = true,
   withoutLoc: boolean = false,
 ): T {
+  if (!node) return node;
   return cloneNodeInternal(node, deep, withoutLoc, new Map());
 }
 
-function cloneNodeInternal<T extends t.Node>(
+function cloneNodeInternal<T extends t.Node | undefined | null>(
   node: T,
   deep: boolean = true,
   withoutLoc: boolean = false,
@@ -153,11 +151,11 @@ function cloneNodeInternal<T extends t.Node>(
 }
 
 function maybeCloneComments<T extends t.Comment>(
-  comments: ReadonlyArray<T> | null,
+  comments: readonly T[] | null | undefined,
   deep: boolean,
   withoutLoc: boolean,
   commentsCache: Map<T, T>,
-): ReadonlyArray<T> | null {
+): readonly T[] | null | undefined {
   if (!comments || !deep) {
     return comments;
   }
@@ -169,7 +167,7 @@ function maybeCloneComments<T extends t.Comment>(
 
     const ret = { type, value, loc } as T;
     if (withoutLoc) {
-      ret.loc = null;
+      ret.loc = undefined;
     }
 
     commentsCache.set(comment, ret);

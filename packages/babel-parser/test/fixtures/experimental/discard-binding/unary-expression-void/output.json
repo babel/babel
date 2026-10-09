@@ -1,0 +1,232 @@
+{
+  "type": "File",
+  "start":0,"end":200,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":16,"column":1,"index":200}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":200,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":16,"column":1,"index":200}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":8,"end":200,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":16,"column":1,"index":200}},
+        "expression": {
+          "type": "UnaryExpression",
+          "start":8,"end":200,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":16,"column":1,"index":200}},
+          "operator": "void",
+          "prefix": true,
+          "argument": {
+            "type": "ArrayExpression",
+            "start":13,"end":200,"loc":{"start":{"line":2,"column":5,"index":13},"end":{"line":16,"column":1,"index":200}},
+            "elements": [
+              {
+                "type": "AssignmentExpression",
+                "start":30,"end":198,"loc":{"start":{"line":4,"column":2,"index":30},"end":{"line":15,"column":16,"index":198}},
+                "operator": "=",
+                "left": {
+                  "type": "ArrayPattern",
+                  "start":30,"end":38,"loc":{"start":{"line":4,"column":2,"index":30},"end":{"line":4,"column":10,"index":38}},
+                  "elements": [
+                    {
+                      "type": "VoidPattern",
+                      "start":32,"end":36,"loc":{"start":{"line":4,"column":4,"index":32},"end":{"line":4,"column":8,"index":36}}
+                    }
+                  ]
+                },
+                "right": {
+                  "type": "AssignmentExpression",
+                  "start":41,"end":198,"loc":{"start":{"line":4,"column":13,"index":41},"end":{"line":15,"column":16,"index":198}},
+                  "operator": "=",
+                  "left": {
+                    "type": "ArrayPattern",
+                    "start":41,"end":186,"loc":{"start":{"line":4,"column":13,"index":41},"end":{"line":15,"column":4,"index":186}},
+                    "elements": [
+                      {
+                        "type": "ObjectPattern",
+                        "start":42,"end":185,"loc":{"start":{"line":4,"column":14,"index":42},"end":{"line":15,"column":3,"index":185}},
+                        "properties": [
+                          {
+                            "type": "ObjectProperty",
+                            "start":60,"end":169,"loc":{"start":{"line":6,"column":4,"index":60},"end":{"line":13,"column":5,"index":169}},
+                            "method": false,
+                            "computed": true,
+                            "key": {
+                              "type": "UnaryExpression",
+                              "start":62,"end":69,"loc":{"start":{"line":6,"column":6,"index":62},"end":{"line":6,"column":13,"index":69}},
+                              "operator": "void",
+                              "prefix": true,
+                              "argument": {
+                                "type": "ArrayExpression",
+                                "start":67,"end":69,"loc":{"start":{"line":6,"column":11,"index":67},"end":{"line":6,"column":13,"index":69}},
+                                "elements": []
+                              }
+                            },
+                            "shorthand": false,
+                            "value": {
+                              "type": "AssignmentPattern",
+                              "start":92,"end":169,"loc":{"start":{"line":8,"column":4,"index":92},"end":{"line":13,"column":5,"index":169}},
+                              "left": {
+                                "type": "ArrayPattern",
+                                "start":92,"end":100,"loc":{"start":{"line":8,"column":4,"index":92},"end":{"line":8,"column":12,"index":100}},
+                                "elements": [
+                                  {
+                                    "type": "VoidPattern",
+                                    "start":94,"end":98,"loc":{"start":{"line":8,"column":6,"index":94},"end":{"line":8,"column":10,"index":98}}
+                                  }
+                                ]
+                              },
+                              "right": {
+                                "type": "UnaryExpression",
+                                "start":119,"end":169,"loc":{"start":{"line":10,"column":4,"index":119},"end":{"line":13,"column":5,"index":169}},
+                                "operator": "void",
+                                "prefix": true,
+                                "argument": {
+                                  "type": "ArrayExpression",
+                                  "start":124,"end":169,"loc":{"start":{"line":10,"column":9,"index":124},"end":{"line":13,"column":5,"index":169}},
+                                  "elements": [
+                                    {
+                                      "type": "ArrowFunctionExpression",
+                                      "start":149,"end":163,"loc":{"start":{"line":12,"column":6,"index":149},"end":{"line":12,"column":20,"index":163}},
+                                      "id": null,
+                                      "generator": false,
+                                      "async": false,
+                                      "params": [
+                                        {
+                                          "type": "ArrayPattern",
+                                          "start":150,"end":156,"loc":{"start":{"line":12,"column":7,"index":150},"end":{"line":12,"column":13,"index":156}},
+                                          "elements": [
+                                            {
+                                              "type": "VoidPattern",
+                                              "start":151,"end":155,"loc":{"start":{"line":12,"column":8,"index":151},"end":{"line":12,"column":12,"index":155}}
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "body": {
+                                        "type": "ArrayExpression",
+                                        "start":161,"end":163,"loc":{"start":{"line":12,"column":18,"index":161},"end":{"line":12,"column":20,"index":163}},
+                                        "elements": []
+                                      },
+                                      "leadingComments": [
+                                        {
+                                          "type": "CommentLine",
+                                          "value": " pattern",
+                                          "start":132,"end":142,"loc":{"start":{"line":11,"column":6,"index":132},"end":{"line":11,"column":16,"index":142}}
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                "leadingComments": [
+                                  {
+                                    "type": "CommentLine",
+                                    "value": " expr",
+                                    "start":107,"end":114,"loc":{"start":{"line":9,"column":4,"index":107},"end":{"line":9,"column":11,"index":114}}
+                                  }
+                                ]
+                              },
+                              "leadingComments": [
+                                {
+                                  "type": "CommentLine",
+                                  "value": " pattern",
+                                  "start":77,"end":87,"loc":{"start":{"line":7,"column":4,"index":77},"end":{"line":7,"column":14,"index":87}}
+                                }
+                              ]
+                            },
+                            "trailingComments": [
+                              {
+                                "type": "CommentLine",
+                                "value": " expr",
+                                "start":174,"end":181,"loc":{"start":{"line":14,"column":4,"index":174},"end":{"line":14,"column":11,"index":181}}
+                              }
+                            ],
+                            "leadingComments": [
+                              {
+                                "type": "CommentLine",
+                                "value": " expr",
+                                "start":48,"end":55,"loc":{"start":{"line":5,"column":4,"index":48},"end":{"line":5,"column":11,"index":55}}
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "right": {
+                    "type": "ArrayExpression",
+                    "start":189,"end":198,"loc":{"start":{"line":15,"column":7,"index":189},"end":{"line":15,"column":16,"index":198}},
+                    "elements": [
+                      {
+                        "type": "UnaryExpression",
+                        "start":190,"end":197,"loc":{"start":{"line":15,"column":8,"index":190},"end":{"line":15,"column":15,"index":197}},
+                        "operator": "void",
+                        "prefix": true,
+                        "argument": {
+                          "type": "ArrayExpression",
+                          "start":195,"end":197,"loc":{"start":{"line":15,"column":13,"index":195},"end":{"line":15,"column":15,"index":197}},
+                          "elements": []
+                        }
+                      }
+                    ]
+                  }
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentLine",
+                    "value": " pattern",
+                    "start":17,"end":27,"loc":{"start":{"line":3,"column":2,"index":17},"end":{"line":3,"column":12,"index":27}}
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " expr",
+            "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}}
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " expr",
+      "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " pattern",
+      "start":17,"end":27,"loc":{"start":{"line":3,"column":2,"index":17},"end":{"line":3,"column":12,"index":27}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " expr",
+      "start":48,"end":55,"loc":{"start":{"line":5,"column":4,"index":48},"end":{"line":5,"column":11,"index":55}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " pattern",
+      "start":77,"end":87,"loc":{"start":{"line":7,"column":4,"index":77},"end":{"line":7,"column":14,"index":87}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " expr",
+      "start":107,"end":114,"loc":{"start":{"line":9,"column":4,"index":107},"end":{"line":9,"column":11,"index":114}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " pattern",
+      "start":132,"end":142,"loc":{"start":{"line":11,"column":6,"index":132},"end":{"line":11,"column":16,"index":142}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " expr",
+      "start":174,"end":181,"loc":{"start":{"line":14,"column":4,"index":174},"end":{"line":14,"column":11,"index":181}}
+    }
+  ]
+}

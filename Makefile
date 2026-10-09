@@ -1,6 +1,6 @@
-FLOW_COMMIT = 105ad30f566f401db9cafcb49cd2831fb29e87c5
-TEST262_COMMIT = ea11e0e78739b2be9fd2f49787955b9c2bf54bcc
-TYPESCRIPT_COMMIT = d87d0adcd30ac285393bf3bfbbb4d94d50c4f3c9
+FLOW_COMMIT = ce660230358806c4d210ad24c170b02f5395bfce
+TEST262_COMMIT = 2e0a56762801e275a9fdf96dc49d90ba0cddcf63
+TYPESCRIPT_COMMIT = 2dfdbbabae955186f821925c629a37d8df76bab2
 
 SOURCES = packages codemods eslint
 
@@ -14,10 +14,10 @@ NODE := $(YARN) node
 MAKEJS := node Makefile.js
 
 
-.PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap use-esm use-cjs
+.PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
-Makefile.js: Makefile.source.mjs yarn.lock
-	$(NODE) ./scripts/pack-script.js
+Makefile.js: Makefile.source.ts yarn.lock .yarn/install-state.gz
+	$(NODE) ./scripts/pack-script.ts
 
 build:
 	$(MAKEJS) build
@@ -33,6 +33,9 @@ generate-tsconfig:
 
 generate-type-helpers:
 	$(MAKEJS) generate-type-helpers
+
+bundle-babel-parser-dts:
+	$(MAKEJS) bundle-babel-parser-dts
 
 build-flow-typings:
 	$(MAKEJS) build-flow-typings
@@ -70,7 +73,7 @@ lint-ci:
 	$(MAKEJS) lint-ci
 
 generate-readme:
-	$(NODE) scripts/generators/readmes.js
+	$(NODE) scripts/generators/readmes.ts
 
 lint:
 	$(MAKEJS) lint
@@ -103,17 +106,17 @@ prepublish-build:
 prepublish:
 	$(MAKEJS) prepublish
 
+prepublish-no-lint:
+	$(MAKEJS) prepublish-no-lint
+
+prepublish-no-test:
+	$(MAKEJS) prepublish-no-test
+
 bootstrap-only:
 	$(MAKEJS) bootstrap-only
 
 bootstrap:
 	$(MAKEJS) bootstrap
-
-use-cjs:
-	$(MAKEJS) use-cjs
-
-use-esm:
-	$(MAKEJS) use-esm
 
 clean-lib:
 	$(MAKEJS) clean-lib
@@ -129,6 +132,7 @@ clean-all:
 
 
 build-no-bundle-ci: bootstrap-only
+	$(MAKE) bundle-babel-parser-dts
 	$(YARN) gulp build-dev
 	$(MAKE) build-flow-typings
 	$(MAKE) build-dist
@@ -193,37 +197,12 @@ new-version-checklist:
 new-version:
 	$(MAKEJS) new-version
 
-new-babel-8-version:
-	$(MAKEJS) new-babel-8-version
-
-new-babel-8-version-create-commit:
-	$(MAKEJS) new-babel-8-version-create-commit
-
-new-babel-8-version-create-commit-ci:
-	$(MAKEJS) new-babel-8-version-create-commit-ci
-
-# NOTE: Run make new-version first
-publish:
-	@echo "Please confirm you have stopped make watch. (y)es, [N]o:"; \
-	read CLEAR; \
-	if [ "_$$CLEAR" != "_y" ]; then \
-		exit 1; \
-	fi
-	$(MAKE) prepublish
-ifeq ("$(BABEL_8_BREAKING)", "true")
-	USE_ESM=true $(YARN) release-tool publish --tag next
-else
-	$(YARN) release-tool publish
-endif
-	$(MAKE) clean
-
 publish-test:
 ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
 	echo "You probably don't know what you are doing"
 	exit 1
 endif
 	$(YARN) release-tool version $(VERSION) --all --yes --tag-version-prefix="version-e2e-test-"
-	$(MAKE) prepublish
-	node ./scripts/set-module-type.js clean
+	$(MAKE) prepublish-no-test
 	YARN_NPM_PUBLISH_REGISTRY=http://localhost:4873 $(YARN) release-tool publish --yes --tag-version-prefix="version-e2e-test-"
 	$(MAKE) clean

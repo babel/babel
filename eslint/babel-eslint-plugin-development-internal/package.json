@@ -1,8 +1,8 @@
 {
   "name": "@babel/eslint-plugin-development-internal",
-  "version": "7.25.2",
+  "version": "8.0.6",
   "description": "The Babel Team's ESLint custom rules plugin. Since it's internal, it might not respect semver.",
-  "main": "./lib/index.cjs",
+  "main": "./lib/index.js",
   "keywords": [
     "babel",
     "eslint",
@@ -16,11 +16,19 @@
   },
   "homepage": "https://github.com/babel/babel/tree/master/eslint/babel-eslint-plugin-development-internal",
   "peerDependencies": {
-    "@babel/eslint-parser": ">=7.11.0",
-    "eslint": ">=7.5.0"
+    "eslint": "^9.0.0 || ^10.0.0",
+    "eslint-plugin-import": "^2.31.0"
   },
   "devDependencies": {
-    "eslint": "^9.7.0"
+    "eslint": "catalog:babel-eslint",
+    "eslint-plugin-import": "catalog:babel-eslint"
   },
-  "type": "module"
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  }
 }

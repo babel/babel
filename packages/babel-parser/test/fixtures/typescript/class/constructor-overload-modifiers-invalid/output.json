@@ -1,0 +1,193 @@
+{
+  "type": "File",
+  "start":0,"end":158,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":158}},
+  "errors": [
+    "SyntaxError: A parameter property is only allowed in a constructor implementation. (2:16)",
+    "SyntaxError: A parameter property is only allowed in a constructor implementation. (2:34)",
+    "SyntaxError: A parameter property is only allowed in a constructor implementation. (3:16)",
+    "SyntaxError: A parameter property is only allowed in a constructor implementation. (3:37)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":158,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":158}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":158,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":158}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":158,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":5,"column":1,"index":158}},
+          "body": [
+            {
+              "type": "TSDeclareMethod",
+              "start":14,"end":63,"loc":{"start":{"line":2,"column":4,"index":14},"end":{"line":2,"column":53,"index":63}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":14,"end":25,"loc":{"start":{"line":2,"column":4,"index":14},"end":{"line":2,"column":15,"index":25},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "TSParameterProperty",
+                  "start":26,"end":42,"loc":{"start":{"line":2,"column":16,"index":26},"end":{"line":2,"column":32,"index":42}},
+                  "accessibility": "public",
+                  "parameter": {
+                    "type": "Identifier",
+                    "start":33,"end":42,"loc":{"start":{"line":2,"column":23,"index":33},"end":{"line":2,"column":32,"index":42},"identifierName":"x"},
+                    "name": "x",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":34,"end":42,"loc":{"start":{"line":2,"column":24,"index":34},"end":{"line":2,"column":32,"index":42}},
+                      "typeAnnotation": {
+                        "type": "TSNumberKeyword",
+                        "start":36,"end":42,"loc":{"start":{"line":2,"column":26,"index":36},"end":{"line":2,"column":32,"index":42}}
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "TSParameterProperty",
+                  "start":44,"end":61,"loc":{"start":{"line":2,"column":34,"index":44},"end":{"line":2,"column":51,"index":61}},
+                  "accessibility": "private",
+                  "parameter": {
+                    "type": "Identifier",
+                    "start":52,"end":61,"loc":{"start":{"line":2,"column":42,"index":52},"end":{"line":2,"column":51,"index":61},"identifierName":"y"},
+                    "name": "y",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":53,"end":61,"loc":{"start":{"line":2,"column":43,"index":53},"end":{"line":2,"column":51,"index":61}},
+                      "typeAnnotation": {
+                        "type": "TSNumberKeyword",
+                        "start":55,"end":61,"loc":{"start":{"line":2,"column":45,"index":55},"end":{"line":2,"column":51,"index":61}}
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "TSDeclareMethod",
+              "start":68,"end":121,"loc":{"start":{"line":3,"column":4,"index":68},"end":{"line":3,"column":57,"index":121}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":68,"end":79,"loc":{"start":{"line":3,"column":4,"index":68},"end":{"line":3,"column":15,"index":79},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "TSParameterProperty",
+                  "start":80,"end":99,"loc":{"start":{"line":3,"column":16,"index":80},"end":{"line":3,"column":35,"index":99}},
+                  "accessibility": "protected",
+                  "parameter": {
+                    "type": "Identifier",
+                    "start":90,"end":99,"loc":{"start":{"line":3,"column":26,"index":90},"end":{"line":3,"column":35,"index":99},"identifierName":"x"},
+                    "name": "x",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":91,"end":99,"loc":{"start":{"line":3,"column":27,"index":91},"end":{"line":3,"column":35,"index":99}},
+                      "typeAnnotation": {
+                        "type": "TSStringKeyword",
+                        "start":93,"end":99,"loc":{"start":{"line":3,"column":29,"index":93},"end":{"line":3,"column":35,"index":99}}
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "TSParameterProperty",
+                  "start":101,"end":119,"loc":{"start":{"line":3,"column":37,"index":101},"end":{"line":3,"column":55,"index":119}},
+                  "readonly": true,
+                  "parameter": {
+                    "type": "Identifier",
+                    "start":110,"end":119,"loc":{"start":{"line":3,"column":46,"index":110},"end":{"line":3,"column":55,"index":119},"identifierName":"y"},
+                    "name": "y",
+                    "typeAnnotation": {
+                      "type": "TSTypeAnnotation",
+                      "start":111,"end":119,"loc":{"start":{"line":3,"column":47,"index":111},"end":{"line":3,"column":55,"index":119}},
+                      "typeAnnotation": {
+                        "type": "TSStringKeyword",
+                        "start":113,"end":119,"loc":{"start":{"line":3,"column":49,"index":113},"end":{"line":3,"column":55,"index":119}}
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "ClassMethod",
+              "start":126,"end":156,"loc":{"start":{"line":4,"column":4,"index":126},"end":{"line":4,"column":34,"index":156}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":126,"end":137,"loc":{"start":{"line":4,"column":4,"index":126},"end":{"line":4,"column":15,"index":137},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start":138,"end":144,"loc":{"start":{"line":4,"column":16,"index":138},"end":{"line":4,"column":22,"index":144},"identifierName":"x"},
+                  "name": "x",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":139,"end":144,"loc":{"start":{"line":4,"column":17,"index":139},"end":{"line":4,"column":22,"index":144}},
+                    "typeAnnotation": {
+                      "type": "TSAnyKeyword",
+                      "start":141,"end":144,"loc":{"start":{"line":4,"column":19,"index":141},"end":{"line":4,"column":22,"index":144}}
+                    }
+                  }
+                },
+                {
+                  "type": "Identifier",
+                  "start":146,"end":152,"loc":{"start":{"line":4,"column":24,"index":146},"end":{"line":4,"column":30,"index":152},"identifierName":"y"},
+                  "name": "y",
+                  "typeAnnotation": {
+                    "type": "TSTypeAnnotation",
+                    "start":147,"end":152,"loc":{"start":{"line":4,"column":25,"index":147},"end":{"line":4,"column":30,"index":152}},
+                    "typeAnnotation": {
+                      "type": "TSAnyKeyword",
+                      "start":149,"end":152,"loc":{"start":{"line":4,"column":27,"index":149},"end":{"line":4,"column":30,"index":152}}
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":154,"end":156,"loc":{"start":{"line":4,"column":32,"index":154},"end":{"line":4,"column":34,"index":156}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

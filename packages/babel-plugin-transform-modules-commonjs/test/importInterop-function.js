@@ -1,7 +1,7 @@
 import * as babel from "@babel/core";
 import transformCommonjs from "../lib/index.js";
 import externalHelpers from "@babel/plugin-external-helpers";
-import path from "path";
+import path from "node:path";
 
 describe("'importInterop'", () => {
   function transform(code, importInterop, filename) {
@@ -34,11 +34,11 @@ describe("'importInterop'", () => {
     };
 
     expect(transform(code, importInterop)).toMatchInlineSnapshot(`
-      "\\"use strict\\";
+      ""use strict";
 
-      var _a = babelHelpers.interopRequireDefault(require(\\"a\\"));
-      var _b = require(\\"b\\");
-      var _c = require(\\"c\\");
+      var _a = babelHelpers.interopRequireDefault(require("a"));
+      var _b = require("b");
+      var _c = require("c");
       (0, _a.default)();
       _b();
       (0, _c.default)();"

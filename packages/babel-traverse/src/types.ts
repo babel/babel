@@ -1,5 +1,5 @@
 import type * as t from "@babel/types";
-import type { NodePath } from "./index.ts";
+import type { NodePath, Scope } from "./index.ts";
 import type { VirtualTypeAliases } from "./path/lib/virtual-types.ts";
 import type {
   ExplVisitorBase,
@@ -20,8 +20,7 @@ export interface ExplVisitNode<S, P extends t.Node> {
 }
 
 export interface ExplodedVisitor<S = unknown>
-  extends ExplVisitorBase<S>,
-    ExplVisitNode<S, t.Node> {
+  extends ExplVisitorBase<S>, ExplVisitNode<S, t.Node> {
   _exploded: true;
   _verified: true;
 }
@@ -52,24 +51,50 @@ interface VisitorVirtualAliases<S> {
 
 // TODO: Do not export this? Or give it a better name?
 export interface VisitorBase<S>
-  extends VisitNodeObject<S, t.Node>,
+  extends
+    VisitNodeObject<S, t.Node>,
     VisitorBaseNodes<S>,
     VisitorBaseAliases<S>,
-    VisitorVirtualAliases<S> {
-  // Babel supports `NodeTypesWithoutComment | NodeTypesWithoutComment | ... ` but it is
-  // too complex for TS. So we type it as a general visitor only if the key contains `|`
-  // this is good enough for non-visitor traverse options e.g. `noScope`
-  [k: `${string}|${string}`]: VisitNode<S, t.Node>;
-}
+    VisitorVirtualAliases<S>,
+    // Babel supports `NodeTypesWithoutComment | NodeTypesWithoutComment | ... ` but it is
+    // too complex for TS. So we type it as a general visitor only if the key contains `|`
+    // this is good enough for non-visitor traverse options e.g. `noScope`
+    Record<`${string}|${string}`, VisitNode<S, t.Node>> {}
 
 export type Visitor<S = unknown> = VisitorBase<S> | ExplodedVisitor<S>;
 
 export type VisitNode<S, P extends t.Node> =
-  | VisitNodeFunction<S, P>
-  | VisitNodeObject<S, P>;
+  VisitNodeFunction<S, P> | VisitNodeObject<S, P>;
 
 export type VisitNodeFunction<S, P extends t.Node> = (
   this: S,
   path: NodePath<P>,
   state: S,
 ) => void;
+
+type Split<S extends string> = S extends `${infer L}|${infer R}`
+  ? L | Split<R>
+  : S;
+
+type ToNode<S extends string, N = Split<S>> = N extends keyof t.Aliases
+  ? t.Aliases[N]
+  : N extends keyof VirtualTypeAliases
+    ? VirtualTypeAliases[N]
+    : Extract<t.Node, { type: N }>;
+
+type OptionKeys = keyof TraverseOptions;
+
+type VisitNodeObjectKeys = keyof VisitNodeObject<unknown, t.Node>;
+
+export type VisitorProp<S, K extends string> = K extends OptionKeys
+  ? TraverseOptions[K]
+  : K extends VisitNodeObjectKeys
+    ? VisitNodeObject<S, t.Node>[K]
+    : VisitNode<S, ToNode<K>>;
+
+export type TraverseOptions = {
+  scope?: Scope;
+  noScope?: boolean;
+  denylist?: string[];
+  shouldSkip?: (node: NodePath) => boolean;
+};

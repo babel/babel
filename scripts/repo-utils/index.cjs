@@ -1,57 +1,59 @@
+// NOTE: This file must be runnable on all Node.js version
 /* eslint-disable no-undef */
+/* eslint-disable unicorn/prefer-node-protocol */
+// @ts-check
 
 const path = require("path");
-const { readFileSync } = require("fs");
 const { fileURLToPath } = require("url");
 const { createRequire } = require("module");
-const semver = require("semver");
+const { isGreaterThanOrEqual, isLessThan, satisfies } = require("verkit");
 
-let USE_ESM = false;
-try {
-  const type = readFileSync(
-    path.join(__dirname, "../../.module-type"),
-    "utf-8"
-  ).trim();
-  USE_ESM = type === "module";
-} catch (_) {}
-
+// env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
 function bool(value) {
   return Boolean(value) && value !== "false" && value !== "0";
 }
-exports.USE_ESM = USE_ESM;
-exports.IS_BABEL_8 = () => bool(process.env.BABEL_8_BREAKING);
+
+exports.repoRoot = path.resolve(__dirname, "../../");
+
+exports.IS_BABEL_9 = () => bool(process.env.BABEL_9_BREAKING);
 
 if (typeof jest !== "undefined") {
   const dummy = () => {};
   dummy.only = dummy.skip = dummy;
+  dummy.each = () => dummy;
   exports.itDummy = dummy;
-  exports.itNoESM = USE_ESM ? dummy : it;
-  exports.itESM = USE_ESM ? it : dummy;
-  exports.itGteESM = function (version) {
-    return USE_ESM && semver.gte(process.version, version) ? it : dummy;
-  };
-  exports.itGteNoESM = function (version) {
-    return !USE_ESM && semver.gte(process.version, version) ? it : dummy;
-  };
+  exports.itBabel8 = bool(process.env.BABEL_9_BREAKING) ? dummy : it;
+  exports.itBabel9 = bool(process.env.BABEL_9_BREAKING) ? it : dummy;
   exports.itGte = function (version) {
-    return semver.gte(process.version, version) ? it : dummy;
+    return isGreaterThanOrEqual(process.version, version) ? it : dummy;
+  };
+  exports.itLt = function (version) {
+    return isLessThan(process.version, version) ? it : dummy;
+  };
+  exports.itSatisfies = function (version) {
+    return satisfies(process.version, version) ? it : dummy;
+  };
+  exports.itNegate = function (jestIt) {
+    return jestIt === dummy ? it : dummy;
   };
   exports.itNoWin32 = process.platform === "win32" ? dummy : it;
-  exports.itBabel8 = process.env.BABEL_8_BREAKING ? it : dummy;
-  exports.itBabel7 = process.env.BABEL_8_BREAKING ? dummy : it;
-  exports.itBabel7NoESM = process.env.BABEL_8_BREAKING
+  exports.describeBabel8 = bool(process.env.BABEL_9_BREAKING)
     ? dummy
-    : exports.itNoESM;
-  exports.itBabel7GteNoESM = function (version) {
-    return process.env.BABEL_8_BREAKING ? dummy : exports.itGteNoESM(version);
-  };
-  exports.describeESM = USE_ESM ? describe : dummy;
-  exports.describeBabel7 = process.env.BABEL_8_BREAKING ? dummy : describe;
-  exports.describeBabel7NoESM = USE_ESM ? dummy : exports.describeBabel7;
-  exports.describeBabel8 = process.env.BABEL_8_BREAKING ? describe : dummy;
+    : describe;
+  exports.describeBabel9 = bool(process.env.BABEL_9_BREAKING)
+    ? describe
+    : dummy;
   exports.describeGte = function (version) {
-    return semver.gte(process.version, version) ? describe : describe.skip;
+    return isGreaterThanOrEqual(process.version, version)
+      ? describe
+      : describe.skip;
   };
+  exports.describeSatisfies = function (version) {
+    return satisfies(process.version, version) ? describe : describe.skip;
+  };
+  exports.describeNoCITGM = __dirname.includes("citgm_tmp")
+    ? describe.skip
+    : describe;
 }
 
 exports.commonJS = function (metaUrl) {

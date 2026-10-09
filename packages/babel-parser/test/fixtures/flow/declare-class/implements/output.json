@@ -19,7 +19,7 @@
         "extends": [],
         "implements": [
           {
-            "type": "InterfaceExtends",
+            "type": "ClassImplements",
             "start":27,"end":28,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":28,"index":28}},
             "id": {
               "type": "Identifier",

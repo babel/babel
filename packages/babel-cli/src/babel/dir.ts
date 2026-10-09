@@ -1,6 +1,6 @@
 import slash from "slash";
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
 
 import * as util from "./util.ts";
 import * as watcher from "./watcher.ts";
@@ -54,20 +54,20 @@ export default async function ({
         if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
           outputMap = "external";
         } else if (babelOptions.sourceMaps == null) {
-          outputMap = util.hasDataSourcemap(res.code) ? "external" : "both";
+          outputMap = util.hasDataSourcemap(res.code!) ? "external" : "both";
         }
 
         if (outputMap) {
           const mapLoc = dest + ".map";
           if (outputMap === "external") {
-            res.code = util.addSourceMappingUrl(res.code, mapLoc);
+            res.code = util.addSourceMappingUrl(res.code!, mapLoc);
           }
           res.map.file = path.basename(relative);
           outputFileSync(mapLoc, JSON.stringify(res.map));
         }
       }
 
-      outputFileSync(dest, res.code);
+      outputFileSync(dest, res.code!);
       util.chmod(src, dest);
 
       if (cliOptions.verbose) {
@@ -153,7 +153,7 @@ export default async function ({
     startTime = null;
   }, 100);
 
-  if (cliOptions.watch) watcher.enable({ enableGlobbing: true });
+  if (cliOptions.watch) watcher.enable();
 
   if (!cliOptions.skipInitialBuild) {
     if (cliOptions.deleteDirOnStart) {
@@ -192,14 +192,14 @@ export default async function ({
     } else {
       // A map from absolute compiled file path to its base, from which
       // the output destination will be determined
-      const filenameToBaseMap: Map<string, string> = new Map(
+      const filenameToBaseMap = new Map<string, string>(
         filenames.map(filename => {
           const absoluteFilename = path.resolve(filename);
           return [absoluteFilename, path.dirname(filename)];
         }),
       );
 
-      const absoluteFilenames: Map<string, string> = new Map(
+      const absoluteFilenames = new Map<string, string>(
         filenames.map(filename => {
           const absoluteFilename = path.resolve(filename);
           return [absoluteFilename, filename];
@@ -237,7 +237,7 @@ export default async function ({
 
       try {
         const written = await Promise.all(
-          filenames.map(filename => handleFile(filename, getBase(filename))),
+          filenames.map(filename => handleFile(filename, getBase(filename)!)),
         );
 
         compiledFiles += written.filter(Boolean).length;

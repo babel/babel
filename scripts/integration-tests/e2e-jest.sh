@@ -42,7 +42,7 @@ startLocalRegistry "$root"/verdaccio-config.yml
 yarn install --no-immutable
 yarn dedupe '@babel/*'
 
-if [ "$BABEL_8_BREAKING" = true ] ; then
+# Babel 8 adjustments
   # This option is removed in Babel 8
   sed -i 's/allowDeclareFields: true,\?/\/* allowDeclareFields: true *\//g' babel.config.js
 
@@ -62,18 +62,17 @@ if [ "$BABEL_8_BREAKING" = true ] ; then
     pkg.resolutions['@types/babel__traverse/@babel/types'] = 'latest';
     fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
   "
-fi
 
 sed -i 's/"skipLibCheck": false,/"skipLibCheck": true,/g' tsconfig.json # Speedup
 
 yarn build
 
-# Temporarily ignore this test that is failing due to source maps changes in
-# Babel 7.21.0.
 # Re-enable it once Jest updates their snapshots to the latest Babel version.
-rm -f packages/jest-transform/src/__tests__/ScriptTransformer.test.ts
-rm -f packages/jest-transform/src/__tests__/__snapshots__/ScriptTransformer.test.ts.snap
+rm -f e2e/__tests__/transform.test.ts
+rm -f e2e/__tests__/__snapshots__/transform.test.ts.snap
 
+# Suppress REQUIRE_ESM warning from Node.js 22.12
+export NODE_OPTIONS="--disable-warning=ExperimentalWarning"
 # The full test suite takes about 20mins on CircleCI. We run only a few of them
 # to speed it up.
 # The goals of this e2e test are:
@@ -82,5 +81,6 @@ rm -f packages/jest-transform/src/__tests__/__snapshots__/ScriptTransformer.test
 CI=true yarn jest --color --maxWorkers=2 --config jest.config.mjs packages
 CI=true yarn jest --color --maxWorkers=2 --config jest.config.mjs e2e/__tests__/babel
 CI=true yarn jest --color --maxWorkers=2 --config jest.config.mjs e2e/__tests__/transform
+unset NODE_OPTIONS
 
 cleanup

@@ -13,11 +13,12 @@ import type {
   Mapping,
 } from "@jridgewell/gen-mapping";
 
-import {
-  type SourceMapInput,
-  originalPositionFor,
-  TraceMap,
+import type {
+  InvalidOriginalMapping,
+  OriginalMapping,
+  SourceMapInput,
 } from "@jridgewell/trace-mapping";
+import { originalPositionFor, TraceMap } from "@jridgewell/trace-mapping";
 
 /**
  * Build a sourcemap.
@@ -36,7 +37,7 @@ export default class SourceMap {
   // inits to an impossible value. So init to 0 is fine.
   private _lastSourceColumn = 0;
 
-  public _inputMap: TraceMap;
+  public _inputMap: TraceMap | null = null;
 
   constructor(
     opts: {
@@ -44,7 +45,7 @@ export default class SourceMap {
       sourceRoot?: string;
       inputSourceMap?: SourceMapInput;
     },
-    code: string | { [sourceFileName: string]: string },
+    code: string | Record<string, string> | null | undefined,
   ) {
     const map = (this._map = new GenMapping({ sourceRoot: opts.sourceRoot }));
     this._sourceFileName = opts.sourceFileName?.replace(/\\/g, "/");
@@ -58,6 +59,7 @@ export default class SourceMap {
           setSourceContent(
             map,
             resolvedSources[i],
+            // @ts-expect-error FIXME: this._inputMap.sourcesContent?.[i] may be undefined, which is not acceptable by setSourceContent
             this._inputMap.sourcesContent?.[i],
           );
         }
@@ -65,13 +67,13 @@ export default class SourceMap {
     }
 
     if (typeof code === "string" && !opts.inputSourceMap) {
-      setSourceContent(map, this._sourceFileName, code);
+      setSourceContent(map, this._sourceFileName!, code);
     } else if (typeof code === "object") {
-      for (const sourceFileName of Object.keys(code)) {
+      for (const sourceFileName of Object.keys(code!)) {
         setSourceContent(
           map,
           sourceFileName.replace(/\\/g, "/"),
-          code[sourceFileName],
+          code![sourceFileName],
         );
       }
     }
@@ -81,11 +83,17 @@ export default class SourceMap {
    * Get the sourcemap.
    */
   get(): EncodedSourceMap {
-    return toEncodedMap(this._map);
+    const encoded = toEncodedMap(this._map);
+    // TODO(Babel 9): Remove this fallback.
+    encoded.ignoreList ??= [];
+    return encoded;
   }
 
   getDecoded(): DecodedSourceMap {
-    return toDecodedMap(this._map);
+    const decoded = toDecodedMap(this._map);
+    // TODO(Babel 9): Remove this fallback.
+    decoded.ignoreList ??= [];
+    return decoded;
   }
 
   getRawMappings(): Mapping[] {
@@ -99,34 +107,38 @@ export default class SourceMap {
 
   mark(
     generated: { line: number; column: number },
-    line: number,
-    column: number,
+    generatedIdentifierName: string | null,
+    line?: number,
+    column?: number,
     identifierName?: string | null,
     identifierNamePos?: { line: number; column: number },
     filename?: string | null,
   ) {
     this._rawMappings = undefined;
 
-    let originalMapping: {
-      source: string | null;
-      name?: string | null;
-      line: number | null;
-      column: number | null;
-    };
+    let originalMapping: OriginalMapping | InvalidOriginalMapping | undefined;
 
     if (line != null) {
       if (this._inputMap) {
         // This is the lookup for this mark
         originalMapping = originalPositionFor(this._inputMap, {
           line,
-          column,
+          column: column!,
         });
 
-        // If the we found a name, nothing else needs to be done
-        // Maybe we're marking a `(` and the input map already had a name attached there,
-        // or we're marking a `(` and the sourcemap spanned a `foo(`,
-        // or we're marking an identifier, etc.
-        if (!originalMapping.name && identifierNamePos) {
+        // Prefer the original name from the input sourcemap when marking an
+        // identifier token at the same column, or when marking a related
+        // token such as `(` via identifierNamePos.
+        if (
+          originalMapping.name &&
+          (identifierNamePos ||
+            (identifierName != null && originalMapping.column === column))
+        ) {
+          identifierName = originalMapping.name;
+        } else if (identifierNamePos) {
+          // Maybe we're marking a `(` and the input map already had a name attached there,
+          // or we're marking a `(` and the sourcemap spanned a `foo(`,
+          // or we're marking an identifier, etc.
           // We're trying to mark a `(` (as that's the only thing that provides
           // an identifierNamePos currently), and we the AST had an identifier attached.
           // Lookup it's original name.
@@ -140,13 +152,19 @@ export default class SourceMap {
         }
       } else {
         originalMapping = {
-          source: filename?.replace(/\\/g, "/") || this._sourceFileName,
+          name: null,
+          source: filename?.replace(/\\/g, "/") || this._sourceFileName!,
           line: line,
-          column: column,
+          column: column!,
         };
       }
     }
 
+    if (identifierName != null && identifierName === generatedIdentifierName) {
+      identifierName = null;
+    }
+
+    // @ts-expect-error FIXME: original cannot be InvalidOriginalMapping
     maybeAddMapping(this._map, {
       name: identifierName,
       generated,

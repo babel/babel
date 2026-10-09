@@ -1,32 +1,33 @@
-export type Pos = {
-  start: number;
-};
-
 // These are used when `options.locations` is on, for the
 // `startLoc` and `endLoc` properties.
 
 export class Position {
-  line: number;
-  column: number;
-  index: number;
+  declare line: number;
+  declare column: number;
+  declare index: number;
 
-  constructor(line: number, col: number, index: number) {
+  constructor(line: number, col: number, index?: number) {
+    // The following three lines will give a huge performance boost.
+    this.line = undefined!;
+    this.column = undefined!;
+    if (index !== undefined) this.index = undefined!;
+
     this.line = line;
     this.column = col;
-    this.index = index;
+    if (index !== undefined) this.index = index;
   }
 }
 
 export class SourceLocation {
   start: Position;
   end: Position;
-  filename: string;
+  filename: string | undefined;
   identifierName: string | undefined | null;
 
   constructor(start: Position, end?: Position) {
     this.start = start;
     // (may start as null, but initialized later)
-    this.end = end;
+    this.end = end!;
   }
 }
 

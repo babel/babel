@@ -1,4 +1,4 @@
-import { basename, extname } from "path";
+import { basename, extname } from "node:path";
 import type { types as t, NodePath } from "@babel/core";
 
 import { isIdentifierName } from "@babel/helper-validator-identifier";
@@ -53,8 +53,8 @@ export interface SourceModuleMetadata {
   referenced: boolean;
 }
 
-export interface LocalExportMetadata {
-  names: Array<string>; // names of exports,
+interface LocalExportMetadata {
+  names: string[]; // names of exports,
   kind: "import" | "hoisted" | "block" | "var";
 }
 
@@ -111,7 +111,7 @@ function resolveImportInterop(
  */
 export default function normalizeModuleAndLoadMetadata(
   programPath: NodePath<t.Program>,
-  exportName: string,
+  exportName: string | undefined,
   {
     importInterop,
     initializeReexports = false,
@@ -126,8 +126,8 @@ export default function normalizeModuleAndLoadMetadata(
       metadata: SourceModuleMetadata,
       importNodes: t.Node[],
     ) => unknown;
-    esNamespaceOnly: boolean;
-    filename: string;
+    esNamespaceOnly: boolean | undefined;
+    filename: string | undefined;
   },
 ): ModuleMetadata {
   if (!exportName) {
@@ -287,20 +287,20 @@ function getModuleMetadata(
 
         // @ts-expect-error lazy is not listed in the type.
         // This is needed for compatibility with older version of the commonjs
-        // plusing.
-        // TODO(Babel 8): Remove this
+        // plugins.
+        // TODO(Babel 9): Remove this
         get lazy() {
           return this.wrap === "lazy";
         },
 
         referenced: false,
       };
-      sourceData.set(source, data);
+      sourceData.set(source, data!);
       importNodes.set(source, [node]);
     } else {
-      importNodes.get(source).push(node);
+      importNodes.get(source)!.push(node);
     }
-    return data;
+    return data!;
   };
   let hasExports = false;
   programPath.get("body").forEach(child => {
@@ -433,7 +433,7 @@ function getModuleMetadata(
       metadata.wrap = getWrapperPayload(
         source,
         metadata,
-        importNodes.get(source),
+        importNodes.get(source)!,
       );
     }
   }
@@ -456,7 +456,10 @@ function getLocalExportMetadata(
 ): Map<string, LocalExportMetadata> {
   const bindingKindLookup = new Map();
 
-  programPath.get("body").forEach((child: NodePath) => {
+  const programScope = programPath.scope;
+  const programChildren = programPath.get("body");
+
+  programChildren.forEach((child: NodePath) => {
     let kind: ModuleBindingKind;
     if (child.isImportDeclaration()) {
       kind = "import";
@@ -466,14 +469,11 @@ function getLocalExportMetadata(
       }
       if (child.isExportNamedDeclaration()) {
         if (child.node.declaration) {
-          child = child.get("declaration");
-        } else if (
-          initializeReexports &&
-          child.node.source &&
-          child.get("source").isStringLiteral()
-        ) {
+          child = child.get("declaration") as NodePath;
+        } else if (initializeReexports && child.node.source) {
           child.get("specifiers").forEach(spec => {
             assertExportSpecifier(spec);
+            // @ts-expect-error FIXME: local may be StringLiteral
             bindingKindLookup.set(spec.get("local").node.name, "block");
           });
           return;
@@ -504,7 +504,12 @@ function getLocalExportMetadata(
     let metadata = localMetadata.get(localName);
 
     if (!metadata) {
-      const kind = bindingKindLookup.get(localName);
+      // If localName is not found in the bindingKindLookup generated
+      // from top level declarations, it could be a reference to a var
+      // declaration defined within block statement or switch case
+      const kind: ModuleBindingKind =
+        bindingKindLookup.get(localName) ??
+        (programScope.getBinding(localName)?.kind as "var" | undefined);
 
       if (kind === undefined) {
         throw idPath.buildCodeFrameError(
@@ -521,7 +526,7 @@ function getLocalExportMetadata(
     return metadata;
   };
 
-  programPath.get("body").forEach(child => {
+  programChildren.forEach(child => {
     if (
       child.isExportNamedDeclaration() &&
       (initializeReexports || !child.node.source)
@@ -539,7 +544,7 @@ function getLocalExportMetadata(
         });
       } else {
         child.get("specifiers").forEach(spec => {
-          const local = spec.get("local");
+          const local = spec.get("local") as NodePath<t.Identifier>;
           const exported = spec.get("exported");
           const localMetadata = getLocalMetadata(local);
           const exportName = getExportSpecifierName(exported, stringSpecifiers);
@@ -556,7 +561,9 @@ function getLocalExportMetadata(
         declaration.isFunctionDeclaration() ||
         declaration.isClassDeclaration()
       ) {
-        getLocalMetadata(declaration.get("id")).names.push("default");
+        getLocalMetadata(
+          declaration.get("id") as NodePath<t.Identifier>,
+        ).names.push("default");
       } else {
         // These should have been removed by the nameAnonymousExports() call.
         throw declaration.buildCodeFrameError(
@@ -575,12 +582,7 @@ function nameAnonymousExports(programPath: NodePath<t.Program>) {
   // Name anonymous exported locals.
   programPath.get("body").forEach(child => {
     if (!child.isExportDefaultDeclaration()) return;
-    if (!process.env.BABEL_8_BREAKING && !USE_ESM && !IS_STANDALONE) {
-      // polyfill when being run by an older Babel version
-      child.splitExportDeclaration ??=
-        // eslint-disable-next-line no-restricted-globals
-        require("@babel/traverse").NodePath.prototype.splitExportDeclaration;
-    }
+
     child.splitExportDeclaration();
   });
 }

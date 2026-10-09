@@ -8,7 +8,9 @@ Using targets:
 Using modules transform: auto
 
 Using plugins:
+  transform-explicit-resource-management { ie }
   transform-duplicate-named-capturing-groups-regex { ie }
+  transform-regexp-modifiers { ie }
   transform-unicode-sets-regex { ie }
   transform-class-static-block { ie }
   transform-private-property-in-object { ie }
@@ -48,7 +50,5 @@ Using plugins:
   transform-new-target { ie }
   transform-regenerator { ie }
   transform-export-namespace-from { ie }
-  transform-modules-commonjs
-  transform-dynamic-import
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.

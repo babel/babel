@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of the React source tree.
  */
 
-const scriptTypes = ["text/jsx", "text/babel"];
+const scriptTypes = new Set(["text/jsx", "text/babel"]);
 
 import type { transform } from "./index.ts";
 import type { InputOptions } from "@babel/core";
@@ -14,9 +14,11 @@ import type { InputOptions } from "@babel/core";
 let headEl: HTMLHeadElement;
 let inlineScriptCount = 0;
 
+type Browsers = string | readonly string[];
+
 type CompilationResult = {
   async: boolean;
-  type: string;
+  type?: string;
   error: boolean;
   loaded: boolean;
   content: string | null;
@@ -24,8 +26,9 @@ type CompilationResult = {
   // nonce is undefined in browsers that don't support the nonce global attribute
   nonce: string | undefined;
   // todo: refine plugins/presets
-  plugins: InputOptions["plugins"];
-  presets: InputOptions["presets"];
+  plugins?: InputOptions["plugins"];
+  presets?: InputOptions["presets"];
+  targets?: Browsers;
   url: string | null;
 };
 
@@ -47,44 +50,51 @@ function transformCode(
     }
   }
 
-  return transformFn(script.content, buildBabelOptions(script, source)).code;
+  return transformFn(script.content!, buildBabelOptions(script, source))!.code!;
 }
 
 /**
  * Builds the Babel options for transforming the specified script, using some
  * sensible default presets and plugins if none were explicitly provided.
  */
-function buildBabelOptions(script: CompilationResult, filename: string) {
+function buildBabelOptions(
+  script: CompilationResult,
+  filename: string,
+): InputOptions {
   let presets = script.presets;
   if (!presets) {
     if (script.type === "module") {
       presets = [
-        "react",
+        ["react", { runtime: "classic" }],
         [
           "env",
           {
-            targets: {
-              esmodules: true,
-            },
             modules: false,
           },
         ],
       ];
     } else {
-      presets = ["react", "env"];
+      presets = [["react", { runtime: "classic" }], "env"];
     }
+  }
+
+  const plugins = script.plugins;
+
+  const targets: InputOptions["targets"] = {
+    browsers: script.targets,
+  };
+
+  if (script.type === "module") {
+    targets.esmodules = true;
   }
 
   return {
     filename,
     presets,
-    plugins: script.plugins || [
-      "transform-class-properties",
-      "transform-object-rest-spread",
-      "transform-flow-strip-types",
-    ],
+    plugins,
     sourceMaps: "inline" as const,
     sourceFileName: filename,
+    targets,
   };
 }
 
@@ -136,9 +146,9 @@ function load(
 /**
  * Converts a comma-separated data attribute string into an array of values. If
  * the string is empty, returns an empty array. If the string is not defined,
- * returns null.
+ * returns undefined.
  */
-function getPluginsOrPresetsFromScript(
+function parseFromScriptAttribute(
   script: HTMLScriptElement,
   attributeName: string,
 ) {
@@ -150,7 +160,7 @@ function getPluginsOrPresetsFromScript(
   if (!rawValue) {
     // Any other falsy value (null, undefined) means we're not overriding this
     // setting, and should use the default.
-    return null;
+    return undefined;
   }
   return rawValue.split(",").map(item => item.trim());
 }
@@ -185,12 +195,13 @@ function loadScripts(
     const result: CompilationResult = {
       // script.async is always true for non-JavaScript script tags
       async: script.hasAttribute("async"),
-      type: script.getAttribute("data-type"),
+      type: script.getAttribute("data-type") ?? undefined,
       nonce: script.nonce,
       error: false,
       executed: false,
-      plugins: getPluginsOrPresetsFromScript(script, "data-plugins"),
-      presets: getPluginsOrPresetsFromScript(script, "data-presets"),
+      plugins: parseFromScriptAttribute(script, "data-plugins"),
+      presets: parseFromScriptAttribute(script, "data-presets"),
+      targets: parseFromScriptAttribute(script, "data-targets"),
       loaded: false,
       url: null,
       content: null,
@@ -238,10 +249,10 @@ export function runScripts(
   // Array.prototype.slice cannot be used on NodeList on IE8
   const jsxScripts = [];
   for (let i = 0; i < scripts.length; i++) {
-    const script = scripts.item(i);
+    const script = scripts.item(i)!;
     // Support the old type="text/jsx;harmony=true"
     const type = script.type.split(";")[0];
-    if (scriptTypes.includes(type)) {
+    if (scriptTypes.has(type)) {
       jsxScripts.push(script);
     }
   }

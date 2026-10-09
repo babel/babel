@@ -1,6 +1,6 @@
-import buildDebug from "debug";
-import nodeFs from "fs";
-import path from "path";
+import { createDebug } from "obug";
+import nodeFs from "node:fs";
+import path from "node:path";
 import json5 from "json5";
 import gensync from "gensync";
 import type { Handler } from "gensync";
@@ -17,11 +17,12 @@ import ConfigError from "../../errors/config-error.ts";
 
 import * as fs from "../../gensync-utils/fs.ts";
 
-import { createRequire } from "module";
+import { createRequire } from "node:module";
 import { endHiddenCallStack } from "../../errors/rewrite-stack-trace.ts";
+import { isAsync } from "../../gensync-utils/async.ts";
 const require = createRequire(import.meta.url);
 
-const debug = buildDebug("babel:config:loading:files:configuration");
+const debug = createDebug("babel:config:loading:files:configuration");
 
 export const ROOT_CONFIG_FILENAMES = [
   "babel.config.js",
@@ -29,6 +30,8 @@ export const ROOT_CONFIG_FILENAMES = [
   "babel.config.mjs",
   "babel.config.json",
   "babel.config.cts",
+  "babel.config.ts",
+  "babel.config.mts",
 ];
 const RELATIVE_CONFIG_FILENAMES = [
   ".babelrc",
@@ -53,11 +56,11 @@ const runConfig = makeWeakCache(function* runConfig(
   options: InputOptions | null;
   cacheNeedsConfiguration: boolean;
 }> {
-  // @ts-expect-error - if we want to make it possible to use async configs
+  // if we want to make it possible to use async configs
   yield* [];
 
   return {
-    options: endHiddenCallStack(options as any as (api: ConfigAPI) => unknown)(
+    options: endHiddenCallStack(options as any as (api: ConfigAPI) => any)(
       makeConfigAPI(cache),
     ),
     cacheNeedsConfiguration: !cache.configured(),
@@ -72,8 +75,12 @@ function* readConfigCode(
 
   let options = yield* loadCodeDefault(
     filepath,
+    (yield* isAsync()) ? "auto" : "require",
     "You appear to be using a native ECMAScript module configuration " +
-      "file, which is only supported when running Babel asynchronously.",
+      "file, which is only supported when running Babel asynchronously " +
+      "or when using the Node.js `--experimental-require-module` flag.",
+    "You appear to be using a configuration file that contains top-level " +
+      "await, which is only supported when running Babel asynchronously.",
   );
 
   let cacheNeedsConfiguration = false;
@@ -88,11 +95,9 @@ function* readConfigCode(
     );
   }
 
-  // @ts-expect-error todo(flow->ts)
-  if (typeof options.then === "function") {
-    // @ts-expect-error We use ?. in case options is a thenable but not a promise
-    options.catch?.(() => {});
-
+  if (typeof (options as any).then === "function") {
+    // We use ?. in case options is a thenable but not a promise
+    (options as any).catch?.(() => {});
     throw new ConfigError(
       `You appear to be using an async configuration, ` +
         `which your current version of Babel does not support. ` +
@@ -138,9 +143,9 @@ function buildConfigFileObject(
 
 const packageToBabelConfig = makeWeakCacheSync(
   (file: ConfigFile): ConfigFile | null => {
-    const babel: unknown = file.options["babel"];
+    const babel: unknown = file.options.babel;
 
-    if (typeof babel === "undefined") return null;
+    if (babel === undefined) return null;
 
     if (typeof babel !== "object" || Array.isArray(babel) || babel === null) {
       throw new ConfigError(`.babel property must be an object`, file.filepath);
@@ -174,7 +179,7 @@ const readConfigJSON5 = makeStaticFileCache((filepath, content): ConfigFile => {
     throw new ConfigError(`Expected config object but found array`, filepath);
   }
 
-  delete options["$schema"];
+  delete options.$schema;
 
   return {
     filepath,
@@ -187,11 +192,11 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   const ignoreDir = path.dirname(filepath);
   const ignorePatterns = content
     .split("\n")
-    .map<string>(line => line.replace(/#.*$/, "").trim())
-    .filter(line => !!line);
+    .map(line => line.replace(/^#.*$/, "").trim())
+    .filter(Boolean);
 
   for (const pattern of ignorePatterns) {
-    if (pattern[0] === "!") {
+    if (pattern.startsWith("!")) {
       throw new ConfigError(
         `Negation of file paths is not supported.`,
         filepath,
@@ -334,7 +339,9 @@ function readConfig(
     case ".js":
     case ".cjs":
     case ".mjs":
+    case ".ts":
     case ".cts":
+    case ".mts":
       return readConfigCode(filepath, { envName, caller });
     default:
       return readConfigJSON5(filepath);
@@ -347,7 +354,7 @@ export function* resolveShowConfigPath(
   const targetPath = process.env.BABEL_SHOW_CONFIG_FOR;
   if (targetPath != null) {
     const absolutePath = path.resolve(dirname, targetPath);
-    const stats = yield* fs.stat(absolutePath);
+    const stats = (yield* fs.stat(absolutePath))!;
     if (!stats.isFile()) {
       throw new Error(
         `${absolutePath}: BABEL_SHOW_CONFIG_FOR must refer to a regular file, directories are not supported.`,

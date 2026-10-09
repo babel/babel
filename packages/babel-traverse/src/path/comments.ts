@@ -10,7 +10,7 @@ import {
  * Share comments amongst siblings.
  */
 
-export function shareCommentsWithSiblings(this: NodePath) {
+export function shareCommentsWithSiblings(this: NodePath<t.Node | null>) {
   // NOTE: this assumes numbered keys
   if (typeof this.key === "string") return;
 
@@ -21,10 +21,10 @@ export function shareCommentsWithSiblings(this: NodePath) {
   const leading = node.leadingComments;
   if (!trailing && !leading) return;
 
-  const prev = this.getSibling(this.key - 1);
-  const next = this.getSibling(this.key + 1);
-  const hasPrev = Boolean(prev.node);
-  const hasNext = Boolean(next.node);
+  const prev = this.getSibling(this.key! - 1);
+  const next = this.getSibling(this.key! + 1);
+  const hasPrev = !!prev.node;
+  const hasNext = !!next.node;
 
   if (hasPrev) {
     if (leading) {
@@ -46,7 +46,7 @@ export function shareCommentsWithSiblings(this: NodePath) {
   }
 }
 
-function removeIfExisting<T>(list: T[], toRemove?: T[]): T[] {
+function removeIfExisting<T>(list: T[], toRemove?: T[] | null): T[] {
   if (!toRemove?.length) return list;
   const set = new Set(toRemove);
   return list.filter(el => {

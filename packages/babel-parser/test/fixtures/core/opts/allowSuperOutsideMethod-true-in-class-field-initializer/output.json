@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":52}},
+  "errors": [
+    "SyntaxError: `super()` is only valid inside a class constructor of a subclass. Maybe a typo in the method name ('constructor') or not extending another class? (2:13)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":52}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":52,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":52}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":13,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":13,"index":13},"identifierName":"Derived"},
+          "name": "Derived"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":22,"end":26,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":26,"index":26},"identifierName":"Base"},
+          "name": "Base"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":27,"end":52,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":3,"column":1,"index":52}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":31,"end":50,"loc":{"start":{"line":2,"column":2,"index":31},"end":{"line":2,"column":21,"index":50}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":31,"end":39,"loc":{"start":{"line":2,"column":2,"index":31},"end":{"line":2,"column":10,"index":39},"identifierName":"property"},
+                "name": "property"
+              },
+              "computed": false,
+              "value": {
+                "type": "CallExpression",
+                "start":42,"end":49,"loc":{"start":{"line":2,"column":13,"index":42},"end":{"line":2,"column":20,"index":49}},
+                "callee": {
+                  "type": "Super",
+                  "start":42,"end":47,"loc":{"start":{"line":2,"column":13,"index":42},"end":{"line":2,"column":18,"index":47}}
+                },
+                "arguments": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

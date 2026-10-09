@@ -14,7 +14,10 @@ export default function isType(
 /**
  * Test if a `nodeType` is a `targetType` or if `targetType` is an alias of `nodeType`.
  */
-export default function isType(nodeType: string, targetType: string): boolean {
+export default function isType(
+  nodeType: string | null | undefined,
+  targetType: string,
+): boolean {
   if (nodeType === targetType) return true;
 
   // If nodeType is nullish, it can't be an alias of targetType.
@@ -25,14 +28,8 @@ export default function isType(nodeType: string, targetType: string): boolean {
   // @ts-expect-error targetType may not index ALIAS_KEYS
   if (ALIAS_KEYS[targetType]) return false;
 
-  const aliases: Array<string> | undefined = FLIPPED_ALIAS_KEYS[targetType];
-  if (aliases) {
-    if (aliases[0] === nodeType) return true;
-
-    for (const alias of aliases) {
-      if (nodeType === alias) return true;
-    }
-  }
+  const aliases: string[] | undefined = FLIPPED_ALIAS_KEYS[targetType];
+  if (aliases?.includes(nodeType)) return true;
 
   return false;
 }

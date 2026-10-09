@@ -73,4 +73,4 @@ export default {
       "The `sourceMapTarget` option has been removed because it makes more sense for the tooling " +
       "that calls Babel to assign `map.file` themselves.",
   },
-} as { [name: string]: { version?: number; message: string } };
+} as Record<string, { version?: number; message: string }>;

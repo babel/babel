@@ -7,9 +7,27 @@ describe("builders", function () {
         expect(
           t.tsLiteralType(t.unaryExpression("-", t.numericLiteral(1))),
         ).toMatchSnapshot();
+      });
+
+      it("accepts unary expression with bigint literal", function () {
         expect(
-          t.tsLiteralType(t.unaryExpression("-", t.bigIntLiteral("123456789"))),
-        ).toMatchSnapshot();
+          t.tsLiteralType(
+            t.unaryExpression("-", t.bigIntLiteral(BigInt("123456789"))),
+          ),
+        ).toMatchInlineSnapshot(`
+          {
+            "literal": {
+              "argument": {
+                "type": "BigIntLiteral",
+                "value": 123456789n,
+              },
+              "operator": "-",
+              "prefix": true,
+              "type": "UnaryExpression",
+            },
+            "type": "TSLiteralType",
+          }
+        `);
       });
       it("throws with non-numeric argument", function () {
         expect(() => {

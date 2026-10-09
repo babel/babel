@@ -1,0 +1,44 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+        "exportKind": "value",
+        "specifiers": [],
+        "source": null,
+        "attributes": [],
+        "declaration": {
+          "type": "TSModuleDeclaration",
+          "start":7,"end":28,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":28,"index":28}},
+          "kind": "namespace",
+          "id": {
+            "type": "Placeholder",
+            "start":17,"end":24,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":24,"index":24}},
+            "name": {
+              "type": "Identifier",
+              "start":19,"end":22,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":22,"index":22},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "expectedNode": "Identifier"
+          },
+          "body": {
+            "type": "TSModuleBlock",
+            "start":25,"end":28,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":28,"index":28}},
+            "body": []
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

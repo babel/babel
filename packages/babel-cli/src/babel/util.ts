@@ -1,7 +1,6 @@
-import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
-import path from "path";
-import fs from "fs";
+import path from "node:path";
+import fs from "node:fs";
 
 import * as watcher from "./watcher.ts";
 
@@ -25,51 +24,31 @@ export function readdir(
   dirname: string,
   includeDotfiles: boolean,
   filter?: ReaddirFilter,
-): Array<string> {
-  if (process.env.BABEL_8_BREAKING) {
-    return (
-      fs
-        .readdirSync(dirname, { recursive: true, withFileTypes: true })
-        .filter(dirent => {
-          // exclude directory entries from readdir results
-          if (dirent.isDirectory()) return false;
-          const filename = dirent.name;
-          return (
-            (includeDotfiles || filename[0] !== ".") &&
-            (!filter || filter(filename))
-          );
-        })
-        .map(dirent => path.join(dirent.path, dirent.name))
-        // readdirSyncRecursive conducts BFS, sort the entries so we can match the DFS behaviour of fs-readdir-recursive
-        // https://github.com/nodejs/node/blob/d6b12f5b77e35c58a611d614cf0aac674ec2c3ed/lib/fs.js#L1421
-        .sort(alphasort)
-    );
-  } else {
-    return readdirRecursive(
-      "",
-      (filename, index, currentDirectory) => {
-        const stat = fs.statSync(path.join(currentDirectory, filename));
-
-        // ensure we recurse into .* folders
-        if (stat.isDirectory()) return true;
-
+): string[] {
+  return (
+    fs
+      .readdirSync(dirname, { recursive: true, withFileTypes: true })
+      .filter(dirent => {
+        // exclude directory entries from readdir results
+        if (dirent.isDirectory()) return false;
+        const filename = dirent.name;
         return (
-          (includeDotfiles || filename[0] !== ".") &&
+          (includeDotfiles || !filename.startsWith(".")) &&
           (!filter || filter(filename))
         );
-      },
-      // @ts-expect-error improve @types/fs-readdir-recursive typings
-      [],
-      dirname,
-    );
-  }
+      })
+      .map(dirent => path.join(dirent.parentPath, dirent.name))
+      // readdirSyncRecursive conducts BFS, sort the entries so we can match the DFS behaviour of fs-readdir-recursive
+      // https://github.com/nodejs/node/blob/d6b12f5b77e35c58a611d614cf0aac674ec2c3ed/lib/fs.js#L1421
+      .sort(alphasort)
+  );
 }
 
 export function readdirForCompilable(
   dirname: string,
   includeDotfiles: boolean,
-  altExts?: Array<string>,
-): Array<string> {
+  altExts?: string[],
+): string[] {
   return readdir(dirname, includeDotfiles, function (filename) {
     return isCompilableExtension(filename, altExts);
   });
@@ -96,21 +75,29 @@ export function hasDataSourcemap(code: string): boolean {
   return pos !== -1 && code.lastIndexOf("//# sourceMappingURL") < pos;
 }
 
-const CALLER = {
+const REPL_CALLER = {
+  name: "@babel/cli",
+  supportsStaticESM: false,
+  supportsDynamicImport: false,
+  supportsExportNamespaceFrom: false,
+};
+
+const COMPILE_CALLER = {
   name: "@babel/cli",
 };
 
 export function transformRepl(filename: string, code: string, opts: any) {
   opts = {
     ...opts,
-    caller: CALLER,
+    sourceMaps: opts.sourceMaps === "inline" ? true : opts.sourceMaps,
+    caller: REPL_CALLER,
     filename,
   };
 
   return new Promise<FileResult>((resolve, reject) => {
     babel.transform(code, opts, (err, result) => {
       if (err) reject(err);
-      else resolve(result);
+      else resolve(result!);
     });
   });
 }
@@ -118,22 +105,12 @@ export function transformRepl(filename: string, code: string, opts: any) {
 export async function compile(filename: string, opts: InputOptions) {
   opts = {
     ...opts,
-    caller: CALLER,
+    caller: COMPILE_CALLER,
   };
 
-  const result = process.env.BABEL_8_BREAKING
-    ? await babel.transformFileAsync(filename, opts)
-    : await new Promise<FileResult>((resolve, reject) => {
-        babel.transformFile(filename, opts, (err, result) => {
-          if (err) reject(err);
-          else resolve(result);
-        });
-      });
+  const result = await babel.transformFileAsync(filename, opts);
 
   if (result) {
-    if (!process.env.BABEL_8_BREAKING) {
-      if (!result.externalDependencies) return result;
-    }
     watcher.updateExternalDependencies(filename, result.externalDependencies);
   }
 

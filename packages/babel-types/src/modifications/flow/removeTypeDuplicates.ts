@@ -17,7 +17,7 @@ function getQualifiedName(node: t.GenericTypeAnnotation["id"]): string {
  * Dedupe type annotations.
  */
 export default function removeTypeDuplicates(
-  nodesIn: ReadonlyArray<t.FlowType | false | null | undefined>,
+  nodesIn: readonly (t.FlowType | false | null | undefined)[],
 ): t.FlowType[] {
   const nodes = Array.from(nodesIn);
 
@@ -61,16 +61,14 @@ export default function removeTypeDuplicates(
       const name = getQualifiedName(node.id);
 
       if (generics.has(name)) {
-        let existing: t.Flow = generics.get(name);
-        if (existing.typeParameters) {
+        const existingTypeParameters = generics.get(name)!.typeParameters;
+        if (existingTypeParameters) {
           if (node.typeParameters) {
-            existing.typeParameters.params.push(...node.typeParameters.params);
-            existing.typeParameters.params = removeTypeDuplicates(
-              existing.typeParameters.params,
+            existingTypeParameters.params.push(...node.typeParameters.params);
+            existingTypeParameters.params = removeTypeDuplicates(
+              existingTypeParameters.params,
             );
           }
-        } else {
-          existing = node.typeParameters;
         }
       } else {
         generics.set(name, node);

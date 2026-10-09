@@ -1,11 +1,13 @@
+/* eslint-disable unicorn/prefer-node-protocol */
 const fs = require("fs");
 const path = require("path");
 
-const runtimePath = path.resolve(__dirname, "../../packages/babel-runtime");
-const runtimeCorejs3Path = path.resolve(
-  __dirname,
-  "../../packages/babel-runtime-corejs3"
-);
+const runtimePath = path
+  .resolve(__dirname, "../../packages/babel-runtime")
+  .replace(/\\/g, "/");
+const runtimeCorejs3Path = path
+  .resolve(__dirname, "../../packages/babel-runtime-corejs3")
+  .replace(/\\/g, "/");
 const input = path.resolve(__dirname, "src");
 
 for (const file of fs.readdirSync(input)) {

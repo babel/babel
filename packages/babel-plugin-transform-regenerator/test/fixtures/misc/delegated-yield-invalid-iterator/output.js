@@ -1,15 +1,14 @@
 // #15177
 var _Symbol$iterator = {
-    [Symbol.iterator]: /*#__PURE__*/babelHelpers.regeneratorRuntime().mark(function _callee() {
-      return babelHelpers.regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) switch (_context.prev = _context.next) {
+    [Symbol.iterator]: /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
+      return babelHelpers.regenerator().w(function (_context) {
+        while (1) switch (_context.n) {
           case 0:
-            return _context.delegateYield({
+            return _context.d(babelHelpers.regeneratorValues({
               [Symbol.iterator]: x => []
-            }, "t0", 1);
+            }), 1);
           case 1:
-          case "end":
-            return _context.stop();
+            return _context.a(2);
         }
       }, _callee);
     })

@@ -1,6 +1,7 @@
 /*:: declare var invariant; */
 
-import type { Options } from "../options.ts";
+import type { OptionsWithDefaults } from "../options.ts";
+import { OptionFlags } from "../options.ts";
 import {
   Position,
   SourceLocation,
@@ -18,11 +19,8 @@ import {
   type TokenType,
 } from "./types.ts";
 import type { TokContext } from "./context.ts";
-import {
-  Errors,
-  type ParseError,
-  type ParseErrorConstructor,
-} from "../parse-error.ts";
+import type { ParseError } from "../parse-error.ts";
+import { Errors, type ParseErrorConstructor } from "../parse-error.ts";
 import {
   lineBreakG,
   isNewLine,
@@ -44,7 +42,7 @@ import {
   type StringContentsErrorHandlers,
 } from "@babel/helper-string-parser";
 
-import type { Plugin } from "../typings.ts";
+import type { Plugin } from "../typings.d.ts";
 
 function buildPosition(pos: number, lineStart: number, curLine: number) {
   return new Position(curLine, pos - lineStart, pos);
@@ -67,10 +65,11 @@ const VALID_REGEX_FLAGS = new Set([
 
 export class Token {
   constructor(state: State) {
+    const startIndex = state.startIndex || 0;
     this.type = state.type;
     this.value = state.value;
-    this.start = state.start;
-    this.end = state.end;
+    this.start = startIndex + state.start;
+    this.end = startIndex + state.end;
     this.loc = new SourceLocation(state.startLoc, state.endLoc);
   }
 
@@ -81,15 +80,17 @@ export class Token {
   declare loc: SourceLocation;
 }
 
+let locDataCache: Uint32Array | undefined;
+
 // ## Tokenizer
 
 export default abstract class Tokenizer extends CommentsParser {
   isLookahead: boolean;
 
   // Token store.
-  tokens: Array<Token | N.Comment> = [];
+  tokens: (Token | N.Comment)[] = [];
 
-  constructor(options: Options, input: string) {
+  constructor(options: OptionsWithDefaults, input: string) {
     super();
     this.state = new State();
     this.state.init(options);
@@ -97,6 +98,44 @@ export default abstract class Tokenizer extends CommentsParser {
     this.length = input.length;
     this.comments = [];
     this.isLookahead = false;
+
+    if (process.env.IS_PUBLISH) {
+      if (!locDataCache || locDataCache.length < (this.length + 1) * 2) {
+        locDataCache = new Uint32Array((this.length + 1) * 2);
+      }
+    } else {
+      locDataCache = new Uint32Array((this.length + 1) * 2);
+      locDataCache.fill(4294967295);
+    }
+
+    this.locData = locDataCache;
+  }
+
+  setLoc(loc: Position) {
+    const dataIndex = this.offsetToSourcePos(loc.index);
+    this.locData[dataIndex * 2] = loc.line;
+    this.locData[dataIndex * 2 + 1] = loc.column;
+  }
+
+  getLoc(locIndex: number): Position {
+    const dataIndex = this.offsetToSourcePos(locIndex);
+    if (!process.env.IS_PUBLISH) {
+      if (
+        this.locData[dataIndex * 2] === 4294967295 ||
+        this.locData[dataIndex * 2 + 1] === 4294967295
+      ) {
+        throw new Error(
+          "Attempted to get location data for an index that has not been set",
+        );
+      }
+    }
+
+    const loc = new Position(
+      this.locData[dataIndex * 2],
+      this.locData[dataIndex * 2 + 1],
+      locIndex,
+    );
+    return loc;
   }
 
   pushToken(token: Token | N.Comment) {
@@ -111,7 +150,7 @@ export default abstract class Tokenizer extends CommentsParser {
 
   next(): void {
     this.checkKeywordEscapes();
-    if (this.options.tokens) {
+    if (this.optionFlags & OptionFlags.Tokens) {
       this.pushToken(new Token(this.state));
     }
 
@@ -193,7 +232,11 @@ export default abstract class Tokenizer extends CommentsParser {
   }
 
   lookaheadCharCode(): number {
-    return this.input.charCodeAt(this.nextTokenStart());
+    return this.lookaheadCharCodeSince(this.state.pos);
+  }
+
+  lookaheadCharCodeSince(pos: number): number {
+    return this.input.charCodeAt(this.nextTokenStartSince(pos));
   }
 
   /**
@@ -303,11 +346,12 @@ export default abstract class Tokenizer extends CommentsParser {
     const comment: N.CommentBlock = {
       type: "CommentBlock",
       value: this.input.slice(start + 2, end),
-      start,
-      end: end + commentEnd.length,
-      loc: new SourceLocation(startLoc, this.state.curPosition()),
+      start: this.sourceToOffsetPos(start),
+      end: this.sourceToOffsetPos(end + commentEnd.length),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      loc: new SourceLocation(startLoc!, this.state.curPosition()),
     };
-    if (this.options.tokens) this.pushToken(comment);
+    if (this.optionFlags & OptionFlags.Tokens) this.pushToken(comment);
     return comment;
   }
 
@@ -332,11 +376,12 @@ export default abstract class Tokenizer extends CommentsParser {
     const comment: N.CommentLine = {
       type: "CommentLine",
       value,
-      start,
-      end,
-      loc: new SourceLocation(startLoc, this.state.curPosition()),
+      start: this.sourceToOffsetPos(start),
+      end: this.sourceToOffsetPos(end),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      loc: new SourceLocation(startLoc!, this.state.curPosition()),
     };
-    if (this.options.tokens) this.pushToken(comment);
+    if (this.optionFlags & OptionFlags.Tokens) this.pushToken(comment);
     return comment;
   }
 
@@ -345,7 +390,8 @@ export default abstract class Tokenizer extends CommentsParser {
 
   skipSpace(): void {
     const spaceStart = this.state.pos;
-    const comments = [];
+    const attachComment = (this.optionFlags & OptionFlags.AttachComment) > 0;
+    let comments: N.Comment[] | undefined;
     loop: while (this.state.pos < this.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
@@ -375,7 +421,9 @@ export default abstract class Tokenizer extends CommentsParser {
               const comment = this.skipBlockComment("*/");
               if (comment !== undefined) {
                 this.addComment(comment);
-                if (this.options.attachComment) comments.push(comment);
+                if (attachComment) {
+                  (comments ??= []).push(comment);
+                }
               }
               break;
             }
@@ -384,7 +432,9 @@ export default abstract class Tokenizer extends CommentsParser {
               const comment = this.skipLineComment(2);
               if (comment !== undefined) {
                 this.addComment(comment);
-                if (this.options.attachComment) comments.push(comment);
+                if (attachComment) {
+                  (comments ??= []).push(comment);
+                }
               }
               break;
             }
@@ -400,7 +450,7 @@ export default abstract class Tokenizer extends CommentsParser {
           } else if (
             ch === charCodes.dash &&
             !this.inModule &&
-            this.options.annexB
+            this.optionFlags & OptionFlags.AnnexB
           ) {
             const pos = this.state.pos;
             if (
@@ -412,7 +462,9 @@ export default abstract class Tokenizer extends CommentsParser {
               const comment = this.skipLineComment(3);
               if (comment !== undefined) {
                 this.addComment(comment);
-                if (this.options.attachComment) comments.push(comment);
+                if (attachComment) {
+                  (comments ??= []).push(comment);
+                }
               }
             } else {
               break loop;
@@ -420,7 +472,7 @@ export default abstract class Tokenizer extends CommentsParser {
           } else if (
             ch === charCodes.lessThan &&
             !this.inModule &&
-            this.options.annexB
+            this.optionFlags & OptionFlags.AnnexB
           ) {
             const pos = this.state.pos;
             if (
@@ -432,7 +484,9 @@ export default abstract class Tokenizer extends CommentsParser {
               const comment = this.skipLineComment(4);
               if (comment !== undefined) {
                 this.addComment(comment);
-                if (this.options.attachComment) comments.push(comment);
+                if (attachComment) {
+                  (comments ??= []).push(comment);
+                }
               }
             } else {
               break loop;
@@ -443,12 +497,12 @@ export default abstract class Tokenizer extends CommentsParser {
       }
     }
 
-    if (comments.length > 0) {
+    if (comments?.length) {
       const end = this.state.pos;
       const commentWhitespace: CommentWhitespace = {
-        start: spaceStart,
-        end,
-        comments,
+        start: this.sourceToOffsetPos(spaceStart),
+        end: this.sourceToOffsetPos(end),
+        comments: comments,
         leadingNode: null,
         trailingNode: null,
         containingNode: null,
@@ -476,8 +530,6 @@ export default abstract class Tokenizer extends CommentsParser {
 
   replaceToken(type: TokenType): void {
     this.state.type = type;
-    // @ts-expect-error the prevType of updateContext is required
-    // only when the new type is tt.slash/tt.jsxTagEnd
     this.updateContext();
   }
 
@@ -505,36 +557,7 @@ export default abstract class Tokenizer extends CommentsParser {
       );
     }
 
-    if (
-      next === charCodes.leftCurlyBrace ||
-      (next === charCodes.leftSquareBracket && this.hasPlugin("recordAndTuple"))
-    ) {
-      // When we see `#{`, it is likely to be a hash record.
-      // However we don't yell at `#[` since users may intend to use "computed private fields",
-      // which is not allowed in the spec. Throwing expecting recordAndTuple is
-      // misleading
-      this.expectPlugin("recordAndTuple");
-      if (
-        !process.env.BABEL_8_BREAKING &&
-        this.getPluginOption("recordAndTuple", "syntaxType") === "bar"
-      ) {
-        throw this.raise(
-          next === charCodes.leftCurlyBrace
-            ? Errors.RecordExpressionHashIncorrectStartSyntaxType
-            : Errors.TupleExpressionHashIncorrectStartSyntaxType,
-          this.state.curPosition(),
-        );
-      }
-
-      this.state.pos += 2;
-      if (next === charCodes.leftCurlyBrace) {
-        // #{
-        this.finishToken(tt.braceHashL);
-      } else {
-        // #[
-        this.finishToken(tt.bracketHashL);
-      }
-    } else if (isIdentifierStart(next)) {
+    if (isIdentifierStart(next)) {
       ++this.state.pos;
       this.finishToken(tt.privateName, this.readWord1(next));
     } else if (next === charCodes.backslash) {
@@ -641,38 +664,8 @@ export default abstract class Tokenizer extends CommentsParser {
         return;
       }
       // '|}'
-      if (
-        !process.env.BABEL_8_BREAKING &&
-        this.hasPlugin("recordAndTuple") &&
-        next === charCodes.rightCurlyBrace
-      ) {
-        if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-          throw this.raise(
-            Errors.RecordExpressionBarIncorrectEndSyntaxType,
-            this.state.curPosition(),
-          );
-        }
-        this.state.pos += 2;
-        this.finishToken(tt.braceBarR);
-        return;
-      }
 
       // '|]'
-      if (
-        !process.env.BABEL_8_BREAKING &&
-        this.hasPlugin("recordAndTuple") &&
-        next === charCodes.rightSquareBracket
-      ) {
-        if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-          throw this.raise(
-            Errors.TupleExpressionBarIncorrectEndSyntaxType,
-            this.state.curPosition(),
-          );
-        }
-        this.state.pos += 2;
-        this.finishToken(tt.bracketBarR);
-        return;
-      }
     }
 
     if (next === charCodes.equalsTo) {
@@ -875,50 +868,18 @@ export default abstract class Tokenizer extends CommentsParser {
         this.finishToken(tt.comma);
         return;
       case charCodes.leftSquareBracket:
-        if (
-          !process.env.BABEL_8_BREAKING &&
-          this.hasPlugin("recordAndTuple") &&
-          this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
-        ) {
-          if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-            throw this.raise(
-              Errors.TupleExpressionBarIncorrectStartSyntaxType,
-              this.state.curPosition(),
-            );
-          }
+        ++this.state.pos;
+        this.finishToken(tt.bracketL);
 
-          // [|
-          this.state.pos += 2;
-          this.finishToken(tt.bracketBarL);
-        } else {
-          ++this.state.pos;
-          this.finishToken(tt.bracketL);
-        }
         return;
       case charCodes.rightSquareBracket:
         ++this.state.pos;
         this.finishToken(tt.bracketR);
         return;
       case charCodes.leftCurlyBrace:
-        if (
-          !process.env.BABEL_8_BREAKING &&
-          this.hasPlugin("recordAndTuple") &&
-          this.input.charCodeAt(this.state.pos + 1) === charCodes.verticalBar
-        ) {
-          if (this.getPluginOption("recordAndTuple", "syntaxType") !== "bar") {
-            throw this.raise(
-              Errors.RecordExpressionBarIncorrectStartSyntaxType,
-              this.state.curPosition(),
-            );
-          }
+        ++this.state.pos;
+        this.finishToken(tt.braceL);
 
-          // {|
-          this.state.pos += 2;
-          this.finishToken(tt.braceBarL);
-        } else {
-          ++this.state.pos;
-          this.finishToken(tt.braceL);
-        }
         return;
       case charCodes.rightCurlyBrace:
         ++this.state.pos;
@@ -1172,6 +1133,7 @@ export default abstract class Tokenizer extends CommentsParser {
   }
 
   readRadixNumber(radix: number): void {
+    const start = this.state.pos;
     const startLoc = this.state.curPosition();
     let isBigInt = false;
 
@@ -1192,8 +1154,6 @@ export default abstract class Tokenizer extends CommentsParser {
     if (next === charCodes.lowercaseN) {
       ++this.state.pos;
       isBigInt = true;
-    } else if (next === charCodes.lowercaseM) {
-      throw this.raise(Errors.InvalidDecimal, startLoc);
     }
 
     if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
@@ -1201,9 +1161,7 @@ export default abstract class Tokenizer extends CommentsParser {
     }
 
     if (isBigInt) {
-      const str = this.input
-        .slice(startLoc.index, this.state.pos)
-        .replace(/[_n]/g, "");
+      const str = this.input.slice(start, this.state.pos).replace(/[_n]/g, "");
       this.finishToken(tt.bigint, str);
       return;
     }
@@ -1218,8 +1176,6 @@ export default abstract class Tokenizer extends CommentsParser {
     const startLoc = this.state.curPosition();
     let isFloat = false;
     let isBigInt = false;
-    let isDecimal = false;
-    let hasExponent = false;
     let isOctal = false;
 
     if (!startsWithDot && this.readInt(10) === null) {
@@ -1266,9 +1222,11 @@ export default abstract class Tokenizer extends CommentsParser {
         this.raise(Errors.InvalidOrMissingExponent, startLoc);
       }
       isFloat = true;
-      hasExponent = true;
       next = this.input.charCodeAt(this.state.pos);
     }
+
+    // remove "_" for numeric literal separator. It should not include "n" for bigint literal
+    const str = this.input.slice(start, this.state.pos).replaceAll("_", "");
 
     if (next === charCodes.lowercaseN) {
       // disallow floats, legacy octal syntax and non octal decimals
@@ -1280,29 +1238,12 @@ export default abstract class Tokenizer extends CommentsParser {
       isBigInt = true;
     }
 
-    if (next === charCodes.lowercaseM) {
-      this.expectPlugin("decimal", this.state.curPosition());
-      if (hasExponent || hasLeadingZero) {
-        this.raise(Errors.InvalidDecimal, startLoc);
-      }
-      ++this.state.pos;
-      isDecimal = true;
-    }
-
     if (isIdentifierStart(this.codePointAtPos(this.state.pos))) {
       throw this.raise(Errors.NumberIdentifier, this.state.curPosition());
     }
 
-    // remove "_" for numeric literal separator, and trailing `m` or `n`
-    const str = this.input.slice(start, this.state.pos).replace(/[_mn]/g, "");
-
     if (isBigInt) {
       this.finishToken(tt.bigint, str);
-      return;
-    }
-
-    if (isDecimal) {
-      this.finishToken(tt.decimal, str);
       return;
     }
 
@@ -1370,7 +1311,7 @@ export default abstract class Tokenizer extends CommentsParser {
       this.state.firstInvalidTemplateEscapePos = new Position(
         firstInvalidLoc.curLine,
         firstInvalidLoc.pos - firstInvalidLoc.lineStart,
-        firstInvalidLoc.pos,
+        this.sourceToOffsetPos(firstInvalidLoc.pos),
       );
     }
 
@@ -1489,13 +1430,26 @@ export default abstract class Tokenizer extends CommentsParser {
    */
   raise<ErrorDetails = object>(
     toParseError: ParseErrorConstructor<ErrorDetails>,
-    at: Position | Undone<Node>,
+    at: Position | Undone<Node> | number,
     details: ErrorDetails = {} as ErrorDetails,
-  ): ParseError<ErrorDetails> {
-    const loc = at instanceof Position ? at : at.loc.start;
-    const error = toParseError(loc, details);
+  ): ParseError {
+    const loc =
+      at instanceof Position
+        ? at
+        : typeof at === "number"
+          ? this.getLoc(at)
+          : this.optionFlags & OptionFlags.Locations
+            ? at.loc!.start
+            : this.getLoc(at.start!);
+    const pos =
+      at instanceof Position
+        ? loc.index
+        : typeof at === "number"
+          ? at
+          : at.start!;
+    const error = toParseError(loc, pos, details);
 
-    if (!this.options.errorRecovery) throw error;
+    if (!(this.optionFlags & OptionFlags.ErrorRecovery)) throw error;
     if (!this.isLookahead) this.state.errors.push(error);
 
     return error;
@@ -1511,28 +1465,33 @@ export default abstract class Tokenizer extends CommentsParser {
     toParseError: ParseErrorConstructor<ErrorDetails>,
     at: Position | Undone<Node>,
     details: ErrorDetails = {} as ErrorDetails,
-  ): ParseError<ErrorDetails> | never {
-    const loc = at instanceof Position ? at : at.loc.start;
-    const pos = loc.index;
+  ): ParseError {
+    const loc =
+      at instanceof Position
+        ? at
+        : this.optionFlags & OptionFlags.Locations
+          ? at.loc!.start
+          : this.getLoc(at.start!);
+    const pos = at instanceof Position ? loc.index : at.start!;
     const errors = this.state.errors;
 
     for (let i = errors.length - 1; i >= 0; i--) {
       const error = errors[i];
-      if (error.loc.index === pos) {
-        return (errors[i] = toParseError(loc, details));
+      if (error.pos === pos) {
+        return (errors[i] = toParseError(loc, pos, details));
       }
-      if (error.loc.index < pos) break;
+      if (error.pos < pos) break;
     }
 
-    return this.raise(toParseError, at, details);
+    return this.raise(toParseError, loc, details);
   }
 
   // updateContext is used by the jsx plugin
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  updateContext(prevType: TokenType): void {}
+  updateContext(prevType?: TokenType): void {}
 
   // Raise an unexpected token error. Can take the expected token type.
-  unexpected(loc?: Position | null, type?: TokenType): void {
+  unexpected(loc?: Position | number | null, type?: TokenType): any {
     throw this.raise(
       Errors.UnexpectedToken,
       loc != null ? loc : this.state.startLoc,
@@ -1542,7 +1501,7 @@ export default abstract class Tokenizer extends CommentsParser {
     );
   }
 
-  expectPlugin(pluginName: Plugin, loc?: Position): true {
+  expectPlugin(pluginName: Plugin, loc?: Position | number | null): true {
     if (this.hasPlugin(pluginName)) {
       return true;
     }
@@ -1556,7 +1515,7 @@ export default abstract class Tokenizer extends CommentsParser {
     );
   }
 
-  expectOnePlugin(pluginNames: Plugin[]): void {
+  expectOnePlugin(pluginNames: Plugin[]): any {
     if (!pluginNames.some(name => this.hasPlugin(name))) {
       throw this.raise(Errors.MissingOneOfPlugins, this.state.startLoc, {
         missingPlugin: pluginNames,
@@ -1572,13 +1531,9 @@ export default abstract class Tokenizer extends CommentsParser {
 
   errorHandlers_readInt: IntErrorHandlers = {
     invalidDigit: (pos, lineStart, curLine, radix) => {
-      if (!this.options.errorRecovery) return false;
-
       this.raise(Errors.InvalidDigit, buildPosition(pos, lineStart, curLine), {
         radix,
       });
-      // Continue parsing the number as if there was no invalid digit.
-      return true;
     },
     numericSeparatorInEscapeSequence: this.errorBuilder(
       Errors.NumericSeparatorInEscapeSequence,

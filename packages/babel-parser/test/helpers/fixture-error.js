@@ -1,13 +1,11 @@
-import { inspect } from "util";
+import { inspect } from "node:util";
 import Difference from "./difference.js";
-import "./polyfill.js";
 
 const { isArray } = Array;
 const { defineProperty, entries, fromEntries } = Object;
 
 const named = (name, object) => defineProperty(object, "name", { value: name });
 const mapEntries = (object, f) => fromEntries(entries(object).map(f));
-// eslint-disable-next-line no-confusing-arrow
 const toContextError = error =>
   isArray(error) ? error.map(toContextError) : error.context || error;
 
@@ -76,7 +74,8 @@ Object.assign(
 
       DifferentAST: ({ message }) => message,
 
-      UnexpectedError: () => `Encountered unexpected unrecoverable error.`,
+      UnexpectedError: ({ actual }) =>
+        `Encountered unexpected unrecoverable error:\n\n    ${inspect(actual)}\n\n`,
 
       UnexpectedSuccess: ({ expected }) =>
         `Expected unrecoverable error:\n\n    ${expected}\n\n` +

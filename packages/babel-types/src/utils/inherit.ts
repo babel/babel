@@ -1,13 +1,26 @@
 import type * as t from "../index.ts";
 
-export default function inherit<
-  C extends t.Node | undefined,
-  P extends t.Node | undefined,
->(key: keyof C & keyof P, child: C, parent: P): void {
+type MaybeArray = unknown[] | null | undefined;
+
+type ArrayKeys<C> = {
+  [K in keyof C]: C[K] extends MaybeArray ? K : never;
+}[keyof C];
+
+export default function inherit<C extends t.Node, P extends t.Node>(
+  key: ArrayKeys<C> & ArrayKeys<P>,
+  child: C,
+  parent: P,
+): void {
   if (child && parent) {
-    // @ts-expect-error Could further refine key definitions
-    child[key] = Array.from(
-      new Set([].concat(child[key], parent[key]).filter(Boolean)),
+    const parentVal = parent[key] as MaybeArray;
+    if (!parentVal) return;
+
+    const childVal = child[key] as MaybeArray;
+
+    (child[key] as MaybeArray) = Array.from(
+      childVal
+        ? new Set([...childVal, ...parentVal].filter(Boolean))
+        : parentVal,
     );
   }
 }

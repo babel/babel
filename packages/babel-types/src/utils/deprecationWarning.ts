@@ -4,9 +4,10 @@ export default function deprecationWarning(
   oldName: string,
   newName: string,
   prefix: string = "",
+  cacheKey: string = oldName,
 ) {
-  if (warnings.has(oldName)) return;
-  warnings.add(oldName);
+  if (warnings.has(cacheKey)) return;
+  warnings.add(cacheKey);
 
   const { internal, trace } = captureShortStackTrace(1, 2);
   if (internal) {
@@ -34,11 +35,12 @@ function captureShortStackTrace(skip: number, length: number) {
   Error.stackTraceLimit = stackTraceLimit;
   Error.prepareStackTrace = prepareStackTrace;
 
-  if (!stackTrace) return { internal: false, trace: "" };
+  if (!stackTrace!) return { internal: false, trace: "" };
 
   const shortStackTrace = stackTrace.slice(1 + skip, 1 + skip + length);
   return {
-    internal: /[\\/]@babel[\\/]/.test(shortStackTrace[1].getFileName()),
+    internal: /[\\/]@babel[\\/]/.test(shortStackTrace[1].getFileName()!),
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     trace: shortStackTrace.map(frame => `    at ${frame}`).join("\n"),
   };
 }

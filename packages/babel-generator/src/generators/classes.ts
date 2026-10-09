@@ -5,9 +5,11 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 
-// We inline this package
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
+import { _shouldPrintDecoratorsBeforeExport } from "./expressions.ts";
+import { _tsPrintClassMemberModifiers } from "./typescript.ts";
+import { _variance } from "./flow.ts";
+import { _methodHead } from "./methods.ts";
 
 export function ClassDeclaration(
   this: Printer,
@@ -19,7 +21,8 @@ export function ClassDeclaration(
 
   if (
     !inExport ||
-    !this._shouldPrintDecoratorsBeforeExport(
+    !_shouldPrintDecoratorsBeforeExport.call(
+      this,
       parent as t.ExportDeclaration & { declaration: t.ClassDeclaration },
     )
   ) {
@@ -52,7 +55,7 @@ export function ClassDeclaration(
     this.word("extends");
     this.space();
     this.print(node.superClass);
-    this.print(node.superTypeParameters);
+    this.print(node.superTypeArguments);
   }
 
   if (node.implements) {
@@ -73,11 +76,12 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
   if (node.body.length === 0) {
     this.token("}");
   } else {
-    this.newline();
+    const separator = classBodyEmptySemicolonsPrinter(this, node);
+    separator?.(-1); // print leading semicolons in preserveFormat mode
 
-    const exit = this.enterDelimited();
-    this.printSequence(node.body, { indent: true });
-    exit();
+    const oldNoLineTerminatorAfterNode = this.enterDelimited();
+    this.printJoin(node.body, true, true, separator, true, true);
+    this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
 
     if (!this.endsWith(charCodes.lineFeed)) this.newline();
 
@@ -85,22 +89,77 @@ export function ClassBody(this: Printer, node: t.ClassBody) {
   }
 }
 
+function classBodyEmptySemicolonsPrinter(printer: Printer, node: t.ClassBody) {
+  if (!printer.tokenMap || node.start == null || node.end == null) {
+    return null;
+  }
+
+  // "empty statements" in class bodies are not represented in the AST.
+  // Print them by checking if there are any ; tokens between the current AST
+  // member and the next one.
+
+  const indexes = printer.tokenMap.getIndexes(node);
+  if (!indexes) return null;
+
+  let k = 1; // start from 1 to skip '{'
+
+  let occurrenceCount = 0;
+
+  let nextLocIndex = 0;
+  const advanceNextLocIndex = () => {
+    while (
+      nextLocIndex < node.body.length &&
+      node.body[nextLocIndex].start == null
+    ) {
+      nextLocIndex++;
+    }
+  };
+  advanceNextLocIndex();
+
+  return (i: number) => {
+    if (nextLocIndex <= i) {
+      nextLocIndex = i + 1;
+      advanceNextLocIndex();
+    }
+
+    const end =
+      nextLocIndex === node.body.length
+        ? node.end
+        : node.body[nextLocIndex].start;
+
+    let tok;
+    while (
+      k < indexes.length &&
+      printer.tokenMap!.matchesOriginal(
+        (tok = printer._tokens![indexes[k]]),
+        ";",
+      ) &&
+      tok.start < end!
+    ) {
+      printer.tokenChar(charCodes.semicolon, occurrenceCount++);
+      k++;
+    }
+  };
+}
+
 export function ClassProperty(this: Printer, node: t.ClassProperty) {
   this.printJoin(node.decorators);
 
-  // catch up to property key, avoid line break
-  // between member modifiers and the property key.
-  const endLine = node.key.loc?.end?.line;
-  if (endLine) this.catchUp(endLine);
+  if (!node.static && !this.format.preserveFormat) {
+    // catch up to property key, avoid line break
+    // between member TS modifiers and the property key.
+    const endLine = node.key.loc?.end?.line;
+    if (endLine) this.catchUp(endLine);
+  }
 
-  this.tsPrintClassMemberModifiers(node);
+  _tsPrintClassMemberModifiers.call(this, node);
 
   if (node.computed) {
     this.token("[");
     this.print(node.key);
     this.token("]");
   } else {
-    this._variance(node);
+    _variance.call(this, node);
     this.print(node.key);
   }
 
@@ -134,7 +193,7 @@ export function ClassAccessorProperty(
   if (endLine) this.catchUp(endLine);
 
   // TS does not support class accessor property yet
-  this.tsPrintClassMemberModifiers(node);
+  _tsPrintClassMemberModifiers.call(this, node);
 
   this.word("accessor", true);
   this.space();
@@ -145,7 +204,7 @@ export function ClassAccessorProperty(
     this.token("]");
   } else {
     // Todo: Flow does not support class accessor property yet.
-    this._variance(node);
+    _variance.call(this, node);
     this.print(node.key);
   }
 
@@ -172,11 +231,15 @@ export function ClassPrivateProperty(
   node: t.ClassPrivateProperty,
 ) {
   this.printJoin(node.decorators);
-  if (node.static) {
-    this.word("static");
-    this.space();
-  }
+  _tsPrintClassMemberModifiers.call(this, node);
   this.print(node.key);
+  // TS
+  if (node.optional) {
+    this.token("?");
+  }
+  if (node.definite) {
+    this.token("!");
+  }
   this.print(node.typeAnnotation);
   if (node.value) {
     this.space();
@@ -188,13 +251,13 @@ export function ClassPrivateProperty(
 }
 
 export function ClassMethod(this: Printer, node: t.ClassMethod) {
-  this._classMethodHead(node);
+  _classMethodHead.call(this, node);
   this.space();
   this.print(node.body);
 }
 
 export function ClassPrivateMethod(this: Printer, node: t.ClassPrivateMethod) {
-  this._classMethodHead(node);
+  _classMethodHead.call(this, node);
   this.space();
   this.print(node.body);
 }
@@ -202,16 +265,21 @@ export function ClassPrivateMethod(this: Printer, node: t.ClassPrivateMethod) {
 export function _classMethodHead(
   this: Printer,
   node: t.ClassMethod | t.ClassPrivateMethod | t.TSDeclareMethod,
+  allowDecorators = true,
 ) {
-  this.printJoin(node.decorators);
+  if (allowDecorators) {
+    this.printJoin((node as t.ClassMethod | t.ClassPrivateMethod).decorators);
+  }
 
-  // catch up to method key, avoid line break
-  // between member modifiers/method heads and the method key.
-  const endLine = node.key.loc?.end?.line;
-  if (endLine) this.catchUp(endLine);
+  if (!this.format.preserveFormat) {
+    // catch up to method key, avoid line break
+    // between member modifiers/method heads and the method key.
+    const endLine = node.key.loc?.end?.line;
+    if (endLine) this.catchUp(endLine);
+  }
 
-  this.tsPrintClassMemberModifiers(node);
-  this._methodHead(node);
+  _tsPrintClassMemberModifiers.call(this, node);
+  _methodHead.call(this, node);
 }
 
 export function StaticBlock(this: Printer, node: t.StaticBlock) {
@@ -222,7 +290,7 @@ export function StaticBlock(this: Printer, node: t.StaticBlock) {
     this.token("}");
   } else {
     this.newline();
-    this.printSequence(node.body, { indent: true });
+    this.printSequence(node.body, true);
     this.rightBrace(node);
   }
 }
