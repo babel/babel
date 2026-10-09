@@ -332,17 +332,14 @@ export function* loadConfig(
   envName: string,
   caller: CallerMetadata | undefined,
 ): Handler<ConfigFile> {
-  let extName = path.extname(name);
-  const filepath =
-    path.isAbsolute(name) && extName !== ""
-      ? name
-      : require.resolve(name, { paths: [dirname] });
-  if (extName === "") {
-    // If the original name had no extension, derive it from the resolved filepath.
-    extName = path.extname(filepath);
-  }
+  const filepath = require.resolve(name, { paths: [dirname] });
 
-  const conf = yield* readConfig(filepath, extName, envName, caller);
+  const conf = yield* readConfig(
+    filepath,
+    path.extname(filepath),
+    envName,
+    caller,
+  );
   if (!conf) {
     throw new ConfigError(
       `Config file contains no configuration data`,
