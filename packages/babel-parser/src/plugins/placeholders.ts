@@ -344,7 +344,9 @@ export default (superClass: typeof Parser) =>
           if (
             this.input.startsWith(
               tokenLabelName(tt.placeholder),
-              this.nextTokenStartSince(next + 4),
+              this.hasPlugin("exportDefaultFrom")
+                ? this.nextTokenStartSince(next + 4)
+                : this.nextTokenInLineStartSince(next + 4),
             )
           ) {
             return true;
