@@ -3,7 +3,9 @@
   "start":0,"end":67,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":35,"index":67}},
   "errors": [
     "SyntaxError: Async functions can only be declared at the top level or inside a block. (1:3)",
-    "SyntaxError: Async functions can only be declared at the top level or inside a block. (2:5)"
+    "SyntaxError: Identifier 'f' has already been declared. (1:29)",
+    "SyntaxError: Async functions can only be declared at the top level or inside a block. (2:5)",
+    "SyntaxError: Identifier 'g' has already been declared. (2:31)"
   ],
   "program": {
     "type": "Program",

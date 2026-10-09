@@ -540,11 +540,16 @@ export default abstract class StatementParser extends ExpressionParser {
             );
           }
           this.next(); // eat 'async'
-          return this.parseFunctionStatement(
-            node,
-            true,
-            !allowDeclaration && allowFunctionDeclaration,
-          );
+          if (!allowDeclaration && allowFunctionDeclaration) {
+            const result = this.parseFunctionStatement(node, true, true);
+            // Annex B.3.1: labelled function declarations are bound in the
+            // enclosing scope.
+            if (flags & ParseStatementFlag.AllowLabeledFunction) {
+              this.registerFunctionStatementId(result);
+            }
+            return result;
+          }
+          return this.parseFunctionStatement(node, true, false);
         }
       }
     }
@@ -564,7 +569,7 @@ export default abstract class StatementParser extends ExpressionParser {
     ) {
       return this.parseLabeledStatement(node, maybeName, expr, flags);
     } else {
-      return this.parseExpressionStatement(node, expr);
+      return this.parseExpressionStatement(node, expr, flags);
     }
   }
 
@@ -1160,6 +1165,8 @@ export default abstract class StatementParser extends ExpressionParser {
   parseExpressionStatement(
     node: Undone<N.ExpressionStatement>,
     expr: N.Expression,
+    // Used by the placeholders plugin to parse placeholder labels
+    _flags: ParseStatementFlag,
   ) {
     node.expression = expr;
     this.semicolon();
