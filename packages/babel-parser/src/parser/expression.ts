@@ -69,10 +69,14 @@ import type Parser from "./index.ts";
 import { OptionFlags, type SourceType } from "../options.ts";
 import { createExportedTokens } from "./statement.ts";
 
-export const enum PlaceholderParsingFlags {
-  None = 0,
-  AllowPlaceholder = 1 << 0,
-  UseVersion2018_07 = 1 << 1,
+// Where the placeholders of partial application, `?` and `...`, are allowed
+export const enum ArgumentsContext {
+  // Not an argument list that accepts placeholders, such as `super(...)`
+  Other,
+  // `f(...)`, where version 2018-07 accepts `?`
+  LegacyPartialCall,
+  // `f~(...)` and `new F~(...)`
+  PartialCall,
 }
 
 export default abstract class ExpressionParser extends LValParser {
@@ -889,7 +893,7 @@ export default abstract class ExpressionParser extends LValParser {
       // still parsed as an await expression with a recoverable error
       this.lookaheadCharCode() === charCodes.leftParenthesis
     ) {
-      return this.parsePartialArguments(
+      return this.parsePartialCall(
         base as N.Expression,
         startLoc,
         state,
@@ -1018,10 +1022,9 @@ export default abstract class ExpressionParser extends LValParser {
       node.arguments = this.parseCallExpressionArguments();
     } else {
       node.arguments = this.parseCallExpressionArguments(
-        PlaceholderParsingFlags.UseVersion2018_07 |
-          (base.type !== "Super"
-            ? PlaceholderParsingFlags.AllowPlaceholder
-            : PlaceholderParsingFlags.None),
+        base.type === "Super"
+          ? ArgumentsContext.Other
+          : ArgumentsContext.LegacyPartialCall,
         node,
         refExpressionErrors,
       );
@@ -1123,7 +1126,7 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
   ): N.PartialCallExpression["arguments"] {
     const args = this.parseCallExpressionArguments(
-      PlaceholderParsingFlags.AllowPlaceholder,
+      ArgumentsContext.PartialCall,
     );
     this.toReferencedList(args);
     let seenRestPlaceholder = false;
@@ -1136,6 +1139,15 @@ export default abstract class ExpressionParser extends LValParser {
       }
     }
     return args;
+  }
+
+  // Whether the arguments are those of `f(...)`, where version 2018-07
+  // accepts `?` but none of the syntax introduced by version 2021-10
+  isPartialApplication2018_07Call(context: ArgumentsContext): boolean {
+    return (
+      context === ArgumentsContext.LegacyPartialCall &&
+      this.getPluginOption("partialApplication", "version") === "2018-07"
+    );
   }
 
   // Eat the `~` of a partial application, which requires version 2021-10
@@ -1152,7 +1164,7 @@ export default abstract class ExpressionParser extends LValParser {
     this.next(); // eat `~`
   }
 
-  parsePartialArguments(
+  parsePartialCall(
     this: Parser,
     base: N.Expression,
     startLoc: Position,
@@ -1175,7 +1187,7 @@ export default abstract class ExpressionParser extends LValParser {
 
   parseCallExpressionArguments(
     this: Parser,
-    placeholderFlags?: PlaceholderParsingFlags,
+    context?: ArgumentsContext,
     nodeForExtra?: Undone<N.Node> | null,
     refExpressionErrors?: ExpressionErrors | null,
   ): (N.Expression | N.SpreadElement)[] {
@@ -1200,7 +1212,7 @@ export default abstract class ExpressionParser extends LValParser {
         tt.parenR,
         false,
         refExpressionErrors,
-        placeholderFlags,
+        context,
       );
       // On invalid input `import(,)` and errorRecovery mode,
       // the parser will crash if we leave a hole here
@@ -2888,21 +2900,21 @@ export default abstract class ExpressionParser extends LValParser {
     close: TokenType,
     allowEmpty?: boolean,
     refExpressionErrors?: ExpressionErrors | null,
-    placeholderFlags?: PlaceholderParsingFlags,
+    context?: ArgumentsContext,
   ): N.Expression | null;
   parseExprListItem(
     this: Parser,
     close: TokenType,
     allowEmpty?: false,
     refExpressionErrors?: ExpressionErrors | null,
-    placeholderFlags?: PlaceholderParsingFlags | null,
+    context?: ArgumentsContext,
   ): N.Expression;
   parseExprListItem(
     this: Parser,
     close: TokenType,
     allowEmpty?: boolean | null,
     refExpressionErrors?: ExpressionErrors | null,
-    placeholderFlags: PlaceholderParsingFlags = PlaceholderParsingFlags.None,
+    context: ArgumentsContext = ArgumentsContext.Other,
   ):
     | N.Expression
     | N.SpreadElement
@@ -2927,25 +2939,16 @@ export default abstract class ExpressionParser extends LValParser {
           nextChar === charCodes.rightParenthesis ||
           nextChar === charCodes.comma
         ) {
-          if (!(placeholderFlags & PlaceholderParsingFlags.AllowPlaceholder)) {
+          // Rest placeholders were introduced in 2021-10, where they are
+          // only valid in `~(` argument lists
+          if (this.isPartialApplication2018_07Call(context)) {
+            this.raise(
+              Errors.IncorrectPartialApplicationVersion,
+              this.state.startLoc,
+              { expected: "2021-10", actual: "2018-07" },
+            );
+          } else if (context !== ArgumentsContext.PartialCall) {
             this.raise(Errors.UnexpectedRestPlaceholder, this.state.startLoc);
-          } else if (
-            placeholderFlags & PlaceholderParsingFlags.UseVersion2018_07
-          ) {
-            // Rest placeholders were introduced in 2021-10, where they are
-            // only valid in `~(` argument lists
-            if (
-              this.getPluginOption("partialApplication", "version") ===
-              "2018-07"
-            ) {
-              this.raise(
-                Errors.IncorrectPartialApplicationVersion,
-                this.state.startLoc,
-                { expected: "2021-10", actual: "2018-07" },
-              );
-            } else {
-              this.raise(Errors.UnexpectedRestPlaceholder, this.state.startLoc);
-            }
           }
           return this.parseRestPlaceholder();
         }
@@ -2957,22 +2960,16 @@ export default abstract class ExpressionParser extends LValParser {
       );
     } else if (this.match(tt.question)) {
       this.expectPlugin("partialApplication");
-      const isCallWithoutTilde = !!(
-        placeholderFlags & PlaceholderParsingFlags.UseVersion2018_07
-      );
       // Without `~(`, only version 2018-07 allows `?`. Don't suggest
       // switching to 2018-07 here: the same call may use 2021-10-only
       // syntax, such as `f(?, ...)`.
-      const allowed =
-        !!(placeholderFlags & PlaceholderParsingFlags.AllowPlaceholder) &&
-        (!isCallWithoutTilde ||
-          this.getPluginOption("partialApplication", "version") === "2018-07");
-      if (!allowed) {
+      const is2018_07Call = this.isPartialApplication2018_07Call(context);
+      if (!is2018_07Call && context !== ArgumentsContext.PartialCall) {
         this.raise(Errors.UnexpectedArgumentPlaceholder, this.state.startLoc);
       }
       // Placeholder ordinals were introduced in 2021-10. When the placeholder
       // itself is unexpected, its ordinal isn't reported again.
-      return this.parseArgumentPlaceholder(allowed && isCallWithoutTilde);
+      return this.parseArgumentPlaceholder(is2018_07Call);
     } else {
       elt = this.parseMaybeAssignAllowInOrVoidPattern(
         close,
