@@ -3,6 +3,7 @@ import * as t from "@babel/types";
 
 import traverse from "../lib/index.js";
 import generate from "@babel/generator";
+import { runInNewContext } from "node:vm";
 
 function getPath(code, parserOpts) {
   const ast = parse(code, parserOpts);
@@ -232,6 +233,64 @@ describe("modification", function () {
   });
 
   describe("insertAfter", function () {
+    it("inserts effects after initializer coercion", () => {
+      const ast = parse(`
+        const log = [];
+        const value = { valueOf() { log.push("coerce"); return 2; } };
+        const result = value + 1;
+        log;
+      `);
+      let target;
+      traverse(ast, {
+        VariableDeclarator(path) {
+          if (t.isIdentifier(path.node.id, { name: "result" })) {
+            target = path.get("init");
+          }
+        },
+      });
+      target.insertAfter(
+        t.expressionStatement(
+          t.callExpression(
+            t.memberExpression(t.identifier("log"), t.identifier("push")),
+            [t.stringLiteral("after")],
+          ),
+        ),
+      );
+
+      expect(
+        Array.from(runInNewContext(generate(ast).code, {}, { timeout: 100 })),
+      ).toEqual(["coerce", "after"]);
+    });
+
+    it("preserves distinct class field values during initializer reentry", () => {
+      const ast = parse(`
+        let inner, busy = false;
+        function make() { return {}; }
+        function after() {
+          if (!busy) {
+            busy = true;
+            inner = new C();
+          }
+        }
+        class C { value = make(); }
+        const outer = new C();
+        outer.value !== inner.value;
+      `);
+      let target;
+      traverse(ast, {
+        ClassProperty(path) {
+          target = path.get("value");
+        },
+      });
+      target.insertAfter(
+        t.expressionStatement(t.callExpression(t.identifier("after"), [])),
+      );
+
+      expect(runInNewContext(generate(ast).code, {}, { timeout: 100 })).toBe(
+        true,
+      );
+    });
+
     it("returns inserted path with BlockStatement with ExpressionStatement", function () {
       const rootPath = getPath("if (x) { y; }");
       const path = rootPath.get("consequent.body.0");
