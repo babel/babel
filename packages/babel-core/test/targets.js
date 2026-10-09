@@ -80,6 +80,23 @@ describe("targets", () => {
 
     expect(() => withTargets({ browsers: [] })).not.toThrow();
   });
+
+  it("ignores the BROWSERSLIST env variable", () => {
+    const opts = {
+      cwd: join(cwd, "fixtures", "targets"),
+      targets: "chrome 90",
+    };
+    expect(loadOptionsSync(opts).targets).toEqual({ chrome: "90.0.0" });
+
+    const { BROWSERSLIST } = process.env;
+    process.env.BROWSERSLIST = "firefox 100";
+    try {
+      expect(loadOptionsSync(opts).targets).toEqual({ chrome: "90.0.0" });
+    } finally {
+      if (BROWSERSLIST === undefined) delete process.env.BROWSERSLIST;
+      else process.env.BROWSERSLIST = BROWSERSLIST;
+    }
+  });
 });
 
 describe("browserslist", () => {
@@ -98,6 +115,51 @@ describe("browserslist", () => {
         filename: "./node_modules/dep/test.js",
       }).targets,
     ).toEqual({ chrome: "80.0.0" });
+  });
+
+  describe("empty string targets", () => {
+    it("loads .browserslistrc", () => {
+      expect(
+        loadOptionsSync({
+          cwd: join(cwd, "fixtures", "targets"),
+          targets: "",
+        }).targets,
+      ).toEqual({ chrome: "80.0.0" });
+    });
+
+    it("forwards browserslistEnv", () => {
+      expect(
+        loadOptionsSync({
+          cwd: join(cwd, "fixtures", "targets"),
+          targets: "",
+          browserslistEnv: "browserslist-loading-test",
+        }).targets,
+      ).toEqual({ chrome: "70.0.0" });
+    });
+
+    it("respects browserslistConfigFile: false", () => {
+      expect(
+        loadOptionsSync({
+          cwd: join(cwd, "fixtures", "targets"),
+          targets: "",
+          browserslistConfigFile: false,
+        }).targets,
+      ).toEqual({});
+    });
+
+    it("reads the BROWSERSLIST env variable on every call", () => {
+      const opts = { cwd: join(cwd, "fixtures", "targets"), targets: "" };
+      expect(loadOptionsSync(opts).targets).toEqual({ chrome: "80.0.0" });
+
+      const { BROWSERSLIST } = process.env;
+      process.env.BROWSERSLIST = "firefox 100";
+      try {
+        expect(loadOptionsSync(opts).targets).toEqual({ firefox: "100.0.0" });
+      } finally {
+        if (BROWSERSLIST === undefined) delete process.env.BROWSERSLIST;
+        else process.env.BROWSERSLIST = BROWSERSLIST;
+      }
+    });
   });
 
   describe("browserslistConfigFile", () => {
