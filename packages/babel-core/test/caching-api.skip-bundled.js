@@ -433,6 +433,29 @@ describe("caching API", () => {
       );
     });
 
+    it("should not hang after the handler throws asynchronously", async () => {
+      let calls = 0;
+      const fn = gensync(
+        makeStrongCache(function* (arg, cache) {
+          cache.forever();
+          calls++;
+          yield* wait(50);
+          if (calls === 1) throw new Error("boom");
+          return { arg };
+        }),
+      ).async;
+
+      // The concurrent call waits for the lock of the first one, and gets the
+      // same error instead of waiting forever.
+      const results = await Promise.allSettled([fn("foo"), fn("foo")]);
+      expect(results.map(r => r.status)).toEqual(["rejected", "rejected"]);
+      expect(results[1].reason).toBe(results[0].reason);
+
+      // The failed result is not cached, so the next call runs the handler again.
+      expect(await fn("foo")).toEqual({ arg: "foo" });
+      expect(calls).toBe(2);
+    });
+
     it("should allow asynchronous cache invalidation functions", async () => {
       const fn = gensync(
         makeStrongCache(function* (arg, cache) {

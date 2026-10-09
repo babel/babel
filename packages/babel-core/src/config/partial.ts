@@ -90,7 +90,7 @@ export default function* loadPrivatePartialConfig(
   } = args;
   const absoluteCwd = path.resolve(cwd);
   const absoluteRootDir = resolveRootMode(
-    path.resolve(absoluteCwd, rootDir),
+    rootDir === "." ? absoluteCwd : path.resolve(absoluteCwd, rootDir),
     rootMode,
   );
 
@@ -99,7 +99,11 @@ export default function* loadPrivatePartialConfig(
       ? path.resolve(cwd, args.filename)
       : undefined;
 
-  const showConfigPath = yield* resolveShowConfigPath(absoluteCwd);
+  const relativeShowConfigPath = process.env.BABEL_SHOW_CONFIG_FOR;
+  const showConfigPath =
+    relativeShowConfigPath != null
+      ? yield* resolveShowConfigPath(absoluteCwd, relativeShowConfigPath)
+      : null;
 
   const context: ConfigContext = {
     filename,
