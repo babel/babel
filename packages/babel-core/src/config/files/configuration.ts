@@ -332,7 +332,11 @@ export function* loadConfig(
   envName: string,
   caller: CallerMetadata | undefined,
 ): Handler<ConfigFile> {
-  const filepath = require.resolve(name, { paths: [dirname] });
+  // `paths` is ignored when resolving an absolute path, but Node.js still
+  // computes the node_modules lookup paths for it, which is slow.
+  const filepath = path.isAbsolute(name)
+    ? require.resolve(name)
+    : require.resolve(name, { paths: [dirname] });
 
   const conf = yield* readConfig(
     filepath,
