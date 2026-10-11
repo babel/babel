@@ -285,6 +285,29 @@ function hoistFunctionEnvironment(
   const { thisPaths, argumentsPaths, newTargetPaths, superProps, superCalls } =
     getScopeInformation(fnPath);
 
+  // The bindings below are declared in the body of `thisEnvFn`, which its own
+  // parameter list cannot see.
+  if (isInParameterList(fnPath, thisEnvFn)) {
+    for (const [name, paths] of [
+      ["this", thisPaths],
+      ["arguments", argumentsPaths],
+      ["new.target", newTargetPaths],
+    ] as const) {
+      if (paths.length > 0) {
+        throw paths[0].buildCodeFrameError(
+          `It's not possible to compile \`${name}\` in an arrow function in a function's parameter list without compiling parameters.\n` +
+            "Please add '@babel/plugin-transform-parameters' to your Babel configuration.",
+        );
+      }
+    }
+    if (!noNewArrows) {
+      throw fnPath.buildCodeFrameError(
+        "It's not possible to compile an arrow function in a function's parameter list with the `noNewArrows` assumption set to `false` without compiling parameters.\n" +
+          "Please add '@babel/plugin-transform-parameters' to your Babel configuration.",
+      );
+    }
+  }
+
   // Convert all super() calls in the constructor, if super is used in an arrow.
   if (inConstructor && superCalls.length > 0) {
     if (!allowInsertArrow) {
@@ -624,6 +647,12 @@ function hasSuperClass(thisEnvFn: NodePath<t.Function>) {
   return (
     thisEnvFn.isClassMethod() &&
     !!thisEnvFn.parentPath.parentPath.node.superClass
+  );
+}
+
+function isInParameterList(path: NodePath, fn: NodePath) {
+  return (
+    path.findParent(p => p.parentPath?.node === fn.node)?.listKey === "params"
   );
 }
 

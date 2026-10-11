@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-arrow-functions"],
+  "throws": "It's not possible to compile `arguments` in an arrow function in a function's parameter list without compiling parameters.\nPlease add '@babel/plugin-transform-parameters' to your Babel configuration."
+}

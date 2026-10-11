@@ -1,0 +1,3 @@
+{
+  "throws": "It's not possible to compile an arrow function in a function's parameter list with the `noNewArrows` assumption set to `false` without compiling parameters.\nPlease add '@babel/plugin-transform-parameters' to your Babel configuration."
+}
