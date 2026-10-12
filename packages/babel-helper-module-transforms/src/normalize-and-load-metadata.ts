@@ -182,7 +182,7 @@ export default function normalizeModuleAndLoadMetadata(
     hasExports,
     local,
     source:
-      filename === "unknown"
+      filename === undefined || filename === "unknown"
         ? sources
         : new Map(
           [...sources].map(([key, value]) => [
