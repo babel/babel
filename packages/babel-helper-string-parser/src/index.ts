@@ -12,6 +12,9 @@ const forbiddenNumericSeparatorSiblings = {
     charCodes.lowercaseB,
     charCodes.lowercaseE,
     charCodes.lowercaseO,
+    // exponent sign, e.g. 1e+_1
+    charCodes.plusSign,
+    charCodes.dash,
   ]),
   hex: new Set<number>([
     charCodes.dot,
@@ -349,8 +352,7 @@ export function readInt(
       } else if (
         Number.isNaN(next) ||
         !isAllowedSibling(next) ||
-        forbiddenSiblings.has(prev) ||
-        forbiddenSiblings.has(next)
+        forbiddenSiblings.has(prev)
       ) {
         if (bailOnError) return { n: null, pos };
         errors.unexpectedNumericSeparator(pos, lineStart, curLine);

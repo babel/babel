@@ -1,0 +1,78 @@
+{
+  "type": "File",
+  "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":7,"index":38}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":7,"index":38}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
+          "extra": {
+            "rawValue": 10000000000,
+            "raw": "1e+1_0"
+          },
+          "value": 10000000000
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":8,"end":15,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":7,"index":15}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":8,"end":14,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":6,"index":14}},
+          "extra": {
+            "rawValue": 1e-10,
+            "raw": "1e-1_0"
+          },
+          "value": 1e-10
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":16,"end":23,"loc":{"start":{"line":3,"column":0,"index":16},"end":{"line":3,"column":7,"index":23}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":16,"end":22,"loc":{"start":{"line":3,"column":0,"index":16},"end":{"line":3,"column":6,"index":22}},
+          "extra": {
+            "rawValue": 10000000000,
+            "raw": "1E+1_0"
+          },
+          "value": 10000000000
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":24,"end":30,"loc":{"start":{"line":4,"column":0,"index":24},"end":{"line":4,"column":6,"index":30}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":24,"end":29,"loc":{"start":{"line":4,"column":0,"index":24},"end":{"line":4,"column":5,"index":29}},
+          "extra": {
+            "rawValue": 10000000000,
+            "raw": "1e1_0"
+          },
+          "value": 10000000000
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":31,"end":38,"loc":{"start":{"line":5,"column":0,"index":31},"end":{"line":5,"column":7,"index":38}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":31,"end":37,"loc":{"start":{"line":5,"column":0,"index":31},"end":{"line":5,"column":6,"index":37}},
+          "extra": {
+            "rawValue": 100,
+            "raw": "1_0e+1"
+          },
+          "value": 100
+        }
+      }
+    ],
+    "directives": []
+  }
+}
