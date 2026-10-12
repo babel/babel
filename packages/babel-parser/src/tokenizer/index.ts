@@ -26,6 +26,7 @@ import {
   isNewLine,
   isWhitespace,
   skipWhiteSpace,
+  skipWhiteSpaceAnnexB,
   skipWhiteSpaceInLine,
 } from "../util/whitespace.ts";
 import State from "./state.ts";
@@ -227,8 +228,12 @@ export default abstract class Tokenizer extends CommentsParser {
   }
 
   nextTokenStartSince(pos: number): number {
-    skipWhiteSpace.lastIndex = pos;
-    return skipWhiteSpace.test(this.input) ? skipWhiteSpace.lastIndex : pos;
+    const skipWhiteSpaceRe =
+      this.inModule || !(this.optionFlags & OptionFlags.AnnexB)
+        ? skipWhiteSpace
+        : skipWhiteSpaceAnnexB;
+    skipWhiteSpaceRe.lastIndex = pos;
+    return skipWhiteSpaceRe.test(this.input) ? skipWhiteSpaceRe.lastIndex : pos;
   }
 
   lookaheadCharCode(): number {
