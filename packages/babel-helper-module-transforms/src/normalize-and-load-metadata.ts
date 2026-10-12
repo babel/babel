@@ -185,9 +185,10 @@ export default function normalizeModuleAndLoadMetadata(
       filename === "unknown"
         ? sources
         : new Map(
-            [...sources].map(([key, value]) => [
-              new URL(key, new URL(filename, "file:///").href)
-                .pathname,
+          [...sources].map(([key, value]) => [
+              filename.startsWith(".")
+                ? new URL(key, new URL(filename, "file:///").href).pathname
+                : filename,
               value,
             ]),
           ),
