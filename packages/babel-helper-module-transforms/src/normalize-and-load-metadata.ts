@@ -188,7 +188,7 @@ export default function normalizeModuleAndLoadMetadata(
           [...sources].map(([key, value]) => [
               key.startsWith(".")
                 ? new URL(key, new URL(filename, "file:///").href).pathname
-                : filename ?? key,
+                : key,
               value,
             ]),
           ),
