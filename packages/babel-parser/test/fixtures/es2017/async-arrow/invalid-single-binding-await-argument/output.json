@@ -1,0 +1,72 @@
+{
+  "type": "File",
+  "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":42,"index":42}},
+  "errors": [
+    "SyntaxError: Missing semicolon. (1:32)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":42,"index":42}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":42,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":42,"index":42}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":42,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":42,"index":42}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":21,"end":32,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":32,"index":32}},
+              "expression": {
+                "type": "AwaitExpression",
+                "start":21,"end":32,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":32,"index":32}},
+                "argument": {
+                  "type": "Identifier",
+                  "start":27,"end":32,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":32,"index":32},"identifierName":"async"},
+                  "name": "async"
+                }
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start":33,"end":40,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":40,"index":40}},
+              "expression": {
+                "type": "ArrowFunctionExpression",
+                "start":33,"end":40,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":40,"index":40}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start":33,"end":34,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":34,"index":34},"identifierName":"x"},
+                    "name": "x"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":38,"end":40,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":1,"column":40,"index":40}},
+                  "body": [],
+                  "directives": []
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

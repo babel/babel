@@ -1,0 +1,54 @@
+{
+  "type": "File",
+  "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+  "errors": [
+    "SyntaxError: Missing semicolon. (1:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+        "expression": {
+          "type": "NewExpression",
+          "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+          "callee": {
+            "type": "Identifier",
+            "start":4,"end":9,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":9,"index":9},"identifierName":"async"},
+            "name": "async"
+          },
+          "arguments": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":10,"end":17,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":17,"index":17}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":10,"end":17,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":17,"index":17}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"x"},
+              "name": "x"
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start":15,"end":17,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":17,"index":17}},
+            "body": [],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

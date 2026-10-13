@@ -1,0 +1,68 @@
+{
+  "type": "File",
+  "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+  "errors": [
+    "SyntaxError: Missing semicolon. (1:12)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "expression": {
+          "type": "TSTypeAssertion",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "typeAnnotation": {
+            "type": "TSTypeReference",
+            "start":1,"end":6,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":6,"index":6}},
+            "typeName": {
+              "type": "Identifier",
+              "start":1,"end":6,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":6,"index":6},"identifierName":"const"},
+              "name": "const"
+            }
+          },
+          "expression": {
+            "type": "Identifier",
+            "start":7,"end":12,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":12,"index":12},"identifierName":"async"},
+            "name": "async"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":13,"end":20,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":20,"index":20}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":13,"end":19,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":19,"index":19}},
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start":13,"end":14,"loc":{"start":{"line":1,"column":13,"index":13},"end":{"line":1,"column":14,"index":14},"identifierName":"x"},
+              "name": "x"
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
