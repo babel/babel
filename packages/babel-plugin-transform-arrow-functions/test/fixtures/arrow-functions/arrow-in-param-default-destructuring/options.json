@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-arrow-functions"],
+  "throws": "When using '@babel/plugin-transform-arrow-functions', it's not possible to compile `this` in an arrow function in a parameter default without compiling parameters.\nPlease add '@babel/plugin-transform-parameters' to your Babel configuration."
+}

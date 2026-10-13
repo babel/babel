@@ -236,6 +236,27 @@ const getSuperCallsVisitor = environmentVisitor<{
  * @returns `fnPath`: the new path to the function node. This is different from the fnPath
  *                    parameter when the function node is wrapped in another node.
  */
+/**
+ * Check whether `fnPath` is contained in the parameter list of
+ * `thisEnvFn`, i.e. whether the arrow being converted is a parameter
+ * default (possibly nested in a destructuring pattern) of the function
+ * that would receive the injected environment aliases.
+ */
+function isInFunctionParams(
+  fnPath: NodePath<t.Function>,
+  thisEnvFn: NodePath<t.Function>,
+): boolean {
+  let curr: NodePath | null = fnPath;
+  while (curr && curr !== thisEnvFn) {
+    const parent: NodePath | null = curr.parentPath;
+    if (parent === thisEnvFn) {
+      return curr.listKey === "params";
+    }
+    curr = parent;
+  }
+  return false;
+}
+
 function hoistFunctionEnvironment(
   fnPath: NodePath<t.Function>,
   // TODO(Babel 9): Consider defaulting to `false` for spec compliance
@@ -284,6 +305,37 @@ function hoistFunctionEnvironment(
 
   const { thisPaths, argumentsPaths, newTargetPaths, superProps, superCalls } =
     getScopeInformation(fnPath);
+
+  // An arrow function in a parameter default cannot see bindings declared
+  // in the function body: parameter initializers run in the parameter
+  // scope, which is outer to the body scope. The `_this`/`_arguments`/
+  // `_newtarget` aliases are injected into the body, so they would not
+  // be visible to the arrow and the output would throw a ReferenceError
+  // at runtime. Throw here, like the `super()` handling below, instead
+  // of emitting broken code.
+  // `this` is only rewritten to a body-injected alias when not using
+  // `.bind(this)` (i.e. `noNewArrows`) or in a derived-class
+  // constructor; otherwise the arrow is bound in place and `this` in a
+  // parameter default is correct as-is.
+  const needsThisAlias =
+    thisPaths.length > 0 &&
+    (noNewArrows || (inConstructor && hasSuperClass(thisEnvFn)));
+  if (
+    (argumentsPaths.length > 0 ||
+      newTargetPaths.length > 0 ||
+      needsThisAlias) &&
+    isInFunctionParams(fnPath, thisEnvFn)
+  ) {
+    const refs: string[] = [];
+    if (needsThisAlias) refs.push("`this`");
+    if (argumentsPaths.length > 0) refs.push("`arguments`");
+    if (newTargetPaths.length > 0) refs.push("`new.target`");
+    throw fnPath.buildCodeFrameError(
+      "When using '@babel/plugin-transform-arrow-functions', " +
+        `it's not possible to compile ${refs.join(" and ")} in an arrow function in a parameter default without compiling parameters.\n` +
+        "Please add '@babel/plugin-transform-parameters' to your Babel configuration.",
+    );
+  }
 
   // Convert all super() calls in the constructor, if super is used in an arrow.
   if (inConstructor && superCalls.length > 0) {
