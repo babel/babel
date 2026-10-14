@@ -36,11 +36,14 @@ const loopLabel = { kind: LoopLabelKind.Loop } as const,
   switchLabel = { kind: LoopLabelKind.Switch } as const;
 
 export const enum ParseFunctionFlag {
-  Expression = 0b0000,
-  Declaration = 0b0001,
-  HangingDeclaration = 0b0010,
-  NullableId = 0b0100,
-  Async = 0b1000,
+  Expression = 0b00000,
+  Declaration = 0b00001,
+  // The declaration is not bound in the enclosing scope
+  HangingDeclaration = 0b00010,
+  NullableId = 0b00100,
+  Async = 0b01000,
+  // The declaration is a statement that is not a StatementListItem
+  SingleStatement = 0b10000,
 }
 
 export const enum ParseStatementFlag {
@@ -525,7 +528,7 @@ export default abstract class StatementParser extends ExpressionParser {
         return this.parseFunctionStatement(
           node as Undone<N.FunctionDeclaration>,
           false,
-          !allowDeclaration && allowFunctionDeclaration,
+          flags,
         );
       case tt._class:
         if (!allowDeclaration) this.unexpected();
@@ -673,7 +676,7 @@ export default abstract class StatementParser extends ExpressionParser {
           return this.parseFunctionStatement(
             node as Undone<N.FunctionDeclaration>,
             true,
-            !allowDeclaration && allowFunctionDeclaration,
+            flags,
           );
         }
       }
@@ -703,6 +706,7 @@ export default abstract class StatementParser extends ExpressionParser {
         node as Undone<N.ExpressionStatement>,
         expr,
         decorators,
+        flags,
       );
     }
   }
@@ -1074,15 +1078,23 @@ export default abstract class StatementParser extends ExpressionParser {
     this: Parser,
     node: Undone<N.FunctionDeclaration>,
     isAsync: boolean,
-    isHangingDeclaration: boolean,
+    statementFlags: ParseStatementFlag,
   ): N.FunctionDeclaration {
     this.next(); // eat 'function'
-    return this.parseFunction(
-      node,
-      ParseFunctionFlag.Declaration |
-        (isHangingDeclaration ? ParseFunctionFlag.HangingDeclaration : 0) |
-        (isAsync ? ParseFunctionFlag.Async : 0),
-    );
+    let flags =
+      ParseFunctionFlag.Declaration | (isAsync ? ParseFunctionFlag.Async : 0);
+    if (
+      !(statementFlags & ParseStatementFlag.AllowDeclaration) &&
+      statementFlags & ParseStatementFlag.AllowFunctionDeclaration
+    ) {
+      flags |= ParseFunctionFlag.SingleStatement;
+      // Annex B.3.1: unlike functions in if statement clauses (B.3.3),
+      // labelled function declarations are bound in the enclosing scope.
+      if (!(statementFlags & ParseStatementFlag.AllowLabeledFunction)) {
+        flags |= ParseFunctionFlag.HangingDeclaration;
+      }
+    }
+    return this.parseFunction(node, flags);
   }
 
   // https://tc39.es/ecma262/#prod-IfStatement
@@ -1358,6 +1370,8 @@ export default abstract class StatementParser extends ExpressionParser {
     expr: N.Expression,
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in TypeScript parser */
     decorators: N.Decorator[] | null | undefined,
+    // Used by the placeholders plugin to parse placeholder labels
+    _flags: ParseStatementFlag,
   ) {
     node.expression = expr;
     this.semicolon();
@@ -1654,7 +1668,6 @@ export default abstract class StatementParser extends ExpressionParser {
     node: Undone<T>,
     flags: ParseFunctionFlag = ParseFunctionFlag.Expression,
   ): T {
-    const hangingDeclaration = flags & ParseFunctionFlag.HangingDeclaration;
     const isDeclaration = !!(flags & ParseFunctionFlag.Declaration);
     const requireId = isDeclaration && !(flags & ParseFunctionFlag.NullableId);
     const isAsync = !!(flags & ParseFunctionFlag.Async);
@@ -1662,7 +1675,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.initFunction(node, isAsync);
 
     if (this.match(tt.star)) {
-      if (hangingDeclaration) {
+      if (flags & ParseFunctionFlag.SingleStatement) {
         this.raise(
           Errors.GeneratorInSingleStatementContext,
           this.state.startLoc,
@@ -1701,7 +1714,7 @@ export default abstract class StatementParser extends ExpressionParser {
     this.prodParam.exit();
     this.scope.exit();
 
-    if (isDeclaration && !hangingDeclaration) {
+    if (isDeclaration && !(flags & ParseFunctionFlag.HangingDeclaration)) {
       // We need to register this _after_ parsing the function body
       // because of TypeScript body-less function declarations,
       // which shouldn't be added to the scope.
