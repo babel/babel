@@ -1,0 +1,232 @@
+{
+  "type": "File",
+  "start":0,"end":124,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":34,"index":124}},
+  "errors": [
+    "SyntaxError: Identifier 'f' has already been declared. (1:25)",
+    "SyntaxError: Identifier 'g' has already been declared. (2:25)",
+    "SyntaxError: Identifier 'h' has already been declared. (3:21)",
+    "SyntaxError: Identifier 'i' has already been declared. (4:26)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":124,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":34,"index":124}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":29,"index":29}},
+        "body": [
+          {
+            "type": "LabeledStatement",
+            "start":2,"end":20,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":20,"index":20}},
+            "body": {
+              "type": "FunctionDeclaration",
+              "start":5,"end":20,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":20,"index":20}},
+              "id": {
+                "type": "Identifier",
+                "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"f"},
+                "name": "f"
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":18,"end":20,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":20,"index":20}},
+                "body": [],
+                "directives": []
+              }
+            },
+            "label": {
+              "type": "Identifier",
+              "start":2,"end":3,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":3,"index":3},"identifierName":"l"},
+              "name": "l"
+            }
+          },
+          {
+            "type": "VariableDeclaration",
+            "start":21,"end":27,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":27,"index":27}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":25,"end":26,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":26,"index":26}},
+                "id": {
+                  "type": "Identifier",
+                  "start":25,"end":26,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":26,"index":26},"identifierName":"f"},
+                  "name": "f"
+                },
+                "init": null
+              }
+            ],
+            "kind": "let"
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":30,"end":59,"loc":{"start":{"line":2,"column":0,"index":30},"end":{"line":2,"column":29,"index":59}},
+        "body": [
+          {
+            "type": "LabeledStatement",
+            "start":32,"end":50,"loc":{"start":{"line":2,"column":2,"index":32},"end":{"line":2,"column":20,"index":50}},
+            "body": {
+              "type": "FunctionDeclaration",
+              "start":35,"end":50,"loc":{"start":{"line":2,"column":5,"index":35},"end":{"line":2,"column":20,"index":50}},
+              "id": {
+                "type": "Identifier",
+                "start":44,"end":45,"loc":{"start":{"line":2,"column":14,"index":44},"end":{"line":2,"column":15,"index":45},"identifierName":"g"},
+                "name": "g"
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":48,"end":50,"loc":{"start":{"line":2,"column":18,"index":48},"end":{"line":2,"column":20,"index":50}},
+                "body": [],
+                "directives": []
+              }
+            },
+            "label": {
+              "type": "Identifier",
+              "start":32,"end":33,"loc":{"start":{"line":2,"column":2,"index":32},"end":{"line":2,"column":3,"index":33},"identifierName":"l"},
+              "name": "l"
+            }
+          },
+          {
+            "type": "VariableDeclaration",
+            "start":51,"end":57,"loc":{"start":{"line":2,"column":21,"index":51},"end":{"line":2,"column":27,"index":57}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":55,"end":56,"loc":{"start":{"line":2,"column":25,"index":55},"end":{"line":2,"column":26,"index":56}},
+                "id": {
+                  "type": "Identifier",
+                  "start":55,"end":56,"loc":{"start":{"line":2,"column":25,"index":55},"end":{"line":2,"column":26,"index":56},"identifierName":"g"},
+                  "name": "g"
+                },
+                "init": null
+              }
+            ],
+            "kind": "var"
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":60,"end":89,"loc":{"start":{"line":3,"column":0,"index":60},"end":{"line":3,"column":29,"index":89}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":62,"end":68,"loc":{"start":{"line":3,"column":2,"index":62},"end":{"line":3,"column":8,"index":68}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":66,"end":67,"loc":{"start":{"line":3,"column":6,"index":66},"end":{"line":3,"column":7,"index":67}},
+                "id": {
+                  "type": "Identifier",
+                  "start":66,"end":67,"loc":{"start":{"line":3,"column":6,"index":66},"end":{"line":3,"column":7,"index":67},"identifierName":"h"},
+                  "name": "h"
+                },
+                "init": null
+              }
+            ],
+            "kind": "var"
+          },
+          {
+            "type": "LabeledStatement",
+            "start":69,"end":87,"loc":{"start":{"line":3,"column":9,"index":69},"end":{"line":3,"column":27,"index":87}},
+            "body": {
+              "type": "FunctionDeclaration",
+              "start":72,"end":87,"loc":{"start":{"line":3,"column":12,"index":72},"end":{"line":3,"column":27,"index":87}},
+              "id": {
+                "type": "Identifier",
+                "start":81,"end":82,"loc":{"start":{"line":3,"column":21,"index":81},"end":{"line":3,"column":22,"index":82},"identifierName":"h"},
+                "name": "h"
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":85,"end":87,"loc":{"start":{"line":3,"column":25,"index":85},"end":{"line":3,"column":27,"index":87}},
+                "body": [],
+                "directives": []
+              }
+            },
+            "label": {
+              "type": "Identifier",
+              "start":69,"end":70,"loc":{"start":{"line":3,"column":9,"index":69},"end":{"line":3,"column":10,"index":70},"identifierName":"l"},
+              "name": "l"
+            }
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "BlockStatement",
+        "start":90,"end":124,"loc":{"start":{"line":4,"column":0,"index":90},"end":{"line":4,"column":34,"index":124}},
+        "body": [
+          {
+            "type": "VariableDeclaration",
+            "start":92,"end":98,"loc":{"start":{"line":4,"column":2,"index":92},"end":{"line":4,"column":8,"index":98}},
+            "declarations": [
+              {
+                "type": "VariableDeclarator",
+                "start":96,"end":97,"loc":{"start":{"line":4,"column":6,"index":96},"end":{"line":4,"column":7,"index":97}},
+                "id": {
+                  "type": "Identifier",
+                  "start":96,"end":97,"loc":{"start":{"line":4,"column":6,"index":96},"end":{"line":4,"column":7,"index":97},"identifierName":"i"},
+                  "name": "i"
+                },
+                "init": null
+              }
+            ],
+            "kind": "let"
+          },
+          {
+            "type": "LabeledStatement",
+            "start":99,"end":122,"loc":{"start":{"line":4,"column":9,"index":99},"end":{"line":4,"column":32,"index":122}},
+            "body": {
+              "type": "LabeledStatement",
+              "start":103,"end":122,"loc":{"start":{"line":4,"column":13,"index":103},"end":{"line":4,"column":32,"index":122}},
+              "body": {
+                "type": "FunctionDeclaration",
+                "start":107,"end":122,"loc":{"start":{"line":4,"column":17,"index":107},"end":{"line":4,"column":32,"index":122}},
+                "id": {
+                  "type": "Identifier",
+                  "start":116,"end":117,"loc":{"start":{"line":4,"column":26,"index":116},"end":{"line":4,"column":27,"index":117},"identifierName":"i"},
+                  "name": "i"
+                },
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":120,"end":122,"loc":{"start":{"line":4,"column":30,"index":120},"end":{"line":4,"column":32,"index":122}},
+                  "body": [],
+                  "directives": []
+                }
+              },
+              "label": {
+                "type": "Identifier",
+                "start":103,"end":105,"loc":{"start":{"line":4,"column":13,"index":103},"end":{"line":4,"column":15,"index":105},"identifierName":"l2"},
+                "name": "l2"
+              }
+            },
+            "label": {
+              "type": "Identifier",
+              "start":99,"end":101,"loc":{"start":{"line":4,"column":9,"index":99},"end":{"line":4,"column":11,"index":101},"identifierName":"l1"},
+              "name": "l1"
+            }
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

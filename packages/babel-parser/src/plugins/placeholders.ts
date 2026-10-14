@@ -7,6 +7,7 @@ import { ParseErrorEnum, type ParseErrorTemplates } from "../parse-error.ts";
 import type { Undone } from "../parser/node.ts";
 import type { ExpressionErrors } from "../parser/util.ts";
 import type { BindingFlag } from "../util/scopeflags.ts";
+import { ParseStatementFlag } from "../parser/statement.ts";
 
 type PossiblePlaceholders = {
   Identifier: N.Identifier;
@@ -222,11 +223,12 @@ export default (superClass: typeof Parser) =>
     parseExpressionStatement(
       node: MaybePlaceholder<"Statement">,
       expr: MaybePlaceholder<"Expression">,
+      flags: ParseStatementFlag,
     ): MaybePlaceholder<"Statement"> {
       // @ts-expect-error placeholder typings
       if (expr.type !== "Placeholder" || expr.extra?.parenthesized) {
         // @ts-expect-error placeholder typings
-        return super.parseExpressionStatement(node, expr);
+        return super.parseExpressionStatement(node, expr, flags);
       }
 
       if (this.match(tt.colon)) {
@@ -234,7 +236,11 @@ export default (superClass: typeof Parser) =>
         const stmt: N.LabeledStatement = node;
         stmt.label = this.finishPlaceholder(expr, "Identifier");
         this.next();
-        stmt.body = super.parseStatementOrSloppyAnnexBFunctionDeclaration();
+        // https://tc39.es/ecma262/#prod-LabelledItem
+        stmt.body =
+          flags & ParseStatementFlag.AllowLabeledFunction
+            ? super.parseStatementOrSloppyAnnexBFunctionDeclaration(true)
+            : super.parseStatement();
         return this.finishNode(stmt, "LabeledStatement");
       }
 
