@@ -28,6 +28,16 @@ export function hasNewLine(input: string, start: number, end: number): boolean {
 
 export const skipWhiteSpace = /(?:\s|\/\/.*|\/\*[^]*?\*\/)*/g;
 
+// Like skipWhiteSpace, but also skips the Annex B HTML-like comments, which
+// are only allowed in scripts. `-->` is only a comment after a line
+// terminator: the first group skips whitespace and block comments on the
+// current line, and the second group must not start with `-->`. The second
+// group is optional so that a failed `(?!-->)` does not backtrack into the
+// first one.
+// https://tc39.es/ecma262/#sec-html-like-comments
+export const skipWhiteSpaceAnnexB =
+  /(?:[^\S\n\r\u2028\u2029]|\/\*.*?\*\/)*(?:(?!-->)(?:\s|\/\/.*|\/\*[^]*?\*\/|<!--.*|-->.*)*)?/g;
+
 export const skipWhiteSpaceInLine =
   /(?:[^\S\n\r\u2028\u2029]|\/\/.*|\/\*.*?\*\/)*/g;
 

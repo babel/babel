@@ -1,0 +1,59 @@
+{
+  "type": "File",
+  "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":5,"index":11}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":5,"index":11}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":0,"end":4,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":4,"index":4}},
+          "left": {
+            "type": "NumericLiteral",
+            "start":0,"end":1,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":1,"index":1}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          },
+          "operator": "+",
+          "right": {
+            "type": "Identifier",
+            "start":2,"end":4,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":4,"index":4},"identifierName":"_1"},
+            "name": "_1"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":6,"end":11,"loc":{"start":{"line":2,"column":0,"index":6},"end":{"line":2,"column":5,"index":11}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":6,"end":10,"loc":{"start":{"line":2,"column":0,"index":6},"end":{"line":2,"column":4,"index":10}},
+          "left": {
+            "type": "NumericLiteral",
+            "start":6,"end":7,"loc":{"start":{"line":2,"column":0,"index":6},"end":{"line":2,"column":1,"index":7}},
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          },
+          "operator": "-",
+          "right": {
+            "type": "Identifier",
+            "start":8,"end":10,"loc":{"start":{"line":2,"column":2,"index":8},"end":{"line":2,"column":4,"index":10},"identifierName":"_1"},
+            "name": "_1"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

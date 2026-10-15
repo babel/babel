@@ -707,6 +707,35 @@ export default abstract class ExpressionParser extends LValParser {
   ): N.Expression {
     const startLoc = this.state.startLoc;
     this.setLoc(startLoc);
+
+    if (
+      refExpressionErrors != null &&
+      (this.match(tt.braceL) || this.match(tt.bracketL))
+    ) {
+      // An object or array literal followed by a subscript can never be
+      // converted to a pattern, so the errors recorded while parsing it must
+      // be reported: track them separately to know which ones belong to it.
+      const atomExpressionErrors = new ExpressionErrors();
+      const expr = this.parseExprAtom(atomExpressionErrors);
+      const result = this.parseSubscripts(expr, startLoc);
+      if (result !== expr) {
+        // e.g. `[{ a = 1 }].x = 0`
+        this.checkExpressionErrors(atomExpressionErrors, true);
+      } else {
+        refExpressionErrors.shorthandAssignLoc ??=
+          atomExpressionErrors.shorthandAssignLoc;
+        refExpressionErrors.doubleProtoLoc ??=
+          atomExpressionErrors.doubleProtoLoc;
+        refExpressionErrors.privateKeyLoc ??=
+          atomExpressionErrors.privateKeyLoc;
+        refExpressionErrors.optionalParametersLoc ??=
+          atomExpressionErrors.optionalParametersLoc;
+        refExpressionErrors.voidPatternLoc ??=
+          atomExpressionErrors.voidPatternLoc;
+      }
+      return result;
+    }
+
     const expr = this.parseExprAtom(refExpressionErrors);
 
     if (this.shouldExitDescending(expr)) {
@@ -1075,6 +1104,7 @@ export default abstract class ExpressionParser extends LValParser {
   ): N.Expression | N.Super | N.Import {
     const startLoc = this.state.startLoc;
     const isImport = this.match(tt._import);
+    this.state.canStartArrow = false;
     const base = this.parseExprAtom();
     if (isImport && base.type === "ImportExpression") {
       onUnparenthesizedImportExpression(base);
@@ -2890,6 +2920,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     if (!soloAwait) {
+      this.state.canStartArrow = false;
       node.argument = this.parseMaybeUnary(null, true);
     }
 
