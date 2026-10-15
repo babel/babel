@@ -1,6 +1,6 @@
 // If PromiseResolve throws synchronously on the yielded value (here, a
 // promise whose "constructor" getter throws), the wrapper closes the sync
-// iterator and rejects with that error (ecma262#2600).
+// iterator synchronously and rejects with that error (ecma262#2600).
 const log = [];
 const err = new Error();
 
@@ -26,11 +26,9 @@ const iterable = {
   },
 };
 
-return (async () => {
-  await expect(
-    (async () => {
-      for await (const x of iterable);
-    })(),
-  ).rejects.toBe(err);
-  expect(log).toEqual(["next", "return"]);
+const promise = (async () => {
+  for await (const x of iterable);
 })();
+expect(log).toEqual(["next", "return"]);
+
+return expect(promise).rejects.toBe(err);

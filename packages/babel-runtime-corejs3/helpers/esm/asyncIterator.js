@@ -23,7 +23,11 @@ function AsyncFromSyncIterator(r) {
     try {
       n = _Promise.resolve(e);
     } catch (r) {
-      n = _Promise.reject(r);
+      if (t && !o) try {
+        var a = t["return"];
+        null != a && a.call(t);
+      } catch (r) {}
+      return _Promise.reject(r);
     }
     return n.then(function (r) {
       return {

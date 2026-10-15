@@ -137,8 +137,15 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
     try {
       p = Promise.resolve(value);
     } catch (e) {
+      // If PromiseResolve throws, close the iterator synchronously.
+      if (s && !done) {
+        try {
+          var ret = s["return"];
+          if (ret != null) ret.call(s);
+        } catch (_) {}
+      }
       // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
-      p = Promise.reject(e);
+      return Promise.reject(e);
     }
     return p.then<IteratorResult<T, TReturn>>(
       function (value) {
