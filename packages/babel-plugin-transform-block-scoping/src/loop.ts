@@ -6,7 +6,28 @@ interface LoopBodyBindingsState {
 }
 
 const collectLoopBodyBindingsVisitor: Visitor<LoopBodyBindingsState> = {
-  "Expression|Declaration|Loop"(path) {
+  "Expression|Declaration"(path) {
+    path.skip();
+  },
+  Loop(path, state) {
+    // A nested loop handles its own head and body, but a closure created in
+    // its initializer (e.g. `for (let x = (f = () => x, 0); ...)`) captures
+    // a binding that must be fresh on every entry of the nested loop, which
+    // only the enclosing loop can provide by wrapping its body.
+    if (path.isForStatement()) {
+      const init = path.get("init");
+      if (
+        init.isVariableDeclaration() &&
+        (init.node.kind === "let" || init.node.kind === "const")
+      ) {
+        for (const name of Object.keys(init.getBindingIdentifiers())) {
+          const binding = init.scope.getOwnBinding(name);
+          if (binding && getUsageInBody(binding, path).capturedInHeadClosure) {
+            state.blockScoped.push(binding);
+          }
+        }
+      }
+    }
     path.skip();
   },
   Scope(path, state) {
