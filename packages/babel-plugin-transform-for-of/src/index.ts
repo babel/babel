@@ -10,6 +10,18 @@ export interface Options {
   loose?: boolean;
 }
 
+// The loop head is moved into the body, so a binding of the body must not
+// capture a name that the head declares or reads.
+function getLeftNames(path: NodePath<t.ForXStatement>) {
+  const names = Object.keys(path.getBindingIdentifiers());
+  path.get("left").traverse({
+    ReferencedIdentifier({ node }) {
+      names.push(node.name);
+    },
+  });
+  return names;
+}
+
 function buildLoopBody(
   path: NodePath<t.ForXStatement>,
   declar: t.Statement,
@@ -20,9 +32,7 @@ function buildLoopBody(
   const body = newBody ?? bodyPath.node;
   if (
     t.isBlockStatement(body) &&
-    Object.keys(path.getBindingIdentifiers()).some(id =>
-      bodyPath.scope.hasOwnBinding(id),
-    )
+    getLeftNames(path).some(name => bodyPath.scope.hasOwnBinding(name))
   ) {
     block = t.blockStatement([declar, body]);
   } else {
