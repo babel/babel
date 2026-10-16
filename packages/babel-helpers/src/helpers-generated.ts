@@ -103,7 +103,7 @@ const helpers: Record<string, Helper> = {
   // size: 57, gzip size: 71
   arrayWithHoles: helper(
     "7.0.0-beta.0",
-    "function _arrayWithHoles(r){if(Array.isArray(r))return r}",
+    "function _arrayWithHoles(r){if(Array.isArray(r)&&r[Symbol.iterator]===Array.prototype[Symbol.iterator])return r}",
     {
       globals: ["Array"],
       locals: { _arrayWithHoles: ["body.0.id"] },
