@@ -161,10 +161,21 @@ export function referencesImport(
       const object = (
         this as NodePath<t.MemberExpression | t.OptionalMemberExpression>
       ).get("object");
-      return (
-        object.isReferencedIdentifier() &&
-        object.referencesImport(moduleSource, "*")
-      );
+      if (!object.isReferencedIdentifier()) return false;
+
+      const binding = object.scope.getBinding(object.node.name);
+      if (binding?.kind !== "module") return false;
+
+      const { path } = binding;
+      if (
+        !path.isImportNamespaceSpecifier() ||
+        path.parent.source.value !== moduleSource
+      ) {
+        return false;
+      }
+
+      const { exportsFilter } = path.node;
+      return !exportsFilter || isInExportsFilter(exportsFilter, importName);
     }
 
     return false;
@@ -188,8 +199,11 @@ export function referencesImport(
     return true;
   }
 
-  if (path.isImportNamespaceSpecifier() && importName === "*") {
-    return true;
+  if (path.isImportNamespaceSpecifier()) {
+    const { exportsFilter } = path.node;
+    return exportsFilter
+      ? isInExportsFilter(exportsFilter, importName)
+      : importName === "*";
   }
 
   if (
@@ -200,6 +214,17 @@ export function referencesImport(
   }
 
   return false;
+}
+
+function isInExportsFilter(
+  exportsFilter: (t.Identifier | t.StringLiteral)[],
+  importName: string,
+): boolean {
+  return exportsFilter.some(
+    name =>
+      isIdentifier(name, { name: importName }) ||
+      isStringLiteral(name, { value: importName }),
+  );
 }
 
 /**

@@ -421,7 +421,7 @@ export default (superClass: typeof Parser) =>
         const hasStarImport = this.maybeParseStarImportSpecifier(node);
 
         // import %%DEFAULT%%, { ...
-        if (!hasStarImport) this.parseNamedImportSpecifiers(node);
+        if (!hasStarImport) this.parseNamedOrFilteredImportSpecifiers(node);
       }
 
       this.expectContextual(tt._from);
