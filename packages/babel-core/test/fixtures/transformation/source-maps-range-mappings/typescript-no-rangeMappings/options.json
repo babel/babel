@@ -1,0 +1,8 @@
+{
+  "sourceType": "module",
+  "plugins": ["transform-typescript"],
+  "sourceMaps": true,
+  "generatorOpts": {
+    "sourceMapRanges": false
+  }
+}
