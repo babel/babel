@@ -424,6 +424,11 @@ export default declare<PluginState, Options>((api, options: Options) => {
                 const specifiers = path.node.specifiers;
                 if (specifiers?.length) {
                   if (path.node.source) {
+                    if (path.node.phase === "defer") {
+                      throw path.buildCodeFrameError(
+                        "Transforming `export defer ... from '...'` is not supported yet.",
+                      );
+                    }
                     pushModule(path.node.source.value, "exports", specifiers);
                     path.remove();
                   } else {

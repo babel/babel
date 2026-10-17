@@ -357,6 +357,11 @@ function getModuleMetadata(
       };
       data.referenced = true;
     } else if (child.isExportNamedDeclaration() && child.node.source) {
+      if (child.node.phase === "defer") {
+        throw child.buildCodeFrameError(
+          "Transforming `export defer ... from '...'` is not supported yet.",
+        );
+      }
       hasExports = true;
       const data = getData(child.node.source, child.node);
       if (!data.loc) data.loc = child.node.loc;
