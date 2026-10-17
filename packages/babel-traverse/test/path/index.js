@@ -64,7 +64,9 @@ describe("NodePath", () => {
         expect(path.hasNode()).toBe(true);
       });
     });
+  });
 
+  it("exported methods", () => {
     function isAndAssertFilter(key) {
       return !(
         (key.startsWith("assert") || key.startsWith("is")) &&
@@ -74,13 +76,12 @@ describe("NodePath", () => {
       );
     }
 
-    it("methods babel 8", () => {
-      const path = new NodePath({}, {});
-      const keys = Object.keys(Object.getPrototypeOf(path))
-        .sort()
-        .filter(isAndAssertFilter);
+    const path = new NodePath({}, {});
+    const keys = Object.keys(Object.getPrototypeOf(path))
+      .sort()
+      .filter(isAndAssertFilter);
 
-      expect(keys).toMatchInlineSnapshot(`
+    expect(keys).toMatchInlineSnapshot(`
         [
           "_guessExecutionStatusRelativeTo",
           "addComment",
@@ -149,7 +150,6 @@ describe("NodePath", () => {
           "requeue",
           "requeueComputedKeyAndDecorators",
           "resolve",
-          "setContext",
           "shareCommentsWithSiblings",
           "skip",
           "skipKey",
@@ -160,6 +160,5 @@ describe("NodePath", () => {
           "willIMaybeExecuteBefore",
         ]
       `);
-    });
   });
 });

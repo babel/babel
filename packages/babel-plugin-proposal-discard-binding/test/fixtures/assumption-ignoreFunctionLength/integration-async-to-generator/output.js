@@ -11,7 +11,7 @@ function f1(_x2, _x3) {
   return _f2.apply(this, arguments);
 }
 function _f2() {
-  _f2 = babelHelpers.asyncToGenerator(function* (_2, x) {
+  _f2 = babelHelpers.asyncToGenerator(function* (_, x) {
     "f1";
   });
   return _f2.apply(this, arguments);
@@ -34,7 +34,7 @@ class C {
   m1() {
     "m1";
 
-    return babelHelpers.asyncToGenerator(function* (_, x) {}).apply(this, arguments);
+    return babelHelpers.asyncToGenerator(function* (_2, x) {}).apply(this, arguments);
   }
   m2() {
     "m2";

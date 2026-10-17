@@ -1,7 +1,7 @@
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
-import traverse, { NodePath } from "../lib/index.js";
+import traverse from "../lib/index.js";
 
 function getPath(code, options) {
   const ast =
@@ -30,22 +30,7 @@ function getIdentifierPath(code) {
 }
 
 function createNode(node) {
-  const ast = t.file(t.program(Array.isArray(node) ? node : [node]));
-
-  // This puts the path into the cache internally
-  // We afterwards traverse ast, as we need to start traversing
-  // at the File node and not the Program node
-  NodePath.get({
-    hub: {
-      buildError: (_, msg) => new Error(msg),
-    },
-    parentPath: null,
-    parent: ast,
-    container: ast,
-    key: "program",
-  }).setContext();
-
-  return ast;
+  return t.file(t.program(Array.isArray(node) ? node : [node]));
 }
 
 describe("scope", () => {
