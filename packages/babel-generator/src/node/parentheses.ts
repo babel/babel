@@ -64,6 +64,9 @@ const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
     case __node("CallExpression"):
     case __node("OptionalCallExpression"):
     case __node("NewExpression"):
+    case __node("PartialCallExpression"):
+    case __node("OptionalPartialCallExpression"):
+    case __node("PartialNewExpression"):
       return parent.callee === node;
     case __node("TaggedTemplateExpression"):
       return parent.tag === node;
@@ -515,12 +518,16 @@ export function ConditionalExpression(
 export { ConditionalExpression as ArrowFunctionExpression };
 
 export function OptionalMemberExpression(
-  node: t.OptionalMemberExpression,
+  node:
+    | t.OptionalMemberExpression
+    | t.OptionalCallExpression
+    | t.OptionalPartialCallExpression,
   parent: any,
   parentId: number,
 ): boolean {
   switch (parentId) {
     case __node("CallExpression"):
+    case __node("PartialCallExpression"):
       return parent.callee === node;
     case __node("MemberExpression"):
       return parent.object === node;
@@ -528,7 +535,10 @@ export function OptionalMemberExpression(
   return false;
 }
 
-export { OptionalMemberExpression as OptionalCallExpression };
+export {
+  OptionalMemberExpression as OptionalCallExpression,
+  OptionalMemberExpression as OptionalPartialCallExpression,
+};
 
 export function AssignmentExpression(
   node: t.AssignmentExpression,

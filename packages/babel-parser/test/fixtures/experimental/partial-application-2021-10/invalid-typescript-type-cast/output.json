@@ -1,0 +1,81 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":33}},
+  "errors": [
+    "SyntaxError: Did not expect a type annotation here. (1:4)",
+    "SyntaxError: Did not expect a type annotation here. (2:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":33}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+        "expression": {
+          "type": "PartialCallExpression",
+          "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+          "callee": {
+            "type": "Identifier",
+            "start":0,"end":1,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":1,"index":1},"identifierName":"f"},
+            "name": "f"
+          },
+          "arguments": [
+            {
+              "type": "TSTypeCastExpression",
+              "start":3,"end":12,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":12,"index":12}},
+              "expression": {
+                "type": "Identifier",
+                "start":3,"end":4,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":4,"index":4},"identifierName":"x"},
+                "name": "x"
+              },
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":4,"end":12,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":12,"index":12}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":6,"end":12,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":12,"index":12}}
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":15,"end":33,"loc":{"start":{"line":2,"column":0,"index":15},"end":{"line":2,"column":18,"index":33}},
+        "expression": {
+          "type": "PartialNewExpression",
+          "start":15,"end":32,"loc":{"start":{"line":2,"column":0,"index":15},"end":{"line":2,"column":17,"index":32}},
+          "callee": {
+            "type": "Identifier",
+            "start":19,"end":20,"loc":{"start":{"line":2,"column":4,"index":19},"end":{"line":2,"column":5,"index":20},"identifierName":"F"},
+            "name": "F"
+          },
+          "arguments": [
+            {
+              "type": "TSTypeCastExpression",
+              "start":22,"end":31,"loc":{"start":{"line":2,"column":7,"index":22},"end":{"line":2,"column":16,"index":31}},
+              "expression": {
+                "type": "Identifier",
+                "start":22,"end":23,"loc":{"start":{"line":2,"column":7,"index":22},"end":{"line":2,"column":8,"index":23},"identifierName":"x"},
+                "name": "x"
+              },
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start":23,"end":31,"loc":{"start":{"line":2,"column":8,"index":23},"end":{"line":2,"column":16,"index":31}},
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start":25,"end":31,"loc":{"start":{"line":2,"column":10,"index":25},"end":{"line":2,"column":16,"index":31}}
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}
