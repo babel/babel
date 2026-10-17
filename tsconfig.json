@@ -170,6 +170,9 @@
       "path": "./packages/babel-plugin-proposal-export-default-from"
     },
     {
+      "path": "./packages/babel-plugin-proposal-filtered-namespaces"
+    },
+    {
       "path": "./packages/babel-plugin-proposal-function-bind"
     },
     {
