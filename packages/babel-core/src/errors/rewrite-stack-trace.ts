@@ -42,6 +42,8 @@
  * were directly thrown in the config file.
  */
 
+import type { Gensync } from "gensync";
+
 const ErrorToString = Function.call.bind(Error.prototype.toString);
 
 const SUPPORTED =
@@ -88,9 +90,17 @@ export function expectedError(error: Error) {
   return error;
 }
 
-export function beginHiddenCallStack<A extends unknown[], R>(
-  fn: (...args: A) => R,
+export function beginHiddenCallStackForGensync<A extends unknown[], R, E>(
+  handler: Gensync<A, R, E>,
 ) {
+  return {
+    errback: beginHiddenCallStack(handler.errback),
+    sync: beginHiddenCallStack(handler.sync),
+    async: beginHiddenCallStack(handler.async),
+  };
+}
+
+function beginHiddenCallStack<A extends unknown[], R>(fn: (...args: A) => R) {
   if (!SUPPORTED) return fn;
 
   return Object.defineProperty(
