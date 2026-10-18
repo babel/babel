@@ -37,7 +37,7 @@ import { Errors, type LValAncestor } from "../parse-error.ts";
 import type Parser from "./index.ts";
 import { OptionFlags } from "../options.ts";
 
-const unwrapParenthesizedExpression = (node: Node): Node => {
+export const unwrapParenthesizedExpression = (node: Node): Node => {
   return node.type === "ParenthesizedExpression"
     ? unwrapParenthesizedExpression(node.expression)
     : node;
