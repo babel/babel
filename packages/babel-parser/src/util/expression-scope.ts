@@ -97,6 +97,11 @@ class ArrowHeadParsingScope extends ExpressionScope {
   clearDeclarationError(index: number) {
     this.declarationErrors.delete(index);
   }
+  clearDeclarationErrorsFrom(index: number) {
+    this.declarationErrors.forEach((_, key) => {
+      if (key >= index) this.declarationErrors.delete(key);
+    });
+  }
   iterateErrors(
     iterator: (a: ArrowHeadParsingDeclarationError, b: number) => void,
   ) {
@@ -197,6 +202,18 @@ export default class ExpressionScopeHandler {
         scope.recordDeclarationError(Errors.AwaitBindingIdentifier, at);
       }
       scope = stack[--i];
+    }
+  }
+
+  /**
+   * Discard the errors recorded at or after `index`, i.e. by a failed `tryParse` attempt
+   * starting at `index`. The fallback parse records them again if they still apply.
+   */
+  clearDeclarationErrorsFrom(index: number): void {
+    for (const scope of this.stack) {
+      if (scope.canBeArrowParameterDeclaration()) {
+        scope.clearDeclarationErrorsFrom(index);
+      }
     }
   }
 
