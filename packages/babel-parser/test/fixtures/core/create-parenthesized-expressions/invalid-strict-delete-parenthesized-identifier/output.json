@@ -1,0 +1,74 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":13,"index":39}},
+  "errors": [
+    "SyntaxError: Deleting local variable in strict mode. (2:0)",
+    "SyntaxError: Deleting local variable in strict mode. (3:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":13,"index":39}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":25,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":11,"index":25}},
+        "expression": {
+          "type": "UnaryExpression",
+          "start":14,"end":24,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":10,"index":24}},
+          "operator": "delete",
+          "prefix": true,
+          "argument": {
+            "type": "ParenthesizedExpression",
+            "start":21,"end":24,"loc":{"start":{"line":2,"column":7,"index":21},"end":{"line":2,"column":10,"index":24}},
+            "expression": {
+              "type": "Identifier",
+              "start":22,"end":23,"loc":{"start":{"line":2,"column":8,"index":22},"end":{"line":2,"column":9,"index":23},"identifierName":"a"},
+              "name": "a"
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":26,"end":39,"loc":{"start":{"line":3,"column":0,"index":26},"end":{"line":3,"column":13,"index":39}},
+        "expression": {
+          "type": "UnaryExpression",
+          "start":26,"end":38,"loc":{"start":{"line":3,"column":0,"index":26},"end":{"line":3,"column":12,"index":38}},
+          "operator": "delete",
+          "prefix": true,
+          "argument": {
+            "type": "ParenthesizedExpression",
+            "start":33,"end":38,"loc":{"start":{"line":3,"column":7,"index":33},"end":{"line":3,"column":12,"index":38}},
+            "expression": {
+              "type": "ParenthesizedExpression",
+              "start":34,"end":37,"loc":{"start":{"line":3,"column":8,"index":34},"end":{"line":3,"column":11,"index":37}},
+              "expression": {
+                "type": "Identifier",
+                "start":35,"end":36,"loc":{"start":{"line":3,"column":9,"index":35},"end":{"line":3,"column":10,"index":36},"identifierName":"a"},
+                "name": "a"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}
