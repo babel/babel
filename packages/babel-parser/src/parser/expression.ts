@@ -20,6 +20,7 @@ import {
   tokenCanStartExpression,
   tokenIsAssignment,
   tokenIsIdentifier,
+  tokenIsKeyword,
   tokenIsKeywordOrIdentifier,
   tokenIsOperator,
   tokenIsPostfix,
@@ -434,6 +435,14 @@ export default abstract class ExpressionParser extends LValParser {
     return this.parseExprOp(expr, startLoc, -1);
   }
 
+  isEscapedKeywordOperatorAfterLineBreak(this: Parser): boolean {
+    return (
+      tokenIsKeyword(this.state.type) &&
+      this.state.containsEsc &&
+      this.hasPrecedingLineBreak()
+    );
+  }
+
   // Parse binary operators with the operator precedence parsing
   // algorithm. `left` is the left-hand side of the operator.
   // `minPrec` provides context that allows the function to stop and
@@ -456,7 +465,8 @@ export default abstract class ExpressionParser extends LValParser {
       if (
         minPrec >= tokenOperatorPrecedence(tt._in) ||
         !this.prodParam.hasIn ||
-        !this.match(tt._in)
+        !this.match(tt._in) ||
+        this.isEscapedKeywordOperatorAfterLineBreak()
       ) {
         this.raise(Errors.PrivateInExpectedIn, leftStartLoc, {
           identifierName: value,
@@ -467,7 +477,11 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     const op = this.state.type;
-    if (tokenIsOperator(op) && (this.prodParam.hasIn || !this.match(tt._in))) {
+    if (
+      tokenIsOperator(op) &&
+      (this.prodParam.hasIn || !this.match(tt._in)) &&
+      !this.isEscapedKeywordOperatorAfterLineBreak()
+    ) {
       let prec = tokenOperatorPrecedence(op);
       if (prec > minPrec) {
         if (op === tt.pipeline) {
@@ -3099,7 +3113,8 @@ export default abstract class ExpressionParser extends LValParser {
       if (
         tokenIsOperator(nextOp) &&
         nextOp !== tt.pipeline &&
-        (this.prodParam.hasIn || nextOp !== tt._in)
+        (this.prodParam.hasIn || nextOp !== tt._in) &&
+        !this.isEscapedKeywordOperatorAfterLineBreak()
       ) {
         this.raise(Errors.PipelineUnparenthesized, startLoc);
       }
