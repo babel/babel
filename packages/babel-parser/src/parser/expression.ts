@@ -303,7 +303,16 @@ export default abstract class ExpressionParser extends LValParser {
     if (isParenItem) {
       left = this.parseParenItem(left, startLoc);
     }
-    if (tokenIsAssignment(this.state.type)) {
+    if (
+      tokenIsAssignment(this.state.type) &&
+      // `/=` can't continue an expression ending with an arrow function body
+      // or an argument-less `yield`: it starts a regular expression literal,
+      // which is re-tokenized by the next statement after ASI.
+      !(
+        this.match(tt.slashAssign) &&
+        this.state.lastTokEndLoc!.index === this.state.regExpAllowedAt
+      )
+    ) {
       const node = this.startNodeAt<N.AssignmentExpression>(startLoc);
       const operator = this.state.value as N.AssignmentExpression["operator"];
       node.operator = operator;
@@ -2477,7 +2486,8 @@ export default abstract class ExpressionParser extends LValParser {
     // ConciseBody[In] :
     //   [lookahead ≠ {] ExpressionBody[?In, ~Await]
     //   { FunctionBody[~Yield, ~Await] }
-    if (!this.match(tt.braceL)) {
+    const hasBlockBody = this.match(tt.braceL);
+    if (!hasBlockBody) {
       flags |=
         this.prodParam.currentFlags() &
         (ParamKind.PARAM_IN | ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY);
@@ -2489,6 +2499,9 @@ export default abstract class ExpressionParser extends LValParser {
       this.setArrowFunctionParameters(node, params, trailingCommaLoc);
     }
     this.parseFunctionBody(node, true);
+    if (hasBlockBody) {
+      this.state.regExpAllowedAt = this.state.lastTokEndLoc!.index;
+    }
 
     this.prodParam.exit();
     this.scope.exit();
@@ -2980,6 +2993,9 @@ export default abstract class ExpressionParser extends LValParser {
         default:
           argument = this.parseMaybeAssign();
       }
+    }
+    if (!argument) {
+      this.state.regExpAllowedAt = this.state.lastTokEndLoc!.index;
     }
     node.delegate = delegating;
     node.argument = argument;
