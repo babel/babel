@@ -2196,7 +2196,10 @@ export default abstract class StatementParser extends ExpressionParser {
       return this.finishNode(node, "ExportAllDeclaration");
     }
 
-    const hasSpecifiers = this.maybeParseExportNamedSpecifiers(node);
+    // `export * as ns` must be followed by `from` (ExportFromClause), so only
+    // look for NamedExports when nothing, or a comma, came before.
+    const hasSpecifiers =
+      parseAfterNamespace && this.maybeParseExportNamedSpecifiers(node);
 
     if (hasDefault && parseAfterDefault && !hasStar && !hasSpecifiers) {
       this.unexpected(null, tt.braceL);
