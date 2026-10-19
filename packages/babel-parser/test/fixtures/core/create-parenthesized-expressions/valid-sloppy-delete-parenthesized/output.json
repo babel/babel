@@ -1,0 +1,84 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":13,"index":39}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":13,"index":39}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+        "expression": {
+          "type": "UnaryExpression",
+          "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+          "operator": "delete",
+          "prefix": true,
+          "argument": {
+            "type": "ParenthesizedExpression",
+            "start":7,"end":10,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":10,"index":10}},
+            "expression": {
+              "type": "Identifier",
+              "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9},"identifierName":"a"},
+              "name": "a"
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":12,"end":25,"loc":{"start":{"line":2,"column":0,"index":12},"end":{"line":2,"column":13,"index":25}},
+        "expression": {
+          "type": "UnaryExpression",
+          "start":12,"end":24,"loc":{"start":{"line":2,"column":0,"index":12},"end":{"line":2,"column":12,"index":24}},
+          "operator": "delete",
+          "prefix": true,
+          "argument": {
+            "type": "ParenthesizedExpression",
+            "start":19,"end":24,"loc":{"start":{"line":2,"column":7,"index":19},"end":{"line":2,"column":12,"index":24}},
+            "expression": {
+              "type": "ParenthesizedExpression",
+              "start":20,"end":23,"loc":{"start":{"line":2,"column":8,"index":20},"end":{"line":2,"column":11,"index":23}},
+              "expression": {
+                "type": "Identifier",
+                "start":21,"end":22,"loc":{"start":{"line":2,"column":9,"index":21},"end":{"line":2,"column":10,"index":22},"identifierName":"a"},
+                "name": "a"
+              }
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":26,"end":39,"loc":{"start":{"line":3,"column":0,"index":26},"end":{"line":3,"column":13,"index":39}},
+        "expression": {
+          "type": "UnaryExpression",
+          "start":26,"end":38,"loc":{"start":{"line":3,"column":0,"index":26},"end":{"line":3,"column":12,"index":38}},
+          "operator": "delete",
+          "prefix": true,
+          "argument": {
+            "type": "ParenthesizedExpression",
+            "start":33,"end":38,"loc":{"start":{"line":3,"column":7,"index":33},"end":{"line":3,"column":12,"index":38}},
+            "expression": {
+              "type": "MemberExpression",
+              "start":34,"end":37,"loc":{"start":{"line":3,"column":8,"index":34},"end":{"line":3,"column":11,"index":37}},
+              "object": {
+                "type": "Identifier",
+                "start":34,"end":35,"loc":{"start":{"line":3,"column":8,"index":34},"end":{"line":3,"column":9,"index":35},"identifierName":"a"},
+                "name": "a"
+              },
+              "computed": false,
+              "property": {
+                "type": "Identifier",
+                "start":36,"end":37,"loc":{"start":{"line":3,"column":10,"index":36},"end":{"line":3,"column":11,"index":37},"identifierName":"b"},
+                "name": "b"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}
