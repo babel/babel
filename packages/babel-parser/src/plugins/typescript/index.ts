@@ -315,6 +315,29 @@ function tsIsEntityName(
   }
 }
 
+/**
+ * Whether the node is a type cast, which is a valid assignment target but not
+ * a valid binding, e.g. `a as T`, `a satisfies T`, `a!` or `<T>a`.
+ * Note that `TSTypeCastExpression`, i.e. `(a: T)`, is not one of them.
+ */
+function tsIsTypeCast(
+  node: N.Node,
+): node is
+  | N.TSAsExpression
+  | N.TSSatisfiesExpression
+  | N.TSNonNullExpression
+  | N.TSTypeAssertion {
+  switch (node.type) {
+    case "TSAsExpression":
+    case "TSSatisfiesExpression":
+    case "TSNonNullExpression":
+    case "TSTypeAssertion":
+      return true;
+    default:
+      return false;
+  }
+}
+
 export const enum tsParseEntityNameFlags {
   NONE = 0b00,
   ALLOW_RESERVED_WORDS = 0b01,
@@ -4062,23 +4085,21 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     toAssignable(node: N.Node, isLHS: boolean = false): void {
+      if (tsIsTypeCast(node)) {
+        if (isLHS) {
+          this.expressionScope.recordArrowParameterBindingError(
+            TSErrors.UnexpectedTypeCastInParameter,
+            node,
+          );
+        } else {
+          this.raise(TSErrors.UnexpectedTypeCastInParameter, node);
+        }
+        this.toAssignable(node.expression, isLHS);
+        return;
+      }
       switch (node.type) {
         case "ParenthesizedExpression":
           this.toAssignableParenthesizedExpression(node, isLHS);
-          break;
-        case "TSAsExpression":
-        case "TSSatisfiesExpression":
-        case "TSNonNullExpression":
-        case "TSTypeAssertion":
-          if (isLHS) {
-            this.expressionScope.recordArrowParameterBindingError(
-              TSErrors.UnexpectedTypeCastInParameter,
-              node,
-            );
-          } else {
-            this.raise(TSErrors.UnexpectedTypeCastInParameter, node);
-          }
-          this.toAssignable(node.expression, isLHS);
           break;
         case "AssignmentExpression":
           // @ts-expect-error the left of AssignmentExpression must not be a TSTypeCastExpression
@@ -4096,29 +4117,21 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: N.ParenthesizedExpression,
       isLHS: boolean,
     ): void {
-      switch (node.expression.type) {
-        case "TSAsExpression":
-        case "TSSatisfiesExpression":
-        case "TSNonNullExpression":
-        case "TSTypeAssertion":
-        case "ParenthesizedExpression":
-          this.toAssignable(node.expression, isLHS);
-          break;
-        default:
-          super.toAssignable(node, isLHS);
+      if (
+        tsIsTypeCast(node.expression) ||
+        node.expression.type === "ParenthesizedExpression"
+      ) {
+        this.toAssignable(node.expression, isLHS);
+      } else {
+        super.toAssignable(node, isLHS);
       }
     }
 
     checkToRestConversion(node: N.Node, allowPattern: boolean): void {
-      switch (node.type) {
-        case "TSAsExpression":
-        case "TSSatisfiesExpression":
-        case "TSTypeAssertion":
-        case "TSNonNullExpression":
-          this.checkToRestConversion(node.expression, false);
-          break;
-        default:
-          super.checkToRestConversion(node, allowPattern);
+      if (tsIsTypeCast(node)) {
+        this.checkToRestConversion(node.expression, false);
+      } else {
+        super.checkToRestConversion(node, allowPattern);
       }
     }
 
