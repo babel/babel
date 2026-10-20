@@ -1368,10 +1368,10 @@ export default abstract class StatementParser extends ExpressionParser {
   parseExpressionStatement(
     node: Undone<N.ExpressionStatement>,
     expr: N.Expression,
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in TypeScript parser */
+    /* eslint-disable @typescript-eslint/no-unused-vars -- used in TypeScript parser and placeholders plugin */
     decorators: N.Decorator[] | null | undefined,
-    // Used by the placeholders plugin to parse placeholder labels
-    _flags: ParseStatementFlag,
+    flags: ParseStatementFlag,
+    /* eslint-enable @typescript-eslint/no-unused-vars */
   ) {
     node.expression = expr;
     this.semicolon();
