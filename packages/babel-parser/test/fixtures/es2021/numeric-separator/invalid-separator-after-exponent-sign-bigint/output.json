@@ -18,10 +18,10 @@
           "type": "BigIntLiteral",
           "start":0,"end":6,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":6,"index":6}},
           "extra": {
-            "rawValue": null,
+            "rawValue": "1E+1",
             "raw": "1E+_1n"
           },
-          "value": null
+          "value": "1E+1"
         }
       }
     ],
