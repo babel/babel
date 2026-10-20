@@ -121,6 +121,90 @@ export function getUsageInBody(
   };
 }
 
+export function moveCapturingTestAndUpdateIntoBody(
+  loopPath: NodePath<t.ForStatement>,
+) {
+  const init = loopPath.get("init");
+
+  if (!init.isVariableDeclaration() || init.node.kind !== "let") return;
+
+  const testPath = loopPath.get("test");
+  const updatePath = loopPath.get("update");
+  let testCaptures = false;
+  let updateCaptures = false;
+
+  for (const name of Object.keys(init.getBindingIdentifiers())) {
+    const binding = loopPath.scope.getOwnBinding(name);
+    if (!binding?.constantViolations.length) continue;
+    for (const ref of [
+      ...binding.referencePaths,
+      ...binding.constantViolations,
+    ]) {
+      testCaptures ||= isCapturedInClosureWithin(ref, testPath, loopPath);
+      updateCaptures ||= isCapturedInClosureWithin(ref, updatePath, loopPath);
+    }
+  }
+  if (!testCaptures && !updateCaptures) return;
+
+  const { node } = loopPath;
+  const bodyStmts: t.Statement[] = [];
+
+  if (updateCaptures) {
+    const first = loopPath.scope.generateUid("first");
+    init.node.declarations.push(
+      t.variableDeclarator(t.identifier(first), t.booleanLiteral(true)),
+    );
+    bodyStmts.push(
+      t.ifStatement(
+        t.identifier(first),
+        t.expressionStatement(
+          t.assignmentExpression(
+            "=",
+            t.identifier(first),
+            t.booleanLiteral(false),
+          ),
+        ),
+        t.expressionStatement(node.update!),
+      ),
+    );
+    node.update = null;
+  }
+
+  // The update must run before the test, so if the update has been moved the
+  // test needs to be moved too.
+  if (node.test) {
+    bodyStmts.push(
+      t.ifStatement(t.unaryExpression("!", node.test), t.breakStatement()),
+    );
+    node.test = null;
+  }
+
+  bodyStmts.push(node.body);
+  node.body = t.blockStatement(bodyStmts);
+
+  loopPath.scope.crawl();
+}
+
+function isCapturedInClosureWithin(
+  path: NodePath,
+  containerPath: NodePath<t.Expression | null>,
+  loopPath: NodePath,
+) {
+  if (!containerPath.node) return false;
+  let inClosure = false;
+  for (
+    let currPath: NodePath | null = path;
+    currPath && currPath !== loopPath;
+    currPath = currPath.parentPath
+  ) {
+    if (currPath.isFunction() || currPath.isClass() || currPath.isMethod()) {
+      inClosure = true;
+    }
+    if (currPath === containerPath) return inClosure;
+  }
+  return false;
+}
+
 function relativeLoopLocation(path: NodePath, loopPath: NodePath<t.Loop>) {
   const bodyPath = loopPath.get("body");
   const headPath = loopPath.isForStatement() ? loopPath.get("init") : null;
