@@ -267,7 +267,7 @@ export function newAsyncArrowScope() {
 
 // The Expression, ParameterDeclaration and Initializer scopes hold no state, so
 // a single instance of each is shared
-export const expressionScope = new ExpressionScope();
+export const sharedExpressionScope = new ExpressionScope();
 export const parameterDeclarationScope = new ExpressionScope(
   ExpressionScopeType.kParameterDeclaration,
 );

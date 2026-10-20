@@ -1634,35 +1634,34 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         return true;
       }
 
-      if (this.match(tt.braceL)) {
-        // Return true if we can parse an object pattern without errors
+      const isObjectPattern = this.match(tt.braceL);
+      if (isObjectPattern || this.match(tt.bracketL)) {
+        if (!isObjectPattern) this.next();
+        // Return true if we can parse an object or array pattern without errors
         const { errors } = this.state;
         const previousErrorCount = errors.length;
-        const restoreScopeStacks = this.snapshotScopeStacks();
+        const scopeDepth = this.scope.scopeStack.length;
+        const prodParamDepth = this.prodParam.stacks.length;
+        const classScopeDepth = this.classScope.stack.length;
+        const expressionScopeDepth = this.expressionScope.stack.length;
         try {
-          this.parseObjectLike(tt.braceR, true);
+          if (isObjectPattern) {
+            this.parseObjectLike(tt.braceR, true);
+          } else {
+            super.parseBindingList(
+              tt.bracketR,
+              charCodes.rightSquareBracket,
+              ParseBindingListFlags.ALLOW_EMPTY,
+            );
+          }
           return errors.length === previousErrorCount;
         } catch {
-          restoreScopeStacks();
-          return false;
-        }
-      }
-
-      if (this.match(tt.bracketL)) {
-        this.next();
-        // Return true if we can parse an array pattern without errors
-        const { errors } = this.state;
-        const previousErrorCount = errors.length;
-        const restoreScopeStacks = this.snapshotScopeStacks();
-        try {
-          super.parseBindingList(
-            tt.bracketR,
-            charCodes.rightSquareBracket,
-            ParseBindingListFlags.ALLOW_EMPTY,
+          this.restoreScopeStacks(
+            scopeDepth,
+            prodParamDepth,
+            classScopeDepth,
+            expressionScopeDepth,
           );
-          return errors.length === previousErrorCount;
-        } catch {
-          restoreScopeStacks();
           return false;
         }
       }
