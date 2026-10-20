@@ -19,8 +19,8 @@ import {
 import { ExpressionErrors } from "./util.ts";
 import { ParamKind, functionFlags } from "../util/production-parameter.ts";
 import {
-  expressionScope,
   parameterDeclarationScope,
+  sharedExpressionScope,
 } from "../util/expression-scope.ts";
 import { OptionFlags } from "../options.ts";
 import type { Token } from "../tokenizer/index.ts";
@@ -1489,7 +1489,7 @@ export default abstract class StatementParser extends ExpressionParser {
       // The name of a function expression is not part of an enclosing async
       // arrow head, so `await` must not be recorded as an error there:
       // `async (x = function await() {}) => {}` is valid.
-      this.expressionScope.enter(expressionScope);
+      this.expressionScope.enter(sharedExpressionScope);
       node.id = this.parseFunctionId();
       this.expressionScope.exit();
     }
@@ -2132,7 +2132,7 @@ export default abstract class StatementParser extends ExpressionParser {
     >,
   ): void {
     this.scope.enter(ScopeFlag.CLASS | ScopeFlag.SUPER);
-    this.expressionScope.enter(expressionScope);
+    this.expressionScope.enter(sharedExpressionScope);
     this.prodParam.enter(ParamKind.PARAM);
     node.value = this.eat(tt.eq) ? this.parseMaybeAssignAllowIn() : null;
     this.expressionScope.exit();

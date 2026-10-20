@@ -159,21 +159,20 @@ export default abstract class UtilParser extends Tokenizer {
   }
 
   /**
-   * Record the depth of the scope stacks before a speculative parse. The
-   * returned function exits the scopes that the parse left open if it threw.
+   * Exit the scopes that a speculative parse left open when it threw, given the
+   * depth of the scope stacks recorded before the parse.
    */
-  snapshotScopeStacks(): () => void {
-    const { scope, prodParam, classScope, expressionScope } = this;
-    const scopeDepth = scope.scopeStack.length;
-    const prodParamDepth = prodParam.stacks.length;
-    const classScopeDepth = classScope.stack.length;
-    const expressionScopeDepth = expressionScope.stack.length;
-    return () => {
-      while (scope.scopeStack.length > scopeDepth) scope.exit();
-      prodParam.stacks.length = prodParamDepth;
-      classScope.stack.length = classScopeDepth;
-      expressionScope.stack.length = expressionScopeDepth;
-    };
+  restoreScopeStacks(
+    scopeDepth: number,
+    prodParamDepth: number,
+    classScopeDepth: number,
+    expressionScopeDepth: number,
+  ): void {
+    const { scope } = this;
+    while (scope.scopeStack.length > scopeDepth) scope.exit();
+    this.prodParam.stacks.length = prodParamDepth;
+    this.classScope.stack.length = classScopeDepth;
+    this.expressionScope.stack.length = expressionScopeDepth;
   }
 
   // tryParse will clone parser state.
@@ -188,7 +187,10 @@ export default abstract class UtilParser extends Tokenizer {
     const abortSignal: {
       node: T | null;
     } = { node: null };
-    const restoreScopeStacks = this.snapshotScopeStacks();
+    const scopeDepth = this.scope.scopeStack.length;
+    const prodParamDepth = this.prodParam.stacks.length;
+    const classScopeDepth = this.classScope.stack.length;
+    const expressionScopeDepth = this.expressionScope.stack.length;
     try {
       const node = fn((node = null as T) => {
         abortSignal.node = node;
@@ -221,7 +223,12 @@ export default abstract class UtilParser extends Tokenizer {
     } catch (error) {
       const failState = this.state;
       this.state = oldState;
-      restoreScopeStacks();
+      this.restoreScopeStacks(
+        scopeDepth,
+        prodParamDepth,
+        classScopeDepth,
+        expressionScopeDepth,
+      );
       if (error instanceof SyntaxError) {
         // @ts-expect-error casting general syntax error to parse error
         return { node: null, error, thrown: true, aborted: false, failState };

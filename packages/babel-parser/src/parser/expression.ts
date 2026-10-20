@@ -52,10 +52,10 @@ import { ScopeFlag, BindingFlag } from "../util/scopeflags.ts";
 import { ExpressionErrors } from "./util.ts";
 import { ParamKind, functionFlags } from "../util/production-parameter.ts";
 import {
-  expressionScope,
   initializerScope,
   newArrowHeadScope,
   newAsyncArrowScope,
+  sharedExpressionScope,
 } from "../util/expression-scope.ts";
 import { Errors } from "../parse-error.ts";
 import {
@@ -2585,7 +2585,7 @@ export default abstract class ExpressionParser extends LValParser {
     isMethod: boolean = false,
   ): void {
     const isExpression = allowExpression && !this.match(tt.braceL);
-    this.expressionScope.enter(expressionScope);
+    this.expressionScope.enter(sharedExpressionScope);
 
     if (isExpression) {
       // https://tc39.es/ecma262/#prod-ExpressionBody
