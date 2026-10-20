@@ -101,12 +101,10 @@ export function ExportAllDeclaration(
   this.space();
   this.word("from");
   this.space();
+  this.print(node.source);
   if (node.attributes?.length) {
-    this.print(node.source, true);
     this.space();
     _printAttributes.call(this, node, false);
-  } else {
-    this.print(node.source);
   }
 
   this.semicolon();
@@ -182,12 +180,10 @@ export function ExportNamedDeclaration(
       this.space();
       this.word("from");
       this.space();
+      this.print(node.source);
       if (node.attributes?.length) {
-        this.print(node.source, true);
         this.space();
         _printAttributes.call(this, node, hasBrace);
-      } else {
-        this.print(node.source);
       }
     }
 
@@ -268,12 +264,10 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
     this.space();
   }
 
+  this.print(node.source);
   if (node.attributes?.length) {
-    this.print(node.source, true);
     this.space();
     _printAttributes.call(this, node, hasBrace);
-  } else {
-    this.print(node.source);
   }
 
   this.semicolon();
