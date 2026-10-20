@@ -437,9 +437,19 @@ export default abstract class ExpressionParser extends LValParser {
 
   isEscapedKeywordOperatorAfterLineBreak(this: Parser): boolean {
     return (
+      // `tokenIsKeyword` is required: `containsEsc` is stale on punctuator tokens.
       tokenIsKeyword(this.state.type) &&
       this.state.containsEsc &&
       this.hasPrecedingLineBreak()
+    );
+  }
+
+  // Whether `op`, the current token, continues a binary expression.
+  isBinaryOperator(this: Parser, op: TokenType): boolean {
+    return (
+      tokenIsOperator(op) &&
+      (this.prodParam.hasIn || op !== tt._in) &&
+      !this.isEscapedKeywordOperatorAfterLineBreak()
     );
   }
 
@@ -455,6 +465,9 @@ export default abstract class ExpressionParser extends LValParser {
     leftStartLoc: Position,
     minPrec: number,
   ): N.Expression {
+    const op = this.state.type;
+    const isOperator = this.isBinaryOperator(op);
+
     if (this.isPrivateName(left)) {
       // https://tc39.es/ecma262/#prod-RelationalExpression
       // RelationalExpression [In, Yield, Await]
@@ -464,9 +477,8 @@ export default abstract class ExpressionParser extends LValParser {
 
       if (
         minPrec >= tokenOperatorPrecedence(tt._in) ||
-        !this.prodParam.hasIn ||
-        !this.match(tt._in) ||
-        this.isEscapedKeywordOperatorAfterLineBreak()
+        op !== tt._in ||
+        !isOperator
       ) {
         this.raise(Errors.PrivateInExpectedIn, leftStartLoc, {
           identifierName: value,
@@ -476,12 +488,7 @@ export default abstract class ExpressionParser extends LValParser {
       this.classScope.usePrivateName(value, leftStartLoc);
     }
 
-    const op = this.state.type;
-    if (
-      tokenIsOperator(op) &&
-      (this.prodParam.hasIn || !this.match(tt._in)) &&
-      !this.isEscapedKeywordOperatorAfterLineBreak()
-    ) {
+    if (isOperator) {
       let prec = tokenOperatorPrecedence(op);
       if (prec > minPrec) {
         if (op === tt.pipeline) {
@@ -3110,12 +3117,7 @@ export default abstract class ExpressionParser extends LValParser {
       this.next();
       ret = this.parseAwait(startLoc, true);
       const nextOp = this.state.type;
-      if (
-        tokenIsOperator(nextOp) &&
-        nextOp !== tt.pipeline &&
-        (this.prodParam.hasIn || nextOp !== tt._in) &&
-        !this.isEscapedKeywordOperatorAfterLineBreak()
-      ) {
+      if (nextOp !== tt.pipeline && this.isBinaryOperator(nextOp)) {
         this.raise(Errors.PipelineUnparenthesized, startLoc);
       }
     } else {
