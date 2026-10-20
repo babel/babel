@@ -51,7 +51,8 @@ export function getUsageInBody(
   // itself) that refer to the binding.
   const headUsages: NodePath<t.Identifier>[] = [];
 
-  const constantViolations = binding.constantViolations.flatMap(path => {
+  const constantViolations: NodePath<t.Identifier>[] = [];
+  for (const path of binding.constantViolations) {
     const { inBody, inHead, inClosure } = relativeLoopLocation(path, loopPath);
 
     const id = path.isUpdateExpression()
@@ -68,13 +69,13 @@ export function getUsageInBody(
     if (inHead) {
       capturedInHeadClosure ||= inClosure;
       headUsages.push(...ids);
-      return [];
+      continue;
     }
-    if (!inBody) return [];
+    if (!inBody) continue;
     capturedInClosure ||= inClosure;
 
-    return ids;
-  });
+    constantViolations.push(...ids);
+  }
 
   const references = filterMap(binding.referencePaths, path => {
     if (seen.has(path.node)) return null;
