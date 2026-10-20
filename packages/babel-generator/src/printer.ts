@@ -181,6 +181,10 @@ class Printer {
   declare _buf: Buffer;
   _currentNode: t.Node | null = null;
   _currentTypeId: number | null = null;
+  // The parenthesized string that would be parsed as a directive if it were
+  // printed bare (see _findParenthesizedPrologueString). It is printed before
+  // any nested body is entered, so it is never restored.
+  _parenthesizedPrologueString: t.StringLiteral | null = null;
   _indent: number = 0;
   _indentRepeat: number = 0;
   _insideAux: boolean = false;
@@ -757,6 +761,11 @@ class Printer {
       (parenthesized &&
         flags & PRINTER_FLAGS.RETAIN_FUNCTION_PARENS &&
         nodeId === __node("FunctionExpression")) ||
+      // `('use strict'); 010` is not a directive, but `'use strict'; 010` is
+      // A plugin can reuse the node elsewhere, where parentheses may be invalid
+      (parenthesized &&
+        parentId === __node("ExpressionStatement") &&
+        node === this._parenthesizedPrologueString) ||
       (parent &&
         (parentNeedsParens(node, parent, parentId!) ||
           (needsParens != null &&
