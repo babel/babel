@@ -1144,6 +1144,7 @@ export default abstract class Tokenizer extends CommentsParser {
 
     this.state.pos += 2; // 0x
     let val = this.readInt(radix);
+    const end = this.state.pos;
     if (val == null) {
       this.raise(
         Errors.InvalidDigit,
@@ -1165,19 +1166,26 @@ export default abstract class Tokenizer extends CommentsParser {
       throw this.raise(Errors.NumberIdentifier, this.state.curPosition());
     }
 
-    if (isBigInt) {
-      const str = this.input.slice(start, this.state.pos).replace(/[_n]/g, "");
-      this.finishToken(tt.bigint, str);
-      return;
-    }
+    if (isBigInt || (val !== null && val > Number.MAX_SAFE_INTEGER)) {
+      const digits = this.input.slice(start + 2, end).replaceAll("_", "");
 
-    if (val > Number.MAX_SAFE_INTEGER) {
+      if (isBigInt) {
+        this.finishToken(
+          tt.bigint,
+          this.input.slice(start, start + 2) + digits,
+        );
+        return;
+      }
+
       // readInt accumulates digit by digit in a double, so a literal that does
       // not fit in 53 bits is rounded at every step rather than once. The MV
       // must be rounded exactly once (NumericValue, #sec-numericvalue), which
-      // parseInt guarantees for radixes 2, 8 and 16.
+      // parseInt guarantees for radixes 2, 8 and 16. In error recovery readInt
+      // reads an invalid digit as 0, whereas parseInt would stop at it.
       val = parseInt(
-        this.input.slice(start + 2, this.state.pos).replace(/_/g, ""),
+        radix === 16
+          ? digits
+          : digits.replace(/[2-9]/g, d => (+d < radix ? d : "0")),
         radix,
       );
     }
