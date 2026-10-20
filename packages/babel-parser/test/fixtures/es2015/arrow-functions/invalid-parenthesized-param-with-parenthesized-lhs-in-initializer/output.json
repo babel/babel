@@ -3,11 +3,8 @@
   "start":0,"end":166,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":30,"index":166}},
   "errors": [
     "SyntaxError: Invalid parenthesized assignment pattern. (1:2)",
-    "SyntaxError: Invalid parenthesized assignment pattern. (1:2)",
     "SyntaxError: Invalid parenthesized assignment pattern. (2:3)",
     "SyntaxError: Invalid parenthesized assignment pattern. (3:3)",
-    "SyntaxError: Invalid parenthesized assignment pattern. (3:3)",
-    "SyntaxError: Invalid parenthesized assignment pattern. (4:7)",
     "SyntaxError: Invalid parenthesized assignment pattern. (4:7)",
     "SyntaxError: Invalid parenthesized assignment pattern. (5:8)",
     "SyntaxError: Invalid parenthesized assignment pattern. (6:9)"

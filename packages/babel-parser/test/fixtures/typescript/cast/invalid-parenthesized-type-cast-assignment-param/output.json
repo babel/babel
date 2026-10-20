@@ -3,7 +3,6 @@
   "start":0,"end":113,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":27,"index":113}},
   "errors": [
     "SyntaxError: Unexpected type cast in parameter position. (1:2)",
-    "SyntaxError: Unexpected type cast in parameter position. (1:2)",
     "SyntaxError: Invalid parenthesized assignment pattern. (2:2)",
     "SyntaxError: Unexpected type cast in parameter position. (2:3)",
     "SyntaxError: Invalid parenthesized assignment pattern. (3:2)",
