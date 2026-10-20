@@ -270,10 +270,6 @@ export default class ExpressionScopeHandler {
   }
 }
 
-export function newParameterDeclarationScope() {
-  return new ExpressionScope(ExpressionScopeType.kParameterDeclaration);
-}
-
 export function newArrowHeadScope() {
   return new ArrowHeadParsingScope(
     ExpressionScopeType.kMaybeArrowParameterDeclaration,
@@ -286,11 +282,12 @@ export function newAsyncArrowScope() {
   );
 }
 
-export function newExpressionScope() {
-  return new ExpressionScope();
-}
-
-// The Initializer scope holds no state, so a single instance is shared
+// The Expression, ParameterDeclaration and Initializer scopes hold no state, so
+// a single instance of each is shared
+export const expressionScope = new ExpressionScope();
+export const parameterDeclarationScope = new ExpressionScope(
+  ExpressionScopeType.kParameterDeclaration,
+);
 export const initializerScope = new ExpressionScope(
   ExpressionScopeType.kInitializer,
 );
