@@ -222,7 +222,6 @@ export default abstract class UtilParser extends Tokenizer {
       const failState = this.state;
       this.state = oldState;
       restoreScopeStacks();
-      this.expressionScope.clearDeclarationErrorsFrom(oldState.start);
       if (error instanceof SyntaxError) {
         // @ts-expect-error casting general syntax error to parse error
         return { node: null, error, thrown: true, aborted: false, failState };
