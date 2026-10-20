@@ -1,0 +1,4 @@
+{
+  "locations": false,
+  "throws": "Cannot destructure property 'start' of 'node.loc' as it is undefined."
+}
