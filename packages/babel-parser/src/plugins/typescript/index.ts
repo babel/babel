@@ -4095,7 +4095,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             node,
           );
         } else {
-          this.raise(TSErrors.UnexpectedTypeCastInParameter, node);
+          this.raiseOnce(TSErrors.UnexpectedTypeCastInParameter, node);
         }
         this.toAssignable(node.expression, isLHS);
         return;

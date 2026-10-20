@@ -6,7 +6,6 @@
     "SyntaxError: Invalid parenthesized assignment pattern. (1:3)",
     "SyntaxError: Invalid parenthesized assignment pattern. (2:3)",
     "SyntaxError: Invalid parenthesized assignment pattern. (2:2)",
-    "SyntaxError: Invalid parenthesized assignment pattern. (2:3)",
     "SyntaxError: Only '=' operator can be used for specifying default value. (3:3)",
     "SyntaxError: Invalid parenthesized assignment pattern. (3:2)"
   ],
