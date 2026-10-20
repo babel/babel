@@ -23,6 +23,7 @@
   "--experimental-specifier-resolution",
   "--experimental-test-isolation",
   "--experimental-test-tag-filter",
+  "--force-fips",
   "--heap-prof-dir",
   "--heap-prof-interval",
   "--heap-prof-name",

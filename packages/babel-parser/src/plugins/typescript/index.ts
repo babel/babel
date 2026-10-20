@@ -427,9 +427,23 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (stopOnStartOfClassStaticBlock && this.tsIsStartOfStaticBlocks()) {
           return undefined;
         }
+        // An escaped `in` / `const` may still be an IdentifierName (e.g. a
+        // class member named `in`), so `next()` must not report the escape
+        // before we know that it is a modifier.
+        const escapedKeywordLoc =
+          this.state.containsEsc && !tokenIsIdentifier(this.state.type)
+            ? this.state.startLoc
+            : null;
+        if (escapedKeywordLoc) this.state.containsEsc = false;
         if (this.tsTryParse(this.tsNextTokenCanFollowModifier.bind(this))) {
+          if (escapedKeywordLoc) {
+            this.raise(Errors.InvalidEscapedReservedWord, escapedKeywordLoc, {
+              reservedWord: modifier,
+            });
+          }
           return modifier;
         }
+        if (escapedKeywordLoc) this.state.containsEsc = true;
       }
       return undefined;
     }
