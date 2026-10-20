@@ -31,7 +31,6 @@ import {
 import { OptionFlags } from "../options.ts";
 import type { Token } from "../tokenizer/index.ts";
 import type { Position } from "../util/location.ts";
-import { createPositionWithColumnOffset } from "../util/location.ts";
 import type { Undone } from "./node.ts";
 import type Parser from "./index.ts";
 import { ParseBindingListFlags } from "./lval.ts";
@@ -136,11 +135,13 @@ export default abstract class StatementParser extends ExpressionParser {
       // finish at eof for top level program
       finishedProgram = this.finishNode(program, "Program");
     } else {
-      // finish immediately before the end token
+      // finish immediately before the end token, which has already been
+      // consumed by parseBlockBody. Do not use the start of the next token
+      // since there may be comments or line breaks in between.
       finishedProgram = this.finishNodeAt(
         program,
         "Program",
-        createPositionWithColumnOffset(this.state.startLoc, -1),
+        this.state.lastTokStartLoc!,
       );
     }
     return finishedProgram;
