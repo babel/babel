@@ -19,7 +19,7 @@ import { ScopeFlag, BindingFlag } from "../../util/scopeflags.ts";
 import TypeScriptScopeHandler from "./scope.ts";
 import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util.ts";
-import type { ParseStatementFlag } from "../../parser/statement.ts";
+import { ParseStatementFlag } from "../../parser/statement.ts";
 import { ParamKind } from "../../util/production-parameter.ts";
 import { Errors, ParseErrorEnum } from "../../parse-error.ts";
 import type { Undone } from "../../parser/node.ts";
