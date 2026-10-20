@@ -92,6 +92,11 @@ export function TSParameterProperty(
     this.space();
   }
 
+  if (node.override) {
+    this.word("override");
+    this.space();
+  }
+
   if (node.readonly) {
     this.word("readonly");
     this.space();
