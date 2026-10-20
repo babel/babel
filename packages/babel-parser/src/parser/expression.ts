@@ -2866,6 +2866,10 @@ export default abstract class ExpressionParser extends LValParser {
         this.replaceToken(tt.name);
       }
     } else {
+      // Plugins (e.g. v8intrinsic, flow) may call parseIdentifierName()
+      // without having started a node at this token, so record the location
+      // data for `start` in case checkReservedWord needs to raise at it.
+      this.setLoc(this.state.startLoc);
       this.checkReservedWord(
         name!,
         this.sourceToOffsetPos(start),

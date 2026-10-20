@@ -1,0 +1,30 @@
+{
+  "type": "File",
+  "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'enum'. (1:1)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+        "expression": {
+          "type": "CallExpression",
+          "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
+          "callee": {
+            "type": "V8IntrinsicIdentifier",
+            "start":0,"end":5,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":5,"index":5},"identifierName":"enum"},
+            "name": "enum"
+          },
+          "arguments": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}
