@@ -5,6 +5,7 @@ import { _functionHead, _param, _parameters } from "./methods.ts";
 import { _classMethodHead } from "./classes.ts";
 import { _printTemplate } from "./template-literals.ts";
 import { LAST_CHAR_KINDS } from "../buffer.ts";
+import { _findParenthesizedPrologueString } from "./base.ts";
 
 export function TSTypeAnnotation(
   this: Printer,
@@ -668,6 +669,11 @@ export function TSModuleDeclaration(
 }
 
 export function TSModuleBlock(this: Printer, node: t.TSModuleBlock) {
+  // TypeScript moves a namespace body into a function, where a leading string
+  // is a directive.
+  this._parenthesizedPrologueString = _findParenthesizedPrologueString(
+    node.body,
+  );
   printBraced(this, node, () => this.printSequence(node.body, true, true));
 }
 
