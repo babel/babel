@@ -6,8 +6,28 @@ interface LoopBodyBindingsState {
 }
 
 const collectLoopBodyBindingsVisitor: Visitor<LoopBodyBindingsState> = {
-  "Expression|Declaration|Loop"(path) {
+  "Expression|Declaration"(path) {
     path.skip();
+  },
+  Loop(path, state) {
+    path.skip();
+
+    if (!path.isForStatement()) return;
+    const init = path.get("init");
+    if (!init.isVariableDeclaration() || init.node.kind === "var") return;
+
+    for (const name of Object.keys(init.getBindingIdentifiers())) {
+      const binding = path.scope.getOwnBinding(name);
+      if (!binding) continue;
+      const capturedInHeadClosure = [
+        ...binding.referencePaths,
+        ...binding.constantViolations,
+      ].some(ref => {
+        const { inHead, inClosure } = relativeLoopLocation(ref, path);
+        return inHead && inClosure;
+      });
+      if (capturedInHeadClosure) state.blockScoped.push(binding);
+    }
   },
   Scope(path, state) {
     if (path.isFunctionParent()) path.skip();
