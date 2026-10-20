@@ -1109,14 +1109,15 @@ export default abstract class ExpressionParser extends LValParser {
         }
       }
 
-      elts.push(
-        this.parseExprListItem(
-          tt.parenR,
-          false,
-          refExpressionErrors,
-          allowPlaceholder,
-        ),
+      const elt = this.parseExprListItem(
+        tt.parenR,
+        false,
+        refExpressionErrors,
+        allowPlaceholder,
       );
+      // On invalid input `import(,)` and errorRecovery mode,
+      // the parser will crash if we leave a hole here
+      if (elt !== null) elts.push(elt);
     }
 
     return elts;
@@ -2754,7 +2755,14 @@ export default abstract class ExpressionParser extends LValParser {
         }
       }
 
-      elts.push(this.parseExprListItem(close, allowEmpty, refExpressionErrors));
+      const elt = this.parseExprListItem(
+        close,
+        allowEmpty,
+        refExpressionErrors,
+      );
+      // On invalid input `new f(,)` in errorRecovery mode,
+      // do not leave a hole in the arguments list
+      if (elt !== null || allowEmpty) elts.push(elt);
     }
     return elts;
   }
