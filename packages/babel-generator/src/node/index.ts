@@ -17,6 +17,9 @@ export const enum TokenContext {
   // be reset after forIn or forInit head is printed
   forInOrInitHeadAccumulate = 1 << 7,
   forInOrInitHeadAccumulatePassThroughMask = 0b10000000,
+  // Set while printing the binding of a `using` declaration in a for-of head
+  // (see VariableDeclaration); cleared by the next printed token.
+  usingForOfBinding = 1 << 8,
 }
 
 export type NodeHandler<R> = (
