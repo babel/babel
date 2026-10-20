@@ -2693,17 +2693,26 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   checkImportPhase(node: Undone<N.ImportDeclaration>) {
+    if (node.phase == null) {
+      return;
+    }
     const { specifiers } = node;
     const singleBindingType =
       specifiers.length === 1 ? specifiers[0].type : null;
 
     if (node.phase === "source") {
       if (singleBindingType !== "ImportDefaultSpecifier") {
-        this.raise(Errors.SourcePhaseImportRequiresDefault, specifiers[0]);
+        this.raise(
+          Errors.SourcePhaseImportRequiresDefault,
+          specifiers.length === 0 ? node : specifiers[0],
+        );
       }
     } else if (node.phase === "defer") {
       if (singleBindingType !== "ImportNamespaceSpecifier") {
-        this.raise(Errors.DeferImportRequiresNamespace, specifiers[0]);
+        this.raise(
+          Errors.DeferImportRequiresNamespace,
+          specifiers.length === 0 ? node : specifiers[0],
+        );
       }
     }
   }
