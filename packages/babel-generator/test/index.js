@@ -1483,6 +1483,41 @@ describe("programmatic generation", function () {
     });
   });
 
+  describe("numeric literal with an infinite value", () => {
+    // `Infinity` is an identifier (it can be shadowed), not a numeric
+    // literal, so it must never be printed as the spelling of the node.
+    // @babel/types rejects t.numericLiteral(Infinity), but such a node can
+    // still come from the parser (`1e1000`) and lose its `extra.raw`.
+    const infinity = { type: "NumericLiteral", value: Infinity };
+
+    it("without raw", () => {
+      const output = generate(infinity).code;
+      expect(output).toBe("1e999");
+      expect(parseExpression(output)).toMatchObject({
+        type: "NumericLiteral",
+        value: Infinity,
+      });
+    });
+
+    it("jsescOption.numbers", () => {
+      const output = generate(infinity, {
+        jsescOption: { numbers: "hexadecimal" },
+      }).code;
+      expect(output).toBe("1e999");
+    });
+  });
+
+  it("numeric literal with a NaN value", () => {
+    // There is no NaN numeric literal, and `NaN` is an identifier that can be
+    // shadowed
+    const nan = { type: "NumericLiteral", value: NaN };
+    expect(generate(nan).code).toBe("(0 / 0)");
+    expect(
+      generate(t.memberExpression(nan, t.identifier("x")), { minified: true })
+        .code,
+    ).toBe("(0/0).x");
+  });
+
   describe("jsescOption.minimal", () => {
     const string = t.stringLiteral("\u8868\u683C_\u526F\u672C");
 

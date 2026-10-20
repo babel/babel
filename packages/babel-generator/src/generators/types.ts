@@ -162,7 +162,23 @@ export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
   const value = node.value;
-  const str = value + "";
+  // `value + ""` (and jsesc) spell an overflowing value as `Infinity`, which
+  // is an identifier that can be shadowed, not a numeric literal. Use a short
+  // literal that still evaluates to Infinity so the output re-parses to the
+  // same node.
+  if (Number.isNaN(value)) {
+    // There is no NaN numeric literal and `NaN` is an identifier that can be
+    // shadowed: print what `t.valueToNode(NaN)` builds
+    this.token("(");
+    this.number("0", 0);
+    this.space();
+    this.token("/");
+    this.space();
+    this.number("0", 0);
+    this.token(")");
+    return;
+  }
+  const str = value === Infinity ? "1e999" : value + "";
   // Only integers can use a non-decimal radix:
   // Workaround for https://github.com/mathiasbynens/jsesc/issues/79
   if (
