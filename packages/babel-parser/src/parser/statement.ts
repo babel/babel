@@ -2484,7 +2484,7 @@ export default abstract class StatementParser extends ExpressionParser {
       node.source = this.parseImportSource();
       this.maybeParseImportAttributes(node);
     } else if (expect) {
-      this.unexpected();
+      this.unexpected(null, tt._from);
     }
 
     this.semicolon();
