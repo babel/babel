@@ -1638,10 +1638,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // Return true if we can parse an object pattern without errors
         const { errors } = this.state;
         const previousErrorCount = errors.length;
+        const restoreScopeStacks = this.snapshotScopeStacks();
         try {
           this.parseObjectLike(tt.braceR, true);
           return errors.length === previousErrorCount;
         } catch {
+          restoreScopeStacks();
           return false;
         }
       }
@@ -1651,6 +1653,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // Return true if we can parse an array pattern without errors
         const { errors } = this.state;
         const previousErrorCount = errors.length;
+        const restoreScopeStacks = this.snapshotScopeStacks();
         try {
           super.parseBindingList(
             tt.bracketR,
@@ -1659,6 +1662,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           );
           return errors.length === previousErrorCount;
         } catch {
+          restoreScopeStacks();
           return false;
         }
       }
