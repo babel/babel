@@ -224,7 +224,8 @@ export default class ExpressionScopeHandler {
       const scope: ExpressionScope = stack[i];
       if (scope.canBeArrowParameterDeclaration()) {
         if (
-          scope.type === ExpressionScopeType.kMaybeAsyncArrowParameterDeclaration
+          scope.type ===
+          ExpressionScopeType.kMaybeAsyncArrowParameterDeclaration
         ) {
           scope.recordDeclarationError(Errors.AwaitBindingIdentifier, at);
         }
