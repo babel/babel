@@ -9,6 +9,11 @@ type ClassAssumptions = {
   constantSuper: boolean;
   superIsCallableConstructor: boolean;
   noClassCalls: boolean;
+
+  // TODO: These are not assumptions that can be set individually yet, they are
+  // only enabled by the `loose` option.
+  noClassPrototypeAssign: boolean;
+  noConstructorPrimitiveReturn: boolean;
 };
 
 type ClassConstructor = t.ClassMethod & { kind: "constructor" };
@@ -62,7 +67,6 @@ export default function transformClass(
   path: NodePath<t.Class>,
   file: File,
   builtinClasses: ReadonlySet<string>,
-  isLoose: boolean,
   assumptions: ClassAssumptions,
   supportUnicodeId: boolean,
 ) {
@@ -470,7 +474,7 @@ export default function transformClass(
 
     let wrapReturn;
 
-    if (isLoose) {
+    if (assumptions.noConstructorPrimitiveReturn) {
       wrapReturn = (returnArg: t.Expression | void) => {
         const thisExpr = buildAssertThisInitialized();
         return returnArg
@@ -625,7 +629,11 @@ export default function transformClass(
     classState.body.unshift(
       t.expressionStatement(
         t.callExpression(
-          file.addHelper(isLoose ? "inheritsLoose" : "inherits"),
+          file.addHelper(
+            assumptions.setClassMethods && assumptions.noClassPrototypeAssign
+              ? "inheritsLoose"
+              : "inherits",
+          ),
           [
             t.cloneNode(classState.classRef!),
             t.cloneNode(classState.superName),
@@ -752,13 +760,15 @@ export default function transformClass(
     if (constructorOnly) {
       // named class with only a constructor
       const expr = t.toExpression(classState.construct);
-      return isLoose ? expr : createClassHelper([expr]);
+      return assumptions.noClassPrototypeAssign
+        ? expr
+        : createClassHelper([expr]);
     }
 
     if (!classState.pushedCreateClass) {
       body.push(
         t.returnStatement(
-          isLoose
+          assumptions.noClassPrototypeAssign
             ? t.cloneNode(classState.classRef)
             : createClassHelper([t.cloneNode(classState.classRef)]),
         ),
