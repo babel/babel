@@ -22,9 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -43,9 +43,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -75,9 +75,9 @@ jobs:
     #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -125,9 +125,9 @@ jobs:
     #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -149,9 +149,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -168,9 +168,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -209,9 +209,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -230,7 +230,7 @@ jobs:
           BABEL_ENV: test
           BABEL_COVERAGE: true
       - name: Upload coverage report
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           name: babel-7
@@ -245,9 +245,9 @@ jobs:
         node-version: [25, 24, 22]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest # Run yarn on latest node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -259,7 +259,7 @@ jobs:
         with:
           name: babel-artifact
       - name: Use Node.js ${{ matrix.node-version }} # Checkout node version for test executor
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
       - name: Ensure that @babel/node's list of node flags is up to date
@@ -283,9 +283,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -309,9 +309,9 @@ jobs:
     #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -342,9 +342,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -366,9 +366,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -387,7 +387,7 @@ jobs:
           BABEL_COVERAGE: true
           BABEL_9_BREAKING: true
       - name: Upload coverage report
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           name: babel-9
@@ -402,9 +402,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -426,9 +426,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -453,9 +453,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -519,9 +519,9 @@ jobs:
           ]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -554,7 +554,7 @@ jobs:
       - name: Generate absoluteRuntime tests
         run: yarn test:runtime:generate-absolute-runtime
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
       - name: Test Node.js ${{ matrix.node-version }}
@@ -570,9 +570,9 @@ jobs:
         eslint-version: [9]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           cache: "yarn"
@@ -592,14 +592,14 @@ jobs:
     if: github.repository == 'babel/babel'
     steps:
       - name: Checkout Babel
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
       - name: Checkout test runner
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: babel/babel-test262-runner
           path: babel-test262-runner
@@ -629,9 +629,9 @@ jobs:
     needs: [build, test262-prepare]
     steps:
       - name: Checkout Babel
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -641,7 +641,7 @@ jobs:
         with:
           name: babel-artifact
       - name: Checkout test runner
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: babel/babel-test262-runner
           path: babel-test262-runner
@@ -709,7 +709,7 @@ jobs:
           name: test262-result
           path: test262.tap
       - name: Checkout test runner
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: babel/babel-test262-runner
           path: babel-test262-runner
@@ -735,9 +735,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: latest
           check-latest: true
@@ -752,9 +752,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: "*"
           cache: "yarn"
