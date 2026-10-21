@@ -414,6 +414,7 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
         "typescript/cast/for-of-lhs/input.ts",
         "typescript/cast/need-parentheses/input.ts",
         "typescript/cast/parenthesized-type-assertion-and-assign/input.ts",
+        "typescript/cast/parenthesized-type-assertion-and-assign-in-param-initializer/input.ts",
         "typescript/cast/type-assertion/input.ts",
         "typescript/cast/type-assertion-after-operator/input.ts",
         "typescript/cast/type-assertion-and-assign/input.ts",

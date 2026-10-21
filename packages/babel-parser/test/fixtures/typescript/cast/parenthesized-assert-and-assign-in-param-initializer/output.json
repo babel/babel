@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":116,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":40,"index":116}},
+  "start":0,"end":90,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":40,"index":90}},
   "program": {
     "type": "Program",
-    "start":0,"end":116,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":40,"index":116}},
+    "start":0,"end":90,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":40,"index":90}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -68,17 +68,17 @@
       },
       {
         "type": "ExpressionStatement",
-        "start":28,"end":53,"loc":{"start":{"line":2,"column":0,"index":28},"end":{"line":2,"column":25,"index":53}},
+        "start":28,"end":49,"loc":{"start":{"line":2,"column":0,"index":28},"end":{"line":2,"column":21,"index":49}},
         "expression": {
           "type": "ArrowFunctionExpression",
-          "start":28,"end":52,"loc":{"start":{"line":2,"column":0,"index":28},"end":{"line":2,"column":24,"index":52}},
+          "start":28,"end":48,"loc":{"start":{"line":2,"column":0,"index":28},"end":{"line":2,"column":20,"index":48}},
           "id": null,
           "generator": false,
           "async": false,
           "params": [
             {
               "type": "AssignmentPattern",
-              "start":29,"end":45,"loc":{"start":{"line":2,"column":1,"index":29},"end":{"line":2,"column":17,"index":45}},
+              "start":29,"end":41,"loc":{"start":{"line":2,"column":1,"index":29},"end":{"line":2,"column":13,"index":41}},
               "left": {
                 "type": "Identifier",
                 "start":29,"end":30,"loc":{"start":{"line":2,"column":1,"index":29},"end":{"line":2,"column":2,"index":30},"identifierName":"x"},
@@ -86,18 +86,14 @@
               },
               "right": {
                 "type": "AssignmentExpression",
-                "start":33,"end":45,"loc":{"start":{"line":2,"column":5,"index":33},"end":{"line":2,"column":17,"index":45}},
+                "start":33,"end":41,"loc":{"start":{"line":2,"column":5,"index":33},"end":{"line":2,"column":13,"index":41}},
                 "operator": "=",
                 "left": {
-                  "type": "TSTypeAssertion",
-                  "start":34,"end":40,"loc":{"start":{"line":2,"column":6,"index":34},"end":{"line":2,"column":12,"index":40}},
-                  "typeAnnotation": {
-                    "type": "TSAnyKeyword",
-                    "start":35,"end":38,"loc":{"start":{"line":2,"column":7,"index":35},"end":{"line":2,"column":10,"index":38}}
-                  },
+                  "type": "TSNonNullExpression",
+                  "start":34,"end":36,"loc":{"start":{"line":2,"column":6,"index":34},"end":{"line":2,"column":8,"index":36}},
                   "expression": {
                     "type": "Identifier",
-                    "start":39,"end":40,"loc":{"start":{"line":2,"column":11,"index":39},"end":{"line":2,"column":12,"index":40},"identifierName":"a"},
+                    "start":34,"end":35,"loc":{"start":{"line":2,"column":6,"index":34},"end":{"line":2,"column":7,"index":35},"identifierName":"a"},
                     "name": "a"
                   },
                   "extra": {
@@ -107,7 +103,7 @@
                 },
                 "right": {
                   "type": "NumericLiteral",
-                  "start":44,"end":45,"loc":{"start":{"line":2,"column":16,"index":44},"end":{"line":2,"column":17,"index":45}},
+                  "start":40,"end":41,"loc":{"start":{"line":2,"column":12,"index":40},"end":{"line":2,"column":13,"index":41}},
                   "extra": {
                     "rawValue": 1,
                     "raw": "1"
@@ -119,62 +115,7 @@
           ],
           "body": {
             "type": "BlockStatement",
-            "start":50,"end":52,"loc":{"start":{"line":2,"column":22,"index":50},"end":{"line":2,"column":24,"index":52}},
-            "body": [],
-            "directives": []
-          }
-        }
-      },
-      {
-        "type": "ExpressionStatement",
-        "start":54,"end":75,"loc":{"start":{"line":3,"column":0,"index":54},"end":{"line":3,"column":21,"index":75}},
-        "expression": {
-          "type": "ArrowFunctionExpression",
-          "start":54,"end":74,"loc":{"start":{"line":3,"column":0,"index":54},"end":{"line":3,"column":20,"index":74}},
-          "id": null,
-          "generator": false,
-          "async": false,
-          "params": [
-            {
-              "type": "AssignmentPattern",
-              "start":55,"end":67,"loc":{"start":{"line":3,"column":1,"index":55},"end":{"line":3,"column":13,"index":67}},
-              "left": {
-                "type": "Identifier",
-                "start":55,"end":56,"loc":{"start":{"line":3,"column":1,"index":55},"end":{"line":3,"column":2,"index":56},"identifierName":"x"},
-                "name": "x"
-              },
-              "right": {
-                "type": "AssignmentExpression",
-                "start":59,"end":67,"loc":{"start":{"line":3,"column":5,"index":59},"end":{"line":3,"column":13,"index":67}},
-                "operator": "=",
-                "left": {
-                  "type": "TSNonNullExpression",
-                  "start":60,"end":62,"loc":{"start":{"line":3,"column":6,"index":60},"end":{"line":3,"column":8,"index":62}},
-                  "expression": {
-                    "type": "Identifier",
-                    "start":60,"end":61,"loc":{"start":{"line":3,"column":6,"index":60},"end":{"line":3,"column":7,"index":61},"identifierName":"a"},
-                    "name": "a"
-                  },
-                  "extra": {
-                    "parenthesized": true,
-                    "parenStart": 59
-                  }
-                },
-                "right": {
-                  "type": "NumericLiteral",
-                  "start":66,"end":67,"loc":{"start":{"line":3,"column":12,"index":66},"end":{"line":3,"column":13,"index":67}},
-                  "extra": {
-                    "rawValue": 1,
-                    "raw": "1"
-                  },
-                  "value": 1
-                }
-              }
-            }
-          ],
-          "body": {
-            "type": "BlockStatement",
-            "start":72,"end":74,"loc":{"start":{"line":3,"column":18,"index":72},"end":{"line":3,"column":20,"index":74}},
+            "start":46,"end":48,"loc":{"start":{"line":2,"column":18,"index":46},"end":{"line":2,"column":20,"index":48}},
             "body": [],
             "directives": []
           }
@@ -182,10 +123,10 @@
       },
       {
         "type": "FunctionDeclaration",
-        "start":76,"end":116,"loc":{"start":{"line":4,"column":0,"index":76},"end":{"line":4,"column":40,"index":116}},
+        "start":50,"end":90,"loc":{"start":{"line":3,"column":0,"index":50},"end":{"line":3,"column":40,"index":90}},
         "id": {
           "type": "Identifier",
-          "start":85,"end":86,"loc":{"start":{"line":4,"column":9,"index":85},"end":{"line":4,"column":10,"index":86},"identifierName":"f"},
+          "start":59,"end":60,"loc":{"start":{"line":3,"column":9,"index":59},"end":{"line":3,"column":10,"index":60},"identifierName":"f"},
           "name": "f"
         },
         "generator": false,
@@ -193,36 +134,36 @@
         "params": [
           {
             "type": "AssignmentPattern",
-            "start":87,"end":112,"loc":{"start":{"line":4,"column":11,"index":87},"end":{"line":4,"column":36,"index":112}},
+            "start":61,"end":86,"loc":{"start":{"line":3,"column":11,"index":61},"end":{"line":3,"column":36,"index":86}},
             "left": {
               "type": "Identifier",
-              "start":87,"end":88,"loc":{"start":{"line":4,"column":11,"index":87},"end":{"line":4,"column":12,"index":88},"identifierName":"x"},
+              "start":61,"end":62,"loc":{"start":{"line":3,"column":11,"index":61},"end":{"line":3,"column":12,"index":62},"identifierName":"x"},
               "name": "x"
             },
             "right": {
               "type": "AssignmentExpression",
-              "start":91,"end":112,"loc":{"start":{"line":4,"column":15,"index":91},"end":{"line":4,"column":36,"index":112}},
+              "start":65,"end":86,"loc":{"start":{"line":3,"column":15,"index":65},"end":{"line":3,"column":36,"index":86}},
               "operator": "=",
               "left": {
                 "type": "TSSatisfiesExpression",
-                "start":92,"end":107,"loc":{"start":{"line":4,"column":16,"index":92},"end":{"line":4,"column":31,"index":107}},
+                "start":66,"end":81,"loc":{"start":{"line":3,"column":16,"index":66},"end":{"line":3,"column":31,"index":81}},
                 "expression": {
                   "type": "Identifier",
-                  "start":92,"end":93,"loc":{"start":{"line":4,"column":16,"index":92},"end":{"line":4,"column":17,"index":93},"identifierName":"a"},
+                  "start":66,"end":67,"loc":{"start":{"line":3,"column":16,"index":66},"end":{"line":3,"column":17,"index":67},"identifierName":"a"},
                   "name": "a"
                 },
                 "typeAnnotation": {
                   "type": "TSAnyKeyword",
-                  "start":104,"end":107,"loc":{"start":{"line":4,"column":28,"index":104},"end":{"line":4,"column":31,"index":107}}
+                  "start":78,"end":81,"loc":{"start":{"line":3,"column":28,"index":78},"end":{"line":3,"column":31,"index":81}}
                 },
                 "extra": {
                   "parenthesized": true,
-                  "parenStart": 91
+                  "parenStart": 65
                 }
               },
               "right": {
                 "type": "NumericLiteral",
-                "start":111,"end":112,"loc":{"start":{"line":4,"column":35,"index":111},"end":{"line":4,"column":36,"index":112}},
+                "start":85,"end":86,"loc":{"start":{"line":3,"column":35,"index":85},"end":{"line":3,"column":36,"index":86}},
                 "extra": {
                   "rawValue": 1,
                   "raw": "1"
@@ -234,7 +175,7 @@
         ],
         "body": {
           "type": "BlockStatement",
-          "start":114,"end":116,"loc":{"start":{"line":4,"column":38,"index":114},"end":{"line":4,"column":40,"index":116}},
+          "start":88,"end":90,"loc":{"start":{"line":3,"column":38,"index":88},"end":{"line":3,"column":40,"index":90}},
           "body": [],
           "directives": []
         }
