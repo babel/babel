@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":203,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":17,"index":203}},
+  "start":0,"end":405,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":13,"column":22,"index":405}},
   "program": {
     "type": "Program",
-    "start":0,"end":203,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":7,"column":17,"index":203}},
+    "start":0,"end":405,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":13,"column":22,"index":405}},
     "sourceType": "script",
     "interpreter": null,
     "body": [
@@ -96,6 +96,84 @@
             "raw": "0x20000000000000"
           },
           "value": 9007199254740992
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":204,"end":223,"loc":{"start":{"line":8,"column":0,"index":204},"end":{"line":8,"column":19,"index":223}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":204,"end":222,"loc":{"start":{"line":8,"column":0,"index":204},"end":{"line":8,"column":18,"index":222}},
+          "extra": {
+            "rawValue": 1152921504606847000,
+            "raw": "0x1000000000000080"
+          },
+          "value": 1152921504606847000
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":224,"end":243,"loc":{"start":{"line":9,"column":0,"index":224},"end":{"line":9,"column":19,"index":243}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":224,"end":242,"loc":{"start":{"line":9,"column":0,"index":224},"end":{"line":9,"column":18,"index":242}},
+          "extra": {
+            "rawValue": 1152921504606847500,
+            "raw": "0x1000000000000180"
+          },
+          "value": 1152921504606847500
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":244,"end":301,"loc":{"start":{"line":10,"column":0,"index":244},"end":{"line":10,"column":57,"index":301}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":244,"end":300,"loc":{"start":{"line":10,"column":0,"index":244},"end":{"line":10,"column":56,"index":300}},
+          "extra": {
+            "rawValue": 9007199254740992,
+            "raw": "0b100000000000000000000000000000000000000000000000000001"
+          },
+          "value": 9007199254740992
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":302,"end":359,"loc":{"start":{"line":11,"column":0,"index":302},"end":{"line":11,"column":57,"index":359}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":302,"end":358,"loc":{"start":{"line":11,"column":0,"index":302},"end":{"line":11,"column":56,"index":358}},
+          "extra": {
+            "rawValue": 9007199254740996,
+            "raw": "0b100000000000000000000000000000000000000000000000000011"
+          },
+          "value": 9007199254740996
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":360,"end":382,"loc":{"start":{"line":12,"column":0,"index":360},"end":{"line":12,"column":22,"index":382}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":360,"end":381,"loc":{"start":{"line":12,"column":0,"index":360},"end":{"line":12,"column":21,"index":381}},
+          "extra": {
+            "rawValue": 18014398509481984,
+            "raw": "0o1000000000000000002"
+          },
+          "value": 18014398509481984
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":383,"end":405,"loc":{"start":{"line":13,"column":0,"index":383},"end":{"line":13,"column":22,"index":405}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":383,"end":404,"loc":{"start":{"line":13,"column":0,"index":383},"end":{"line":13,"column":21,"index":404}},
+          "extra": {
+            "rawValue": 18014398509481990,
+            "raw": "0o1000000000000000006"
+          },
+          "value": 18014398509481990
         }
       }
     ],
