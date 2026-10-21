@@ -34,7 +34,7 @@ import {
   type TokenType,
 } from "../tokenizer/types.ts";
 import type * as N from "../types.ts";
-import LValParser from "./lval.ts";
+import LValParser, { unwrapParenthesizedExpression } from "./lval.ts";
 import {
   isKeyword,
   isReservedWord,
@@ -684,7 +684,7 @@ export default abstract class ExpressionParser extends LValParser {
       this.checkExpressionErrors(refExpressionErrors, true);
 
       if (this.state.strict && isDelete) {
-        const arg = node.argument;
+        const arg = unwrapParenthesizedExpression(node.argument);
 
         if (arg.type === "Identifier") {
           this.raise(Errors.StrictDelete, node);
