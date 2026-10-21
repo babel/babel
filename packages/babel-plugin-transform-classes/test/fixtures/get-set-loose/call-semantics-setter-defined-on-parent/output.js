@@ -2,23 +2,22 @@
 
 let Base = /*#__PURE__*/function () {
   function Base() {}
-  return babelHelpers.createClass(Base, [{
-    key: "test",
-    set: function (v) {
-      throw new Error("gobbledygook");
-    }
-  }]);
+  var _proto = Base.prototype;
+  babelHelpers.defineAccessor("set", _proto, "test", function (v) {
+    throw new Error("gobbledygook");
+  });
+  return Base;
 }();
 let Obj = /*#__PURE__*/function (_Base) {
   function Obj() {
     return _Base.apply(this, arguments) || this;
   }
   babelHelpers.inheritsLoose(Obj, _Base);
-  var _proto = Obj.prototype;
-  _proto.call = function call() {
+  var _proto2 = Obj.prototype;
+  _proto2.call = function call() {
     return _Base.prototype.test.call(this);
   };
-  _proto.test = function test() {
+  _proto2.test = function test() {
     throw new Error("gobbledygook");
   };
   return Obj;

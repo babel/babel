@@ -8,15 +8,13 @@ let Obj = /*#__PURE__*/function (_Base) {
   }
   babelHelpers.inheritsLoose(Obj, _Base);
   var _proto = Obj.prototype;
+  babelHelpers.defineAccessor("set", _proto, "test", function (v) {
+    value = v;
+  });
   _proto.set = function set() {
     return this.test = 3;
   };
-  return babelHelpers.createClass(Obj, [{
-    key: "test",
-    set: function (v) {
-      value = v;
-    }
-  }]);
+  return Obj;
 }(Base);
 const obj = new Obj();
 expect(obj.set()).toBe(3);
