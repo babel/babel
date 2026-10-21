@@ -1,2 +1,2 @@
-var a = babelHelpers.arrayWithoutHoles(['a',, 'b']);
-var b = ['a'].concat(babelHelpers.arrayWithoutHoles(['b',, 'c']));
+var a = ['a', void 0, 'b'].concat();
+var b = ['a'].concat(['b', void 0, 'c']);
