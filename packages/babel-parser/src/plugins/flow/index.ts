@@ -2011,6 +2011,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: N.ExpressionStatement,
       expr: N.Expression,
       decorators: N.Decorator[] | null,
+      flags: ParseStatementFlag,
     ): N.ExpressionStatement {
       if (expr.type === "Identifier") {
         if (expr.name === "declare") {
@@ -2038,7 +2039,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
-      return super.parseExpressionStatement(node, expr, decorators);
+      return super.parseExpressionStatement(node, expr, decorators, flags);
     }
 
     // export type
