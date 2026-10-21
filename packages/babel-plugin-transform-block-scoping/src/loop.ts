@@ -149,25 +149,22 @@ export function moveCapturingTestAndUpdateIntoBody(
   const { node } = loopPath;
   const bodyStmts: t.Statement[] = [];
 
-  if (updateCaptures) {
+  if (updateCaptures && node.update) {
     const first = loopPath.scope.generateUid("first");
     init.node.declarations.push(
       t.variableDeclarator(t.identifier(first), t.booleanLiteral(true)),
     );
     bodyStmts.push(
       t.ifStatement(
-        t.identifier(first),
-        t.expressionStatement(
-          t.assignmentExpression(
-            "=",
-            t.identifier(first),
-            t.booleanLiteral(false),
-          ),
-        ),
-        t.expressionStatement(node.update!),
+        t.unaryExpression("!", t.identifier(first)),
+        t.expressionStatement(node.update),
       ),
     );
-    node.update = null;
+    node.update = t.assignmentExpression(
+      "=",
+      t.identifier(first),
+      t.booleanLiteral(false),
+    );
   }
 
   // The update must run before the test, so if the update has been moved the
