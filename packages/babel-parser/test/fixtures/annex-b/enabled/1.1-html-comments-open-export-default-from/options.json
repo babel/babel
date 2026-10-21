@@ -1,0 +1,4 @@
+{
+  "allowImportExportEverywhere": true,
+  "plugins": ["exportDefaultFrom"]
+}
