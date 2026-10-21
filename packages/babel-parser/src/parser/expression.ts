@@ -20,6 +20,7 @@ import {
   tokenCanStartExpression,
   tokenIsAssignment,
   tokenIsIdentifier,
+  tokenIsKeyword,
   tokenIsKeywordOrIdentifier,
   tokenIsOperator,
   tokenIsPostfix,
@@ -435,6 +436,24 @@ export default abstract class ExpressionParser extends LValParser {
     return this.parseExprOp(expr, startLoc, -1);
   }
 
+  isEscapedKeywordOperatorAfterLineBreak(this: Parser): boolean {
+    return (
+      // `tokenIsKeyword` is required: `containsEsc` is stale on punctuator tokens.
+      tokenIsKeyword(this.state.type) &&
+      this.state.containsEsc &&
+      this.hasPrecedingLineBreak()
+    );
+  }
+
+  // Whether `op`, the current token, continues a binary expression.
+  isBinaryOperator(this: Parser, op: TokenType): boolean {
+    return (
+      tokenIsOperator(op) &&
+      (this.prodParam.hasIn || op !== tt._in) &&
+      !this.isEscapedKeywordOperatorAfterLineBreak()
+    );
+  }
+
   // Parse binary operators with the operator precedence parsing
   // algorithm. `left` is the left-hand side of the operator.
   // `minPrec` provides context that allows the function to stop and
@@ -447,6 +466,9 @@ export default abstract class ExpressionParser extends LValParser {
     leftStartLoc: Position,
     minPrec: number,
   ): N.Expression {
+    const op = this.state.type;
+    const isOperator = this.isBinaryOperator(op);
+
     if (this.isPrivateName(left)) {
       // https://tc39.es/ecma262/#prod-RelationalExpression
       // RelationalExpression [In, Yield, Await]
@@ -456,8 +478,8 @@ export default abstract class ExpressionParser extends LValParser {
 
       if (
         minPrec >= tokenOperatorPrecedence(tt._in) ||
-        !this.prodParam.hasIn ||
-        !this.match(tt._in)
+        op !== tt._in ||
+        !isOperator
       ) {
         this.raise(Errors.PrivateInExpectedIn, left, {
           identifierName: value,
@@ -467,8 +489,7 @@ export default abstract class ExpressionParser extends LValParser {
       this.classScope.usePrivateName(value, left.loc.start);
     }
 
-    const op = this.state.type;
-    if (tokenIsOperator(op) && (this.prodParam.hasIn || !this.match(tt._in))) {
+    if (isOperator) {
       let prec = tokenOperatorPrecedence(op);
       if (prec > minPrec) {
         if (op === tt.pipeline) {

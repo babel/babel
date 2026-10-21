@@ -399,6 +399,11 @@ function deeplyMakePlainObject(obj) {
         // ts-eslint/tsc does not support this example
         "typescript/regression/nested-extends-in-arrow-type-param/input.ts",
         "typescript/type-arguments-bit-shift-left-like/jsx-opening-element/input.tsx",
+
+        // tsc parses an escaped `in` / `instanceof` after a class field
+        // initializer as the binary operator instead of applying ASI
+        // https://github.com/microsoft/TypeScript/issues/64883
+        "typescript/class/escaped-in-after-initializer/input.ts",
       ]);
       for (const [name, testSuites] of Object.entries(fixtures)) {
         if (["typescript"].includes(name)) {
