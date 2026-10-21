@@ -752,6 +752,17 @@ export function convertVariableDeclaration(
   scope.crawl();
 }
 
+// The last expression of a sequence is the value of the whole sequence.
+function isResultUnused(path: NodePath): boolean {
+  const { parentPath } = path;
+  if (parentPath.isExpressionStatement()) return true;
+  if (parentPath.isSequenceExpression()) {
+    const { expressions } = parentPath.node;
+    return path.key !== expressions.length - 1 || isResultUnused(parentPath);
+  }
+  return false;
+}
+
 export function convertAssignmentExpression(
   path: NodePath<t.AssignmentExpression & { left: t.Pattern }>,
   addHelper: File["addHelper"],
@@ -776,11 +787,7 @@ export function convertAssignmentExpression(
   });
 
   let ref: t.Identifier | undefined;
-  if (
-    (!parentPath.isExpressionStatement() &&
-      !parentPath.isSequenceExpression()) ||
-    path.isCompletionRecord()
-  ) {
+  if (!isResultUnused(path) || path.isCompletionRecord()) {
     ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");
 
     nodes.push(
