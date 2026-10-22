@@ -1,5 +1,9 @@
 import type Printer from "../printer.ts";
-import { isDeclareExportDeclaration, isStatement } from "@babel/types";
+import {
+  isDeclareExportDeclaration,
+  isExportNamespaceSpecifier,
+  isStatement,
+} from "@babel/types";
 import type * as t from "@babel/types";
 import { ExportAllDeclaration } from "./modules.ts";
 import { TokenContext } from "../node/index.ts";
@@ -274,13 +278,20 @@ function FlowExportDeclaration(
     this.print(declar);
     if (!isStatement(declar)) this.semicolon();
   } else {
-    this.token("{");
-    if (node.specifiers!.length) {
-      this.space();
-      this.printList(node.specifiers);
-      this.space();
+    const specifiers = node.specifiers!;
+    if (specifiers.length === 1 && isExportNamespaceSpecifier(specifiers[0])) {
+      // declare export * as ns from "a";
+      // declare export { x } as ns from "a";
+      this.print(specifiers[0]);
+    } else {
+      this.token("{");
+      if (specifiers.length) {
+        this.space();
+        this.printList(specifiers);
+        this.space();
+      }
+      this.token("}");
     }
-    this.token("}");
 
     if (node.source) {
       this.space();
