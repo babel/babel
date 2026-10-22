@@ -45,6 +45,7 @@ const tSFunctionTypeAnnotationCommon = () => ({
 
 defineType("TSParameterProperty", {
   aliases: process.env.BABEL_8_BREAKING ? [] : ["LVal"],
+  builder: ["parameter"],
   visitor: ["decorators" /* for legacy param decorators */, "parameter"],
   fields: {
     accessibility: {
