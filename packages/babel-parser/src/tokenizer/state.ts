@@ -147,7 +147,10 @@ export default class State {
 
   // todo(JLHwung): set strictErrors to null and avoid recording string errors
   // after a non-directive is parsed
-  strictErrors = new Map<number, [DeferredStrictError, Position]>();
+  strictErrors = new Map<
+    number,
+    [DeferredStrictError, Position, { escape: string }?]
+  >();
 
   // Tokens length in token store
   tokensLength: number = 0;

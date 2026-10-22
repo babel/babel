@@ -254,7 +254,7 @@ type ErrorInfoCompressed = {
   StrictEvalArguments: [{ referenceName: string }];
   StrictEvalArgumentsBinding: [{ bindingName: string }];
   StrictFunction: [];
-  StrictNumericEscape: [];
+  StrictNumericEscape: [{ escape: string }];
   StrictOctalLiteral: [];
   StrictWith: [];
   ParseExpressionEmptyInput: [];

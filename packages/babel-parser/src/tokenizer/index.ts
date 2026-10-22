@@ -297,8 +297,8 @@ export default abstract class Tokenizer extends CommentsParser {
       // after a "use strict" directive. Strict mode will be set at parse
       // time for any literals that occur after the next node of the strict
       // directive.
-      this.state.strictErrors.forEach(([toParseError, at]) =>
-        this.raise(toParseError, at),
+      this.state.strictErrors.forEach(([toParseError, at, details]) =>
+        this.raise(toParseError, at, details),
       );
       this.state.strictErrors.clear();
     }
@@ -1334,13 +1334,17 @@ export default abstract class Tokenizer extends CommentsParser {
     }
   }
 
-  recordStrictModeErrors(toParseError: DeferredStrictError, at: Position) {
+  recordStrictModeErrors(
+    toParseError: DeferredStrictError,
+    at: Position,
+    details?: { escape: string },
+  ) {
     const index = at.index;
 
     if (this.state.strict && !this.state.strictErrors.has(index)) {
-      this.raise(toParseError, at);
+      this.raise(toParseError, at, details);
     } else {
-      this.state.strictErrors.set(index, [toParseError, at]);
+      this.state.strictErrors.set(index, [toParseError, at, details]);
     }
   }
 
@@ -1556,10 +1560,11 @@ export default abstract class Tokenizer extends CommentsParser {
 
   errorHandlers_readStringContents_string: StringContentsErrorHandlers = {
     ...this.errorHandlers_readCodePoint,
-    strictNumericEscape: (pos, lineStart, curLine) => {
+    strictNumericEscape: (pos, lineStart, curLine, escape) => {
       this.recordStrictModeErrors(
         Errors.StrictNumericEscape,
         buildPosition(pos, lineStart, curLine),
+        { escape },
       );
     },
     unterminated: (pos, lineStart, curLine) => {
@@ -1572,7 +1577,13 @@ export default abstract class Tokenizer extends CommentsParser {
 
   errorHandlers_readStringContents_template: StringContentsErrorHandlers = {
     ...this.errorHandlers_readCodePoint,
-    strictNumericEscape: this.errorBuilder(Errors.StrictNumericEscape),
+    strictNumericEscape: (pos, lineStart, curLine, escape) => {
+      this.raise(
+        Errors.StrictNumericEscape,
+        buildPosition(pos, lineStart, curLine),
+        { escape },
+      );
+    },
     unterminated: (pos, lineStart, curLine) => {
       throw this.raise(
         Errors.UnterminatedTemplate,
