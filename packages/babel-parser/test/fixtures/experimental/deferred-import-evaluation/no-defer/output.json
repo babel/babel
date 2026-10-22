@@ -1,0 +1,125 @@
+{
+  "type": "File",
+  "start":0,"end":89,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":22,"index":89}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":89,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":22,"index":89}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "phase": null,
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8}},
+            "local": {
+              "type": "Identifier",
+              "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8},"identifierName":"x"},
+              "name": "x"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":14,"end":17,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":17,"index":17}},
+          "extra": {
+            "rawValue": "x",
+            "raw": "\"x\""
+          },
+          "value": "x"
+        },
+        "attributes": []
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":19,"end":43,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":24,"index":43}},
+        "phase": null,
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start":26,"end":33,"loc":{"start":{"line":2,"column":7,"index":26},"end":{"line":2,"column":14,"index":33}},
+            "local": {
+              "type": "Identifier",
+              "start":31,"end":33,"loc":{"start":{"line":2,"column":12,"index":31},"end":{"line":2,"column":14,"index":33},"identifierName":"ns"},
+              "name": "ns"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":39,"end":42,"loc":{"start":{"line":2,"column":20,"index":39},"end":{"line":2,"column":23,"index":42}},
+          "extra": {
+            "rawValue": "y",
+            "raw": "\"y\""
+          },
+          "value": "y"
+        },
+        "attributes": []
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":44,"end":66,"loc":{"start":{"line":3,"column":0,"index":44},"end":{"line":3,"column":22,"index":66}},
+        "phase": null,
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":53,"end":54,"loc":{"start":{"line":3,"column":9,"index":53},"end":{"line":3,"column":10,"index":54}},
+            "imported": {
+              "type": "Identifier",
+              "start":53,"end":54,"loc":{"start":{"line":3,"column":9,"index":53},"end":{"line":3,"column":10,"index":54},"identifierName":"z"},
+              "name": "z"
+            },
+            "local": {
+              "type": "Identifier",
+              "start":53,"end":54,"loc":{"start":{"line":3,"column":9,"index":53},"end":{"line":3,"column":10,"index":54},"identifierName":"z"},
+              "name": "z"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":62,"end":65,"loc":{"start":{"line":3,"column":18,"index":62},"end":{"line":3,"column":21,"index":65}},
+          "extra": {
+            "rawValue": "z",
+            "raw": "\"z\""
+          },
+          "value": "z"
+        },
+        "attributes": []
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":67,"end":89,"loc":{"start":{"line":4,"column":0,"index":67},"end":{"line":4,"column":22,"index":89}},
+        "phase": null,
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":74,"end":79,"loc":{"start":{"line":4,"column":7,"index":74},"end":{"line":4,"column":12,"index":79}},
+            "local": {
+              "type": "Identifier",
+              "start":74,"end":79,"loc":{"start":{"line":4,"column":7,"index":74},"end":{"line":4,"column":12,"index":79},"identifierName":"defer"},
+              "name": "defer"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":85,"end":88,"loc":{"start":{"line":4,"column":18,"index":85},"end":{"line":4,"column":21,"index":88}},
+          "extra": {
+            "rawValue": "w",
+            "raw": "\"w\""
+          },
+          "value": "w"
+        },
+        "attributes": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
