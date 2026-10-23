@@ -90,6 +90,7 @@ import transformUnicodeEscapes from "@babel/plugin-transform-unicode-escapes";
 import transformUnicodeRegex from "@babel/plugin-transform-unicode-regex";
 import transformExplicitResourceManagement from "@babel/plugin-transform-explicit-resource-management";
 import proposalImportDefer from "@babel/plugin-proposal-import-defer";
+import proposalFilteredNamespaces from "@babel/plugin-proposal-filtered-namespaces";
 export {
   externalHelpers,
   syntaxDecorators,
@@ -179,6 +180,7 @@ export {
   transformUnicodeRegex,
   transformExplicitResourceManagement,
   proposalImportDefer,
+  proposalFilteredNamespaces,
 };
 export const all: Record<string, any> = {
   "external-helpers": externalHelpers,
@@ -270,4 +272,5 @@ export const all: Record<string, any> = {
   "transform-unicode-regex": transformUnicodeRegex,
   "transform-explicit-resource-management": transformExplicitResourceManagement,
   "proposal-import-defer": proposalImportDefer,
+  "proposal-filtered-namespaces": proposalFilteredNamespaces,
 };
