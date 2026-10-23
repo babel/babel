@@ -12,124 +12,124 @@ import _spliceInstanceProperty from "core-js-pure/features/instance/splice.js";
 import checkInRHS from "./checkInRHS.js";
 import setFunctionName from "./setFunctionName.js";
 import toPropertyKey from "./toPropertyKey.js";
-function applyDecs2311(e, t, n, r, o, i) {
-  var a,
-    c,
-    u,
-    s,
+function applyDecs2311(n, o, i, a, c, u) {
+  var s,
     f,
     l,
     p,
-    d = _Symbol$metadata || _Symbol$for("Symbol.metadata"),
-    m = _Object$defineProperty,
-    h = _Object$create,
-    y = [h(null), h(null)],
-    v = t.length;
-  function g(t, n, r) {
+    d,
+    m,
+    h,
+    v = _Symbol$metadata || _Symbol$for("Symbol.metadata"),
+    g = _Object$defineProperty,
+    y = _Object$create,
+    b = [y(null), y(null)],
+    w = o.length;
+  function D(e, t, r) {
     return function (o, i) {
-      n && (i = o, o = e);
-      for (var a = 0; a < t.length; a++) i = t[a].apply(o, r ? [i] : []);
+      t && (i = o, o = n);
+      for (var a = 0; a < e.length; a++) i = e[a].apply(o, r ? [i] : []);
       return r ? i : o;
     };
   }
-  function b(e, t, n, r) {
-    if ("function" != typeof e && (r || void 0 !== e)) throw new TypeError(t + " must " + (n || "be") + " a function" + (r ? "" : " or undefined"));
+  function j(e, t, r, n) {
+    if ("function" != typeof e && (n || void 0 !== e)) throw new TypeError(t + " must " + (r || "be") + " a function" + (n ? "" : " or undefined"));
     return e;
   }
-  function applyDec(e, t, n, r, o, i, u, s, f, l, p) {
+  function applyDec(e, r, n, o, i, a, c, u, l, p, d) {
     var _context, _context3;
-    function d(e) {
-      if (!p(e)) throw new TypeError("Attempted to access private element on non-instance");
+    function m(e) {
+      if (!d(e)) throw new TypeError("Attempted to access private element on non-instance");
     }
-    var h = _concatInstanceProperty(_context = []).call(_context, t[0]),
-      v = t[3],
-      w = !u,
-      D = 1 === o,
-      S = 3 === o,
-      j = 4 === o,
-      E = 2 === o;
-    function I(t, n, r) {
+    var h = _concatInstanceProperty(_context = []).call(_context, r[0]),
+      v = r[3],
+      y = !c,
+      w = 1 === i,
+      E = 3 === i,
+      O = 4 === i,
+      S = 2 === i;
+    function T(t, r, n) {
       return function (o, i) {
-        return n && (i = o, o = e), r && r(o), P[t].call(o, i);
+        return r && (i = o, o = e), n && n(o), z[t].call(o, i);
       };
     }
-    if (!w) {
-      var P = {},
-        k = [],
-        F = S ? "get" : j || D ? "set" : "value";
-      if (f ? (l || D ? P = {
+    if (!y) {
+      var z = {},
+        A = [],
+        I = E ? "get" : O || w ? "set" : "value";
+      if (l ? (p || w ? z = {
         get: setFunctionName(function () {
           return v(this);
-        }, r, "get"),
+        }, o, "get"),
         set: function set(e) {
-          t[4](this, e);
+          r[4](this, e);
         }
-      } : P[F] = v, l || setFunctionName(P[F], r, E ? "" : F)) : l || (P = _Object$getOwnPropertyDescriptor(e, r)), !l && !f) {
-        if ((c = y[+s][r]) && 7 !== (c ^ o)) throw Error("Decorating two elements with the same name (" + P[F].name + ") is not supported yet");
-        y[+s][r] = o < 3 ? 1 : o;
+      } : z[I] = v, p || setFunctionName(z[I], o, S ? "" : I)) : p || (z = _Object$getOwnPropertyDescriptor(e, o)), !p && !l) {
+        if ((f = b[+u][o]) && 7 !== (f ^ i)) throw Error("Decorating two elements with the same name (" + z[I].name + ") is not supported yet");
+        b[+u][o] = i < 3 ? 1 : i;
       }
     }
-    for (var N = e, O = h.length - 1; O >= 0; O -= n ? 2 : 1) {
+    for (var P = e, k = h.length - 1; k >= 0; k -= n ? 2 : 1) {
       var _context2;
-      var T = b(h[O], "A decorator", "be", !0),
-        z = n ? h[O - 1] : void 0,
-        A = {},
-        H = {
-          kind: ["field", "accessor", "method", "getter", "setter", "class"][o],
-          name: r,
-          metadata: a,
+      var x = j(h[k], "A decorator", "be", !0),
+        F = n ? h[k - 1] : void 0,
+        H = {},
+        K = {
+          kind: ["field", "accessor", "method", "getter", "setter", "class"][i],
+          name: o,
+          metadata: s,
           addInitializer: _bindInstanceProperty(_context2 = function _context2(e, t) {
             if (e.v) throw new TypeError("attempted to call addInitializer after decoration was finished");
-            b(t, "An initializer", "be", !0), _pushInstanceProperty(i).call(i, t);
-          }).call(_context2, null, A)
+            j(t, "An initializer", "be", !0), _pushInstanceProperty(a).call(a, t);
+          }).call(_context2, null, H)
         };
-      if (w) c = T.call(z, N, H), A.v = 1, b(c, "class decorators", "return") && (N = c);else if (H["static"] = s, H["private"] = f, c = H.access = {
-        has: f ? _bindInstanceProperty(p).call(p) : function (e) {
-          return r in e;
+      if (y) f = x.call(F, P, K), H.v = 1, j(f, "class decorators", "return") && (P = f);else if (K["static"] = u, K["private"] = l, f = K.access = {
+        has: l ? _bindInstanceProperty(d).call(d) : function (e) {
+          return o in e;
         }
-      }, j || (c.get = f ? E ? function (e) {
-        return d(e), P.value;
-      } : I("get", 0, d) : function (e) {
-        return e[r];
-      }), E || S || (c.set = f ? I("set", 0, d) : function (e, t) {
-        e[r] = t;
-      }), N = T.call(z, D ? {
-        get: P.get,
-        set: P.set
-      } : P[F], H), A.v = 1, D) {
-        if ("object" == _typeof(N) && N) (c = b(N.get, "accessor.get")) && (P.get = c), (c = b(N.set, "accessor.set")) && (P.set = c), (c = b(N.init, "accessor.init")) && _unshiftInstanceProperty(k).call(k, c);else if (void 0 !== N) throw new TypeError("accessor decorators must return an object with get, set, or init properties or undefined");
-      } else b(N, (l ? "field" : "method") + " decorators", "return") && (l ? _unshiftInstanceProperty(k).call(k, N) : P[F] = N);
+      }, O || (f.get = l ? S ? function (e) {
+        return m(e), z.value;
+      } : T("get", 0, m) : function (e) {
+        return e[o];
+      }), S || E || (f.set = l ? T("set", 0, m) : function (e, t) {
+        e[o] = t;
+      }), P = x.call(F, w ? {
+        get: z.get,
+        set: z.set
+      } : z[I], K), H.v = 1, w) {
+        if ("object" == _typeof(P) && P) (f = j(P.get, "accessor.get")) && (z.get = f), (f = j(P.set, "accessor.set")) && (z.set = f), (f = j(P.init, "accessor.init")) && _unshiftInstanceProperty(A).call(A, f);else if (void 0 !== P) throw new TypeError("accessor decorators must return an object with get, set, or init properties or undefined");
+      } else j(P, (p ? "field" : "method") + " decorators", "return") && (p ? _unshiftInstanceProperty(A).call(A, P) : z[I] = P);
     }
-    return o < 2 && _pushInstanceProperty(u).call(u, g(k, s, 1), g(i, s, 0)), l || w || (f ? D ? _spliceInstanceProperty(u).call(u, -1, 0, I("get", s), I("set", s)) : _pushInstanceProperty(u).call(u, E ? P[F] : _bindInstanceProperty(_context3 = b.call).call(_context3, P[F])) : m(e, r, P)), N;
+    return i < 2 && _pushInstanceProperty(c).call(c, D(A, u, 1), D(a, u, 0)), p || y || (l ? w ? _spliceInstanceProperty(c).call(c, -1, 0, T("get", u), T("set", u)) : _pushInstanceProperty(c).call(c, S ? z[I] : _bindInstanceProperty(_context3 = j.call).call(_context3, z[I])) : g(e, o, z)), P;
   }
-  function w(e) {
-    return m(e, d, {
+  function E(e) {
+    return g(e, v, {
       configurable: !0,
       enumerable: !0,
-      value: a
+      value: s
     });
   }
-  return void 0 !== i && (a = i[d]), a = h(null == a ? null : a), f = [], l = function l(e) {
-    e && _pushInstanceProperty(f).call(f, g(e));
-  }, p = function p(t, r) {
-    for (var i = 0; i < n.length; i++) {
-      var a = n[i],
-        c = a[1],
-        l = 7 & c;
-      if ((8 & c) == t && !l == r) {
-        var p = a[2],
-          d = !!a[3],
-          m = 16 & c;
-        applyDec(t ? e : e.prototype, a, m, d ? "#" + p : toPropertyKey(p), l, l < 2 ? [] : t ? s = s || [] : u = u || [], f, !!t, d, r, t && d ? function (t) {
-          return checkInRHS(t) === e;
-        } : o);
+  return void 0 !== u && (s = u[v]), s = y(null == s ? null : s), d = [], m = function m(e) {
+    e && _pushInstanceProperty(d).call(d, D(e));
+  }, h = function h(t, o) {
+    for (var a = 0; a < i.length; a++) {
+      var u = i[a],
+        s = u[1],
+        f = 7 & s;
+      if ((8 & s) == t && !f == o) {
+        var m = u[2],
+          h = !!u[3],
+          v = 16 & s;
+        applyDec(t ? n : n.prototype, u, v, h ? "#" + m : toPropertyKey(m), f, f < 2 ? [] : t ? p = p || [] : l = l || [], d, !!t, h, o, t && h ? function (t) {
+          return checkInRHS(t) === n;
+        } : c);
       }
     }
-  }, p(8, 0), p(0, 0), p(8, 1), p(0, 1), l(u), l(s), c = f, v || w(e), {
-    e: c,
+  }, h(8, 0), h(0, 0), h(8, 1), h(0, 1), m(l), m(p), f = d, w || E(n), {
+    e: f,
     get c() {
-      var n = [];
-      return v && [w(e = applyDec(e, [t], r, e.name, 5, n)), g(n, 1)];
+      var e = [];
+      return w && [E(n = applyDec(n, [o], a, n.name, 5, e)), D(e, 1)];
     }
   };
 }
