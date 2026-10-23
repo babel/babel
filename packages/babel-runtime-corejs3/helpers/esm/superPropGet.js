@@ -1,9 +1,9 @@
 import get from "./get.js";
 import getPrototypeOf from "./getPrototypeOf.js";
-function _superPropGet(t, o, e, r) {
-  var p = get(getPrototypeOf(1 & r ? t.prototype : t), o, e);
-  return 2 & r && "function" == typeof p ? function (t) {
-    return p.apply(e, t);
-  } : p;
+function _superPropGet(r, e, p, f) {
+  var n = get(getPrototypeOf(1 & f ? r.prototype : r), e, p);
+  return 2 & f && "function" == typeof n ? function (t) {
+    return n.apply(p, t);
+  } : n;
 }
 export { _superPropGet as default };
