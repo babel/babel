@@ -872,6 +872,21 @@ describe("api", function () {
       expect(script).toEqual(expect.stringContaining("typeof"));
     });
 
+    it("no conflicting top-level bindings across helpers", function () {
+      const script = babel.buildExternalHelpers(undefined, "module");
+      const ast = babel.parseSync(script, {
+        configFile: false,
+        babelrc: false,
+        sourceType: "module",
+      });
+
+      const names = ast.program.body.flatMap(node =>
+        Object.keys(babel.types.getBindingIdentifiers(node, false, true)),
+      );
+      // All names are unique
+      expect(new Set(names).size).toBe(names.length);
+    });
+
     describe("output types", function () {
       it("global", function () {
         const script = babel.buildExternalHelpers(["get"], "global");
