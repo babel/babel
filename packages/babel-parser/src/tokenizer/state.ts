@@ -87,6 +87,14 @@ export default class State {
   //          ^
   noArrowParamsConversionAt: number[] = [];
 
+  // The end of the last token after which `/` or `/=` starts a regular
+  // expression although the parser has already parsed an expression before
+  // it: the `}` of an arrow function body or an argument-less `yield`.
+  // e.g. () => {}
+  //             ^
+  //      /=/
+  regExpAllowedAt: number = -1;
+
   // Flags to track
   @bit accessor maybeInArrowParameters = false;
   @bit accessor inType = false;
@@ -194,6 +202,7 @@ export default class State {
     state.noArrowAt = this.noArrowAt.slice();
     state.noArrowParamsConversionAt = this.noArrowParamsConversionAt.slice();
     state.topicContext = this.topicContext;
+    state.regExpAllowedAt = this.regExpAllowedAt;
     state.labels = this.labels.slice();
     state.commentsLen = this.commentsLen;
     state.commentStack = this.commentStack.slice();
