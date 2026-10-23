@@ -733,10 +733,7 @@ export default function transformClass(
               ? "inheritsLoose"
               : "inherits",
           ),
-          [
-            t.cloneNode(classState.classRef),
-            t.cloneNode(classState.superName),
-          ],
+          [t.cloneNode(classState.classRef), t.cloneNode(classState.superName)],
         ),
       ),
     );
