@@ -50,13 +50,11 @@ export abstract class NodeUtils extends UtilParser {
   }
 
   startNode<T extends NodeType = never>(): Undone<T> {
-    const { startLoc } = this.state;
-    this.setLoc(startLoc);
-
-    return this.startNodeAt<T>(startLoc);
+    return this.startNodeAt<T>(this.state.startLoc);
   }
 
   startNodeAt<T extends NodeType = never>(loc: Position): Undone<T> {
+    this.setLoc(loc);
     const { optionFlags, filename } = this;
     if (!(optionFlags & OptionFlags.Locations)) {
       return new Node(optionFlags, filename, loc.index) as unknown as Undone<T>;
