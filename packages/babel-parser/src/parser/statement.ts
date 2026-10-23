@@ -2405,8 +2405,8 @@ export default abstract class StatementParser extends ExpressionParser {
     const hasStar = parseAfterDefault && this.eatExportStar(node);
     const hasNamespace =
       hasStar && this.maybeParseExportNamespaceSpecifier(node);
-    const parseAfterNamespace =
-      parseAfterDefault && (!hasNamespace || this.eat(tt.comma));
+    // `export * as ns` must be followed by `from` (ExportFromClause).
+    const parseAfterNamespace = parseAfterDefault && !hasNamespace;
     const isFromRequired = hasDefault || hasStar;
 
     if (hasStar && !hasNamespace) {
@@ -2421,14 +2421,11 @@ export default abstract class StatementParser extends ExpressionParser {
       return this.finishNode(node, "ExportAllDeclaration");
     }
 
-    const hasSpecifiers = this.maybeParseExportNamedSpecifiers(node);
+    const hasSpecifiers =
+      parseAfterNamespace && this.maybeParseExportNamedSpecifiers(node);
 
     if (hasDefault && parseAfterDefault && !hasStar && !hasSpecifiers) {
       this.unexpected(null, tt.braceL);
-    }
-
-    if (hasNamespace && parseAfterNamespace) {
-      this.unexpected(null, tt._from);
     }
 
     let hasDeclaration;
@@ -2709,7 +2706,7 @@ export default abstract class StatementParser extends ExpressionParser {
       this.maybeParseImportAttributes(node);
       this.checkJSONModuleImport(node);
     } else if (expect) {
-      this.unexpected();
+      this.unexpected(null, tt._from);
     }
 
     this.semicolon();
