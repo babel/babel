@@ -2118,7 +2118,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       this.expect(tt.question);
       const state = this.state.clone();
-      const originalNoArrowAt = this.state.noArrowAt;
       const node = this.startNodeAt<N.ConditionalExpression>(startLoc);
       let { consequent, failed } = this.tryParseConditionalConsequent();
       const result = this.getArrowLikeExpressions(consequent);
@@ -2126,14 +2125,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       const invalid = result[1];
 
       if (failed || invalid.length > 0) {
-        const noArrowAt = [...originalNoArrowAt];
-
         if (invalid.length > 0) {
           this.state = state;
-          this.state.noArrowAt = noArrowAt;
 
           for (let i = 0; i < invalid.length; i++) {
-            noArrowAt.push(invalid[i].start!);
+            this.noArrowAt.add(invalid[i].start!);
           }
 
           ({ consequent, failed } = this.tryParseConditionalConsequent());
@@ -2151,15 +2147,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         if (failed && valid.length === 1) {
           this.state = state;
-          noArrowAt.push(valid[0].start!);
-          this.state.noArrowAt = noArrowAt;
+          this.noArrowAt.add(valid[0].start!);
           ({ consequent } = this.tryParseConditionalConsequent());
         }
       }
 
       this.getArrowLikeExpressions(consequent, true);
 
-      this.state.noArrowAt = originalNoArrowAt;
       this.expect(tt.colon);
 
       node.test = expr;
@@ -3252,9 +3246,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     parseParenAndDistinguishExpression(canStartArrow: boolean): N.Expression {
       return super.parseParenAndDistinguishExpression(
         canStartArrow &&
-          !this.state.noArrowAt.includes(
-            this.sourceToOffsetPos(this.state.start),
-          ),
+          !this.noArrowAt.has(this.sourceToOffsetPos(this.state.start)),
       );
     }
 
@@ -3281,7 +3273,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (
         base.type === "Identifier" &&
         base.name === "async" &&
-        this.state.noArrowAt.includes(startLoc.index)
+        this.noArrowAt.has(startLoc.index)
       ) {
         this.next();
 
