@@ -1,0 +1,35 @@
+{
+  "type": "File",
+  "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":9,"index":29}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":29,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":9,"index":29}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":0,"end":19,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":19,"index":19}},
+        "declaration": {
+          "type": "Identifier",
+          "start":15,"end":19,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":19,"index":19},"identifierName":"from"},
+          "name": "from"
+        }
+      },
+      {
+        "type": "Placeholder",
+        "start":20,"end":29,"loc":{"start":{"line":2,"column":0,"index":20},"end":{"line":2,"column":9,"index":29}},
+        "name": {
+          "type": "Identifier",
+          "start":22,"end":26,"loc":{"start":{"line":2,"column":2,"index":22},"end":{"line":2,"column":6,"index":26},"identifierName":"FILE"},
+          "name": "FILE"
+        },
+        "expectedNode": "Statement"
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
