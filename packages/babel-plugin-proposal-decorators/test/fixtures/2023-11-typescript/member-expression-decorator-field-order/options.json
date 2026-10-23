@@ -1,0 +1,5 @@
+{
+  "minNodeVersion": "16.11.0",
+  "plugins": [["proposal-decorators", { "version": "2023-11" }]],
+  "presets": [["typescript"]]
+}
