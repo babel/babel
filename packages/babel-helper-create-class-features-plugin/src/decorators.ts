@@ -1640,7 +1640,6 @@ function transformClass(
     classInitLocal && t.callExpression(t.cloneNode(classInitLocal), []);
 
   let originalClassPath = path;
-  const originalClass = path.node;
 
   const staticClosures: t.AssignmentExpression[] = [];
   if (classDecorators) {
@@ -1786,7 +1785,7 @@ function transformClass(
         // Note that any static elements of the wrapper class can not be accessed
         // in the user land, so we don't have to remove the temporary class field.
         t.classProperty(
-          t.toExpression(originalClass),
+          t.toExpression(path.node),
           undefined,
           undefined,
           undefined,
@@ -1837,6 +1836,7 @@ function transformClass(
     );
   }
 
+  const originalClass = originalClassPath.node;
   let { superClass } = originalClass;
   if (superClass) {
     const id = path.scope.maybeGenerateMemoised(superClass);

@@ -1,18 +1,16 @@
-import type { HubInterface } from "../hub.ts";
-import type TraversalContext from "../context.ts";
+import type { TraversalStack } from "../context.ts";
+import { default as TraversalContext } from "../context.ts";
 import * as virtualTypes from "./lib/virtual-types.ts";
 import { createDebug } from "obug";
-import traverse from "../index.ts";
 import type {
   Visitor,
   VisitorProp,
   TraverseOptions,
   ExplodedVisitor,
 } from "../types.ts";
-import Scope from "../scope/index.ts";
+import type Scope from "../scope/index.ts";
 import { validate } from "@babel/types";
 import * as t from "@babel/types";
-import * as cache from "../cache.ts";
 import generator from "@babel/generator";
 
 // NodePath is split across many files.
@@ -30,13 +28,16 @@ import * as NodePath_comments from "./comments.ts";
 import * as NodePath_virtual_types_validator from "./lib/virtual-types-validator.ts";
 import type { NodePathAssertions } from "./generated/asserts.d.ts";
 import type { NodePathValidators } from "./generated/validators.d.ts";
-import { setup } from "./context.ts";
+import type { HubInterface } from "../hub.ts";
+import { lightTraverse } from "../light-traverse.ts";
+import { explode } from "../visitors.ts";
 
 const debug = createDebug("babel");
 
 export const REMOVED = 1 << 0;
 export const SHOULD_STOP = 1 << 1;
 export const SHOULD_SKIP = 1 << 2;
+export const INSERTED = 1 << 3;
 
 declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.d.ts").BitDecorator<
   NodePath_Final<t.Node>
@@ -58,84 +59,45 @@ export type NodeOrNodeList<T extends t.Node> = T | NodeList<T>;
 export type NodeList<T extends t.Node> = T[] | [T, ...T[]];
 
 const NodePath_Final = class NodePath {
-  constructor(hub: HubInterface | undefined, parent: t.Node) {
-    this.parent = parent;
-    this.hub = hub!;
-    this.data = null;
+  context!: TraversalContext;
+  scope!: Scope;
+  parentPath!: NodePath_Final;
 
-    // @ts-expect-error Set it in setContext
-    this.context = null;
-    // @ts-expect-error Set it in setContext
-    this.scope = null;
-  }
-
-  declare parent: t.Node;
-  declare hub: HubInterface;
-  declare data: Record<string | symbol, unknown> | null;
-  // TraversalContext is configured by setContext
-  declare context: TraversalContext;
-  declare scope: Scope;
-
-  contexts: TraversalContext[] = [];
-  state: any = null;
-  declare opts: TraverseOptions & ExplodedVisitor;
+  _visitFrame: TraversalStack | undefined;
+  _childPath0: NodePath_Final | undefined;
+  _childPath1: NodePath_Final | undefined;
+  _childPaths: Map<t.Node, NodePath_Final> | undefined;
 
   @bit.storage _traverseFlags: number = 0;
   @bit(REMOVED) accessor removed = false;
   @bit(SHOULD_STOP) accessor shouldStop = false;
   @bit(SHOULD_SKIP) accessor shouldSkip = false;
 
-  skipKeys: Record<string, boolean> | null = null;
-  parentPath: NodePath_Final | null = null;
+  skipKeys: string[] | undefined;
   container: t.Node | t.Node[] | null = null;
-  listKey: string | null | undefined = null;
+  listKey: string | null = null;
   key: string | number | null = null;
   node: t.Node | null = null;
-  type: t.Node["type"] | null = null;
-  _store: Map<t.Node, NodePath_Final> | null = null;
+  data: Record<string | symbol, any> | undefined = undefined;
 
-  static get({
-    hub,
-    parentPath,
-    parent,
-    container,
-    listKey,
-    key,
-  }: {
-    hub?: HubInterface;
-    parentPath: NodePath_Final | null | undefined;
-    parent: t.Node;
-    container: t.Node | t.Node[];
-    listKey?: string | null;
-    key: string | number;
-  }): NodePath_Final {
-    if (!hub && parentPath) {
-      hub = parentPath.hub;
-    }
-
-    if (!parent) {
-      throw new Error("To get a node path the parent needs to exist");
-    }
-
-    const targetNode =
-      // @ts-expect-error key must present in container
-      container[key];
-
-    const paths = cache.getOrCreateCachedPaths(parent, parentPath);
-
-    let path = paths.get(targetNode);
-    if (!path) {
-      path = new NodePath(hub, parent) as NodePath_Final;
-      if (targetNode) paths.set(targetNode, path);
-    }
-
-    setup.call(path, parentPath, container, listKey, key);
-
-    return path;
+  get type(): t.Node["type"] | null {
+    return this.node?.type as t.Node["type"] | null;
   }
 
-  getScope(this: NodePath_Final, scope: Scope): Scope {
-    return this.isScope() ? new Scope(this) : scope;
+  get parent(): t.Node | undefined {
+    return this.parentPath?.node;
+  }
+
+  get opts(): TraverseOptions & ExplodedVisitor<any> {
+    return this.context.opts;
+  }
+
+  get state() {
+    return this.context.state;
+  }
+
+  get hub(): HubInterface {
+    return this.context.hub;
   }
 
   setData<T>(key: string | symbol, val: T): T {
@@ -185,7 +147,8 @@ const NodePath_Final = class NodePath {
   ): void;
   traverse(this: NodePath_Final, visitor: TraverseOptions & Visitor<any>): void;
   traverse(this: NodePath_Final, visitor: any, state?: any) {
-    traverse(this.node, visitor, this.scope, state, this);
+    const ctx = new TraversalContext(explode(visitor), state, this.context.hub);
+    lightTraverse(this.node, ctx, this);
   }
 
   set(key: string, node: any) {
@@ -199,6 +162,7 @@ const NodePath_Final = class NodePath {
     let path: NodePath_Final<t.Node | null> = this;
     do {
       let key = path.key;
+      if (key === null) continue;
       if (path.inList) key = `${path.listKey}[${key}]`;
       parts.unshift(key);
     } while ((path = path.parentPath));
@@ -294,7 +258,6 @@ const methods = {
   skip: NodePath_context.skip,
   skipKey: NodePath_context.skipKey,
   stop: NodePath_context.stop,
-  setContext: NodePath_context.setContext,
   requeue: NodePath_context.requeue,
   requeueComputedKeyAndDecorators:
     NodePath_context.requeueComputedKeyAndDecorators,

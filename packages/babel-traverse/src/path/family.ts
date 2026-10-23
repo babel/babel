@@ -1,7 +1,7 @@
 // This file contains methods responsible for dealing with/retrieving children or siblings.
 
-import type TraversalContext from "../context.ts";
-import NodePath from "./index.ts";
+import { createNodePath } from "../context.ts";
+import type NodePath from "./index.ts";
 import {
   getAssignmentIdentifiers as _getAssignmentIdentifiers,
   getBindingIdentifiers as _getBindingIdentifiers,
@@ -300,13 +300,15 @@ export function getSibling(
   this: NodePath<t.Node | null>,
   key: string | number,
 ): NodePath<t.Node | null> {
-  return NodePath.get({
-    parentPath: this.parentPath,
-    parent: this.parent,
-    container: this.container!,
-    listKey: this.listKey!,
-    key: key,
-  }).setContext(this.context);
+  const path = createNodePath(
+    this.context,
+    this.parentPath,
+    (this.container as any)[key],
+    this.container,
+    key,
+    this.listKey,
+  );
+  return path;
 }
 
 export function getPrevSibling(
@@ -400,7 +402,6 @@ type ToNodePath<T> = T extends undefined | null
 function get<T extends NodePath, K extends keyof T["node"]>(
   this: T,
   key: K,
-  context?: true | TraversalContext,
 ): T extends any
   ? T["node"][K] extends (infer U extends t.Node | null)[] | null | undefined
     ? NodePath<U>[]
@@ -412,7 +413,6 @@ function get<T extends NodePath, K extends keyof T["node"]>(
 function get<T extends NodePath<t.Node>, K extends string>(
   this: T,
   key: K,
-  context?: true | TraversalContext,
 ): string extends K
   ? NodePath<t.Node | null> | NodePath<t.Node | null>[]
   : T extends any
@@ -422,24 +422,18 @@ function get<T extends NodePath<t.Node>, K extends string>(
 function get(
   this: NodePath,
   key: string,
-  context?: true | TraversalContext,
 ): NodePath<t.Node | null> | NodePath<t.Node | null>[];
 
-function get(
-  this: NodePath,
-  key: string,
-  context: true | TraversalContext = true,
-): NodePath | NodePath[] {
-  if (context === true) context = this.context;
+function get(this: NodePath, key: string): NodePath | NodePath[] {
   const parts = key.split(".");
   if (parts.length === 1) {
     // "foo"
     // @ts-expect-error key may not index T
-    return _getKey.call(this, key, context);
+    return _getKey.call(this, key);
   } else {
     // "foo.bar"
     // @ts-expect-error this may be NodePath<null>
-    return _getPattern.call(this, parts, context);
+    return _getPattern.call(this, parts);
   }
 }
 
@@ -448,7 +442,6 @@ export { get };
 function _getKey<T extends t.Node>(
   this: NodePath<T>,
   key: keyof T & string,
-  context?: TraversalContext,
 ): NodePath<t.Node | null> | NodePath<t.Node | null>[] {
   const node = this.node as T;
   const container = node[key];
@@ -456,29 +449,27 @@ function _getKey<T extends t.Node>(
   if (Array.isArray(container)) {
     // requested a container so give them all the paths
     return container.map((_, i) => {
-      return NodePath.get({
-        listKey: key,
-        parentPath: this,
-        parent: node,
-        container: container,
-        key: i,
-      }).setContext(context);
+      return createNodePath(
+        this.context,
+        this,
+        container[i],
+        container,
+        i,
+        key,
+      );
     });
-  } else {
-    return NodePath.get({
-      parentPath: this,
-      parent: node,
-      container: node,
-      key: key,
-    }).setContext(context);
   }
+  return createNodePath(
+    this.context,
+    this,
+    container as t.Node,
+    node,
+    key,
+    null,
+  );
 }
 
-function _getPattern(
-  this: NodePath,
-  parts: string[],
-  context?: TraversalContext,
-) {
+function _getPattern(this: NodePath, parts: string[]) {
   let path: NodePath<t.Node | null> | NodePath<t.Node | null>[] = this;
   for (const part of parts) {
     if (part === ".") {
@@ -490,7 +481,7 @@ function _getPattern(
         path = path[part];
       } else {
         // @ts-expect-error path may be NodePath<null>
-        path = path.get(part, context);
+        path = path.get(part);
       }
     }
   }

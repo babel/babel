@@ -1,7 +1,7 @@
 import Renamer from "./lib/renamer.ts";
 import type NodePath from "../path/index.ts";
+import { getScopeParent } from "../path/context.ts";
 import traverse from "../index.ts";
-import traverseForScope from "./traverseForScope.ts";
 import Binding from "./binding.ts";
 import type { BindingKind } from "./binding.ts";
 import globalsBuiltinLower from "@babel/helper-globals/data/builtin-lower.json" with { type: "json" };
@@ -51,7 +51,6 @@ import {
   sequenceExpression,
 } from "@babel/types";
 import * as t from "@babel/types";
-import { scope as scopeCache } from "../cache.ts";
 import type { ExplodedVisitor, Visitor } from "../types.ts";
 
 export type { BindingKind };
@@ -225,6 +224,8 @@ function gatherNodeParts(node: t.Node | null | undefined, parts: NodePart[]) {
 }
 
 function resetScope(scope: Scope) {
+  scope.parent = getScopeParent.call(scope.path);
+
   if (scope.path.type === "Program") {
     scope.referencesSet = new Set();
     scope.uidsSet = new Set();
@@ -414,7 +415,8 @@ export { Scope as default };
 class Scope {
   uid;
 
-  path!: NodePath;
+  path: NodePath;
+  parent: Scope | undefined;
   block!: t.Pattern | t.Scopable;
 
   inited!: boolean;
@@ -426,27 +428,18 @@ class Scope {
   globals!: Record<string, t.Identifier | t.JSXIdentifier>;
   /** Only defined in the program scope */
   uidsSet?: Set<string>;
-  data!: Record<string | symbol, unknown>;
   crawling!: boolean;
 
   /**
    * This searches the current "scope" and collects all references/bindings
    * within.
    */
-  constructor(path: NodePath<t.Pattern | t.Scopable>) {
-    const { node } = path;
-    const cached = scopeCache.get(node);
-    // Sometimes, a scopable path is placed higher in the AST tree.
-    // In these cases, have to create a new Scope.
-    if (cached?.path === path) {
-      return cached;
-    }
-    scopeCache.set(node, this);
-
+  constructor(path: NodePath, parent: Scope | undefined) {
     this.uid = uid++;
 
-    this.block = node;
+    this.parent = parent;
     this.path = path;
+    this.block = path.node as t.Pattern | t.Scopable;
 
     this.labels = new Map();
     this.inited = false;
@@ -463,32 +456,6 @@ class Scope {
    */
 
   static contextVariables = ["arguments", "undefined", "Infinity", "NaN"];
-
-  get parent() {
-    let parent,
-      path = this.path;
-    do {
-      // Skip method scope if coming from inside computed key or decorator expression
-      const shouldSkip = path.key === "key" || path.listKey === "decorators";
-      path = path.parentPath;
-      if (shouldSkip && path.isMethod()) path = path.parentPath;
-      if (path?.isScope()) parent = path;
-    } while (path && !parent);
-
-    return parent?.scope;
-  }
-
-  get references() {
-    throw new Error(
-      "Scope#references is not available in Babel 8. Use Scope#referencesSet instead.",
-    );
-  }
-
-  get uids() {
-    throw new Error(
-      "Scope#uids is not available in Babel 8. Use Scope#uidsSet instead.",
-    );
-  }
 
   /**
    * Generate a unique identifier and add it to the current scope.
@@ -905,39 +872,6 @@ class Scope {
     }
   }
 
-  /**
-   * Set some arbitrary data on the current scope.
-   */
-
-  setData(key: string | symbol, val: any) {
-    return (this.data[key] = val);
-  }
-
-  /**
-   * Recursively walk up scope tree looking for the data `key`.
-   */
-
-  getData(key: string | symbol): any {
-    let scope: Scope | undefined = this;
-    do {
-      const data = scope.data[key];
-      if (data != null) return data;
-    } while ((scope = scope.parent));
-  }
-
-  /**
-   * Recursively walk up scope tree looking for the data `key` and if it exists,
-   * remove it.
-   */
-
-  removeData(key: string) {
-    let scope: Scope | undefined = this;
-    do {
-      const data = scope.data[key];
-      if (data != null) scope.data[key] = null;
-    } while ((scope = scope.parent));
-  }
-
   init() {
     if (!this.inited) {
       this.inited = true;
@@ -949,7 +883,6 @@ class Scope {
     const path = this.path;
 
     resetScope(this);
-    this.data = Object.create(null);
 
     let scope: Scope | undefined = this;
     do {
@@ -987,7 +920,7 @@ class Scope {
       }
     }
 
-    traverseForScope(path, scopeVisitor as Visitor, state);
+    path.traverse(scopeVisitor, state);
 
     this.crawling = false;
 
@@ -1067,13 +1000,16 @@ class Scope {
       path = path.get("body");
     }
 
+    const body = (path as NodePath<t.BlockStatement | t.Program>).node.body;
     const blockHoist = opts._blockHoist == null ? 2 : opts._blockHoist;
 
     const dataKey = `declaration:${kind}:${blockHoist}`;
     let declarPath = !unique && path.getData(dataKey);
 
-    if (!declarPath) {
-      const declar = variableDeclaration(kind, []);
+    const declarator = variableDeclarator(id, init);
+    let bindingPath: NodePath<t.VariableDeclaration | t.VariableDeclarator>;
+    if (!declarPath || declarPath.container !== body) {
+      const declar = variableDeclaration(kind, [declarator]);
       // @ts-expect-error todo(flow->ts): avoid modifying nodes
       declar._blockHoist = blockHoist;
 
@@ -1082,11 +1018,11 @@ class Scope {
         [declar],
       );
       if (!unique) path.setData(dataKey, declarPath);
+      bindingPath = declarPath;
+    } else {
+      [bindingPath] = declarPath.pushContainer("declarations", [declarator]);
     }
-
-    const declarator = variableDeclarator(id, init);
-    const len = declarPath.node.declarations.push(declarator);
-    path.scope.registerBinding(kind, declarPath.get("declarations")[len - 1]);
+    path.scope.registerBinding(kind, bindingPath);
   }
 
   /**

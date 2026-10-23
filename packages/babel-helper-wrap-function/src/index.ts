@@ -13,6 +13,7 @@ import {
   identifier,
   thisExpression,
   isPattern,
+  toExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
 
@@ -161,11 +162,9 @@ function plainFunction(
   let built = node;
   if (!isCallExpression(node)) {
     functionId = node.id;
-    node.id = null;
-    node.type = "FunctionExpression";
-    built = callExpression(callId, [
-      node as Exclude<typeof node, t.FunctionDeclaration>,
-    ]);
+    const expression = toExpression(node);
+    expression.id = null;
+    built = callExpression(callId, [expression]);
   }
 
   const params: t.Identifier[] = [];
