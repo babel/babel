@@ -122,33 +122,12 @@ const COMMON_VALIDATORS: ValidatorSet = {
   generatorOpts: assertObject as Validator<InputOptions["generatorOpts"]>,
 };
 
-type Assumptions = {
-  arrayLikeIsIterable?: boolean;
-  constantReexports?: boolean;
-  constantSuper?: boolean;
-  enumerableModuleMeta?: boolean;
-  ignoreFunctionLength?: boolean;
-  ignoreToPrimitiveHint?: boolean;
-  iterableIsArray?: boolean;
-  mutableTemplateObject?: boolean;
-  noClassCalls?: boolean;
-  noDocumentAll?: boolean;
-  noIncompleteNsImportDetection?: boolean;
-  noNewArrows?: boolean;
-  noUninitializedPrivateFieldAccess?: boolean;
-  objectRestNoSymbols?: boolean;
-  privateFieldsAsProperties?: boolean;
-  privateFieldsAsSymbols?: boolean;
-  pureGetters?: boolean;
-  setClassMethods?: boolean;
-  setComputedProperties?: boolean;
-  setPublicClassFields?: boolean;
-  setSpreadProperties?: boolean;
-  skipForOfIteratorClosing?: boolean;
-  superIsCallableConstructor?: boolean;
-};
+export type AssumptionName = (typeof knownAssumptions)[number];
 
-export type AssumptionName = keyof Assumptions;
+// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style -- we have optional properties
+type Assumptions = {
+  [Name in AssumptionName]?: boolean;
+};
 
 type EnvSet<T> = Record<string, T>;
 
@@ -356,6 +335,8 @@ const knownAssumptions = [
   "iterableIsArray",
   "mutableTemplateObject",
   "noClassCalls",
+  "noClassPrototypeAssign",
+  "noConstructorPrimitiveReturn",
   "noDocumentAll",
   "noIncompleteNsImportDetection",
   "noNewArrows",
