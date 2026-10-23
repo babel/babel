@@ -545,6 +545,14 @@ export default abstract class StatementParser extends ExpressionParser {
     // next token is a colon and the expression was a simple
     // Identifier node, we switch to interpreting it as a label.
     const maybeName = this.state.value;
+    if (startType === tt._arguments && this.lookahead().type === tt.colon) {
+      // A LabelIdentifier is not an IdentifierReference, so `arguments` is a
+      // valid label even where ContainsArguments must be false (class field
+      // initializers and static blocks).
+      const label = this.parseIdentifier(true);
+      this.next();
+      return this.parseLabeledStatement(node, maybeName, label, flags);
+    }
     const expr = this.parseExpression();
 
     if (
@@ -700,7 +708,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.isLineTerminator()) {
       node.label = null;
     } else {
-      node.label = this.parseIdentifier();
+      node.label = this.parseIdentifier(this.match(tt._arguments));
       this.semicolon();
     }
 
