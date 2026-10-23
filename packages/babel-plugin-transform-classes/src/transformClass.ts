@@ -693,7 +693,7 @@ export default function transformClass(
       node.async,
     );
     t.inherits(func, node);
-    const expr = t.expressionStatement(buildExpr(classRef!, func));
+    const expr = t.expressionStatement(buildExpr(classRef, func));
     t.inheritsComments(expr, node);
     classState.body.push(expr);
   }
