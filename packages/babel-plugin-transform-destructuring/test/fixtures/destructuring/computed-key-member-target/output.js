@@ -48,4 +48,18 @@ var _source12 = babelHelpers.slicedToArray(_source11, 1);
 var _target4 = target;
 var _source12$ = _source12[0];
 _target4.x = _source12$ === void 0 ? 0 : _source12$;
-_source11;
+var symKey = Symbol();
+var symForKey = Symbol.for("key");
+var _source13 = source;
+target.x = _source13[symKey];
+target.y = _source13[symForKey];
+({
+  m() {
+    var _source14 = source;
+    var _source14$x = _source14.x;
+    super.x = _source14$x === void 0 ? 0 : _source14$x;
+    var _prop2 = prop();
+    var _source14$y = _source14.y;
+    super[_prop2] = _source14$y === void 0 ? 0 : _source14$y;
+  }
+});

@@ -194,3 +194,57 @@ var primObj = {
 };
 ({ [primKey]: primObj.t.x } = { x: 1 });
 expect(primLog).toEqual(["toPropertyKey", "target"]);
+
+const symKey = Symbol("k");
+const symForKey = Symbol.for("babel-destructuring-test");
+var symObj = {};
+({ [symKey]: symObj.x, [symForKey]: symObj.y } = {
+  [symKey]: 1,
+  [symForKey]: 2,
+});
+expect(symObj).toEqual({ x: 1, y: 2 });
+
+(function () {
+  var shadowLog = [];
+  function Symbol() {
+    return {
+      toString() {
+        shadowLog.push("toPropertyKey");
+        return "x";
+      },
+    };
+  }
+  const shadowKey = Symbol();
+  var shadowObj = {
+    get t() {
+      shadowLog.push("target");
+      return {};
+    },
+  };
+  ({ [shadowKey]: shadowObj.t.x } = { x: 1 });
+  expect(shadowLog).toEqual(["toPropertyKey", "target"]);
+})();
+
+var superLog = [];
+var superObj = {
+  __proto__: {
+    set x(v) {
+      superLog.push("set " + v);
+    },
+  },
+  m(source) {
+    ({
+      x: super.x = 1,
+      y: super[(superLog.push("property"), "x")] = 2,
+    } = source);
+  },
+};
+superObj.m({
+  get x() {
+    superLog.push("read x");
+  },
+  get y() {
+    superLog.push("read y");
+  },
+});
+expect(superLog).toEqual(["read x", "set 1", "property", "read y", "set 2"]);

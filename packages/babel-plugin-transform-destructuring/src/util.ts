@@ -258,18 +258,31 @@ export class DestructuringTransformer {
 
   /**
    * Test if a node is a primitive literal, or a constant binding initialized
-   * to one, so that it cannot change and converting it to a property key has
-   * no side effects.
+   * to one or to a symbol, so that it cannot change and converting it to a
+   * property key has no side effects.
    */
   isPrimitiveConstant(node: t.Expression) {
     if (t.isImmutable(node)) return true;
     if (!t.isIdentifier(node)) return false;
     const binding = this.scope.getBinding(node.name);
+    if (!binding?.constant || !binding.path.isVariableDeclarator()) {
+      return false;
+    }
+    const { init } = binding.path.node;
+    if (init == null) return false;
+    if (t.isImmutable(init)) return true;
+
+    // const KEY = Symbol(); or const KEY = Symbol.for("key");
+    if (!t.isCallExpression(init)) return false;
+    const { callee } = init;
+    const symbolRef = t.isMemberExpression(callee) ? callee.object : callee;
     return (
-      !!binding?.constant &&
-      binding.path.isVariableDeclarator() &&
-      binding.path.node.init != null &&
-      t.isImmutable(binding.path.node.init)
+      t.isIdentifier(symbolRef, { name: "Symbol" }) &&
+      !binding.path.scope.getBinding("Symbol") &&
+      (callee === symbolRef ||
+        (t.isMemberExpression(callee) &&
+          !callee.computed &&
+          t.isIdentifier(callee.property, { name: "for" })))
     );
   }
 
