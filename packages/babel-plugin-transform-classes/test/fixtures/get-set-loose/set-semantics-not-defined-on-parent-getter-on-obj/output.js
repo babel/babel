@@ -8,15 +8,13 @@ let Obj = /*#__PURE__*/function (_Base) {
   }
   babelHelpers.inheritsLoose(Obj, _Base);
   var _proto = Obj.prototype;
+  babelHelpers.defineAccessor("get", _proto, "test", function () {
+    called = true;
+  });
   _proto.set = function set() {
     return this.test = 3;
   };
-  return babelHelpers.createClass(Obj, [{
-    key: "test",
-    get: function () {
-      called = true;
-    }
-  }]);
+  return Obj;
 }(Base);
 const obj = new Obj();
 // This is incorrect according to the spec,
