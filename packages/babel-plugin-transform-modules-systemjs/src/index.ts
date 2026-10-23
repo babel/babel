@@ -331,6 +331,16 @@ export default declare<PluginState, Options>((api, options: Options) => {
               // because they must be hoisted
               path.node.kind = "var";
             } else if (path.isImportDeclaration()) {
+              for (const specifier of path.node.specifiers) {
+                if (
+                  t.isImportNamespaceSpecifier(specifier) &&
+                  specifier.exportsFilter
+                ) {
+                  throw path.buildCodeFrameError(
+                    "Transforming `import { x, y } as ns from '...'` is not supported yet.",
+                  );
+                }
+              }
               const source = path.node.source.value;
               pushModule(source, "imports", path.node.specifiers);
               for (const name of Object.keys(path.getBindingIdentifiers())) {
@@ -427,6 +437,15 @@ export default declare<PluginState, Options>((api, options: Options) => {
                     if (path.node.phase === "defer") {
                       throw path.buildCodeFrameError(
                         "Transforming `export defer ... from '...'` is not supported yet.",
+                      );
+                    }
+                    const [firstSpecifier] = specifiers;
+                    if (
+                      t.isExportNamespaceSpecifier(firstSpecifier) &&
+                      firstSpecifier.exportsFilter
+                    ) {
+                      throw path.buildCodeFrameError(
+                        "Transforming `export { x, y } as ns from '...'` is not supported yet.",
                       );
                     }
                     pushModule(path.node.source.value, "exports", specifiers);

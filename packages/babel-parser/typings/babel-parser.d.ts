@@ -55,6 +55,7 @@ type Plugin$1 =
   | "functionSent"
   | "jsx"
   | "moduleBlocks"
+  | "namespaceImportFilter"
   | "placeholders"
   | "sourcePhaseImports"
   | "throwExpressions"
@@ -148,6 +149,9 @@ type ErrorInfoCompressed = {
   EscapedCharNotAnIdentifier: [];
   ExportBindingIsString: [{ localName: string; exportName: string }];
   ExportDefaultFromAsIdentifier: [];
+  FilteredNamespaceDuplicateName: [{ name: string }];
+  FilteredNamespaceRename: [];
+  FilteredNamespaceTypeModifier: [];
   ForInOfLoopInitializer: [{ type: "ForInStatement" | "ForOfStatement" }];
   ForInUsing: [];
   ForOfAsync: [];
