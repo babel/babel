@@ -341,6 +341,7 @@ const knownAssumptions = [
   "noIncompleteNsImportDetection",
   "noNewArrows",
   "noUninitializedPrivateFieldAccess",
+  "noUninitializedThis",
   "objectRestNoSymbols",
   "privateFieldsAsSymbols",
   "privateFieldsAsProperties",

@@ -44,6 +44,7 @@ export default declare((api, options: Options) => {
     api.assumption("noClassPrototypeAssign") ?? loose;
   const noConstructorPrimitiveReturn =
     api.assumption("noConstructorPrimitiveReturn") ?? loose;
+  const noUninitializedThis = api.assumption("noUninitializedThis") ?? false;
   const supportUnicodeId = !isRequired(
     "transform-unicode-escapes",
     api.targets(),
@@ -96,6 +97,7 @@ export default declare((api, options: Options) => {
               noClassCalls,
               noClassPrototypeAssign,
               noConstructorPrimitiveReturn,
+              noUninitializedThis,
             },
             supportUnicodeId,
           ),
