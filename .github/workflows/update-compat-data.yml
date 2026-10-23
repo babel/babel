@@ -14,13 +14,13 @@ jobs:
     permissions:
       contents: write # for Git to git push
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           repository: kangax/compat-table
           path: packages/babel-compat-data/build/compat-table
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: "*"
       - name: Get latest kangax/compat-table commit
