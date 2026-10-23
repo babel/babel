@@ -45,6 +45,16 @@ function hasObjectRest(pattern: t.ObjectPattern) {
   return pattern.properties.some(prop => t.isRestElement(prop));
 }
 
+/**
+ * Test if a pattern contains any MemberExpression, such as a member target.
+ */
+
+function hasMemberExpression(pattern: t.Pattern) {
+  return t.traverseFast(pattern, node =>
+    t.isMemberExpression(node) ? t.traverseFast.stop : undefined,
+  );
+}
+
 interface UnpackableArrayExpression extends t.ArrayExpression {
   elements: (null | t.Expression)[];
 }
@@ -246,6 +256,47 @@ export class DestructuringTransformer {
     }
   }
 
+  /**
+   * Test if a node is a primitive literal, or a constant binding initialized
+   * to one, so that it cannot change and converting it to a property key has
+   * no side effects.
+   */
+  isPrimitiveConstant(node: t.Expression) {
+    if (t.isImmutable(node)) return true;
+    if (!t.isIdentifier(node)) return false;
+    const binding = this.scope.getBinding(node.name);
+    return (
+      !!binding?.constant &&
+      binding.path.isVariableDeclarator() &&
+      binding.path.node.init != null &&
+      t.isImmutable(binding.path.node.init)
+    );
+  }
+
+  memoiseMemberTarget(member: t.MemberExpression): t.MemberExpression {
+    let { object, property } = member;
+
+    if (!t.isSuper(object) && !this.scope.isStatic(object)) {
+      const temp = this.scope.generateUidIdentifierBasedOnNode(object);
+      this.nodes.push(this.buildVariableDeclaration(temp, object));
+      object = temp;
+    }
+
+    if (
+      member.computed &&
+      !t.isImmutable(property) &&
+      !this.scope.isStatic(property)
+    ) {
+      const temp = this.scope.generateUidIdentifierBasedOnNode(property);
+      this.nodes.push(
+        this.buildVariableDeclaration(temp, property as t.Expression),
+      );
+      property = temp;
+    }
+
+    return t.memberExpression(object, property, member.computed);
+  }
+
   pushAssignmentPattern(
     { left, right }: t.AssignmentPattern,
     valueRef: t.Expression,
@@ -257,6 +308,11 @@ export class DestructuringTransformer {
     if (isPureVoid(valueRef)) {
       this.push(left, right);
       return;
+    }
+
+    // the member expression target must be evaluated before reading the value,
+    if (t.isMemberExpression(left)) {
+      left = this.memoiseMemberTarget(left);
     }
 
     // we need to assign the current value of the assignment to avoid evaluating
@@ -314,11 +370,28 @@ export class DestructuringTransformer {
     if (t.isLiteral(prop.key)) prop.computed = true;
 
     const pattern = prop.value as t.AssignmentExpression["left"];
-    const objRef = t.memberExpression(
-      t.cloneNode(propRef),
-      prop.key,
-      prop.computed,
-    );
+    let key = prop.key as t.Expression;
+
+    // the computed key must be evaluated (and converted to a property key)
+    // before the member expression target
+    if (
+      prop.computed &&
+      (t.isMemberExpression(pattern) ||
+        (t.isAssignmentPattern(prop.value) &&
+          t.isMemberExpression(prop.value.left))) &&
+      !this.isPrimitiveConstant(key)
+    ) {
+      const temp = this.scope.generateUidIdentifierBasedOnNode(key);
+      this.nodes.push(
+        this.buildVariableDeclaration(
+          temp,
+          t.callExpression(this.addHelper("toPropertyKey"), [key]),
+        ),
+      );
+      key = temp;
+    }
+
+    const objRef = t.memberExpression(t.cloneNode(propRef), key, prop.computed);
 
     if (t.isPattern(pattern)) {
       this.push(pattern, objRef);
@@ -344,9 +417,13 @@ export class DestructuringTransformer {
 
     // if we have more than one properties in this pattern and the objectRef is a
     // member expression then we need to assign it to a temporary variable so it's
-    // only evaluated once
+    // only evaluated once. The same applies if the pattern has member expression
+    // targets
 
-    if (pattern.properties.length > 1 && !this.scope.isStatic(objRef)) {
+    if (
+      (pattern.properties.length > 1 || hasMemberExpression(pattern)) &&
+      !this.scope.isStatic(objRef)
+    ) {
       const temp = this.scope.generateUidIdentifierBasedOnNode(objRef);
       this.nodes.push(this.buildVariableDeclaration(temp, objRef));
       objRef = temp;
