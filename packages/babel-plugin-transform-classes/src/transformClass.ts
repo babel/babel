@@ -11,6 +11,11 @@ type ClassAssumptions = {
   constantSuper: boolean;
   superIsCallableConstructor: boolean;
   noClassCalls: boolean;
+
+  // TODO: These are not assumptions that can be set individually yet, they are
+  // only enabled by the `loose` option.
+  noClassPrototypeAssign: boolean;
+  noConstructorPrimitiveReturn: boolean;
 };
 
 type ClassConstructor = t.ClassMethod & { kind: "constructor" };
@@ -62,7 +67,6 @@ type State = {
   pushedInherits: boolean;
   pushedCreateClass: boolean;
   protoAlias: t.Identifier | null;
-  isLoose: boolean;
 
   dynamicKeys: Map<string, t.Expression>;
 
@@ -92,7 +96,6 @@ export default function transformClass(
   path: NodePath<t.Class>,
   file: File,
   builtinClasses: ReadonlySet<string>,
-  isLoose: boolean,
   assumptions: ClassAssumptions,
   supportUnicodeId: boolean,
 ) {
@@ -121,7 +124,6 @@ export default function transformClass(
     pushedInherits: false,
     pushedCreateClass: false,
     protoAlias: null,
-    isLoose: false,
 
     dynamicKeys: new Map(),
 
@@ -534,7 +536,7 @@ export default function transformClass(
 
     let wrapReturn;
 
-    if (classState.isLoose) {
+    if (assumptions.noConstructorPrimitiveReturn) {
       wrapReturn = (returnArg: t.Expression | void) => {
         const thisExpr = buildAssertThisInitialized();
         return returnArg
@@ -727,7 +729,9 @@ export default function transformClass(
       t.expressionStatement(
         t.callExpression(
           classState.file.addHelper(
-            classState.isLoose ? "inheritsLoose" : "inherits",
+            assumptions.setClassMethods && assumptions.noClassPrototypeAssign
+              ? "inheritsLoose"
+              : "inherits",
           ),
           [t.cloneNode(classState.classRef), t.cloneNode(classState.superName)],
         ),
@@ -784,7 +788,6 @@ export default function transformClass(
     path: NodePath<t.Class>,
     file: File,
     builtinClasses: ReadonlySet<string>,
-    isLoose: boolean,
   ) {
     setState({
       parent: path.parent,
@@ -792,7 +795,6 @@ export default function transformClass(
       node: path.node,
       path,
       file,
-      isLoose,
     });
 
     setState({
@@ -865,13 +867,15 @@ export default function transformClass(
     if (constructorOnly) {
       // named class with only a constructor
       const expr = t.toExpression(classState.construct);
-      return classState.isLoose ? expr : createClassHelper([expr]);
+      return assumptions.noClassPrototypeAssign
+        ? expr
+        : createClassHelper([expr]);
     }
 
     if (!classState.pushedCreateClass) {
       body.push(
         t.returnStatement(
-          classState.isLoose
+          assumptions.noClassPrototypeAssign
             ? t.cloneNode(classState.classRef)
             : createClassHelper([t.cloneNode(classState.classRef)]),
         ),
@@ -887,5 +891,5 @@ export default function transformClass(
     return t.callExpression(container, closureArgs);
   }
 
-  return classTransformer(path, file, builtinClasses, isLoose);
+  return classTransformer(path, file, builtinClasses);
 }

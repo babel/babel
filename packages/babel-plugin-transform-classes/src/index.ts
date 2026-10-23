@@ -32,6 +32,8 @@ export default declare((api, options: Options) => {
   const superIsCallableConstructor =
     api.assumption("superIsCallableConstructor") ?? loose;
   const noClassCalls = api.assumption("noClassCalls") ?? loose;
+  const noClassPrototypeAssign = loose;
+  const noConstructorPrimitiveReturn = loose;
   const supportUnicodeId = !isRequired(
     "transform-unicode-escapes",
     api.targets(),
@@ -89,12 +91,13 @@ export default declare((api, options: Options) => {
             path,
             state.file,
             builtinClasses,
-            loose,
             {
               setClassMethods,
               constantSuper,
               superIsCallableConstructor,
               noClassCalls,
+              noClassPrototypeAssign,
+              noConstructorPrimitiveReturn,
             },
             supportUnicodeId,
           ),
