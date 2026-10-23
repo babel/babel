@@ -660,7 +660,7 @@ export default function transformClass(
       const key =
         node.computed || t.isLiteral(node.key)
           ? node.key
-          : t.stringLiteral(node.key.name);
+          : t.stringLiteral((node.key as t.Identifier).name);
       return t.callExpression(file.addHelper("defineAccessor"), [
         t.stringLiteral(node.kind),
         t.cloneNode(classRef),
