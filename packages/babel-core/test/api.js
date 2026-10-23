@@ -883,8 +883,15 @@ describe("api", function () {
       const names = ast.program.body.flatMap(node =>
         Object.keys(babel.types.getBindingIdentifiers(node, false, true)),
       );
-      // All names are unique
-      expect(new Set(names).size).toBe(names.length);
+      const seen = new Set();
+      const duplicates = names.filter(name => {
+        if (seen.has(name)) {
+          return true;
+        }
+        seen.add(name);
+        return false;
+      });
+      expect(duplicates).toHaveLength(0);
     });
 
     describe("output types", function () {
