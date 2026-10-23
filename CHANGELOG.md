@@ -25,6 +25,39 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.11 (2026-10-23)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#18405](https://github.com/babel/babel/pull/18405) Disallow `eval` and `arguments` as class names ([@babel-bot](https://github.com/babel-bot))
+  * [#18404](https://github.com/babel/babel/pull/18404) fix(parser): disallow const x followed by linebreak and of ([@babel-bot](https://github.com/babel-bot))
+  * [#18400](https://github.com/babel/babel/pull/18400) fix(parser): disallow named specifiers after * as ns ([@babel-bot](https://github.com/babel-bot))
+  * [#18374](https://github.com/babel/babel/pull/18374) fix(parser): reject delete (x) when createParenthesizedExpressions: true ([@babel-bot](https://github.com/babel-bot))
+  * [#18373](https://github.com/babel/babel/pull/18373) Disallow call expressions as arrow function parameters in sloppy mode ([@babel-bot](https://github.com/babel-bot))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#18403](https://github.com/babel/babel/pull/18403) fix(parser): ASI between arrow body and `/=` regex ([@babel-bot](https://github.com/babel-bot))
+  * [#18402](https://github.com/babel/babel/pull/18402) Allow ASI after `export default from` without `exportDefaultFrom` ([@babel-bot](https://github.com/babel-bot))
+  * [#18401](https://github.com/babel/babel/pull/18401) fix(parser): allow arguments as a label in class ([@babel-bot](https://github.com/babel-bot))
+  * [#18378](https://github.com/babel/babel/pull/18378) Skip HTML-like comments in the parser's character lookahead ([@babel-bot](https://github.com/babel-bot))
+  * [#18375](https://github.com/babel/babel/pull/18375) fix(parser): register function id in labeled function declaration ([@babel-bot](https://github.com/babel-bot))
+  * [#18377](https://github.com/babel/babel/pull/18377) fix(parser): allow ASI between property init and escaped in ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-classes`
+  * [#18408](https://github.com/babel/babel/pull/18408) Leave loose class prototype mutable with accessors ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-typescript`, `babel-types`
+  * [#18391](https://github.com/babel/babel/pull/18391) fix(types): visit decorators of TSParameterProperty ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-block-scoping`
+  * [#18370](https://github.com/babel/babel/pull/18370) fix: wrap enclosing loop when a nested for head closure captures its bindings ([@babel-bot](https://github.com/babel-bot))
+  * [#18364](https://github.com/babel/babel/pull/18364) fix: closures in for-loop init capture wrong binding ([@babel-bot](https://github.com/babel-bot))
+
+#### :house: Internal
+* `babel-plugin-transform-classes`
+  * [#18398](https://github.com/babel/babel/pull/18398) Remove internal usage of `loose` in class transform ([@babel-bot](https://github.com/babel-bot))
+
+#### :microscope: Output optimization
+* `babel-plugin-transform-spread`
+  * [#18390](https://github.com/babel/babel/pull/18390) Avoid `arrayLikeToArray` for spreading literals ([@babel-bot](https://github.com/babel-bot))
 ## v7.29.10 (2026-10-07)
 
 #### :bug: Bug Fix
