@@ -2702,17 +2702,11 @@ export default abstract class StatementParser extends ExpressionParser {
 
     if (node.phase === "source") {
       if (singleBindingType !== "ImportDefaultSpecifier") {
-        this.raise(
-          Errors.SourcePhaseImportRequiresDefault,
-          specifiers.length === 0 ? node : specifiers[0],
-        );
+        this.raise(Errors.SourcePhaseImportRequiresDefault, node);
       }
     } else if (node.phase === "defer") {
       if (singleBindingType !== "ImportNamespaceSpecifier") {
-        this.raise(
-          Errors.DeferImportRequiresNamespace,
-          specifiers.length === 0 ? node : specifiers[0],
-        );
+        this.raise(Errors.DeferImportRequiresNamespace, node);
       }
     }
   }
