@@ -1608,11 +1608,17 @@ export default abstract class StatementParser extends ExpressionParser {
           ? this.parseMaybeAssignDisallowIn()
           : this.parseMaybeAssignAllowIn();
 
-      if (decl.init === null && !allowMissingInitializer) {
-        if (
-          decl.id.type !== "Identifier" &&
-          !(isFor && (this.match(tt._in) || this.isContextual(tt._of)))
-        ) {
+      if (
+        decl.init === null &&
+        !allowMissingInitializer &&
+        !(
+          isFor &&
+          // Only the first binding of a for-in/of head may omit the initializer
+          declarations.length === 0 &&
+          (this.match(tt._in) || this.isContextual(tt._of))
+        )
+      ) {
+        if (decl.id.type !== "Identifier") {
           this.raise(
             Errors.DeclarationMissingInitializer,
             this.state.lastTokEndLoc!,
@@ -1621,8 +1627,9 @@ export default abstract class StatementParser extends ExpressionParser {
             },
           );
         } else if (
-          (kind === "const" || kind === "using" || kind === "await using") &&
-          !(this.match(tt._in) || this.isContextual(tt._of))
+          kind === "const" ||
+          kind === "using" ||
+          kind === "await using"
         ) {
           this.raise(
             Errors.DeclarationMissingInitializer,
