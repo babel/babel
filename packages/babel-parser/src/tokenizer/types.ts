@@ -282,6 +282,7 @@ export const tt = {
 
   // Primary literals
   // start: isIdentifier
+  _arguments: createKeywordLike("arguments", { startsExpr }),
   _as: createKeywordLike("as", { startsExpr }),
   _assert: createKeywordLike("assert", { startsExpr }),
   _async: createKeywordLike("async", { startsExpr }),
@@ -353,7 +354,7 @@ export const tt = {
 } as const;
 
 export function tokenIsIdentifier(token: TokenType): boolean {
-  return token >= tt._as && token <= tt.placeholder;
+  return token >= tt._arguments && token <= tt.placeholder;
 }
 
 export function tokenKeywordOrIdentifierIsKeyword(token: TokenType): boolean {
