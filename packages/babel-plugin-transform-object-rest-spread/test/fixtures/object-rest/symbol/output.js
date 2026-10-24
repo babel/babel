@@ -1,14 +1,14 @@
-var _Symbol$for, _Symbol$for2, _Symbol$for3, _ref3;
+var _ref3;
 let _ref = {},
   {
-    [_Symbol$for = Symbol.for("foo")]: foo
+    [Symbol.for("foo")]: foo
   } = _ref,
-  rest = babelHelpers.objectWithoutProperties(_ref, [_Symbol$for]);
+  rest = babelHelpers.objectWithoutProperties(_ref, [Symbol.for("foo")]);
 var _ref2 = {};
 ({
-  [_Symbol$for2 = Symbol.for("foo")]: foo
+  [Symbol.for("foo")]: foo
 } = _ref2);
-rest = babelHelpers.objectWithoutProperties(_ref2, [_Symbol$for2]);
+rest = babelHelpers.objectWithoutProperties(_ref2, [Symbol.for("foo")]);
 if (_ref3 = {}, {
-  [_Symbol$for3 = Symbol.for("foo")]: foo
-} = _ref3, rest = babelHelpers.objectWithoutProperties(_ref3, [_Symbol$for3]), _ref3) {}
+  [Symbol.for("foo")]: foo
+} = _ref3, rest = babelHelpers.objectWithoutProperties(_ref3, [Symbol.for("foo")]), _ref3) {}
