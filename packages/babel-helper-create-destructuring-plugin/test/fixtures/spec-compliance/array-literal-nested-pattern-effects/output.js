@@ -5,5 +5,6 @@ var _ref2 = [[undefined], z],
   _ref2$0$ = babelHelpers.slicedToArray(_ref2[0], 1)[0],
   a = _ref2$0$ === void 0 ? f() : _ref2$0$,
   b = _ref2[1];
-var c = 1,
-  d = z;
+var _z = z,
+  c = 1,
+  d = _z;
