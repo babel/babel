@@ -12,6 +12,7 @@ import {
   hasArrayRest,
   hasObjectRest,
   isAnonymousFunctionDefinition,
+  isInitializedReference,
   isObjectCoercible,
   isPropertyKeyExpression,
   isPureVoid,
@@ -528,6 +529,9 @@ export class Lowering {
     ref: Ref,
   ): boolean {
     if (isObjectCoercible(ref.expr)) return false;
+    // Computed keys are stored in temporaries to be excluded from a lowered
+    // rest element, before the property is read.
+    const lowersRest = plans[plans.length - 1] === PropertyPlan.Rest;
     // Whether a key will be passed to the object rest helper, which then
     // returns `{}` for null/undefined instead of throwing.
     let hasExcludedKey = false;
@@ -539,20 +543,30 @@ export class Lowering {
       const prop = properties[i] as t.ObjectProperty;
       // private keys are not enumerable, so they are never excluded
       if (prop.key.type !== "PrivateName") hasExcludedKey = true;
-      // Evaluating the key could observe that the check was delayed
-      if (prop.computed && !isStablePropertyKey(prop.key, this.scope)) {
-        return true;
-      }
       // Skipped and `void` properties are not read
-      if (plan === PropertyPlan.Lower && prop.value.type !== "VoidPattern") {
-        // Assignment references run before the property read, so they cannot
-        // perform the pattern's initial RequireObjectCoercible check for us.
-        const target =
+      const isRead =
+        plan === PropertyPlan.Lower && prop.value.type !== "VoidPattern";
+      // Assignment references run before the property read, so they cannot
+      // perform the pattern's initial RequireObjectCoercible check for us.
+      const hasMemberTarget =
+        isRead &&
+        this.isMemberTarget(
           prop.value.type === "AssignmentPattern"
             ? prop.value.left
-            : prop.value;
-        return this.isMemberTarget(target);
+            : prop.value,
+        );
+      if (prop.computed && !isStablePropertyKey(prop.key, this.scope)) {
+        // Evaluating the key could observe that the check was delayed, unless
+        // it is an initialized binding read by the property access itself,
+        // which performs the check before coercing the key: `ref[key]`
+        return !(
+          isRead &&
+          !hasMemberTarget &&
+          !lowersRest &&
+          isInitializedReference(prop.key, this.scope)
+        );
       }
+      if (isRead) return hasMemberTarget;
     }
     return true;
   }
