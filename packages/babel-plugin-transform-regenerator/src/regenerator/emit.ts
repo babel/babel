@@ -1368,6 +1368,100 @@ export class Emitter {
         return self.contextProperty("v");
       }
 
+      case "TemplateLiteral": {
+        const expressions = path.get("expressions") as NodePath<t.Expression>[];
+
+        // Each substitution must be coerced to a string before the next
+        // substitution is evaluated. Using a single-substitution template
+        // literal performs exactly ToString, without relying on the global
+        // String function or on the ToPrimitive hint of the + operator.
+        const coerced = expressions.map(exprPath => {
+          const expr = self.explodeExpression(exprPath);
+          return self.emitAssign(
+            self.makeTempVar(),
+            t.templateLiteral(
+              [
+                t.templateElement({ raw: "", cooked: "" }),
+                t.templateElement({ raw: "", cooked: "" }),
+              ],
+              [t.cloneNode(expr)],
+            ),
+          );
+        });
+
+        return finish(
+          t.templateLiteral(
+            path.node.quasis.map(quasi => t.cloneNode(quasi)),
+            coerced.map(expr => t.cloneNode(expr)),
+          ),
+        );
+      }
+
+      case "TaggedTemplateExpression": {
+        const tagPath = path.get("tag") as NodePath<t.Expression>;
+        const quasi = path.node.quasi;
+
+        let newTag: t.Expression;
+
+        if (t.isMemberExpression(tagPath.node)) {
+          // The object and computed property of a member tag are evaluated
+          // before the substitutions, and the resulting function must still
+          // be called with the object as its `this` value.
+          const newObject = self.emitAssign(
+            self.makeTempVar(),
+            self.explodeExpression(
+              tagPath.get("object") as NodePath<t.Expression>,
+            ),
+          );
+
+          const newProperty = tagPath.node.computed
+            ? self.explodeViaTempVar(
+                null,
+                tagPath.get("property") as NodePath<t.Expression>,
+                hasLeapingChildren,
+              )
+            : tagPath.node.property;
+
+          newTag = self.emitAssign(
+            self.makeTempVar(),
+            t.memberExpression(
+              t.cloneNode(newObject),
+              newProperty,
+              tagPath.node.computed,
+            ),
+          );
+          newTag = t.callExpression(
+            t.memberExpression(t.cloneNode(newTag), t.identifier("bind")),
+            [t.cloneNode(newObject)],
+          );
+        } else {
+          // Reading the tag (including getters) happens before substitutions.
+          newTag = self.emitAssign(
+            self.makeTempVar(),
+            self.explodeExpression(tagPath),
+          );
+        }
+
+        const newExpressions = (
+          path.get("quasi.expressions") as NodePath<t.Expression>[]
+        ).map(exprPath =>
+          self.emitAssign(
+            self.makeTempVar(),
+            t.cloneNode(self.explodeExpression(exprPath)),
+          ),
+        );
+
+        return finish(
+          t.taggedTemplateExpression(
+            newTag,
+            t.templateLiteral(
+              quasi.quasis.map(q => t.cloneNode(q)),
+              newExpressions.map(expr => t.cloneNode(expr)),
+            ),
+          ),
+        );
+      }
+
       case "ClassExpression":
         return finish(self.explodeClass(path));
 
