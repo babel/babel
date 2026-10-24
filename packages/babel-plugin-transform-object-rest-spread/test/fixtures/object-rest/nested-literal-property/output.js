@@ -1,14 +1,16 @@
 let useState = [{
   some: 42
 }, () => null];
-let {
-    0: {
-      numeric
-    },
-    '2': {
-      str
-    },
+let _useState$ = useState[0],
+  {
+    numeric
+  } = _useState$,
+  rest1 = babelHelpers.objectWithoutProperties(_useState$, ["numeric"]),
+  _useState$2 = useState['2'],
+  {
+    str
+  } = _useState$2,
+  rest2 = babelHelpers.objectWithoutProperties(_useState$2, ["str"]),
+  {
     1: setState
-  } = useState,
-  rest1 = babelHelpers.objectWithoutProperties(useState[0], ["numeric"]),
-  rest2 = babelHelpers.objectWithoutProperties(useState['2'], ["str"]);
+  } = useState;

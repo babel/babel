@@ -332,9 +332,14 @@ function getMarkedFunctionId(
     info.decl.declarations.push(t.variableDeclarator(markedId, markCallExp)) -
     1;
 
-  const markCallExpPath = info.declPath.get("declarations." + index + ".init");
+  const declaratorPath = info.declPath.get("declarations." + index);
+  const markCallExpPath = declaratorPath.get("init");
 
   assert.strictEqual(markCallExpPath.node, markCallExp);
+
+  (
+    blockPath.scope.getFunctionParent() || blockPath.scope.getProgramParent()
+  ).registerBinding("var", declaratorPath);
 
   markCallExpPath.addComment("leading", "#__PURE__");
 

@@ -8,19 +8,13 @@
   for (var _ref3 of []) {
     var _ref4;
     [_ref4] = _ref3;
-    var _ref5 = _ref4;
-    ({} = _ref5);
-    a = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref5), _ref5));
-    _ref5;
+    a = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref4), _ref4));
   }
   async function f() {
-    for await (var _ref6 of []) {
-      var _ref7;
-      [_ref7] = _ref6;
-      var _ref8 = _ref7;
-      ({} = _ref8);
-      a = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref8), _ref8));
-      _ref8;
+    for await (var _ref5 of []) {
+      var _ref6;
+      [_ref6] = _ref5;
+      a = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref6), _ref6));
     }
   }
 }

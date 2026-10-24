@@ -13,16 +13,16 @@ new (_Foo2 = (_x = /*#__PURE__*/new WeakMap(), _A = /*#__PURE__*/new WeakMap(), 
   [_Foo, _initClass] = babelHelpers.applyDecs2311(_Foo3, [dec], []).c;
   _staticBlock = function () {
     staticThis = this;
-    getX = _p => {
-      var x = babelHelpers.classPrivateFieldGet2(_x, _p);
+    getX = _ref => {
+      var x = babelHelpers.classPrivateFieldGet2(_x, _ref);
       return x;
     };
-    getA = _p2 => {
-      var a = babelHelpers.classPrivateGetter(_Foo3_brand, _p2, _get_a);
+    getA = _ref2 => {
+      var a = babelHelpers.classPrivateGetter(_Foo3_brand, _ref2, _get_a);
       return a;
     };
-    callM = _p3 => {
-      var m = babelHelpers.assertClassBrand(_Foo3_brand, _p3, _m);
+    callM = _ref3 => {
+      var m = babelHelpers.assertClassBrand(_Foo3_brand, _ref3, _m);
       return m();
     };
   };

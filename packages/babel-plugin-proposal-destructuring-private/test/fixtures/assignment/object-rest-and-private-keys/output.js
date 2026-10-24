@@ -7,9 +7,9 @@ class C {
   static c = "c";
   static {
     let x, y, z;
-    x = C.#x, y = C.#y, {
-      ...z
-    } = C;
+    x = C.#x;
+    y = C.#y;
+    z = Object.assign({}, (babelHelpers.objectDestructuringEmpty(C), C));
     result = {
       x,
       y,

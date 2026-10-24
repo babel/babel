@@ -3,8 +3,8 @@ var _iterator = babelHelpers.createForOfIteratorHelper(c),
   _step;
 try {
   var _loop = function _loop() {
-    var _step$value = babelHelpers.slicedToArray(_step.value, 1),
-      a = _step$value[0];
+    var _ref = _step.value;
+    var a = babelHelpers.slicedToArray(_ref, 1)[0];
     a = 1;
     (function () {
       return a;

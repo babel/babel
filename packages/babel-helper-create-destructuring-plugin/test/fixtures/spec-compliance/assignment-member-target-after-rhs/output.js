@@ -1,0 +1,14 @@
+var _source$a;
+var _source = source();
+obj[key()] = _source.a;
+var _source2 = source();
+obj.x = (_source$a = _source2.a) === void 0 ? 1 : _source$a;
+var _source3 = source();
+obj.x = _source3.a;
+var _source4 = babelHelpers.slicedToArray(source(), 1);
+obj[key()] = _source4[0];
+var _value = value;
+obj[key()] = _value.a;
+var _value2 = value;
+obj.x = _value2.a;
+_value2;
