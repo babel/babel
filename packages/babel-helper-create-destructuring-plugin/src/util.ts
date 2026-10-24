@@ -405,7 +405,7 @@ export function getExtendsHelper(
 
 /**
  * Build `objectWithoutProperties(objRef, [...excludedKeys])`, or
- * `extends({}, (objectDestructuringEmpty(objRef), objRef))` when there is
+ * `objectWithoutProperties((objectDestructuringEmpty(objRef), objRef), [])` when there is
  * no key to exclude.
  */
 export function buildObjectExcludingKeys(
@@ -414,7 +414,6 @@ export function buildObjectExcludingKeys(
   scope: Scope,
   addHelper: File["addHelper"],
   objectRestNoSymbols: boolean,
-  useBuiltIns: boolean,
 ): t.CallExpression {
   // `objRef` may be needed more than once: either clone it, or ask the
   // caller for a new node each time.
@@ -465,13 +464,22 @@ export function buildObjectExcludingKeys(
   }
 
   if (keys.length === 0) {
-    return t.callExpression(getExtendsHelper(useBuiltIns, addHelper), [
-      t.objectExpression([]),
-      t.sequenceExpression([
-        t.callExpression(addHelper("objectDestructuringEmpty"), [getObjRef()]),
-        getObjRef(),
-      ]),
-    ]);
+    return t.callExpression(
+      addHelper(
+        objectRestNoSymbols
+          ? "objectWithoutPropertiesLoose"
+          : "objectWithoutProperties",
+      ),
+      [
+        t.sequenceExpression([
+          t.callExpression(addHelper("objectDestructuringEmpty"), [
+            getObjRef(),
+          ]),
+          getObjRef(),
+        ]),
+        t.arrayExpression([]),
+      ],
+    );
   }
 
   let keyExpression: t.Expression = t.arrayExpression(keys);

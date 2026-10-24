@@ -8,7 +8,7 @@ const _excluded = ["a1"],
   _excluded8 = ["a1"],
   _excluded9 = ["a1"];
 function a(_ref) {
-  var a34 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref), _ref));
+  var a34 = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_ref), _ref), []);
 }
 function a2(_ref2) {
   var {
@@ -62,7 +62,7 @@ function a7(_ref8 = {}) {
 }
 function a8(_ref9) {
   var [_ref0] = _ref9,
-    a1 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref0), _ref0));
+    a1 = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_ref0), _ref0), []);
 }
 function a9(_ref1) {
   var [_ref10] = _ref1,
@@ -73,7 +73,7 @@ function a9(_ref1) {
 }
 function a10(_ref11) {
   var [a1, _ref12] = _ref11,
-    a2 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref12), _ref12));
+    a2 = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_ref12), _ref12), []);
 }
 // Unchanged
 function b(a) {}

@@ -22,10 +22,9 @@ describe("buildObjectExcludingKeys", () => {
       getProgramScope(),
       addHelper,
       false,
-      false,
     );
-    // _extends({}, (_objectDestructuringEmpty(obj), obj))
-    const [check, ref] = node.arguments[1].expressions;
+    // _objectWithoutProperties((_objectDestructuringEmpty(obj), obj), [])
+    const [check, ref] = node.arguments[0].expressions;
     expect(check.arguments[0]).toBe(objRef);
     expect(ref).not.toBe(objRef);
     expect(ref).toEqual(objRef);
@@ -33,14 +32,7 @@ describe("buildObjectExcludingKeys", () => {
 
   it("calls the object reference factory for each use", () => {
     const factory = jest.fn(() => t.identifier("obj"));
-    buildObjectExcludingKeys(
-      [],
-      factory,
-      getProgramScope(),
-      addHelper,
-      false,
-      false,
-    );
+    buildObjectExcludingKeys([], factory, getProgramScope(), addHelper, false);
     expect(factory).toHaveBeenCalledTimes(2);
   });
 
@@ -54,7 +46,6 @@ describe("buildObjectExcludingKeys", () => {
       t.identifier("obj"),
       getProgramScope(),
       addHelper,
-      false,
       false,
     );
     expect(node.callee.name).toBe("_objectWithoutProperties");

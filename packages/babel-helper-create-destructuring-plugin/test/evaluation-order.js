@@ -89,6 +89,28 @@ describe.each([
   ["object rest", FEATURES.objectRest],
   ["full destructuring", FEATURES.objectRest | FEATURES.destructuring],
 ])("%s", (_name, feature) => {
+  it.each(["{ omitted, ...rest }", "{ ...rest }"])(
+    "copies an own __proto__ data property with %s",
+    pattern => {
+      for (const objectRestNoSymbols of [false, true]) {
+        expectSameEvaluation(
+          `
+            const proto = { inherited: true };
+            const source = { ["__proto__"]: proto, omitted: 1, other: 2 };
+            const ${pattern} = source;
+            return [
+              Object.getPrototypeOf(rest) === Object.prototype,
+              Object.getOwnPropertyDescriptor(rest, "__proto__"),
+              Object.keys(rest)
+            ];
+          `,
+          feature,
+          { objectRestNoSymbols },
+        );
+      }
+    },
+  );
+
   it.each(keyExpressions)("coerces %s once and in order", expression => {
     for (const pattern of patterns) {
       expectSameEvaluation(

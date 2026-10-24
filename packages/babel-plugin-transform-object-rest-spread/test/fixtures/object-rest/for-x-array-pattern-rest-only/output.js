@@ -3,18 +3,18 @@
   let a;
   for (const _ref of []) {
     const [_ref2] = _ref,
-      a = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref2), _ref2));
+      a = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_ref2), _ref2), []);
   }
   for (var _ref3 of []) {
     var _ref4;
     [_ref4] = _ref3;
-    a = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref4), _ref4));
+    a = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_ref4), _ref4), []);
   }
   async function f() {
     for await (var _ref5 of []) {
       var _ref6;
       [_ref6] = _ref5;
-      a = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref6), _ref6));
+      a = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_ref6), _ref6), []);
     }
   }
 }
