@@ -7,7 +7,6 @@ var _loop = function (_i) {
     i = _i;
     return 1;
   } // break
-  ;
   i = _i;
 };
 for (var i = 0, _first2 = true;; _first2 = false) {

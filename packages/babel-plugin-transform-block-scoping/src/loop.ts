@@ -128,8 +128,6 @@ export function moveCapturingTestAndUpdateIntoBody(
 
   if (!init.isVariableDeclaration() || init.node.kind !== "let") return;
 
-  const testPath = loopPath.get("test");
-  const updatePath = loopPath.get("update");
   let testCaptures = false;
   let updateCaptures = false;
 
@@ -140,11 +138,17 @@ export function moveCapturingTestAndUpdateIntoBody(
       ...binding.referencePaths,
       ...binding.constantViolations,
     ]) {
-      testCaptures ||= isCapturedInClosureWithin(ref, testPath, loopPath);
-      updateCaptures ||= isCapturedInClosureWithin(ref, updatePath, loopPath);
+      const { inTest, inUpdate, inClosure } = relativeLoopLocation(
+        ref,
+        loopPath,
+      );
+      testCaptures ||= inTest && inClosure;
+      updateCaptures ||= inUpdate && inClosure;
     }
   }
   if (!testCaptures && !updateCaptures) return;
+
+  makeAnnexBAssignmentsExplicit(loopPath);
 
   const { node } = loopPath;
   const bodyStmts: t.Statement[] = [];
@@ -176,47 +180,101 @@ export function moveCapturingTestAndUpdateIntoBody(
     node.test = null;
   }
 
-  bodyStmts.push(node.body);
+  if (!t.isEmptyStatement(node.body)) bodyStmts.push(node.body);
   node.body = t.blockStatement(bodyStmts);
 
   loopPath.scope.crawl();
 }
 
-function isCapturedInClosureWithin(
-  path: NodePath,
-  containerPath: NodePath<t.Expression | null>,
-  loopPath: NodePath,
-) {
-  if (!containerPath.node) return false;
-  let inClosure = false;
-  for (
-    let currPath: NodePath | null = path;
-    currPath && currPath !== loopPath;
-    currPath = currPath.parentPath
-  ) {
-    if (currPath.isFunction() || currPath.isClass() || currPath.isMethod()) {
-      inClosure = true;
+function makeAnnexBAssignmentsExplicit(loopPath: NodePath<t.ForStatement>) {
+  const declarations: NodePath<t.FunctionDeclaration>[] = [];
+  loopPath.get("body").traverse({
+    Function(path) {
+      if (
+        path.isFunctionDeclaration() &&
+        (path.parentPath.isBlockStatement() ||
+          path.parentPath.isSwitchCase()) &&
+        path.node.id &&
+        !path.node.generator &&
+        !path.node.async &&
+        !path.isInStrictMode() &&
+        !hasLexicalConflict(loopPath, path.node.id.name)
+      ) {
+        declarations.push(path);
+      }
+      path.skip();
+    },
+  });
+
+  if (declarations.length === 0) return;
+
+  const names = new Set<string>();
+  const renamed = new Map<Scope, Set<string>>();
+  for (const path of declarations) {
+    const name = path.node.id!.name;
+    names.add(name);
+
+    // The scope of the enclosing block or `switch`
+    const declScope = path.scope.parent!;
+    if (!renamed.has(declScope)) renamed.set(declScope, new Set());
+    if (!renamed.get(declScope)!.has(name)) {
+      renamed.get(declScope)!.add(name);
+      declScope.rename(name);
     }
-    if (currPath === containerPath) return inClosure;
+    path.insertAfter(
+      t.expressionStatement(
+        t.assignmentExpression(
+          "=",
+          t.identifier(name),
+          t.cloneNode(path.node.id!),
+        ),
+      ),
+    );
   }
-  return false;
+
+  const body = t.toBlock(loopPath.node.body);
+  body.body.unshift(
+    t.variableDeclaration(
+      "var",
+      Array.from(names, name => t.variableDeclarator(t.identifier(name))),
+    ),
+  );
+  loopPath.node.body = body;
+}
+
+function hasLexicalConflict(loopPath: NodePath, name: string) {
+  const binding = loopPath.scope.getBinding(name);
+  return !!binding && binding.kind !== "var" && binding.kind !== "hoisted";
 }
 
 function relativeLoopLocation(path: NodePath, loopPath: NodePath<t.Loop>) {
   const bodyPath = loopPath.get("body");
   const headPath = loopPath.isForStatement() ? loopPath.get("init") : null;
+  const testPath = loopPath.isForStatement() ? loopPath.get("test") : null;
+  const updatePath = loopPath.isForStatement() ? loopPath.get("update") : null;
   let inClosure = false;
 
   for (let currPath = path; currPath; currPath = currPath.parentPath) {
     if (currPath.isFunction() || currPath.isClass() || currPath.isMethod()) {
       inClosure = true;
     }
+    const location = {
+      inBody: false,
+      inHead: false,
+      inTest: false,
+      inUpdate: false,
+      inClosure,
+    };
     if (currPath === bodyPath) {
-      return { inBody: true, inHead: false, inClosure };
+      return { ...location, inBody: true };
     } else if (headPath && currPath === headPath) {
-      return { inBody: false, inHead: true, inClosure };
+      return { ...location, inHead: true };
+    } else if (testPath?.node && currPath === testPath) {
+      return { ...location, inTest: true };
+    } else if (updatePath?.node && currPath === updatePath) {
+      return { ...location, inUpdate: true };
     } else if (currPath === loopPath) {
-      return { inBody: false, inHead: false, inClosure };
+      return location;
     }
   }
 
