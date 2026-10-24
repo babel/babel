@@ -9,10 +9,11 @@ var _x = {
   var x,
     a = "a";
   for (var _ref of [_C]) {
-    x = babelHelpers.assertClassBrand(_C, _ref, _x)._;
+    var _ref2 = _ref;
+    x = babelHelpers.assertClassBrand(_C, _ref2, _x)._;
     ({
       [a]: a
-    } = _ref);
+    } = _ref2);
     {
       const a = "A";
     }
