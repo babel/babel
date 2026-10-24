@@ -37,9 +37,8 @@ interface ConflictState {
 function isRedeclaredInBody(binding: Binding): boolean {
   return binding.constantViolations.some(
     violation =>
-      violation.isVariableDeclarator() ||
-      violation.isFunctionDeclaration() ||
-      violation.isClassDeclaration(),
+      // A lexical declaration with the same name is an early error
+      violation.isVariableDeclarator() || violation.isFunctionDeclaration(),
   );
 }
 
