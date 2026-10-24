@@ -177,7 +177,11 @@ export function isStableExpression(node: t.Node, scope: Scope): boolean {
 
 /** Whether a computed key can be evaluated and coerced again later. */
 export function isStablePropertyKey(node: t.Node, scope: Scope): boolean {
-  return isPrimitiveExpression(node) && isStableExpression(node, scope);
+  return (
+    isPrimitiveExpression(node) &&
+    isSafeToEvaluate(node, scope) &&
+    isStableExpression(node, scope)
+  );
 }
 
 const SIDE_EFFECT_NODES = new Set([
@@ -240,25 +244,44 @@ export function targetReferenceMayRunUserCode(
 }
 
 /**
- * Whether an element of an array literal is unaffected by user code running
- * between the evaluation of the literal and the moment it is read: literals,
- * constant identifiers, and functions (which capture bindings by reference).
+ * Whether evaluating a value can be delayed or omitted without observable
+ * effects or errors. Even constant identifiers can throw in their TDZ.
  */
-export function isSafeArrayLiteralElement(
-  element: t.ArrayExpression["elements"][number],
+export function isSafeToEvaluate(
+  element: t.Node | null,
   scope: Scope,
 ): boolean {
   if (element === null) return true;
-  if (isStableExpression(element, scope) || t.isFunction(element)) return true;
+  if (t.isPureish(element)) return true;
+  if (t.isIdentifier(element)) {
+    return (
+      ["undefined", "Infinity", "NaN"].includes(element.name) &&
+      !scope.hasBinding(element.name, { noGlobals: true })
+    );
+  }
+  if (t.isUnaryExpression(element)) {
+    return (
+      ["void", "typeof", "!"].includes(element.operator) &&
+      isSafeToEvaluate(element.argument, scope)
+    );
+  }
+  if (t.isTemplateLiteral(element)) {
+    return element.expressions.every(
+      expr => isPrimitiveExpression(expr) && isSafeToEvaluate(expr, scope),
+    );
+  }
   if (t.isArrayExpression(element)) {
-    return element.elements.every(el => isSafeArrayLiteralElement(el, scope));
+    return element.elements.every(el => isSafeToEvaluate(el, scope));
+  }
+  if (t.isSequenceExpression(element)) {
+    return element.expressions.every(el => isSafeToEvaluate(el, scope));
   }
   if (t.isObjectExpression(element)) {
     return element.properties.every(
       prop =>
         t.isObjectProperty(prop) &&
         !prop.computed &&
-        isSafeArrayLiteralElement(prop.value as t.Expression, scope),
+        isSafeToEvaluate(prop.value as t.Expression, scope),
     );
   }
   return false;
@@ -294,36 +317,11 @@ export function containsUnstableMemberTarget(
 /**
  * https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
  */
-function mayBeNameKey(key: t.Node, computed: boolean): boolean {
-  if (!computed) {
-    return (
-      t.isIdentifier(key, { name: "name" }) ||
-      t.isStringLiteral(key, { value: "name" })
-    );
-  }
-  const value = t.isTemplateLiteral(key)
-    ? key.expressions.length === 0
-      ? (key.quasis[0].value.cooked ?? null)
-      : null
-    : getLiteralKeyString(key);
-  // We can't know the value of other computed keys
-  return value === null || value === "name";
-}
-
 export function isAnonymousFunctionDefinition(node: t.Node): boolean {
   if (t.isArrowFunctionExpression(node)) return true;
   if (t.isFunctionExpression(node)) return !node.id;
   if (t.isClassExpression(node)) {
-    if (node.id) return false;
-    // A class with an own static "name" member keeps it.
-    return !node.body.body.some(
-      element =>
-        (t.isClassProperty(element) ||
-          t.isClassMethod(element) ||
-          t.isClassAccessorProperty(element)) &&
-        element.static &&
-        mayBeNameKey(element.key, element.computed),
-    );
+    return !node.id;
   }
   return false;
 }

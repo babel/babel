@@ -4,7 +4,6 @@ import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { canUnpackArrayPattern } from "./array-unpacking.ts";
 import {
   buildObjectExcludingKeys,
-  containsUnstableMemberTarget,
   hasArrayRest,
   hasObjectRest,
   isAnonymousFunctionDefinition,
@@ -12,11 +11,12 @@ import {
   isPrimitiveExpression,
   isPrimitiveKeyExpression,
   isPureVoid,
+  isSafeToEvaluate,
   isStablePropertyKey,
-  isStableMemberTarget,
   mayRunUserCode,
   needsLowering,
   propertyNeedsLowering,
+  someTarget,
   splitArrayPattern,
   targetReferenceMayRunUserCode,
   type ExcludedKey,
@@ -76,6 +76,7 @@ const enum Decision {
 class Ref {
   private readonly placeholders: { node: t.Identifier; index: number }[] = [];
   private decision = Decision.None;
+  private staticUsed = false;
 
   tempId: t.Identifier | null = null;
   forceTemp = false;
@@ -116,7 +117,8 @@ class Ref {
   }
 
   use(): t.Expression {
-    if (this.isStatic) {
+    if (this.isStatic && !this.forceTemp) {
+      this.staticUsed = true;
       // Always clone: the original node might be shared with other places
       // of the AST (e.g. by @babel/plugin-transform-parameters).
       return t.cloneNode(this.expr);
@@ -128,12 +130,21 @@ class Ref {
   }
 
   decide() {
-    if (this.isStatic) return;
+    if (this.isStatic && !this.forceTemp) {
+      if (
+        !this.staticUsed &&
+        !this.discarded &&
+        !isSafeToEvaluate(this.expr, this.lowering.scope)
+      ) {
+        this.decision = Decision.Effect;
+      }
+      return;
+    }
     const { placeholders } = this;
     if (placeholders.length === 0) {
       // The value might still need to be evaluated for its side effects.
       this.decision =
-        this.discarded || this.lowering.scope.isPure(this.expr)
+        this.discarded || isSafeToEvaluate(this.expr, this.lowering.scope)
           ? Decision.None
           : Decision.Effect;
     } else if (
@@ -168,8 +179,7 @@ class Ref {
         dep.decision === Decision.Inline &&
         nodes.has(dep.placeholders[0].node) &&
         // Reordering is only observable if one of them can affect the other
-        (targetMayRunUserCode ||
-          !(t.isIdentifier(dep.expr) || scope.isPure(dep.expr)))
+        (targetMayRunUserCode || !isSafeToEvaluate(dep.expr, scope))
       ) {
         dep.decision = Decision.Temp;
       }
@@ -196,13 +206,13 @@ class Ref {
         lowering.steps.splice(insertAt, 0, {
           kind: StepKind.Temp,
           id: this.tempId!,
-          init: this.expr,
+          init: this.isStatic ? t.cloneNode(this.expr) : this.expr,
         });
         break;
       case Decision.Effect:
         lowering.steps.splice(insertAt, 0, {
           kind: StepKind.Effect,
-          expression: this.expr,
+          expression: this.isStatic ? t.cloneNode(this.expr) : this.expr,
         });
         break;
     }
@@ -329,7 +339,9 @@ export class Lowering {
   ) {
     const ref = new Ref(
       this,
-      expr,
+      isAnonymousFunctionDefinition(expr)
+        ? t.sequenceExpression([t.numericLiteral(0), expr])
+        : expr,
       this.steps.length,
       isStatic,
       isArray,
@@ -354,17 +366,13 @@ export class Lowering {
    * happens before its value is read, can affect or be affected by the code
    * evaluated around it.
    */
-  private isUnstableTarget(target: t.Node): target is t.MemberExpression {
-    return (
-      this.isAssignment &&
-      t.isMemberExpression(target) &&
-      !isStableMemberTarget(target, this.scope)
-    );
+  private isMemberTarget(target: t.Node): target is t.MemberExpression {
+    return this.isAssignment && t.isMemberExpression(target);
   }
 
   /** `target = <expression reading ref>` */
   private bindRef(target: t.LVal, ref: Ref, init?: t.Expression) {
-    if (this.isUnstableTarget(target)) ref.readAfter = target;
+    if (this.isMemberTarget(target)) ref.readAfter = target;
     this.bind(target, init ?? ref.use());
   }
 
@@ -373,6 +381,15 @@ export class Lowering {
   }
 
   private lowerTarget(target: PatternTarget, ref: Ref) {
+    if (
+      this.isAssignment &&
+      (t.isObjectPattern(target) || t.isArrayPattern(target)) &&
+      someTarget(target, node => t.isMemberExpression(node))
+    ) {
+      // The whole value is read before evaluating any nested target,
+      // including targets that can throw without running user code.
+      ref.forceTemp = true;
+    }
     if (
       !this.full &&
       target!.type !== "AssignmentPattern" &&
@@ -407,21 +424,38 @@ export class Lowering {
     // -> const x = 42;
     if (isPureVoid(ref.expr, this.scope)) {
       ref.discarded = true;
-      this.lowerTarget(left, this.createRef(right));
+      if (t.isIdentifier(left) && isAnonymousFunctionDefinition(right)) {
+        this.bind(left, right);
+      } else {
+        this.lowerTarget(left, this.createRef(right));
+      }
       return;
     }
 
     let defaultValue = right;
     if (t.isIdentifier(left) && isAnonymousFunctionDefinition(right)) {
       // https://tc39.es/ecma262/#sec-runtime-semantics-namedevaluation
-      defaultValue = t.callExpression(this.addHelper("setFunctionName"), [
-        right,
-        t.stringLiteral(left.name),
-      ]);
+      if (t.isClassExpression(right) && left.name === "__proto__") {
+        // An object property with this name would set the prototype.
+        // Keep references to the outer binding outside the class's scope.
+        this.scope.rename(left.name);
+        right.id = t.identifier("__proto__");
+      } else {
+        defaultValue = t.isClassExpression(right)
+          ? // Property definitions infer the name before static initialization.
+            t.memberExpression(
+              t.objectExpression([t.objectProperty(t.cloneNode(left), right)]),
+              t.cloneNode(left),
+            )
+          : t.callExpression(this.addHelper("setFunctionName"), [
+              right,
+              t.stringLiteral(left.name),
+            ]);
+      }
     }
 
     const { scope } = this;
-    if (this.isUnstableTarget(left)) {
+    if (this.isMemberTarget(left)) {
       // The target reference must be evaluated before reading the value:
       //   target.x = (_tmp = ref.x) === void 0 ? right : _tmp
       const tmp = scope.generateUidIdentifierBasedOnNode(ref.hint());
@@ -517,7 +551,8 @@ export class Lowering {
       if (prop.key.type !== "PrivateName") hasExcludedKey = true;
       if (
         prop.computed &&
-        (!isPrimitiveExpression(prop.key) || mayRunUserCode(prop.key))
+        (!isPrimitiveExpression(prop.key) ||
+          !isSafeToEvaluate(prop.key, this.scope))
       ) {
         return true;
       }
@@ -531,7 +566,7 @@ export class Lowering {
 
   private lowerObjectPattern(pattern: t.ObjectPattern, ref: Ref) {
     const { properties } = pattern;
-    const { scope, full, isAssignment } = this;
+    const { scope, full } = this;
 
     // The pattern is only lowered when it needs to be (see `lowerTarget`): if
     // there is a rest element, either it or a property before it has to be
@@ -645,7 +680,7 @@ export class Lowering {
           !isStablePropertyKey(key, scope) &&
           (hasRest ||
             // The target reference must be evaluated after the property name
-            (this.isUnstableTarget(target) &&
+            (this.isMemberTarget(target) &&
               (!primitive ||
                 mayRunUserCode(key) ||
                 targetReferenceMayRunUserCode(target))));
@@ -682,14 +717,6 @@ export class Lowering {
             ),
         },
       );
-      if (
-        isAssignment &&
-        (t.isObjectPattern(value) || t.isArrayPattern(value)) &&
-        containsUnstableMemberTarget(value, scope)
-      ) {
-        // Nested targets are evaluated after reading the property.
-        propRef.forceTemp = true;
-      }
       this.lowerTarget(value as PatternTarget, propRef);
     }
     flush();
@@ -724,7 +751,11 @@ export class Lowering {
       ref.discarded = true;
       const holeToUndefined = (el: t.ArrayExpression["elements"][number]) =>
         (el as t.Expression | null) ?? t.buildUndefinedNode();
-      const values = ref.expr.elements;
+      const values = ref.expr.elements.map(element =>
+        isSafeToEvaluate(element, this.scope)
+          ? element
+          : this.temp(element as t.Expression),
+      );
       for (let i = 0; i < elements.length; i++) {
         const element = elements[i]!;
         if (element.type === "RestElement") {

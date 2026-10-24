@@ -1,13 +1,16 @@
 const _obj = obj,
   a = _obj[true],
   b = _obj[null],
-  c = _obj[-1],
-  rest = babelHelpers.objectWithoutProperties(_obj, ["true", "null", -1].map(babelHelpers.toPropertyKey));
+  _babelHelpers$toPrope = babelHelpers.toPropertyKey(-1),
+  c = _obj[_babelHelpers$toPrope],
+  rest = babelHelpers.objectWithoutProperties(_obj, ["true", "null", _babelHelpers$toPrope]);
 const _obj2 = obj,
   o = _obj2["other"],
   rest3 = babelHelpers.objectWithoutProperties(_obj2, ["other"]);
 var _obj3 = obj;
-d = _obj3[-1];
+babelHelpers.objectDestructuringEmpty(_obj3);
+var _babelHelpers$toPrope2 = babelHelpers.toPropertyKey(-1);
+d = _obj3[_babelHelpers$toPrope2];
 e = _obj3[!0];
-rest2 = babelHelpers.objectWithoutProperties(_obj3, [-1, !0].map(babelHelpers.toPropertyKey));
+rest2 = babelHelpers.objectWithoutProperties(_obj3, [_babelHelpers$toPrope2, !0].map(babelHelpers.toPropertyKey));
 _obj3;

@@ -2,7 +2,7 @@ import { types as t } from "@babel/core";
 import type { Scope } from "@babel/core";
 import {
   hasArrayRest,
-  isSafeArrayLiteralElement,
+  isSafeToEvaluate,
   mayRunUserCode,
   someTarget,
   type PatternTarget,
@@ -77,7 +77,7 @@ export function canUnpackArrayPattern(
     if (
       effectfulFrom !== -1 &&
       i > effectfulFrom &&
-      !isSafeArrayLiteralElement(element, scope)
+      !isSafeToEvaluate(element, scope)
     ) {
       return false;
     }

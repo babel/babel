@@ -1,5 +1,6 @@
 var _values = values;
-var _fieldName = fieldName;
-value = _values[_fieldName];
-rest = babelHelpers.objectWithoutProperties(_values, [_fieldName].map(babelHelpers.toPropertyKey));
+babelHelpers.objectDestructuringEmpty(_values);
+var _babelHelpers$toPrope = babelHelpers.toPropertyKey(fieldName);
+value = _values[_babelHelpers$toPrope];
+rest = babelHelpers.objectWithoutProperties(_values, [_babelHelpers$toPrope]);
 var error;
