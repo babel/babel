@@ -977,6 +977,7 @@ defineType("ObjectProperty", {
     const pattern = assertNodeType(
       "Identifier",
       "Pattern",
+      "MemberExpression",
       "TSAsExpression",
       "TSSatisfiesExpression",
       "TSNonNullExpression",
