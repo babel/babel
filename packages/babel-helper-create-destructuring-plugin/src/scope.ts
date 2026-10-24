@@ -13,7 +13,7 @@
  * function parameters) don't need to forget anything.
  */
 import { types as t } from "@babel/core";
-import type { NodePath, Scope } from "@babel/core";
+import type { NodePath, Scope, Visitor } from "@babel/core";
 
 type Binding = Scope["bindings"][string];
 
@@ -95,24 +95,23 @@ export function removeUndeclaredBindings(
   }
 }
 
+// Created once, so that it's only exploded once.
+const scopeInfoVisitor: Visitor<(p: NodePath) => void> = {
+  ReferencedIdentifier(path, visit) {
+    visit(path);
+  },
+  "AssignmentExpression|UpdateExpression|ForXStatement|VariableDeclarator"(
+    path,
+    visit,
+  ) {
+    visit(path);
+  },
+};
+
 /** Visit `path` and the descendants that carry scope information. */
 function forEachScopeInfoPath(path: NodePath, visit: (p: NodePath) => void) {
   visit(path);
-  path.traverse({
-    ReferencedIdentifier: visit,
-    "AssignmentExpression|UpdateExpression|ForXStatement|VariableDeclarator":
-      visit,
-  });
-}
-
-/** The names assigned by a path visited by `forEachScopeInfoPath`. */
-function assignedNames(path: NodePath): string[] {
-  return Object.keys(
-    path.isVariableDeclarator()
-      ? // A duplicate `var` declaration is a constant violation
-        t.getBindingIdentifiers(path.node.id)
-      : path.getAssignmentIdentifiers(),
-  );
+  path.traverse(scopeInfoVisitor, visit);
 }
 
 /**
@@ -123,27 +122,68 @@ function assignedNames(path: NodePath): string[] {
  * kept: `registerLoweredDeclaration` moves them to the new declarations.
  */
 export function collectScopeInfo(path: NodePath): () => void {
-  const references: [Binding, t.Node][] = [];
-  const violations: [Binding, t.Node][] = [];
-  forEachScopeInfoPath(path, p => {
-    if (p.isReferencedIdentifier()) {
-      const binding = p.scope.getBinding(p.node.name);
-      if (binding) references.push([binding, p.node]);
-    } else {
-      for (const name of assignedNames(p)) {
-        const binding = p.scope.getBinding(name);
-        if (binding) violations.push([binding, p.node]);
-      }
+  // References and violations are forgotten by node, so the nodes don't need
+  // paths: a name is resolved from the scope of `path`. If it resolves to a
+  // binding of a nested scope instead, the outer binding has no reference to
+  // that node and nothing is forgotten. The bindings of nested scopes don't
+  // need to be forgotten: their references keep their paths, as their parent
+  // nodes don't change, or the scope is created again when visiting its new
+  // path.
+  const { scope } = path;
+  const references = new Map<Binding, Set<t.Node>>();
+  const violations = new Map<Binding, Set<t.Node>>();
+  const record = (
+    map: Map<Binding, Set<t.Node>>,
+    name: string,
+    node: t.Node,
+  ) => {
+    const binding = scope.getBinding(name);
+    if (!binding) return;
+    let nodes = map.get(binding);
+    if (!nodes) map.set(binding, (nodes = new Set()));
+    nodes.add(node);
+  };
+  t.traverseFast(path.node, node => {
+    switch (node.type) {
+      case "Identifier":
+      case "JSXIdentifier":
+        record(references, node.name, node);
+        break;
+      case "VariableDeclarator":
+        // A duplicate `var` declaration is a constant violation
+        for (const name of Object.keys(t.getBindingIdentifiers(node.id))) {
+          record(violations, name, node);
+        }
+        break;
+      case "AssignmentExpression":
+      case "UpdateExpression":
+      case "ForInStatement":
+      case "ForOfStatement":
+        for (const name of Object.keys(t.getAssignmentIdentifiers(node))) {
+          record(violations, name, node);
+        }
+        break;
     }
   });
 
   return () => {
-    for (const [binding, node] of references) forgetReference(binding, node);
-    for (const [binding, node] of violations) {
+    for (const [binding, nodes] of references) {
+      // The same node may have been registered through different paths, e.g.
+      // by a crawl of a nested scope after it was moved.
+      binding.referencePaths = binding.referencePaths.filter(ref => {
+        if (!nodes.has(ref.node)) return true;
+        binding.dereference();
+        return false;
+      });
+    }
+    for (const [binding, nodes] of violations) {
+      const { length } = binding.constantViolations;
       binding.constantViolations = binding.constantViolations.filter(
-        violation => violation.node !== node,
+        violation => !nodes.has(violation.node),
       );
-      binding.constant = binding.constantViolations.length === 0;
+      if (binding.constantViolations.length !== length) {
+        binding.constant = binding.constantViolations.length === 0;
+      }
     }
   };
 }
