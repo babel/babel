@@ -686,7 +686,14 @@ export class Lowering {
       }
 
       // https://tc39.es/proposal-discard-binding/: `void` does not read the property
-      if (isVoid) continue;
+      if (isVoid) {
+        // Its key must still be evaluated and coerced unless a temporary
+        // already did so, or both operations are unobservable.
+        if (computed && keyExpr === key && !isStablePropertyKey(key, scope)) {
+          this.effect(this.toPropertyKey(key));
+        }
+        continue;
+      }
 
       const keyNode = keyExpr === key ? key : t.cloneNode(keyExpr);
       const propRef = this.createRef(
