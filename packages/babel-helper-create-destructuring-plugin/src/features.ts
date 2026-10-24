@@ -96,9 +96,10 @@ export function getResolvedOptions(file: File): ResolvedOptions {
   let resolved: ResolvedOptions | null = file.get(resolvedKey);
   if (resolved) return resolved;
 
-  const features: number = file.get(featuresKey) ?? 0;
-  const allOptions: Map<number, FeatureOptions> =
-    file.get(optionsKey) ?? new Map();
+  // Set by `enableFeature` and `setAssumptions`, in the `pre` hook of the
+  // plugins
+  const features: number = file.get(featuresKey);
+  const allOptions: Map<number, FeatureOptions> = file.get(optionsKey);
 
   const restFirst = [
     FEATURES.objectRest,
@@ -141,7 +142,7 @@ export function getResolvedOptions(file: File): ResolvedOptions {
       [FEATURES.objectRest, FEATURES.privateDestructuring],
       false,
     ),
-    noNewArrows: file.get(noNewArrowsKey) ?? true,
+    noNewArrows: file.get(noNewArrowsKey),
   };
   file.set(resolvedKey, resolved);
   return resolved;

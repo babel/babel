@@ -45,8 +45,7 @@ function registerLoweredDeclaration(
     }
     registerScope.registerBinding(kind as "var" | "let" | "const", declarator);
     for (const [name, old] of transferred) {
-      const binding = registerScope.getOwnBinding(name);
-      if (!binding) continue;
+      const binding = registerScope.getOwnBinding(name)!;
       binding.referencePaths = old.referencePaths;
       binding.references = old.references;
       binding.referenced = old.referenced;
