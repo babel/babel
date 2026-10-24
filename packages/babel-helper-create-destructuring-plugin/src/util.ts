@@ -139,49 +139,9 @@ export function isObjectCoercible(node: t.Node): boolean {
   }
 }
 
-/**
- * Whether evaluating `node` again later is guaranteed to produce the same
- * value with no side effects, even if other code (getters, defaults, ...)
- * runs in between. This is stricter than `scope.isPure`, which considers
- * non-constant identifiers pure.
- */
-export function isStableExpression(node: t.Node, scope: Scope): boolean {
-  switch (node.type) {
-    case "StringLiteral":
-    case "NumericLiteral":
-    case "BigIntLiteral":
-    case "BooleanLiteral":
-    case "NullLiteral":
-    case "ThisExpression":
-    case "Super":
-      return true;
-    case "TemplateLiteral":
-      return node.expressions.every(
-        expr => isPrimitiveExpression(expr) && isStableExpression(expr, scope),
-      );
-    case "Identifier":
-      return scope.isStatic(node);
-    case "UnaryExpression":
-      return (
-        node.operator !== "delete" &&
-        (node.operator === "void" ||
-          node.operator === "typeof" ||
-          node.operator === "!" ||
-          isPrimitiveExpression(node.argument)) &&
-        isStableExpression(node.argument, scope)
-      );
-    default:
-      return false;
-  }
-}
-
 /** Whether a computed key can be evaluated and coerced again later. */
 export function isStablePropertyKey(node: t.Node, scope: Scope): boolean {
-  return (
-    isPrimitiveExpression(node) &&
-    isSafeToEvaluate(node, scope) &&
-    isStableExpression(node, scope)
-  );
+  return isPrimitiveExpression(node) && isSafeToEvaluate(node, scope);
 }
 
 const SIDE_EFFECT_NODES = new Set([
