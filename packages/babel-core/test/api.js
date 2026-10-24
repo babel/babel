@@ -872,6 +872,28 @@ describe("api", function () {
       expect(script).toEqual(expect.stringContaining("typeof"));
     });
 
+    it("no conflicting top-level bindings across helpers", function () {
+      const script = babel.buildExternalHelpers(undefined, "module");
+      const ast = babel.parseSync(script, {
+        configFile: false,
+        babelrc: false,
+        sourceType: "module",
+      });
+
+      const names = ast.program.body.flatMap(node =>
+        Object.keys(babel.types.getBindingIdentifiers(node, false, true)),
+      );
+      const seen = new Set();
+      const duplicates = names.filter(name => {
+        if (seen.has(name)) {
+          return true;
+        }
+        seen.add(name);
+        return false;
+      });
+      expect(duplicates).toHaveLength(0);
+    });
+
     describe("output types", function () {
       it("global", function () {
         const script = babel.buildExternalHelpers(["get"], "global");
@@ -879,11 +901,11 @@ describe("api", function () {
           "(function (global) {
             var babelHelpers = global.babelHelpers = {};
             function _get() {
-              return babelHelpers.get = _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-                var p = babelHelpers.superPropBase(e, t);
-                if (p) {
-                  var n = Object.getOwnPropertyDescriptor(p, t);
-                  return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
+              return babelHelpers.get = _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (t, r, n) {
+                var l = babelHelpers.superPropBase(t, r);
+                if (l) {
+                  var f = Object.getOwnPropertyDescriptor(l, r);
+                  return f.get ? f.get.call(arguments.length < 3 ? t : n) : f.value;
                 }
               }, _get.apply(null, arguments);
             }
@@ -906,11 +928,11 @@ describe("api", function () {
           })(this, function (global) {
             var babelHelpers = global;
             function _get() {
-              return babelHelpers.get = _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-                var p = babelHelpers.superPropBase(e, t);
-                if (p) {
-                  var n = Object.getOwnPropertyDescriptor(p, t);
-                  return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
+              return babelHelpers.get = _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (t, r, n) {
+                var l = babelHelpers.superPropBase(t, r);
+                if (l) {
+                  var f = Object.getOwnPropertyDescriptor(l, r);
+                  return f.get ? f.get.call(arguments.length < 3 ? t : n) : f.value;
                 }
               }, _get.apply(null, arguments);
             }
@@ -924,11 +946,11 @@ describe("api", function () {
         expect(script).toMatchInlineSnapshot(`
           "var babelHelpers = {};
           function _get() {
-            return babelHelpers.get = _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-              var p = babelHelpers.superPropBase(e, t);
-              if (p) {
-                var n = Object.getOwnPropertyDescriptor(p, t);
-                return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
+            return babelHelpers.get = _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (t, r, n) {
+              var l = babelHelpers.superPropBase(t, r);
+              if (l) {
+                var f = Object.getOwnPropertyDescriptor(l, r);
+                return f.get ? f.get.call(arguments.length < 3 ? t : n) : f.value;
               }
             }, _get.apply(null, arguments);
           }
@@ -942,11 +964,11 @@ describe("api", function () {
         expect(script).toMatchInlineSnapshot(`
           "export { _get as get };
           function _get() {
-            return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (e, t, r) {
-              var p = _superPropBase(e, t);
-              if (p) {
-                var n = Object.getOwnPropertyDescriptor(p, t);
-                return n.get ? n.get.call(arguments.length < 3 ? e : r) : n.value;
+            return _get = "undefined" != typeof Reflect && Reflect.get ? Reflect.get.bind() : function (t, r, n) {
+              var l = _superPropBase(t, r);
+              if (l) {
+                var f = Object.getOwnPropertyDescriptor(l, r);
+                return f.get ? f.get.call(arguments.length < 3 ? t : n) : f.value;
               }
             }, _get.apply(null, arguments);
           }"

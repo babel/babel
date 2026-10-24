@@ -9,6 +9,11 @@ type ClassAssumptions = {
   constantSuper: boolean;
   superIsCallableConstructor: boolean;
   noClassCalls: boolean;
+
+  // TODO: These are not assumptions that can be set individually yet, they are
+  // only enabled by the `loose` option.
+  noClassPrototypeAssign: boolean;
+  noConstructorPrimitiveReturn: boolean;
 };
 
 type ClassConstructor = t.ClassMethod & { kind: "constructor" };
@@ -62,7 +67,6 @@ export default function transformClass(
   path: NodePath<t.Class>,
   file: File,
   builtinClasses: ReadonlySet<string>,
-  isLoose: boolean,
   assumptions: ClassAssumptions,
   supportUnicodeId: boolean,
 ) {
@@ -470,7 +474,7 @@ export default function transformClass(
 
     let wrapReturn;
 
-    if (isLoose) {
+    if (assumptions.noConstructorPrimitiveReturn) {
       wrapReturn = (returnArg: t.Expression | void) => {
         const thisExpr = buildAssertThisInitialized();
         return returnArg
@@ -518,8 +522,21 @@ export default function transformClass(
    * Push a method to its respective mutatorMap.
    */
   function pushMethod(node: t.ClassMethod, wrapped?: t.Expression) {
-    if (node.kind === "method") {
-      if (processMethod(node)) return;
+    if (assumptions.setClassMethods) {
+      if (node.kind === "method") {
+        processMethodToSet(node as Extract<typeof node, { kind: "method" }>);
+        return;
+      } else if (
+        (node.kind === "get" || node.kind === "set") &&
+        // If either 'setClassMethods' or 'noClassPrototypeAssign' is not
+        // enabled we need to emit `createClass` anyway
+        assumptions.noClassPrototypeAssign
+      ) {
+        processAccessorToDefine(
+          node as Extract<typeof node, { kind: "get" | "set" }>,
+        );
+        return;
+      }
     }
 
     const placement = node.static ? "static" : "instance";
@@ -563,40 +580,60 @@ export default function transformClass(
     }
   }
 
-  function processMethod(node: t.ClassMethod) {
-    if (assumptions.setClassMethods && !node.decorators) {
-      // use assignments instead of define properties for loose classes
-      let { classRef } = classState;
-      if (!node.static) {
-        insertProtoAliasOnce();
-        classRef = classState.protoAlias!;
-      }
+  function processMethodToSet(node: t.ClassMethod & { kind: "method" }) {
+    processMethodInline(node, (classRef, func) => {
       const methodName = t.memberExpression(
-        t.cloneNode(classRef!),
+        t.cloneNode(classRef),
         node.key,
         node.computed || t.isLiteral(node.key),
       );
+      return t.assignmentExpression("=", methodName, func);
+    });
+  }
 
-      const func: t.Expression = t.functionExpression(
-        // @ts-expect-error We actually set and id through .ensureFunctionName
-        node.id,
-        // @ts-expect-error Fixme: should throw when we see TSParameterProperty
-        node.params,
-        node.body,
-        node.generator,
-        node.async,
-      );
-      t.inherits(func, node);
+  function processAccessorToDefine(
+    node: t.ClassMethod & { kind: "get" | "set" },
+  ) {
+    processMethodInline(node, (classRef, func) => {
+      const key =
+        node.computed || t.isLiteral(node.key)
+          ? node.key
+          : t.stringLiteral(node.key.name);
+      return t.callExpression(file.addHelper("defineAccessor"), [
+        t.stringLiteral(node.kind),
+        t.cloneNode(classRef),
+        key,
+        func,
+      ]);
+    });
+  }
 
-      const expr = t.expressionStatement(
-        t.assignmentExpression("=", methodName, func),
-      );
-      t.inheritsComments(expr, node);
-      classState.body.push(expr);
-      return true;
+  function processMethodInline(
+    node: t.ClassMethod & { kind: "method" | "get" | "set" },
+    buildExpr: (
+      classRef: t.Identifier,
+      func: t.FunctionExpression,
+    ) => t.Expression,
+  ) {
+    let { classRef } = classState;
+    if (!node.static) {
+      insertProtoAliasOnce();
+      classRef = classState.protoAlias!;
     }
 
-    return false;
+    const func = t.functionExpression(
+      // @ts-expect-error We actually set and id through .ensureFunctionName
+      node.id,
+      // @ts-expect-error Fixme: should throw when we see TSParameterProperty
+      node.params,
+      node.body,
+      node.generator,
+      node.async,
+    );
+    t.inherits(func, node);
+    const expr = t.expressionStatement(buildExpr(classRef!, func));
+    t.inheritsComments(expr, node);
+    classState.body.push(expr);
   }
 
   function insertProtoAliasOnce() {
@@ -625,7 +662,11 @@ export default function transformClass(
     classState.body.unshift(
       t.expressionStatement(
         t.callExpression(
-          file.addHelper(isLoose ? "inheritsLoose" : "inherits"),
+          file.addHelper(
+            assumptions.setClassMethods && assumptions.noClassPrototypeAssign
+              ? "inheritsLoose"
+              : "inherits",
+          ),
           [
             t.cloneNode(classState.classRef!),
             t.cloneNode(classState.superName),
@@ -752,13 +793,15 @@ export default function transformClass(
     if (constructorOnly) {
       // named class with only a constructor
       const expr = t.toExpression(classState.construct);
-      return isLoose ? expr : createClassHelper([expr]);
+      return assumptions.noClassPrototypeAssign
+        ? expr
+        : createClassHelper([expr]);
     }
 
     if (!classState.pushedCreateClass) {
       body.push(
         t.returnStatement(
-          isLoose
+          assumptions.noClassPrototypeAssign
             ? t.cloneNode(classState.classRef)
             : createClassHelper([t.cloneNode(classState.classRef)]),
         ),

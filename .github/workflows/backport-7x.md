@@ -263,8 +263,12 @@ jobs:
             echo "**Checks:** build, lint (\`make -j lint-ci check-compat-data\`) and tests (\`yarn jest\`) pass."
           } > "$out/body.md"
 
+          # Copy the labels of the original PR, except for the `7.x: ...` ones.
+          labels=$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json labels \
+            --jq '[.labels[].name | select(startswith("7.x:") | not)] | join(",")')
+
           url=$(gh pr create --repo "$GITHUB_REPOSITORY" --head "$branch" --base 7.x \
-            --title "$title" --body-file "$out/body.md" --label "7.x: backport")
+            --title "$title" --body-file "$out/body.md" --label "7.x: backport${labels:+,$labels}")
           gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Backported to 7.x in #${url##*/}."
           gh pr edit "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --remove-label "7.x: needs backport"
 
@@ -322,13 +326,20 @@ jobs:
   conclusion:
     # This runs after the `safe-outputs` job from the agent.
     pre-steps:
-      - name: 'Link the backport PR and remove the "7.x: needs backport" label'
+      - name: 'Link the backport PR, copy the labels and remove the "7.x: needs backport" label'
         if: needs.safe_outputs.outputs.created_pr_number != ''
         env:
           GH_TOKEN: ${{ secrets.BOT_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           BACKPORT_PR: ${{ needs.safe_outputs.outputs.created_pr_number }}
         run: |
+          set -euo pipefail
+          # Copy the labels of the original PR, except for the `7.x: ...` ones.
+          labels=$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json labels \
+            --jq '[.labels[].name | select(startswith("7.x:") | not)] | join(",")')
+          if [ -n "$labels" ]; then
+            gh pr edit "$BACKPORT_PR" --repo "$GITHUB_REPOSITORY" --add-label "$labels"
+          fi
           gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Backported to 7.x in #$BACKPORT_PR."
           gh pr edit "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --remove-label "7.x: needs backport"
 
