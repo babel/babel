@@ -4,6 +4,7 @@ import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { canUnpackArrayPattern } from "./array-unpacking.ts";
 import {
   buildNamedDefault,
+  isIdentifierRef,
   preventNamedEvaluation,
 } from "./named-evaluation.ts";
 import {
@@ -429,7 +430,7 @@ export class Lowering {
     // -> const x = 42;
     if (isPureVoid(ref.expr, this.scope)) {
       ref.discarded = true;
-      if (t.isIdentifier(left) && isAnonymousFunctionDefinition(right)) {
+      if (isIdentifierRef(left) && isAnonymousFunctionDefinition(right)) {
         this.bind(left, right);
       } else {
         this.lowerTarget(left, this.createRef(right));
