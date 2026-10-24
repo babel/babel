@@ -15,14 +15,14 @@ babelHelpers.defineProperty(C, "c", "c");
   var _C$a, _C$b;
   var a, b, x, y, z;
   ({
-    [_C$a = _C.a]: a
+    [_C$a = babelHelpers.toPropertyKey(_C.a)]: a
   } = _C);
   x = _x._;
   ({
-    [_C$b = _C.b]: b
+    [_C$b = babelHelpers.toPropertyKey(_C.b)]: b
   } = _C);
   y = _y._;
-  z = babelHelpers.objectWithoutProperties(_C, [_C$a, _C$b].map(babelHelpers.toPropertyKey));
+  z = babelHelpers.objectWithoutProperties(_C, [_C$a, _C$b]);
   result = {
     a,
     b,

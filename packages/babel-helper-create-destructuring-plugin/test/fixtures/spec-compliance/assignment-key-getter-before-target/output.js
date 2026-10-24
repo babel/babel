@@ -1,5 +1,5 @@
 var _e = e;
 babelHelpers.objectDestructuringEmpty(_e);
-var _a$b = a.b;
-obj.c = _e[_a$b];
+var _babelHelpers$toPrope = babelHelpers.toPropertyKey(a.b);
+obj.c = _e[_babelHelpers$toPrope];
 _e;
