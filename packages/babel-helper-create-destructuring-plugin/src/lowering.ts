@@ -2,7 +2,10 @@ import { types as t, template } from "@babel/core";
 import type { File, Scope } from "@babel/core";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { canUnpackArrayPattern } from "./array-unpacking.ts";
-import { buildNamedDefault } from "./named-evaluation.ts";
+import {
+  buildNamedDefault,
+  preventNamedEvaluation,
+} from "./named-evaluation.ts";
 import {
   buildObjectExcludingKeys,
   hasArrayRest,
@@ -340,9 +343,7 @@ export class Lowering {
   ) {
     const ref = new Ref(
       this,
-      isAnonymousFunctionDefinition(expr)
-        ? t.sequenceExpression([t.numericLiteral(0), expr])
-        : expr,
+      preventNamedEvaluation(expr),
       this.steps.length,
       isStatic,
       isArray,
@@ -357,9 +358,7 @@ export class Lowering {
     this.steps.push({
       kind: StepKind.Temp,
       id,
-      init: isAnonymousFunctionDefinition(init)
-        ? t.sequenceExpression([t.numericLiteral(0), init])
-        : init,
+      init: preventNamedEvaluation(init),
     });
     return id;
   }
@@ -438,7 +437,7 @@ export class Lowering {
       return;
     }
 
-    const defaultValue = buildNamedDefault(left, right, this);
+    const defaultValue = buildNamedDefault(left, right, this.addHelper);
 
     const { scope } = this;
     if (this.isMemberTarget(left)) {

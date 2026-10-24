@@ -279,45 +279,42 @@ function transformForXStatement(
 ) {
   const { node, scope } = path;
   const { left } = node;
-  const { features } = options;
+  const isDeclaration = t.isVariableDeclaration(left);
+  const pattern = isDeclaration ? left.declarations[0].id : left;
+  if (
+    !(t.isObjectPattern(pattern) || t.isArrayPattern(pattern)) ||
+    !needsLowering(pattern, options.features)
+  ) {
+    return;
+  }
 
-  if (t.isVariableDeclaration(left)) {
-    const pattern = left.declarations[0].id;
-    if (!needsLowering(pattern, features)) return;
+  // for (const { a } of b) body;
+  // for ({ a } of b) body;
+  // transform to:
+  // for (const _ref of b) { const { a } = _ref; body; }
+  // for (var _ref of b) { ({ a } = _ref); body; }
+  // The scope of the loop is crawled again: forget the information of its
+  // nodes first, as some of them get new paths.
+  forgetScopeInfo(path);
+  const ref = scope.generateUidIdentifier("ref");
+  node.left = t.variableDeclaration(isDeclaration ? left.kind : "var", [
+    t.variableDeclarator(ref),
+  ]);
 
-    // for (const { a } of b) body;
-    // transforms to:
-    // for (const _ref of b) { const { a } = _ref; body; }
-    // The scope of the loop is crawled again: forget the information of its
-    // nodes first, as some of them get new paths.
-    forgetScopeInfo(path);
-    const key = scope.generateUidIdentifier("ref");
-    node.left = t.variableDeclaration(left.kind, [
-      t.variableDeclarator(key, null),
-    ]);
-    unshiftForXStatementBody(path, [
+  const statements: t.Statement[] = [];
+  if (isDeclaration) {
+    statements.push(
       t.variableDeclaration(left.kind, [
-        t.variableDeclarator(pattern, t.cloneNode(key)),
+        t.variableDeclarator(pattern, t.cloneNode(ref)),
       ]),
-    ]);
-    // the pattern will be handled by the VariableDeclaration visitor.
-    scope.crawl();
-  } else if (t.isPattern(left)) {
-    if (!needsLowering(left, features)) return;
-
-    // for ({ a } of b) body;
-    // transforms to:
-    // for (var _ref of b) { ({ a } = _ref); body; }
-    forgetScopeInfo(path);
-    const temp = scope.generateUidIdentifier("ref");
-    node.left = t.variableDeclaration("var", [t.variableDeclarator(temp)]);
-
-    path.ensureBlock();
-    const nodes: t.Statement[] = [
+    );
+  } else {
+    statements.push(
       t.expressionStatement(
-        t.assignmentExpression("=", left, t.cloneNode(temp)),
+        t.assignmentExpression("=", pattern, t.cloneNode(ref)),
       ),
-    ];
+    );
+    path.ensureBlock();
     // todo: the completion of a for statement can only be observed from
     // a do block (or eval that we don't support),
     // but the new do-expression proposal plans to ban iteration ends in the
@@ -326,12 +323,13 @@ function transformForXStatement(
       (node.body as t.BlockStatement).body.length === 0 &&
       path.isCompletionRecord()
     ) {
-      nodes.push(t.expressionStatement(t.buildUndefinedNode()));
+      statements.push(t.expressionStatement(t.buildUndefinedNode()));
     }
-    unshiftForXStatementBody(path, nodes);
-    // the pattern will be handled by the AssignmentExpression visitor.
-    scope.crawl();
   }
+  unshiftForXStatementBody(path, statements);
+  // The pattern will be handled by the VariableDeclaration or
+  // AssignmentExpression visitor.
+  scope.crawl();
 }
 
 /**
