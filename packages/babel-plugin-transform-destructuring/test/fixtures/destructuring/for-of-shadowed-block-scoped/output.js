@@ -3,7 +3,6 @@ var O = {
 };
 const a = "a";
 for (const _ref of [O]) {
-  babelHelpers.objectDestructuringEmpty(_ref);
   const _ = _ref[a];
   {
     const a = "A";
@@ -11,7 +10,6 @@ for (const _ref of [O]) {
 }
 var _;
 for (var _ref2 of [O]) {
-  babelHelpers.objectDestructuringEmpty(_ref2);
   _ = _ref2[a];
   {
     const a = "A";
