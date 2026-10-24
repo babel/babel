@@ -34,7 +34,11 @@ export function buildNamedDefault(
   if (!isIdentifierRef(left) || !isAnonymousFunctionDefinition(right)) {
     return right;
   }
-  if (!t.isClassExpression(right)) {
+  let definition = right;
+  while (t.isParenthesizedExpression(definition)) {
+    definition = definition.expression;
+  }
+  if (!t.isClassExpression(definition)) {
     return t.callExpression(addHelper("setFunctionName"), [
       right,
       t.stringLiteral(left.name),
