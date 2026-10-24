@@ -13,6 +13,15 @@ export function preventNamedEvaluation(expr: t.Expression): t.Expression {
 }
 
 /**
+ * https://tc39.es/ecma262/#sec-static-semantics-isidentifierref
+ * A parenthesized identifier is not an IdentifierReference: anonymous
+ * functions assigned to it are not named.
+ */
+export function isIdentifierRef(node: t.Node): node is t.Identifier {
+  return t.isIdentifier(node) && !node.extra?.parenthesized;
+}
+
+/**
  * The default value of `left`, named after it if it is an anonymous function
  * definition, as it would be by the destructuring pattern.
  * https://tc39.es/ecma262/#sec-runtime-semantics-namedevaluation
@@ -22,7 +31,7 @@ export function buildNamedDefault(
   right: t.Expression,
   addHelper: File["addHelper"],
 ): t.Expression {
-  if (!t.isIdentifier(left) || !isAnonymousFunctionDefinition(right)) {
+  if (!isIdentifierRef(left) || !isAnonymousFunctionDefinition(right)) {
     return right;
   }
   if (!t.isClassExpression(right)) {
