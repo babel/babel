@@ -1201,12 +1201,17 @@ describe("scope", () => {
         "var a, b, c;
         foo;"
       `);
-      const declarations = program.get("body.0.declarations");
+      const declaration = program.get("body.0");
+      for (const name of ["a", "b", "c"]) {
+        expect(program.scope.getOwnBinding(name).path.context).toBe(
+          declaration.context,
+        );
+      }
+      const declarations = declaration.get("declarations");
       for (const [i, name] of ["a", "b", "c"].entries()) {
         const binding = program.scope.getOwnBinding(name);
         expect(binding.path).toBe(declarations[i]);
         expect(binding.path.key).toBe(i);
-        expect(binding.path.context).toBe(program.get("body.0").context);
       }
     });
   });
