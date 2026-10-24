@@ -3,23 +3,26 @@ const _excluded = ["a"],
   _excluded3 = ["a"];
 // ForXStatement
 for (var _ref of []) {
-  var {
+  var _ref2 = _ref,
+    {
       a
-    } = _ref,
-    b = babelHelpers.objectWithoutProperties(_ref, _excluded);
+    } = _ref2,
+    b = babelHelpers.objectWithoutProperties(_ref2, _excluded);
 }
-for (var _ref2 of []) {
+for (var _ref3 of []) {
+  var _ref4 = _ref3;
   ({
     a
-  } = _ref2);
-  b = babelHelpers.objectWithoutProperties(_ref2, _excluded2);
+  } = _ref4);
+  b = babelHelpers.objectWithoutProperties(_ref4, _excluded2);
 }
 async function a() {
-  for await (var _ref3 of []) {
+  for await (var _ref5 of []) {
+    var _ref6 = _ref5;
     ({
       a
-    } = _ref3);
-    b = babelHelpers.objectWithoutProperties(_ref3, _excluded3);
+    } = _ref6);
+    b = babelHelpers.objectWithoutProperties(_ref6, _excluded3);
   }
 }
 
