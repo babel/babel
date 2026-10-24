@@ -229,14 +229,20 @@ function registerScopeInfo(paths: NodePath[]) {
           // A redeclaration of an existing binding
           if (binding && binding.identifier !== ids[name]) binding.reassign(p);
         }
-      } else {
+      } else if (
+        p.isAssignmentExpression() ||
+        p.isUpdateExpression() ||
+        p.isForXStatement()
+      ) {
         const ids = p.getAssignmentIdentifiers();
         for (const name of Object.keys(ids)) {
-          if (!p.scope.getBinding(name)) {
+          const binding = p.scope.getBinding(name);
+          if (binding) {
+            binding.reassign(p);
+          } else {
             p.scope.getProgramParent().addGlobal(ids[name]);
           }
         }
-        p.scope.registerConstantViolation(p);
       }
     });
   }
