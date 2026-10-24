@@ -1,0 +1,16 @@
+{
+  "plugins": [
+    "transform-parameters",
+    "transform-destructuring"
+  ],
+  "parserOpts": {
+    "plugins": [
+      [
+        "discardBinding",
+        {
+          "syntaxType": "void"
+        }
+      ]
+    ]
+  }
+}
