@@ -18,7 +18,6 @@ import {
   isPureVoid,
   isSafeToEvaluate,
   isStablePropertyKey,
-  mayRunUserCode,
   needsLowering,
   propertyNeedsLowering,
   someTarget,
@@ -662,15 +661,12 @@ export class Lowering {
       let keyComputed = computed;
       if (computed) {
         const target = value.type === "AssignmentPattern" ? value.left : value;
-        const primitive = isPrimitiveExpression(key);
         const needsTemp =
           !isStablePropertyKey(key, scope) &&
           (hasRest ||
-            // The target reference must be evaluated after the property name
-            (this.isMemberTarget(target) &&
-              (!primitive ||
-                mayRunUserCode(key) ||
-                targetReferenceMayRunUserCode(target))));
+            // The property name is evaluated before the target reference,
+            // including when either evaluation throws without running user code.
+            this.isMemberTarget(target));
         if (needsTemp) {
           keyExpr = this.temp(this.toPropertyKey(key));
         }
