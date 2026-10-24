@@ -14,7 +14,7 @@ babelHelpers.defineProperty(C, "c", "c");
 (() => {
   var x = _x._,
     y = _y._,
-    z = Object.assign({}, (babelHelpers.objectDestructuringEmpty(_C), _C));
+    z = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_C), _C), []);
   result = {
     x,
     y,

@@ -11,7 +11,7 @@ class C {
       _instance$list = babelHelpers.toArray(babelHelpers.classPrivateFieldGet2(_list, instance)),
       first = _instance$list[0],
       others = babelHelpers.arrayLikeToArray(_instance$list).slice(1),
-      rest = Object.assign({}, (babelHelpers.objectDestructuringEmpty(instance), instance));
+      rest = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(instance), instance), []);
     let _other$x = babelHelpers.classPrivateFieldGet2(_x, other),
       ox = _other$x === void 0 ? 0 : _other$x,
       plain = other.plain,
