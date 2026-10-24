@@ -1,9 +1,10 @@
-var _source$_key;
+var _source$_babelHelpers;
 var _source = source;
 babelHelpers.objectDestructuringEmpty(_source);
-var _key = key();
-obj[target()] = (_source$_key = _source[_key]) === void 0 ? 1 : _source$_key;
+var _babelHelpers$toPrope = babelHelpers.toPropertyKey(key());
+obj[target()] = (_source$_babelHelpers = _source[_babelHelpers$toPrope]) === void 0 ? 1 : _source$_babelHelpers;
 var _source2 = source;
-var _k = k;
-obj[target2()] = _source2[_k];
+babelHelpers.objectDestructuringEmpty(_source2);
+var _babelHelpers$toPrope2 = babelHelpers.toPropertyKey(k);
+obj[target2()] = _source2[_babelHelpers$toPrope2];
 _source2;

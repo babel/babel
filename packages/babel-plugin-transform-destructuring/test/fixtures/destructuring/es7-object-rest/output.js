@@ -5,10 +5,11 @@ var _z = z,
 var _z2 = z,
   x = _z2.x,
   y = babelHelpers.objectWithoutProperties(_z2, ["x"]);
-var _z3 = z,
-  _x = x,
-  x = _z3[_x],
-  y = babelHelpers.objectWithoutProperties(_z3, [_x].map(babelHelpers.toPropertyKey));
+var _z3 = z;
+babelHelpers.objectDestructuringEmpty(_z3);
+var _babelHelpers$toPrope = babelHelpers.toPropertyKey(x),
+  x = _z3[_babelHelpers$toPrope],
+  y = babelHelpers.objectWithoutProperties(_z3, [_babelHelpers$toPrope]);
 (function (_ref) {
   var x = _ref.x,
     y = babelHelpers.objectWithoutProperties(_ref, _excluded);

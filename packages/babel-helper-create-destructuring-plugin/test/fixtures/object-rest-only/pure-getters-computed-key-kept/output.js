@@ -1,6 +1,6 @@
 function omit(obj, spec) {
   const {} = obj,
-    _spec$key = spec.key,
-    rest = babelHelpers.objectWithoutProperties(obj, [_spec$key, "unused"].map(babelHelpers.toPropertyKey));
+    _babelHelpers$toPrope = babelHelpers.toPropertyKey(spec.key),
+    rest = babelHelpers.objectWithoutProperties(obj, [_babelHelpers$toPrope, "unused"]);
   return rest;
 }
