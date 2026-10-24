@@ -1,0 +1,13 @@
+var _;
+var _ref = [2, a = {}];
+a.b = (_ = _ref[0]) === void 0 ? 1 : _;
+c = _ref[1];
+var _ref2 = [[2], d = {}];
+var _ref2$ = babelHelpers.slicedToArray(_ref2[0], 1);
+d.e = _ref2$[0];
+f = _ref2[1];
+var _ref3 = [obj, g.h];
+var _ref3$ = _ref3[0];
+g.h = _ref3$.x;
+i = _ref3[1];
+_ref3;

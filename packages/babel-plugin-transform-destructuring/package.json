@@ -17,6 +17,7 @@
     "babel-plugin"
   ],
   "dependencies": {
+    "@babel/helper-create-destructuring-plugin": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {

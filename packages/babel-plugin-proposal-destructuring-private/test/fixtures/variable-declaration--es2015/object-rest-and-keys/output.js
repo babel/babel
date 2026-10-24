@@ -1,5 +1,5 @@
-const _excluded = ["y"];
 var _C;
+const _excluded = ["y"];
 let result;
 class C {}
 _C = C;

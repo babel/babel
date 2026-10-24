@@ -5,8 +5,8 @@ class C {
     x = "x";
     try {
       throw new C();
-    } catch (_e) {
-      let x = _e.#x;
+    } catch (_ref) {
+      let x = _ref.#x;
     }
   }
 }

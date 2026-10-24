@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "names": [],
+  "sources": [
+    "sourcemap/assignment-loc/input.js"
+  ],
+  "sourcesContent": [
+    "function fn(arg) {\n  [x, y] = arg;\n  const f = () => ({ z } = arg);\n  return g(([w] = arg));\n}"
+  ],
+  "mappings": "AAAA,SAAS,EAAE,CAAC,GAAG,EAAE;EACf,sCAAS,GAAG;EAAX,CAAC;EAAE,CAAC;EACL,MAAM,CAAC,GAAG;IAAS,CAAC,GAAK,GAAG,CAAT,CAAC;IAAH,OAAQ,GAAG;EAAA,CAAC;EAC7B,OAAO,CAAC,EAAG,CAAC,8BAAI,GAAG,SAAH,GAAG,CAAC,CAAC;AACvB",
+  "ignoreList": []
+}

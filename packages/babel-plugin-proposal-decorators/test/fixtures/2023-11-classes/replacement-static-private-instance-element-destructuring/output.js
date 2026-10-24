@@ -8,16 +8,16 @@ new class extends babelHelpers.identity {
       [_Foo, _initClass] = babelHelpers.applyDecs2311(this, [dec], []).c;
       _staticBlock = function () {
         staticThis = this;
-        getX = _p => {
-          var x = _p.#x;
+        getX = _ref => {
+          var x = _ref.#x;
           return x;
         };
-        getA = _p2 => {
-          var a = _p2.#a;
+        getA = _ref2 => {
+          var a = _ref2.#a;
           return a;
         };
-        callM = _p3 => {
-          var m = _p3.#m;
+        callM = _ref3 => {
+          var m = _ref3.#m;
           return m();
         };
       };

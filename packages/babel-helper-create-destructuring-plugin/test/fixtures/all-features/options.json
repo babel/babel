@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "proposal-destructuring-private",
+    "transform-object-rest-spread",
+    "transform-destructuring",
+    "transform-class-properties",
+    "transform-class-static-block"
+  ]
+}

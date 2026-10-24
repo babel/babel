@@ -1,5 +1,12 @@
 {
   "plugins": [
-    ["transform-object-rest-spread", { "loose": true, "useBuiltIns": true }]
+    [
+      "transform-object-rest-spread",
+      {
+        "loose": true,
+        "useBuiltIns": true
+      }
+    ],
+    "../../helpers/checkScopeInfo.js"
   ]
 }

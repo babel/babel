@@ -1,3 +1,4 @@
+const _excluded = ["y"];
 let result;
 class C {
   static #x = "#x";
@@ -8,9 +9,9 @@ class C {
   static {
     var x = C.#x,
       {
-        y,
-        ...z
-      } = C;
+        y
+      } = C,
+      z = babelHelpers.objectWithoutProperties(C, _excluded);
     result = {
       x,
       y,

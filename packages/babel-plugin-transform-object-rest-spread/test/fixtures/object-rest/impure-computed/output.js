@@ -1,4 +1,4 @@
-var _key, _key2, _key3;
+var _key, _key2, _key3, _key4;
 var key, x, y, z;
 // impure
 key = 1;
@@ -38,11 +38,10 @@ var _$z = {
   z: "zee"
 };
 ({
-  [key]: y,
+  [_key4 = key]: y,
   z
 } = _$z);
-x = babelHelpers.objectWithoutProperties(_$z, [key, "z"].map(babelHelpers.toPropertyKey));
-_$z;
+x = babelHelpers.objectWithoutProperties(_$z, [_key4, "z"].map(babelHelpers.toPropertyKey));
 expect(y).toBe("two");
 expect(x).toEqual({});
 expect(z).toBe("zee");

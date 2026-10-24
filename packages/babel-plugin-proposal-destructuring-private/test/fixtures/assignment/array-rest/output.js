@@ -2,7 +2,10 @@ let x, z;
 class C {
   static #x;
   static {
-    var _p, _p2, _m;
-    [_p, ..._p2] = [C], _m = _p.#x, x = _m === void 0 ? 1 : _m, z = _p2;
+    var _ref, _ref2;
+    [_ref, ..._ref2] = [C];
+    var _ref$x = _ref.#x;
+    x = _ref$x === void 0 ? 1 : _ref$x;
+    z = _ref2;
   }
 }

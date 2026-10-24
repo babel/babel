@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "transform-object-rest-spread",
+    ["proposal-discard-binding", { "syntaxType": "void" }]
+  ],
+  "parserOpts": { "plugins": [["discardBinding", { "syntaxType": "void" }]] }
+}

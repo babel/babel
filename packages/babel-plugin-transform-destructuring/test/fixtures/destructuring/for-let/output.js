@@ -1,1 +1,1 @@
-for (var _range = range, _range2 = babelHelpers.slicedToArray(_range, 2), i = _range2[0], n = _range2[1];;) {}
+for (var _range = babelHelpers.slicedToArray(range, 2), i = _range[0], n = _range[1];;) {}

@@ -11,7 +11,7 @@ _C = C;
   x = "x";
   try {
     throw new _C();
-  } catch (_e) {
-    let x = babelHelpers.classPrivateFieldGet2(_x, _e);
+  } catch (_ref) {
+    let x = babelHelpers.classPrivateFieldGet2(_x, _ref);
   }
 })();

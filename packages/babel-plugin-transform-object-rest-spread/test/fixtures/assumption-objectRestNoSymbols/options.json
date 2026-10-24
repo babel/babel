@@ -1,5 +1,8 @@
 {
-  "plugins": ["transform-object-rest-spread"],
+  "plugins": [
+    "transform-object-rest-spread",
+    "../../helpers/checkScopeInfo.js"
+  ],
   "assumptions": {
     "objectRestNoSymbols": true
   }

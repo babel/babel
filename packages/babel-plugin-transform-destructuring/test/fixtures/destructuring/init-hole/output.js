@@ -38,14 +38,14 @@ expect(g).toEqual(undefined);
 let thrown;
 try {
   thrown = false;
-  babelHelpers.objectDestructuringEmpty();
+  babelHelpers.objectDestructuringEmpty(void 0);
 } catch (e) {
   thrown = true;
 }
 expect(thrown).toEqual(true);
 try {
   thrown = false;
-  var _ = babelHelpers.slicedToArray(void 0, 0);
+  babelHelpers.slicedToArray(void 0, 0);
 } catch (e) {
   thrown = true;
 }

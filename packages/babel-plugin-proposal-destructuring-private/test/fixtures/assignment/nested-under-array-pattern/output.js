@@ -7,8 +7,15 @@ class C {
     return C;
   }
   static {
-    var _p, _p2, _p3, _p4, _m;
+    var _ref, _ref2, _ref3, _ref4;
     let x, y, z;
-    [_p, _p2,, _p3] = [this, this], x = (_p === void 0 ? C.self : _p).#x, [, _p4] = _p2.#y, _m = (_p4 === void 0 ? C.self : _p4).#z, y = _m === void 0 ? C.#self() : _m, z = _p3 === void 0 ? y.#y : _p3;
+    [_ref, _ref2,, _ref3] = [this, this];
+    var _ref5 = _ref === void 0 ? C.self : _ref;
+    x = _ref5.#x;
+    [, _ref4] = _ref2.#y;
+    var _ref6 = _ref4 === void 0 ? C.self : _ref4;
+    var _ref6$z = _ref6.#z;
+    y = _ref6$z === void 0 ? C.#self() : _ref6$z;
+    z = _ref3 === void 0 ? y.#y : _ref3;
   }
 }

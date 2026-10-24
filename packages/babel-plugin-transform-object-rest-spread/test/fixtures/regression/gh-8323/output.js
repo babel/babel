@@ -4,7 +4,7 @@ const get = () => {
   return 3;
 };
 const f = _ref => {
-  let {
+  var {
       a = get(),
       b
     } = _ref,

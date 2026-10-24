@@ -71,6 +71,9 @@
       "path": "./packages/babel-helper-create-class-features-plugin"
     },
     {
+      "path": "./packages/babel-helper-create-destructuring-plugin"
+    },
+    {
       "path": "./packages/babel-helper-create-regexp-features-plugin"
     },
     {

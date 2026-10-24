@@ -1,0 +1,9 @@
+var _o$foo = o.foo,
+  bar = _o$foo.bar,
+  qux = babelHelpers.objectWithoutProperties(_o$foo, ["bar"]);
+const _obj = obj,
+  _obj$a = _obj.a,
+  innerA = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_obj$a), _obj$a)),
+  _obj$b = _obj.b,
+  innerB = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_obj$b), _obj$b)),
+  outer = babelHelpers.objectWithoutProperties(_obj, ["a", "b"]);
