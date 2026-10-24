@@ -27,3 +27,7 @@ expect(() => {
   const [void, void] = [late];
   const late = 1;
 }).toThrow(ReferenceError);
+
+// Discarding function values never calls their bodies.
+const [void] = [() => { throw "must not run"; }];
+const [void] = [(0, function () { throw "must not run"; })];
