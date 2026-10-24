@@ -1,0 +1,12 @@
+{
+  "parserOpts": {
+    "plugins": [
+      [
+        "discardBinding",
+        {
+          "syntaxType": "void"
+        }
+      ]
+    ]
+  }
+}
