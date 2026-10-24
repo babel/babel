@@ -9,6 +9,7 @@ import { collectScopeInfo, registerReplacement } from "./scope.ts";
 import { needsLowering } from "./util.ts";
 
 type Param = t.Function["params"][number];
+type Binding = Scope["bindings"][string];
 
 /**
  * Replace parameters containing object rest or private keys with a
@@ -27,6 +28,19 @@ interface ConflictState {
   index: number;
   isLowered: boolean;
   conflict: boolean;
+}
+
+/**
+ * Whether a parameter is redeclared in the function body, which then has its
+ * own binding for that name.
+ */
+function isRedeclaredInBody(binding: Binding): boolean {
+  return binding.constantViolations.some(
+    violation =>
+      violation.isVariableDeclarator() ||
+      violation.isFunctionDeclaration() ||
+      violation.isClassDeclaration(),
+  );
 }
 
 // If another parameter (e.g. a default value) references a binding that
@@ -50,8 +64,10 @@ const conflictVisitor: Visitor<ConflictState> = {
         path.scope.getBinding(name) === functionScope.getBinding(name)) ||
       (owner === undefined &&
         binding &&
-        binding.kind !== "param" &&
-        state.isLowered)
+        state.isLowered &&
+        // A parameter redeclared in the body is a different binding there,
+        // e.g. for closures: function f({ a = () => x }, x) { var x; }
+        (binding.kind !== "param" || isRedeclaredInBody(binding)))
     ) {
       state.conflict = true;
       path.stop();
@@ -115,14 +131,10 @@ export function transformFunctionParams(
   }
 
   // Parameters redeclared in the function body
-  const shadowed = [...ownerOf.keys()].some(name =>
-    functionScope.bindings[name]?.constantViolations.some(
-      violation =>
-        violation.isVariableDeclarator() ||
-        violation.isFunctionDeclaration() ||
-        violation.isClassDeclaration(),
-    ),
-  );
+  const shadowed = [...ownerOf.keys()].some(name => {
+    const binding = functionScope.getOwnBinding(name);
+    return binding && isRedeclaredInBody(binding);
+  });
 
   // The lowered parameters are destructured in the body: the following
   // parameters must not be evaluated before them.
