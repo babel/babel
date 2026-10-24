@@ -1,0 +1,132 @@
+{
+  "type": "File",
+  "start":0,"end":67,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":14,"column":7,"index":67}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":67,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":14,"column":7,"index":67}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":5,"index":9}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":9,"loc":{"start":{"line":2,"column":0,"index":4},"end":{"line":2,"column":5,"index":9}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":9,"loc":{"start":{"line":2,"column":0,"index":4},"end":{"line":2,"column":5,"index":9},"identifierName":"yield"},
+              "name": "yield"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":10,"end":19,"loc":{"start":{"line":3,"column":0,"index":10},"end":{"line":4,"column":5,"index":19}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":14,"end":19,"loc":{"start":{"line":4,"column":0,"index":14},"end":{"line":4,"column":5,"index":19}},
+            "id": {
+              "type": "Identifier",
+              "start":14,"end":19,"loc":{"start":{"line":4,"column":0,"index":14},"end":{"line":4,"column":5,"index":19},"identifierName":"await"},
+              "name": "await"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":20,"end":29,"loc":{"start":{"line":5,"column":0,"index":20},"end":{"line":6,"column":5,"index":29}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":24,"end":29,"loc":{"start":{"line":6,"column":0,"index":24},"end":{"line":6,"column":5,"index":29}},
+            "id": {
+              "type": "Identifier",
+              "start":24,"end":29,"loc":{"start":{"line":6,"column":0,"index":24},"end":{"line":6,"column":5,"index":29},"identifierName":"async"},
+              "name": "async"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":30,"end":36,"loc":{"start":{"line":7,"column":0,"index":30},"end":{"line":8,"column":2,"index":36}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":34,"end":36,"loc":{"start":{"line":8,"column":0,"index":34},"end":{"line":8,"column":2,"index":36}},
+            "id": {
+              "type": "Identifier",
+              "start":34,"end":36,"loc":{"start":{"line":8,"column":0,"index":34},"end":{"line":8,"column":2,"index":36},"identifierName":"of"},
+              "name": "of"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":37,"end":47,"loc":{"start":{"line":9,"column":0,"index":37},"end":{"line":10,"column":6,"index":47}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":41,"end":47,"loc":{"start":{"line":10,"column":0,"index":41},"end":{"line":10,"column":6,"index":47}},
+            "id": {
+              "type": "Identifier",
+              "start":41,"end":47,"loc":{"start":{"line":10,"column":0,"index":41},"end":{"line":10,"column":6,"index":47},"identifierName":"static"},
+              "name": "static"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":48,"end":55,"loc":{"start":{"line":11,"column":0,"index":48},"end":{"line":12,"column":3,"index":55}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":52,"end":55,"loc":{"start":{"line":12,"column":0,"index":52},"end":{"line":12,"column":3,"index":55}},
+            "id": {
+              "type": "Identifier",
+              "start":52,"end":55,"loc":{"start":{"line":12,"column":0,"index":52},"end":{"line":12,"column":3,"index":55},"identifierName":"iff"},
+              "name": "iff"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start":56,"end":67,"loc":{"start":{"line":13,"column":0,"index":56},"end":{"line":14,"column":7,"index":67}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":60,"end":67,"loc":{"start":{"line":14,"column":0,"index":60},"end":{"line":14,"column":7,"index":67}},
+            "id": {
+              "type": "Identifier",
+              "start":60,"end":67,"loc":{"start":{"line":14,"column":0,"index":60},"end":{"line":14,"column":7,"index":67},"identifierName":"nullish"},
+              "name": "nullish"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}
