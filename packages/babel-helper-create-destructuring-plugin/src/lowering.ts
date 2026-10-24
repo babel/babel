@@ -2,6 +2,7 @@ import { types as t, template } from "@babel/core";
 import type { File, Scope } from "@babel/core";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { canUnpackArrayPattern } from "./array-unpacking.ts";
+import { buildNamedDefault } from "./named-evaluation.ts";
 import {
   buildObjectExcludingKeys,
   hasArrayRest,
@@ -422,99 +423,6 @@ export class Lowering {
     }
   }
 
-  /** Infer default names before class static initialization. */
-  private namedDefault(left: t.LVal, right: t.Expression): t.Expression {
-    let defaultValue = right;
-    if (t.isIdentifier(left) && isAnonymousFunctionDefinition(right)) {
-      // https://tc39.es/ecma262/#sec-runtime-semantics-namedevaluation
-      if (t.isClassExpression(right) && left.name === "__proto__") {
-        // An object property with this name would set the prototype.
-        // Keep references to the outer binding outside the class's scope.
-        if (this.scope.getBinding(left.name)) {
-          this.scope.rename(left.name);
-        } else {
-          const outer = this.scope.generateUidIdentifier("outer");
-          this.hoisted.push(outer);
-          this.scope.path.traverse({
-            ClassExpression(path) {
-              if (path.node !== right) return;
-              path.traverse({
-                "TypeAnnotation|TSTypeAnnotation|TypeParameterDeclaration|TSTypeParameterDeclaration"(
-                  path,
-                ) {
-                  path.skip();
-                },
-                "ReferencedIdentifier|BindingIdentifier"(path) {
-                  if (
-                    path.node.name === "__proto__" &&
-                    !path.scope.getBinding("__proto__")
-                  ) {
-                    path.replaceWith(
-                      t.memberExpression(
-                        t.cloneNode(outer),
-                        t.identifier("value"),
-                      ),
-                    );
-                  }
-                },
-              });
-              path.stop();
-            },
-          });
-          const setterBody = t.blockStatement([
-            t.expressionStatement(
-              t.assignmentExpression(
-                "=",
-                t.identifier("__proto__"),
-                t.identifier("value"),
-              ),
-            ),
-          ]);
-          setterBody.directives = [
-            t.directive(t.directiveLiteral("use strict")),
-          ];
-          defaultValue = t.sequenceExpression([
-            t.assignmentExpression(
-              "=",
-              t.cloneNode(outer),
-              t.objectExpression([
-                t.objectMethod(
-                  "get",
-                  t.identifier("value"),
-                  [],
-                  t.blockStatement([
-                    t.returnStatement(t.identifier("__proto__")),
-                  ]),
-                ),
-                t.objectMethod(
-                  "set",
-                  t.identifier("value"),
-                  [t.identifier("value")],
-                  setterBody,
-                ),
-              ]),
-            ),
-            right,
-          ]);
-        }
-        right.id = t.identifier("__proto__");
-      } else {
-        defaultValue = t.isClassExpression(right)
-          ? // Property definitions infer the name before static initialization.
-            t.memberExpression(
-              t.objectExpression([t.objectProperty(t.cloneNode(left), right)]),
-              t.cloneNode(left),
-            )
-          : t.callExpression(this.addHelper("setFunctionName"), [
-              right,
-              t.stringLiteral(left.name),
-            ]);
-      }
-    }
-
-    return defaultValue;
-  }
-
   private lowerDefault(left: t.LVal, right: t.Expression, ref: Ref) {
     // handle array init with void 0. This also happens when
     // the value was originally a hole.
@@ -530,7 +438,7 @@ export class Lowering {
       return;
     }
 
-    const defaultValue = this.namedDefault(left, right);
+    const defaultValue = buildNamedDefault(left, right, this);
 
     const { scope } = this;
     if (this.isMemberTarget(left)) {
