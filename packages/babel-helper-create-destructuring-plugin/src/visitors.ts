@@ -14,6 +14,7 @@ import {
 import {
   isAnonymousFunctionDefinition,
   isValueUsed,
+  markTemporary,
   needsLowering,
   referencesName,
   unshiftForXStatementBody,
@@ -298,6 +299,8 @@ function transformForXStatement(
   // nodes first, as some of them get new paths.
   forgetScopeInfo(path);
   const ref = scope.generateUidIdentifier("ref");
+  // Only assigned by the loop head, before each iteration
+  markTemporary(scope, ref.name);
   node.left = t.variableDeclaration(isDeclaration ? left.kind : "var", [
     t.variableDeclarator(ref),
   ]);

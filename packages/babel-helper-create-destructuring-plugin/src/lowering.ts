@@ -18,6 +18,8 @@ import {
   isPureVoid,
   isSafeToEvaluate,
   isStablePropertyKey,
+  isTemporary,
+  markTemporary,
   needsLowering,
   propertyNeedsLowering,
   someTarget,
@@ -253,7 +255,6 @@ export class Lowering {
    */
   readonly hoisted: t.Identifier[] = [];
   private readonly refs: Ref[] = [];
-  private readonly temps = new Set<string>();
 
   readonly scope: Scope;
   readonly options: ResolvedOptions;
@@ -333,7 +334,7 @@ export class Lowering {
     {
       isStatic = this.scope.isStatic(expr) ||
         // Our own temporaries are never reassigned by user code.
-        (t.isIdentifier(expr) && this.temps.has(expr.name)),
+        (t.isIdentifier(expr) && isTemporary(this.scope, expr.name)),
       isArray = false,
       nameHint = expr,
     }: {
@@ -356,7 +357,7 @@ export class Lowering {
 
   private temp(init: t.Expression, nameHint: t.Node = init): t.Identifier {
     const id = this.scope.generateUidIdentifierBasedOnNode(nameHint);
-    this.temps.add(id.name);
+    markTemporary(this.scope, id.name);
     this.steps.push({
       kind: StepKind.Temp,
       id,
