@@ -29,6 +29,47 @@ const buildSafeArgumentsAccess = template.statement(`
   let $0 = arguments.length > $1 ? arguments[$1] : undefined;
 `);
 
+/** Whether a default can be evaluated earlier without effects or errors. */
+export function isDefaultEvaluationObservable(
+  node: t.Node,
+  scope: Scope,
+): boolean {
+  if (t.isPureish(node)) return false;
+  if (t.isIdentifier(node)) {
+    // Even a constant binding may still be in its TDZ.
+    return !(
+      ["undefined", "Infinity", "NaN"].includes(node.name) &&
+      !scope.hasBinding(node.name, { noGlobals: true })
+    );
+  }
+  if (t.isUnaryExpression(node)) {
+    return (
+      !["void", "typeof", "!"].includes(node.operator) ||
+      isDefaultEvaluationObservable(node.argument, scope)
+    );
+  }
+  if (t.isArrayExpression(node)) {
+    return node.elements.some(
+      element => element && isDefaultEvaluationObservable(element, scope),
+    );
+  }
+  if (t.isObjectExpression(node)) {
+    return node.properties.some(
+      prop =>
+        !t.isObjectProperty(prop) ||
+        prop.computed ||
+        isDefaultEvaluationObservable(prop.value, scope),
+    );
+  }
+  if (t.isSequenceExpression(node)) {
+    return node.expressions.some(expr =>
+      isDefaultEvaluationObservable(expr, scope),
+    );
+  }
+  if (t.isTemplateLiteral(node)) return node.expressions.length !== 0;
+  return true;
+}
+
 /**
  * Whether evaluating the parameter can run user code, or read bindings that
  * user code could modify.
@@ -41,7 +82,10 @@ export function isParamEvaluationObservable(
     case "Identifier":
       return false;
     case "AssignmentPattern":
-      return !t.isIdentifier(param.left) || !scope.isPure(param.right, true);
+      return (
+        !t.isIdentifier(param.left) ||
+        isDefaultEvaluationObservable(param.right, scope)
+      );
     case "RestElement":
       return !t.isIdentifier(param.argument);
     default:
