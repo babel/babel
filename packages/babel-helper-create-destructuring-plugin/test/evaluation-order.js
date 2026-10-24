@@ -30,6 +30,19 @@ function expectSameEvaluation(
 }
 
 const keyExpressions = ["key", "+key", "-key", "~key", "`${key}`", 'key + ""'];
+
+it.each(["1n / 0n", "+1n", "1n + 1", "1n >>> 0n"])(
+  "evaluates a throwing computed key %s before the assignment target",
+  key => {
+    for (const target of ["missing.x", "null.x", "missing.x = 0"]) {
+      expectSameEvaluation(
+        `try { ({ [${key}]: ${target} } = {}); }
+         catch (error) { return error.name; }`,
+        FEATURES.destructuring,
+      );
+    }
+  },
+);
 const patterns = [
   "const { [KEY]: value = fallback(), ...rest } = source; return [log, value, rest];",
   "let value, rest; ({ [KEY]: value = fallback(), ...rest } = source); return [log, value, rest];",
