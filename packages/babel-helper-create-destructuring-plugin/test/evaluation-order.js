@@ -31,6 +31,41 @@ function expectSameEvaluation(
 
 const keyExpressions = ["key", "+key", "-key", "~key", "`${key}`", 'key + ""'];
 
+it.each(["+key", "key + 0", "`${key}`", "{ [key]: 1 }", "+1n"])(
+  "keeps a parameter default %s after earlier destructuring",
+  expression => {
+    for (const param of ["b", "{ b, ...laterRest }"]) {
+      expectSameEvaluation(
+        `
+          const log = [];
+          const key = {
+            valueOf() { log.push("valueOf"); return 2; },
+            toString() { log.push("toString"); return "b"; }
+          };
+          function f({ a, ...rest }, ${param} = ${expression}) {}
+          for (const source of [{ get a() { log.push("get"); return 1; } }, null]) {
+            try { f(source); } catch (error) { log.push(error.name); }
+          }
+          return log;
+        `,
+        FEATURES.objectRest,
+      );
+    }
+  },
+);
+
+it("keeps a parameter default in its TDZ after earlier destructuring", () => {
+  expectSameEvaluation(
+    `const log = [];
+     function f({ a, ...rest }, b = key) {}
+     try { f({ get a() { log.push("get"); return 1; } }); }
+     catch (error) { log.push(error.name); }
+     const key = 2;
+     return log;`,
+    FEATURES.objectRest,
+  );
+});
+
 it.each(["1n / 0n", "+1n", "1n + 1", "1n >>> 0n"])(
   "evaluates a throwing computed key %s before the assignment target",
   key => {
