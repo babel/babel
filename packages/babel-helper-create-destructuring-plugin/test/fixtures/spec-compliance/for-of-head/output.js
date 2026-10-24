@@ -12,13 +12,12 @@ for (const _ref of items) {
   use(a, c, d, rest);
 }
 for (var _ref2 of items) {
-  var _ref3 = _ref2;
-  x = _ref3.x;
-  y = babelHelpers.objectWithoutProperties(_ref3, _excluded2);
+  x = _ref2.x;
+  y = babelHelpers.objectWithoutProperties(_ref2, _excluded2);
 }
-for (var _ref4 in obj) {
-  var _ref5 = babelHelpers.slicedToArray(_ref4, 2),
-    k = _ref5[0],
-    v = _ref5[1].v;
+for (var _ref3 in obj) {
+  var _ref4 = babelHelpers.slicedToArray(_ref3, 2),
+    k = _ref4[0],
+    v = _ref4[1].v;
   ;
 }
