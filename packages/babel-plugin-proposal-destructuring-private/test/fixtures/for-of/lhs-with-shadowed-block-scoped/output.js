@@ -5,10 +5,11 @@ class C {
     var x,
       a = "a";
     for (var _ref of [C]) {
-      x = _ref.#x;
+      var _ref2 = _ref;
+      x = _ref2.#x;
       ({
         [a]: a
-      } = _ref);
+      } = _ref2);
       {
         const a = "A";
       }
