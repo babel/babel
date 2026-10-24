@@ -13,7 +13,6 @@ import {
   hasObjectRest,
   isAnonymousFunctionDefinition,
   isObjectCoercible,
-  isPrimitiveExpression,
   isPropertyKeyExpression,
   isPureVoid,
   isSafeToEvaluate,
@@ -540,11 +539,8 @@ export class Lowering {
       const prop = properties[i] as t.ObjectProperty;
       // private keys are not enumerable, so they are never excluded
       if (prop.key.type !== "PrivateName") hasExcludedKey = true;
-      if (
-        prop.computed &&
-        (!isPrimitiveExpression(prop.key) ||
-          !isSafeToEvaluate(prop.key, this.scope))
-      ) {
+      // Evaluating the key could observe that the check was delayed
+      if (prop.computed && !isStablePropertyKey(prop.key, this.scope)) {
         return true;
       }
       // Skipped and `void` properties are not read

@@ -139,9 +139,19 @@ export function isObjectCoercible(node: t.Node): boolean {
   }
 }
 
-/** Whether a computed key can be evaluated and coerced again later. */
+/**
+ * Whether a computed key can be evaluated and coerced again later, with no
+ * observable effects: `Symbol.for` always returns the same symbol for a
+ * given key, and well-known symbols are not writable.
+ */
 export function isStablePropertyKey(node: t.Node, scope: Scope): boolean {
-  return isPrimitiveExpression(node) && isSafeToEvaluate(node, scope);
+  if (isPrimitiveExpression(node)) return isSafeToEvaluate(node, scope);
+  if (isWellKnownSymbol(node, scope)) return true;
+  return (
+    isSymbolFor(node, scope) &&
+    node.arguments.length === 1 &&
+    isStablePropertyKey(node.arguments[0], scope)
+  );
 }
 
 const SIDE_EFFECT_NODES = new Set([
@@ -390,13 +400,28 @@ export function isPropertyKeyExpression(key: t.Node, scope: Scope): boolean {
     t.isStringLiteral(key) ||
     t.isTemplateLiteral(key) ||
     t.isUnaryExpression(key, { operator: "typeof" }) ||
-    (!scope.hasBinding("Symbol", { noGlobals: true }) &&
-      ((t.isMemberExpression(key, { computed: false }) &&
-        t.isIdentifier(key.object, { name: "Symbol" }) &&
-        t.isIdentifier(key.property) &&
-        wellKnownSymbols.has(key.property.name)) ||
-        (t.isCallExpression(key) &&
-          t.matchesPattern(key.callee, "Symbol.for"))))
+    isWellKnownSymbol(key, scope) ||
+    isSymbolFor(key, scope)
+  );
+}
+
+/** `Symbol.iterator`, and the other well-known symbols */
+function isWellKnownSymbol(key: t.Node, scope: Scope): boolean {
+  return (
+    t.isMemberExpression(key, { computed: false }) &&
+    t.isIdentifier(key.object, { name: "Symbol" }) &&
+    t.isIdentifier(key.property) &&
+    wellKnownSymbols.has(key.property.name) &&
+    !scope.hasBinding("Symbol", { noGlobals: true })
+  );
+}
+
+/** `Symbol.for(...)` */
+function isSymbolFor(key: t.Node, scope: Scope): key is t.CallExpression {
+  return (
+    t.isCallExpression(key) &&
+    t.matchesPattern(key.callee, "Symbol.for") &&
+    !scope.hasBinding("Symbol", { noGlobals: true })
   );
 }
 
