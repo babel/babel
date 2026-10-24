@@ -140,6 +140,42 @@ export function isObjectCoercible(node: t.Node): boolean {
 }
 
 /**
+ * Whether evaluating `node` can neither throw nor run user code: it is an
+ * identifier referencing a binding that is initialized when `node` is
+ * evaluated in `scope`. Lexical bindings must be declared before `node` in
+ * the same function, so that they are not in their TDZ (outside of `switch`
+ * statements, whose cases can skip declarations).
+ */
+export function isInitializedReference(node: t.Node, scope: Scope): boolean {
+  if (!t.isIdentifier(node)) return false;
+  const binding = scope.getBinding(node.name);
+  if (!binding) return false;
+  switch (binding.kind) {
+    case "var":
+    case "hoisted":
+      return true;
+    case "param": {
+      // In their TDZ in the parameter list
+      const fn = binding.scope.block as t.Function;
+      return node.start != null && node.start >= fn.body.start!;
+    }
+    case "let":
+    case "const": {
+      const { end } = binding.path.node;
+      return (
+        end != null &&
+        node.start != null &&
+        end <= node.start &&
+        binding.scope.getFunctionParent() === scope.getFunctionParent() &&
+        !binding.scope.path.isSwitchStatement()
+      );
+    }
+    default:
+      return false;
+  }
+}
+
+/**
  * Whether a computed key can be evaluated and coerced again later, with no
  * observable effects: `Symbol.for` always returns the same symbol for a
  * given key, and well-known symbols are not writable.
