@@ -9,6 +9,7 @@ d.e = _ref2$2[0];
 f = _ref2[1];
 var _ref3 = [obj, g.h];
 var _ref3$ = _ref3[0];
+babelHelpers.objectDestructuringEmpty(_ref3$);
 g.h = _ref3$.x;
 i = _ref3[1];
 _ref3;

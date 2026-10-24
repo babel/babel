@@ -1,8 +1,8 @@
-for (_o = o, obj.x = (_o$a = _o.a) === void 0 ? 1 : _o$a;;) {
+for (_o = o, babelHelpers.objectDestructuringEmpty(_o), obj.x = (_o$a = _o.a) === void 0 ? 1 : _o$a;;) {
   var _o$a, _o;
   break;
 }
-while (_o2 = o, obj.y = (_o$b = _o2.b) === void 0 ? 2 : _o$b, _o2) {
+while (_o2 = o, babelHelpers.objectDestructuringEmpty(_o2), obj.y = (_o$b = _o2.b) === void 0 ? 2 : _o$b, _o2) {
   var _o$b, _o2;
   break;
 }
@@ -11,6 +11,7 @@ try {
 } catch (e) {
   var _e$c;
   var _e = e;
+  babelHelpers.objectDestructuringEmpty(_e);
   obj.z = (_e$c = _e.c) === void 0 ? 3 : _e$c;
   _e;
 }

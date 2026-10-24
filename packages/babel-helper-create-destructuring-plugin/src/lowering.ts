@@ -545,7 +545,13 @@ export class Lowering {
       }
       // Skipped and `void` properties are not read
       if (plan === PropertyPlan.Lower && prop.value.type !== "VoidPattern") {
-        return false;
+        // Assignment references run before the property read, so they cannot
+        // perform the pattern's initial RequireObjectCoercible check for us.
+        const target =
+          prop.value.type === "AssignmentPattern"
+            ? prop.value.left
+            : prop.value;
+        return this.isMemberTarget(target);
       }
     }
     return true;
