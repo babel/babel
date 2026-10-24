@@ -7,10 +7,9 @@ var _loop = function (foo) {
   }
 };
 for (var _ref of {}) {
-  var _ref2 = _ref,
-    {
+  var {
       foo
-    } = _ref2,
-    bar = babelHelpers.objectWithoutPropertiesLoose(_ref2, _excluded);
+    } = _ref,
+    bar = babelHelpers.objectWithoutPropertiesLoose(_ref, _excluded);
   _loop(foo);
 }

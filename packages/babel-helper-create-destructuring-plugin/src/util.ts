@@ -487,9 +487,9 @@ export function getExtendsHelper(
 }
 
 /**
- * Build `objectWithoutProperties(objRef, [...excludedKeys])`, or
- * `objectWithoutProperties((objectDestructuringEmpty(objRef), objRef), [])` when there is
- * no key to exclude.
+ * Build `objectWithoutProperties(objRef, [...excludedKeys])`. Without excluded
+ * keys, snapshot the source with Object.assign first, preserving its own-key,
+ * descriptor and value trap order.
  */
 export function buildObjectExcludingKeys(
   excludedKeys: ExcludedKey[],
@@ -497,6 +497,7 @@ export function buildObjectExcludingKeys(
   scope: Scope,
   addHelper: File["addHelper"],
   objectRestNoSymbols: boolean,
+  useBuiltIns: boolean = false,
 ): t.CallExpression {
   // `objRef` may be needed more than once: either clone it, or ask the
   // caller for a new node each time.
@@ -554,11 +555,20 @@ export function buildObjectExcludingKeys(
           : "objectWithoutProperties",
       ),
       [
-        t.sequenceExpression([
-          t.callExpression(addHelper("objectDestructuringEmpty"), [
+        // The null prototype lets Object.assign create an own __proto__ data
+        // property. The rest helper then copies these plain data properties
+        // to an ordinary object without touching the original source again.
+        t.callExpression(getExtendsHelper(useBuiltIns, addHelper), [
+          t.callExpression(
+            t.memberExpression(t.identifier("Object"), t.identifier("create")),
+            [t.nullLiteral()],
+          ),
+          t.sequenceExpression([
+            t.callExpression(addHelper("objectDestructuringEmpty"), [
+              getObjRef(),
+            ]),
             getObjRef(),
           ]),
-          getObjRef(),
         ]),
         t.arrayExpression([]),
       ],

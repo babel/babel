@@ -107,6 +107,90 @@ describe.each([
   ["object rest", FEATURES.objectRest],
   ["full destructuring", FEATURES.objectRest | FEATURES.destructuring],
 ])("%s", (_name, feature) => {
+  it.each([false, true])(
+    "copies a rest-only Proxy in key order (useBuiltIns: %s)",
+    useBuiltIns => {
+      for (const objectRestNoSymbols of [false, true]) {
+        for (const pattern of [
+          "const { ...rest } = source;",
+          "let rest; ({ ...rest } = source);",
+          "let rest; const receiver = {}; function targetRef() { log.push('target'); return receiver; } ({ ...targetRef().value } = source); rest = receiver.value;",
+          "let rest; function f({ ...value }) { rest = value; } f(source);",
+          "let rest; for (const { ...value } of [source]) rest = value;",
+          "let rest; try { throw source; } catch ({ ...value }) { rest = value; }",
+        ]) {
+          expectSameEvaluation(
+            `
+              const log = [];
+              const symbol = Symbol("key");
+              const target = { a: 1, ["__proto__"]: { own: true }, b: 2 };
+              Object.defineProperty(target, "hidden", { value: 4 });
+              if (!${objectRestNoSymbols}) target[symbol] = 3;
+              const source = new Proxy(target, {
+                ownKeys() {
+                  log.push("keys");
+                  return ${objectRestNoSymbols}
+                    ? ["b", "hidden", "__proto__", "a"]
+                    : [symbol, "b", "hidden", "__proto__", "a"];
+                },
+                getOwnPropertyDescriptor(target, key) {
+                  log.push(["descriptor", String(key)]);
+                  return Reflect.getOwnPropertyDescriptor(target, key);
+                },
+                get(target, key, receiver) {
+                  log.push(["get", String(key)]);
+                  return Reflect.get(target, key, receiver);
+                },
+                getPrototypeOf() { throw new Error("prototype visited"); }
+              });
+              ${pattern}
+              return [
+                log,
+                Reflect.ownKeys(rest).map(String),
+                Object.getOwnPropertyDescriptor(rest, "__proto__"),
+                Object.getPrototypeOf(rest) === Object.prototype,
+                rest.a, rest.b, rest[symbol]
+              ];
+            `,
+            feature,
+            { useBuiltIns, objectRestNoSymbols },
+          );
+        }
+      }
+    },
+  );
+
+  it.each(["none", "descriptor", "value"])(
+    "interleaves rest-only descriptors and reads until %s throws",
+    throwing => {
+      expectSameEvaluation(
+        `
+          const log = [];
+          const target = { a: 1, b: 2, c: 3 };
+          const source = new Proxy(target, {
+            ownKeys(target) { log.push("keys"); return Reflect.ownKeys(target); },
+            getOwnPropertyDescriptor(target, key) {
+              log.push(["descriptor", key]);
+              if (key === "b" && ${JSON.stringify(throwing)} === "descriptor") throw new Error("descriptor");
+              return Reflect.getOwnPropertyDescriptor(target, key);
+            },
+            get(target, key) {
+              log.push(["get", key]);
+              if (key === "b" && ${JSON.stringify(throwing)} === "value") throw new Error("value");
+              if (key === "a" && ${JSON.stringify(throwing)} === "none") delete target.b;
+              return target[key];
+            },
+            getPrototypeOf() { log.push("prototype"); return Object.prototype; }
+          });
+          try { const { ...rest } = source; log.push(Object.keys(rest)); }
+          catch (error) { log.push(error.message); }
+          return log;
+        `,
+        feature,
+      );
+    },
+  );
+
   it.each(["{ omitted, ...rest }", "{ ...rest }"])(
     "copies an own __proto__ data property with %s",
     pattern => {

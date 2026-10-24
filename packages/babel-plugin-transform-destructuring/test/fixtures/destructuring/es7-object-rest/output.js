@@ -1,7 +1,7 @@
 var _excluded = ["x"];
 var z = {};
 var _z = z,
-  x = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_z), _z), []);
+  x = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_z), _z)), []);
 var _z2 = z,
   x = _z2.x,
   y = babelHelpers.objectWithoutProperties(_z2, ["x"]);
