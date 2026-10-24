@@ -14,9 +14,8 @@ import baselinePresetTypescript from "@babel-baseline/preset-typescript";
 import baselinePluginCommonjs from "@babel-baseline/plugin-transform-modules-commonjs";
 
 import { Bench } from "tinybench";
-import { globSync } from "glob";
 import { withCodSpeed } from "@codspeed/tinybench-plugin";
-import { readFileSync, copyFileSync, mkdirSync } from "node:fs";
+import { readFileSync, copyFileSync, mkdirSync, globSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import assert from "node:assert";
