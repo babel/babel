@@ -1640,10 +1640,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // Return true if we can parse an object or array pattern without errors
         const { errors } = this.state;
         const previousErrorCount = errors.length;
-        const scopeDepth = this.scope.scopeStack.length;
-        const prodParamDepth = this.prodParam.stacks.length;
-        const classScopeDepth = this.classScope.stack.length;
-        const expressionScopeDepth = this.expressionScope.stack.length;
+        const scopeStacksSnapshot = this.snapshotScopeStacks();
         try {
           if (isObjectPattern) {
             this.parseObjectLike(tt.braceR, true);
@@ -1656,12 +1653,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           }
           return errors.length === previousErrorCount;
         } catch {
-          this.restoreScopeStacks(
-            scopeDepth,
-            prodParamDepth,
-            classScopeDepth,
-            expressionScopeDepth,
-          );
+          this.restoreScopeStacks(scopeStacksSnapshot);
           return false;
         }
       }

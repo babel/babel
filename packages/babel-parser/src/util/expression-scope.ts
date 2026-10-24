@@ -66,7 +66,7 @@ const enum ExpressionScopeType {
 }
 
 class ExpressionScope {
-  declare type: ExpressionScopeType;
+  declare readonly type: ExpressionScopeType;
 
   constructor(type: ExpressionScopeType = ExpressionScopeType.kExpression) {
     this.type = type;

@@ -39,6 +39,13 @@ type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   failState: FailState;
 };
 
+type ScopeStacksSnapshot = {
+  scopeDepth: number;
+  prodParamDepth: number;
+  classScopeDepth: number;
+  expressionScopeDepth: number;
+};
+
 // ## Parser utilities
 
 export default abstract class UtilParser extends Tokenizer {
@@ -159,20 +166,24 @@ export default abstract class UtilParser extends Tokenizer {
   }
 
   /**
-   * Exit the scopes that a speculative parse left open when it threw, given the
-   * depth of the scope stacks recorded before the parse.
+   * Record the depth of the scope stacks before a speculative parse, so that the
+   * scopes it left open when it threw can be exited by `restoreScopeStacks`.
    */
-  restoreScopeStacks(
-    scopeDepth: number,
-    prodParamDepth: number,
-    classScopeDepth: number,
-    expressionScopeDepth: number,
-  ): void {
+  snapshotScopeStacks(): ScopeStacksSnapshot {
+    return {
+      scopeDepth: this.scope.scopeStack.length,
+      prodParamDepth: this.prodParam.stacks.length,
+      classScopeDepth: this.classScope.stack.length,
+      expressionScopeDepth: this.expressionScope.stack.length,
+    };
+  }
+
+  restoreScopeStacks(snapshot: ScopeStacksSnapshot): void {
     const { scope } = this;
-    while (scope.scopeStack.length > scopeDepth) scope.exit();
-    this.prodParam.stacks.length = prodParamDepth;
-    this.classScope.stack.length = classScopeDepth;
-    this.expressionScope.stack.length = expressionScopeDepth;
+    while (scope.scopeStack.length > snapshot.scopeDepth) scope.exit();
+    this.prodParam.stacks.length = snapshot.prodParamDepth;
+    this.classScope.stack.length = snapshot.classScopeDepth;
+    this.expressionScope.stack.length = snapshot.expressionScopeDepth;
   }
 
   // tryParse will clone parser state.
@@ -187,10 +198,7 @@ export default abstract class UtilParser extends Tokenizer {
     const abortSignal: {
       node: T | null;
     } = { node: null };
-    const scopeDepth = this.scope.scopeStack.length;
-    const prodParamDepth = this.prodParam.stacks.length;
-    const classScopeDepth = this.classScope.stack.length;
-    const expressionScopeDepth = this.expressionScope.stack.length;
+    const scopeStacksSnapshot = this.snapshotScopeStacks();
     try {
       const node = fn((node = null as T) => {
         abortSignal.node = node;
@@ -223,12 +231,7 @@ export default abstract class UtilParser extends Tokenizer {
     } catch (error) {
       const failState = this.state;
       this.state = oldState;
-      this.restoreScopeStacks(
-        scopeDepth,
-        prodParamDepth,
-        classScopeDepth,
-        expressionScopeDepth,
-      );
+      this.restoreScopeStacks(scopeStacksSnapshot);
       if (error instanceof SyntaxError) {
         // @ts-expect-error casting general syntax error to parse error
         return { node: null, error, thrown: true, aborted: false, failState };
