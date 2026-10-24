@@ -6,8 +6,9 @@ var _z2 = z,
   x = _z2.x,
   y = babelHelpers.objectWithoutProperties(_z2, ["x"]);
 var _z3 = z,
-  x = _z3[x],
-  y = babelHelpers.objectWithoutProperties(_z3, [x].map(babelHelpers.toPropertyKey));
+  _x = x,
+  x = _z3[_x],
+  y = babelHelpers.objectWithoutProperties(_z3, [_x].map(babelHelpers.toPropertyKey));
 (function (_ref) {
   var x = _ref.x,
     y = babelHelpers.objectWithoutProperties(_ref, _excluded);

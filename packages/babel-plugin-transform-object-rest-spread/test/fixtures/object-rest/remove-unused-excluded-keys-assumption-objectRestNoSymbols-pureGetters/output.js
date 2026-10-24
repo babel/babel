@@ -6,7 +6,6 @@ var _c = c2;
   a2
 } = _c);
 b2 = babelHelpers.objectWithoutPropertiesLoose(_c, ["a2"]);
-_c;
 class Comp extends React.Component {
   render() {
     const _this$props = this.props,
@@ -20,6 +19,7 @@ class Comp extends React.Component {
   }
 }
 function smth(_ref) {
-  let rest = babelHelpers.objectWithoutPropertiesLoose(_ref, _excluded2);
+  var {} = _ref,
+    rest = babelHelpers.objectWithoutPropertiesLoose(_ref, _excluded2);
   call(rest);
 }

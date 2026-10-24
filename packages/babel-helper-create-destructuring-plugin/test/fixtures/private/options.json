@@ -1,0 +1,17 @@
+{
+  "plugins": [
+    "proposal-destructuring-private",
+    "../../helpers/checkScopeInfo.js"
+  ],
+  "parserOpts": {
+    "plugins": [
+      [
+        "discardBinding",
+        {
+          "syntaxType": "void"
+        }
+      ]
+    ]
+  },
+  "minNodeVersion": "16.11.0"
+}
