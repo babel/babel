@@ -15,6 +15,7 @@ import {
   isAnonymousFunctionDefinition,
   isValueUsed,
   needsLowering,
+  referencesName,
   unshiftForXStatementBody,
 } from "./util.ts";
 
@@ -343,15 +344,10 @@ function bodyShadowsPatternReference(
 ): boolean {
   // The body shares the scope of the catch clause
   const paramNames = t.getBindingIdentifiers(param);
-  const bodyNames = new Set(
-    Object.keys(scope.bindings).filter(name => !paramNames[name]),
+  return referencesName(
+    param,
+    new Set(Object.keys(scope.bindings).filter(name => !paramNames[name])),
   );
-  if (bodyNames.size === 0) return false;
-  return t.traverseFast(param, node => {
-    if (t.isIdentifier(node) && bodyNames.has(node.name)) {
-      return t.traverseFast.stop;
-    }
-  });
 }
 
 function transformCatchClause(

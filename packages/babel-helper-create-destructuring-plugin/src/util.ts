@@ -285,16 +285,34 @@ export function isValueUsed(path: NodePath<t.Expression>): boolean {
   }
 }
 
+/** Whether one of `nodes` contains an identifier with one of `names`. */
+export function referencesName(
+  nodes: t.Node | t.Node[],
+  names: ReadonlySet<string>,
+): boolean {
+  if (names.size === 0) return false;
+  for (const node of Array.isArray(nodes) ? nodes : [nodes]) {
+    const found = t.traverseFast(node, child => {
+      if (t.isIdentifier(child) && names.has(child.name)) {
+        return t.traverseFast.stop;
+      }
+    });
+    if (found) return true;
+  }
+  return false;
+}
+
 export function unshiftForXStatementBody(
   statementPath: NodePath<t.ForXStatement>,
   newStatements: t.Statement[],
 ) {
   statementPath.ensureBlock();
   const { scope, node } = statementPath;
-  const bodyScopeBindings = statementPath.get("body").scope.bindings;
-  const hasShadowedBlockScopedBindings = Object.keys(bodyScopeBindings).some(
-    name => scope.hasBinding(name),
-  );
+  const bodyNames = Object.keys(statementPath.get("body").scope.bindings);
+  const hasShadowedBlockScopedBindings =
+    bodyNames.some(name => scope.hasBinding(name)) ||
+    // e.g. globals, which have no binding
+    referencesName(newStatements, new Set(bodyNames));
 
   if (hasShadowedBlockScopedBindings) {
     // handle shadowed variables referenced in computed keys:
