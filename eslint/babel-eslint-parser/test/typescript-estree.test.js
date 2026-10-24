@@ -141,18 +141,6 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
    */
   let tsEstree;
 
-  /**
-   * @type {import("@typescript-eslint/typescript-estree").TSESTreeOptions}
-   */
-  const tsEstreeOptions = {
-    filePath: "typescript-estree.test.js-test-input.tsx",
-    jsx: true,
-    tokens: true,
-    loc: true,
-    range: true,
-    comment: true,
-  };
-
   // The set of babel parser plugins that are always supported by the typescript-eslint
   const tsEslintSupportedParserPlugins = [
     "decorators-legacy",
@@ -165,8 +153,15 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
   function parseAndAssertSame(code, options = {}, withoutTokens) {
     code = unpad(code);
     const sourceType = options.sourceType === "script" ? "script" : "module";
+    const plugins = options.plugins ?? tsEslintSupportedParserPlugins;
+    const jsx = plugins.some(p => (Array.isArray(p) ? p[0] : p) === "jsx");
     const tsEstreeAST = tsEstree.parse(code, {
-      ...tsEstreeOptions,
+      filePath: "typescript-estree.test.js-test-input" + (jsx ? ".tsx" : ".ts"),
+      jsx: jsx,
+      tokens: true,
+      loc: true,
+      range: true,
+      comment: true,
       sourceType: sourceType,
     });
     const babelAST = parseForESLint(code, {
@@ -387,15 +382,6 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
     const fixtures = getFixtures(parserTestFixtureRoot);
     const FAILURES = new Set(
       [
-        // ts-eslint/tsc does not support arrow generic in tsx mode
-        "typescript/arrow-function/async-await-null/input.ts",
-        "typescript/arrow-function/async-generic-after-await/input.ts",
-        "typescript/arrow-function/async-generic-tokens-true/input.ts",
-        "typescript/arrow-function/generic/input.ts",
-        "typescript/cast/arrow-in-parens/input.ts",
-        "typescript/cast/arrow-in-parens-with-parens-node/input.ts",
-        "typescript/regression/async-arrow-generic-9560/input.ts",
-
         // different program range handling when the program starts/ends with a comment
         // https://github.com/typescript-eslint/typescript-eslint/issues/11026
         "typescript/cast/as/input.ts",
@@ -403,21 +389,6 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
         "typescript/import/internal-comments/input.ts",
         "typescript/type-alias/export/input.ts",
         "typescript/types/type-literal/input.ts",
-
-        // ts-eslint/tsc does not support <const> in tsx mode
-        "typescript/cast/as-const/input.ts",
-        "typescript/cast/type-assertion-parenthesized-arrow/input.ts",
-        "typescript/types/const-type-parameters/input.ts",
-
-        // ts-eslint/tsc does not support <T> cast in tsx mode
-        "typescript/cast/destructure-and-assign/input.ts",
-        "typescript/cast/for-of-lhs/input.ts",
-        "typescript/cast/need-parentheses/input.ts",
-        "typescript/cast/parenthesized-type-assertion-and-assign/input.ts",
-        "typescript/cast/type-assertion/input.ts",
-        "typescript/cast/type-assertion-after-operator/input.ts",
-        "typescript/cast/type-assertion-and-assign/input.ts",
-        "typescript/cast/type-assertion-before-operator/input.ts",
 
         // ts-eslint/tsc does not support this example
         "typescript/regression/nested-extends-in-arrow-type-param/input.ts",
