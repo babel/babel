@@ -13,6 +13,7 @@ var _ref3 = [obj, {
   }],
   x3 = _ref3[0].x,
   y3 = _ref3[1];
-var x4 = obj.x,
+var _obj = obj,
+  x4 = _obj.x,
   y4 = void 0,
   z4 = 1;

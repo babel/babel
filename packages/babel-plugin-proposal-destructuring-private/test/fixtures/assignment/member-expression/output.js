@@ -6,7 +6,8 @@ class C {
   static {
     var _ref, _ref2;
     let z;
-    [C.#x, _ref, ..._ref2] = [0, C];
+    var _ref3 = [0, C];
+    [C.#x, _ref, ..._ref2] = _ref3;
     x = _ref.#x;
     z = _ref2;
   }

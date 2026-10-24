@@ -130,3 +130,115 @@ it.each(keyExpressions)(
     }
   },
 );
+
+it.each([
+  [
+    "unbound RHS",
+    `let a = 0, b; try { [a, b] = [1, missing]; } catch (error) { return [a, error.name]; }`,
+  ],
+  [
+    "RHS in its TDZ",
+    `let a = 0, b; try { [a, b] = [1, late]; } catch (error) { return [a, error.name]; } const late = 2;`,
+  ],
+  [
+    "throwing primitive coercion",
+    `let a = 0, b; try { [a, b] = [1, +1n]; } catch (error) { return [a, error.name]; }`,
+  ],
+  [
+    "nested throwing RHS",
+    `let a = 0, b; try { [a, b] = [1, { value: late }]; } catch (error) { return [a, error.name]; } const late = 2;`,
+  ],
+  [
+    "derived constructor this",
+    `let a = 0, b; class C extends Object { constructor() { try { [a, b] = [1, this]; } catch (error) { return { a, error: error.name }; } } } return new C();`,
+  ],
+  [
+    "class static name",
+    `const { C = class { static value = this.name; } } = {}; return [C.name, C.value];`,
+  ],
+  [
+    "class static name override",
+    `const { C = class { static before = this.name; static name = "custom"; } } = {}; return [C.name, C.before];`,
+  ],
+  [
+    "computed class member",
+    `const key = "other"; const { C = class { static [key] = 1; static value = this.name; } } = {}; return [C.name, C.value];`,
+  ],
+  [
+    "computed class name override",
+    `const key = "name"; const { C = class { static before = this.name; static [key] = "custom"; } } = {}; return [C.name, C.before];`,
+  ],
+  [
+    "class default named __proto__",
+    `const { __proto__ = class { static value = this.name; } } = { __proto__: null }; return [__proto__.name, __proto__.value];`,
+  ],
+  [
+    "source key changes target",
+    `let obj = {}; const old = obj; const key = { [Symbol.toPrimitive]() { obj = {}; return "a"; } }; ({ a: obj.x } = { [key]: 1 }); return [old.x, obj.x];`,
+  ],
+  [
+    "null member target",
+    `const log = []; const target = null; const source = { get a() { log.push("get"); return 1; } }; try { ({ a: target.x = 2 } = source); } catch (error) { log.push(error.name); } return log;`,
+  ],
+  [
+    "nested null member target",
+    `const log = []; const target = null; const source = { get a() { log.push("get"); return {}; } }; try { ({ a: { b: target.x } } = source); } catch (error) { log.push(error.name); } return log;`,
+  ],
+  [
+    "source TDZ before null target",
+    `const target = null; try { ({ a: target.x } = source); } catch (error) { return error.name; } const source = {};`,
+  ],
+  [
+    "unused object RHS in its TDZ",
+    `try { const {} = { value: late }; } catch (error) { return error.name; } const late = 1;`,
+  ],
+])("preserves %s", (_name, input) => {
+  expectSameEvaluation(input, FEATURES.destructuring);
+});
+
+it.each([
+  ["anonymous array element", `const [f] = [function () {}]; return f.name;`],
+  ["anonymous arrow array element", `const [f] = [() => {}]; return f.name;`],
+  [
+    "anonymous class array element",
+    `const [C] = [class { static value = this.name; }]; return [C.name, C.value];`,
+  ],
+  [
+    "anonymous function RHS",
+    `const { name, length } = function () {}; return [name, length];`,
+  ],
+  [
+    "anonymous class RHS",
+    `const { name, value } = class { static value = this.name; }; return [name, value];`,
+  ],
+  [
+    "anonymous nested default",
+    `const [{ name, length } = function () {}] = [undefined]; return [name, length];`,
+  ],
+  [
+    "class default static method name",
+    `const { C = class { static name() {} } } = {}; return typeof C.name;`,
+  ],
+  [
+    "class default TDZ reference",
+    `try { const { C = class { static value = C; } } = {}; } catch (error) { return error.name; }`,
+  ],
+  [
+    "class default named __proto__ with outer reference",
+    `let __proto__ = 1; ({ __proto__ = class { static value = __proto__; } } = { __proto__: null }); return [__proto__.name, __proto__.value];`,
+  ],
+])("preserves %s", (_name, input) => {
+  expectSameEvaluation(input, FEATURES.destructuring);
+});
+
+it("checks null before coercing a newly created key object", () => {
+  expectSameEvaluation(
+    `
+    const log = [];
+    try { const { [{ toString() { log.push("key"); return "a"; } }]: value } = null; }
+    catch (error) { log.push(error.name); }
+    return log;
+    `,
+    FEATURES.destructuring,
+  );
+});
