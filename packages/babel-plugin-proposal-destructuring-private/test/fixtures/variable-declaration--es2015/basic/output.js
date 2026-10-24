@@ -8,8 +8,8 @@ var _x = {
   var {
       a = 1
     } = _C,
-    _m = _x._,
-    x = _m === void 0 ? 2 : _m,
+    _C$x = _x._,
+    x = _C$x === void 0 ? 2 : _C$x,
     {
       b = 3
     } = _C;

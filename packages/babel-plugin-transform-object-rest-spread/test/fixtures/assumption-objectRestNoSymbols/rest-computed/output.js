@@ -1,5 +1,6 @@
 var _a;
-let {
+let _obj = obj,
+  {
     [_a = a]: b
-  } = obj,
-  c = babelHelpers.objectWithoutPropertiesLoose(obj, [_a].map(babelHelpers.toPropertyKey));
+  } = _obj,
+  c = babelHelpers.objectWithoutPropertiesLoose(_obj, [_a].map(babelHelpers.toPropertyKey));

@@ -8,9 +8,7 @@ class C {
   static {
     var x = C.#x,
       y = C.#y,
-      {
-        ...z
-      } = C;
+      z = Object.assign({}, (babelHelpers.objectDestructuringEmpty(C), C));
     result = {
       x,
       y,

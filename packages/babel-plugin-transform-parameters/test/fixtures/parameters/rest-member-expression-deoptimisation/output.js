@@ -109,9 +109,7 @@ function arrayDestructure() {
   for (var _len13 = arguments.length, rest = new Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
     rest[_key13] = arguments[_key13];
   }
-  var _x = x;
-  var _x2 = babelHelpers.slicedToArray(_x, 1);
-  rest[0] = _x2[0];
+  rest[0] = babelHelpers.slicedToArray(x, 1)[0];
 }
 function forOf() {
   for (var _len14 = arguments.length, rest = new Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {

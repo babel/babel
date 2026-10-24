@@ -8,10 +8,11 @@ var _x = {
 (() => {
   var x,
     a = "a";
-  for (const _ref of [_C]) {
-    x = babelHelpers.assertClassBrand(_C, _ref, _x)._, {
+  for (var _ref of [_C]) {
+    x = babelHelpers.assertClassBrand(_C, _ref, _x)._;
+    ({
       [a]: a
-    } = _ref;
+    } = _ref);
     {
       const a = "A";
     }

@@ -1,7 +1,7 @@
 const _excluded = ["outsetArrows"];
 function Foo(_ref) {
   var _div;
-  let {
+  var {
       outsetArrows
     } = _ref,
     rest = babelHelpers.objectWithoutProperties(_ref, _excluded);

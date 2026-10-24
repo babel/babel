@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "transform-object-rest-spread",
+    "transform-destructuring",
+    "../../helpers/checkScopeInfo.js"
+  ],
+  "targets": {
+    "ie": "11"
+  }
+}

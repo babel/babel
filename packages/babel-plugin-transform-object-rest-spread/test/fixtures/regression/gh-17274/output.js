@@ -1,4 +1,4 @@
-var _log, _log2, _log3, _log4;
+var _log, _log2;
 // Computed keys must be evaluated in source order (left-to-right)
 // even when nested object rest is involved. This test verifies
 // that log(0), log(1), log(2), log(3) execute in that order.
@@ -12,11 +12,12 @@ const _x = {
       x: {}
     }
   },
+  _x$log = _x[log(0)],
   {
-    [_log = log(0)]: {
-      [_log2 = log(1)]: x,
-      [_log3 = log(2)]: y
-    },
-    [_log4 = log(3)]: z
-  } = _x,
-  rest = babelHelpers.objectWithoutProperties(_x[_log], [_log2, _log3].map(babelHelpers.toPropertyKey));
+    [_log = log(1)]: x,
+    [_log2 = log(2)]: y
+  } = _x$log,
+  rest = babelHelpers.objectWithoutProperties(_x$log, [_log, _log2].map(babelHelpers.toPropertyKey)),
+  {
+    [log(3)]: z
+  } = _x;

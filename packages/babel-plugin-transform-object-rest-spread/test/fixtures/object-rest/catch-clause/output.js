@@ -20,12 +20,13 @@ try {} catch (_ref3) {
 try {} catch (_ref4) {
   let {
       a2,
-      b2,
-      c2: {
-        c3
-      }
+      b2
     } = _ref4,
-    c4 = babelHelpers.objectWithoutProperties(_ref4.c2, _excluded3);
+    _ref4$c = _ref4.c2,
+    {
+      c3
+    } = _ref4$c,
+    c4 = babelHelpers.objectWithoutProperties(_ref4$c, _excluded3);
 }
 
 // Unchanged

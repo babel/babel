@@ -41,6 +41,9 @@
       "@babel/helper-create-class-features-plugin": [
         "./packages/babel-helper-create-class-features-plugin/src"
       ],
+      "@babel/helper-create-destructuring-plugin": [
+        "./packages/babel-helper-create-destructuring-plugin/src"
+      ],
       "@babel/helper-create-regexp-features-plugin": [
         "./packages/babel-helper-create-regexp-features-plugin/src"
       ],
