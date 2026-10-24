@@ -151,7 +151,6 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
     loc: true,
     range: true,
     comment: true,
-    sourceType: "module",
   };
 
   // The set of babel parser plugins that are always supported by the typescript-eslint
@@ -165,7 +164,11 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
 
   function parseAndAssertSame(code, options = {}, withoutTokens) {
     code = unpad(code);
-    const tsEstreeAST = tsEstree.parse(code, tsEstreeOptions);
+    const sourceType = options.sourceType === "script" ? "script" : "module";
+    const tsEstreeAST = tsEstree.parse(code, {
+      ...tsEstreeOptions,
+      sourceType: sourceType,
+    });
     const babelAST = parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
@@ -178,10 +181,7 @@ describe("Babel should output the same AST as TypeScript-Estree", () => {
           // These options are not supported by the Babel eslint-parser
           createParenthesizedExpressions: false,
           // These options are not mirrored by the typescript-eslint/parser
-          sourceType:
-            options.sourceType === "unambiguous"
-              ? "module"
-              : options.sourceType,
+          sourceType: sourceType,
         },
       },
     }).ast;
