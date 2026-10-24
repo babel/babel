@@ -175,6 +175,11 @@ export function isStableExpression(node: t.Node, scope: Scope): boolean {
   }
 }
 
+/** Whether a computed key can be evaluated and coerced again later. */
+export function isStablePropertyKey(node: t.Node, scope: Scope): boolean {
+  return isPrimitiveExpression(node) && isStableExpression(node, scope);
+}
+
 const SIDE_EFFECT_NODES = new Set([
   "CallExpression",
   "OptionalCallExpression",
