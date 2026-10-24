@@ -31,6 +31,24 @@ function expectSameEvaluation(
 
 const keyExpressions = ["key", "+key", "-key", "~key", "`${key}`", 'key + ""'];
 
+it.each([
+  `function f({ a, ...rest }, value = 1) { value = 2; return [arguments[1], (() => arguments[0])()]; } return f({ a: 1 }, 3);`,
+  `function f({ a, ...rest }, value) { value = 2; return eval("arguments[1]"); } return f({ a: 1 }, 3);`,
+  `function f({ a, ...rest }, value) { function inner() { return arguments[0]; } return [inner(2), { arguments: value }]; } return f({ a: 1 }, 3);`,
+])("preserves argument environments when lowering object rest: %s", input => {
+  expectSameEvaluation(input, FEATURES.objectRest);
+});
+
+it("handles public classes with private destructuring enabled", () => {
+  expectSameEvaluation(
+    `class Plain { run(value) { const { a, ...rest } = value; return [a, rest]; } }
+     return new Plain().run({ a: 1, b: 2 });`,
+    FEATURES.privateDestructuring |
+      FEATURES.destructuring |
+      FEATURES.objectRest,
+  );
+});
+
 it.each(["+key", "key + 0", "`${key}`", "{ [key]: 1 }", "+1n"])(
   "keeps a parameter default %s after earlier destructuring",
   expression => {
