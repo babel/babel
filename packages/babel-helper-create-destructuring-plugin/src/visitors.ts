@@ -12,6 +12,7 @@ import {
   snapshotDeclaredBindings,
 } from "./scope.ts";
 import {
+  isAnonymousFunctionDefinition,
   isValueUsed,
   needsLowering,
   unshiftForXStatementBody,
@@ -115,6 +116,15 @@ function foldForInit(
   }
   const declarators: t.VariableDeclarator[] = [];
   let pending: t.Expression[] = [];
+  /** Evaluate the pending expressions in the initializer of a temporary. */
+  const declarePending = () => {
+    declarators.push(
+      t.variableDeclarator(
+        scope.generateUidIdentifier("ref"),
+        pending.length === 1 ? pending[0] : t.sequenceExpression(pending),
+      ),
+    );
+  };
   for (const node of nodes) {
     if (t.isExpressionStatement(node)) {
       pending.push(node.expression);
@@ -122,10 +132,19 @@ function foldForInit(
     }
     for (const declarator of node.declarations) {
       if (pending.length) {
-        declarator.init = t.sequenceExpression([
-          ...pending,
-          declarator.init ?? t.buildUndefinedNode(),
-        ]);
+        if (
+          t.isIdentifier(declarator.id) &&
+          declarator.init &&
+          isAnonymousFunctionDefinition(declarator.init)
+        ) {
+          // `f = (effect, function () {})` would not name the function
+          declarePending();
+        } else {
+          declarator.init = t.sequenceExpression([
+            ...pending,
+            declarator.init ?? t.buildUndefinedNode(),
+          ]);
+        }
         pending = [];
       }
       declarators.push(declarator);
@@ -136,12 +155,7 @@ function foldForInit(
       // There are several nodes, which are all expressions
       return t.sequenceExpression(pending);
     }
-    declarators.push(
-      t.variableDeclarator(
-        scope.generateUidIdentifier("ref"),
-        pending.length === 1 ? pending[0] : t.sequenceExpression(pending),
-      ),
-    );
+    declarePending();
   }
   return t.variableDeclaration(kind, declarators);
 }
@@ -320,6 +334,28 @@ function transformForXStatement(
   }
 }
 
+/**
+ * Whether the body of a catch clause declares a name referenced by the
+ * default values or computed keys of its parameter, which can't see the
+ * declarations of the body.
+ */
+function bodyShadowsPatternReference(
+  param: t.CatchClause["param"] & {},
+  scope: Scope,
+): boolean {
+  // The body shares the scope of the catch clause
+  const paramNames = t.getBindingIdentifiers(param);
+  const bodyNames = new Set(
+    Object.keys(scope.bindings).filter(name => !paramNames[name]),
+  );
+  if (bodyNames.size === 0) return false;
+  return t.traverseFast(param, node => {
+    if (t.isIdentifier(node) && bodyNames.has(node.name)) {
+      return t.traverseFast.stop;
+    }
+  });
+}
+
 function transformCatchClause(
   path: NodePath<t.CatchClause>,
   options: ResolvedOptions,
@@ -333,11 +369,19 @@ function transformCatchClause(
   // catch (_ref) { let { a } = _ref; body }
   const ref = scope.generateUidIdentifier("ref");
   node.param = ref;
-  node.body.body.unshift(
-    t.variableDeclaration("let", [
-      t.variableDeclarator(param, t.cloneNode(ref)),
-    ]),
-  );
+  const declaration = t.variableDeclaration("let", [
+    t.variableDeclarator(param, t.cloneNode(ref)),
+  ]);
+  if (bodyShadowsPatternReference(param, scope)) {
+    // catch ({ a = b }) { let b; }
+    // transforms to:
+    // catch (_ref) { let { a = b } = _ref; { let b; } }
+    // The nodes of the body get new paths, registered by the crawl below.
+    forgetScopeInfo(path.get("body"));
+    node.body = t.blockStatement([declaration, node.body]);
+  } else {
+    node.body.body.unshift(declaration);
+  }
   // The pattern will be handled by the VariableDeclaration visitor, which
   // forgets the scope information registered again by this crawl.
   scope.crawl();
