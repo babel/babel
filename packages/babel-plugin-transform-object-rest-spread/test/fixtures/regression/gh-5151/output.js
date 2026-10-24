@@ -5,7 +5,7 @@ const _a = a,
   y = babelHelpers.objectWithoutProperties(_a, ["x"]),
   z = foo(y);
 const _r = r,
-  s = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_r), _r)),
+  s = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_r), _r), []),
   t = foo(s);
 
 // ordering is preserved

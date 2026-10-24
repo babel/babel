@@ -3,5 +3,5 @@ it("es7.objectRestSpread", () => {
     a: 1,
     b: 2
   };
-  let copy = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(original), original));
+  let copy = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(original), original), []);
 });

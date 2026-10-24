@@ -9,7 +9,7 @@ class C {
     let x, y, z;
     x = C.#x;
     y = C.#y;
-    z = Object.assign({}, (babelHelpers.objectDestructuringEmpty(C), C));
+    z = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(C), C), []);
     result = {
       x,
       y,
