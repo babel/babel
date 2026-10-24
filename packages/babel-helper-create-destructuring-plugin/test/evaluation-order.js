@@ -288,3 +288,23 @@ it.each([
 ])("preserves %s", (_name, input) => {
   expectSameEvaluation(input, FEATURES.destructuring);
 });
+
+it("keeps global writes and shadowed class parameters distinct", () => {
+  expectSameEvaluation(
+    `
+    class Other {}
+    const before = __proto__;
+    ({ __proto__ = class {
+      static current() { return __proto__; }
+      static local(__proto__) { return __proto__; }
+      static change(value) { __proto__ = value; }
+    } } = { __proto__: null });
+    const C = __proto__;
+    C.change(before);
+    return [C.name, C.current() === before, C.local(7), __proto__ === before];
+    `,
+    FEATURES.destructuring,
+    {},
+    code => compileFunction(code, [], { parsingContext: createContext() })(),
+  );
+});
