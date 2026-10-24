@@ -162,7 +162,9 @@ function transformVariableDeclaration(
   });
 
   const forgetScopeInfo = collectScopeInfo(path);
-  const declared = snapshotDeclaredBindings(node, scope);
+  const declared = options.pureGetters
+    ? snapshotDeclaredBindings(node, scope)
+    : null;
   declarations.forEach((declarator, i) =>
     lowering.lowerDeclarator(declarator, i === declarations.length - 1),
   );
@@ -185,7 +187,7 @@ function transformVariableDeclaration(
     paths = path.replaceWithMultiple(nodes);
   }
   registerReplacement(paths, scope);
-  removeUndeclaredBindings(declared);
+  if (declared) removeUndeclaredBindings(declared);
 }
 
 function transformAssignmentExpression(
