@@ -3,13 +3,12 @@
 let called = false;
 let Base = /*#__PURE__*/function () {
   function Base() {}
-  return babelHelpers.createClass(Base, [{
-    key: "test",
-    get: function () {
-      called = true;
-      return 1;
-    }
-  }]);
+  var _proto = Base.prototype;
+  babelHelpers.defineAccessor("get", _proto, "test", function () {
+    called = true;
+    return 1;
+  });
+  return Base;
 }();
 ;
 let Obj = /*#__PURE__*/function (_Base) {
@@ -17,8 +16,8 @@ let Obj = /*#__PURE__*/function (_Base) {
     return _Base.apply(this, arguments) || this;
   }
   babelHelpers.inheritsLoose(Obj, _Base);
-  var _proto = Obj.prototype;
-  _proto.set = function set() {
+  var _proto2 = Obj.prototype;
+  _proto2.set = function set() {
     return this.test = 3;
   };
   return Obj;

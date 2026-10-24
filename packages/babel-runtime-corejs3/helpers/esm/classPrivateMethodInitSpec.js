@@ -1,5 +1,5 @@
 import checkPrivateRedeclaration from "./checkPrivateRedeclaration.js";
-function _classPrivateMethodInitSpec(e, a) {
-  checkPrivateRedeclaration(e, a), a.add(e);
+function _classPrivateMethodInitSpec(t, a) {
+  checkPrivateRedeclaration(t, a), a.add(t);
 }
 export { _classPrivateMethodInitSpec as default };

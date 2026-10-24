@@ -14,8 +14,8 @@ jobs:
     name: Create or update REPL comment
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/github-script@v8
+      - uses: actions/checkout@v7
+      - uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.BOT_TOKEN }}
           script: |

@@ -18,7 +18,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Get Pull Request branch
-        uses: actions/github-script@v6
+        uses: actions/github-script@v9
         id: pr-meta
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -40,7 +40,7 @@ jobs:
             fs.appendFileSync(GITHUB_OUTPUT, `repository=${repository}\n`);
 
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: ${{ steps.pr-meta.outputs.repository }}
           ref: ${{ steps.pr-meta.outputs.branch }}
@@ -48,7 +48,7 @@ jobs:
           persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
 
       - name: Use Node.js latest
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: "*"
           cache: "yarn"

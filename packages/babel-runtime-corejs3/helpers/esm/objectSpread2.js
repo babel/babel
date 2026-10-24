@@ -18,16 +18,16 @@ function ownKeys(e, r) {
   }
   return t;
 }
-function _objectSpread2(e) {
-  for (var r = 1; r < arguments.length; r++) {
+function _objectSpread2(r) {
+  for (var t = 1; t < arguments.length; t++) {
     var _context, _context2;
-    var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? _forEachInstanceProperty(_context = ownKeys(Object(t), !0)).call(_context, function (r) {
-      defineProperty(e, r, t[r]);
-    }) : _Object$getOwnPropertyDescriptors ? _Object$defineProperties(e, _Object$getOwnPropertyDescriptors(t)) : _forEachInstanceProperty(_context2 = ownKeys(Object(t))).call(_context2, function (r) {
-      _Object$defineProperty(e, r, _Object$getOwnPropertyDescriptor(t, r));
+    var o = null != arguments[t] ? arguments[t] : {};
+    t % 2 ? _forEachInstanceProperty(_context = ownKeys(Object(o), !0)).call(_context, function (t) {
+      defineProperty(r, t, o[t]);
+    }) : _Object$getOwnPropertyDescriptors ? _Object$defineProperties(r, _Object$getOwnPropertyDescriptors(o)) : _forEachInstanceProperty(_context2 = ownKeys(Object(o))).call(_context2, function (e) {
+      _Object$defineProperty(r, e, _Object$getOwnPropertyDescriptor(o, e));
     });
   }
-  return e;
+  return r;
 }
 export { _objectSpread2 as default };

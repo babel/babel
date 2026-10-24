@@ -25,6 +25,41 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.8 (2026-10-23)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#18366](https://github.com/babel/babel/pull/18366) fix(parser): disallow named specifiers after * as ns ([@JLHwung](https://github.com/JLHwung))
+  * [#18336](https://github.com/babel/babel/pull/18336) fix(parser): disallow const x followed by linebreak and of ([@JLHwung](https://github.com/JLHwung))
+  * [#18343](https://github.com/babel/babel/pull/18343) fix(parser): reject delete (x) when createParenthesizedExpressions: true ([@JLHwung](https://github.com/JLHwung))
+  * [#18276](https://github.com/babel/babel/pull/18276) fix: report expression errors in object literals used as member base ([@JLHwung](https://github.com/JLHwung))
+  * [#18286](https://github.com/babel/babel/pull/18286) Disallow arrow functions as `new` callee and `await` operand ([@JLHwung](https://github.com/JLHwung))
+  * [#18309](https://github.com/babel/babel/pull/18309) Disallow call expressions as arrow function parameters in sloppy mode ([@JLHwung](https://github.com/JLHwung))
+  * [#18315](https://github.com/babel/babel/pull/18315) Disallow `eval` and `arguments` as class names ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#18392](https://github.com/babel/babel/pull/18392) fix(parser): set phase: null for non-deferred imports with deferredImportEvaluation (#18313) ([@bhushan4work](https://github.com/bhushan4work))
+  * [#18344](https://github.com/babel/babel/pull/18344) fix(parser): ASI between arrow body and `/=` regex ([@JLHwung](https://github.com/JLHwung))
+  * [#18342](https://github.com/babel/babel/pull/18342) fix(parser): allow arguments as a label in class ([@JLHwung](https://github.com/JLHwung))
+  * [#18365](https://github.com/babel/babel/pull/18365) fix(parser): allow ASI between property init and escaped in ([@JLHwung](https://github.com/JLHwung))
+  * [#18327](https://github.com/babel/babel/pull/18327) fix(parser): register function id in labeled function declaration ([@JLHwung](https://github.com/JLHwung))
+  * [#18323](https://github.com/babel/babel/pull/18323) Skip HTML-like comments in the parser's character lookahead ([@JLHwung](https://github.com/JLHwung))
+  * [#18322](https://github.com/babel/babel/pull/18322) Allow ASI after `export default from` without `exportDefaultFrom` ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-modules-commonjs`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#18186](https://github.com/babel/babel/pull/18186) Fix `_arrayWithHoles` bypassing custom `Symbol.iterator` on array-backed Proxies ([@webdevelopersrinu](https://github.com/webdevelopersrinu))
+* `babel-plugin-transform-typescript`, `babel-types`
+  * [#18380](https://github.com/babel/babel/pull/18380) fix(types): visit decorators of TSParameterProperty ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-block-scoping`
+  * [#18331](https://github.com/babel/babel/pull/18331) fix: wrap enclosing loop when a nested for head closure captures its bindings ([@joellemd](https://github.com/joellemd))
+
+#### :house: Internal
+* `babel-plugin-transform-classes`
+  * [#18383](https://github.com/babel/babel/pull/18383) Remove internal usage of `loose` in class transform ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :microscope: Output optimization
+* `babel-plugin-transform-spread`
+  * [#18318](https://github.com/babel/babel/pull/18318) Avoid `arrayLikeToArray` for spreading literals ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v8.0.7 (2026-10-07)
 
 #### :bug: Bug Fix
