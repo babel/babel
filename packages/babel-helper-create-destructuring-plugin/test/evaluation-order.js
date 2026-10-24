@@ -1,8 +1,14 @@
 import { transformSync } from "@babel/core";
+import { compileFunction, createContext } from "node:vm";
 import { createDestructuringPlugin, FEATURES } from "../lib/index.js";
 import checkScopeInfo from "./helpers/checkScopeInfo.js";
 
-function expectSameEvaluation(input, feature, options = {}) {
+function expectSameEvaluation(
+  input,
+  feature,
+  options = {},
+  evaluate = code => new Function(code)(),
+) {
   const source = `return (() => { ${input} })();`;
   const { code } = transformSync(source, {
     configFile: false,
@@ -20,7 +26,7 @@ function expectSameEvaluation(input, feature, options = {}) {
       checkScopeInfo,
     ],
   });
-  expect(new Function(code)()).toEqual(new Function(source)());
+  expect(evaluate(code)).toEqual(evaluate(source));
 }
 
 const keyExpressions = ["key", "+key", "-key", "~key", "`${key}`", 'key + ""'];
@@ -241,4 +247,44 @@ it("checks null before coercing a newly created key object", () => {
     `,
     FEATURES.destructuring,
   );
+});
+
+it.each([
+  ["captured anonymous class", `const [C] = [class {}]; return C.name;`],
+  [
+    "captured class static field",
+    `const [C] = [class { static value = 1; }]; return [C.name, C.value];`,
+  ],
+])("preserves %s", (_name, input) => {
+  expectSameEvaluation(input, FEATURES.destructuring);
+});
+
+it("preserves global references in a class default named __proto__", () => {
+  expectSameEvaluation(
+    `
+    const before = __proto__;
+    ({ __proto__ = class { static value = __proto__; } } = { __proto__: null });
+    return [__proto__.name, __proto__.value === before];
+    `,
+    FEATURES.destructuring,
+    {},
+    code => compileFunction(code, [], { parsingContext: createContext() })(),
+  );
+});
+
+it.each([
+  [
+    "function default from void",
+    `const [f = function () {}] = [void 0]; return f.name;`,
+  ],
+  [
+    "class default from void",
+    `const [C = class { static value = this.name; }] = [void 0]; return [C.name, C.value];`,
+  ],
+  [
+    "class default named __proto__ in its TDZ",
+    `try { const { __proto__ = class { static value = __proto__; } } = { __proto__: null }; } catch (error) { return error.name; }`,
+  ],
+])("preserves %s", (_name, input) => {
+  expectSameEvaluation(input, FEATURES.destructuring);
 });
