@@ -23,8 +23,9 @@ describe("buildObjectExcludingKeys", () => {
       addHelper,
       false,
     );
-    // _objectWithoutProperties((_objectDestructuringEmpty(obj), obj), [])
-    const [check, ref] = node.arguments[0].expressions;
+    // _objectWithoutProperties(_extends(Object.create(null),
+    //   (_objectDestructuringEmpty(obj), obj)), [])
+    const [check, ref] = node.arguments[0].arguments[1].expressions;
     expect(check.arguments[0]).toBe(objRef);
     expect(ref).not.toBe(objRef);
     expect(ref).toEqual(objRef);

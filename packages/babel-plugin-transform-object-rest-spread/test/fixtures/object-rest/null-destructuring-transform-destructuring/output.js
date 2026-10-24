@@ -1,7 +1,7 @@
 const _excluded = ["x"];
 expect(() => {
   var _ref = null,
-    x = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_ref), _ref), []);
+    x = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref), _ref)), []);
 }).toThrow(/null/);
 expect(() => {
   var _ref2 = null,

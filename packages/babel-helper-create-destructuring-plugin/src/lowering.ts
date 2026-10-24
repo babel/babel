@@ -661,6 +661,7 @@ export class Lowering {
               scope,
               this.addHelper,
               this.options.objectRestNoSymbols,
+              this.options.useBuiltIns,
             ),
             { isStatic: false, nameHint: prop.argument },
           ),
