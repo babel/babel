@@ -1,4 +1,5 @@
-import { template, types as t, type NodePath } from "@babel/core";
+import { template, types as t, type NodePath, type Scope } from "@babel/core";
+import convertFunctionRest from "./rest.ts";
 
 import {
   getIIFEVisitor,
@@ -28,7 +29,29 @@ const buildSafeArgumentsAccess = template.statement(`
   let $0 = arguments.length > $1 ? arguments[$1] : undefined;
 `);
 
-// last 2 parameters are optional -- they are used by transform-object-rest-spread/src/index.js
+/**
+ * Whether evaluating the parameter can run user code, or read bindings that
+ * user code could modify.
+ */
+export function isParamEvaluationObservable(
+  param: t.Function["params"][number],
+  scope: Scope,
+): boolean {
+  switch (param.type) {
+    case "Identifier":
+      return false;
+    case "AssignmentPattern":
+      return !t.isIdentifier(param.left) || !scope.isPure(param.right, true);
+    case "RestElement":
+      return !t.isIdentifier(param.argument);
+    default:
+      return true;
+  }
+}
+
+// The last 3 parameters are optional: they are used by
+// @babel/helper-create-destructuring-plugin, which only moves some parameters
+// into the function body.
 export default function convertFunctionParams(
   path: NodePath<t.Function>,
   ignoreFunctionLength: boolean | void,
@@ -38,13 +61,50 @@ export default function convertFunctionParams(
     paramPath: NodePath<t.Function["params"][number]>,
     transformedRestNodes: t.Statement[],
   ) => void,
+  noNewArrows: boolean = true,
 ) {
+  if (path.node.params.every(param => t.isIdentifier(param))) return false;
+
+  const isLoose =
+    ignoreFunctionLength || t.isMethod(path.node, { kind: "set" });
+
+  // Besides the parameters the caller asks for, we must move the parameters
+  // that would otherwise be evaluated before a parameter moved into the body,
+  // and the ones following a default value read from `arguments`.
+  const shouldTransform: boolean[] = [];
+  let moved = false;
+  let readsArguments = false;
+  path.node.params.forEach((param, i) => {
+    if (
+      readsArguments ||
+      !shouldTransformParam ||
+      shouldTransformParam(i) ||
+      (moved && isParamEvaluationObservable(param, path.scope))
+    ) {
+      shouldTransform[i] = moved = true;
+      if (!isLoose && t.isAssignmentPattern(param)) readsArguments = true;
+    }
+  });
+
+  let prologue: t.Statement | undefined;
+  if (readsArguments && path.isArrowFunctionExpression()) {
+    path = path.arrowFunctionToExpression({
+      allowInsertArrowWithRest: false,
+      noNewArrows,
+    }) as NodePath<t.FunctionExpression>;
+    // The parameters must be initialized after `_newArrowCheck(this, _this)`
+    if (!noNewArrows) {
+      prologue = path.node.body.body.shift();
+    }
+  }
+
   const params = path.get("params");
-
-  const isSimpleParameterList = params.every(param => param.isIdentifier());
-  if (isSimpleParameterList) return false;
-
   const { node, scope } = path;
+
+  // Skip the TypeScript `this` parameter when reading `arguments`
+  const argumentsOffset = t.isIdentifier(node.params[0], { name: "this" })
+    ? 1
+    : 0;
 
   const body: t.Statement[] = [];
   const shadowedParams = new Set<string>();
@@ -65,23 +125,20 @@ export default function convertFunctionParams(
   }
 
   let firstOptionalIndex = null;
+  let restNodes: t.Statement[] | undefined;
 
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
 
-    if (shouldTransformParam && !shouldTransformParam(i)) {
-      continue;
-    }
+    if (!shouldTransform[i]) continue;
+
     const transformedRestNodes: t.Statement[] = [];
     if (replaceRestElement) {
       replaceRestElement(path, param, transformedRestNodes);
     }
 
     const paramIsAssignmentPattern = param.isAssignmentPattern();
-    if (
-      paramIsAssignmentPattern &&
-      (ignoreFunctionLength || t.isMethod(node, { kind: "set" }))
-    ) {
+    if (paramIsAssignmentPattern && isLoose) {
       const left = param.get("left");
       const right = param.get("right");
 
@@ -117,32 +174,50 @@ export default function convertFunctionParams(
       const defNode = buildDefaultParam({
         VARIABLE_NAME: left.node,
         DEFAULT_VALUE: right.node,
-        ARGUMENT_KEY: t.numericLiteral(i),
+        ARGUMENT_KEY: t.numericLiteral(i - argumentsOffset),
       });
       body.push(defNode);
+    } else if (param.isRestElement()) {
+      // The rest parameter is usually converted before calling this function,
+      // but callers that only transform some parameters may keep it. It must
+      // be converted if the parameters are cut off below.
+      if (firstOptionalIndex !== null) {
+        restNodes = transformedRestNodes;
+        continue;
+      }
     } else if (firstOptionalIndex !== null) {
       const defNode = buildSafeArgumentsAccess([
         param.node,
-        t.numericLiteral(i),
+        t.numericLiteral(i - argumentsOffset),
       ]);
       body.push(defNode);
     } else if (param.isObjectPattern() || param.isArrayPattern()) {
       const uid = path.scope.generateUidIdentifier("ref");
-      uid.typeAnnotation = param.node.typeAnnotation;
+      // Move the type annotation to the new parameter
+      const newParam = t.cloneNode(uid);
+      newParam.typeAnnotation = param.node.typeAnnotation;
+      param.node.typeAnnotation = null;
 
       const defNode = t.variableDeclaration("let", [
         t.variableDeclarator(param.node, uid),
       ]);
       body.push(defNode);
 
-      param.replaceWith(t.cloneNode(uid));
+      param.replaceWith(newParam);
     }
 
-    if (transformedRestNodes) {
-      for (const transformedNode of transformedRestNodes) {
-        body.push(transformedNode);
-      }
-    }
+    body.push(...transformedRestNodes);
+  }
+
+  if (restNodes) {
+    // The destructuring of the rest parameter happens after it is initialized
+    path.ensureBlock();
+    (node.body as t.BlockStatement).body.unshift(...restNodes);
+    // `convertFunctionRest` needs the binding of the new rest parameter. The
+    // scope must not be crawled here: the parameters moved into the body are
+    // not declared yet, and their references would resolve to outer bindings.
+    scope.registerBinding("param", params[params.length - 1]);
+    convertFunctionRest(path);
   }
 
   // we need to cut off all trailing parameters
@@ -188,6 +263,8 @@ export default function convertFunctionParams(
   } else {
     path2.get("body").unshiftContainer("body", body);
   }
+
+  if (prologue) path2.get("body").unshiftContainer("body", prologue);
 
   return true;
 }
