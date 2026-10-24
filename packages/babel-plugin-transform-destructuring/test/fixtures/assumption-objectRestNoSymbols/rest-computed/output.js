@@ -1,4 +1,5 @@
-let _obj = obj,
-  _a = a,
-  b = _obj[_a],
-  c = babelHelpers.objectWithoutPropertiesLoose(_obj, [_a].map(babelHelpers.toPropertyKey));
+let _obj = obj;
+babelHelpers.objectDestructuringEmpty(_obj);
+let _babelHelpers$toPrope = babelHelpers.toPropertyKey(a),
+  b = _obj[_babelHelpers$toPrope],
+  c = babelHelpers.objectWithoutPropertiesLoose(_obj, [_babelHelpers$toPrope]);

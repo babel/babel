@@ -7,7 +7,7 @@ rest = babelHelpers.objectWithoutProperties(_source, ["w"]);
 var _ref2 = [source];
 [_ref] = _ref2;
 ({
-  [_key = key]: tgt.y
+  [_key = babelHelpers.toPropertyKey(key)]: tgt.y
 } = _ref);
-rest2 = babelHelpers.objectWithoutProperties(_ref, [_key].map(babelHelpers.toPropertyKey));
+rest2 = babelHelpers.objectWithoutProperties(_ref, [_key]);
 _ref2;

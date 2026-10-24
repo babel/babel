@@ -14,10 +14,10 @@ const _x = {
   },
   _x$log = _x[log(0)],
   {
-    [_log = log(1)]: x,
-    [_log2 = log(2)]: y
+    [_log = babelHelpers.toPropertyKey(log(1))]: x,
+    [_log2 = babelHelpers.toPropertyKey(log(2))]: y
   } = _x$log,
-  rest = babelHelpers.objectWithoutProperties(_x$log, [_log, _log2].map(babelHelpers.toPropertyKey)),
+  rest = babelHelpers.objectWithoutProperties(_x$log, [_log, _log2]),
   {
     [log(3)]: z
   } = _x;

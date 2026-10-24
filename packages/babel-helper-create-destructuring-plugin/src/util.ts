@@ -156,12 +156,19 @@ export function isStableExpression(node: t.Node, scope: Scope): boolean {
     case "Super":
       return true;
     case "TemplateLiteral":
-      return node.expressions.every(expr => isStableExpression(expr, scope));
+      return node.expressions.every(
+        expr => isPrimitiveExpression(expr) && isStableExpression(expr, scope),
+      );
     case "Identifier":
       return scope.isStatic(node);
     case "UnaryExpression":
       return (
-        node.operator !== "delete" && isStableExpression(node.argument, scope)
+        node.operator !== "delete" &&
+        (node.operator === "void" ||
+          node.operator === "typeof" ||
+          node.operator === "!" ||
+          isPrimitiveExpression(node.argument)) &&
+        isStableExpression(node.argument, scope)
       );
     default:
       return false;
@@ -180,9 +187,22 @@ const SIDE_EFFECT_NODES = new Set([
 ]);
 
 function isSideEffect(node: t.Node): boolean {
-  return t.isUnaryExpression(node)
-    ? node.operator === "delete"
-    : SIDE_EFFECT_NODES.has(node.type);
+  if (t.isUnaryExpression(node)) {
+    return (
+      node.operator === "delete" ||
+      (["+", "-", "~"].includes(node.operator) &&
+        !isPrimitiveExpression(node.argument))
+    );
+  }
+  if (t.isBinaryExpression(node)) {
+    return (
+      node.operator !== "===" &&
+      node.operator !== "!==" &&
+      (!isPrimitiveExpression(node.left) || !isPrimitiveExpression(node.right))
+    );
+  }
+  if (t.isTemplateLiteral(node)) return node.expressions.length > 0;
+  return SIDE_EFFECT_NODES.has(node.type);
 }
 
 /**
@@ -359,11 +379,48 @@ export interface ExcludedKey {
   primitive?: boolean;
 }
 
-export function isPrimitiveKeyExpression(key: t.Node): boolean {
+/** Whether evaluating an expression produces a primitive value. */
+export function isPrimitiveExpression(key: t.Node): boolean {
   return (
-    (t.isMemberExpression(key, { computed: false }) &&
-      t.isIdentifier(key.object, { name: "Symbol" })) ||
-    (t.isCallExpression(key) && t.matchesPattern(key.callee, "Symbol.for"))
+    getLiteralKeyString(key) !== null ||
+    t.isTemplateLiteral(key) ||
+    t.isUnaryExpression(key) ||
+    t.isBinaryExpression(key) ||
+    t.isUpdateExpression(key)
+  );
+}
+
+const wellKnownSymbols = new Set([
+  "asyncDispose",
+  "asyncIterator",
+  "dispose",
+  "hasInstance",
+  "isConcatSpreadable",
+  "iterator",
+  "match",
+  "matchAll",
+  "replace",
+  "search",
+  "species",
+  "split",
+  "toPrimitive",
+  "toStringTag",
+  "unscopables",
+]);
+
+/** Whether an expression already produces a string or symbol property key. */
+export function isPrimitiveKeyExpression(key: t.Node, scope: Scope): boolean {
+  return (
+    t.isStringLiteral(key) ||
+    t.isTemplateLiteral(key) ||
+    t.isUnaryExpression(key, { operator: "typeof" }) ||
+    (!scope.hasBinding("Symbol", { noGlobals: true }) &&
+      ((t.isMemberExpression(key, { computed: false }) &&
+        t.isIdentifier(key.object, { name: "Symbol" }) &&
+        t.isIdentifier(key.property) &&
+        wellKnownSymbols.has(key.property.name)) ||
+        (t.isCallExpression(key) &&
+          t.matchesPattern(key.callee, "Symbol.for"))))
   );
 }
 

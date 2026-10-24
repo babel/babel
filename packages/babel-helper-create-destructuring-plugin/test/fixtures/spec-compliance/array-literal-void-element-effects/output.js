@@ -1,5 +1,3 @@
-x++;
-const a = 2;
-new Foo();
-const b = 2;
+const a = [x++, 2][1];
+const b = [new Foo(), 2][1];
 const c = 2;

@@ -3,6 +3,6 @@ var _a$b = {
     b: 1
   },
   a = _a$b.a,
-  _String = String(a),
-  b = _a$b[_String],
-  rest = babelHelpers.objectWithoutProperties(_a$b, ["a", _String].map(babelHelpers.toPropertyKey));
+  _babelHelpers$toPrope = babelHelpers.toPropertyKey(String(a)),
+  b = _a$b[_babelHelpers$toPrope],
+  rest = babelHelpers.objectWithoutProperties(_a$b, ["a", _babelHelpers$toPrope]);
