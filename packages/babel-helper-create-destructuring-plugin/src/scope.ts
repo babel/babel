@@ -127,12 +127,14 @@ function forEachScopeInfoPath(path: NodePath, visit: (p: NodePath) => void) {
  */
 export function collectScopeInfo(path: NodePath): () => void {
   // References and violations are forgotten by node, so the nodes don't need
-  // paths: a name is resolved from the scope of `path`. If it resolves to a
-  // binding of a nested scope instead, the outer binding has no reference to
-  // that node and nothing is forgotten. The bindings of nested scopes don't
-  // need to be forgotten: their references keep their paths, as their parent
-  // nodes don't change, or the scope is created again when visiting its new
-  // path.
+  // paths: a name is resolved from the scope of `path`, to all the bindings
+  // with that name in it and its parents. The node can't be resolved more
+  // precisely without its path: e.g. parameter defaults don't see the
+  // declarations of the function body, which share the scope of the
+  // function. Bindings that have no reference to that node are unaffected.
+  // The bindings of nested scopes don't need to be forgotten: their
+  // references keep their paths, as their parent nodes don't change, or the
+  // scope is created again when visiting its new path.
   const { scope } = path;
   const references = new Map<Binding, Set<t.Node>>();
   const violations = new Map<Binding, Set<t.Node>>();
@@ -141,11 +143,13 @@ export function collectScopeInfo(path: NodePath): () => void {
     name: string,
     node: t.Node,
   ) => {
-    const binding = scope.getBinding(name);
-    if (!binding) return;
-    let nodes = map.get(binding);
-    if (!nodes) map.set(binding, (nodes = new Set()));
-    nodes.add(node);
+    for (let s: Scope | undefined = scope; s; s = s.parent) {
+      const binding = s.getOwnBinding(name);
+      if (!binding) continue;
+      let nodes = map.get(binding);
+      if (!nodes) map.set(binding, (nodes = new Set()));
+      nodes.add(node);
+    }
   };
   t.traverseFast(path.node, node => {
     switch (node.type) {
