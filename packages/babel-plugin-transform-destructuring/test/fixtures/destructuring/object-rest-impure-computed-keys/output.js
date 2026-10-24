@@ -1,5 +1,5 @@
 var _z = z;
 babelHelpers.objectDestructuringEmpty(_z);
-var _fn = fn(),
-  x = _z[_fn],
-  y = babelHelpers.objectWithoutProperties(_z, [_fn].map(babelHelpers.toPropertyKey));
+var _babelHelpers$toPrope = babelHelpers.toPropertyKey(fn()),
+  x = _z[_babelHelpers$toPrope],
+  y = babelHelpers.objectWithoutProperties(_z, [_babelHelpers$toPrope]);

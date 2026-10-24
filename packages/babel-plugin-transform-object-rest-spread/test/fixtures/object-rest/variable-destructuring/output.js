@@ -1,12 +1,13 @@
+var _d;
 const [..._ref] = z().x15,
   y15 = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_ref), _ref));
 let _complex = complex,
   _complex$x = _complex.x,
   {
     a: xa,
-    [d]: f
+    [_d = babelHelpers.toPropertyKey(d)]: f
   } = _complex$x,
-  asdf = babelHelpers.objectWithoutProperties(_complex$x, ["a", d].map(babelHelpers.toPropertyKey)),
+  asdf = babelHelpers.objectWithoutProperties(_complex$x, ["a", _d]),
   _complex$y = _complex.y,
   d = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(_complex$y), _complex$y)),
   g = babelHelpers.objectWithoutProperties(_complex, ["x", "y"]);

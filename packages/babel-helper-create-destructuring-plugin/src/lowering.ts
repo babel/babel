@@ -8,6 +8,7 @@ import {
   hasObjectRest,
   isAnonymousFunctionDefinition,
   isObjectCoercible,
+  isPrimitiveExpression,
   isPrimitiveKeyExpression,
   isPureVoid,
   isSafeArrayLiteralElement,
@@ -537,7 +538,12 @@ export class Lowering {
       const prop = properties[i] as t.ObjectProperty;
       // private keys are not enumerable, so they are never excluded
       if (prop.key.type !== "PrivateName") hasExcludedKey = true;
-      if (prop.computed && mayRunUserCode(prop.key)) return true;
+      if (
+        prop.computed &&
+        (!isPrimitiveExpression(prop.key) || mayRunUserCode(prop.key))
+      ) {
+        return true;
+      }
       // Skipped and `void` properties are not read
       if (plan === PropertyPlan.Lower && prop.value.type !== "VoidPattern") {
         return false;
@@ -574,11 +580,12 @@ export class Lowering {
       key: ExcludedKey["key"],
       computed: boolean,
       original: t.Node = key,
+      primitive = isPrimitiveKeyExpression(original, scope),
     ) => {
       excluded.push({
         key,
         computed,
-        primitive: isPrimitiveKeyExpression(original),
+        primitive,
       });
     };
 
@@ -617,9 +624,12 @@ export class Lowering {
 
       if (plans[i] === PropertyPlan.Skip) {
         // Its key must still be evaluated and excluded from the rest object.
-        if (computed && !isStableExpression(key, scope)) {
+        if (
+          computed &&
+          (!isPrimitiveExpression(key) || !isStableExpression(key, scope))
+        ) {
           flush();
-          exclude(this.temp(key), true, key);
+          exclude(this.temp(this.toPropertyKey(key)), true, key, true);
         } else {
           exclude(key, computed);
         }
@@ -628,7 +638,11 @@ export class Lowering {
 
       if (plans[i] === PropertyPlan.Native) {
         let nativeProp = prop;
-        if (hasRest && computed && !isStableExpression(key, scope)) {
+        if (
+          hasRest &&
+          computed &&
+          (!isPrimitiveExpression(key) || !isStableExpression(key, scope))
+        ) {
           // Memoise the key inline so that it can be excluded from the rest
           // object while preserving the evaluation order:
           //   { [_key = f()]: x, ...rest }
@@ -636,9 +650,13 @@ export class Lowering {
           this.hoisted.push(id);
           nativeProp = {
             ...prop,
-            key: t.assignmentExpression("=", t.cloneNode(id), key),
+            key: t.assignmentExpression(
+              "=",
+              t.cloneNode(id),
+              this.toPropertyKey(key),
+            ),
           };
-          exclude(id, true, key);
+          exclude(id, true, key, true);
         } else {
           exclude(key, computed);
         }
@@ -652,16 +670,24 @@ export class Lowering {
       let keyComputed = computed;
       if (computed) {
         const target = value.type === "AssignmentPattern" ? value.left : value;
+        const primitive = isPrimitiveExpression(key);
         const needsTemp =
-          !isStableExpression(key, scope) &&
+          (!primitive || !isStableExpression(key, scope)) &&
           (hasRest ||
             // The target reference must be evaluated after the property name
             (this.isUnstableTarget(target) &&
-              (mayRunUserCode(key) || targetReferenceMayRunUserCode(target))));
+              (!primitive ||
+                mayRunUserCode(key) ||
+                targetReferenceMayRunUserCode(target))));
         if (needsTemp) {
-          keyExpr = this.temp(key);
+          keyExpr = this.temp(this.toPropertyKey(key));
         }
-        exclude(keyExpr, true, key);
+        exclude(
+          keyExpr,
+          true,
+          key,
+          needsTemp || isPrimitiveKeyExpression(key, scope),
+        );
       } else if (key.type === "Identifier" || key.type === "PrivateName") {
         exclude(key, false);
       } else {
@@ -697,6 +723,12 @@ export class Lowering {
       this.lowerTarget(value as PatternTarget, propRef);
     }
     flush();
+  }
+
+  private toPropertyKey(key: t.Expression): t.Expression {
+    return isPrimitiveKeyExpression(key, this.scope)
+      ? key
+      : t.callExpression(this.addHelper("toPropertyKey"), [key]);
   }
 
   private lowerArrayPattern(pattern: t.ArrayPattern, ref: Ref) {
@@ -881,11 +913,9 @@ export class Lowering {
       // deopt on spread elements
       if (t.isSpreadElement(element)) return false;
 
-      // deopt call expressions as they might change values of LHS variables
-      if (t.isCallExpression(element)) return false;
-
-      // deopt on member expressions as they may be getter/setters and have side-effects
-      if (t.isMemberExpression(element)) return false;
+      // The entire RHS runs before any target is bound, including nested
+      // calls, constructors and implicit coercions.
+      if (element && mayRunUserCode(element)) return false;
 
       // The array literal is fully evaluated before the pattern. If an earlier
       // target has side effects, later elements must not be affected by them.
@@ -955,6 +985,7 @@ function isEffectfulArrayTarget(
     case "AssignmentPattern":
       return (
         !scope.isPure(element.right) ||
+        mayRunUserCode(element.right) ||
         isEffectfulArrayTarget(element.left, value, scope)
       );
     case "ArrayPattern":
