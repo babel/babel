@@ -2,6 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import convertFunctionParams from "./params.ts";
 import convertFunctionRest from "./rest.ts";
 export { convertFunctionParams };
+export { isParamEvaluationObservable } from "./params.ts";
 
 export interface Options {
   /** @deprecated Use the `ignoreFunctionLength` assumption instead. */
