@@ -8,7 +8,9 @@ class C {
   static {
     var x = C.#x,
       y = C.#y,
-      z = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(C), C), []);
+      {
+        ...z
+      } = C;
     result = {
       x,
       y,

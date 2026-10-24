@@ -10,7 +10,9 @@ class C {
     }
     try {} catch (_ref3) {
       let [, _ref4] = _ref3,
-        rest = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_ref4), _ref4), []);
+        {
+          ...rest
+        } = _ref4;
     }
     for (const _ref5 of []) {
       const {
@@ -40,12 +42,16 @@ class C {
       q: 2,
       r: 3
     }];
-    rest = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_ref7), _ref7), []);
+    ({
+      ...rest
+    } = _ref7);
     var [, _ref8] = [0, {
         p: 1,
         q: 2,
         r: 3
       }],
-      rest = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_ref8), _ref8), []);
+      {
+        ...rest
+      } = _ref8;
   }
 }
