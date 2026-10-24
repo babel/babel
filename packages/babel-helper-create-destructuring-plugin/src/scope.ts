@@ -97,6 +97,10 @@ export function removeUndeclaredBindings(
 
 // Created once, so that it's only exploded once.
 const scopeInfoVisitor: Visitor<(p: NodePath) => void> = {
+  TSTypeAnnotation(path) {
+    // Match Scope#crawl: type annotations do not reference runtime bindings.
+    path.skip();
+  },
   ReferencedIdentifier(path, visit) {
     visit(path);
   },
