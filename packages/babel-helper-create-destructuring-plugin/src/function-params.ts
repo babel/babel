@@ -74,6 +74,40 @@ const conflictVisitor: Visitor<ConflictState> = {
   },
 };
 
+// Whether a function reads its own `arguments` object (also through arrow
+// functions, or a direct `eval`).
+const argumentsVisitor: Visitor<{ found: boolean }> = {
+  Function(path) {
+    if (!path.isArrowFunctionExpression()) path.skip();
+  },
+  Identifier(path, state) {
+    if (
+      (path.node.name === "arguments" && path.isReferencedIdentifier()) ||
+      (path.node.name === "eval" && path.parentPath.isCallExpression())
+    ) {
+      state.found = true;
+      path.stop();
+    }
+  },
+};
+
+/**
+ * In sloppy mode, the `arguments` object of a function with simple
+ * parameters is mapped to them: assigning a parameter changes the
+ * corresponding element, and conversely. Functions with destructuring
+ * parameters have an unmapped `arguments` object: keep the parameter list
+ * non-simple, with an unused rest element, which changes neither the
+ * function's `length` nor the arguments.
+ */
+function keepArgumentsUnmapped(path: NodePath<t.Function>) {
+  if (!path.node.params.every(param => t.isIdentifier(param))) return;
+  const [rest] = path.pushContainer(
+    "params",
+    t.restElement(path.scope.generateUidIdentifier("unmapped")),
+  );
+  path.scope.registerBinding("param", rest.get("argument"));
+}
+
 export function transformFunctionParams(
   path: NodePath<t.Function>,
   options: ResolvedOptions,
@@ -103,6 +137,17 @@ export function transformFunctionParams(
   }
 
   const functionScope = path.scope;
+
+  const argumentsState = { found: false };
+  if (
+    !path.isArrowFunctionExpression() &&
+    !path.isInStrictMode() &&
+    // When all destructuring is lowered, so are rest parameters: an ES5
+    // parameter list can't keep `arguments` unmapped.
+    !(options.features & FEATURES.destructuring)
+  ) {
+    path.traverse(argumentsVisitor, argumentsState);
+  }
 
   // Names bound by parameters that will be moved into the function body.
   const ownerOf = new Map<string, number>();
@@ -184,6 +229,7 @@ export function transformFunctionParams(
       options.noNewArrows,
     );
     forgetScopeInfo();
+    if (argumentsState.found) keepArgumentsUnmapped(path);
     functionScope.crawl();
     return;
   }
@@ -227,4 +273,5 @@ export function transformFunctionParams(
   // their new paths; they are forgotten by node when the declarations are
   // lowered.
   registerReplacement(declarationPaths, functionScope);
+  if (argumentsState.found) keepArgumentsUnmapped(path);
 }
