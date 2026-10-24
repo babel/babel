@@ -9,7 +9,7 @@ import {
   isAnonymousFunctionDefinition,
   isObjectCoercible,
   isPrimitiveExpression,
-  isPrimitiveKeyExpression,
+  isPropertyKeyExpression,
   isPureVoid,
   isSafeToEvaluate,
   isStablePropertyKey,
@@ -362,9 +362,8 @@ export class Lowering {
   }
 
   /**
-   * Whether `target` is an assignment target whose evaluation, which
-   * happens before its value is read, can affect or be affected by the code
-   * evaluated around it.
+   * Member references must be evaluated before reading their assigned value:
+   * even a constant base can throw if it is null or undefined.
    */
   private isMemberTarget(target: t.Node): target is t.MemberExpression {
     return this.isAssignment && t.isMemberExpression(target);
@@ -417,21 +416,8 @@ export class Lowering {
     }
   }
 
-  private lowerDefault(left: t.LVal, right: t.Expression, ref: Ref) {
-    // handle array init with void 0. This also happens when
-    // the value was originally a hole.
-    // const [x = 42] = [void 0,];
-    // -> const x = 42;
-    if (isPureVoid(ref.expr, this.scope)) {
-      ref.discarded = true;
-      if (t.isIdentifier(left) && isAnonymousFunctionDefinition(right)) {
-        this.bind(left, right);
-      } else {
-        this.lowerTarget(left, this.createRef(right));
-      }
-      return;
-    }
-
+  /** Infer default names before class static initialization. */
+  private namedDefault(left: t.LVal, right: t.Expression): t.Expression {
     let defaultValue = right;
     if (t.isIdentifier(left) && isAnonymousFunctionDefinition(right)) {
       // https://tc39.es/ecma262/#sec-runtime-semantics-namedevaluation
@@ -453,6 +439,26 @@ export class Lowering {
             ]);
       }
     }
+
+    return defaultValue;
+  }
+
+  private lowerDefault(left: t.LVal, right: t.Expression, ref: Ref) {
+    // handle array init with void 0. This also happens when
+    // the value was originally a hole.
+    // const [x = 42] = [void 0,];
+    // -> const x = 42;
+    if (isPureVoid(ref.expr, this.scope)) {
+      ref.discarded = true;
+      if (t.isIdentifier(left) && isAnonymousFunctionDefinition(right)) {
+        this.bind(left, right);
+      } else {
+        this.lowerTarget(left, this.createRef(right));
+      }
+      return;
+    }
+
+    const defaultValue = this.namedDefault(left, right);
 
     const { scope } = this;
     if (this.isMemberTarget(left)) {
@@ -591,8 +597,7 @@ export class Lowering {
     const exclude = (
       key: ExcludedKey["key"],
       computed: boolean,
-      original: t.Node = key,
-      primitive = isPrimitiveKeyExpression(original, scope),
+      primitive = isPropertyKeyExpression(key, scope),
     ) => {
       excluded.push({
         key,
@@ -638,7 +643,7 @@ export class Lowering {
         // Its key must still be evaluated and excluded from the rest object.
         if (computed && !isStablePropertyKey(key, scope)) {
           flush();
-          exclude(this.temp(this.toPropertyKey(key)), true, key, true);
+          exclude(this.temp(this.toPropertyKey(key)), true, true);
         } else {
           exclude(key, computed);
         }
@@ -661,7 +666,7 @@ export class Lowering {
               this.toPropertyKey(key),
             ),
           };
-          exclude(id, true, key, true);
+          exclude(id, true, true);
         } else {
           exclude(key, computed);
         }
@@ -690,8 +695,7 @@ export class Lowering {
         exclude(
           keyExpr,
           true,
-          key,
-          needsTemp || isPrimitiveKeyExpression(key, scope),
+          needsTemp || isPropertyKeyExpression(key, scope),
         );
       } else if (key.type === "Identifier" || key.type === "PrivateName") {
         exclude(key, false);
@@ -723,7 +727,7 @@ export class Lowering {
   }
 
   private toPropertyKey(key: t.Expression): t.Expression {
-    return isPrimitiveKeyExpression(key, this.scope)
+    return isPropertyKeyExpression(key, this.scope)
       ? key
       : t.callExpression(this.addHelper("toPropertyKey"), [key]);
   }

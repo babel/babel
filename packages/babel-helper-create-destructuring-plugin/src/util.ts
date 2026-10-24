@@ -288,33 +288,6 @@ export function isSafeToEvaluate(
 }
 
 /**
- * Whether evaluating the reference `target.x` / `target[key]` can be
- * observed or affected by the code evaluated around it.
- */
-export function isStableMemberTarget(
-  target: t.MemberExpression,
-  scope: Scope,
-): boolean {
-  const { object, property, computed } = target;
-  if (!isStableExpression(object, scope) && !t.isSuper(object)) return false;
-  return !computed || isStableExpression(property, scope);
-}
-
-/**
- * Whether the pattern contains an assignment target whose evaluation is not
- * stable (see `isStableMemberTarget`). Only meaningful in assignment mode.
- */
-export function containsUnstableMemberTarget(
-  target: PatternTarget,
-  scope: Scope,
-): boolean {
-  return someTarget(
-    target,
-    node => t.isMemberExpression(node) && !isStableMemberTarget(node, scope),
-  );
-}
-
-/**
  * https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
  */
 export function isAnonymousFunctionDefinition(node: t.Node): boolean {
@@ -412,7 +385,7 @@ const wellKnownSymbols = new Set([
 ]);
 
 /** Whether an expression already produces a string or symbol property key. */
-export function isPrimitiveKeyExpression(key: t.Node, scope: Scope): boolean {
+export function isPropertyKeyExpression(key: t.Node, scope: Scope): boolean {
   return (
     t.isStringLiteral(key) ||
     t.isTemplateLiteral(key) ||
