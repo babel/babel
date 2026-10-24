@@ -2,6 +2,7 @@ import { types as t } from "@babel/core";
 import type { NodePath, Scope, Visitor } from "@babel/core";
 import {
   convertFunctionParams,
+  isDefaultEvaluationObservable,
   isParamEvaluationObservable,
 } from "@babel/plugin-transform-parameters";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
@@ -190,7 +191,7 @@ export function transformFunctionParams(
     // Only the default value of a lowered parameter stays in the list
     return (
       param.isAssignmentPattern() &&
-      !functionScope.isPure(param.node.right, true)
+      isDefaultEvaluationObservable(param.node.right, functionScope)
     );
   });
 
