@@ -43,7 +43,9 @@ export default function transpileConstEnum(
       ),
     );
 
-    if (path.scope.hasOwnBinding(name)) {
+    const oldBinding = path.scope.getOwnBinding(name);
+    path.scope.removeOwnBinding(name);
+    if (oldBinding?.kind !== "unknown") {
       (parentIsExport ? path.parentPath : path).replaceWith(
         t.expressionStatement(
           t.callExpression(
