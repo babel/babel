@@ -251,6 +251,9 @@ export function isSafeToEvaluate(
  * https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
  */
 export function isAnonymousFunctionDefinition(node: t.Node): boolean {
+  if (t.isParenthesizedExpression(node)) {
+    return isAnonymousFunctionDefinition(node.expression);
+  }
   if (t.isArrowFunctionExpression(node)) return true;
   if (t.isFunctionExpression(node)) return !node.id;
   if (t.isClassExpression(node)) {
