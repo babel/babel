@@ -561,15 +561,43 @@ export class Lowering {
     return true;
   }
 
+  /**
+   * In partial lowering, a rest element that doesn't need to be lowered can
+   * stay in the native pattern of the properties before it, if it would
+   * exclude the same keys: the lowered properties before them must all have
+   * private keys, which are never copied to the rest object.
+   *
+   *   const { #x: x, y, ...z } = obj;  ->  const x = obj.#x, { y, ...z } = obj;
+   */
+  private keepNativeRest(
+    properties: t.ObjectPattern["properties"],
+    plans: PropertyPlan[],
+  ): boolean {
+    if (this.full || this.options.features & FEATURES.objectRest) return false;
+    let i = properties.length - 2;
+    while (i >= 0 && plans[i] === PropertyPlan.Native) i--;
+    for (; i >= 0; i--) {
+      if (
+        plans[i] !== PropertyPlan.Lower ||
+        (properties[i] as t.ObjectProperty).key.type !== "PrivateName"
+      ) {
+        return false;
+      }
+    }
+    plans[properties.length - 1] = PropertyPlan.Native;
+    return true;
+  }
+
   private lowerObjectPattern(pattern: t.ObjectPattern, ref: Ref) {
     const { properties } = pattern;
     const { scope, full } = this;
 
     // The pattern is only lowered when it needs to be (see `lowerTarget`): if
     // there is a rest element, either it or a property before it has to be
-    // lowered, and then the rest element must be lowered too.
+    // lowered, and then the rest element is usually lowered too.
     const hasRest = hasObjectRest(pattern);
     const plans = this.planProperties(properties, hasRest);
+    const lowersRest = hasRest && !this.keepNativeRest(properties, plans);
 
     if (this.needsCoercibleCheck(properties, plans, ref)) {
       if (full) {
@@ -609,6 +637,10 @@ export class Lowering {
     for (let i = 0; i < properties.length; i++) {
       const prop = properties[i];
       if (prop.type === "RestElement") {
+        if (!lowersRest) {
+          chunk.push(prop);
+          continue;
+        }
         flush();
         this.lowerTarget(
           prop.argument,
@@ -642,7 +674,7 @@ export class Lowering {
 
       if (plans[i] === PropertyPlan.Native) {
         let nativeProp = prop;
-        if (hasRest && computed && !isStablePropertyKey(key, scope)) {
+        if (lowersRest && computed && !isStablePropertyKey(key, scope)) {
           // Memoise the key inline so that it can be excluded from the rest
           // object while preserving the evaluation order:
           //   { [_key = f()]: x, ...rest }
@@ -672,7 +704,7 @@ export class Lowering {
         const target = value.type === "AssignmentPattern" ? value.left : value;
         const needsTemp =
           !isStablePropertyKey(key, scope) &&
-          (hasRest ||
+          (lowersRest ||
             // The property name is evaluated before the target reference,
             // including when either evaluation throws without running user code.
             this.isMemberTarget(target));
