@@ -738,7 +738,7 @@ export class Lowering {
     ) {
       ref.discarded = true;
       const holeToUndefined = (el: t.ArrayExpression["elements"][number]) =>
-        (el as t.Expression | null) ?? t.buildUndefinedNode();
+        el ? t.cloneNode(el as t.Expression) : t.buildUndefinedNode();
       const values = ref.expr.elements.map(element =>
         isSafeToEvaluate(element, this.scope)
           ? element
