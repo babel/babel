@@ -52,9 +52,10 @@ import { ScopeFlag, BindingFlag } from "../util/scopeflags.ts";
 import { ExpressionErrors } from "./util.ts";
 import { ParamKind, functionFlags } from "../util/production-parameter.ts";
 import {
+  initializerScope,
   newArrowHeadScope,
   newAsyncArrowScope,
-  newExpressionScope,
+  sharedExpressionScope,
 } from "../util/expression-scope.ts";
 import { Errors } from "../parse-error.ts";
 import {
@@ -291,11 +292,18 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     let ownExpressionErrors;
+    let inInitializerScope = false;
     if (refExpressionErrors) {
       ownExpressionErrors = false;
     } else {
       refExpressionErrors = new ExpressionErrors();
       ownExpressionErrors = true;
+      // Without refExpressionErrors, this expression is not part of a cover
+      // grammar and can never be a binding target.
+      if (this.expressionScope.canBeInParameters()) {
+        this.expressionScope.enter(initializerScope);
+        inInitializerScope = true;
+      }
     }
 
     this.state.canStartArrow = true;
@@ -354,6 +362,7 @@ export default abstract class ExpressionParser extends LValParser {
 
       this.next();
       node.right = this.parseMaybeAssign();
+      if (inInitializerScope) this.expressionScope.exit();
       this.checkLVal(
         left,
         this.finishNode(node, "AssignmentExpression"),
@@ -366,6 +375,7 @@ export default abstract class ExpressionParser extends LValParser {
       return node as N.AssignmentExpression;
     } else if (ownExpressionErrors) {
       this.checkExpressionErrors(refExpressionErrors, true);
+      if (inInitializerScope) this.expressionScope.exit();
     }
 
     if (isYield) {
@@ -2575,7 +2585,7 @@ export default abstract class ExpressionParser extends LValParser {
     isMethod: boolean = false,
   ): void {
     const isExpression = allowExpression && !this.match(tt.braceL);
-    this.expressionScope.enter(newExpressionScope());
+    this.expressionScope.enter(sharedExpressionScope);
 
     if (isExpression) {
       // https://tc39.es/ecma262/#prod-ExpressionBody
