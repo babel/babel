@@ -389,20 +389,23 @@ export class Lowering {
   }
 
   private lowerTarget(target: PatternTarget, ref: Ref) {
+    const isNative =
+      !this.full &&
+      target!.type !== "AssignmentPattern" &&
+      !needsLowering(target, this.options.features);
     if (
       this.isAssignment &&
-      (t.isObjectPattern(target) || t.isArrayPattern(target)) &&
+      // Native patterns, including the array patterns of partial lowering,
+      // read the value once before evaluating their targets.
+      (t.isObjectPattern(target) || (t.isArrayPattern(target) && this.full)) &&
+      !isNative &&
       someTarget(target, node => t.isMemberExpression(node))
     ) {
       // The whole value is read before evaluating any nested target,
       // including targets that can throw without running user code.
       ref.forceTemp = true;
     }
-    if (
-      !this.full &&
-      target!.type !== "AssignmentPattern" &&
-      !needsLowering(target, this.options.features)
-    ) {
+    if (isNative) {
       this.bindRef(target as t.LVal, ref);
       return;
     }
