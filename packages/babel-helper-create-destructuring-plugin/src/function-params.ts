@@ -149,7 +149,12 @@ export function transformFunctionParams(
     );
   });
 
-  if (conflictIndex !== -1 || shadowed || reordered) {
+  // The parameters of generators are initialized when they are called, not
+  // when they are first resumed: convertFunctionParams evaluates them in a
+  // function wrapping the generator body.
+  const { generator } = path.node;
+
+  if (conflictIndex !== -1 || shadowed || reordered || generator) {
     // Move the conflicting parameters, and the following ones, into the body.
     // convertFunctionParams also moves the parameters that must be evaluated
     // after them.
