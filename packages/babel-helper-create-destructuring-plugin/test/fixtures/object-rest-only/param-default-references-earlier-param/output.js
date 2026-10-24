@@ -1,8 +1,8 @@
 const _excluded = ["a"];
 function f(_ref) {
-  let a = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_ref), _ref), []);
+  let a = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref), _ref)), []);
   let _ref2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : a,
-    b = babelHelpers.objectWithoutProperties((babelHelpers.objectDestructuringEmpty(_ref2), _ref2), []);
+    b = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref2), _ref2)), []);
 }
 function g(_ref3, _ref4) {
   var _a;
