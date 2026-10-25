@@ -1,4 +1,4 @@
 import { readFileSync as _readFileSync } from "fs";
 const ns = {
-  default: String(_readFileSync(new URL(import.meta.resolve("./x"))))
+  default: String(_readFileSync(new URL(import.meta.resolve("./x")))).replace(/^\xEF\xBB\xBF/, "")
 };

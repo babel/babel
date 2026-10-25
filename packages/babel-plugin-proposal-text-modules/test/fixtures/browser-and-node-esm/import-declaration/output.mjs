@@ -1,2 +1,2 @@
-const j = await (typeof process === "object" && process.versions?.node ? import("fs").then(fs => fs.promises.readFile(new URL(import.meta.resolve("./x")))).then(String) : _processResponse(fetch(import.meta.resolve("./x")), "text"));
+const j = await (typeof process === "object" && process.versions?.node ? import("fs").then(fs => fs.promises.readFile(new URL(import.meta.resolve("./x")))).then(_ => String(_).replace(/^\xEF\xBB\xBF/, "")) : _processResponse(fetch(import.meta.resolve("./x")), "text"));
 function _processResponse(t, e, r) { return t.then(t => { if (t.ok) { const s = t[e](); return r ? s.then(r) : s; } throw TypeError(`Fetch failed: ${t.status} ${t.statusText}`); }); }
