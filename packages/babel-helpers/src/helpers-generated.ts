@@ -113,17 +113,17 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 63, gzip size: 77
+  // size: 194, gzip size: 154
   arrayWithoutHoles: helper(
     "7.0.0-beta.0",
-    "function _arrayWithoutHoles(a){if(Array.isArray(a))return r(a)}",
+    'function _arrayWithoutHoles(t){var o;if(Array.isArray(t)&&("undefined"==typeof Symbol||(o=t[Symbol.iterator])===[][Symbol.iterator])&&(o||!(o=t["@@iterator"])||o===[]["@@iterator"]))return r(t)}',
     {
-      globals: ["Array"],
+      globals: ["Array", "Symbol"],
       locals: { _arrayWithoutHoles: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_arrayWithoutHoles",
       dependencies: {
-        arrayLikeToArray: ["body.0.body.body.0.consequent.argument.callee"],
+        arrayLikeToArray: ["body.0.body.body.1.consequent.argument.callee"],
       },
       internal: false,
     },
