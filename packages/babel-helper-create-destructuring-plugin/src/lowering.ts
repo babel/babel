@@ -64,6 +64,19 @@ function replaceInPlace(target: t.Node, source: t.Node) {
   Object.assign(target, source);
 }
 
+/**
+ * Whether `arguments` refers to an arguments object in `scope`: arrow
+ * functions use the one of their enclosing function, and there is none
+ * outside of functions (`arguments` is then a global).
+ */
+function hasArgumentsObject(scope: Scope): boolean {
+  let fn = scope.getFunctionParent();
+  while (fn?.path.isArrowFunctionExpression()) {
+    fn = fn.parent?.getFunctionParent() ?? null;
+  }
+  return fn !== null;
+}
+
 const enum Decision {
   None,
   Inline,
@@ -913,7 +926,11 @@ export class Lowering {
       return ref;
     }
 
-    if (t.isIdentifier(node, { name: "arguments" })) {
+    if (
+      t.isIdentifier(node, { name: "arguments" }) &&
+      !binding &&
+      hasArgumentsObject(scope)
+    ) {
       return this.createRef(
         template.expression.ast`Array.prototype.slice.call(${ref.use()})`,
         { isArray: true, isStatic: false, nameHint: node },

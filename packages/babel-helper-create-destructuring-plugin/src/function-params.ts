@@ -74,7 +74,9 @@ const argumentsVisitor: Visitor<{ found: boolean }> = {
   Identifier(path, state) {
     if (
       (path.node.name === "arguments" && path.isReferencedIdentifier()) ||
-      (path.node.name === "eval" && path.parentPath.isCallExpression())
+      (path.node.name === "eval" &&
+        path.key === "callee" &&
+        path.parentPath.isCallExpression())
     ) {
       state.found = true;
       path.stop();
