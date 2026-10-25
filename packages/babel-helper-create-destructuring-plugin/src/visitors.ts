@@ -454,7 +454,6 @@ export function buildDestructuringVisitor(guard: Guard): Visitor<PluginPass> {
       (path, state, options) => {
         const { node, parent } = path;
         if (t.isForXStatement(parent)) return;
-        if (!parent || !path.container) return; // i don't know why this is necessary - TODO
         if (node.declare) return;
         if (
           !node.declarations.some(declarator =>
