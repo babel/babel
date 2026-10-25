@@ -36,7 +36,7 @@ export function canUnpackArrayPattern(
   arr: t.ArrayExpression,
   scope: Scope,
 ): boolean {
-  // pattern has less elements than the array and doesn't have a rest so some
+  // pattern has fewer elements than the array and doesn't have a rest so some
   // elements won't be evaluated
   if (pattern.elements.length > arr.elements.length) return false;
   if (pattern.elements.length < arr.elements.length && !hasArrayRest(pattern)) {
@@ -48,7 +48,7 @@ export function canUnpackArrayPattern(
   let effectfulFrom = -1;
   for (let i = 0; i < pattern.elements.length; i++) {
     const element = pattern.elements[i];
-    // deopt on holes
+    // deopt on elisions
     if (!element) return false;
 
     // deopt on member expressions, also nested ones, as they may be

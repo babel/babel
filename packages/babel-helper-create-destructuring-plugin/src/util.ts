@@ -178,7 +178,7 @@ export function isInitializedReference(node: t.Node, scope: Scope): boolean {
 /**
  * Whether a computed key can be evaluated and coerced again later, with no
  * observable effects: `Symbol.for` always returns the same symbol for a
- * given key, and well-known symbols are not writable.
+ * key (registered symbols), and well-known symbols are not writable.
  */
 export function isStablePropertyKey(node: t.Node, scope: Scope): boolean {
   if (isPrimitiveExpression(node)) return isSafeToEvaluate(node, scope);
@@ -253,37 +253,34 @@ export function targetReferenceMayRunUserCode(
  * Whether evaluating a value can be delayed or omitted without observable
  * effects or errors. Even constant identifiers can throw in their TDZ.
  */
-export function isSafeToEvaluate(
-  element: t.Node | null,
-  scope: Scope,
-): boolean {
-  if (element === null) return true;
-  if (t.isPureish(element)) return true;
-  if (t.isIdentifier(element)) {
+export function isSafeToEvaluate(node: t.Node | null, scope: Scope): boolean {
+  if (node === null) return true;
+  if (t.isPureish(node)) return true;
+  if (t.isIdentifier(node)) {
     return (
-      ["undefined", "Infinity", "NaN"].includes(element.name) &&
-      !scope.hasBinding(element.name, { noGlobals: true })
+      ["undefined", "Infinity", "NaN"].includes(node.name) &&
+      !scope.hasBinding(node.name, { noGlobals: true })
     );
   }
-  if (t.isUnaryExpression(element)) {
+  if (t.isUnaryExpression(node)) {
     return (
-      ["void", "typeof", "!"].includes(element.operator) &&
-      isSafeToEvaluate(element.argument, scope)
+      ["void", "typeof", "!"].includes(node.operator) &&
+      isSafeToEvaluate(node.argument, scope)
     );
   }
-  if (t.isTemplateLiteral(element)) {
-    return element.expressions.every(
+  if (t.isTemplateLiteral(node)) {
+    return node.expressions.every(
       expr => isPrimitiveExpression(expr) && isSafeToEvaluate(expr, scope),
     );
   }
-  if (t.isArrayExpression(element)) {
-    return element.elements.every(el => isSafeToEvaluate(el, scope));
+  if (t.isArrayExpression(node)) {
+    return node.elements.every(el => isSafeToEvaluate(el, scope));
   }
-  if (t.isSequenceExpression(element)) {
-    return element.expressions.every(el => isSafeToEvaluate(el, scope));
+  if (t.isSequenceExpression(node)) {
+    return node.expressions.every(el => isSafeToEvaluate(el, scope));
   }
-  if (t.isObjectExpression(element)) {
-    return element.properties.every(
+  if (t.isObjectExpression(node)) {
+    return node.properties.every(
       prop =>
         t.isObjectProperty(prop) &&
         !prop.computed &&
@@ -621,7 +618,7 @@ export function splitArrayPattern(
   let split = false;
   for (let i = 0; i < elements.length; i++) {
     const element = elements[i];
-    // Holes and `void` don't bind anything: keep them in the pattern,
+    // Elisions and `void` don't bind anything: keep them in the pattern,
     // `void = _ref` would be invalid.
     if (!element || element.type === "VoidPattern") continue;
     if (!split) {
