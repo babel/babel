@@ -2499,9 +2499,9 @@ __metadata:
   resolution: "@babel/plugin-transform-explicit-resource-management@workspace:packages/babel-plugin-transform-explicit-resource-management"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-create-destructuring-plugin": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-transform-destructuring": "workspace:^"
   peerDependencies:
     "@babel/core": ^8.0.0
   languageName: unknown
