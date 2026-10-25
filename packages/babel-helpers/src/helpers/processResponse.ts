@@ -2,7 +2,7 @@
 
 export default function _processResponse(
   responseP: Promise<Response>,
-  method: "json" | "bytes" | "text",
+  method: "json" | "arrayBuffer" | "text",
   map?: (value: any) => any,
 ) {
   return responseP.then(response => {

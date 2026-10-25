@@ -325,6 +325,11 @@
       "import": "./helpers/esm/possibleConstructorReturn.js",
       "default": "./helpers/possibleConstructorReturn.js"
     },
+    "./helpers/processResponse": {
+      "node": "./helpers/processResponse.js",
+      "import": "./helpers/esm/processResponse.js",
+      "default": "./helpers/processResponse.js"
+    },
     "./helpers/readOnlyError": {
       "node": "./helpers/readOnlyError.js",
       "import": "./helpers/esm/readOnlyError.js",

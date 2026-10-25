@@ -7,10 +7,17 @@ declare global {
 }
 
 export default function _immutableUint8Array(
-  u8orNodeBuffer: Uint8Array<ArrayBuffer>,
+  arrayBufferOrNodeBuffer: Buffer<ArrayBuffer> | ArrayBuffer,
 ) {
-  var buf = u8orNodeBuffer.buffer;
+  if ("buffer" in arrayBufferOrNodeBuffer) {
+    arrayBufferOrNodeBuffer = arrayBufferOrNodeBuffer.buffer.slice(
+      arrayBufferOrNodeBuffer.byteOffset,
+      arrayBufferOrNodeBuffer.byteOffset + arrayBufferOrNodeBuffer.byteLength,
+    );
+  }
   return new Uint8Array(
-    buf.transferToImmutable ? buf.transferToImmutable() : buf,
+    arrayBufferOrNodeBuffer.transferToImmutable
+      ? arrayBufferOrNodeBuffer.transferToImmutable()
+      : arrayBufferOrNodeBuffer,
   );
 }

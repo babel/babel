@@ -661,10 +661,10 @@ const helpers: Record<string, Helper> = {
     dependencies: {},
     internal: false,
   }),
-  // size: 119, gzip size: 105
+  // size: 176, gzip size: 138
   immutableUint8Array: helper(
     "8.0.0-rc.2",
-    "function _immutableUint8Array(r){var t=r.buffer;return new Uint8Array(t.transferToImmutable?t.transferToImmutable():t)}",
+    'function _immutableUint8Array(e){return"buffer"in e&&(e=e.buffer.slice(e.byteOffset,e.byteOffset+e.byteLength)),new Uint8Array(e.transferToImmutable?e.transferToImmutable():e)}',
     {
       globals: ["Uint8Array"],
       locals: { _immutableUint8Array: ["body.0.id"] },
