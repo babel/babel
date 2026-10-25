@@ -23,11 +23,9 @@
   "keywords": [
     "babel-plugin",
     "import",
-    "source",
-    "phase",
-    "wasm",
-    "WebAssembly",
-    "assertions",
+    "type",
+    "bytes",
+    "attributes",
     "proposal",
     "stage-3"
   ],

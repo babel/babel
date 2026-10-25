@@ -23,9 +23,9 @@
   "keywords": [
     "babel-plugin",
     "import",
+    "type",
     "text",
     "attributes",
-    "assertions",
     "proposal",
     "stage-3"
   ],
