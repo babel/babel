@@ -61,32 +61,35 @@ export function createDestructuringPlugin({
 
   const visitor = buildDestructuringVisitor(guard);
 
-  if (feature & (FEATURES.objectRest | FEATURES.privateDestructuring)) {
-    Object.assign(visitor, {
-      Function: guard<t.Function>((path, _, options) =>
-        transformFunctionParams(path, options),
-      ),
-    });
-  }
+  // The newest helper copy must handle every enabled feature, including
+  // features enabled by plugins using an older copy of this helper.
+  Object.assign(visitor, {
+    Function: guard<t.Function>((path, _, options) => {
+      if (
+        options.features &
+        (FEATURES.objectRest | FEATURES.privateDestructuring)
+      ) {
+        transformFunctionParams(path, options);
+      }
+    }),
+    ObjectExpression: guard<t.ObjectExpression>((path, state, options) => {
+      if (options.features & FEATURES.objectSpread) {
+        transformObjectSpread(path, state, options);
+      }
+    }),
+  });
 
-  if (feature & FEATURES.objectSpread) {
-    Object.assign(visitor, {
-      ObjectExpression: guard<t.ObjectExpression>(transformObjectSpread),
-    });
-  }
-
-  if (feature & FEATURES.privateDestructuring) {
-    // Private names in patterns must be lowered to private member
-    // expressions before the class features plugins transform the class,
-    // which happens when visiting the Class node.
-    const innerVisitor: Visitor<PluginPass> = { ...visitor };
-    Object.assign(visitor, {
-      Class: guard<t.Class>((path, state) => {
-        if (!hasPrivateClassElement(path.node.body)) return;
-        path.traverse(innerVisitor, state);
-      }),
-    });
-  }
+  // Private names in patterns must be lowered to private member
+  // expressions before the class features plugins transform the class,
+  // which happens when visiting the Class node.
+  const innerVisitor: Visitor<PluginPass> = { ...visitor };
+  Object.assign(visitor, {
+    Class: guard<t.Class>((path, state, options) => {
+      if (!(options.features & FEATURES.privateDestructuring)) return;
+      if (!hasPrivateClassElement(path.node.body)) return;
+      path.traverse(innerVisitor, state);
+    }),
+  });
 
   return {
     name,

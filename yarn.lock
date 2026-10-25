@@ -838,6 +838,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/plugin-transform-class-properties": "workspace:^"
     "@babel/plugin-transform-parameters": "workspace:^"
     verkit: "catalog:"
   peerDependencies:
