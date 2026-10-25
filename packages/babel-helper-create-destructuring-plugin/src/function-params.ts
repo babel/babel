@@ -12,16 +12,6 @@ import { needsLowering } from "./util.ts";
 type Param = t.Function["params"][number];
 type Binding = Scope["bindings"][string];
 
-/**
- * Replace parameters containing object rest or private keys with a
- * temporary identifier, destructured at the beginning of the function body.
- *
- *   function f({ a, ...b }, [c, { ...d }]) {}
- * becomes
- *   function f(_ref, [c, _ref2]) { var { a, ...b } = _ref, { ...d } = _ref2; }
- *
- * The declarations are then lowered by the VariableDeclaration visitor.
- */
 interface ConflictState {
   ownerOf: Map<string, number>;
   functionScope: Scope;
@@ -93,12 +83,12 @@ const argumentsVisitor: Visitor<{ found: boolean }> = {
 };
 
 /**
- * In sloppy mode, the `arguments` object of a function with simple
- * parameters is mapped to them: assigning a parameter changes the
- * corresponding element, and conversely. Functions with destructuring
- * parameters have an unmapped `arguments` object: keep the parameter list
- * non-simple, with an unused rest element, which changes neither the
- * function's `length` nor the arguments.
+ * In sloppy mode, a function whose parameter list is simple
+ * (IsSimpleParameterList) has a mapped `arguments` object: assigning a
+ * parameter changes the corresponding element, and conversely. Functions with
+ * destructuring parameters have an unmapped `arguments` object: keep the
+ * parameter list non-simple, with an unused rest element, which changes
+ * neither the function's `length` nor the arguments.
  */
 function keepArgumentsUnmapped(path: NodePath<t.Function>) {
   if (!path.node.params.every(param => t.isIdentifier(param))) return;
@@ -109,6 +99,16 @@ function keepArgumentsUnmapped(path: NodePath<t.Function>) {
   path.scope.registerBinding("param", rest.get("argument"));
 }
 
+/**
+ * Replace parameters containing object rest or private keys with a
+ * temporary identifier, destructured at the beginning of the function body.
+ *
+ *   function f({ a, ...b }, [c, { ...d }]) {}
+ * becomes
+ *   function f(_ref, [c, _ref2]) { var { a, ...b } = _ref, { ...d } = _ref2; }
+ *
+ * The declarations are then lowered by the VariableDeclaration visitor.
+ */
 export function transformFunctionParams(
   path: NodePath<t.Function>,
   options: ResolvedOptions,
