@@ -93,6 +93,9 @@ const argumentsVisitor: Visitor<{ found: boolean }> = {
  * neither the function's `length` nor the arguments.
  */
 function keepArgumentsUnmapped(path: NodePath<t.Function>) {
+  // setter has exactly one parameter, which is also the lowered one that
+  // user code cannot assign, so the mapping is not observable.
+  if (path.isMethod({ kind: "set" })) return;
   if (!path.node.params.every(param => t.isIdentifier(param))) return;
   const [rest] = path.pushContainer(
     "params",
