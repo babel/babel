@@ -545,6 +545,14 @@ export default abstract class StatementParser extends ExpressionParser {
     // next token is a colon and the expression was a simple
     // Identifier node, we switch to interpreting it as a label.
     const maybeName = this.state.value;
+    if (startType === tt._arguments && this.lookahead().type === tt.colon) {
+      // A LabelIdentifier is not an IdentifierReference, so `arguments` is a
+      // valid label even where ContainsArguments must be false (class field
+      // initializers and static blocks).
+      const label = this.parseIdentifier(true);
+      this.next();
+      return this.parseLabeledStatement(node, maybeName, label, flags);
+    }
     const expr = this.parseExpression();
 
     if (
@@ -700,7 +708,7 @@ export default abstract class StatementParser extends ExpressionParser {
     if (this.isLineTerminator()) {
       node.label = null;
     } else {
-      node.label = this.parseIdentifier();
+      node.label = this.parseIdentifier(this.match(tt._arguments));
       this.semicolon();
     }
 
@@ -1378,11 +1386,17 @@ export default abstract class StatementParser extends ExpressionParser {
           ? this.parseMaybeAssignDisallowIn()
           : this.parseMaybeAssignAllowIn();
 
-      if (decl.init === null && !allowMissingInitializer) {
-        if (
-          decl.id.type !== "Identifier" &&
-          !(isFor && (this.match(tt._in) || this.isContextual(tt._of)))
-        ) {
+      if (
+        decl.init === null &&
+        !allowMissingInitializer &&
+        !(
+          isFor &&
+          // Only the first binding of a for-in/of head may omit the initializer
+          declarations.length === 0 &&
+          (this.match(tt._in) || this.isContextual(tt._of))
+        )
+      ) {
+        if (decl.id.type !== "Identifier") {
           this.raise(
             Errors.DeclarationMissingInitializer,
             this.state.lastTokEndLoc!,
@@ -1391,8 +1405,9 @@ export default abstract class StatementParser extends ExpressionParser {
             },
           );
         } else if (
-          (kind === "const" || kind === "using" || kind === "await using") &&
-          !(this.match(tt._in) || this.isContextual(tt._of))
+          kind === "const" ||
+          kind === "using" ||
+          kind === "await using"
         ) {
           this.raise(
             Errors.DeclarationMissingInitializer,
@@ -2180,8 +2195,8 @@ export default abstract class StatementParser extends ExpressionParser {
     const hasStar = parseAfterDefault && this.eatExportStar(node);
     const hasNamespace =
       hasStar && this.maybeParseExportNamespaceSpecifier(node);
-    const parseAfterNamespace =
-      parseAfterDefault && (!hasNamespace || this.eat(tt.comma));
+    // `export * as ns` must be followed by `from` (ExportFromClause).
+    const parseAfterNamespace = parseAfterDefault && !hasNamespace;
     const isFromRequired = hasDefault || hasStar;
 
     if (hasStar && !hasNamespace) {
@@ -2196,14 +2211,11 @@ export default abstract class StatementParser extends ExpressionParser {
       return this.finishNode(node, "ExportAllDeclaration");
     }
 
-    const hasSpecifiers = this.maybeParseExportNamedSpecifiers(node);
+    const hasSpecifiers =
+      parseAfterNamespace && this.maybeParseExportNamedSpecifiers(node);
 
     if (hasDefault && parseAfterDefault && !hasStar && !hasSpecifiers) {
       this.unexpected(null, tt.braceL);
-    }
-
-    if (hasNamespace && parseAfterNamespace) {
-      this.unexpected(null, tt._from);
     }
 
     let hasDeclaration;
@@ -2487,7 +2499,7 @@ export default abstract class StatementParser extends ExpressionParser {
       node.source = this.parseImportSource();
       this.maybeParseImportAttributes(node);
     } else if (expect) {
-      this.unexpected();
+      this.unexpected(null, tt._from);
     }
 
     this.semicolon();
@@ -2724,7 +2736,10 @@ export default abstract class StatementParser extends ExpressionParser {
     } else if (phase === "defer") {
       this.expectPlugin("deferredImportEvaluation", loc);
       (node as N.ImportDeclaration).phase = "defer";
-    } else if (this.hasPlugin("sourcePhaseImports")) {
+    } else if (
+      this.hasPlugin("sourcePhaseImports") ||
+      this.hasPlugin("deferredImportEvaluation")
+    ) {
       (node as N.ImportDeclaration).phase = null;
     }
   }

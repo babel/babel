@@ -1,14 +1,14 @@
 import _Object$getOwnPropertySymbols from "core-js-pure/features/object/get-own-property-symbols.js";
 import _indexOfInstanceProperty from "core-js-pure/features/instance/index-of.js";
 import objectWithoutPropertiesLoose from "./objectWithoutPropertiesLoose.js";
-function _objectWithoutProperties(e, t) {
-  if (null == e) return {};
+function _objectWithoutProperties(t, r) {
+  if (null == t) return {};
   var o,
-    r,
-    i = objectWithoutPropertiesLoose(e, t);
+    n,
+    i = objectWithoutPropertiesLoose(t, r);
   if (_Object$getOwnPropertySymbols) {
-    var n = _Object$getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === _indexOfInstanceProperty(t).call(t, o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    var l = _Object$getOwnPropertySymbols(t);
+    for (n = 0; n < l.length; n++) o = l[n], -1 === _indexOfInstanceProperty(r).call(r, o) && {}.propertyIsEnumerable.call(t, o) && (i[o] = t[o]);
   }
   return i;
 }

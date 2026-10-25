@@ -4,26 +4,26 @@ import getPrototypeOf from "./getPrototypeOf.js";
 import setPrototypeOf from "./setPrototypeOf.js";
 import isNativeFunction from "./isNativeFunction.js";
 import construct from "./construct.js";
-function _wrapNativeSuper(t) {
-  var r = "function" == typeof _Map ? new _Map() : void 0;
-  return _wrapNativeSuper = function _wrapNativeSuper(t) {
-    if (null === t || !isNativeFunction(t)) return t;
-    if ("function" != typeof t) throw new TypeError("Super expression must either be null or a function");
-    if (void 0 !== r) {
-      if (r.has(t)) return r.get(t);
-      r.set(t, Wrapper);
+function _wrapNativeSuper(p) {
+  var n = "function" == typeof _Map ? new _Map() : void 0;
+  return _wrapNativeSuper = function _wrapNativeSuper(p) {
+    if (null === p || !isNativeFunction(p)) return p;
+    if ("function" != typeof p) throw new TypeError("Super expression must either be null or a function");
+    if (void 0 !== n) {
+      if (n.has(p)) return n.get(p);
+      n.set(p, Wrapper);
     }
     function Wrapper() {
-      return construct(t, arguments, getPrototypeOf(this).constructor);
+      return construct(p, arguments, getPrototypeOf(this).constructor);
     }
-    return Wrapper.prototype = _Object$create(t.prototype, {
+    return Wrapper.prototype = _Object$create(p.prototype, {
       constructor: {
         value: Wrapper,
         enumerable: !1,
         writable: !0,
         configurable: !0
       }
-    }), setPrototypeOf(Wrapper, t);
-  }, _wrapNativeSuper(t);
+    }), setPrototypeOf(Wrapper, p);
+  }, _wrapNativeSuper(p);
 }
 export { _wrapNativeSuper as default };
