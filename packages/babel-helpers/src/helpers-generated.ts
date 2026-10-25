@@ -1024,6 +1024,19 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
+  // size: 159, gzip size: 147
+  processResponse: helper(
+    "8.0.0",
+    "function _processResponse(t,e,r){return t.then(t=>{if(t.ok){const s=t[e]();return r?s.then(r):s}throw TypeError(`Fetch failed: ${t.status} ${t.statusText}`)})}",
+    {
+      globals: ["TypeError"],
+      locals: { _processResponse: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_processResponse",
+      dependencies: {},
+      internal: false,
+    },
+  ),
   // size: 71, gzip size: 85
   readOnlyError: helper(
     "7.0.0-beta.0",

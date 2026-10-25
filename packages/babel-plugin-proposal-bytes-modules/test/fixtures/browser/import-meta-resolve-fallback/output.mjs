@@ -1,2 +1,3 @@
-const j = await fetch(import.meta.resolve?.("./x") ?? new URL("./x", import.meta.url)).then(r => r.bytes()).then(_immutableUint8Array);
+const j = await _processResponse(fetch(import.meta.resolve?.("./x") ?? new URL("./x", import.meta.url)), "bytes", _immutableUint8Array);
 function _immutableUint8Array(r) { var t = r.buffer; return new Uint8Array(t.transferToImmutable ? t.transferToImmutable() : t); }
+function _processResponse(t, e, r) { return t.then(t => { if (t.ok) { const s = t[e](); return r ? s.then(r) : s; } throw TypeError(`Fetch failed: ${t.status} ${t.statusText}`); }); }

@@ -16,7 +16,7 @@ export default declare(api => {
     transformers: {
       webFetch: (fetch, file) =>
         template.expression.ast`
-          ${fetch}.then(r => r.bytes()).then(${file.addHelper("immutableUint8Array")})
+          ${file.addHelper("processResponse")}(${fetch}, "bytes", ${file.addHelper("immutableUint8Array")})
         `,
       nodeFsSync: (buf, file) =>
         t.callExpression(file.addHelper("immutableUint8Array"), [buf]),

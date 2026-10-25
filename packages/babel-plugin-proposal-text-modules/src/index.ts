@@ -14,7 +14,9 @@ export default declare(api => {
     api,
     type: "text",
     transformers: {
-      webFetch: fetch => template.expression.ast`${fetch}.then(r => r.text())`,
+      webFetch: (fetch, file) =>
+        template.expression
+          .ast`${file.addHelper("processResponse")}(${fetch}, "text")`,
       nodeFsSync: buf => t.callExpression(t.identifier("String"), [buf]),
       nodeFsAsync: () => t.identifier("String"),
     },
