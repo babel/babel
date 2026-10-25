@@ -1,9 +1,10 @@
 import type Binding from "../binding.ts";
 import * as t from "@babel/types";
 import type { NodePath, ExplodedVisitor } from "../../index.ts";
-import { traverseNode } from "../../traverse-node.ts";
 import { explode } from "../../visitors.ts";
 import { getAssignmentIdentifiers, type Identifier } from "@babel/types";
+import { lightTraverse } from "../../light-traverse.ts";
+import TraversalContext from "../../context.ts";
 
 let renameVisitor: ExplodedVisitor<Renamer>;
 const getRenameVisitor = () =>
@@ -26,7 +27,7 @@ const getRenameVisitor = () =>
           path.requeueComputedKeyAndDecorators();
         }
         if (path.isSwitchStatement()) {
-          path.context.maybeQueue(path.get("discriminant"));
+          path._visitFrame!.queue.push(path.get("discriminant"));
         }
       }
     },
@@ -162,24 +163,22 @@ export default class Renamer {
     //     return x;
     //   },
     // };
-    const skipKeys: Record<string, true> = { discriminant: true };
+    const skipKeys = ["discriminant"];
     if (t.isMethod(blockToTraverse)) {
       if (blockToTraverse.computed) {
-        skipKeys.key = true;
+        skipKeys.push("key");
       }
       if (!t.isObjectMethod(blockToTraverse)) {
-        skipKeys.decorators = true;
+        skipKeys.push("decorators");
       }
     }
 
-    traverseNode(
-      blockToTraverse,
+    const ctx = new TraversalContext(
       getRenameVisitor(),
-      scope,
       this,
-      scope.path,
-      skipKeys,
+      scope.path.context.hub,
     );
+    lightTraverse(blockToTraverse, ctx, scope.path, skipKeys);
 
     scope.removeOwnBinding(oldName);
     scope.bindings[newName] = binding;

@@ -146,18 +146,22 @@ describe("converters", function () {
   describe("toStatement", function () {
     it("noop on statements", function () {
       const node = t.emptyStatement();
-      expect(t.toStatement(node)).toEqual(node);
+      expect(t.toStatement(node)).toBe(node);
       t.assertEmptyStatement(node);
     });
-    it("mutate class expression to declaration", function () {
+    it("convert class expression to declaration", function () {
       const node = t.classExpression(
         t.identifier("A"),
         null,
         t.classBody([]),
         [],
       );
-      t.toStatement(node);
-      t.assertClassDeclaration(node);
+      const statement = t.toStatement(node);
+      t.assertClassDeclaration(statement);
+      t.assertClassExpression(node);
+      expect(statement).not.toBe(node);
+      expect(statement.id).toBe(node.id);
+      expect(statement.body).toBe(node.body);
     });
     it("fail if class expression has no id", function () {
       const node = t.classExpression(null, null, t.classBody([]), []);
@@ -167,14 +171,19 @@ describe("converters", function () {
       expect(t.toStatement(node, /* ignore = */ true)).toBe(false);
       t.assertClassExpression(node);
     });
-    it("mutate function expression to declaration", function () {
+    it("convert function expression to declaration", function () {
       const node = t.functionExpression(
         t.identifier("A"),
         [],
         t.blockStatement([]),
       );
-      t.toStatement(node);
-      t.assertFunctionDeclaration(node);
+      const statement = t.toStatement(node);
+      t.assertFunctionDeclaration(statement);
+      t.assertFunctionExpression(node);
+      expect(statement).not.toBe(node);
+      expect(statement.id).toBe(node.id);
+      expect(statement.params).toBe(node.params);
+      expect(statement.body).toBe(node.body);
     });
     it("fail if function expression has no id", function () {
       const node = t.functionExpression(null, [], t.blockStatement([]));
@@ -208,44 +217,64 @@ describe("converters", function () {
       expect(t.toExpression(node)).toEqual(node);
       t.assertIdentifier(node);
     });
-    it("mutate class declaration to expression", function () {
+    it("convert class declaration to expression", function () {
       const node = t.classDeclaration(
         t.identifier("A"),
         null,
         t.classBody([]),
         [],
       );
-      t.toExpression(node);
-      t.assertClassExpression(node);
+      const expression = t.toExpression(node);
+      t.assertClassExpression(expression);
+      t.assertClassDeclaration(node);
+      expect(expression).not.toBe(node);
+      expect(expression.id).toBe(node.id);
+      expect(expression.body).toBe(node.body);
     });
-    it("mutate function declaration to expression", function () {
+    it("convert function declaration to expression", function () {
       const node = t.functionDeclaration(
         t.identifier("A"),
         [],
         t.blockStatement([]),
       );
-      t.toExpression(node);
-      t.assertFunctionExpression(node);
+      const expression = t.toExpression(node);
+      t.assertFunctionExpression(expression);
+      t.assertFunctionDeclaration(node);
+      expect(expression).not.toBe(node);
+      expect(expression.id).toBe(node.id);
+      expect(expression.params).toBe(node.params);
+      expect(expression.body).toBe(node.body);
     });
-    it("mutate object method to expression", function () {
+    it("convert object method to expression", function () {
       const node = t.objectMethod(
         "method",
         t.identifier("A"),
         [],
         t.blockStatement([]),
       );
-      t.toExpression(node);
-      t.assertFunctionExpression(node);
+      const expression = t.toExpression(node);
+      t.assertFunctionExpression(expression);
+      t.assertObjectMethod(node);
+      expect(expression).not.toBe(node);
+      expect(expression.params).toBe(node.params);
+      expect(expression.body).toBe(node.body);
     });
-    it("mutate class method to expression", function () {
+    it("convert class method to expression", function () {
       const node = t.classMethod(
         "constructor",
         t.identifier("A"),
         [],
         t.blockStatement([]),
       );
-      t.toExpression(node);
-      t.assertFunctionExpression(node);
+      node.id = t.identifier("inferredName");
+
+      const expression = t.toExpression(node);
+      t.assertFunctionExpression(expression);
+      t.assertClassMethod(node);
+      expect(expression).not.toBe(node);
+      expect(expression.id).toBe(node.id);
+      expect(expression.params).toBe(node.params);
+      expect(expression.body).toBe(node.body);
     });
     it("expression statement", function () {
       const inner = t.yieldExpression(t.identifier("foo"));
@@ -264,9 +293,11 @@ describe("converters", function () {
     it("strip class abstract", function () {
       const node = t.classDeclaration(t.identifier("A"), null, t.classBody([]));
       node.abstract = true;
-      t.toExpression(node);
-      t.assertClassExpression(node);
-      expect(node.abstract).toBe(false);
+      const expression = t.toExpression(node);
+      t.assertClassExpression(expression);
+      expect(expression.abstract).toBeUndefined();
+      t.assertClassDeclaration(node);
+      expect(node.abstract).toBe(true);
     });
   });
 });

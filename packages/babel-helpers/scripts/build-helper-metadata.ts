@@ -194,7 +194,7 @@ export function getHelperMetadata(
 function makePath(path: NodePath) {
   const parts = [];
 
-  for (; path.parentPath; path = path.parentPath) {
+  for (; !path.isProgram(); path = path.parentPath!) {
     parts.push(path.key);
     if (path.inList) parts.push(path.listKey);
   }

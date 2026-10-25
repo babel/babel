@@ -1,4 +1,4 @@
-import { NodePath } from "../lib/index.js";
+import traverse from "../lib/index.js";
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
@@ -12,8 +12,15 @@ function assertConversion(
   const inputAst = wrapMethod(input, methodName, extend);
   const outputAst = wrapMethod(output, methodName, extend);
 
-  const rootPath = NodePath.get({
-    hub: {
+  traverse(
+    inputAst,
+    {
+      ClassMethod(path) {
+        path.get("body.body.0.expression").arrowFunctionToExpression(arrowOpts);
+      },
+    },
+    undefined,
+    {
       addHelper(helperName) {
         return t.memberExpression(
           t.identifier("babelHelpers"),
@@ -21,17 +28,7 @@ function assertConversion(
         );
       },
     },
-    parentPath: null,
-    parent: inputAst,
-    container: inputAst,
-    key: "program",
-  }).setContext();
-
-  rootPath.traverse({
-    ClassMethod(path) {
-      path.get("body.body.0.expression").arrowFunctionToExpression(arrowOpts);
-    },
-  });
+  );
 
   expect(generate(inputAst).code).toBe(generate(outputAst).code);
 }

@@ -1,13 +1,14 @@
 // This file contains methods responsible for removing a node.
 
 import { hooks } from "./lib/removal-hooks.ts";
-import { getCachedPaths } from "../cache.ts";
 import { _replaceWith } from "./replacement.ts";
 import type NodePath from "./index.ts";
 import { REMOVED, SHOULD_SKIP } from "./index.ts";
 import * as t from "@babel/types";
 import { updateSiblingKeys } from "./modification.ts";
 import { resync } from "./context.ts";
+import { uncacheNodePath } from "../cache.ts";
+import TraversalContext from "../context.ts";
 
 export function remove(this: NodePath<t.Node | null>) {
   _assertUnremoved.call(this);
@@ -28,8 +29,18 @@ export function remove(this: NodePath<t.Node | null>) {
     this.shareCommentsWithSiblings();
 
     if (Array.isArray(this.container)) {
-      this.container.splice(this.key as number, 1);
-      updateSiblingKeys.call(this, this.key as number, -1);
+      const index = this.key as number;
+      this.container.splice(index, 1);
+      updateSiblingKeys.call(this, index + 1, -1);
+
+      for (let ctx = TraversalContext.current; ctx; ctx = ctx._parent) {
+        for (let i = ctx._depth - 1; i > 0; i--) {
+          const frame = ctx._stacks[i];
+          if (frame.container === this.container && frame.index >= index) {
+            frame.index--;
+          }
+        }
+      }
     } else {
       _replaceWith.call(this, null);
     }
@@ -37,9 +48,7 @@ export function remove(this: NodePath<t.Node | null>) {
 
   // Mark the path as removed.
   this._traverseFlags |= SHOULD_SKIP | REMOVED;
-  if (this.parent) {
-    getCachedPaths(this)?.delete(this.node!);
-  }
+  uncacheNodePath(this);
   this.node = null;
 }
 

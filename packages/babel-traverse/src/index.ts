@@ -7,9 +7,7 @@ import {
   traverseFast,
 } from "@babel/types";
 import type * as t from "@babel/types";
-import * as cache from "./cache.ts";
-import type NodePath from "./path/index.ts";
-import type { default as Scope, Binding } from "./scope/index.ts";
+import type { Binding } from "./scope/index.ts";
 import type {
   ExplodedVisitor,
   Visitor,
@@ -17,14 +15,17 @@ import type {
   VisitorProp,
   TraverseOptions,
 } from "./types.ts";
-import { traverseNode } from "./traverse-node.ts";
+import { lightTraverse } from "./light-traverse.ts";
+import type { HubInterface } from "./hub.ts";
+import TraversalContext from "./context.ts";
 
 export type { ExplodedVisitor, Visitor, VisitorBase, Binding, TraverseOptions };
 export { default as NodePath } from "./path/index.ts";
 export { default as Scope, type BindingKind } from "./scope/index.ts";
 export { default as Hub } from "./hub.ts";
-export type { HubInterface } from "./hub.ts";
+export type { HubInterface };
 export type { VisitWrapper } from "./visitors.ts";
+export { createNodePath, createRootPath } from "./context.ts";
 
 export { visitors };
 
@@ -33,59 +34,43 @@ function traverse<S, T extends object>(
   opts: {
     [P in keyof T]: VisitorProp<S, P & string>;
   },
-  scope: Scope | null | undefined,
   state: S,
-  parentPath?: NodePath,
-  visitSelf?: boolean,
+  hub?: HubInterface,
 ): void;
 function traverse<T extends object>(
   parent: t.Node,
   opts: {
     [P in keyof T]: VisitorProp<any, P & string>;
   },
-  scope?: Scope | null,
   state?: any,
-  parentPath?: NodePath,
-  visitSelf?: boolean,
+  hub?: HubInterface,
 ): void;
 function traverse<S>(
   parent: t.Node,
   opts: TraverseOptions & Visitor<S>,
-  scope: Scope | null | undefined,
   state: S,
-  parentPath?: NodePath,
-  visitSelf?: boolean,
+  hub?: HubInterface,
 ): void;
 function traverse(
   parent: t.Node,
   opts: TraverseOptions & Visitor<any>,
-  scope?: Scope | null,
   state?: any,
-  parentPath?: NodePath,
-  visitSelf?: boolean,
+  hub?: HubInterface,
 ): void;
 function traverse(
   parent: t.Node,
   opts: any = {},
-  scope?: Scope | null,
   state?: any,
-  parentPath?: NodePath,
-  visitSelf?: boolean,
+  hub?: HubInterface,
 ) {
   if (!parent) return;
 
-  if (!opts.noScope && !scope) {
+  if (!opts.noScope) {
     if (parent.type !== "Program" && parent.type !== "File") {
       throw new Error(
-        "You must pass a scope and parentPath unless traversing a Program/File. " +
-          `Instead of that you tried to traverse a ${parent.type} node without ` +
-          "passing scope and parentPath.",
+        "If you do not pass `noScope: true` to traverse, the root node must be a Program or File node.",
       );
     }
-  }
-
-  if (!parentPath && visitSelf) {
-    throw new Error("visitSelf can only be used when providing a NodePath.");
   }
 
   if (!VISITOR_KEYS[parent.type]) {
@@ -94,15 +79,8 @@ function traverse(
 
   visitors.explode(opts);
 
-  traverseNode(
-    parent,
-    opts,
-    scope,
-    state,
-    parentPath,
-    /* skipKeys */ undefined,
-    visitSelf,
-  );
+  const ctx = new TraversalContext(opts, state, hub!);
+  lightTraverse(parent, ctx);
 }
 
 export default traverse;
@@ -114,18 +92,6 @@ traverse.explode = visitors.explode;
 traverse.cheap = function (node: t.Node, enter: (node: t.Node) => void) {
   traverseFast(node, enter);
   return;
-};
-
-traverse.node = function (
-  node: t.Node,
-  opts: TraverseOptions & ExplodedVisitor,
-  scope?: Scope,
-  state?: any,
-  path?: NodePath,
-  skipKeys?: Record<string, boolean>,
-) {
-  traverseNode(node, opts, scope, state, path, skipKeys);
-  // traverse.node always returns undefined
 };
 
 traverse.clearNode = function (node: t.Node, opts?: RemovePropertiesOptions) {
@@ -160,5 +126,3 @@ traverse.hasType = function (
     }
   });
 };
-
-traverse.cache = cache;
