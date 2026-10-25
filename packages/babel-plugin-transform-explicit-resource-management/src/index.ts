@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { unshiftForXStatementBody } from "@babel/plugin-transform-destructuring";
+import { unshiftForXStatementBody } from "@babel/helper-create-destructuring-plugin";
 import { types as t, template, traverse } from "@babel/core";
 import type { NodePath, Visitor, PluginPass } from "@babel/core";
 
