@@ -1,4 +1,4 @@
-function _classPrivateFieldInitSpec(e, t, a) { _checkPrivateRedeclaration(e, t), t.set(e, a); }
+function _classPrivateFieldInitSpec(t, i, a) { _checkPrivateRedeclaration(t, i), i.set(t, a); }
 function _checkPrivateRedeclaration(e, t) { if (t.has(e)) throw new TypeError("Cannot initialize the same private elements twice on an object"); }
 var _message = /*#__PURE__*/new WeakMap();
 class _TypeError2 {

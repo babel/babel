@@ -63,10 +63,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 2839, gzip size: 1468
+  // size: 2790, gzip size: 1454
   applyDecs2311: helper(
     "7.24.0",
-    'function applyDecs2311(e,t,n,r,o,i){var a,c,u,s,f,l,p,d=Symbol.metadata||Symbol.for("Symbol.metadata"),m=Object.defineProperty,h=Object.create,y=[h(null),h(null)],v=t.length;function g(t,n,r){return function(o,i){n&&(i=o,o=e);for(var a=0;a<t.length;a++)i=t[a].apply(o,r?[i]:[]);return r?i:o}}function b(e,t,n,r){if("function"!=typeof e&&(r||void 0!==e))throw new TypeError(t+" must "+(n||"be")+" a function"+(r?"":" or undefined"));return e}function applyDec(e,t,n,r,o,i,u,s,f,l,p){function d(e){if(!p(e))throw new TypeError("Attempted to access private element on non-instance")}var h=[].concat(t[0]),v=t[3],w=!u,D=1===o,S=3===o,j=4===o,E=2===o;function I(t,n,r){return function(o,i){return n&&(i=o,o=e),r&&r(o),P[t].call(o,i)}}if(!w){var P={},k=[],F=S?"get":j||D?"set":"value";if(f?(l||D?P={get:setFunctionName(function(){return v(this)},r,"get"),set:function(e){t[4](this,e)}}:P[F]=v,l||setFunctionName(P[F],r,E?"":F)):l||(P=Object.getOwnPropertyDescriptor(e,r)),!l&&!f){if((c=y[+s][r])&&7!==(c^o))throw Error("Decorating two elements with the same name ("+P[F].name+") is not supported yet");y[+s][r]=o<3?1:o}}for(var N=e,O=h.length-1;O>=0;O-=n?2:1){var T=b(h[O],"A decorator","be",!0),z=n?h[O-1]:void 0,A={},H={kind:["field","accessor","method","getter","setter","class"][o],name:r,metadata:a,addInitializer:function(e,t){if(e.v)throw new TypeError("attempted to call addInitializer after decoration was finished");b(t,"An initializer","be",!0),i.push(t)}.bind(null,A)};if(w)c=T.call(z,N,H),A.v=1,b(c,"class decorators","return")&&(N=c);else if(H.static=s,H.private=f,c=H.access={has:f?p.bind():function(e){return r in e}},j||(c.get=f?E?function(e){return d(e),P.value}:I("get",0,d):function(e){return e[r]}),E||S||(c.set=f?I("set",0,d):function(e,t){e[r]=t}),N=T.call(z,D?{get:P.get,set:P.set}:P[F],H),A.v=1,D){if("object"==typeof N&&N)(c=b(N.get,"accessor.get"))&&(P.get=c),(c=b(N.set,"accessor.set"))&&(P.set=c),(c=b(N.init,"accessor.init"))&&k.unshift(c);else if(void 0!==N)throw new TypeError("accessor decorators must return an object with get, set, or init properties or undefined")}else b(N,(l?"field":"method")+" decorators","return")&&(l?k.unshift(N):P[F]=N)}return o<2&&u.push(g(k,s,1),g(i,s,0)),l||w||(f?D?u.splice(-1,0,I("get",s),I("set",s)):u.push(E?P[F]:b.call.bind(P[F])):m(e,r,P)),N}function w(e){return m(e,d,{configurable:!0,enumerable:!0,value:a})}return void 0!==i&&(a=i[d]),a=h(null==a?null:a),f=[],l=function(e){e&&f.push(g(e))},p=function(t,r){for(var i=0;i<n.length;i++){var a=n[i],c=a[1],l=7&c;if((8&c)==t&&!l==r){var p=a[2],d=!!a[3],m=16&c;applyDec(t?e:e.prototype,a,m,d?"#"+p:toPropertyKey(p),l,l<2?[]:t?s=s||[]:u=u||[],f,!!t,d,r,t&&d?function(t){return checkInRHS(t)===e}:o)}}},p(8,0),p(0,0),p(8,1),p(0,1),l(u),l(s),c=f,v||w(e),{e:c,get c(){var n=[];return v&&[w(e=applyDec(e,[t],r,e.name,5,n)),g(n,1)]}}}',
+    'function applyDecs2311(n,o,i,a,c,u){var s,f,l,p,d,m,h,v=Symbol.metadata||Symbol.for("Symbol.metadata"),g=Object.defineProperty,y=Object.create,b=[y(null),y(null)],w=o.length;function D(e,t,r){return function(o,i){t&&(i=o,o=n);for(var a=0;a<e.length;a++)i=e[a].apply(o,r?[i]:[]);return r?i:o}}function j(e,t,r,n){if("function"!=typeof e&&(n||void 0!==e))throw new TypeError(t+" must "+(r||"be")+" a function"+(n?"":" or undefined"));return e}function applyDec(e,r,n,o,i,a,c,u,l,p,d){function m(e){if(!d(e))throw new TypeError("Attempted to access private element on non-instance")}var h=[].concat(r[0]),v=r[3],y=!c,w=1===i,E=3===i,O=4===i,S=2===i;function T(t,r,n){return function(o,i){return r&&(i=o,o=e),n&&n(o),z[t].call(o,i)}}if(!y){var z={},A=[],I=E?"get":O||w?"set":"value";if(l?(p||w?z={get:t(function(){return v(this)},o,"get"),set:function(e){r[4](this,e)}}:z[I]=v,p||t(z[I],o,S?"":I)):p||(z=Object.getOwnPropertyDescriptor(e,o)),!p&&!l){if((f=b[+u][o])&&7!==(f^i))throw Error("Decorating two elements with the same name ("+z[I].name+") is not supported yet");b[+u][o]=i<3?1:i}}for(var P=e,k=h.length-1;k>=0;k-=n?2:1){var x=j(h[k],"A decorator","be",!0),F=n?h[k-1]:void 0,H={},K={kind:["field","accessor","method","getter","setter","class"][i],name:o,metadata:s,addInitializer:function(e,t){if(e.v)throw new TypeError("attempted to call addInitializer after decoration was finished");j(t,"An initializer","be",!0),a.push(t)}.bind(null,H)};if(y)f=x.call(F,P,K),H.v=1,j(f,"class decorators","return")&&(P=f);else if(K.static=u,K.private=l,f=K.access={has:l?d.bind():function(e){return o in e}},O||(f.get=l?S?function(e){return m(e),z.value}:T("get",0,m):function(e){return e[o]}),S||E||(f.set=l?T("set",0,m):function(e,t){e[o]=t}),P=x.call(F,w?{get:z.get,set:z.set}:z[I],K),H.v=1,w){if("object"==typeof P&&P)(f=j(P.get,"accessor.get"))&&(z.get=f),(f=j(P.set,"accessor.set"))&&(z.set=f),(f=j(P.init,"accessor.init"))&&A.unshift(f);else if(void 0!==P)throw new TypeError("accessor decorators must return an object with get, set, or init properties or undefined")}else j(P,(p?"field":"method")+" decorators","return")&&(p?A.unshift(P):z[I]=P)}return i<2&&c.push(D(A,u,1),D(a,u,0)),p||y||(l?w?c.splice(-1,0,T("get",u),T("set",u)):c.push(S?z[I]:j.call.bind(z[I])):g(e,o,z)),P}function E(e){return g(e,v,{configurable:!0,enumerable:!0,value:s})}return void 0!==u&&(s=u[v]),s=y(null==s?null:s),d=[],m=function(e){e&&d.push(D(e))},h=function(t,o){for(var a=0;a<i.length;a++){var u=i[a],s=u[1],f=7&s;if((8&s)==t&&!f==o){var m=u[2],h=!!u[3],v=16&s;applyDec(t?n:n.prototype,u,v,h?"#"+m:r(m),f,f<2?[]:t?p=p||[]:l=l||[],d,!!t,h,o,t&&h?function(t){return e(t)===n}:c)}}},h(8,0),h(0,0),h(8,1),h(0,1),m(l),m(p),f=d,w||E(n),{e:f,get c(){var e=[];return w&&[E(n=applyDec(n,[o],a,n.name,5,e)),D(e,1)]}}}',
     {
       globals: ["Symbol", "Object", "TypeError", "Error"],
       locals: { applyDecs2311: ["body.0.id"] },
@@ -113,10 +113,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 78, gzip size: 83
+  // size: 63, gzip size: 77
   arrayWithoutHoles: helper(
     "7.0.0-beta.0",
-    "function _arrayWithoutHoles(r){if(Array.isArray(r))return arrayLikeToArray(r)}",
+    "function _arrayWithoutHoles(a){if(Array.isArray(a))return r(a)}",
     {
       globals: ["Array"],
       locals: { _arrayWithoutHoles: ["body.0.id"] },
@@ -154,10 +154,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 486, gzip size: 277
+  // size: 474, gzip size: 267
   asyncGeneratorDelegate: helper(
     "7.0.0-beta.0",
-    'function _asyncGeneratorDelegate(t){var e={},n=!1;function pump(e,r){return n=!0,r=new Promise(function(n){n(t[e](r))}),{done:!1,value:new OverloadYield(r,1)}}return e["undefined"!=typeof Symbol&&Symbol.iterator||"@@iterator"]=function(){return this},e.next=function(t){return n?(n=!1,t):pump("next",t)},"function"==typeof t.throw&&(e.throw=function(t){if(n)throw n=!1,t;return pump("throw",t)}),"function"==typeof t.return&&(e.return=function(t){return n?(n=!1,t):pump("return",t)}),e}',
+    'function _asyncGeneratorDelegate(n){var r={},e=!1;function pump(r,o){return e=!0,o=new Promise(function(t){t(n[r](o))}),{done:!1,value:new t(o,1)}}return r["undefined"!=typeof Symbol&&Symbol.iterator||"@@iterator"]=function(){return this},r.next=function(t){return e?(e=!1,t):pump("next",t)},"function"==typeof n.throw&&(r.throw=function(t){if(e)throw e=!1,t;return pump("throw",t)}),"function"==typeof n.return&&(r.return=function(t){return e?(e=!1,t):pump("return",t)}),r}',
     {
       globals: ["Promise", "Symbol"],
       locals: { _asyncGeneratorDelegate: ["body.0.id"] },
@@ -213,10 +213,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 63, gzip size: 83
+  // size: 51, gzip size: 71
   awaitAsyncGenerator: helper(
     "7.0.0-beta.0",
-    "function _awaitAsyncGenerator(e){return new OverloadYield(e,0)}",
+    "function _awaitAsyncGenerator(r){return new e(r,0)}",
     {
       globals: [],
       locals: { _awaitAsyncGenerator: ["body.0.id"] },
@@ -226,10 +226,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 180, gzip size: 144
+  // size: 107, gzip size: 109
   callSuper: helper(
     "7.23.8",
-    "function _callSuper(t,o,e){return o=getPrototypeOf(o),possibleConstructorReturn(t,isNativeReflectConstruct()?Reflect.construct(o,e||[],getPrototypeOf(t).constructor):o.apply(t,e))}",
+    "function _callSuper(e,c,p){return c=t(c),o(e,r()?Reflect.construct(c,p||[],t(e).constructor):c.apply(e,p))}",
     {
       globals: ["Reflect"],
       locals: { _callSuper: ["body.0.id"] },
@@ -302,10 +302,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 73, gzip size: 88
+  // size: 58, gzip size: 75
   classPrivateFieldGet2: helper(
     "7.24.0",
-    "function _classPrivateFieldGet2(s,a){return s.get(assertClassBrand(s,a))}",
+    "function _classPrivateFieldGet2(e,r){return e.get(t(e,r))}",
     {
       globals: [],
       locals: { _classPrivateFieldGet2: ["body.0.id"] },
@@ -317,10 +317,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 85, gzip size: 96
+  // size: 61, gzip size: 78
   classPrivateFieldInitSpec: helper(
     "7.14.1",
-    "function _classPrivateFieldInitSpec(e,t,a){checkPrivateRedeclaration(e,t),t.set(e,a)}",
+    "function _classPrivateFieldInitSpec(t,i,a){e(t,i),i.set(t,a)}",
     {
       globals: [],
       locals: { _classPrivateFieldInitSpec: ["body.0.id"] },
@@ -347,14 +347,14 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 73, gzip size: 89
+  // size: 71, gzip size: 87
   classPrivateFieldLooseKey: helper(
     "7.0.0-beta.0",
-    'var id=0;function _classPrivateFieldKey(e){return"__private_"+id+++"_"+e}',
+    'var e=0;function _classPrivateFieldKey(r){return"__private_"+e+++"_"+r}',
     {
       globals: [],
       locals: {
-        id: [
+        e: [
           "body.0.declarations.0.id",
           "body.1.body.body.0.argument.left.left.right.argument",
           "body.1.body.body.0.argument.left.left.right.argument",
@@ -367,10 +367,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 79, gzip size: 95
+  // size: 64, gzip size: 82
   classPrivateFieldSet2: helper(
     "7.24.0",
-    "function _classPrivateFieldSet2(s,a,r){return s.set(assertClassBrand(s,a),r),r}",
+    "function _classPrivateFieldSet2(e,r,s){return e.set(t(e,r),s),s}",
     {
       globals: [],
       locals: { _classPrivateFieldSet2: ["body.0.id"] },
@@ -384,10 +384,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 68, gzip size: 84
+  // size: 53, gzip size: 70
   classPrivateGetter: helper(
     "7.24.0",
-    "function _classPrivateGetter(s,r,a){return a(assertClassBrand(s,r))}",
+    "function _classPrivateGetter(t,e,a){return a(r(t,e))}",
     {
       globals: [],
       locals: { _classPrivateGetter: ["body.0.id"] },
@@ -399,10 +399,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 82, gzip size: 91
+  // size: 58, gzip size: 74
   classPrivateMethodInitSpec: helper(
     "7.14.1",
-    "function _classPrivateMethodInitSpec(e,a){checkPrivateRedeclaration(e,a),a.add(e)}",
+    "function _classPrivateMethodInitSpec(t,a){e(t,a),a.add(t)}",
     {
       globals: [],
       locals: { _classPrivateMethodInitSpec: ["body.0.id"] },
@@ -416,10 +416,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 74, gzip size: 89
+  // size: 59, gzip size: 77
   classPrivateSetter: helper(
     "7.24.0",
-    "function _classPrivateSetter(s,r,a,t){return r(assertClassBrand(s,a),t),t}",
+    "function _classPrivateSetter(t,e,a,s){return e(r(t,a),s),s}",
     {
       globals: [],
       locals: { _classPrivateSetter: ["body.0.id"] },
@@ -433,10 +433,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 76, gzip size: 94
+  // size: 61, gzip size: 81
   classStaticPrivateMethodGet: helper(
     "7.3.2",
-    "function _classStaticPrivateMethodGet(s,a,t){return assertClassBrand(a,s),t}",
+    "function _classStaticPrivateMethodGet(r,a,e){return t(a,r),e}",
     {
       globals: [],
       locals: { _classStaticPrivateMethodGet: ["body.0.id"] },
@@ -448,10 +448,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 206, gzip size: 160
+  // size: 170, gzip size: 143
   construct: helper(
     "7.0.0-beta.0",
-    "function _construct(t,e,r){if(isNativeReflectConstruct())return Reflect.construct.apply(null,arguments);var o=[null];o.push.apply(o,e);var p=new(t.bind.apply(t,o));return r&&setPrototypeOf(p,r.prototype),p}",
+    "function _construct(e,o,p){if(t())return Reflect.construct.apply(null,arguments);var n=[null];n.push.apply(n,o);var l=new(e.bind.apply(e,n));return p&&r(l,p.prototype),l}",
     {
       globals: ["Reflect"],
       locals: { _construct: ["body.0.id"] },
@@ -466,10 +466,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 348, gzip size: 220
+  // size: 336, gzip size: 217
   createClass: helper(
     "7.0.0-beta.0",
-    'function _defineProperties(e,r){for(var t=0;t<r.length;t++){var o=r[t];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,toPropertyKey(o.key),o)}}function _createClass(e,r,t){return r&&_defineProperties(e.prototype,r),t&&_defineProperties(e,t),Object.defineProperty(e,"prototype",{writable:!1}),e}',
+    'function _defineProperties(r,t){for(var o=0;o<t.length;o++){var i=t[o];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(r,e(i.key),i)}}function _createClass(e,r,t){return r&&_defineProperties(e.prototype,r),t&&_defineProperties(e,t),Object.defineProperty(e,"prototype",{writable:!1}),e}',
     {
       globals: ["Object"],
       locals: {
@@ -490,10 +490,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 726, gzip size: 432
+  // size: 701, gzip size: 421
   createForOfIteratorHelper: helper(
     "7.9.0",
-    'function _createForOfIteratorHelper(r,e){var t="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(!t){if(Array.isArray(r)||(t=unsupportedIterableToArray(r))||e&&r&&"number"==typeof r.length){t&&(r=t);var n=0,F=function(){};return{s:F,n:function(){return n>=r.length?{done:!0}:{done:!1,value:r[n++]}},e:function(r){throw r},f:F}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var o,a,u=!0;return{s:function(){t=t.call(r)},n:function(){u=!0;var r=t.next();return r.done?{done:!0}:{value:r.value,done:u=!1}},e:function(r){o=!0,a=r},f:function(){try{u||null==t.return||t.return()}finally{if(o)throw a}}}}',
+    'function _createForOfIteratorHelper(e,t){var n="undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(!n){if(Array.isArray(e)||(n=r(e))||t&&e&&"number"==typeof e.length){n&&(e=n);var o=0,F=function(){};return{s:F,n:function(){return o>=e.length?{done:!0}:{done:!1,value:e[o++]}},e:function(r){throw r},f:F}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var a,u,i=!0;return{s:function(){n=n.call(e)},n:function(){i=!0;var r=n.next();return r.done?{done:!0}:{value:r.value,done:i=!1}},e:function(r){a=!0,u=r},f:function(){try{i||null==n.return||n.return()}finally{if(a)throw u}}}}',
     {
       globals: ["Symbol", "Array", "TypeError"],
       locals: { _createForOfIteratorHelper: ["body.0.id"] },
@@ -507,10 +507,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 488, gzip size: 335
+  // size: 463, gzip size: 322
   createForOfIteratorHelperLoose: helper(
     "7.9.0",
-    'function _createForOfIteratorHelperLoose(r,e){var t="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(t)return(t=t.call(r)).next.bind(t);if(Array.isArray(r)||(t=unsupportedIterableToArray(r))||e&&r&&"number"==typeof r.length){t&&(r=t);var o=0;return function(){return o>=r.length?{done:!0}:{done:!1,value:r[o++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}',
+    'function _createForOfIteratorHelperLoose(r,t){var o="undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(o)return(o=o.call(r)).next.bind(o);if(Array.isArray(r)||(o=e(r))||t&&r&&"number"==typeof r.length){o&&(r=o);var n=0;return function(){return n>=r.length?{done:!0}:{done:!1,value:r[n++]}}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}',
     {
       globals: ["Symbol", "Array", "TypeError"],
       locals: { _createForOfIteratorHelperLoose: ["body.0.id"] },
@@ -524,10 +524,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 255, gzip size: 172
+  // size: 182, gzip size: 141
   createSuper: helper(
     "7.9.0",
-    "function _createSuper(t){var r=isNativeReflectConstruct();return function(){var e,o=getPrototypeOf(t);if(r){var s=getPrototypeOf(this).constructor;e=Reflect.construct(o,arguments,s)}else e=o.apply(this,arguments);return possibleConstructorReturn(this,e)}}",
+    "function _createSuper(o){var i=r();return function(){var r,c=t(o);if(i){var n=t(this).constructor;r=Reflect.construct(c,arguments,n)}else r=c.apply(this,arguments);return e(this,r)}}",
     {
       globals: ["Reflect"],
       locals: { _createSuper: ["body.0.id"] },
@@ -574,10 +574,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 151, gzip size: 130
+  // size: 139, gzip size: 125
   defineProperty: helper(
     "7.0.0-beta.0",
-    "function _defineProperty(e,r,t){return(r=toPropertyKey(r))in e?Object.defineProperty(e,r,{value:t,enumerable:!0,configurable:!0,writable:!0}):e[r]=t,e}",
+    "function _defineProperty(r,t,o){return(t=e(t))in r?Object.defineProperty(r,t,{value:o,enumerable:!0,configurable:!0,writable:!0}):r[t]=o,r}",
     {
       globals: ["Object"],
       locals: { _defineProperty: ["body.0.id"] },
@@ -610,10 +610,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 263, gzip size: 202
+  // size: 251, gzip size: 192
   get: helper(
     "7.0.0-beta.0",
-    'function _get(){return _get="undefined"!=typeof Reflect&&Reflect.get?Reflect.get.bind():function(e,t,r){var p=superPropBase(e,t);if(p){var n=Object.getOwnPropertyDescriptor(p,t);return n.get?n.get.call(arguments.length<3?e:r):n.value}},_get.apply(null,arguments)}',
+    'function _get(){return _get="undefined"!=typeof Reflect&&Reflect.get?Reflect.get.bind():function(t,r,n){var l=e(t,r);if(l){var f=Object.getOwnPropertyDescriptor(l,r);return f.get?f.get.call(arguments.length<3?t:n):f.value}},_get.apply(null,arguments)}',
     {
       globals: ["Reflect", "Object"],
       locals: {
@@ -674,10 +674,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 300, gzip size: 219
+  // size: 287, gzip size: 213
   inherits: helper(
     "7.0.0-beta.0",
-    'function _inherits(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),Object.defineProperty(t,"prototype",{writable:!1}),e&&setPrototypeOf(t,e)}',
+    'function _inherits(t,r){if("function"!=typeof r&&null!==r)throw new TypeError("Super expression must either be null or a function");t.prototype=Object.create(r&&r.prototype,{constructor:{value:t,writable:!0,configurable:!0}}),Object.defineProperty(t,"prototype",{writable:!1}),r&&e(t,r)}',
     {
       globals: ["TypeError", "Object"],
       locals: { _inherits: ["body.0.id"] },
@@ -691,10 +691,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 114, gzip size: 105
+  // size: 101, gzip size: 100
   inheritsLoose: helper(
     "7.0.0-beta.0",
-    "function _inheritsLoose(t,o){t.prototype=Object.create(o.prototype),t.prototype.constructor=t,setPrototypeOf(t,o)}",
+    "function _inheritsLoose(o,e){o.prototype=Object.create(e.prototype),o.prototype.constructor=o,t(o,e)}",
     {
       globals: ["Object"],
       locals: { _inheritsLoose: ["body.0.id"] },
@@ -758,14 +758,14 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 428, gzip size: 292
+  // size: 400, gzip size: 283
   interopRequireWildcard: helper(
     "7.14.0",
-    'var cache;function _interopRequireWildcard(e,t){if(!t&&e&&e.__esModule)return e;var r,c,a=Object.defineProperty,n={__proto__:null,default:e};if(Object(e)!==e)return n;if(cache||"function"!=typeof WeakMap||(cache=new WeakMap),cache){if(cache.has(e))return cache.get(e);cache.set(e,n)}for(c in e)"default"!==c&&{}.hasOwnProperty.call(e,c)&&((r=a&&Object.getOwnPropertyDescriptor(e,c))&&(r.get||r.set)?a(n,c,r):n[c]=e[c]);return n}',
+    'var e;function _interopRequireWildcard(t,r){if(!r&&t&&t.__esModule)return t;var n,a,o=Object.defineProperty,f={__proto__:null,default:t};if(Object(t)!==t)return f;if(e||"function"!=typeof WeakMap||(e=new WeakMap),e){if(e.has(t))return e.get(t);e.set(t,f)}for(a in t)"default"!==a&&{}.hasOwnProperty.call(t,a)&&((n=o&&Object.getOwnPropertyDescriptor(t,a))&&(n.get||n.set)?o(f,a,n):f[a]=t[a]);return f}',
     {
       globals: ["Object", "WeakMap"],
       locals: {
-        cache: [
+        e: [
           "body.0.declarations.0.id",
           "body.1.body.body.3.test.expressions.0.left.left",
           "body.1.body.body.3.test.expressions.1",
@@ -839,14 +839,14 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 520, gzip size: 341
+  // size: 452, gzip size: 316
   jsx: helper(
     "7.0.0-beta.0",
-    'var REACT_ELEMENT_TYPE;function _createRawReactElement(e,r,E,l){REACT_ELEMENT_TYPE||(REACT_ELEMENT_TYPE="function"==typeof Symbol&&Symbol.for&&Symbol.for("react.element")||60103);var o=e&&e.defaultProps,n=arguments.length-3;if(r||0===n||(r={children:void 0}),1===n)r.children=l;else if(n>1){for(var t=Array(n),f=0;f<n;f++)t[f]=arguments[f+3];r.children=t}if(r&&o)for(var i in o)void 0===r[i]&&(r[i]=o[i]);else r||(r=o||{});return{$$typeof:REACT_ELEMENT_TYPE,type:e,key:void 0===E?null:""+E,ref:null,props:r,_owner:null}}',
+    'var e;function _createRawReactElement(r,l,o,n){e||(e="function"==typeof Symbol&&Symbol.for&&Symbol.for("react.element")||60103);var t=r&&r.defaultProps,f=arguments.length-3;if(l||0===f||(l={children:void 0}),1===f)l.children=n;else if(f>1){for(var i=Array(f),a=0;a<f;a++)i[a]=arguments[a+3];l.children=i}if(l&&t)for(var c in t)void 0===l[c]&&(l[c]=t[c]);else l||(l=t||{});return{$$typeof:e,type:r,key:void 0===o?null:""+o,ref:null,props:l,_owner:null}}',
     {
       globals: ["Symbol", "Array"],
       locals: {
-        REACT_ELEMENT_TYPE: [
+        e: [
           "body.0.declarations.0.id",
           "body.1.body.body.0.expression.left",
           "body.1.body.body.4.argument.properties.0.value",
@@ -860,10 +860,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 160, gzip size: 144
+  // size: 145, gzip size: 139
   maybeArrayLike: helper(
     "7.9.0",
-    'function _maybeArrayLike(r,a,e){if(a&&!Array.isArray(a)&&"number"==typeof a.length){var y=a.length;return arrayLikeToArray(a,void 0!==e&&e<y?e:y)}return r(a,e)}',
+    'function _maybeArrayLike(e,a,t){if(a&&!Array.isArray(a)&&"number"==typeof a.length){var i=a.length;return r(a,void 0!==t&&t<i?t:i)}return e(a,t)}',
     {
       globals: ["Array"],
       locals: { _maybeArrayLike: ["body.0.id"] },
@@ -942,10 +942,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 613, gzip size: 294
+  // size: 600, gzip size: 295
   objectSpread2: helper(
     "7.5.0",
-    "function ownKeys(e,r){var t=Object.keys(e);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(e);r&&(o=o.filter(function(r){return Object.getOwnPropertyDescriptor(e,r).enumerable})),t.push.apply(t,o)}return t}function _objectSpread2(e){for(var r=1;r<arguments.length;r++){var t=null!=arguments[r]?arguments[r]:{};r%2?ownKeys(Object(t),!0).forEach(function(r){defineProperty(e,r,t[r])}):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(t)):ownKeys(Object(t)).forEach(function(r){Object.defineProperty(e,r,Object.getOwnPropertyDescriptor(t,r))})}return e}",
+    "function ownKeys(e,r){var t=Object.keys(e);if(Object.getOwnPropertySymbols){var o=Object.getOwnPropertySymbols(e);r&&(o=o.filter(function(r){return Object.getOwnPropertyDescriptor(e,r).enumerable})),t.push.apply(t,o)}return t}function _objectSpread2(r){for(var t=1;t<arguments.length;t++){var o=null!=arguments[t]?arguments[t]:{};t%2?ownKeys(Object(o),!0).forEach(function(t){e(r,t,o[t])}):Object.getOwnPropertyDescriptors?Object.defineProperties(r,Object.getOwnPropertyDescriptors(o)):ownKeys(Object(o)).forEach(function(e){Object.defineProperty(r,e,Object.getOwnPropertyDescriptor(o,e))})}return r}",
     {
       globals: ["Object"],
       locals: {
@@ -966,10 +966,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 279, gzip size: 205
+  // size: 252, gzip size: 199
   objectWithoutProperties: helper(
     "7.0.0-beta.0",
-    "function _objectWithoutProperties(e,t){if(null==e)return{};var o,r,i=objectWithoutPropertiesLoose(e,t);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);for(r=0;r<n.length;r++)o=n[r],-1===t.indexOf(o)&&{}.propertyIsEnumerable.call(e,o)&&(i[o]=e[o])}return i}",
+    "function _objectWithoutProperties(t,r){if(null==t)return{};var o,n,i=e(t,r);if(Object.getOwnPropertySymbols){var l=Object.getOwnPropertySymbols(t);for(n=0;n<l.length;n++)o=l[n],-1===r.indexOf(o)&&{}.propertyIsEnumerable.call(t,o)&&(i[o]=t[o])}return i}",
     {
       globals: ["Object"],
       locals: { _objectWithoutProperties: ["body.0.id"] },
@@ -996,10 +996,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 225, gzip size: 180
+  // size: 205, gzip size: 164
   possibleConstructorReturn: helper(
     "7.0.0-beta.0",
-    'function _possibleConstructorReturn(t,e){if(e&&("object"==typeof e||"function"==typeof e))return e;if(void 0!==e)throw new TypeError("Derived constructors may only return object or undefined");return assertThisInitialized(t)}',
+    'function _possibleConstructorReturn(t,e){if(e&&("object"==typeof e||"function"==typeof e))return e;if(void 0!==e)throw new TypeError("Derived constructors may only return object or undefined");return r(t)}',
     {
       globals: ["TypeError"],
       locals: { _possibleConstructorReturn: ["body.0.id"] },
@@ -1024,10 +1024,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 2299, gzip size: 1089
+  // size: 2249, gzip size: 1079
   regenerator: helper(
     "7.27.0",
-    'function _regenerator(){\n/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */\nvar e,t,r="function"==typeof Symbol?Symbol:{},n=r.iterator||"@@iterator",o=r.toStringTag||"@@toStringTag";function i(r,n,o,i){var c=n&&n.prototype instanceof Generator?n:Generator,u=Object.create(c.prototype);return define(u,"_invoke",function(r,n,o){var i,c,u,f=0,p=o||[],y=!1,G={p:0,n:0,v:e,a:d,f:d.bind(e,4),d:function(t,r){return i=t,c=0,u=e,G.n=r,a}};function d(r,n){for(c=r,u=n,t=0;!y&&f&&!o&&t<p.length;t++){var o,i=p[t],d=G.p,l=i[2];r>3?(o=l===n)&&(u=i[(c=i[4])?5:(c=3,3)],i[4]=i[5]=e):i[0]<=d&&((o=r<2&&d<i[1])?(c=0,G.v=n,G.n=i[1]):d<l&&(o=r<3||i[0]>n||n>l)&&(i[4]=r,i[5]=n,G.n=l,c=0))}if(o||r>1)return a;throw y=!0,n}return function(o,p,l){if(f>1)throw TypeError("Generator is already running");for(y&&1===p&&d(p,l),c=p,u=l;(t=c<2?e:u)||!y;){i||(c?c<3?(c>1&&(G.n=-1),d(c,u)):G.n=u:G.v=u);try{if(f=2,i){if(c||(o="next"),t=i[o]){if(!(t=t.call(i,u)))throw TypeError("iterator result is not an object");if(!t.done)return t;u=t.value,c<2&&(c=0)}else 1===c&&(t=i.return)&&t.call(i),c<2&&(u=TypeError("The iterator does not provide a \'"+o+"\' method"),c=1);i=e}else if((t=(y=G.n<0)?u:r.call(n,G))!==a)break}catch(t){i=e,c=1,u=t}finally{f=1}}return{value:t,done:y}}}(r,o,i),!0),u}var a={};function Generator(){}function GeneratorFunction(){}function GeneratorFunctionPrototype(){}t=Object.getPrototypeOf;var c=[][n]?t(t([][n]())):(define(t={},n,function(){return this}),t),u=GeneratorFunctionPrototype.prototype=Generator.prototype=Object.create(c);function f(e){return Object.setPrototypeOf?Object.setPrototypeOf(e,GeneratorFunctionPrototype):(e.__proto__=GeneratorFunctionPrototype,define(e,o,"GeneratorFunction")),e.prototype=Object.create(u),e}return GeneratorFunction.prototype=GeneratorFunctionPrototype,define(u,"constructor",GeneratorFunctionPrototype),define(GeneratorFunctionPrototype,"constructor",GeneratorFunction),GeneratorFunction.displayName="GeneratorFunction",define(GeneratorFunctionPrototype,o,"GeneratorFunction"),define(u),define(u,o,"Generator"),define(u,n,function(){return this}),define(u,"toString",function(){return"[object Generator]"}),(_regenerator=function(){return{w:i,m:f}})()}',
+    'function _regenerator(){\n/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */\nvar r,e,o="function"==typeof Symbol?Symbol:{},n=o.iterator||"@@iterator",a=o.toStringTag||"@@toStringTag";function i(o,n,a,i){var u=n&&n.prototype instanceof Generator?n:Generator,f=Object.create(u.prototype);return t(f,"_invoke",function(t,o,n){var a,i,u,f=0,p=n||[],y=!1,G={p:0,n:0,v:r,a:l,f:l.bind(r,4),d:function(t,e){return a=t,i=0,u=r,G.n=e,c}};function l(t,o){for(i=t,u=o,e=0;!y&&f&&!n&&e<p.length;e++){var n,a=p[e],l=G.p,F=a[2];t>3?(n=F===o)&&(u=a[(i=a[4])?5:(i=3,3)],a[4]=a[5]=r):a[0]<=l&&((n=t<2&&l<a[1])?(i=0,G.v=o,G.n=a[1]):l<F&&(n=t<3||a[0]>o||o>F)&&(a[4]=t,a[5]=o,G.n=F,i=0))}if(n||t>1)return c;throw y=!0,o}return function(n,p,F){if(f>1)throw TypeError("Generator is already running");for(y&&1===p&&l(p,F),i=p,u=F;(e=i<2?r:u)||!y;){a||(i?i<3?(i>1&&(G.n=-1),l(i,u)):G.n=u:G.v=u);try{if(f=2,a){if(i||(n="next"),e=a[n]){if(!(e=e.call(a,u)))throw TypeError("iterator result is not an object");if(!e.done)return e;u=e.value,i<2&&(i=0)}else 1===i&&(e=a.return)&&e.call(a),i<2&&(u=TypeError("The iterator does not provide a \'"+n+"\' method"),i=1);a=r}else if((e=(y=G.n<0)?u:t.call(o,G))!==c)break}catch(t){a=r,i=1,u=t}finally{f=1}}return{value:e,done:y}}}(o,a,i),!0),f}var c={};function Generator(){}function GeneratorFunction(){}function GeneratorFunctionPrototype(){}e=Object.getPrototypeOf;var u=[][n]?e(e([][n]())):(t(e={},n,function(){return this}),e),f=GeneratorFunctionPrototype.prototype=Generator.prototype=Object.create(u);function p(r){return Object.setPrototypeOf?Object.setPrototypeOf(r,GeneratorFunctionPrototype):(r.__proto__=GeneratorFunctionPrototype,t(r,a,"GeneratorFunction")),r.prototype=Object.create(f),r}return GeneratorFunction.prototype=GeneratorFunctionPrototype,t(f,"constructor",GeneratorFunctionPrototype),t(GeneratorFunctionPrototype,"constructor",GeneratorFunction),GeneratorFunction.displayName="GeneratorFunction",t(GeneratorFunctionPrototype,a,"GeneratorFunction"),t(f),t(f,a,"Generator"),t(f,n,function(){return this}),t(f,"toString",function(){return"[object Generator]"}),(_regenerator=function(){return{w:i,m:p}})()}',
     {
       globals: ["Symbol", "Object", "TypeError"],
       locals: {
@@ -1057,10 +1057,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 130, gzip size: 118
+  // size: 123, gzip size: 114
   regeneratorAsync: helper(
     "7.27.0",
-    "function _regeneratorAsync(n,e,r,t,o){var a=asyncGen(n,e,r,t,o);return a.next().then(function(n){return n.done?n.value:a.next()})}",
+    "function _regeneratorAsync(n,r,t,o,u){var a=e(n,r,t,o,u);return a.next().then(function(e){return e.done?e.value:a.next()})}",
     {
       globals: [],
       locals: { _regeneratorAsync: ["body.0.id"] },
@@ -1072,10 +1072,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 114, gzip size: 101
+  // size: 81, gzip size: 94
   regeneratorAsyncGen: helper(
     "7.27.0",
-    "function _regeneratorAsyncGen(r,e,t,o,n){return new regeneratorAsyncIterator(regenerator().w(r,e,t,o),n||Promise)}",
+    "function _regeneratorAsyncGen(o,t,n,a,m){return new e(r().w(o,t,n,a),m||Promise)}",
     {
       globals: ["Promise"],
       locals: { _regeneratorAsyncGen: ["body.0.id"] },
@@ -1090,10 +1090,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 585, gzip size: 303
+  // size: 558, gzip size: 290
   regeneratorAsyncIterator: helper(
     "7.27.0",
-    'function AsyncIterator(t,e){function n(r,o,i,f){try{var c=t[r](o),u=c.value;return u instanceof OverloadYield?e.resolve(u.v).then(function(t){n("next",t,i,f)},function(t){n("throw",t,i,f)}):e.resolve(u).then(function(t){c.value=t,i(c)},function(t){return n("throw",t,i,f)})}catch(t){f(t)}}var r;this.next||(define(AsyncIterator.prototype),define(AsyncIterator.prototype,"function"==typeof Symbol&&Symbol.asyncIterator||"@asyncIterator",function(){return this})),define(this,"_invoke",function(t,o,i){function f(){return new e(function(e,r){n(t,i,e,r)})}return r=r?r.then(f,f):f()},!0)}',
+    'function AsyncIterator(r,e){function o(n,i,c,u){try{var f=r[n](i),a=f.value;return a instanceof t?e.resolve(a.v).then(function(t){o("next",t,c,u)},function(t){o("throw",t,c,u)}):e.resolve(a).then(function(t){f.value=t,c(f)},function(t){return o("throw",t,c,u)})}catch(t){u(t)}}var i;this.next||(n(AsyncIterator.prototype),n(AsyncIterator.prototype,"function"==typeof Symbol&&Symbol.asyncIterator||"@asyncIterator",function(){return this})),n(this,"_invoke",function(t,n,r){function c(){return new e(function(n,e){o(t,r,n,e)})}return i=i?i.then(c,c):c()},!0)}',
     {
       globals: ["Symbol"],
       locals: {
@@ -1164,10 +1164,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 494, gzip size: 274
+  // size: 469, gzip size: 270
   set: helper(
     "7.0.0-beta.0",
-    'function set(e,r,t,o){return set="undefined"!=typeof Reflect&&Reflect.set?Reflect.set:function(e,r,t,o){var f,i=superPropBase(e,r);if(i){if((f=Object.getOwnPropertyDescriptor(i,r)).set)return f.set.call(o,t),!0;if(!f.writable)return!1}if(f=Object.getOwnPropertyDescriptor(o,r)){if(!f.writable)return!1;f.value=t,Object.defineProperty(o,r,f)}else defineProperty(o,r,t);return!0},set(e,r,t,o)}function _set(e,r,t,o,f){if(!set(e,r,t,o||e)&&f)throw new TypeError("failed to set property");return t}',
+    'function set(r,f,o,i){return set="undefined"!=typeof Reflect&&Reflect.set?Reflect.set:function(r,f,o,i){var n,p=e(r,f);if(p){if((n=Object.getOwnPropertyDescriptor(p,f)).set)return n.set.call(i,o),!0;if(!n.writable)return!1}if(n=Object.getOwnPropertyDescriptor(i,f)){if(!n.writable)return!1;n.value=o,Object.defineProperty(i,f,n)}else t(i,f,o);return!0},set(r,f,o,i)}function _set(e,t,r,f,o){if(!set(e,t,r,f||e)&&o)throw new TypeError("failed to set property");return r}',
     {
       globals: ["Reflect", "Object", "TypeError"],
       locals: {
@@ -1237,10 +1237,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 114, gzip size: 103
+  // size: 56, gzip size: 67
   slicedToArray: helper(
     "7.0.0-beta.0",
-    "function _slicedToArray(r,e){return iterableToArrayLimit(r,e)||unsupportedIterableToArray(r,e)||nonIterableRest()}",
+    "function _slicedToArray(e,i){return r(e,i)||o(e,i)||t()}",
     {
       globals: [],
       locals: { _slicedToArray: ["body.0.id"] },
@@ -1256,10 +1256,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 104, gzip size: 113
+  // size: 91, gzip size: 105
   superPropBase: helper(
     "7.0.0-beta.0",
-    "function _superPropBase(t,o){for(;!{}.hasOwnProperty.call(t,o)&&null!==(t=getPrototypeOf(t)););return t}",
+    "function _superPropBase(o,t){for(;!{}.hasOwnProperty.call(o,t)&&null!==(o=r(o)););return o}",
     {
       globals: [],
       locals: { _superPropBase: ["body.0.id"] },
@@ -1271,10 +1271,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 149, gzip size: 134
+  // size: 134, gzip size: 127
   superPropGet: helper(
     "7.25.0",
-    'function _superPropGet(t,o,e,r){var p=get(getPrototypeOf(1&r?t.prototype:t),o,e);return 2&r&&"function"==typeof p?function(t){return p.apply(e,t)}:p}',
+    'function _superPropGet(r,e,p,f){var n=t(o(1&f?r.prototype:r),e,p);return 2&f&&"function"==typeof n?function(t){return n.apply(p,t)}:n}',
     {
       globals: [],
       locals: { _superPropGet: ["body.0.id"] },
@@ -1289,10 +1289,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 88, gzip size: 95
+  // size: 73, gzip size: 87
   superPropSet: helper(
     "7.25.0",
-    "function _superPropSet(t,e,o,r,p,f){return set(getPrototypeOf(f?t.prototype:t),e,o,r,p)}",
+    "function _superPropSet(r,e,p,f,m,u){return t(o(u?r.prototype:r),e,p,f,m)}",
     {
       globals: [],
       locals: { _superPropSet: ["body.0.id"] },
@@ -1344,10 +1344,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 53, gzip size: 73
+  // size: 47, gzip size: 67
   temporalRef: helper(
     "7.0.0-beta.0",
-    "function _temporalRef(r,e){return r===undef?err(e):r}",
+    "function _temporalRef(e,o){return e===r?t(o):e}",
     {
       globals: [],
       locals: { _temporalRef: ["body.0.id"] },
@@ -1369,10 +1369,10 @@ const helpers: Record<string, Helper> = {
     dependencies: {},
     internal: false,
   }),
-  // size: 97, gzip size: 87
+  // size: 44, gzip size: 60
   toArray: helper(
     "7.0.0-beta.0",
-    "function _toArray(r){return iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableRest()}",
+    "function _toArray(e){return r(e)||o(e)||t()}",
     {
       globals: [],
       locals: { _toArray: ["body.0.id"] },
@@ -1388,10 +1388,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 131, gzip size: 114
+  // size: 60, gzip size: 73
   toConsumableArray: helper(
     "7.0.0-beta.0",
-    "function _toConsumableArray(r){return arrayWithoutHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableSpread()}",
+    "function _toConsumableArray(a){return r(a)||o(a)||t(a)||e()}",
     {
       globals: [],
       locals: { _toConsumableArray: ["body.0.id"] },
@@ -1423,10 +1423,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 88, gzip size: 102
+  // size: 78, gzip size: 96
   toPropertyKey: helper(
     "7.1.5",
-    'function toPropertyKey(t){var i=toPrimitive(t,"string");return"symbol"==typeof i?i:i+""}',
+    'function toPropertyKey(r){var o=t(r,"string");return"symbol"==typeof o?o:o+""}',
     {
       globals: [],
       locals: { toPropertyKey: ["body.0.id"] },
@@ -1483,10 +1483,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 328, gzip size: 247
+  // size: 298, gzip size: 240
   unsupportedIterableToArray: helper(
     "7.9.0",
-    'function _unsupportedIterableToArray(r,a){if(r){if("string"==typeof r)return arrayLikeToArray(r,a);var t={}.toString.call(r).slice(8,-1);return"Object"===t&&r.constructor&&(t=r.constructor.name),"Map"===t||"Set"===t?Array.from(r):"Arguments"===t||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t)?arrayLikeToArray(r,a):void 0}}',
+    'function _unsupportedIterableToArray(t,e){if(t){if("string"==typeof t)return r(t,e);var o={}.toString.call(t).slice(8,-1);return"Object"===o&&t.constructor&&(o=t.constructor.name),"Map"===o||"Set"===o?Array.from(t):"Arguments"===o||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(o)?r(t,e):void 0}}',
     {
       globals: ["Array"],
       locals: { _unsupportedIterableToArray: ["body.0.id"] },
@@ -1521,10 +1521,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 1063, gzip size: 498
+  // size: 1051, gzip size: 489
   wrapAsyncGenerator: helper(
     "7.0.0-beta.0",
-    'function _wrapAsyncGenerator(e){return function(){return new AsyncGenerator(e.apply(this,arguments))}}function AsyncGenerator(e){var t,n;function resume(t,n){try{var r=e[t](n),o=r.value,u=o instanceof OverloadYield;Promise.resolve(u?o.v:o).then(function(n){if(u){var i="return"===t&&o.k?t:"next";if(!o.k||n.done)return resume(i,n);n=e[i](n).value}settle(!!r.done,n)},function(e){resume("throw",e)})}catch(e){settle(2,e)}}function settle(e,r){2===e?t.reject(r):t.resolve({value:r,done:e}),(t=t.next)?resume(t.key,t.arg):n=null}this._invoke=function(e,r){return new Promise(function(o,u){var i={key:e,arg:r,resolve:o,reject:u,next:null};n?n=n.next=i:(t=n=i,resume(e,r))})},"function"!=typeof e.return&&(this.return=void 0)}AsyncGenerator.prototype["function"==typeof Symbol&&Symbol.asyncIterator||"@@asyncIterator"]=function(){return this},AsyncGenerator.prototype.next=function(e){return this._invoke("next",e)},AsyncGenerator.prototype.throw=function(e){return this._invoke("throw",e)},AsyncGenerator.prototype.return=function(e){return this._invoke("return",e)};',
+    'function _wrapAsyncGenerator(e){return function(){return new AsyncGenerator(e.apply(this,arguments))}}function AsyncGenerator(t){var n,r;function resume(n,r){try{var o=t[n](r),u=o.value,i=u instanceof e;Promise.resolve(i?u.v:u).then(function(e){if(i){var r="return"===n&&u.k?n:"next";if(!u.k||e.done)return resume(r,e);e=t[r](e).value}settle(!!o.done,e)},function(e){resume("throw",e)})}catch(e){settle(2,e)}}function settle(e,t){2===e?n.reject(t):n.resolve({value:t,done:e}),(n=n.next)?resume(n.key,n.arg):r=null}this._invoke=function(e,t){return new Promise(function(o,u){var i={key:e,arg:t,resolve:o,reject:u,next:null};r?r=r.next=i:(n=r=i,resume(e,t))})},"function"!=typeof t.return&&(this.return=void 0)}AsyncGenerator.prototype["function"==typeof Symbol&&Symbol.asyncIterator||"@@asyncIterator"]=function(){return this},AsyncGenerator.prototype.next=function(e){return this._invoke("next",e)},AsyncGenerator.prototype.throw=function(e){return this._invoke("throw",e)},AsyncGenerator.prototype.return=function(e){return this._invoke("return",e)};',
     {
       globals: ["Promise", "Symbol"],
       locals: {
@@ -1548,10 +1548,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 563, gzip size: 318
+  // size: 514, gzip size: 305
   wrapNativeSuper: helper(
     "7.0.0-beta.0",
-    'function _wrapNativeSuper(t){var r="function"==typeof Map?new Map:void 0;return _wrapNativeSuper=function(t){if(null===t||!isNativeFunction(t))return t;if("function"!=typeof t)throw new TypeError("Super expression must either be null or a function");if(void 0!==r){if(r.has(t))return r.get(t);r.set(t,Wrapper)}function Wrapper(){return construct(t,arguments,getPrototypeOf(this).constructor)}return Wrapper.prototype=Object.create(t.prototype,{constructor:{value:Wrapper,enumerable:!1,writable:!0,configurable:!0}}),setPrototypeOf(Wrapper,t)},_wrapNativeSuper(t)}',
+    'function _wrapNativeSuper(p){var n="function"==typeof Map?new Map:void 0;return _wrapNativeSuper=function(p){if(null===p||!e(p))return p;if("function"!=typeof p)throw new TypeError("Super expression must either be null or a function");if(void 0!==n){if(n.has(p))return n.get(p);n.set(p,Wrapper)}function Wrapper(){return o(p,arguments,r(this).constructor)}return Wrapper.prototype=Object.create(p.prototype,{constructor:{value:Wrapper,enumerable:!1,writable:!0,configurable:!0}}),t(Wrapper,p)},_wrapNativeSuper(p)}',
     {
       globals: ["Map", "TypeError", "Object"],
       locals: {
@@ -1580,10 +1580,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 1207, gzip size: 556
+  // size: 1187, gzip size: 542
   wrapRegExp: helper(
     "7.19.0",
-    'function _wrapRegExp(){_wrapRegExp=function(e,r){return new BabelRegExp(e,void 0,r)};var e=RegExp.prototype,r=new WeakMap;function BabelRegExp(e,t,p){var o=RegExp(e,t);return r.set(o,p||r.get(e)),setPrototypeOf(o,BabelRegExp.prototype)}function buildGroups(e,t){var p=r.get(t);return Object.keys(p).reduce(function(r,t){var o=p[t];if("number"==typeof o)r[t]=e[o];else{for(var i=0;void 0===e[o[i]]&&i+1<o.length;)i++;r[t]=e[o[i]]}return r},Object.create(null))}return inherits(BabelRegExp,RegExp),BabelRegExp.prototype.exec=function(r){var t=e.exec.call(this,r);if(t){t.groups=buildGroups(t,this);var p=t.indices;p&&(p.groups=buildGroups(p,this))}return t},BabelRegExp.prototype[Symbol.replace]=function(t,p){if("string"==typeof p){var o=r.get(this);return e[Symbol.replace].call(this,t,p.replace(/\\$<([^>]+)(>|$)/g,function(e,r,t){if(""===t)return e;var p=o[r];return Array.isArray(p)?"$"+p.join("$"):"number"==typeof p?"$"+p:""}))}if("function"==typeof p){var i=this;return e[Symbol.replace].call(this,t,function(){var e=arguments;return"object"!=typeof e[e.length-1]&&(e=[].slice.call(e)).push(buildGroups(e,i)),p.apply(this,e)})}return e[Symbol.replace].call(this,t,p)},_wrapRegExp.apply(this,arguments)}',
+    'function _wrapRegExp(){_wrapRegExp=function(e,r){return new BabelRegExp(e,void 0,r)};var t=RegExp.prototype,p=new WeakMap;function BabelRegExp(r,t,o){var n=RegExp(r,t);return p.set(n,o||p.get(r)),e(n,BabelRegExp.prototype)}function buildGroups(e,r){var t=p.get(r);return Object.keys(t).reduce(function(r,p){var o=t[p];if("number"==typeof o)r[p]=e[o];else{for(var n=0;void 0===e[o[n]]&&n+1<o.length;)n++;r[p]=e[o[n]]}return r},Object.create(null))}return r(BabelRegExp,RegExp),BabelRegExp.prototype.exec=function(e){var r=t.exec.call(this,e);if(r){r.groups=buildGroups(r,this);var p=r.indices;p&&(p.groups=buildGroups(p,this))}return r},BabelRegExp.prototype[Symbol.replace]=function(e,r){if("string"==typeof r){var o=p.get(this);return t[Symbol.replace].call(this,e,r.replace(/\\$<([^>]+)(>|$)/g,function(e,r,t){if(""===t)return e;var p=o[r];return Array.isArray(p)?"$"+p.join("$"):"number"==typeof p?"$"+p:""}))}if("function"==typeof r){var n=this;return t[Symbol.replace].call(this,e,function(){var e=arguments;return"object"!=typeof e[e.length-1]&&(e=[].slice.call(e)).push(buildGroups(e,n)),r.apply(this,e)})}return t[Symbol.replace].call(this,e,r)},_wrapRegExp.apply(this,arguments)}',
     {
       globals: ["RegExp", "WeakMap", "Object", "Symbol", "Array"],
       locals: {

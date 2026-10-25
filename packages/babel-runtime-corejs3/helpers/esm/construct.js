@@ -3,11 +3,11 @@ import _pushInstanceProperty from "core-js-pure/features/instance/push.js";
 import _bindInstanceProperty from "core-js-pure/features/instance/bind.js";
 import isNativeReflectConstruct from "./isNativeReflectConstruct.js";
 import setPrototypeOf from "./setPrototypeOf.js";
-function _construct(t, e, r) {
+function _construct(e, o, p) {
   if (isNativeReflectConstruct()) return _Reflect$construct.apply(null, arguments);
-  var o = [null];
-  _pushInstanceProperty(o).apply(o, e);
-  var p = new (_bindInstanceProperty(t).apply(t, o))();
-  return r && setPrototypeOf(p, r.prototype), p;
+  var n = [null];
+  _pushInstanceProperty(n).apply(n, o);
+  var l = new (_bindInstanceProperty(e).apply(e, n))();
+  return p && setPrototypeOf(l, p.prototype), l;
 }
 export { _construct as default };
