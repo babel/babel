@@ -109,7 +109,7 @@ export function isPureVoid(node: t.Node, scope: Scope): boolean {
     (t.isUnaryExpression(node, { operator: "void" }) &&
       t.isPureish(node.argument)) ||
     (t.isIdentifier(node, { name: "undefined" }) &&
-      !scope.hasBinding("undefined"))
+      !scope.hasBinding("undefined", { noGlobals: true }))
   );
 }
 
