@@ -22,35 +22,37 @@ export function isIdentifierRef(node: t.Node): node is t.Identifier {
 }
 
 /**
- * The default value of `left`, named after it if it is an anonymous function
- * definition, as it would be by the destructuring pattern.
+ * The defaultValue of `target`: its Initializer, named after it if it is an
+ * anonymous function definition, as it would be by the destructuring pattern.
  * https://tc39.es/ecma262/#sec-runtime-semantics-namedevaluation
  */
 export function buildNamedDefault(
-  left: t.LVal,
-  right: t.Expression,
+  target: t.LVal,
+  initializer: t.Expression,
   addHelper: File["addHelper"],
 ): t.Expression {
-  if (!isIdentifierRef(left) || !isAnonymousFunctionDefinition(right)) {
-    return right;
+  if (!isIdentifierRef(target) || !isAnonymousFunctionDefinition(initializer)) {
+    return initializer;
   }
-  let definition = right;
+  let definition = initializer;
   while (t.isParenthesizedExpression(definition)) {
     definition = definition.expression;
   }
   if (!t.isClassExpression(definition)) {
     return t.callExpression(addHelper("setFunctionName"), [
-      right,
-      t.stringLiteral(left.name),
+      initializer,
+      t.stringLiteral(target.name),
     ]);
   }
   // Property definitions infer the name before static initialization:
   //   { x: class {} }.x
   // `__proto__: value` would set the prototype instead: use a computed key.
-  const computed = left.name === "__proto__";
-  const key = computed ? t.stringLiteral(left.name) : t.identifier(left.name);
+  const computed = target.name === "__proto__";
+  const key = computed
+    ? t.stringLiteral(target.name)
+    : t.identifier(target.name);
   return t.memberExpression(
-    t.objectExpression([t.objectProperty(key, right, computed)]),
+    t.objectExpression([t.objectProperty(key, initializer, computed)]),
     t.cloneNode(key),
     computed,
   );

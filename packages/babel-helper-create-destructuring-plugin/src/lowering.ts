@@ -72,8 +72,10 @@ const enum Decision {
 }
 
 /**
- * A reference to a value that will be destructured. Every place that reads
- * the value calls `use()`, which returns a placeholder expression. Once the
+ * A reference to a value that will be destructured: the `value` argument of
+ * BindingInitialization and DestructuringAssignmentEvaluation (not a
+ * Reference Record). Every place that reads the value calls `use()`, which
+ * returns a placeholder expression. Once the
  * whole pattern has been visited, the lowering decides whether the value must
  * be stored in a temporary variable (it is read more than once, or something
  * with side effects is evaluated between its evaluation and its only read)
@@ -95,7 +97,8 @@ class Ref {
   discarded = false;
   /**
    * Set when the value is read in the initializer of an assignment to this
-   * member expression, which is evaluated before the initializer.
+   * member expression, whose reference (`lref`) is evaluated before the
+   * initializer.
    */
   readAfter: t.MemberExpression | null = null;
 
@@ -388,6 +391,10 @@ export class Lowering {
     this.steps.push({ kind: StepKind.Effect, expression });
   }
 
+  /**
+   * BindingInitialization of a binding pattern or element, or
+   * DestructuringAssignmentEvaluation of an assignment pattern or element.
+   */
   private lowerTarget(target: PatternTarget, ref: Ref) {
     const isNative =
       !this.full &&
@@ -417,7 +424,7 @@ export class Lowering {
         this.lowerArrayPattern(target, ref);
         break;
       case "AssignmentPattern":
-        this.lowerDefault(target.left, target.right, ref);
+        this.lowerInitializer(target.left, target.right, ref);
         break;
       case "VoidPattern":
         // Nothing is bound, but the value (e.g. an element of an unpacked
@@ -428,31 +435,39 @@ export class Lowering {
     }
   }
 
-  private lowerDefault(left: t.LVal, right: t.Expression, ref: Ref) {
+  /** `target = initializer`: evaluate the Initializer if the value is undefined. */
+  private lowerInitializer(
+    target: t.LVal,
+    initializer: t.Expression,
+    ref: Ref,
+  ) {
     // handle array init with void 0. This also happens when
-    // the value was originally a hole.
+    // the value was originally an elision.
     // const [x = 42] = [void 0,];
     // -> const x = 42;
     if (isPureVoid(ref.expr, this.scope)) {
       ref.discarded = true;
-      if (isIdentifierRef(left) && isAnonymousFunctionDefinition(right)) {
-        this.bind(left, right);
+      if (
+        isIdentifierRef(target) &&
+        isAnonymousFunctionDefinition(initializer)
+      ) {
+        this.bind(target, initializer);
       } else {
-        this.lowerTarget(left, this.createRef(right));
+        this.lowerTarget(target, this.createRef(initializer));
       }
       return;
     }
 
-    const defaultValue = buildNamedDefault(left, right, this.addHelper);
+    const defaultValue = buildNamedDefault(target, initializer, this.addHelper);
 
     const { scope } = this;
-    if (this.isMemberTarget(left)) {
+    if (this.isMemberTarget(target)) {
       // The target reference must be evaluated before reading the value:
-      //   target.x = (_tmp = ref.x) === void 0 ? right : _tmp
+      //   target.x = (_tmp = ref.x) === void 0 ? initializer : _tmp
       const tmp = scope.generateUidIdentifierBasedOnNode(ref.hint());
       this.hoisted.push(tmp);
       this.bindRef(
-        left,
+        target,
         ref,
         t.conditionalExpression(
           t.binaryExpression(
@@ -474,15 +489,15 @@ export class Lowering {
       ref.use(),
     );
 
-    if (t.isPattern(left)) {
+    if (t.isPattern(target)) {
       const patternRef = this.createRef(conditional, {
         isStatic: false,
         nameHint: () => ref.hint(),
       });
       patternRef.forceTemp = true;
-      this.lowerTarget(left, patternRef);
+      this.lowerTarget(target, patternRef);
     } else {
-      this.bind(left, conditional);
+      this.bind(target, conditional);
     }
   }
 
@@ -523,7 +538,7 @@ export class Lowering {
    * only need an explicit check when nothing is accessed or when a computed
    * key that can run user code is evaluated before the first access.
    */
-  private needsCoercibleCheck(
+  private needsRequireObjectCoercible(
     properties: t.ObjectPattern["properties"],
     plans: PropertyPlan[],
     ref: Ref,
@@ -598,6 +613,11 @@ export class Lowering {
     return true;
   }
 
+  /**
+   * PropertyBindingInitialization and RestBindingInitialization, or
+   * PropertyDestructuringAssignmentEvaluation and
+   * RestDestructuringAssignmentEvaluation.
+   */
   private lowerObjectPattern(pattern: t.ObjectPattern, ref: Ref) {
     const { properties } = pattern;
     const { scope, full } = this;
@@ -609,7 +629,7 @@ export class Lowering {
     const plans = this.planProperties(properties, hasRest);
     const lowersRest = hasRest && !this.keepNativeRest(properties, plans);
 
-    if (this.needsCoercibleCheck(properties, plans, ref)) {
+    if (this.needsRequireObjectCoercible(properties, plans, ref)) {
       if (full) {
         this.effect(
           t.callExpression(this.addHelper("objectDestructuringEmpty"), [
@@ -669,8 +689,8 @@ export class Lowering {
         continue;
       }
 
-      const { key, computed, value } = prop;
-      const isVoid = value.type === "VoidPattern";
+      const { key, computed, value: element } = prop;
+      const isVoid = element.type === "VoidPattern";
 
       if (plans[i] === PropertyPlan.Skip) {
         // Its key must still be evaluated and excluded from the rest object.
@@ -712,7 +732,8 @@ export class Lowering {
       let keyExpr: t.Expression | t.PrivateName = key;
       let keyComputed = computed;
       if (computed) {
-        const target = value.type === "AssignmentPattern" ? value.left : value;
+        const target =
+          element.type === "AssignmentPattern" ? element.left : element;
         const needsTemp =
           !isStablePropertyKey(key, scope) &&
           (lowersRest ||
@@ -758,7 +779,7 @@ export class Lowering {
             ),
         },
       );
-      this.lowerTarget(value as PatternTarget, propRef);
+      this.lowerTarget(element as PatternTarget, propRef);
     }
     flush();
   }
@@ -769,6 +790,10 @@ export class Lowering {
       : t.callExpression(this.addHelper("toPropertyKey"), [key]);
   }
 
+  /**
+   * IteratorBindingInitialization, or
+   * IteratorDestructuringAssignmentEvaluation.
+   */
   private lowerArrayPattern(pattern: t.ArrayPattern, ref: Ref) {
     if (!this.full) {
       this.lowerArrayPatternPartial(pattern, ref);
@@ -790,7 +815,7 @@ export class Lowering {
       canUnpackArrayPattern(pattern, ref.expr, this.scope)
     ) {
       ref.discarded = true;
-      const holeToUndefined = (el: t.ArrayExpression["elements"][number]) =>
+      const elisionToUndefined = (el: t.ArrayExpression["elements"][number]) =>
         el ? t.cloneNode(el as t.Expression) : t.buildUndefinedNode();
       const values = ref.expr.elements.map(element =>
         isSafeToEvaluate(element, this.scope)
@@ -803,12 +828,15 @@ export class Lowering {
           this.lowerTarget(
             element.argument,
             this.createRef(
-              t.arrayExpression(values.slice(i).map(holeToUndefined)),
+              t.arrayExpression(values.slice(i).map(elisionToUndefined)),
               { isArray: true },
             ),
           );
         } else {
-          this.lowerTarget(element, this.createRef(holeToUndefined(values[i])));
+          this.lowerTarget(
+            element,
+            this.createRef(elisionToUndefined(values[i])),
+          );
         }
       }
       return;
@@ -821,7 +849,7 @@ export class Lowering {
 
     for (let i = 0; i < elements.length; i++) {
       const element = elements[i];
-      // hole, or `void`: the iterator is advanced but nothing is bound
+      // Elision, or `void`: the iterator is advanced but nothing is bound
       if (!element || element.type === "VoidPattern") continue;
 
       if (element.type === "RestElement") {
