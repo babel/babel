@@ -95,9 +95,18 @@ const enum Decision {
  * or can be inlined, and patches the placeholders accordingly.
  */
 class Ref {
-  private readonly placeholders: { node: t.Identifier; index: number }[] = [];
-  private decision = Decision.None;
-  private staticUsed = false;
+  readonly #placeholders: { node: t.Identifier; index: number }[] = [];
+  #decision = Decision.None;
+  #staticUsed = false;
+  readonly #lowering: Lowering;
+  /** The index in `lowering.steps` where the value must be evaluated. */
+  readonly #insertAt: number;
+  /**
+   * A node whose identifiers are used to name the temporary variable. It
+   * is resolved lazily, so that it can refer to the temporaries of the
+   * parent references.
+   */
+  readonly #nameHint: t.Node | (() => t.Node);
 
   tempId: t.Identifier | null = null;
   forceTemp = false;
@@ -116,69 +125,67 @@ class Ref {
   readAfter: t.MemberExpression | null = null;
 
   constructor(
-    private readonly lowering: Lowering,
+    lowering: Lowering,
     readonly expr: t.Expression,
-    /** The index in `lowering.steps` where the value must be evaluated. */
-    private readonly insertAt: number,
+    insertAt: number,
     readonly isStatic: boolean,
     /** Whether the value is known to be an actual Array. */
     readonly isArray: boolean,
-    /**
-     * A node whose identifiers are used to name the temporary variable. It
-     * is resolved lazily, so that it can refer to the temporaries of the
-     * parent references.
-     */
-    private readonly nameHint: t.Node | (() => t.Node),
-  ) {}
+    nameHint: t.Node | (() => t.Node),
+  ) {
+    this.#lowering = lowering;
+    this.#insertAt = insertAt;
+    this.#nameHint = nameHint;
+  }
 
   /** The node to derive names from: the temporary id if there is one. */
   hint(): t.Node {
     if (this.tempId) return this.tempId;
-    const { nameHint } = this;
+    const nameHint = this.#nameHint;
     return typeof nameHint === "function" ? nameHint() : nameHint;
   }
 
   use(): t.Expression {
     if (this.isStatic && !this.forceTemp) {
-      this.staticUsed = true;
+      this.#staticUsed = true;
       // Always clone: the original node might be shared with other places
       // of the AST (e.g. by @babel/plugin-transform-parameters).
       return t.cloneNode(this.expr);
     }
     // The name is assigned once we know that this will be a temporary.
     const node = t.identifier("_ref");
-    this.placeholders.push({ node, index: this.lowering.steps.length });
+    this.#placeholders.push({ node, index: this.#lowering.steps.length });
     return node;
   }
 
   decide() {
     if (this.isStatic && !this.forceTemp) {
       if (
-        !this.staticUsed &&
+        !this.#staticUsed &&
         !this.discarded &&
-        !isSafeToEvaluate(this.expr, this.lowering.scope)
+        !isSafeToEvaluate(this.expr, this.#lowering.scope)
       ) {
-        this.decision = Decision.Effect;
+        this.#decision = Decision.Effect;
       }
       return;
     }
-    const { placeholders } = this;
+    const placeholders = this.#placeholders;
     if (placeholders.length === 0) {
       // The value might still need to be evaluated for its side effects.
-      this.decision =
-        this.discarded || isSafeToEvaluate(this.expr, this.lowering.scope)
+      this.#decision =
+        this.discarded || isSafeToEvaluate(this.expr, this.#lowering.scope)
           ? Decision.None
           : Decision.Effect;
     } else if (
       !this.forceTemp &&
       !this.retained &&
       placeholders.length === 1 &&
-      placeholders[0].index === this.insertAt
+      placeholders[0].index === this.#insertAt
     ) {
       // Nothing is evaluated between the value and its only read: inline it.
-      this.decision = Decision.Inline;
+      this.#decision = Decision.Inline;
     } else {
-      this.decision = Decision.Temp;
+      this.#decision = Decision.Temp;
     }
   }
 
@@ -189,50 +196,51 @@ class Ref {
    */
   hoistDependencies(refs: Ref[]) {
     const { readAfter } = this;
-    if (!readAfter || this.decision !== Decision.Inline) return;
+    if (!readAfter || this.#decision !== Decision.Inline) return;
     const nodes = new Set<t.Node>();
     t.traverseFast(this.expr, node => {
       nodes.add(node);
     });
     const targetMayRunUserCode = targetReferenceMayRunUserCode(readAfter);
-    const { scope } = this.lowering;
+    const { scope } = this.#lowering;
     for (const dep of refs) {
       if (
-        dep.decision === Decision.Inline &&
-        nodes.has(dep.placeholders[0].node) &&
+        dep.#decision === Decision.Inline &&
+        nodes.has(dep.#placeholders[0].node) &&
         // Reordering is only observable if one of them can affect the other
         (targetMayRunUserCode || !isSafeToEvaluate(dep.expr, scope))
       ) {
-        dep.decision = Decision.Temp;
+        dep.#decision = Decision.Temp;
       }
     }
   }
 
   assignName() {
-    if (this.decision !== Decision.Temp) return;
-    const { scope } = this.lowering;
+    if (this.#decision !== Decision.Temp) return;
+    const { scope } = this.#lowering;
     let id = scope.generateUidIdentifierBasedOnNode(this.hint());
     // e.g. `[][0]` only produces digits: fall back to a generic name
     if (/^_\d*$/.test(id.name)) id = scope.generateUidIdentifier("ref");
     this.tempId = id;
-    for (const { node } of this.placeholders) node.name = id.name;
+    for (const { node } of this.#placeholders) node.name = id.name;
   }
 
   apply() {
-    const { lowering, placeholders, insertAt } = this;
-    switch (this.decision) {
+    const { steps } = this.#lowering;
+    const insertAt = this.#insertAt;
+    switch (this.#decision) {
       case Decision.Inline:
-        replaceInPlace(placeholders[0].node, this.expr);
+        replaceInPlace(this.#placeholders[0].node, this.expr);
         break;
       case Decision.Temp:
-        lowering.steps.splice(insertAt, 0, {
+        steps.splice(insertAt, 0, {
           kind: StepKind.Temp,
           id: this.tempId!,
           init: this.isStatic ? t.cloneNode(this.expr) : this.expr,
         });
         break;
       case Decision.Effect:
-        lowering.steps.splice(insertAt, 0, {
+        steps.splice(insertAt, 0, {
           kind: StepKind.Effect,
           expression: this.isStatic ? t.cloneNode(this.expr) : this.expr,
         });
@@ -270,7 +278,7 @@ export class Lowering {
    * enclosing function (they are assigned inline, in expression position).
    */
   readonly hoisted: t.Identifier[] = [];
-  private readonly refs: Ref[] = [];
+  readonly #refs: Ref[] = [];
 
   readonly scope: Scope;
   readonly options: ResolvedOptions;
@@ -296,14 +304,14 @@ export class Lowering {
     value: t.Expression,
     needsCompletion: boolean = false,
   ): t.Expression | null {
-    const ref = this.createRef(value);
+    const ref = this.#createRef(value);
     // The completion value is the original value: keep it in a temporary.
     // This also prevents unpacking array literals, whose elements would be
     // evaluated twice.
     if (needsCompletion) ref.retained = true;
-    this.lowerTarget(target, ref);
+    this.#lowerTarget(target, ref);
     const completion = needsCompletion ? ref.use() : null;
-    this.finalize();
+    this.#finalize();
     return completion;
   }
 
@@ -332,8 +340,8 @@ export class Lowering {
     }
   }
 
-  private finalize() {
-    const { refs } = this;
+  #finalize() {
+    const refs = this.#refs;
     for (const ref of refs) ref.decide();
     for (const ref of refs) ref.hoistDependencies(refs);
     // Name the temporaries in source order, so that the generated names
@@ -345,7 +353,7 @@ export class Lowering {
     refs.length = 0;
   }
 
-  private createRef(
+  #createRef(
     expr: t.Expression,
     {
       isStatic = this.scope.isStatic(expr) ||
@@ -367,11 +375,11 @@ export class Lowering {
       isArray,
       nameHint,
     );
-    this.refs.push(ref);
+    this.#refs.push(ref);
     return ref;
   }
 
-  private temp(init: t.Expression, nameHint: t.Node = init): t.Identifier {
+  #temp(init: t.Expression, nameHint: t.Node = init): t.Identifier {
     const id = this.scope.generateUidIdentifierBasedOnNode(nameHint);
     markTemporary(this.scope, id.name);
     this.steps.push({
@@ -382,7 +390,7 @@ export class Lowering {
     return id;
   }
 
-  private bind(target: t.LVal, init: t.Expression) {
+  #bind(target: t.LVal, init: t.Expression) {
     this.steps.push({ kind: StepKind.Bind, target, init });
   }
 
@@ -390,17 +398,17 @@ export class Lowering {
    * Member references must be evaluated before reading their assigned value:
    * even a constant base can throw if it is null or undefined.
    */
-  private isMemberTarget(target: t.Node): target is t.MemberExpression {
+  #isMemberTarget(target: t.Node): target is t.MemberExpression {
     return this.isAssignment && t.isMemberExpression(target);
   }
 
   /** `target = <expression reading ref>` */
-  private bindRef(target: t.LVal, ref: Ref, init?: t.Expression) {
-    if (this.isMemberTarget(target)) ref.readAfter = target;
-    this.bind(target, init ?? ref.use());
+  #bindRef(target: t.LVal, ref: Ref, init?: t.Expression) {
+    if (this.#isMemberTarget(target)) ref.readAfter = target;
+    this.#bind(target, init ?? ref.use());
   }
 
-  private effect(expression: t.Expression) {
+  #effect(expression: t.Expression) {
     this.steps.push({ kind: StepKind.Effect, expression });
   }
 
@@ -408,7 +416,7 @@ export class Lowering {
    * BindingInitialization of a binding pattern or element, or
    * DestructuringAssignmentEvaluation of an assignment pattern or element.
    */
-  private lowerTarget(target: PatternTarget, ref: Ref) {
+  #lowerTarget(target: PatternTarget, ref: Ref) {
     const isNative =
       !this.full &&
       target!.type !== "AssignmentPattern" &&
@@ -426,34 +434,30 @@ export class Lowering {
       ref.forceTemp = true;
     }
     if (isNative) {
-      this.bindRef(target as t.LVal, ref);
+      this.#bindRef(target as t.LVal, ref);
       return;
     }
     switch (target!.type) {
       case "ObjectPattern":
-        this.lowerObjectPattern(target, ref);
+        this.#lowerObjectPattern(target, ref);
         break;
       case "ArrayPattern":
-        this.lowerArrayPattern(target, ref);
+        this.#lowerArrayPattern(target, ref);
         break;
       case "AssignmentPattern":
-        this.lowerInitializer(target.left, target.right, ref);
+        this.#lowerInitializer(target.left, target.right, ref);
         break;
       case "VoidPattern":
         // Nothing is bound, but the value (e.g. an element of an unpacked
         // array literal) is still evaluated for its side effects.
         break;
       default:
-        this.bindRef(target as t.LVal, ref);
+        this.#bindRef(target as t.LVal, ref);
     }
   }
 
   /** `target = initializer`: evaluate the Initializer if the value is undefined. */
-  private lowerInitializer(
-    target: t.LVal,
-    initializer: t.Expression,
-    ref: Ref,
-  ) {
+  #lowerInitializer(target: t.LVal, initializer: t.Expression, ref: Ref) {
     // handle array init with void 0. This also happens when
     // the value was originally an elision.
     // const [x = 42] = [void 0,];
@@ -464,9 +468,9 @@ export class Lowering {
         isIdentifierRef(target) &&
         isAnonymousFunctionDefinition(initializer)
       ) {
-        this.bind(target, initializer);
+        this.#bind(target, initializer);
       } else {
-        this.lowerTarget(target, this.createRef(initializer));
+        this.#lowerTarget(target, this.#createRef(initializer));
       }
       return;
     }
@@ -474,12 +478,12 @@ export class Lowering {
     const defaultValue = buildNamedDefault(target, initializer, this.addHelper);
 
     const { scope } = this;
-    if (this.isMemberTarget(target)) {
+    if (this.#isMemberTarget(target)) {
       // The target reference must be evaluated before reading the value:
       //   target.x = (_tmp = ref.x) === void 0 ? initializer : _tmp
       const tmp = scope.generateUidIdentifierBasedOnNode(ref.hint());
       this.hoisted.push(tmp);
-      this.bindRef(
+      this.#bindRef(
         target,
         ref,
         t.conditionalExpression(
@@ -503,18 +507,18 @@ export class Lowering {
     );
 
     if (t.isPattern(target)) {
-      const patternRef = this.createRef(conditional, {
+      const patternRef = this.#createRef(conditional, {
         isStatic: false,
         nameHint: () => ref.hint(),
       });
       patternRef.forceTemp = true;
-      this.lowerTarget(target, patternRef);
+      this.#lowerTarget(target, patternRef);
     } else {
-      this.bind(target, conditional);
+      this.#bind(target, conditional);
     }
   }
 
-  private planProperties(
+  #planProperties(
     properties: t.ObjectPattern["properties"],
     hasRest: boolean,
   ): PropertyPlan[] {
@@ -551,7 +555,7 @@ export class Lowering {
    * only need an explicit check when nothing is accessed or when a computed
    * key that can run user code is evaluated before the first access.
    */
-  private needsRequireObjectCoercible(
+  #needsRequireObjectCoercible(
     properties: t.ObjectPattern["properties"],
     plans: PropertyPlan[],
     ref: Ref,
@@ -578,7 +582,7 @@ export class Lowering {
       // perform the pattern's initial RequireObjectCoercible check for us.
       const hasMemberTarget =
         isRead &&
-        this.isMemberTarget(
+        this.#isMemberTarget(
           prop.value.type === "AssignmentPattern"
             ? prop.value.left
             : prop.value,
@@ -607,7 +611,7 @@ export class Lowering {
    *
    *   const { #x: x, y, ...z } = obj;  ->  const x = obj.#x, { y, ...z } = obj;
    */
-  private keepNativeRest(
+  #keepNativeRest(
     properties: t.ObjectPattern["properties"],
     plans: PropertyPlan[],
   ): boolean {
@@ -631,7 +635,7 @@ export class Lowering {
    * PropertyDestructuringAssignmentEvaluation and
    * RestDestructuringAssignmentEvaluation.
    */
-  private lowerObjectPattern(pattern: t.ObjectPattern, ref: Ref) {
+  #lowerObjectPattern(pattern: t.ObjectPattern, ref: Ref) {
     const { properties } = pattern;
     const { scope, full } = this;
 
@@ -639,19 +643,19 @@ export class Lowering {
     // there is a rest element, either it or a property before it has to be
     // lowered, and then the rest element is usually lowered too.
     const hasRest = hasObjectRest(pattern);
-    const plans = this.planProperties(properties, hasRest);
-    const lowersRest = hasRest && !this.keepNativeRest(properties, plans);
+    const plans = this.#planProperties(properties, hasRest);
+    const lowersRest = hasRest && !this.#keepNativeRest(properties, plans);
 
-    if (this.needsRequireObjectCoercible(properties, plans, ref)) {
+    if (this.#needsRequireObjectCoercible(properties, plans, ref)) {
       if (full) {
-        this.effect(
+        this.#effect(
           t.callExpression(this.addHelper("objectDestructuringEmpty"), [
             ref.use(),
           ]),
         );
       } else {
         // An empty native pattern performs the check
-        this.bind(t.objectPattern([]), ref.use());
+        this.#bind(t.objectPattern([]), ref.use());
       }
     }
 
@@ -673,7 +677,7 @@ export class Lowering {
     let chunk: (t.ObjectProperty | t.RestElement)[] = [];
     const flush = () => {
       if (chunk.length === 0) return;
-      this.bind(t.objectPattern(chunk), ref.use());
+      this.#bind(t.objectPattern(chunk), ref.use());
       chunk = [];
     };
 
@@ -685,9 +689,9 @@ export class Lowering {
           continue;
         }
         flush();
-        this.lowerTarget(
+        this.#lowerTarget(
           prop.argument,
-          this.createRef(
+          this.#createRef(
             buildObjectExcludingKeys(
               excluded,
               () => ref.use(),
@@ -709,7 +713,7 @@ export class Lowering {
         // Its key must still be evaluated and excluded from the rest object.
         if (computed && !isStablePropertyKey(key, scope)) {
           flush();
-          exclude(this.temp(this.toPropertyKey(key)), true, true);
+          exclude(this.#temp(this.#toPropertyKey(key)), true, true);
         } else {
           exclude(key, computed);
         }
@@ -729,7 +733,7 @@ export class Lowering {
             key: t.assignmentExpression(
               "=",
               t.cloneNode(id),
-              this.toPropertyKey(key),
+              this.#toPropertyKey(key),
             ),
           };
           exclude(id, true, true);
@@ -752,9 +756,9 @@ export class Lowering {
           (lowersRest ||
             // The property name is evaluated before the target reference,
             // including when either evaluation throws without running user code.
-            this.isMemberTarget(target));
+            this.#isMemberTarget(target));
         if (needsTemp) {
-          keyExpr = this.temp(this.toPropertyKey(key));
+          keyExpr = this.#temp(this.#toPropertyKey(key));
         }
         exclude(
           keyExpr,
@@ -774,13 +778,13 @@ export class Lowering {
         // Its key must still be evaluated and coerced unless a temporary
         // already did so, or both operations are unobservable.
         if (computed && keyExpr === key && !isStablePropertyKey(key, scope)) {
-          this.effect(this.toPropertyKey(key));
+          this.#effect(this.#toPropertyKey(key));
         }
         continue;
       }
 
       const keyNode = keyExpr === key ? key : t.cloneNode(keyExpr);
-      const propRef = this.createRef(
+      const propRef = this.#createRef(
         t.memberExpression(ref.use(), keyNode, keyComputed),
         {
           isStatic: false,
@@ -792,12 +796,12 @@ export class Lowering {
             ),
         },
       );
-      this.lowerTarget(element as PatternTarget, propRef);
+      this.#lowerTarget(element as PatternTarget, propRef);
     }
     flush();
   }
 
-  private toPropertyKey(key: t.Expression): t.Expression {
+  #toPropertyKey(key: t.Expression): t.Expression {
     return isPropertyKeyExpression(key, this.scope)
       ? key
       : t.callExpression(this.addHelper("toPropertyKey"), [key]);
@@ -807,9 +811,9 @@ export class Lowering {
    * IteratorBindingInitialization, or
    * IteratorDestructuringAssignmentEvaluation.
    */
-  private lowerArrayPattern(pattern: t.ArrayPattern, ref: Ref) {
+  #lowerArrayPattern(pattern: t.ArrayPattern, ref: Ref) {
     if (!this.full) {
-      this.lowerArrayPatternPartial(pattern, ref);
+      this.#lowerArrayPatternPartial(pattern, ref);
       return;
     }
 
@@ -833,22 +837,22 @@ export class Lowering {
       const values = ref.expr.elements.map(element =>
         isSafeToEvaluate(element, this.scope)
           ? element
-          : this.temp(element as t.Expression),
+          : this.#temp(element as t.Expression),
       );
       for (let i = 0; i < elements.length; i++) {
         const element = elements[i]!;
         if (element.type === "RestElement") {
-          this.lowerTarget(
+          this.#lowerTarget(
             element.argument,
-            this.createRef(
+            this.#createRef(
               t.arrayExpression(values.slice(i).map(elisionToUndefined)),
               { isArray: true },
             ),
           );
         } else {
-          this.lowerTarget(
+          this.#lowerTarget(
             element,
-            this.createRef(elisionToUndefined(values[i])),
+            this.#createRef(elisionToUndefined(values[i])),
           );
         }
       }
@@ -858,7 +862,7 @@ export class Lowering {
     // if we have a rest then we need all the elements so don't tell
     // `toArray` to only get a certain amount
     const count = hasArrayRest(pattern) ? null : elements.length;
-    const arr = this.toArray(ref, count);
+    const arr = this.#toArray(ref, count);
 
     for (let i = 0; i < elements.length; i++) {
       const element = elements[i];
@@ -868,9 +872,9 @@ export class Lowering {
       if (element.type === "RestElement") {
         // `arr` may be an array-like or an Array subclass (whose `slice`
         // would create another subclass instance): copy it first.
-        this.lowerTarget(
+        this.#lowerTarget(
           element.argument,
-          this.createRef(
+          this.#createRef(
             t.callExpression(
               t.memberExpression(
                 t.callExpression(this.addHelper("arrayLikeToArray"), [
@@ -890,9 +894,9 @@ export class Lowering {
           ),
         );
       } else {
-        this.lowerTarget(
+        this.#lowerTarget(
           element,
-          this.createRef(
+          this.#createRef(
             t.memberExpression(arr.use(), t.numericLiteral(i), true),
             {
               isStatic: false,
@@ -909,7 +913,7 @@ export class Lowering {
     }
   }
 
-  private toArray(ref: Ref, count: number | null): Ref {
+  #toArray(ref: Ref, count: number | null): Ref {
     const node = ref.expr;
     const { scope } = this;
     const { iterableIsArray, arrayLikeIsIterable } = this.options;
@@ -931,7 +935,7 @@ export class Lowering {
       !binding &&
       hasArgumentsObject(scope)
     ) {
-      return this.createRef(
+      return this.#createRef(
         template.expression.ast`Array.prototype.slice.call(${ref.use()})`,
         { isArray: true, isStatic: false, nameHint: node },
       );
@@ -953,14 +957,14 @@ export class Lowering {
       helperName = "maybeArrayLike";
     }
 
-    return this.createRef(t.callExpression(this.addHelper(helperName), args), {
+    return this.#createRef(t.callExpression(this.addHelper(helperName), args), {
       isArray: true,
       isStatic: false,
       nameHint: () => ref.hint(),
     });
   }
 
-  private lowerArrayPatternPartial(pattern: t.ArrayPattern, ref: Ref) {
+  #lowerArrayPatternPartial(pattern: t.ArrayPattern, ref: Ref) {
     const queue: [PatternTarget, t.Identifier][] = [];
     splitArrayPattern(
       pattern,
@@ -972,15 +976,15 @@ export class Lowering {
       },
     );
 
-    this.bind(pattern, ref.use());
+    this.#bind(pattern, ref.use());
 
     // todo: nested patterns are destructured after the whole array pattern
     // has been evaluated. Being fully spec-compliant would require manually
     // iterating the right-hand side.
     for (const [target, id] of queue) {
-      this.lowerTarget(
+      this.#lowerTarget(
         target,
-        this.createRef(t.cloneNode(id), { isStatic: true }),
+        this.#createRef(t.cloneNode(id), { isStatic: true }),
       );
     }
   }
