@@ -65,7 +65,7 @@ const loneSurrogate = /[\uD800-\uDFFF]/u;
 const keywordRelationalOperator = /in(?:stanceof)?/y;
 
 // Every keyword is 2 (`do`) to 10 (`instanceof`) lowercase ASCII letters.
-const keywordLikeWord = /[a-z]{2,10}/y;
+export const keywordLikeWord = /[a-z]{2,10}/y;
 
 /**
  * Prepare exported tokens.
