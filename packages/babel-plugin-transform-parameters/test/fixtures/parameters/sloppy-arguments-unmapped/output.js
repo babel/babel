@@ -63,3 +63,7 @@ function p(b, _ref2) {
   }
   return typeof b;
 }
+function q(a) {
+  let b = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  return [arguments.length, arguments[0]];
+}

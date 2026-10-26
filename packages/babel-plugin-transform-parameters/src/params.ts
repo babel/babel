@@ -124,27 +124,73 @@ export function isParamEvaluationObservable(
 
 // Whether a function reads its own `arguments` object (also through arrow
 // functions, or a direct `eval`).
-const argumentsVisitor: Visitor<{
+interface ArgumentsUsage {
   fn: NodePath<t.Function>;
-  found: boolean;
-}> = {
+  /** Elements of `arguments` are read: mapped to the parameters. */
+  readsElements: boolean;
+  /**
+   * `arguments` is written, or escapes: as a whole, or through a direct
+   * `eval`. The mapping is observable.
+   */
+  escapes: boolean;
+}
+
+const argumentsVisitor: Visitor<ArgumentsUsage> = {
   Function(path) {
     if (!path.isArrowFunctionExpression()) path.skip();
   },
   Identifier(path, state) {
-    if (
-      (path.node.name === "arguments" &&
-        path.isReferencedIdentifier() &&
-        !shadowsArguments(path.scope.getBinding("arguments"), state.fn)) ||
-      (path.node.name === "eval" &&
-        path.key === "callee" &&
-        path.parentPath.isCallExpression())
-    ) {
-      state.found = true;
-      path.stop();
+    const { name } = path.node;
+    if (name === "eval") {
+      if (path.key === "callee" && path.parentPath.isCallExpression()) {
+        state.escapes = true;
+        path.stop();
+      }
+      return;
     }
+    if (
+      name !== "arguments" ||
+      !path.isReferencedIdentifier() ||
+      shadowsArguments(path.scope.getBinding("arguments"), state.fn)
+    ) {
+      return;
+    }
+    const { parentPath } = path;
+    if (
+      parentPath.isMemberExpression({ object: path.node }) &&
+      !isWriteTarget(parentPath)
+    ) {
+      const { property, computed } = parentPath.node;
+      // `arguments.length` is not mapped
+      if (!computed && t.isIdentifier(property, { name: "length" })) return;
+      state.readsElements = true;
+      return;
+    }
+    state.escapes = true;
+    path.stop();
   },
 };
+
+/** Whether a member expression is assigned, updated or deleted. */
+function isWriteTarget(path: NodePath<t.MemberExpression>): boolean {
+  const { parentPath, node } = path;
+  if (
+    parentPath.isAssignmentExpression() ||
+    parentPath.isAssignmentPattern() ||
+    parentPath.isForXStatement()
+  ) {
+    return parentPath.node.left === node;
+  }
+  if (parentPath.isObjectProperty()) {
+    return parentPath.parentPath.isObjectPattern();
+  }
+  return (
+    parentPath.isUpdateExpression() ||
+    parentPath.isUnaryExpression({ operator: "delete" }) ||
+    parentPath.isArrayPattern() ||
+    parentPath.isRestElement()
+  );
+}
 
 /** Whether `binding` shadows the `arguments` object of `fn`. */
 function shadowsArguments(
@@ -162,17 +208,32 @@ function shadowsArguments(
  * (IsSimpleParameterList) has a mapped `arguments` object: assigning a
  * parameter changes the corresponding element, and conversely. Functions with
  * default, rest or destructuring parameters have an unmapped `arguments`
- * object. This returns whether a function with such parameters would observe
- * the mapping once its parameter list is simple.
+ * object. This returns whether a function with such parameters could observe
+ * the mapping once its parameter list is simple: `arguments` is written or
+ * escapes, or its elements are read while a parameter is assigned.
  */
 export function readsMappedArguments(path: NodePath<t.Function>): boolean {
   if (path.isArrowFunctionExpression() || path.isInStrictMode()) return false;
   // A direct eval also reads the explicit binding when `arguments` is shadowed.
   if (shadowsArguments(path.scope.getOwnBinding("arguments"), path))
     return false;
-  const state = { fn: path, found: false };
+  const state: ArgumentsUsage = {
+    fn: path,
+    readsElements: false,
+    escapes: false,
+  };
   path.traverse(argumentsVisitor, state);
-  return state.found;
+  if (state.escapes) return true;
+  if (!state.readsElements) return false;
+  // Only the parameters staying in the list are mapped: identifiers. Their
+  // assignments include redeclarations, which are moved out of the way.
+  const { scope } = path;
+  return path.node.params.some(
+    param =>
+      t.isIdentifier(param) &&
+      param.name !== "this" &&
+      (scope.getOwnBinding(param.name)?.constantViolations.length ?? 0) > 0,
+  );
 }
 
 /**
