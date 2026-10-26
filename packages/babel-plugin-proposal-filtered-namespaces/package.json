@@ -23,7 +23,8 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/plugin-transform-typescript": "workspace:^"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-filtered-namespaces",
   "engines": {

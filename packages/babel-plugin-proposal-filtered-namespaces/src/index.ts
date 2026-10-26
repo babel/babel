@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { types as t, NodePath, Scope } from "@babel/core";
+import type { types as t, NodePath } from "@babel/core";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION("^8.0.6"));
@@ -83,7 +83,6 @@ export default declare(api => {
       // Run in program so that it runs before any modules transform
       Program(path) {
         const declarations: t.VariableDeclarator[] = [];
-        const bindings: ReturnType<Scope["getBinding"]>[] = [];
 
         for (let i = 0; i < path.node.body.length; i++) {
           const node = path.node.body[i];
@@ -219,30 +218,15 @@ export default declare(api => {
               `,
             ),
           );
-
-          // Keep scope in sync. The namespace binding is updated after the
-          // loop (it doesn't exist yet for imports injected for re-exports).
-          bindings.push(path.scope.getBinding(specifier.local.name));
-          path.scope.registerDeclaration(path.get("body")[i]);
         }
 
         if (declarations.length === 0) return;
 
-        const [declPath] = path.unshiftContainer(
+        path.unshiftContainer(
           "body",
           t.variableDeclaration("const", declarations),
         );
-        // Update the existing bindings in place, to preserve their references.
-        declPath.get("declarations").forEach((declarator, i) => {
-          const binding = bindings[i];
-          if (binding) {
-            binding.kind = "const";
-            binding.path = declarator;
-          }
-        });
-        // This registers the bindings that didn't exist yet, and skips the
-        // ones that we just updated since they have the same identifier.
-        path.scope.registerDeclaration(declPath);
+        path.scope.crawl();
       },
       ImportExpression(path, state) {
         // Convert
