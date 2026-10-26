@@ -198,12 +198,14 @@ export default abstract class ExpressionParser extends LValParser {
     disallowIn?: boolean,
     refExpressionErrors?: ExpressionErrors,
   ): N.Expression {
-    if (disallowIn) {
-      return this.disallowInAnd(() =>
-        this.parseExpressionBase(refExpressionErrors),
-      );
+    if (disallowIn ? this.enterDisallowIn() : this.enterAllowIn()) {
+      try {
+        return this.parseExpressionBase(refExpressionErrors);
+      } finally {
+        this.prodParam.exit();
+      }
     }
-    return this.allowInAnd(() => this.parseExpressionBase(refExpressionErrors));
+    return this.parseExpressionBase(refExpressionErrors);
   }
 
   // https://tc39.es/ecma262/#prod-Expression
@@ -230,7 +232,14 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     refExpressionErrors?: ExpressionErrors | null,
   ) {
-    return this.disallowInAnd(() => this.parseMaybeAssign(refExpressionErrors));
+    if (this.enterDisallowIn()) {
+      try {
+        return this.parseMaybeAssign(refExpressionErrors);
+      } finally {
+        this.prodParam.exit();
+      }
+    }
+    return this.parseMaybeAssign(refExpressionErrors);
   }
 
   // Set [+In] parameter for assignment expression
@@ -248,9 +257,14 @@ export default abstract class ExpressionParser extends LValParser {
     refExpressionErrors?: ExpressionErrors | null,
     isParenItem?: boolean,
   ) {
-    return this.allowInAnd(() =>
-      this.parseMaybeAssign(refExpressionErrors, isParenItem),
-    );
+    if (this.enterAllowIn()) {
+      try {
+        return this.parseMaybeAssign(refExpressionErrors, isParenItem);
+      } finally {
+        this.prodParam.exit();
+      }
+    }
+    return this.parseMaybeAssign(refExpressionErrors, isParenItem);
   }
 
   // This method is only used by
@@ -3065,6 +3079,42 @@ export default abstract class ExpressionParser extends LValParser {
       this.state.inHackPipelineBody = oldInHackPipelineBody;
       this.state.seenTopicReference = oldSeenTopicReference;
     }
+  }
+
+  // Enter a production parameter frame with [+In] set, unless the current
+  // frame already has it. Returns whether a new frame was entered, in which
+  // case the caller must call `this.prodParam.exit()`.
+  // Used instead of `allowInAnd` on hot paths, to avoid allocating a closure.
+  enterAllowIn(): boolean {
+    const flags = this.prodParam.currentFlags();
+    const prodParamToSet =
+      (ParamKind.PARAM_IN | ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY) &
+      ~flags;
+    if (prodParamToSet) {
+      this.prodParam.enter(
+        flags |
+          ParamKind.PARAM_IN |
+          ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY,
+      );
+      return true;
+    }
+    return false;
+  }
+
+  // Same as `enterAllowIn`, but with [~In].
+  enterDisallowIn(): boolean {
+    const flags = this.prodParam.currentFlags();
+    const prodParamToClear = ParamKind.PARAM_IN & flags;
+    const prodParamToSet =
+      ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY & ~flags;
+    if (prodParamToClear || prodParamToSet) {
+      this.prodParam.enter(
+        (flags & ~ParamKind.PARAM_IN) |
+          ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY,
+      );
+      return true;
+    }
+    return false;
   }
 
   allowInAnd<T>(callback: () => T): T {
