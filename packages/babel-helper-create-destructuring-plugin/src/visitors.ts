@@ -4,7 +4,7 @@ import type { ResolvedOptions } from "./features.ts";
 import { Lowering, StepKind, type Step } from "./lowering.ts";
 import {
   collectScopeInfo,
-  forgetReference,
+  forgetReferences,
   forgetScopeInfo,
   pushHoistedVars,
   registerReplacement,
@@ -404,9 +404,10 @@ function transformExportNamedDeclaration(
   // specifiers of the new export declaration are the references now.
   const { node, scope } = path;
   const names = Object.keys(declaration.getOuterBindingIdentifiers());
+  const nodes = new Set([node]);
   for (const name of names) {
     const binding = scope.getBinding(name);
-    if (binding) forgetReference(binding, node);
+    if (binding) forgetReferences(binding, nodes);
   }
   path.splitExportDeclaration();
   registerReplacement([path.getNextSibling() as NodePath], scope);
