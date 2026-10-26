@@ -289,7 +289,13 @@ function optimiseLengthGetter(
   }
 }
 
-export default function convertFunctionRest(path: NodePath<t.Function>) {
+export default function convertFunctionRest(
+  path: NodePath<t.Function>,
+  // Inserts the loop building the array of the rest parameter. By default, it
+  // is inserted before the first reference to the parameter (out of loops),
+  // or at the beginning of the body.
+  insertLoop?: (loop: t.Statement) => void,
+) {
   const { node, scope } = path;
   if (!hasRest(node)) return false;
 
@@ -411,7 +417,9 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
     LEN: len,
   });
 
-  if (state.deopted) {
+  if (insertLoop) {
+    insertLoop(loop);
+  } else if (state.deopted) {
     (node.body as t.BlockStatement).body.unshift(loop);
   } else {
     let target = path
