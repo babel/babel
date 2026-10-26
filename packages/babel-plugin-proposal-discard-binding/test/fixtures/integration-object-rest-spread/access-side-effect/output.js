@@ -15,9 +15,8 @@ class MyArray {
   }
 }
 var arr = new MyArray();
-var [, _ref, ..._ref2] = arr,
+var [, _ref, ...rest2] = arr,
   {
     p: _
   } = _ref,
-  rest1 = babelHelpers.objectWithoutProperties(_ref, ["p"]),
-  rest2 = _ref2;
+  rest1 = babelHelpers.objectWithoutProperties(_ref, ["p"]);
