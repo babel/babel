@@ -272,6 +272,16 @@ function transformAssignmentExpression(
   registerReplacement(path.replaceWith(expression), scope);
 }
 
+/**
+ * Whether the completion value of a statement can be observed, from a `do`
+ * expression or as the completion value of a script (e.g. with `eval`).
+ */
+function isCompletionObservable(path: NodePath<t.Statement>) {
+  if (!path.isCompletionRecord()) return false;
+  const parent = path.findParent(p => p.isDoExpression() || p.isProgram())!;
+  return !parent.isProgram({ sourceType: "module" });
+}
+
 function transformForXStatement(
   path: NodePath<t.ForXStatement>,
   options: ResolvedOptions,
@@ -310,22 +320,20 @@ function transformForXStatement(
       ]),
     );
   } else {
-    statements.push(
-      t.expressionStatement(
-        t.assignmentExpression("=", pattern, t.cloneNode(ref)),
-      ),
-    );
+    const assignment = t.assignmentExpression("=", pattern, t.cloneNode(ref));
     path.ensureBlock();
-    // todo: the completion of a for statement can only be observed from
-    // a do block (or eval that we don't support),
-    // but the new do-expression proposal plans to ban iteration ends in the
-    // do block, maybe we can get rid of this
-    if (
-      (node.body as t.BlockStatement).body.length === 0 &&
-      path.isCompletionRecord()
-    ) {
-      statements.push(t.expressionStatement(t.buildUndefinedNode()));
-    }
+    statements.push(
+      // The completion value of the loop is the one of the last iteration
+      // whose body did not complete empty (e.g. `;`, `var x;`, `continue;`):
+      // an expression statement would replace it, but a declaration
+      // completes empty. `var _ref = ({ a } = _ref)` keeps the value of
+      // `_ref`.
+      isCompletionObservable(path)
+        ? t.variableDeclaration("var", [
+            t.variableDeclarator(t.cloneNode(ref), assignment),
+          ])
+        : t.expressionStatement(assignment),
+    );
   }
   unshiftForXStatementBody(path, statements);
   // The pattern will be handled by the VariableDeclaration or
