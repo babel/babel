@@ -30,7 +30,7 @@ export default declare(api => {
     return options.properties.some(property => {
       if (property.type === "SpreadElement") return true;
       const name = getStaticKeyName(property);
-      return name === null || name === "exports";
+      return name === null || name === "exports" || name === "__proto__";
     });
   }
 
