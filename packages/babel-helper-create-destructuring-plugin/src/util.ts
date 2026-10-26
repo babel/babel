@@ -1,5 +1,6 @@
 import { types as t } from "@babel/core";
 import type { File, NodePath, Scope } from "@babel/core";
+import { isDefaultEvaluationObservable } from "@babel/plugin-transform-parameters";
 import { FEATURES } from "./features.ts";
 
 export type PatternTarget =
@@ -250,44 +251,11 @@ export function targetReferenceMayRunUserCode(
 }
 
 /**
- * Whether evaluating a value can be delayed or omitted without observable
- * effects or errors. Even constant identifiers can throw in their TDZ.
+ * Whether evaluating a value (or an array hole) can be delayed or omitted
+ * without observable effects or errors.
  */
 export function isSafeToEvaluate(node: t.Node | null, scope: Scope): boolean {
-  if (node === null) return true;
-  if (t.isPureish(node)) return true;
-  if (t.isIdentifier(node)) {
-    return (
-      ["undefined", "Infinity", "NaN"].includes(node.name) &&
-      !scope.hasBinding(node.name, { noGlobals: true })
-    );
-  }
-  if (t.isUnaryExpression(node)) {
-    return (
-      ["void", "typeof", "!"].includes(node.operator) &&
-      isSafeToEvaluate(node.argument, scope)
-    );
-  }
-  if (t.isTemplateLiteral(node)) {
-    return node.expressions.every(
-      expr => isPrimitiveExpression(expr) && isSafeToEvaluate(expr, scope),
-    );
-  }
-  if (t.isArrayExpression(node)) {
-    return node.elements.every(el => isSafeToEvaluate(el, scope));
-  }
-  if (t.isSequenceExpression(node)) {
-    return node.expressions.every(el => isSafeToEvaluate(el, scope));
-  }
-  if (t.isObjectExpression(node)) {
-    return node.properties.every(
-      prop =>
-        t.isObjectProperty(prop) &&
-        !prop.computed &&
-        isSafeToEvaluate(prop.value as t.Expression, scope),
-    );
-  }
-  return false;
+  return node === null || !isDefaultEvaluationObservable(node, scope);
 }
 
 /**
