@@ -22,8 +22,10 @@ export default declare((api, options: Options) => {
         ? (require, specifier) => t.callExpression(require, [specifier])
         : undefined,
       webFetch: (fetch, file) =>
-        template.expression
-          .ast`${file.addHelper("processResponse")}(${fetch}, "json")`,
+        file.availableHelper("processResponse")
+          ? template.expression
+              .ast`${file.addHelper("processResponse")}(${fetch}, "json")`
+          : template.expression.ast`${fetch}.then(r => r.json())`,
       nodeFsSync: read => template.expression.ast`JSON.parse(${read})`,
       nodeFsAsync: () => template.expression.ast`JSON.parse`,
     },

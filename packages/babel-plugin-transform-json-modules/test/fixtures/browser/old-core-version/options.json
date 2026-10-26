@@ -1,0 +1,3 @@
+{
+  "plugins": ["./no-helpers.cjs", "transform-json-modules"]
+}
