@@ -1,11 +1,15 @@
-function s(_x2) {
+function s(_x) {
   return _s.apply(this, arguments);
 }
 function _s() {
-  _s = babelHelpers.asyncToGenerator(function* (_x) {
+  _s = babelHelpers.asyncToGenerator(function* (x) {
+    arguments = function () {
+      "use strict";
+
+      return arguments;
+    }.apply(void 0, arguments);
     var _arguments = arguments,
       _this = this;
-    let x = _x;
     for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
       args[_key - 1] = arguments[_key];
     }
@@ -20,7 +24,7 @@ function _s() {
             console.log(_this, innerArgs, _arguments);
             return _this.x;
           });
-          function r(_x5, _x6) {
+          function r(_x4, _x5) {
             return _r.apply(this, arguments);
           }
           return r;
@@ -29,7 +33,7 @@ function _s() {
         console.log(_this, args, _arguments);
         return _this.g(r);
       });
-      function t(_x3, _x4) {
+      function t(_x2, _x3) {
         return _t.apply(this, arguments);
       }
       return t;

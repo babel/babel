@@ -2,6 +2,11 @@ const _excluded = ["a"],
   _excluded2 = ["c"];
 var o = {
   set x(_ref) {
+    arguments = function () {
+      "use strict";
+
+      return arguments;
+    }.apply(void 0, arguments);
     var {
         a
       } = _ref,
@@ -9,6 +14,11 @@ var o = {
     return arguments;
   },
   set y(_ref2) {
+    arguments = function () {
+      "use strict";
+
+      return arguments;
+    }.apply(void 0, arguments);
     var _arguments = arguments;
     let {
         c = z
