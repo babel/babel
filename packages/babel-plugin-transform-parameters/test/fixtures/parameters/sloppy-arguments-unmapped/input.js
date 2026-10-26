@@ -26,3 +26,6 @@ function p(b, { a }) {
   }
   return typeof b;
 }
+function q(a, b = 1) {
+  return [arguments.length, arguments[0]];
+}
