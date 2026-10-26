@@ -4,10 +4,9 @@ class C {
   static #y;
   static #z;
   static {
-    var _ref, _ref2;
+    var _ref;
     let z;
-    [C.#x, _ref, ..._ref2] = [0, C];
+    [C.#x, _ref, ...z] = [0, C];
     x = _ref.#x;
-    z = _ref2;
   }
 }
