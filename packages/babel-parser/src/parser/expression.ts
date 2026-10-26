@@ -648,8 +648,8 @@ export default abstract class ExpressionParser extends LValParser {
       return expr;
     }
     const update = this.match(tt.incDec);
-    const node = this.startNode<N.UnaryExpression | N.UpdateExpression>();
     if (tokenIsPrefix(this.state.type)) {
+      const node = this.startNode<N.UnaryExpression | N.UpdateExpression>();
       node.operator = this.state.value;
       node.prefix = true;
       this.state.canStartArrow = false;
@@ -680,13 +680,15 @@ export default abstract class ExpressionParser extends LValParser {
         }
         return this.finishNode(node, "UnaryExpression");
       }
+
+      return this.parseUpdate(
+        node as Undone<N.UpdateExpression>,
+        update,
+        refExpressionErrors,
+      );
     }
 
-    const expr = this.parseUpdate(
-      node as Undone<N.UpdateExpression>,
-      update,
-      refExpressionErrors,
-    );
+    const expr = this.parseUpdate(undefined, false, refExpressionErrors);
 
     if (isAwait) {
       const { type } = this.state;
@@ -705,12 +707,13 @@ export default abstract class ExpressionParser extends LValParser {
   // https://tc39.es/ecma262/#prod-UpdateExpression
   parseUpdate(
     this: Parser,
-    node: Undone<N.UpdateExpression>,
+    // Only defined when `update` is true
+    node: Undone<N.UpdateExpression> | undefined,
     update: boolean,
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression {
     if (update) {
-      const result = this.finishNode(node, "UpdateExpression");
+      const result = this.finishNode(node!, "UpdateExpression");
       this.checkLVal(result.argument, result);
       return result;
     }
