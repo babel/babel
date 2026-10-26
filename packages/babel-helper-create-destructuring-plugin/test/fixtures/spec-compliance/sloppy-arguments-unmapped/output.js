@@ -1,5 +1,9 @@
-function f(_b, _ref) {
-  let b = _b;
+function f(b, _ref) {
+  arguments = function () {
+    "use strict";
+
+    return arguments;
+  }.apply(void 0, arguments);
   var a = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref), _ref)), []);
   b = 9;
   return arguments[0];
@@ -9,14 +13,25 @@ function g(c, [d], _ref2) {
   arguments[0] = "changed";
   return c;
 }
-function h(_i, _ref3) {
-  var i;
-  var j = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref3), _ref3)), []);
-  function i() {}
-  return [typeof i, typeof arguments[0]];
+function h(i, _ref3) {
+  arguments = function () {
+    "use strict";
+
+    return arguments;
+  }.apply(void 0, arguments);
+  var _arguments = arguments;
+  let j = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref3), _ref3)), []);
+  return function (i) {
+    function i() {}
+    return [typeof i, typeof _arguments[0]];
+  }(i);
 }
-function k(_l, _ref4) {
-  let l = _l;
+function k(l, _ref4) {
+  arguments = function () {
+    "use strict";
+
+    return arguments;
+  }.apply(void 0, arguments);
   var m = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref4), _ref4)), []);
   arguments;
   {
@@ -24,10 +39,13 @@ function k(_l, _ref4) {
   }
   return typeof l;
 }
-function n(_o, _ref5) {
-  var o = _o;
-  var p = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref5), _ref5)), []);
-  var o;
+function n(o, _ref5) {
+  arguments = function () {
+    "use strict";
+
+    return arguments;
+  }.apply(void 0, arguments);
+  let p = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref5), _ref5)), []);
   arguments;
   return o;
 }

@@ -35,6 +35,16 @@ const buildSafeArgumentsAccess = template.statement(`
   let $0 = arguments.length > $1 ? arguments[$1] : undefined;
 `);
 
+const buildUnmappedArguments = template.statement(
+  `
+    arguments = function () {
+      "use strict";
+      return arguments;
+    }.apply(void 0, arguments);
+  `,
+  { sourceType: "script" },
+);
+
 /** Whether a default can be evaluated earlier without effects or errors. */
 export function isDefaultEvaluationObservable(
   node: t.Node,
@@ -142,7 +152,7 @@ function shadowsArguments(
 ) {
   if (!binding) return false;
   return binding.scope === fn.scope
-    ? binding.kind === "param"
+    ? ["param", "hoisted", "let", "const"].includes(binding.kind)
     : binding.scope.path.isDescendant(fn);
 }
 
@@ -156,6 +166,9 @@ function shadowsArguments(
  */
 export function readsMappedArguments(path: NodePath<t.Function>): boolean {
   if (path.isArrowFunctionExpression() || path.isInStrictMode()) return false;
+  // A direct eval also reads the explicit binding when `arguments` is shadowed.
+  if (shadowsArguments(path.scope.getOwnBinding("arguments"), path))
+    return false;
   const state = { fn: path, found: false };
   path.traverse(argumentsVisitor, state);
   return state.found;
@@ -163,65 +176,24 @@ export function readsMappedArguments(path: NodePath<t.Function>): boolean {
 
 /**
  * Keep the `arguments` object of a function whose parameter list was made
- * simple unmapped: replace the parameters, except the given temporaries that
- * user code can't access, with temporaries that only initialize variables with
- * the original names at the beginning of the body.
+ * simple unmapped. A strict function creates an unmapped arguments object,
+ * including its throwing `callee` accessor. Copy the arguments before any
+ * parameter initialization or body code can observe or modify them.
  *
- *   function f(a, { b }) { arguments; }
- * becomes
- *   function f(_a, _ref) { let a = _a; var { b } = _ref; arguments; }
- *
- * The scope is not updated: it returns the paths of the new parameters and
- * declarations, if any.
+ * Keep the parameter bindings: replacing them with lexical declarations would
+ * prevent a sloppy direct eval from redeclaring them. Callers must move body
+ * function declarations that redeclare parameters into an IIFE first, so they
+ * do not overwrite entries of the original mapped arguments object.
  */
-export function unmapArguments(
-  path: NodePath<t.Function>,
-  temporaries: ReadonlySet<t.Node>,
-) {
+export function unmapArguments(path: NodePath<t.Function>) {
   if (!path.node.params.every(param => t.isIdentifier(param))) return null;
-  const params = (path.get("params") as NodePath<t.Identifier>[]).filter(
-    param => !temporaries.has(param.node) && param.node.name !== "this",
-  );
-  if (params.length === 0) return null;
-  const { scope } = path;
-  // In sloppy mode, a function declared in a block of the body is also
-  // declared as a `var` of the function (Annex B), unless that would conflict
-  // with a lexical declaration or with a parameter: a `let` keeps the
-  // variable from being overridden like the parameter was.
-  const lexical: t.VariableDeclarator[] = [];
-  // A `var` redeclaration of the parameter in the body stays valid with a
-  // `var`; a function declaration is initialized after the parameters.
-  const vars: t.VariableDeclarator[] = [];
-  for (const param of params) {
-    const { node } = param;
-    const uid = scope.generateUidIdentifier(node.name);
-    param.replaceWith(uid);
-    const violations = scope.getOwnBinding(node.name)?.constantViolations;
-    const redeclaredByFunction = violations?.some(violation =>
-      violation.isFunctionDeclaration(),
-    );
-    if (
-      redeclaredByFunction ||
-      violations?.some(violation => violation.isVariableDeclarator())
-    ) {
-      vars.push(
-        t.variableDeclarator(
-          node,
-          redeclaredByFunction ? null : t.cloneNode(uid),
-        ),
-      );
-    } else {
-      lexical.push(t.variableDeclarator(node, t.cloneNode(uid)));
-    }
-  }
-  const declarations: t.VariableDeclaration[] = [];
-  if (lexical.length) declarations.push(t.variableDeclaration("let", lexical));
-  if (vars.length) declarations.push(t.variableDeclaration("var", vars));
   path.ensureBlock();
-  const declarationPaths = (
-    path.get("body") as NodePath<t.BlockStatement>
-  ).unshiftContainer("body", declarations);
-  return { params, declarations: declarationPaths };
+  // Run before the aliases of `arguments` inserted when converting the IIFE.
+  const statement = Object.assign(buildUnmappedArguments(), { _blockHoist: 3 });
+  return (path.get("body") as NodePath<t.BlockStatement>).unshiftContainer(
+    "body",
+    statement,
+  );
 }
 
 // `shouldTransformParam`, `replaceRestElement` and `noNewArrows` are used by
@@ -240,12 +212,26 @@ export default function convertFunctionParams(
   noNewArrows: boolean = true,
   keepArgumentsUnmapped?: boolean,
 ) {
-  if (path.node.params.every(param => t.isIdentifier(param))) return false;
+  if (path.node.params.every(param => t.isIdentifier(param))) {
+    // Rest lowering can leave only identifiers. Body function declarations
+    // must still be isolated before copying the mapped arguments object.
+    if (
+      !keepArgumentsUnmapped ||
+      !t.isBlockStatement(path.node.body) ||
+      !path.node.body.body.some(
+        statement =>
+          t.isFunctionDeclaration(statement) &&
+          path.node.params.some(param =>
+            t.isIdentifier(param, { name: statement.id?.name }),
+          ),
+      )
+    ) {
+      return false;
+    }
+  }
 
   // Read before `arguments` accesses are added for the moved parameters
   keepArgumentsUnmapped ??= readsMappedArguments(path);
-  // The parameters replaced by temporaries, which are not observable
-  const temporaries = new Set<t.Node>();
 
   const isLoose =
     ignoreFunctionLength || t.isMethod(path.node, { kind: "set" });
@@ -346,7 +332,6 @@ export default function convertFunctionParams(
           }),
         );
         param.replaceWith(paramName);
-        temporaries.add(paramName);
       }
     } else if (paramIsAssignmentPattern) {
       if (firstOptionalIndex === null) firstOptionalIndex = i;
@@ -387,7 +372,6 @@ export default function convertFunctionParams(
       body.push(defNode);
 
       param.replaceWith(newParam);
-      temporaries.add(newParam);
     }
 
     body.push(...transformedRestNodes);
@@ -468,7 +452,7 @@ export default function convertFunctionParams(
 
   if (prologue) path2.get("body").unshiftContainer("body", prologue);
 
-  if (keepArgumentsUnmapped) unmapArguments(path, temporaries);
+  if (keepArgumentsUnmapped) unmapArguments(path);
 
   return true;
 }
