@@ -106,6 +106,7 @@ export function transformFunctionParams(
   }
 
   const functionScope = path.scope;
+  const keepArgumentsUnmapped = readsMappedArguments(path);
 
   // Names bound by parameters that will be moved into the function body.
   const ownerOf = new Map<string, number>();
@@ -132,8 +133,12 @@ export function transformFunctionParams(
     }
   }
 
-  // Parameters redeclared in the function body
-  const shadowed = [...ownerOf.keys()].some(name => {
+  // A body function redeclaring even an unlowered parameter must be isolated
+  // before the mapped arguments object is copied.
+  const shadowedNames = keepArgumentsUnmapped
+    ? params.flatMap(param => Object.keys(param.getBindingIdentifiers()))
+    : [...ownerOf.keys()];
+  const shadowed = shadowedNames.some(name => {
     const binding = functionScope.getOwnBinding(name);
     return binding && isRedeclaredInBody(binding);
   });
@@ -231,14 +236,8 @@ export function transformFunctionParams(
   // lowered.
   registerReplacement(declarationPaths, functionScope);
 
-  const unmapped =
-    readsMappedArguments(path) &&
-    unmapArguments(path, new Set(newParams.map(param => param.node)));
+  const unmapped = keepArgumentsUnmapped && unmapArguments(path);
   if (unmapped) {
-    for (const param of unmapped.params) {
-      functionScope.registerBinding("param", param);
-    }
-    // The bindings of the original parameters are moved to the declarations
-    registerReplacement(unmapped.declarations, functionScope);
+    registerReplacement(unmapped, functionScope);
   }
 }
