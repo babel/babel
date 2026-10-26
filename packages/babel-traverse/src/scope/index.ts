@@ -32,6 +32,7 @@ import {
   isProperty,
   isPureish,
   isRegExpLiteral,
+  isRestElement,
   isSuper,
   isTaggedTemplateExpression,
   isTemplateLiteral,
@@ -1062,7 +1063,8 @@ class Scope {
     // When injecting a non-const non-initialized binding inside
     // an IIFE, if the number of call arguments is less than or
     // equal to the number of function parameters, we can safely
-    // inject the binding into the parameter list.
+    // inject the binding into the parameter list (unless it ends
+    // with a rest parameter, which must be the last one).
     if (
       !init &&
       !unique &&
@@ -1070,6 +1072,8 @@ class Scope {
       isAnonymousFunctionExpression(path) &&
       isCallExpression(path.parent, { callee: path.node }) &&
       path.parent.arguments.length <= path.node.params.length &&
+      (path.node.params.length === 0 ||
+        !isRestElement(path.node.params[path.node.params.length - 1])) &&
       isIdentifier(id)
     ) {
       path.pushContainer("params", id);
