@@ -450,7 +450,7 @@ export function buildDestructuringVisitor(guard: Guard): Visitor<PluginPass> {
     VariableDeclaration: guard<t.VariableDeclaration>(
       (path, state, options) => {
         const { node, parent } = path;
-        if (t.isForXStatement(parent)) return;
+        if (t.isForXStatement(parent, { left: node })) return;
         if (node.declare) return;
         if (
           !node.declarations.some(declarator =>
