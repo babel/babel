@@ -1,7 +1,10 @@
 import { types as t, template } from "@babel/core";
 import type { File, Scope } from "@babel/core";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
-import { canUnpackArrayPattern } from "./array-unpacking.ts";
+import {
+  canUnpackArrayPattern,
+  isSafeUnpackedElement,
+} from "./array-unpacking.ts";
 import {
   buildNamedDefault,
   isIdentifierRef,
@@ -841,17 +844,23 @@ export class Lowering {
     // array expression as then there will be values that won't be evaluated
     //
     // eg: let [a, b] = [1, 2];
-    if (
-      t.isArrayExpression(ref.expr) &&
+    const effectfulFrom =
       // the array itself is used as the completion value
-      !ref.retained &&
-      canUnpackArrayPattern(pattern, ref.expr, this.scope)
-    ) {
+      t.isArrayExpression(ref.expr) && !ref.retained
+        ? canUnpackArrayPattern(pattern, ref.expr, this.scope)
+        : false;
+    if (t.isArrayExpression(ref.expr) && effectfulFrom !== false) {
       ref.discarded = true;
       const elisionToUndefined = (el: t.ArrayExpression["elements"][number]) =>
         el ? t.cloneNode(el as t.Expression) : t.buildUndefinedNode();
-      const values = ref.expr.elements.map(element =>
-        isSafeToEvaluate(element, this.scope)
+      // An element that could throw, or be affected by the effects of an
+      // earlier target, is evaluated before any target is assigned.
+      const values = ref.expr.elements.map((element, i) =>
+        (
+          i > effectfulFrom
+            ? isSafeToEvaluate(element, this.scope)
+            : isSafeUnpackedElement(element, this.scope)
+        )
           ? element
           : this.#temp(element as t.Expression),
       );
