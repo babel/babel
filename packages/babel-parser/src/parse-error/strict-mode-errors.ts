@@ -22,7 +22,8 @@ export default {
   StrictFunction:
     "In strict mode code, functions can only be declared at top level or inside a block.",
 
-  StrictNumericEscape: "The only valid numeric escape in strict mode is '\\0'.",
+  StrictNumericEscape: ({ escape }: { escape: string }) =>
+    `Invalid numeric escape '${escape}' in strict mode.`,
 
   StrictOctalLiteral: "Legacy octal literals are not allowed in strict mode.",
 

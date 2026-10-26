@@ -142,7 +142,12 @@ function isStringEnd(
 
 type EscapedCharErrorHandlers = HexCharErrorHandlers &
   CodePointErrorHandlers & {
-    strictNumericEscape(pos: number, lineStart: number, curLine: number): void;
+    strictNumericEscape(
+      pos: number,
+      lineStart: number,
+      curLine: number,
+      escape: string,
+    ): void;
   };
 
 function readEscapedChar(
@@ -215,7 +220,12 @@ function readEscapedChar(
       if (inTemplate) {
         return res(null);
       } else {
-        errors.strictNumericEscape(pos - 1, lineStart, curLine);
+        errors.strictNumericEscape(
+          pos - 1,
+          lineStart,
+          curLine,
+          input.slice(pos - 2, pos),
+        );
       }
     // fall through
     default:
@@ -240,7 +250,12 @@ function readEscapedChar(
           if (inTemplate) {
             return res(null);
           } else {
-            errors.strictNumericEscape(startPos, lineStart, curLine);
+            errors.strictNumericEscape(
+              startPos,
+              lineStart,
+              curLine,
+              input.slice(startPos - 1, pos + (octalStr === "0" ? 1 : 0)),
+            );
           }
         }
 
