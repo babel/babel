@@ -1,0 +1,64 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":32}},
+  "errors": [
+    "SyntaxError: `S` has already been exported. Exported identifiers must be unique. (2:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":32}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"S"},
+              "name": "S"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"S"},
+              "name": "S"
+            }
+          }
+        ],
+        "source": null,
+        "attributes": [],
+        "declaration": null
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":14,"end":32,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":18,"index":32}},
+        "specifiers": [],
+        "source": null,
+        "attributes": [],
+        "declaration": {
+          "type": "StructDeclaration",
+          "start":21,"end":32,"loc":{"start":{"line":2,"column":7,"index":21},"end":{"line":2,"column":18,"index":32}},
+          "id": {
+            "type": "Identifier",
+            "start":28,"end":29,"loc":{"start":{"line":2,"column":14,"index":28},"end":{"line":2,"column":15,"index":29},"identifierName":"S"},
+            "name": "S"
+          },
+          "superClass": null,
+          "body": {
+            "type": "StructBody",
+            "start":30,"end":32,"loc":{"start":{"line":2,"column":16,"index":30},"end":{"line":2,"column":18,"index":32}},
+            "body": []
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

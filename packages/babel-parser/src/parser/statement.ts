@@ -457,10 +457,7 @@ export default abstract class StatementParser extends ExpressionParser {
         if (!this.state.containsEsc && this.nextTokenIsIdentifierOnSameLine()) {
           this.expectPlugin("structs");
           if (!allowDeclaration) this.unexpected();
-          return this.parseStructDeclaration(
-            node as Undone<N.StructDeclaration>,
-            false,
-          );
+          return this.parseStructDeclaration(node, false);
         }
         break;
       case tt._if:
@@ -2507,10 +2504,7 @@ export default abstract class StatementParser extends ExpressionParser {
         this.chStartsBindingIdentifier(nextCh, next)
       ) {
         this.expectPlugin("structs");
-        return this.parseStructDeclaration(
-          expr as Undone<N.StructDeclaration>,
-          true,
-        );
+        return this.parseStructDeclaration(expr, true);
       }
     }
 
@@ -2711,7 +2705,8 @@ export default abstract class StatementParser extends ExpressionParser {
       // Exported declarations
       if (
         decl.type === "FunctionDeclaration" ||
-        decl.type === "ClassDeclaration"
+        decl.type === "ClassDeclaration" ||
+        decl.type === "StructDeclaration"
       ) {
         const { id } = decl;
         if (!id) throw new Error("Assertion failure");
