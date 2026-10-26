@@ -3,7 +3,10 @@ import type { NodePath, PluginPass, Scope, Visitor } from "@babel/core";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { transformFunctionParams } from "./function-params.ts";
 import { Lowering, StepKind, type Step } from "./lowering.ts";
-import { transformObjectSpread } from "./object-spread.ts";
+import {
+  finishObjectSpreadLoop,
+  transformObjectSpread,
+} from "./object-spread.ts";
 import {
   collectScopeInfo,
   forgetReferences,
@@ -469,6 +472,9 @@ export function buildDestructuringVisitor(guard: Guard): Visitor<PluginPass> {
         transformObjectSpread(path, state, options);
       }
     }),
+    Loop: {
+      exit: guard<t.Loop>(path => finishObjectSpreadLoop(path)),
+    },
   };
 
   // Private names in patterns must be lowered to private member

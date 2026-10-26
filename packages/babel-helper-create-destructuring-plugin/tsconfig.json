@@ -12,6 +12,9 @@
   ],
   "references": [
     {
+      "path": "../../packages/babel-helper-replace-supers"
+    },
+    {
       "path": "../../packages/babel-plugin-transform-parameters"
     },
     {

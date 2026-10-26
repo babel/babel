@@ -1,6 +1,7 @@
 import { types as t } from "@babel/core";
 import type { NodePath, PluginPass } from "@babel/core";
 import type { ResolvedOptions } from "./features.ts";
+import ReplaceSupers from "@babel/helper-replace-supers";
 import { adoptMovedPaths } from "./scope.ts";
 import { getExtendsHelper } from "./util.ts";
 
@@ -21,6 +22,18 @@ function isProtoSetter(
   );
 }
 
+const loopRefsKey = "@babel/helper-create-destructuring-plugin/objectSuper";
+
+export function finishObjectSpreadLoop(path: NodePath<t.Loop>) {
+  const refs: t.Identifier[] | undefined = path.getData(loopRefsKey);
+  if (!refs) return;
+  path.setData(loopRefsKey, undefined);
+  for (const id of refs) path.scope.push({ id, kind: "let" });
+  path.scope.getProgramParent().crawl();
+  // Let transform-block-scoping see the new per-iteration bindings.
+  path.requeue();
+}
+
 /**
  * var a = { ...b, ...c }
  */
@@ -30,6 +43,17 @@ export function transformObjectSpread(
   options: ResolvedOptions,
 ) {
   if (!hasSpread(path.node)) return;
+
+  let objectRef: t.Identifier | undefined;
+  for (const prop of path.get("properties")) {
+    if (!prop.isObjectMethod()) continue;
+    new ReplaceSupers({
+      methodPath: prop,
+      file: file.file,
+      getObjectRef: () =>
+        (objectRef ??= path.scope.generateUidIdentifier("obj")),
+    }).replace();
+  }
 
   // The properties and spread arguments are only moved to the replacement:
   // they keep their paths, and their scope information.
@@ -104,6 +128,29 @@ export function transformObjectSpread(
 
   if (props.length) make();
 
-  const [replacement] = path.replaceWith(exp!);
+  const [replacement] = path.replaceWith(
+    objectRef
+      ? t.assignmentExpression("=", t.cloneNode(objectRef), exp!)
+      : exp!,
+  );
   adoptMovedPaths(replacement, moved);
+
+  if (objectRef) {
+    const scopePath = path.findParent(
+      p =>
+        p.isFunction() ||
+        p.isProgram() ||
+        // Loop headers cannot see declarations in the loop body.
+        (p.isLoop() && path.isDescendant(p.get("body"))),
+    )!;
+    if (scopePath.isLoop()) {
+      const refs: t.Identifier[] = scopePath.getData(loopRefsKey) ?? [];
+      refs.push(objectRef);
+      scopePath.setData(loopRefsKey, refs);
+    } else {
+      path.scope.push({ id: objectRef });
+    }
+    // Replacing super introduced references inside the moved methods.
+    path.scope.getProgramParent().crawl();
+  }
 }
