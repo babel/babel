@@ -410,7 +410,7 @@ export default function convertFunctionParams(
       // The IIFE wrapping the body is passed the parameters it redeclares:
       // like the other parameters, the rest parameter is initialized before
       // it, not inside.
-      convertFunctionRest(path, loop => body.push(loop));
+      convertFunctionRest(path, statements => body.push(...statements));
       if (restNodes.length) {
         bodyNode.body.splice(
           bodyNode.body.indexOf(restNodes[0]),

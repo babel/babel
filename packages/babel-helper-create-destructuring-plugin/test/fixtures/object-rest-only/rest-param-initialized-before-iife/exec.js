@@ -24,3 +24,16 @@ function* gen({ ...l }, n = g(), ...m) {
   yield [n, m];
 }
 expect(gen({}, 1, 7).next().value).toEqual([1, [7]]);
+
+// A rest pattern is destructured before the IIFE too
+function k({ ...d } = {}, ...[x]) {
+  var x = 5;
+  return x;
+}
+expect(k({}, 1)).toBe(5);
+
+function m({ ...d } = {}, ...[y, z = () => y]) {
+  var y = 6;
+  return [y, z()];
+}
+expect(m({}, 1)).toEqual([6, 1]);
