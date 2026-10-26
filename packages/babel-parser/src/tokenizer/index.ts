@@ -92,6 +92,29 @@ for (let i = 0; i < 128; i++) {
   asciiIdentifierChar[i] = isIdentifierChar(i) ? 1 : 0;
 }
 
+// Keywords indexed by (length, first char code), so that classifying an
+// identifier does not need to hash the freshly sliced string, as a Map lookup
+// would. Each bucket is a flat [word, type, word, type, ...] array.
+const keywordBuckets: (string | TokenType)[][] = [];
+let maxKeywordLength = 0;
+for (const [word, type] of keywordTypes) {
+  const index = (word.length << 7) | word.charCodeAt(0);
+  (keywordBuckets[index] ??= []).push(word, type);
+  if (word.length > maxKeywordLength) maxKeywordLength = word.length;
+}
+
+function lookupKeyword(word: string, firstCode: number): TokenType | undefined {
+  const { length } = word;
+  if (length > maxKeywordLength || firstCode >= 128) return undefined;
+  const bucket = keywordBuckets[(length << 7) | firstCode];
+  if (bucket !== undefined) {
+    for (let i = 0; i < bucket.length; i += 2) {
+      if (bucket[i] === word) return bucket[i + 1] as TokenType;
+    }
+  }
+  return undefined;
+}
+
 export default abstract class Tokenizer extends CommentsParser {
   isLookahead: boolean;
 
@@ -1440,7 +1463,10 @@ export default abstract class Tokenizer extends CommentsParser {
 
   readWord(firstCode?: number): void {
     const word = this.readWord1(firstCode);
-    const type = keywordTypes.get(word);
+    const type = lookupKeyword(
+      word,
+      firstCode === undefined ? word.charCodeAt(0) : firstCode,
+    );
     if (type !== undefined) {
       // We don't use word as state.value here because word is a dynamic string
       // while token label is a shared constant string
