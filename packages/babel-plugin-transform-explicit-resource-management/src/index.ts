@@ -1,22 +1,14 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { unshiftForXStatementBody } from "@babel/helper-create-destructuring-plugin";
+import {
+  isAnonymousFunctionDefinition,
+  unshiftForXStatementBody,
+} from "@babel/helper-create-destructuring-plugin";
 import { types as t, template, traverse } from "@babel/core";
 import type { NodePath, Visitor, PluginPass } from "@babel/core";
 
 const enum USING_KIND {
   NORMAL,
   AWAIT,
-}
-
-// https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
-function isAnonymousFunctionDefinition(
-  node: t.Node,
-): node is
-  t.ClassExpression | t.ArrowFunctionExpression | t.FunctionExpression {
-  return (
-    t.isArrowFunctionExpression(node) ||
-    ((t.isFunctionExpression(node) || t.isClassExpression(node)) && !node.id)
-  );
 }
 
 function emitSetFunctionNameCall(
