@@ -23,4 +23,17 @@ function k(b, c = (arguments[0] = 9)) {
 }
 expect(k(1)).toBe(1);
 
-expect([f.length, g.length, h.length, k.length]).toEqual([2, 1, 1, 1]);
+// A function declared in a block is only declared as a `var` of the function
+// (Annex B) when its name is not a parameter
+function p(b, { a }) {
+  arguments;
+  {
+    function b() {}
+  }
+  return typeof b;
+}
+expect(p(1, {})).toBe("number");
+
+expect([f.length, g.length, h.length, k.length, p.length]).toEqual([
+  2, 1, 1, 1, 2,
+]);

@@ -10,3 +10,15 @@ function h(i, { ...j }) {
   function i() {}
   return [typeof i, typeof arguments[0]];
 }
+function k(l, { ...m }) {
+  arguments;
+  {
+    function l() {}
+  }
+  return typeof l;
+}
+function n(o, { ...p }) {
+  var o;
+  arguments;
+  return o;
+}

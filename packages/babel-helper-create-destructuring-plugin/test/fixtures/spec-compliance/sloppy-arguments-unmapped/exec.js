@@ -19,4 +19,25 @@ function h(i, { ...j }) {
 }
 expect(h(1, {})).toEqual(["function", "number"]);
 
-expect([f.length, g.length, h.length]).toEqual([2, 3, 2]);
+// A function declared in a block is only declared as a `var` of the function
+// (Annex B) when its name is not a parameter
+function k(l, { ...m }) {
+  arguments;
+  {
+    function l() {}
+  }
+  return typeof l;
+}
+expect(k(1, {})).toBe("number");
+
+// A `var` redeclaration keeps the value of the parameter
+function n(o, { ...p }) {
+  var o;
+  arguments;
+  return o;
+}
+expect(n(1, {})).toBe(1);
+
+expect([f.length, g.length, h.length, k.length, n.length]).toEqual([
+  2, 3, 2, 2, 2,
+]);

@@ -1,1 +1,4 @@
-{ "sourceType": "script" }
+{
+  "sourceType": "script",
+  "plugins": ["transform-parameters"]
+}

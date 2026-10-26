@@ -19,3 +19,10 @@ function m(b, ...arguments) {
 function n(b, c = 1) {
   return b;
 }
+function p(b, { a }) {
+  arguments;
+  {
+    function b() {}
+  }
+  return typeof b;
+}
