@@ -2,6 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 import convertFunctionParams, {
   readsMappedArguments,
+  recordArgumentsUsage,
   unmapArguments,
 } from "./params.ts";
 import convertFunctionRest from "./rest.ts";
@@ -10,6 +11,7 @@ export {
   isDefaultEvaluationObservable,
   isParamEvaluationObservable,
   readsMappedArguments,
+  recordArgumentsUsage,
   unmapArguments,
 } from "./params.ts";
 export { preserveAnnexBParameterExclusions } from "./shadow-utils.ts";
@@ -36,6 +38,10 @@ export default declare((api, options: Options) => {
 
   return {
     name: "transform-parameters",
+
+    pre(file) {
+      recordArgumentsUsage(file);
+    },
 
     visitor: {
       Function(path) {
