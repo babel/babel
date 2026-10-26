@@ -34,6 +34,12 @@ function p(b, { a }) {
 }
 expect(p(1, {})).toBe("number");
 
-expect([f.length, g.length, h.length, k.length, p.length]).toEqual([
-  2, 1, 1, 1, 2,
+// Reading `arguments` only observes the mapping if a parameter is assigned
+function q(a, b = 1) {
+  return [arguments.length, arguments[0]];
+}
+expect(q(5)).toEqual([1, 5]);
+
+expect([f.length, g.length, h.length, k.length, p.length, q.length]).toEqual([
+  2, 1, 1, 1, 2, 1,
 ]);
