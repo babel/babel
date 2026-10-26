@@ -25,17 +25,10 @@ export interface FeatureOptions {
   ignoreFunctionLength?: boolean;
 }
 
-export interface ResolvedOptions {
+export type ResolvedOptions = Required<FeatureOptions> & {
   features: number;
-  useBuiltIns: boolean;
-  iterableIsArray: boolean;
-  arrayLikeIsIterable: boolean;
-  objectRestNoSymbols: boolean;
-  pureGetters: boolean;
-  setSpreadProperties: boolean;
-  ignoreFunctionLength: boolean;
   noNewArrows: boolean;
-}
+};
 
 // We can't use a symbol because this needs to always be the same, even if
 // this package isn't deduped by npm.
@@ -73,24 +66,32 @@ export function setAssumptions(
   file.set(noNewArrowsKey, noNewArrows ?? true);
 }
 
-function pick<K extends keyof FeatureOptions>(
-  allOptions: Map<number, FeatureOptions>,
-  key: K,
-  precedence: number[],
-  fallback: NonNullable<FeatureOptions[K]>,
-): NonNullable<FeatureOptions[K]> {
-  for (const feature of precedence) {
-    const value = allOptions.get(feature)?.[key];
-    if (value !== undefined) return value;
-  }
-  return fallback;
-}
+const restFirst = [
+  FEATURES.objectRest,
+  FEATURES.destructuring,
+  FEATURES.privateDestructuring,
+];
+const destructuringFirst = [FEATURES.destructuring, FEATURES.objectRest];
+
+/**
+ * The features whose plugin options are used for each option, in order. The
+ * plugin that "owns" a behavior wins: object rest/spread options come from
+ * `transform-object-rest-spread`, array destructuring options from
+ * `transform-destructuring`.
+ */
+const precedence: Record<keyof FeatureOptions, number[]> = {
+  useBuiltIns: restFirst,
+  iterableIsArray: destructuringFirst,
+  arrayLikeIsIterable: destructuringFirst,
+  objectRestNoSymbols: restFirst,
+  pureGetters: restFirst,
+  setSpreadProperties: restFirst,
+  ignoreFunctionLength: [FEATURES.objectRest, FEATURES.privateDestructuring],
+};
 
 /**
  * Merge the options of every enabled plugin into a single configuration
- * used by the shared lowering engine. The plugin that "owns" a behavior wins:
- * object rest/spread options come from `transform-object-rest-spread`, array
- * destructuring options from `transform-destructuring`.
+ * used by the shared lowering engine.
  */
 export function getResolvedOptions(file: File): ResolvedOptions {
   let resolved: ResolvedOptions | null = file.get(resolvedKey);
@@ -101,49 +102,20 @@ export function getResolvedOptions(file: File): ResolvedOptions {
   const features: number = file.get(featuresKey);
   const allOptions: Map<number, FeatureOptions> = file.get(optionsKey);
 
-  const restFirst = [
-    FEATURES.objectRest,
-    FEATURES.destructuring,
-    FEATURES.privateDestructuring,
-  ];
-  const destructuringFirst = [FEATURES.destructuring, FEATURES.objectRest];
-
   resolved = {
     features,
-    useBuiltIns: pick(allOptions, "useBuiltIns", restFirst, false),
-    iterableIsArray: pick(
-      allOptions,
-      "iterableIsArray",
-      destructuringFirst,
-      false,
-    ),
-    arrayLikeIsIterable: pick(
-      allOptions,
-      "arrayLikeIsIterable",
-      destructuringFirst,
-      false,
-    ),
-    objectRestNoSymbols: pick(
-      allOptions,
-      "objectRestNoSymbols",
-      restFirst,
-      false,
-    ),
-    pureGetters: pick(allOptions, "pureGetters", restFirst, false),
-    setSpreadProperties: pick(
-      allOptions,
-      "setSpreadProperties",
-      restFirst,
-      false,
-    ),
-    ignoreFunctionLength: pick(
-      allOptions,
-      "ignoreFunctionLength",
-      [FEATURES.objectRest, FEATURES.privateDestructuring],
-      false,
-    ),
     noNewArrows: file.get(noNewArrowsKey),
-  };
+  } as ResolvedOptions;
+  for (const key of Object.keys(precedence) as (keyof FeatureOptions)[]) {
+    resolved[key] = false;
+    for (const feature of precedence[key]) {
+      const value = allOptions.get(feature)?.[key];
+      if (value !== undefined) {
+        resolved[key] = value;
+        break;
+      }
+    }
+  }
   file.set(resolvedKey, resolved);
   return resolved;
 }

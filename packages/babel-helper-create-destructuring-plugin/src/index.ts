@@ -1,10 +1,4 @@
-import type {
-  PluginAPI,
-  PluginObject,
-  PluginPass,
-  Visitor,
-  types as t,
-} from "@babel/core";
+import type { PluginAPI, PluginObject } from "@babel/core";
 import { isLessThan } from "verkit";
 
 import {
@@ -15,13 +9,13 @@ import {
   type FeatureOptions,
 } from "./features.ts";
 import { buildDestructuringVisitor, type Guard } from "./visitors.ts";
-import { transformFunctionParams } from "./function-params.ts";
-import { transformObjectSpread } from "./object-spread.ts";
-import { hasPrivateClassElement } from "./util.ts";
 
 export { FEATURES };
-export { unshiftForXStatementBody } from "./util.ts";
-export { buildObjectExcludingKeys } from "./util.ts";
+export {
+  buildObjectExcludingKeys,
+  isAnonymousFunctionDefinition,
+  unshiftForXStatementBody,
+} from "./util.ts";
 
 const versionKey = "@babel/plugin-destructuring/version";
 
@@ -30,7 +24,6 @@ export interface Options {
   feature: number;
   options?: FeatureOptions;
   manipulateOptions?: PluginObject["manipulateOptions"];
-  inherits?: PluginObject["inherits"];
   api: PluginAPI;
 }
 
@@ -44,57 +37,22 @@ export function createDestructuringPlugin({
   feature,
   options = {},
   manipulateOptions,
-  inherits,
   api,
 }: Options): PluginObject {
   // Used when moving parameters of arrow functions into their body.
   const noNewArrows = api.assumption("noNewArrows");
 
-  const isCurrentVersion = (state: PluginPass) =>
-    state.file.get(versionKey) === PACKAGE_JSON.version;
-
+  // Only the newest helper copy lowers, with the union of the features
+  // enabled by all the plugins, including the ones using an older copy.
   const guard: Guard = handler => (path, state) => {
-    if (isCurrentVersion(state)) {
+    if (state.file.get(versionKey) === PACKAGE_JSON.version) {
       handler(path, state, getResolvedOptions(state.file));
     }
   };
 
-  const visitor = buildDestructuringVisitor(guard);
-
-  // The newest helper copy must handle every enabled feature, including
-  // features enabled by plugins using an older copy of this helper.
-  Object.assign(visitor, {
-    Function: guard<t.Function>((path, _, options) => {
-      if (
-        options.features &
-        (FEATURES.objectRest | FEATURES.privateDestructuring)
-      ) {
-        transformFunctionParams(path, options);
-      }
-    }),
-    ObjectExpression: guard<t.ObjectExpression>((path, state, options) => {
-      if (options.features & FEATURES.objectSpread) {
-        transformObjectSpread(path, state, options);
-      }
-    }),
-  });
-
-  // Private names in patterns must be lowered to private member
-  // expressions before the class features plugins transform the class,
-  // which happens when visiting the Class node.
-  const innerVisitor: Visitor<PluginPass> = { ...visitor };
-  Object.assign(visitor, {
-    Class: guard<t.Class>((path, state, options) => {
-      if (!(options.features & FEATURES.privateDestructuring)) return;
-      if (!hasPrivateClassElement(path.node.body)) return;
-      path.traverse(innerVisitor, state);
-    }),
-  });
-
   return {
     name,
     manipulateOptions,
-    inherits,
 
     pre(file) {
       enableFeature(file, feature, options);
@@ -108,6 +66,6 @@ export function createDestructuringPlugin({
       }
     },
 
-    visitor,
+    visitor: buildDestructuringVisitor(guard),
   };
 }
