@@ -1112,6 +1112,18 @@ describe("scope", () => {
       expect(program.scope.hasOwnBinding("ref")).toBe(false);
     });
 
+    it("should not register the new binding within IIFunctionExpression when it has a rest parameter", () => {
+      const program = getPath("(function(a, ...b) {})()");
+      const functionBody = program.get("body.0.expression.callee.body");
+      functionBody.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "(function (a, ...b) {
+          var ref;
+        })();"
+      `);
+      expect(functionBody.scope.hasOwnBinding("ref")).toBe(true);
+      expect(program.scope.hasOwnBinding("ref")).toBe(false);
+    });
     it("should not register the new binding within IIFunctionExpression when it has a function name", () => {
       const program = getPath("(function f(a, b = f.length) {})()");
       const functionBody = program.get("body.0.expression.callee.body");
