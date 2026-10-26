@@ -1,4 +1,4 @@
 "use strict";
 
-const text = String(require("fs").readFileSync(require.resolve("./x"))).replace(/^\xEF\xBB\xBF/, ""),
+const text = String(require("fs").readFileSync(require.resolve("./x"))).replace(/^﻿/, ""),
   json = JSON.parse(require("fs").readFileSync(require.resolve("./x")));

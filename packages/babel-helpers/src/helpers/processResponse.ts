@@ -10,6 +10,8 @@ export default function _processResponse(
       (response as any) = response[method]();
       return map ? (response as any).then(map) : response;
     }
-    throw TypeError(`Fetch failed: ${response.status} ${response.statusText}`);
+    throw TypeError(
+      "Fetch failed: " + response.status + " " + response.statusText,
+    );
   });
 }

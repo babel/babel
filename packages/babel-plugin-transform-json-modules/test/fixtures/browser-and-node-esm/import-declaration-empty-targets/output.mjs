@@ -1,2 +1,2 @@
 const j = await (typeof process === "object" && process.versions?.node ? Promise.all([import("fs"), import("module")]).then(([fs, module]) => new Promise((a => (r, j) => fs.readFile(a, (e, d) => e ? j(e) : r(d)))(module.createRequire(import.meta.url).resolve("./x.json")))).then(JSON.parse) : _processResponse(fetch(import.meta.resolve?.("./x.json") ?? new URL("./x.json", import.meta.url)), "json"));
-function _processResponse(t, e, r) { return t.then(function (t) { if (t.ok) return t = t[e](), r ? t.then(r) : t; throw TypeError(`Fetch failed: ${t.status} ${t.statusText}`); }); }
+function _processResponse(t, e, r) { return t.then(function (t) { if (t.ok) return t = t[e](), r ? t.then(r) : t; throw TypeError("Fetch failed: " + t.status + " " + t.statusText); }); }

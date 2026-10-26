@@ -10,7 +10,7 @@ export default declare(api => {
   const { types: t, template } = api;
 
   const toStringStripBOM = (buf: t.Node) => template.expression.ast`
-    String(${buf}).replace(/^\\xEF\\xBB\\xBF/, "")
+    String(${buf}).replace(/^\uFEFF/, "")
   `;
 
   return createImportTypeAsDefaultPlugin({

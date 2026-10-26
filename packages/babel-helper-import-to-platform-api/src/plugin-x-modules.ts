@@ -44,7 +44,7 @@ export function createImportTypeAsDefaultPlugin({
   }
 
   function hasMatchingType(attributes: t.ImportAttribute[]) {
-    return !!attributes?.some(
+    return attributes.some(
       attr => getAttributeKey(attr) === "type" && attr.value.value === type,
     );
   }

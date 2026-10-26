@@ -5,4 +5,4 @@ expect(test.length).toBe(4);
 // sanity check
 expect(
   fs.readFileSync(require.resolve("./test.txt")).toString()
-).toBe("\xEF\xBB\xBFtest");
+).toBe("\uFEFFtest");

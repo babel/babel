@@ -1024,10 +1024,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 160, gzip size: 143
+  // size: 159, gzip size: 141
   processResponse: helper(
     "8.0.0",
-    "function _processResponse(t,e,r){return t.then(function(t){if(t.ok)return t=t[e](),r?t.then(r):t;throw TypeError(`Fetch failed: ${t.status} ${t.statusText}`)})}",
+    'function _processResponse(t,e,r){return t.then(function(t){if(t.ok)return t=t[e](),r?t.then(r):t;throw TypeError("Fetch failed: "+t.status+" "+t.statusText)})}',
     {
       globals: ["TypeError"],
       locals: { _processResponse: ["body.0.id"] },
