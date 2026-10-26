@@ -4,13 +4,13 @@
  * scope again.
  *
  * The protocol of a lowering is: `collectScopeInfo` before lowering (the
- * lowering reads the scope information and mutates patterns), forget once the
- * nodes are replaced, `registerReplacement` on the new nodes. References and
- * violations are tracked by node, not by path: a node that was moved and
- * registered again through a new path (e.g. by a crawl of a nested scope) is
- * fully forgotten when it is lowered later. Sites that only re-parent a
- * pattern into a declaration that will be lowered afterwards (catch clauses,
- * function parameters) don't need to forget anything.
+ * lowering reads the scope information and mutates patterns), forget after
+ * lowering, before replacing the nodes, then `registerReplacement` on the new
+ * nodes. References and violations are tracked by node, not by path: a node
+ * that was moved and registered again through a new path (e.g. by a crawl of
+ * a nested scope) is fully forgotten when it is lowered later. Lowerings that
+ * only move nodes under new parents can instead keep their paths, with
+ * `adoptMovedPaths`.
  */
 import { types as t } from "@babel/core";
 import type { NodePath, Scope, Visitor } from "@babel/core";
@@ -95,27 +95,17 @@ export function removeUndeclaredBindings(
 }
 
 // Created once, so that it's only exploded once.
-const scopeInfoVisitor: Visitor<(p: NodePath) => void> = {
+const scopeInfoVisitor: Visitor = {
   TSTypeAnnotation(path) {
     // Match Scope#crawl: type annotations do not reference runtime bindings.
     path.skip();
   },
-  ReferencedIdentifier(path, visit) {
-    visit(path);
-  },
-  "AssignmentExpression|UpdateExpression|ForXStatement|VariableDeclarator"(
+  "ReferencedIdentifier|AssignmentExpression|UpdateExpression|ForXStatement|VariableDeclarator"(
     path,
-    visit,
   ) {
-    visit(path);
+    registerPathScopeInfo(path);
   },
 };
-
-/** Visit `path` and the descendants that carry scope information. */
-function forEachScopeInfoPath(path: NodePath, visit: (p: NodePath) => void) {
-  visit(path);
-  path.traverse(scopeInfoVisitor, visit);
-}
 
 /**
  * Collect the references and constant violations recorded for the nodes of
@@ -175,24 +165,29 @@ export function collectScopeInfo(path: NodePath): () => void {
 
   return () => {
     for (const [binding, nodes] of references) {
-      // The same node may have been registered through different paths, e.g.
-      // by a crawl of a nested scope after it was moved.
-      binding.referencePaths = binding.referencePaths.filter(ref => {
-        if (!nodes.has(ref.node)) return true;
-        binding.dereference();
-        return false;
-      });
+      forgetReferences(binding, nodes);
     }
     for (const [binding, nodes] of violations) {
-      const { length } = binding.constantViolations;
-      binding.constantViolations = binding.constantViolations.filter(
-        violation => !nodes.has(violation.node),
-      );
-      if (binding.constantViolations.length !== length) {
-        binding.constant = binding.constantViolations.length === 0;
+      const { constantViolations } = binding;
+      if (removePaths(constantViolations, nodes) > 0) {
+        binding.constant = constantViolations.length === 0;
       }
     }
   };
+}
+
+/**
+ * Remove, in place, the paths of `paths` whose node is in `nodes`. Returns
+ * the number of removed paths.
+ */
+function removePaths(paths: NodePath[], nodes: ReadonlySet<t.Node>): number {
+  let kept = 0;
+  for (const path of paths) {
+    if (!nodes.has(path.node)) paths[kept++] = path;
+  }
+  const removed = paths.length - kept;
+  paths.length = kept;
+  return removed;
 }
 
 /**
@@ -204,15 +199,48 @@ export function forgetScopeInfo(path: NodePath) {
   collectScopeInfo(path)();
 }
 
-/** Remove the paths of `node` from the references of `binding`. */
-export function forgetReference(binding: Binding, node: t.Node) {
+/** Remove the paths of `nodes` from the references of `binding`. */
+export function forgetReferences(binding: Binding, nodes: ReadonlySet<t.Node>) {
   // The same node may have been registered through different paths, e.g. by
   // a crawl of a nested scope after it was moved.
-  binding.referencePaths = binding.referencePaths.filter(ref => {
-    if (ref.node !== node) return true;
-    binding.dereference();
-    return false;
-  });
+  const removed = removePaths(binding.referencePaths, nodes);
+  for (let i = 0; i < removed; i++) binding.dereference();
+}
+
+/**
+ * Register the reference or constant violation of a freshly inserted node,
+ * like `Scope#crawl` would.
+ */
+function registerPathScopeInfo(p: NodePath) {
+  if (p.isReferencedIdentifier()) {
+    const binding = p.scope.getBinding(p.node.name);
+    if (binding) {
+      binding.reference(p);
+    } else {
+      p.scope.getProgramParent().addGlobal(p.node);
+    }
+  } else if (p.isVariableDeclarator()) {
+    const ids = t.getBindingIdentifiers(p.node.id);
+    for (const name of Object.keys(ids)) {
+      const binding = p.scope.getBinding(name);
+      // A redeclaration of an existing binding
+      if (binding && binding.identifier !== ids[name]) binding.reassign(p);
+    }
+  } else if (
+    p.isAssignmentExpression() ||
+    p.isUpdateExpression() ||
+    p.isForXStatement()
+  ) {
+    const ids = p.getAssignmentIdentifiers();
+    for (const name of Object.keys(ids)) {
+      const binding = p.scope.getBinding(name);
+      if (binding) {
+        binding.reassign(p);
+      } else {
+        p.scope.getProgramParent().addGlobal(ids[name]);
+      }
+    }
+  }
 }
 
 /**
@@ -221,38 +249,57 @@ export function forgetReference(binding: Binding, node: t.Node) {
  */
 function registerScopeInfo(paths: NodePath[]) {
   for (const path of paths) {
-    forEachScopeInfoPath(path, p => {
-      if (p.isReferencedIdentifier()) {
-        const binding = p.scope.getBinding(p.node.name);
-        if (binding) {
-          binding.reference(p);
-        } else {
-          p.scope.getProgramParent().addGlobal(p.node);
-        }
-      } else if (p.isVariableDeclarator()) {
-        const ids = t.getBindingIdentifiers(p.node.id);
-        for (const name of Object.keys(ids)) {
-          const binding = p.scope.getBinding(name);
-          // A redeclaration of an existing binding
-          if (binding && binding.identifier !== ids[name]) binding.reassign(p);
-        }
-      } else if (
-        p.isAssignmentExpression() ||
-        p.isUpdateExpression() ||
-        p.isForXStatement()
-      ) {
-        const ids = p.getAssignmentIdentifiers();
-        for (const name of Object.keys(ids)) {
-          const binding = p.scope.getBinding(name);
-          if (binding) {
-            binding.reassign(p);
-          } else {
-            p.scope.getProgramParent().addGlobal(ids[name]);
-          }
-        }
-      }
-    });
+    registerPathScopeInfo(path);
+    path.traverse(scopeInfoVisitor);
   }
+}
+
+/**
+ * Give the nodes of `moved`, moved under new parents in the tree of `root`,
+ * the paths they had before instead of new ones: the paths of their
+ * descendants, recorded in the scope information, stay valid, so the scope
+ * information of the moved subtrees doesn't need to be forgotten and
+ * registered again. Registers the scope information of the new nodes, from
+ * `root` to the moved ones.
+ */
+export function adoptMovedPaths(
+  root: NodePath,
+  moved: ReadonlyMap<t.Node, NodePath>,
+) {
+  function visit(path: NodePath) {
+    registerPathScopeInfo(path);
+    const { node } = path;
+    for (const key of t.VISITOR_KEYS[node.type]) {
+      // @ts-expect-error key is a visitor key of node
+      const value: t.Node | null | (t.Node | null)[] = node[key];
+      if (Array.isArray(value)) {
+        value.forEach(
+          (child, i) => child && visitChild(path, `${key}.${i}`, child),
+        );
+      } else if (value) {
+        visitChild(path, key, value);
+      }
+    }
+  }
+  function visitChild(parentPath: NodePath, key: string, node: t.Node) {
+    const old = moved.get(node);
+    if (!old) {
+      visit(parentPath.get(key) as NodePath);
+      return;
+    }
+    // The path of a child is looked up by node in the paths of its parent
+    // (`NodePath.get`): make it the old one, then set up at the new location.
+    // It must be seeded before getting the child, which would otherwise
+    // create a new path (and a new scope, crawled again).
+    (parentPath._store ??= new Map()).set(node, old);
+    const path = parentPath.get(key) as NodePath;
+    if (path !== old) {
+      // The paths can't be reused: register the moved subtree again.
+      forgetScopeInfo(old);
+      registerScopeInfo([path]);
+    }
+  }
+  visit(root);
 }
 
 /**
@@ -266,9 +313,7 @@ export function pushHoistedVars(scope: Scope, ids: t.Identifier[]) {
     scope.push({ id });
     const binding = findPushedBinding(scope, functionScope, id.name);
     if (binding && binding.scope !== functionScope) {
-      binding.scope.removeOwnBinding(id.name);
-      binding.scope = functionScope;
-      functionScope.bindings[id.name] = binding;
+      binding.scope.moveBindingTo(id.name, functionScope);
     }
   }
 }

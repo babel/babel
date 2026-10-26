@@ -1,16 +1,11 @@
 import { types as t } from "@babel/core";
 import type { NodePath, PluginPass } from "@babel/core";
 import type { ResolvedOptions } from "./features.ts";
-import { collectScopeInfo, registerReplacement } from "./scope.ts";
+import { adoptMovedPaths } from "./scope.ts";
 import { getExtendsHelper } from "./util.ts";
 
 function hasSpread(node: t.ObjectExpression): boolean {
-  for (const prop of node.properties) {
-    if (t.isSpreadElement(prop)) {
-      return true;
-    }
-  }
-  return false;
+  return node.properties.some(prop => t.isSpreadElement(prop));
 }
 
 /** `__proto__: value`, which sets the prototype of the object literal. */
@@ -36,7 +31,14 @@ export function transformObjectSpread(
 ) {
   if (!hasSpread(path.node)) return;
 
-  const forgetScopeInfo = collectScopeInfo(path);
+  // The properties and spread arguments are only moved to the replacement:
+  // they keep their paths, and their scope information.
+  const moved = new Map<t.Node, NodePath>();
+  for (const prop of path.get("properties")) {
+    const movedPath = prop.isSpreadElement() ? prop.get("argument") : prop;
+    moved.set(movedPath.node, movedPath);
+  }
+
   const { useBuiltIns, pureGetters, setSpreadProperties } = options;
 
   const helper = setSpreadProperties
@@ -102,6 +104,6 @@ export function transformObjectSpread(
 
   if (props.length) make();
 
-  forgetScopeInfo();
-  registerReplacement(path.replaceWith(exp!), path.scope);
+  const [replacement] = path.replaceWith(exp!);
+  adoptMovedPaths(replacement, moved);
 }
