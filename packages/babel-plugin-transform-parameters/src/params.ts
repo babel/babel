@@ -157,10 +157,10 @@ export function readsMappedArguments(path: NodePath<t.Function>): boolean {
  *
  *   function f(a, { b }) { arguments; }
  * becomes
- *   function f(_a, _ref) { var a = _a; var { b } = _ref; arguments; }
+ *   function f(_a, _ref) { let a = _a; var { b } = _ref; arguments; }
  *
  * The scope is not updated: it returns the paths of the new parameters and
- * declaration, if any.
+ * declarations, if any.
  */
 export function unmapArguments(
   path: NodePath<t.Function>,
@@ -172,28 +172,44 @@ export function unmapArguments(
   );
   if (params.length === 0) return null;
   const { scope } = path;
-  const declarators = params.map(param => {
+  // In sloppy mode, a function declared in a block of the body is also
+  // declared as a `var` of the function (Annex B), unless that would conflict
+  // with a lexical declaration or with a parameter: a `let` keeps the
+  // variable from being overridden like the parameter was.
+  const lexical: t.VariableDeclarator[] = [];
+  // A `var` redeclaration of the parameter in the body stays valid with a
+  // `var`; a function declaration is initialized after the parameters.
+  const vars: t.VariableDeclarator[] = [];
+  for (const param of params) {
     const { node } = param;
     const uid = scope.generateUidIdentifier(node.name);
     param.replaceWith(uid);
-    const redeclaredByFunction = scope
-      .getOwnBinding(node.name)
-      ?.constantViolations.some(
-        violation =>
-          violation.isFunctionDeclaration() &&
-          violation.parentPath.parentPath === path,
-      );
-    // A function declaration in the body is initialized after the variables
-    return t.variableDeclarator(
-      node,
-      redeclaredByFunction ? null : t.cloneNode(uid),
+    const violations = scope.getOwnBinding(node.name)?.constantViolations;
+    const redeclaredByFunction = violations?.some(violation =>
+      violation.isFunctionDeclaration(),
     );
-  });
+    if (
+      redeclaredByFunction ||
+      violations?.some(violation => violation.isVariableDeclarator())
+    ) {
+      vars.push(
+        t.variableDeclarator(
+          node,
+          redeclaredByFunction ? null : t.cloneNode(uid),
+        ),
+      );
+    } else {
+      lexical.push(t.variableDeclarator(node, t.cloneNode(uid)));
+    }
+  }
+  const declarations: t.VariableDeclaration[] = [];
+  if (lexical.length) declarations.push(t.variableDeclaration("let", lexical));
+  if (vars.length) declarations.push(t.variableDeclaration("var", vars));
   path.ensureBlock();
-  const [declaration] = (
+  const declarationPaths = (
     path.get("body") as NodePath<t.BlockStatement>
-  ).unshiftContainer("body", t.variableDeclaration("var", declarators));
-  return { params, declaration };
+  ).unshiftContainer("body", declarations);
+  return { params, declarations: declarationPaths };
 }
 
 // `shouldTransformParam`, `replaceRestElement` and `noNewArrows` are used by
