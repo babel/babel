@@ -4,6 +4,8 @@ import {
   convertFunctionParams,
   isDefaultEvaluationObservable,
   isParamEvaluationObservable,
+  readsMappedArguments,
+  unmapArguments,
 } from "@babel/plugin-transform-parameters";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { collectScopeInfo, registerReplacement } from "./scope.ts";
@@ -65,45 +67,6 @@ const conflictVisitor: Visitor<ConflictState> = {
   },
 };
 
-// Whether a function reads its own `arguments` object (also through arrow
-// functions, or a direct `eval`).
-const argumentsVisitor: Visitor<{ found: boolean }> = {
-  Function(path) {
-    if (!path.isArrowFunctionExpression()) path.skip();
-  },
-  Identifier(path, state) {
-    if (
-      (path.node.name === "arguments" && path.isReferencedIdentifier()) ||
-      (path.node.name === "eval" &&
-        path.key === "callee" &&
-        path.parentPath.isCallExpression())
-    ) {
-      state.found = true;
-      path.stop();
-    }
-  },
-};
-
-/**
- * In sloppy mode, a function whose parameter list is simple
- * (IsSimpleParameterList) has a mapped `arguments` object: assigning a
- * parameter changes the corresponding element, and conversely. Functions with
- * destructuring parameters have an unmapped `arguments` object: keep the
- * parameter list non-simple, with an unused rest element, which changes
- * neither the function's `length` nor the arguments.
- */
-function keepArgumentsUnmapped(path: NodePath<t.Function>) {
-  // setter has exactly one parameter, which is also the lowered one that
-  // user code cannot assign, so the mapping is not observable.
-  if (path.isMethod({ kind: "set" })) return;
-  if (!path.node.params.every(param => t.isIdentifier(param))) return;
-  const [rest] = path.pushContainer(
-    "params",
-    t.restElement(path.scope.generateUidIdentifier("unmapped")),
-  );
-  path.scope.registerBinding("param", rest.get("argument"));
-}
-
 /**
  * Replace parameters containing object rest or private keys with a
  * temporary identifier, destructured at the beginning of the function body.
@@ -143,17 +106,6 @@ export function transformFunctionParams(
   }
 
   const functionScope = path.scope;
-
-  const argumentsState = { found: false };
-  if (
-    !path.isArrowFunctionExpression() &&
-    !path.isInStrictMode() &&
-    // When all destructuring is lowered, so are rest parameters: an ES5
-    // parameter list can't keep `arguments` unmapped.
-    !(options.features & FEATURES.destructuring)
-  ) {
-    path.traverse(argumentsVisitor, argumentsState);
-  }
 
   // Names bound by parameters that will be moved into the function body.
   const ownerOf = new Map<string, number>();
@@ -235,7 +187,6 @@ export function transformFunctionParams(
       options.noNewArrows,
     );
     forgetScopeInfo();
-    if (argumentsState.found) keepArgumentsUnmapped(path);
     functionScope.crawl();
     return;
   }
@@ -279,5 +230,15 @@ export function transformFunctionParams(
   // their new paths; they are forgotten by node when the declarations are
   // lowered.
   registerReplacement(declarationPaths, functionScope);
-  if (argumentsState.found) keepArgumentsUnmapped(path);
+
+  const unmapped =
+    readsMappedArguments(path) &&
+    unmapArguments(path, new Set(newParams.map(param => param.node)));
+  if (unmapped) {
+    for (const param of unmapped.params) {
+      functionScope.registerBinding("param", param);
+    }
+    // The bindings of the original parameters are moved to the declaration
+    registerReplacement([unmapped.declaration], functionScope);
+  }
 }
