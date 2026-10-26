@@ -1,4 +1,10 @@
-import { template, types as t, type NodePath, type Scope } from "@babel/core";
+import {
+  template,
+  types as t,
+  type NodePath,
+  type Scope,
+  type Visitor,
+} from "@babel/core";
 import convertFunctionRest from "./rest.ts";
 
 import {
@@ -93,9 +99,107 @@ export function isParamEvaluationObservable(
   }
 }
 
-// The last 3 parameters are optional: they are used by
+// Whether a function reads its own `arguments` object (also through arrow
+// functions, or a direct `eval`).
+const argumentsVisitor: Visitor<{
+  fn: NodePath<t.Function>;
+  found: boolean;
+}> = {
+  Function(path) {
+    if (!path.isArrowFunctionExpression()) path.skip();
+  },
+  Identifier(path, state) {
+    if (
+      (path.node.name === "arguments" &&
+        path.isReferencedIdentifier() &&
+        !shadowsArguments(path.scope.getBinding("arguments"), state.fn)) ||
+      (path.node.name === "eval" &&
+        path.key === "callee" &&
+        path.parentPath.isCallExpression())
+    ) {
+      state.found = true;
+      path.stop();
+    }
+  },
+};
+
+/** Whether `binding` shadows the `arguments` object of `fn`. */
+function shadowsArguments(
+  binding: Scope["bindings"][string] | undefined,
+  fn: NodePath<t.Function>,
+) {
+  if (!binding) return false;
+  return binding.scope === fn.scope
+    ? binding.kind === "param"
+    : binding.scope.path.isDescendant(fn);
+}
+
+/**
+ * In sloppy mode, a function whose parameter list is simple
+ * (IsSimpleParameterList) has a mapped `arguments` object: assigning a
+ * parameter changes the corresponding element, and conversely. Functions with
+ * default, rest or destructuring parameters have an unmapped `arguments`
+ * object. This returns whether a function with such parameters would observe
+ * the mapping once its parameter list is simple.
+ */
+export function readsMappedArguments(path: NodePath<t.Function>): boolean {
+  if (path.isArrowFunctionExpression() || path.isInStrictMode()) return false;
+  const state = { fn: path, found: false };
+  path.traverse(argumentsVisitor, state);
+  return state.found;
+}
+
+/**
+ * Keep the `arguments` object of a function whose parameter list was made
+ * simple unmapped: replace the parameters, except the given temporaries that
+ * user code can't access, with temporaries that only initialize variables with
+ * the original names at the beginning of the body.
+ *
+ *   function f(a, { b }) { arguments; }
+ * becomes
+ *   function f(_a, _ref) { var a = _a; var { b } = _ref; arguments; }
+ *
+ * The scope is not updated: it returns the paths of the new parameters and
+ * declaration, if any.
+ */
+export function unmapArguments(
+  path: NodePath<t.Function>,
+  temporaries: ReadonlySet<t.Node>,
+) {
+  if (!path.node.params.every(param => t.isIdentifier(param))) return null;
+  const params = (path.get("params") as NodePath<t.Identifier>[]).filter(
+    param => !temporaries.has(param.node) && param.node.name !== "this",
+  );
+  if (params.length === 0) return null;
+  const { scope } = path;
+  const declarators = params.map(param => {
+    const { node } = param;
+    const uid = scope.generateUidIdentifier(node.name);
+    param.replaceWith(uid);
+    const redeclaredByFunction = scope
+      .getOwnBinding(node.name)
+      ?.constantViolations.some(
+        violation =>
+          violation.isFunctionDeclaration() &&
+          violation.parentPath.parentPath === path,
+      );
+    // A function declaration in the body is initialized after the variables
+    return t.variableDeclarator(
+      node,
+      redeclaredByFunction ? null : t.cloneNode(uid),
+    );
+  });
+  path.ensureBlock();
+  const [declaration] = (
+    path.get("body") as NodePath<t.BlockStatement>
+  ).unshiftContainer("body", t.variableDeclaration("var", declarators));
+  return { params, declaration };
+}
+
+// `shouldTransformParam`, `replaceRestElement` and `noNewArrows` are used by
 // @babel/helper-create-destructuring-plugin, which only moves some parameters
-// into the function body.
+// into the function body. `keepArgumentsUnmapped` is computed when omitted:
+// callers that already changed the parameters must pass it.
 export default function convertFunctionParams(
   path: NodePath<t.Function>,
   ignoreFunctionLength: boolean | void,
@@ -106,8 +210,14 @@ export default function convertFunctionParams(
     transformedRestNodes: t.Statement[],
   ) => void,
   noNewArrows: boolean = true,
+  keepArgumentsUnmapped?: boolean,
 ) {
   if (path.node.params.every(param => t.isIdentifier(param))) return false;
+
+  // Read before `arguments` accesses are added for the moved parameters
+  keepArgumentsUnmapped ??= readsMappedArguments(path);
+  // The parameters replaced by temporaries, which are not observable
+  const temporaries = new Set<t.Node>();
 
   const isLoose =
     ignoreFunctionLength || t.isMethod(path.node, { kind: "set" });
@@ -208,6 +318,7 @@ export default function convertFunctionParams(
           }),
         );
         param.replaceWith(paramName);
+        temporaries.add(paramName);
       }
     } else if (paramIsAssignmentPattern) {
       if (firstOptionalIndex === null) firstOptionalIndex = i;
@@ -248,6 +359,7 @@ export default function convertFunctionParams(
       body.push(defNode);
 
       param.replaceWith(newParam);
+      temporaries.add(newParam);
     }
 
     body.push(...transformedRestNodes);
@@ -309,6 +421,8 @@ export default function convertFunctionParams(
   }
 
   if (prologue) path2.get("body").unshiftContainer("body", prologue);
+
+  if (keepArgumentsUnmapped) unmapArguments(path, temporaries);
 
   return true;
 }

@@ -1,10 +1,16 @@
 import { declare } from "@babel/helper-plugin-utils";
-import convertFunctionParams from "./params.ts";
+import { types as t } from "@babel/core";
+import convertFunctionParams, {
+  readsMappedArguments,
+  unmapArguments,
+} from "./params.ts";
 import convertFunctionRest from "./rest.ts";
 export { convertFunctionParams };
 export {
   isDefaultEvaluationObservable,
   isParamEvaluationObservable,
+  readsMappedArguments,
+  unmapArguments,
 } from "./params.ts";
 
 export interface Options {
@@ -49,11 +55,23 @@ export default declare((api, options: Options) => {
           if (!path.isFunctionExpression()) return;
         }
 
+        // Read before `arguments` accesses are added for the rest parameter
+        const keepArgumentsUnmapped =
+          !path.node.params.every(param => t.isIdentifier(param)) &&
+          readsMappedArguments(path);
+
         const convertedRest = convertFunctionRest(path);
         const convertedParams = convertFunctionParams(
           path,
           ignoreFunctionLength,
+          undefined,
+          undefined,
+          undefined,
+          keepArgumentsUnmapped,
         );
+        if (convertedRest && !convertedParams && keepArgumentsUnmapped) {
+          unmapArguments(path, new Set());
+        }
 
         if (convertedRest || convertedParams) {
           // Manually reprocess this scope to ensure that the moved params are updated.
