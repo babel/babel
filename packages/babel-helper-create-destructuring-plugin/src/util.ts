@@ -31,10 +31,7 @@ export function needsLowering(
       );
     case "ArrayPattern":
       if (features & FEATURES.destructuring) return true;
-      for (const element of target.elements) {
-        if (needsLowering(element, features)) return true;
-      }
-      return false;
+      return target.elements.some(element => needsLowering(element, features));
     case "AssignmentPattern":
       return needsLowering(target.left, features);
     case "RestElement":
@@ -82,6 +79,11 @@ export function someTarget(
     default:
       return predicate(target);
   }
+}
+
+/** Whether `target` assigns to a member expression. */
+export function hasMemberTarget(target: PatternTarget): boolean {
+  return someTarget(target, node => t.isMemberExpression(node));
 }
 
 export function hasPrivateClassElement(node: t.ClassBody): boolean {
@@ -266,8 +268,7 @@ export function isAnonymousFunctionDefinition(node: t.Node): boolean {
     return isAnonymousFunctionDefinition(node.expression);
   }
   if (t.isArrowFunctionExpression(node)) return true;
-  if (t.isFunctionExpression(node)) return !node.id;
-  if (t.isClassExpression(node)) {
+  if (t.isFunctionExpression(node) || t.isClassExpression(node)) {
     return !node.id;
   }
   return false;
@@ -437,7 +438,7 @@ export interface ExcludedKey {
 }
 
 /** Whether evaluating an expression produces a primitive value. */
-export function isPrimitiveExpression(key: t.Node): boolean {
+function isPrimitiveExpression(key: t.Node): boolean {
   return (
     getLiteralKeyString(key) !== null ||
     t.isTemplateLiteral(key) ||
@@ -550,11 +551,15 @@ export function buildObjectExcludingKeys(
     };
   }
 
+  const helperName = objectRestNoSymbols
+    ? "objectWithoutPropertiesLoose"
+    : "objectWithoutProperties";
+
   const keys: t.Expression[] = [];
   const seen = new Set<string>();
+  // Whether the keys can be hoisted to the program, as an array of literals
   let allLiteral = true;
   let allPrimitive = true;
-  let hasTemplateLiteral = false;
   for (const prop of excludedKeys) {
     const { key } = prop;
     if (t.isPrivateName(key)) {
@@ -567,7 +572,7 @@ export function buildObjectExcludingKeys(
       keys.push(t.stringLiteral(key.name));
     } else if (t.isTemplateLiteral(key)) {
       keys.push(t.cloneNode(key));
-      hasTemplateLiteral = true;
+      allLiteral = false;
     } else {
       const literal = getLiteralKeyString(key);
       if (literal !== null) {
@@ -583,31 +588,24 @@ export function buildObjectExcludingKeys(
   }
 
   if (keys.length === 0) {
-    return t.callExpression(
-      addHelper(
-        objectRestNoSymbols
-          ? "objectWithoutPropertiesLoose"
-          : "objectWithoutProperties",
-      ),
-      [
-        // The null prototype lets Object.assign create an own __proto__ data
-        // property. The rest helper then copies these plain data properties
-        // to an ordinary object without touching the original source again.
-        t.callExpression(getExtendsHelper(useBuiltIns, addHelper), [
-          t.callExpression(
-            t.memberExpression(t.identifier("Object"), t.identifier("create")),
-            [t.nullLiteral()],
-          ),
-          t.sequenceExpression([
-            t.callExpression(addHelper("objectDestructuringEmpty"), [
-              getObjRef(),
-            ]),
+    return t.callExpression(addHelper(helperName), [
+      // The null prototype lets Object.assign create an own __proto__ data
+      // property. The rest helper then copies these plain data properties
+      // to an ordinary object without touching the original source again.
+      t.callExpression(getExtendsHelper(useBuiltIns, addHelper), [
+        t.callExpression(
+          t.memberExpression(t.identifier("Object"), t.identifier("create")),
+          [t.nullLiteral()],
+        ),
+        t.sequenceExpression([
+          t.callExpression(addHelper("objectDestructuringEmpty"), [
             getObjRef(),
           ]),
+          getObjRef(),
         ]),
-        t.arrayExpression([]),
-      ],
-    );
+      ]),
+      t.arrayExpression([]),
+    ]);
   }
 
   let keyExpression: t.Expression = t.arrayExpression(keys);
@@ -617,7 +615,7 @@ export function buildObjectExcludingKeys(
       t.memberExpression(keyExpression, t.identifier("map")),
       [addHelper("toPropertyKey")],
     );
-  } else if (allLiteral && !hasTemplateLiteral && !t.isProgram(scope.block)) {
+  } else if (allLiteral && !t.isProgram(scope.block)) {
     // Hoist definition of excluded keys, so that it's not created each time.
     const programScope = scope.getProgramParent();
     const id = programScope.generateUidIdentifier("excluded");
@@ -631,10 +629,7 @@ export function buildObjectExcludingKeys(
     keyExpression = t.cloneNode(id);
   }
 
-  return t.callExpression(
-    addHelper(`objectWithoutProperties${objectRestNoSymbols ? "Loose" : ""}`),
-    [getObjRef(), keyExpression],
-  );
+  return t.callExpression(addHelper(helperName), [getObjRef(), keyExpression]);
 }
 
 /**

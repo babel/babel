@@ -10,6 +10,7 @@ import {
 import {
   buildObjectExcludingKeys,
   hasArrayRest,
+  hasMemberTarget,
   hasObjectRest,
   isAnonymousFunctionDefinition,
   isInitializedReference,
@@ -22,7 +23,6 @@ import {
   markTemporary,
   needsLowering,
   propertyNeedsLowering,
-  someTarget,
   splitArrayPattern,
   targetReferenceMayRunUserCode,
   type ExcludedKey,
@@ -145,8 +145,13 @@ class Ref {
     return typeof nameHint === "function" ? nameHint() : nameHint;
   }
 
+  /** A static value is read directly, unless it must be in a temporary. */
+  get #readsStatic(): boolean {
+    return this.isStatic && !this.forceTemp;
+  }
+
   use(): t.Expression {
-    if (this.isStatic && !this.forceTemp) {
+    if (this.#readsStatic) {
       this.#staticUsed = true;
       // Always clone: the original node might be shared with other places
       // of the AST (e.g. by @babel/plugin-transform-parameters).
@@ -159,23 +164,16 @@ class Ref {
   }
 
   decide() {
-    if (this.isStatic && !this.forceTemp) {
-      if (
-        !this.#staticUsed &&
-        !this.discarded &&
-        !isSafeToEvaluate(this.expr, this.#lowering.scope)
-      ) {
-        this.#decision = Decision.Effect;
-      }
-      return;
-    }
     const placeholders = this.#placeholders;
-    if (placeholders.length === 0) {
+    const readsStatic = this.#readsStatic;
+    if (readsStatic ? !this.#staticUsed : placeholders.length === 0) {
       // The value might still need to be evaluated for its side effects.
       this.#decision =
         this.discarded || isSafeToEvaluate(this.expr, this.#lowering.scope)
           ? Decision.None
           : Decision.Effect;
+    } else if (readsStatic) {
+      // Every read is a copy of the expression
     } else if (
       !this.forceTemp &&
       !this.retained &&
@@ -228,6 +226,8 @@ class Ref {
   apply() {
     const { steps } = this.#lowering;
     const insertAt = this.#insertAt;
+    // A static expression is also copied by its reads
+    const expr = () => (this.isStatic ? t.cloneNode(this.expr) : this.expr);
     switch (this.#decision) {
       case Decision.Inline:
         replaceInPlace(this.#placeholders[0].node, this.expr);
@@ -236,13 +236,13 @@ class Ref {
         steps.splice(insertAt, 0, {
           kind: StepKind.Temp,
           id: this.tempId!,
-          init: this.isStatic ? t.cloneNode(this.expr) : this.expr,
+          init: expr(),
         });
         break;
       case Decision.Effect:
         steps.splice(insertAt, 0, {
           kind: StepKind.Effect,
-          expression: this.isStatic ? t.cloneNode(this.expr) : this.expr,
+          expression: expr(),
         });
         break;
     }
@@ -263,7 +263,7 @@ const enum PropertyPlan {
   Lower,
 }
 
-export interface LoweringOptions {
+interface LoweringOptions {
   scope: Scope;
   options: ResolvedOptions;
   addHelper: File["addHelper"];
@@ -379,6 +379,22 @@ export class Lowering {
     return ref;
   }
 
+  /** A reference to `ref[key]`, named after the name of `ref`. */
+  #createMemberRef(
+    ref: Ref,
+    key: t.Expression | t.PrivateName,
+    computed: boolean,
+  ) {
+    return this.#createRef(t.memberExpression(ref.use(), key, computed), {
+      nameHint: () =>
+        t.memberExpression(
+          ref.hint() as t.Expression,
+          t.cloneNode(key),
+          computed,
+        ),
+    });
+  }
+
   #temp(init: t.Expression, nameHint: t.Node = init): t.Identifier {
     const id = this.scope.generateUidIdentifierBasedOnNode(nameHint);
     markTemporary(this.scope, id.name);
@@ -427,7 +443,7 @@ export class Lowering {
       // read the value once before evaluating their targets.
       (t.isObjectPattern(target) || (t.isArrayPattern(target) && this.full)) &&
       !isNative &&
-      someTarget(target, node => t.isMemberExpression(node))
+      hasMemberTarget(target)
     ) {
       // The whole value is read before evaluating any nested target,
       // including targets that can throw without running user code.
@@ -508,7 +524,6 @@ export class Lowering {
 
     if (t.isPattern(target)) {
       const patternRef = this.#createRef(conditional, {
-        isStatic: false,
         nameHint: () => ref.hint(),
       });
       patternRef.forceTemp = true;
@@ -559,11 +574,11 @@ export class Lowering {
     properties: t.ObjectPattern["properties"],
     plans: PropertyPlan[],
     ref: Ref,
-  ): boolean {
-    if (isObjectCoercible(ref.expr)) return false;
     // Computed keys are stored in temporaries to be excluded from a lowered
     // rest element, before the property is read.
-    const lowersRest = plans[plans.length - 1] === PropertyPlan.Rest;
+    lowersRest: boolean,
+  ): boolean {
+    if (isObjectCoercible(ref.expr)) return false;
     // Whether a key will be passed to the object rest helper, which then
     // returns `{}` for null/undefined instead of throwing.
     let hasExcludedKey = false;
@@ -611,7 +626,7 @@ export class Lowering {
    *
    *   const { #x: x, y, ...z } = obj;  ->  const x = obj.#x, { y, ...z } = obj;
    */
-  #keepNativeRest(
+  #canKeepNativeRest(
     properties: t.ObjectPattern["properties"],
     plans: PropertyPlan[],
   ): boolean {
@@ -626,7 +641,6 @@ export class Lowering {
         return false;
       }
     }
-    plans[properties.length - 1] = PropertyPlan.Native;
     return true;
   }
 
@@ -644,9 +658,10 @@ export class Lowering {
     // lowered, and then the rest element is usually lowered too.
     const hasRest = hasObjectRest(pattern);
     const plans = this.#planProperties(properties, hasRest);
-    const lowersRest = hasRest && !this.#keepNativeRest(properties, plans);
+    const lowersRest = hasRest && !this.#canKeepNativeRest(properties, plans);
+    if (hasRest && !lowersRest) plans[plans.length - 1] = PropertyPlan.Native;
 
-    if (this.#needsRequireObjectCoercible(properties, plans, ref)) {
+    if (this.#needsRequireObjectCoercible(properties, plans, ref, lowersRest)) {
       if (full) {
         this.#effect(
           t.callExpression(this.addHelper("objectDestructuringEmpty"), [
@@ -700,7 +715,7 @@ export class Lowering {
               this.options.objectRestNoSymbols,
               this.options.useBuiltIns,
             ),
-            { isStatic: false, nameHint: prop.argument },
+            { nameHint: prop.argument },
           ),
         );
         continue;
@@ -708,12 +723,14 @@ export class Lowering {
 
       const { key, computed, value: element } = prop;
       const isVoid = element.type === "VoidPattern";
+      // A computed key whose evaluation or coercion could be observed
+      const unstableKey = computed && !isStablePropertyKey(key, scope);
 
       if (plans[i] === PropertyPlan.Skip) {
         // Its key must still be evaluated and excluded from the rest object.
-        if (computed && !isStablePropertyKey(key, scope)) {
+        if (unstableKey) {
           flush();
-          exclude(this.#temp(this.#toPropertyKey(key)), true, true);
+          exclude(this.#tempKey(key), true, true);
         } else {
           exclude(key, computed);
         }
@@ -722,7 +739,7 @@ export class Lowering {
 
       if (plans[i] === PropertyPlan.Native) {
         let nativeProp = prop;
-        if (lowersRest && computed && !isStablePropertyKey(key, scope)) {
+        if (lowersRest && unstableKey) {
           // Memoise the key inline so that it can be excluded from the rest
           // object while preserving the evaluation order:
           //   { [_key = f()]: x, ...rest }
@@ -752,13 +769,13 @@ export class Lowering {
         const target =
           element.type === "AssignmentPattern" ? element.left : element;
         const needsTemp =
-          !isStablePropertyKey(key, scope) &&
+          unstableKey &&
           (lowersRest ||
             // The property name is evaluated before the target reference,
             // including when either evaluation throws without running user code.
             this.#isMemberTarget(target));
         if (needsTemp) {
-          keyExpr = this.#temp(this.#toPropertyKey(key));
+          keyExpr = this.#tempKey(key);
         }
         exclude(
           keyExpr,
@@ -777,28 +794,27 @@ export class Lowering {
       if (isVoid) {
         // Its key must still be evaluated and coerced unless a temporary
         // already did so, or both operations are unobservable.
-        if (computed && keyExpr === key && !isStablePropertyKey(key, scope)) {
+        if (unstableKey && keyExpr === key) {
           this.#effect(this.#toPropertyKey(key));
         }
         continue;
       }
 
-      const keyNode = keyExpr === key ? key : t.cloneNode(keyExpr);
-      const propRef = this.#createRef(
-        t.memberExpression(ref.use(), keyNode, keyComputed),
-        {
-          isStatic: false,
-          nameHint: () =>
-            t.memberExpression(
-              ref.hint() as t.Expression,
-              t.cloneNode(keyNode),
-              keyComputed,
-            ),
-        },
+      this.#lowerTarget(
+        element as PatternTarget,
+        this.#createMemberRef(
+          ref,
+          keyExpr === key ? key : t.cloneNode(keyExpr),
+          keyComputed,
+        ),
       );
-      this.#lowerTarget(element as PatternTarget, propRef);
     }
     flush();
+  }
+
+  /** Store the property key `key` in a temporary. */
+  #tempKey(key: t.Expression): t.Identifier {
+    return this.#temp(this.#toPropertyKey(key));
   }
 
   #toPropertyKey(key: t.Expression): t.Expression {
@@ -896,18 +912,7 @@ export class Lowering {
       } else {
         this.#lowerTarget(
           element,
-          this.#createRef(
-            t.memberExpression(arr.use(), t.numericLiteral(i), true),
-            {
-              isStatic: false,
-              nameHint: () =>
-                t.memberExpression(
-                  arr.hint() as t.Expression,
-                  t.numericLiteral(i),
-                  true,
-                ),
-            },
-          ),
+          this.#createMemberRef(arr, t.numericLiteral(i), true),
         );
       }
     }
@@ -937,18 +942,18 @@ export class Lowering {
     ) {
       return this.#createRef(
         template.expression.ast`Array.prototype.slice.call(${ref.use()})`,
-        { isArray: true, isStatic: false, nameHint: node },
+        { isArray: true, nameHint: node },
       );
     }
 
     let helperName: string;
     const args = [ref.use()];
     if (count !== null) {
+      // Without rest element: only read the first `count` elements
       args.push(t.numericLiteral(count));
-      // Used in array-rest to create an array from a subset of an iterable.
       helperName = "slicedToArray";
     } else {
-      // Used in array-rest to create an array
+      // With a rest element: read the whole iterable
       helperName = "toArray";
     }
 
@@ -959,7 +964,6 @@ export class Lowering {
 
     return this.#createRef(t.callExpression(this.addHelper(helperName), args), {
       isArray: true,
-      isStatic: false,
       nameHint: () => ref.hint(),
     });
   }
