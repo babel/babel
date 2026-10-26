@@ -4,6 +4,7 @@ import {
   convertFunctionParams,
   isDefaultEvaluationObservable,
   isParamEvaluationObservable,
+  preserveAnnexBParameterExclusions,
   readsMappedArguments,
   unmapArguments,
 } from "@babel/plugin-transform-parameters";
@@ -224,9 +225,15 @@ export function transformFunctionParams(
   });
 
   path.ensureBlock();
-  const declarationPaths = (
-    path.get("body") as NodePath<t.BlockStatement>
-  ).unshiftContainer("body", declarations);
+  const body = path.get("body") as NodePath<t.BlockStatement>;
+  // In sloppy mode, a function declared in a block is also declared as a
+  // `var` of the function (Annex B), unless its name is a parameter: the
+  // names bound by the moved patterns are not parameters anymore.
+  const annexB = preserveAnnexBParameterExclusions(
+    body,
+    new Set(ownerOf.keys()),
+  );
+  const declarationPaths = body.unshiftContainer("body", declarations);
 
   for (const param of newParams) {
     functionScope.registerBinding("param", param);
@@ -240,4 +247,6 @@ export function transformFunctionParams(
   if (unmapped) {
     registerReplacement(unmapped, functionScope);
   }
+  // The blocks wrapped by the Annex B declarations get new scopes
+  if (annexB) functionScope.crawl();
 }
