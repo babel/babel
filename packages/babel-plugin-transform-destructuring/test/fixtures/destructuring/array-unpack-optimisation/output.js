@@ -38,4 +38,4 @@ a = 1;
 b = 2;
 a = void 0;
 b = 2;
-; // Avoid completion record special case
+0; // Avoid completion record special case
