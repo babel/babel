@@ -2,10 +2,9 @@ import { types as t } from "@babel/core";
 import type { Scope } from "@babel/core";
 import {
   hasArrayRest,
+  hasMemberTarget,
   isSafeToEvaluate,
   mayRunUserCode,
-  someTarget,
-  type PatternTarget,
 } from "./util.ts";
 
 const STOP_TRAVERSAL = {};
@@ -91,11 +90,6 @@ export function canUnpackArrayPattern(
     return false;
   }
   return true;
-}
-
-/** Whether `target` assigns to a member expression. */
-function hasMemberTarget(target: PatternTarget): boolean {
-  return someTarget(target, node => t.isMemberExpression(node));
 }
 
 /**
