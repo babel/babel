@@ -1,6 +1,7 @@
 import {
   template,
   types as t,
+  type File,
   type NodePath,
   type Scope,
   type Visitor,
@@ -203,6 +204,27 @@ function shadowsArguments(
     : binding.scope.path.isDescendant(fn);
 }
 
+// We can't use a symbol because this needs to always be the same, even if
+// this package isn't deduped by npm.
+const argumentsUsageKey = "@babel/plugin-transform-parameters/argumentsUsage";
+
+/**
+ * Record whether the file reads `arguments` or calls `eval` at all. It must
+ * be recorded before the file is transformed (in the `pre` hook of the
+ * plugins): the output of the plugins reads `arguments`. Most files don't,
+ * which saves traversing every function with non-simple parameters.
+ */
+export function recordArgumentsUsage(file: File) {
+  if (file.get(argumentsUsageKey) === undefined) {
+    const { globals } = file.scope;
+    file.set(
+      argumentsUsageKey,
+      Object.prototype.hasOwnProperty.call(globals, "arguments") ||
+        Object.prototype.hasOwnProperty.call(globals, "eval"),
+    );
+  }
+}
+
 /**
  * In sloppy mode, a function whose parameter list is simple
  * (IsSimpleParameterList) has a mapped `arguments` object: assigning a
@@ -217,6 +239,8 @@ export function readsMappedArguments(path: NodePath<t.Function>): boolean {
   // A direct eval also reads the explicit binding when `arguments` is shadowed.
   if (shadowsArguments(path.scope.getOwnBinding("arguments"), path))
     return false;
+  const file = (path.hub as { file?: File } | undefined)?.file;
+  if (file?.get(argumentsUsageKey) === false) return false;
   const state: ArgumentsUsage = {
     fn: path,
     readsElements: false,

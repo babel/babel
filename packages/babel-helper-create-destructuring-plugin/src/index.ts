@@ -1,5 +1,6 @@
 import type { PluginAPI, PluginObject } from "@babel/core";
 import { isLessThan } from "verkit";
+import { recordArgumentsUsage } from "@babel/plugin-transform-parameters";
 
 import {
   FEATURES,
@@ -57,6 +58,7 @@ export function createDestructuringPlugin({
     pre(file) {
       enableFeature(file, feature, options);
       setAssumptions(file, { noNewArrows });
+      recordArgumentsUsage(file);
 
       if (
         !file.get(versionKey) ||
