@@ -1,7 +1,9 @@
 import { types as t } from "@babel/core";
 import type { NodePath, PluginPass, Scope, Visitor } from "@babel/core";
-import type { ResolvedOptions } from "./features.ts";
+import { FEATURES, type ResolvedOptions } from "./features.ts";
+import { transformFunctionParams } from "./function-params.ts";
 import { Lowering, StepKind, type Step } from "./lowering.ts";
+import { transformObjectSpread } from "./object-spread.ts";
 import {
   collectScopeInfo,
   forgetReferences,
@@ -12,6 +14,7 @@ import {
   snapshotDeclaredBindings,
 } from "./scope.ts";
 import {
+  hasPrivateClassElement,
   isAnonymousFunctionDefinition,
   isCompletionObservable,
   isValueUsed,
@@ -161,12 +164,26 @@ function foldForInit(
   return t.variableDeclaration(kind, declarators);
 }
 
+function declarationNeedsLowering(
+  node: t.VariableDeclaration,
+  features: number,
+): boolean {
+  return node.declarations.some(declarator =>
+    needsLowering(declarator.id, features),
+  );
+}
+
 function transformVariableDeclaration(
   path: NodePath<t.VariableDeclaration>,
   file: PluginPass,
   options: ResolvedOptions,
 ) {
   const { node, parent, scope } = path;
+  // The head of a for-in/of statement is lowered with the statement
+  if (t.isForXStatement(parent, { left: node })) return;
+  if (node.declare || !declarationNeedsLowering(node, options.features)) {
+    return;
+  }
   const { declarations } = node;
 
   const lowering = new Lowering({
@@ -176,7 +193,7 @@ function transformVariableDeclaration(
     isAssignment: false,
   });
 
-  const forgetScopeInfo = collectScopeInfo(path);
+  const forget = collectScopeInfo(path);
   const declared = options.pureGetters
     ? snapshotDeclaredBindings(node, scope)
     : null;
@@ -188,7 +205,7 @@ function transformVariableDeclaration(
 
   const nodes = materializeDeclaration(lowering.steps, node);
 
-  forgetScopeInfo();
+  forget();
   let paths: NodePath[];
   if (nodes.length === 0) {
     // e.g. `var {} = {};`
@@ -211,6 +228,8 @@ function transformAssignmentExpression(
   options: ResolvedOptions,
 ) {
   const { node, scope, parentPath } = path;
+  if (node.operator !== "=" || !t.isPattern(node.left)) return;
+  if (!needsLowering(node.left, options.features)) return;
   const valueUsed = isValueUsed(path);
 
   const lowering = new Lowering({
@@ -219,11 +238,11 @@ function transformAssignmentExpression(
     addHelper: name => file.addHelper(name),
     isAssignment: true,
   });
-  const forgetScopeInfo = collectScopeInfo(path);
+  const forget = collectScopeInfo(path);
   const completion = lowering.lower(node.left, node.right, valueUsed);
   const { steps, hoisted } = lowering;
 
-  forgetScopeInfo();
+  forget();
 
   if (parentPath.isExpressionStatement()) {
     pushHoistedVars(scope, hoisted);
@@ -387,11 +406,9 @@ function transformExportNamedDeclaration(
   options: ResolvedOptions,
 ) {
   const declaration = path.get("declaration");
-  if (!declaration.isVariableDeclaration()) return;
   if (
-    !declaration.node.declarations.some(declarator =>
-      needsLowering(declarator.id, options.features),
-    )
+    !declaration.isVariableDeclaration() ||
+    !declarationNeedsLowering(declaration.node, options.features)
   ) {
     return;
   }
@@ -427,42 +444,42 @@ export type Guard = <T extends t.Node>(
 ) => (path: NodePath<T>, state: PluginPass) => void;
 
 export function buildDestructuringVisitor(guard: Guard): Visitor<PluginPass> {
-  return {
+  const visitor: Visitor<PluginPass> = {
     ExportNamedDeclaration: guard<t.ExportNamedDeclaration>(
       (path, _, options) => transformExportNamedDeclaration(path, options),
     ),
-
     ForXStatement: guard<t.ForXStatement>((path, _, options) =>
       transformForXStatement(path, options),
     ),
-
     CatchClause: guard<t.CatchClause>((path, _, options) =>
       transformCatchClause(path, options),
     ),
+    AssignmentExpression: guard(transformAssignmentExpression),
+    VariableDeclaration: guard(transformVariableDeclaration),
+    Function: guard<t.Function>((path, _, options) => {
+      if (
+        options.features &
+        (FEATURES.objectRest | FEATURES.privateDestructuring)
+      ) {
+        transformFunctionParams(path, options);
+      }
+    }),
+    ObjectExpression: guard<t.ObjectExpression>((path, state, options) => {
+      if (options.features & FEATURES.objectSpread) {
+        transformObjectSpread(path, state, options);
+      }
+    }),
+  };
 
-    AssignmentExpression: guard<t.AssignmentExpression>(
-      (path, state, options) => {
-        const { node } = path;
-        if (node.operator !== "=" || !t.isPattern(node.left)) return;
-        if (!needsLowering(node.left, options.features)) return;
-        transformAssignmentExpression(path, state, options);
-      },
-    ),
-
-    VariableDeclaration: guard<t.VariableDeclaration>(
-      (path, state, options) => {
-        const { node, parent } = path;
-        if (t.isForXStatement(parent, { left: node })) return;
-        if (node.declare) return;
-        if (
-          !node.declarations.some(declarator =>
-            needsLowering(declarator.id, options.features),
-          )
-        ) {
-          return;
-        }
-        transformVariableDeclaration(path, state, options);
-      },
-    ),
+  // Private names in patterns must be lowered to private member
+  // expressions before the class features plugins transform the class,
+  // which happens when visiting the Class node.
+  return {
+    ...visitor,
+    Class: guard<t.Class>((path, state, options) => {
+      if (!(options.features & FEATURES.privateDestructuring)) return;
+      if (!hasPrivateClassElement(path.node.body)) return;
+      path.traverse(visitor, state);
+    }),
   };
 }
