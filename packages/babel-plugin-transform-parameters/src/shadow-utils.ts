@@ -78,8 +78,9 @@ export function collectShadowedParamsNames(
 export function preserveAnnexBParameterExclusions(
   body: NodePath<t.BlockStatement>,
   paramNames: ReadonlySet<string>,
-) {
-  if (body.isInStrictMode()) return;
+): boolean {
+  if (body.isInStrictMode()) return false;
+  let modified = false;
   const protectedNodes = new WeakSet<t.Node>();
   const blockers = (statements: t.Statement[]) => {
     const names = new Set<string>();
@@ -106,6 +107,7 @@ export function preserveAnnexBParameterExclusions(
       if (path.isFunctionDeclaration() && path.parentPath.isIfStatement()) {
         const declaration = blockers([path.node]);
         if (declaration) {
+          modified = true;
           path.replaceWith(
             t.blockStatement([declaration, t.blockStatement([path.node])]),
           );
@@ -117,6 +119,7 @@ export function preserveAnnexBParameterExclusions(
       if (protectedNodes.has(path.node) || path.isInStrictMode()) return;
       const declaration = blockers(path.node.body);
       if (!declaration) return;
+      modified = true;
       protectedNodes.add(path.node);
       path.replaceWith(t.blockStatement([declaration, path.node]));
     },
@@ -126,6 +129,7 @@ export function preserveAnnexBParameterExclusions(
         path.node.cases.flatMap(caseNode => caseNode.consequent),
       );
       if (!declaration) return;
+      modified = true;
       protectedNodes.add(path.node);
       // The discriminant runs outside the switch's lexical environment.
       const discriminant = path.scope.generateUidIdentifier("discriminant");
@@ -138,6 +142,7 @@ export function preserveAnnexBParameterExclusions(
       );
     },
   });
+  return modified;
 }
 
 export function buildScopeIIFE(
