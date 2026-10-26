@@ -291,7 +291,7 @@ export default class SourceMap {
     const buf0 = this.#mappingsBuffer0;
     const buf1 = this.#mappingsBuffer1;
     if (buf0 !== null) {
-      if (buf1 !== null) buf0.isRange = true;
+      if (buf1 !== null && this.#droppedMappingForRange) buf0.isRange = true;
       maybeAddMapping(this._map, buf0 as any);
       this.#mappingsBuffer0 = null;
     }
