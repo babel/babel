@@ -293,7 +293,11 @@ export function adoptMovedPaths(
     // create a new path (and a new scope, crawled again).
     (parentPath._store ??= new Map()).set(node, old);
     const path = parentPath.get(key) as NodePath;
-    if (path !== old) {
+    if (path === old) {
+      // `NodePath.get` sets up the container and key, but not the parent
+      // node, only updated by `resync`.
+      old.parent = parentPath.node;
+    } else {
       // The paths can't be reused: register the moved subtree again.
       forgetScopeInfo(old);
       registerScopeInfo([path]);
