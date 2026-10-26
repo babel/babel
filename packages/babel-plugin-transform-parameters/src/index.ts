@@ -70,7 +70,7 @@ export default declare((api, options: Options) => {
           keepArgumentsUnmapped,
         );
         if (convertedRest && !convertedParams && keepArgumentsUnmapped) {
-          unmapArguments(path, new Set());
+          unmapArguments(path);
         }
 
         if (convertedRest || convertedParams) {
