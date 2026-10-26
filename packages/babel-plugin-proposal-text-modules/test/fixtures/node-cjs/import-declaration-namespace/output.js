@@ -1,5 +1,5 @@
 "use strict";
 
 const ns = {
-  default: String(require("fs").readFileSync(require.resolve("./x"))).replace(/^﻿/, "")
+  default: String(require("fs").readFileSync(require.resolve("./x"))).replace(/^\uFEFF/, "")
 };
