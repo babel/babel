@@ -135,17 +135,14 @@ function foldForInit(
     for (const declarator of node.declarations) {
       if (pending.length) {
         if (
-          t.isIdentifier(declarator.id) &&
-          declarator.init &&
-          isAnonymousFunctionDefinition(declarator.init)
-        ) {
+          !declarator.init ||
           // `f = (effect, function () {})` would not name the function
+          (t.isIdentifier(declarator.id) &&
+            isAnonymousFunctionDefinition(declarator.init))
+        ) {
           declarePending();
         } else {
-          declarator.init = t.sequenceExpression([
-            ...pending,
-            declarator.init ?? t.buildUndefinedNode(),
-          ]);
+          declarator.init = t.sequenceExpression([...pending, declarator.init]);
         }
         pending = [];
       }
