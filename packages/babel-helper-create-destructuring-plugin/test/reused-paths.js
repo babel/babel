@@ -1,5 +1,6 @@
 import { transformSync } from "@babel/core";
 import { createDestructuringPlugin, FEATURES } from "../lib/index.js";
+import checkScopeInfo from "./helpers/checkScopeInfo.js";
 
 function transform(code, probe) {
   return transformSync(code, {
@@ -39,4 +40,13 @@ it("keeps the parent of the paths reused when lowering object spread", () => {
     },
   }));
   expect(checked).toBeGreaterThan(3);
+});
+
+it("keeps the scope of a method following a moved property", () => {
+  // Getting the path of a property creates the paths of all of them: the
+  // method must be given its path first, or its scope is crawled again.
+  transform(
+    `let x = 1; var o = { ...a, b: 1, get c() { return x; } };`,
+    checkScopeInfo,
+  );
 });
