@@ -13,6 +13,7 @@ import {
 } from "./scope.ts";
 import {
   isAnonymousFunctionDefinition,
+  isCompletionObservable,
   isValueUsed,
   markTemporary,
   needsLowering,
@@ -272,16 +273,6 @@ function transformAssignmentExpression(
   registerReplacement(path.replaceWith(expression), scope);
 }
 
-/**
- * Whether the completion value of a statement can be observed, from a `do`
- * expression or as the completion value of a script (e.g. with `eval`).
- */
-function isCompletionObservable(path: NodePath<t.Statement>) {
-  if (!path.isCompletionRecord()) return false;
-  const parent = path.findParent(p => p.isDoExpression() || p.isProgram())!;
-  return !parent.isProgram({ sourceType: "module" });
-}
-
 function transformForXStatement(
   path: NodePath<t.ForXStatement>,
   options: ResolvedOptions,
@@ -327,7 +318,7 @@ function transformForXStatement(
       // whose body did not complete empty (e.g. `;`, `var x;`, `continue;`):
       // an expression statement would replace it, but a declaration
       // completes empty. `var _ref = ({ a } = _ref)` keeps the value of
-      // `_ref`.
+      // `_ref`, which is only assigned by the loop head.
       isCompletionObservable(path)
         ? t.variableDeclaration("var", [
             t.variableDeclarator(t.cloneNode(ref), assignment),

@@ -306,6 +306,50 @@ export function isAnonymousFunctionDefinition(node: t.Node): boolean {
 }
 
 /**
+ * Whether a statement completes empty, leaving the completion value of its
+ * statement list to the previous statements.
+ */
+function completesEmpty(node: t.Node): boolean {
+  switch (node.type) {
+    case "EmptyStatement":
+    case "DebuggerStatement":
+    case "VariableDeclaration":
+    case "FunctionDeclaration":
+    case "ClassDeclaration":
+      return true;
+    case "BlockStatement":
+      return node.body.every(completesEmpty);
+    case "SwitchCase":
+      return node.consequent.every(completesEmpty);
+    case "LabeledStatement":
+      return completesEmpty(node.body);
+    default:
+      return false;
+  }
+}
+
+/**
+ * Whether the completion value of a statement can be observed: it is the
+ * completion value of a script (e.g. with `eval`) or of a `do` expression,
+ * only followed by statements that complete empty.
+ */
+export function isCompletionObservable(path: NodePath): boolean {
+  for (let current = path; ; current = current.parentPath) {
+    const { container, key, parentPath } = current;
+    if (Array.isArray(container)) {
+      for (let i = (key as number) + 1; i < container.length; i++) {
+        if (!completesEmpty(container[i])) return false;
+      }
+    }
+    if (parentPath.isProgram()) {
+      return parentPath.node.sourceType !== "module";
+    }
+    if (parentPath.isDoExpression()) return true;
+    if (parentPath.isFunction() || parentPath.isStaticBlock()) return false;
+  }
+}
+
+/**
  * Whether the value of the expression at `path` is observable. Used to
  * decide if a destructuring assignment must preserve its completion value.
  */
@@ -319,7 +363,7 @@ export function isValueUsed(path: NodePath<t.Expression>): boolean {
       continue;
     }
     if (parentPath.isExpressionStatement()) {
-      return current.isCompletionRecord();
+      return isCompletionObservable(parentPath);
     }
     if (
       parentPath.isForStatement() &&
