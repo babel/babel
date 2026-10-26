@@ -6,6 +6,7 @@ var _c = c2;
   a2
 } = _c);
 b2 = babelHelpers.objectWithoutProperties(_c, ["a2"]);
+_c;
 function render() {
   const _this$props = this.props,
     {
