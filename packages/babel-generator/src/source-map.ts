@@ -223,10 +223,7 @@ export default class SourceMap {
     }
 
     if (this.#mappingsBuffer1 === null) {
-      if (
-        this.#allowRangeMappings &&
-        SourceMap.#isRangeCandidate(this.#mappingsBuffer0, newMapping)
-      ) {
+      if (this.#isRangeCandidate(this.#mappingsBuffer0, newMapping)) {
         this.#mappingsBuffer1 = newMapping;
       } else {
         maybeAddMapping(this._map, this.#mappingsBuffer0);
@@ -235,10 +232,7 @@ export default class SourceMap {
       return;
     }
 
-    if (
-      this.#allowRangeMappings &&
-      SourceMap.#isRangeCandidate(this.#mappingsBuffer1, newMapping)
-    ) {
+    if (this.#isRangeCandidate(this.#mappingsBuffer1, newMapping)) {
       // Extend the open range: drop the old close, keep the new one as the
       // range close so the pair (buffer0, buffer1) still spans range candidate code.
       this.#mappingsBuffer1 = newMapping;
@@ -270,10 +264,12 @@ export default class SourceMap {
     }
   }
 
-  static #isRangeCandidate(
+  #isRangeCandidate(
     prev: Parameters<typeof maybeAddMapping>[1],
     next: Parameters<typeof maybeAddMapping>[1],
   ): boolean {
+    if (!this.#allowRangeMappings) return false;
+
     const prevOriginal = prev.original;
     const nextOriginal = next.original;
     if (!prevOriginal || !nextOriginal) return false;
