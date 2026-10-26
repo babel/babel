@@ -238,7 +238,7 @@ export function transformFunctionParams(
     for (const param of unmapped.params) {
       functionScope.registerBinding("param", param);
     }
-    // The bindings of the original parameters are moved to the declaration
-    registerReplacement([unmapped.declaration], functionScope);
+    // The bindings of the original parameters are moved to the declarations
+    registerReplacement(unmapped.declarations, functionScope);
   }
 }
