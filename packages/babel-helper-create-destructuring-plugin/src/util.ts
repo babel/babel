@@ -633,13 +633,45 @@ export function buildObjectExcludingKeys(
 }
 
 /**
- * Rewrite an array pattern in place so that it no longer contains anything
- * that needs to be lowered. Starting from the first element that needs
- * lowering, every element is replaced with a fresh identifier and reported
- * through `hoist`, so that the elements can be destructured later in order:
- * later elements may depend on bindings created by earlier ones.
- *
- *   [a, [{ ...b }], c = b]  ->  [a, _ref, _ref2]
+ * Whether destructuring `target` runs user code besides reading the value:
+ * default values, computed keys and member expression targets.
+ */
+function hasObservableEvaluation(target: t.Node, scope: Scope): boolean {
+  switch (target.type) {
+    case "Identifier":
+    case "VoidPattern":
+      return false;
+    case "AssignmentPattern":
+      return (
+        isDefaultEvaluationObservable(target.right, scope) ||
+        hasObservableEvaluation(target.left, scope)
+      );
+    case "RestElement":
+      return hasObservableEvaluation(target.argument, scope);
+    case "ArrayPattern":
+      return target.elements.some(
+        element => element && hasObservableEvaluation(element, scope),
+      );
+    case "ObjectPattern":
+      return target.properties.some(prop =>
+        prop.type === "RestElement"
+          ? hasObservableEvaluation(prop.argument, scope)
+          : (prop.computed && !isSafeToEvaluate(prop.key, scope)) ||
+            hasObservableEvaluation(prop.value, scope),
+      );
+    default:
+      return true;
+  }
+}
+
+/**
+ * In partial lowering, replace the elements of an array pattern that need to
+ * be lowered with temporaries, `hoist`ed to be destructured after the
+ * pattern. The following elements stay in the native pattern, which keeps
+ * iterating nested patterns before the iterator is closed, unless they read
+ * a name bound by a hoisted element (e.g. in a default value), only
+ * initialized afterwards, or run user code, which must stay after the
+ * reads of the hoisted elements.
  */
 export function splitArrayPattern(
   pattern: t.ArrayPattern,
@@ -648,15 +680,25 @@ export function splitArrayPattern(
   hoist: (target: t.LVal | t.PatternLike, id: t.Identifier) => void,
 ) {
   const { elements } = pattern;
+  const hoistedNames = new Set<string>();
   let split = false;
   for (let i = 0; i < elements.length; i++) {
     const element = elements[i];
     // Elisions and `void` don't bind anything: keep them in the pattern,
     // `void = _ref` would be invalid.
     if (!element || element.type === "VoidPattern") continue;
-    if (!split) {
-      if (!needsLowering(element, features)) continue;
-      split = true;
+    if (!needsLowering(element, features)) {
+      if (
+        !split ||
+        (!referencesName(element, hoistedNames) &&
+          !hasObservableEvaluation(element, scope))
+      ) {
+        continue;
+      }
+    }
+    split = true;
+    for (const name of Object.keys(t.getBindingIdentifiers(element))) {
+      hoistedNames.add(name);
     }
     const id = scope.generateUidIdentifier("ref");
     if (element.type === "RestElement") {

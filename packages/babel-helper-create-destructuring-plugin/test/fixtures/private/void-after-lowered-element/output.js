@@ -1,13 +1,11 @@
 class C {
   static #x = 1;
   static {
-    var _ref3, _ref4;
-    const [_ref, void, _ref2] = [C, 2, 3],
-      a = _ref.#x,
-      b = _ref2;
+    var _ref2;
+    const [_ref, void, b] = [C, 2, 3],
+      a = _ref.#x;
     let c, d;
-    [_ref3, void, _ref4] = [C, 2, 3];
-    c = _ref3.#x;
-    d = _ref4;
+    [_ref2, void, d] = [C, 2, 3];
+    c = _ref2.#x;
   }
 }
