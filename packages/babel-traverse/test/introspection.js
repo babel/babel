@@ -274,6 +274,16 @@ describe("path/introspection", function () {
           program.get("body.2.expression").referencesImport("react", "memo"),
         ).toBe(false);
       });
+      it("rejects a filtered namespace import as any of its exports", function () {
+        const program = getPath(
+          `import { memo, default, "*" } as ns from "source"; ns;`,
+          options,
+        );
+        const reference = program.get("body.1.expression");
+        expect(reference.referencesImport("source", "memo")).toBe(false);
+        expect(reference.referencesImport("source", "default")).toBe(false);
+        expect(reference.referencesImport("source", "*")).toBe(false);
+      });
     });
   });
 

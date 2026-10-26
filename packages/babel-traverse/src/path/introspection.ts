@@ -200,10 +200,9 @@ export function referencesImport(
   }
 
   if (path.isImportNamespaceSpecifier()) {
-    const { exportsFilter } = path.node;
-    return exportsFilter
-      ? isInExportsFilter(exportsFilter, importName)
-      : importName === "*";
+    // A filtered namespace object is neither the full namespace nor any of
+    // its individual exports.
+    return !path.node.exportsFilter && importName === "*";
   }
 
   if (
