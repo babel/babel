@@ -2502,11 +2502,7 @@ export function isStructDeclaration<Opts extends Options<t.StructDeclaration>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "StructDeclaration") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return isType<t.StructDeclaration>("StructDeclaration", node, opts);
 }
 export function isStructBody(
   node: t.Node | null | undefined,
@@ -2519,11 +2515,7 @@ export function isStructBody<Opts extends Options<t.StructBody>>(
   node: t.Node | null | undefined,
   opts?: Opts | null,
 ): boolean {
-  if (!node) return false;
-
-  if (node.type !== "StructBody") return false;
-
-  return opts == null || shallowEqual(node, opts);
+  return isType<t.StructBody>("StructBody", node, opts);
 }
 export function isTSParameterProperty(
   node: t.Node | null | undefined,
