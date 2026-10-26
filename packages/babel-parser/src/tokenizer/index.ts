@@ -97,7 +97,11 @@ for (let i = 0; i < 128; i++) {
 // would. Each bucket is a flat [word, type, word, type, ...] array.
 const keywordBuckets: (string | TokenType)[][] = [];
 let maxKeywordLength = 0;
-for (const [word, type] of keywordTypes) {
+// Not `for...of` over the Map: the parser is compiled with the
+// `iterableIsArray` assumption when building babel-standalone.
+const keywordEntries = Array.from(keywordTypes);
+for (let i = 0; i < keywordEntries.length; i++) {
+  const [word, type] = keywordEntries[i];
   const index = (word.length << 7) | word.charCodeAt(0);
   (keywordBuckets[index] ??= []).push(word, type);
   if (word.length > maxKeywordLength) maxKeywordLength = word.length;
