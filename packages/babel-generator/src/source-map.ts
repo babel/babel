@@ -31,8 +31,20 @@ export default class SourceMap {
 
   public _inputMap: TraceMap | null = null;
 
+  // When range mappings are enabled, we buffer up to three mappings before
+  // committing them to the underlying map, so that we can collapse runs of
+  // mappings into a single range mapping:
+  // - buffer0 is the start of the range we are building;
+  // - buffer1 is its current end: it has the same offset as buffer0 in both
+  //   the generated and the original code. Every following mapping that also
+  //   has that offset replaces it, extending the range;
+  // - buffer2 is a mapping on a new generated line, with the same original
+  //   position as the last buffered one. It is dropped if the next mapping
+  //   extends the range, as the range then covers it, and it is buffered
+  //   normally otherwise.
   #mappingsBuffer0: Parameters<typeof maybeAddMapping>[1] | null = null;
   #mappingsBuffer1: Parameters<typeof maybeAddMapping>[1] | null = null;
+  #mappingsBuffer2: Parameters<typeof maybeAddMapping>[1] | null = null;
   #droppedMappingForRange = false;
 
   #allowRangeMappings: boolean;
@@ -177,24 +189,6 @@ export default class SourceMap {
       identifierName = null;
     }
 
-    if (this.#allowRangeMappings) {
-      const prev = this.#mappingsBuffer1 ?? this.#mappingsBuffer0;
-      // Drop marks whose source position matches the most recent buffered
-      // mark: they would just be skipped by gen-mapping's redundancy check
-      // anyway, and keeping them here breaks the range detection for
-      // sequences like `x + y`, where the printer emits the same source
-      // column for the operator and surrounding spaces.
-      const prevOriginal = prev?.original;
-      if (
-        prevOriginal &&
-        prev.source === originalMapping?.source &&
-        prevOriginal.line === originalMapping.line &&
-        prevOriginal.column === originalMapping.column
-      ) {
-        return;
-      }
-    }
-
     const newMapping = {
       name: identifierName ?? null,
       generated: { line: generated.line, column: generated.column },
@@ -212,6 +206,44 @@ export default class SourceMap {
       return;
     }
 
+    if (this.#allowRangeMappings) {
+      if (this.#mappingsBuffer2 !== null) {
+        const buf2 = this.#mappingsBuffer2;
+        this.#mappingsBuffer2 = null;
+        const prev = this.#mappingsBuffer1 ?? this.#mappingsBuffer0!;
+        if (this.#isRangeCandidate(prev, newMapping)) {
+          // The range we are building covers buffer2, so we can drop it.
+          this.#droppedMappingForRange = true;
+        } else {
+          this.#bufferMapping(buf2);
+        }
+      }
+
+      const prev = this.#mappingsBuffer1 ?? this.#mappingsBuffer0;
+
+      // Unnamed marks whose source position matches the most recent buffered
+      // mark are usually redundant.
+      const prevOriginal = prev?.original;
+      if (
+        prevOriginal &&
+        prev.source === newMapping.source &&
+        prevOriginal.line === newMapping.original?.line &&
+        prevOriginal.column === newMapping.original.column
+      ) {
+        // On the same generated line, gen-mapping would skip it anyway.
+        if (prev.generated.line === newMapping.generated.line) return;
+        // On a different generated line, it is only redundant if the range
+        // that we are building ends up covering it: we only know that once
+        // we see the next mapping, so keep it in buffer2 until then.
+        this.#mappingsBuffer2 = newMapping;
+        return;
+      }
+    }
+
+    this.#bufferMapping(newMapping);
+  }
+
+  #bufferMapping(newMapping: Parameters<typeof maybeAddMapping>[1]) {
     // We keep up to two mappings buffered before committing them to the
     // underlying map. This lets us detect consecutive range candidate mappings and
     // collapse them into a single range mapping: buffer0 is the candidate
@@ -251,6 +283,11 @@ export default class SourceMap {
   }
 
   #flushBuffer() {
+    if (this.#mappingsBuffer2 !== null) {
+      this.#bufferMapping(this.#mappingsBuffer2);
+      this.#mappingsBuffer2 = null;
+    }
+
     const buf0 = this.#mappingsBuffer0;
     const buf1 = this.#mappingsBuffer1;
     if (buf0 !== null) {
