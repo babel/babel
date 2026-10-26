@@ -3,22 +3,22 @@ import _pushInstanceProperty from "core-js-pure/features/instance/push.js";
 import _Promise from "core-js-pure/features/promise/index.js";
 import _sortInstanceProperty from "core-js-pure/features/instance/sort.js";
 import createModuleNsFilter from "./createModuleNsFilter.js";
-function _filterModuleNamespace(r) {
-  var t,
-    e = !1;
+function _filterModuleNamespace(t) {
+  var e,
+    o = !1;
   try {
-    var o = r(function (r) {
+    var i = t(function (r) {
       if (Object(r) === r) try {
-        var o = r.exports;
-        if (void 0 !== o) {
-          if (Object(o) !== o) throw new TypeError("import()'s `exports` must be an object");
-          var _iterator = _createForOfIteratorHelper((t = [], o)),
+        var t = r.exports;
+        if (void 0 !== t) {
+          if (Object(t) !== t) throw new TypeError("import()'s `exports` must be an object");
+          var _iterator = _createForOfIteratorHelper((e = [], t)),
             _step;
           try {
             for (_iterator.s(); !(_step = _iterator.n()).done;) {
               var i = _step.value;
               if ("string" != typeof i) throw new TypeError("import()'s `exports` must be strings");
-              _pushInstanceProperty(t).call(t, i);
+              _pushInstanceProperty(e).call(e, i);
             }
           } catch (err) {
             _iterator.e(err);
@@ -27,14 +27,14 @@ function _filterModuleNamespace(r) {
           }
         }
       } catch (r) {
-        throw e = !0, r;
+        throw o = !0, r;
       }
       return r;
     });
   } catch (r) {
-    if (e) return _Promise.reject(r);
+    if (o) return _Promise.reject(r);
     throw r;
   }
-  return t ? (_sortInstanceProperty(t).call(t), o.then(createModuleNsFilter(t))) : o;
+  return e ? (_sortInstanceProperty(e).call(e), i.then(createModuleNsFilter(e))) : i;
 }
 export { _filterModuleNamespace as default };
