@@ -12,6 +12,7 @@ export {
   readsMappedArguments,
   unmapArguments,
 } from "./params.ts";
+export { preserveAnnexBParameterExclusions } from "./shadow-utils.ts";
 
 export interface Options {
   /** @deprecated Use the `ignoreFunctionLength` assumption instead. */
