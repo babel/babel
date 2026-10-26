@@ -1,0 +1,16 @@
+++(x as number);
+--(x as number);
+(x as number)++;
+(x as number)--;
+++(x satisfies number);
+--(x satisfies number);
+(x satisfies number)++;
+(x satisfies number)--;
+++(<number>x);
+--(<number>x);
+(<number>x)++;
+(<number>x)--;
+(<number>obj.value)++;
+++(values[index] as number);
+++x;
+x++;
