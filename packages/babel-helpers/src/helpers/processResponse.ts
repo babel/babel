@@ -5,10 +5,10 @@ export default function _processResponse(
   method: "json" | "arrayBuffer" | "text",
   map?: (value: any) => any,
 ) {
-  return responseP.then(response => {
+  return responseP.then(function (response) {
     if (response.ok) {
-      const value = response[method]();
-      return map ? value.then(map) : value;
+      (response as any) = response[method]();
+      return map ? (response as any).then(map) : response;
     }
     throw TypeError(`Fetch failed: ${response.status} ${response.statusText}`);
   });
