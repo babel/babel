@@ -274,40 +274,66 @@ export function isAnonymousFunctionDefinition(node: t.Node): boolean {
 }
 
 /**
- * Whether a statement completes empty, leaving the completion value of its
- * statement list to the previous statements.
+ * The completion of a statement list, as far as it is statically known:
+ * "empty" when every statement completes empty, "value" when a statement
+ * produces a value (`if`, loops or `try` complete with `undefined` at least)
+ * before the list is exited by a `break` or `continue` ("abrupt"), which
+ * complete empty as well.
  */
-function completesEmpty(node: t.Node): boolean {
+type ListCompletion = "empty" | "abrupt" | "value";
+
+function getListCompletion(statements: t.Node[], start = 0): ListCompletion {
+  for (let i = start; i < statements.length; i++) {
+    const completion = getStatementCompletion(statements[i]);
+    if (completion !== "empty") return completion;
+  }
+  return "empty";
+}
+
+function getStatementCompletion(node: t.Node): ListCompletion {
   switch (node.type) {
     case "EmptyStatement":
     case "DebuggerStatement":
     case "VariableDeclaration":
     case "FunctionDeclaration":
     case "ClassDeclaration":
-      return true;
+      return "empty";
+    case "BreakStatement":
+    case "ContinueStatement":
+      return "abrupt";
     case "BlockStatement":
-      return node.body.every(completesEmpty);
+      return getListCompletion(node.body);
     case "SwitchCase":
-      return node.consequent.every(completesEmpty);
+      return getListCompletion(node.consequent);
     case "LabeledStatement":
-      return completesEmpty(node.body);
+      return getStatementCompletion(node.body);
     default:
-      return false;
+      return "value";
   }
+}
+
+/**
+ * Whether the statements of a list, from `start`, keep the completion value
+ * of the previous statements: they complete empty, or exit the list with a
+ * `break` or `continue` carrying it.
+ */
+export function keepsCompletionValue(statements: t.Node[], start = 0): boolean {
+  return getListCompletion(statements, start) !== "value";
 }
 
 /**
  * Whether the completion value of a statement can be observed: it is the
  * completion value of a script (e.g. with `eval`) or of a `do` expression,
- * only followed by statements that complete empty.
+ * kept by the following statements.
  */
 export function isCompletionObservable(path: NodePath): boolean {
   for (let current = path; ; current = current.parentPath) {
     const { container, key, parentPath } = current;
-    if (Array.isArray(container)) {
-      for (let i = (key as number) + 1; i < container.length; i++) {
-        if (!completesEmpty(container[i])) return false;
-      }
+    if (
+      Array.isArray(container) &&
+      !keepsCompletionValue(container, (key as number) + 1)
+    ) {
+      return false;
     }
     if (parentPath.isProgram()) {
       return parentPath.node.sourceType !== "module";

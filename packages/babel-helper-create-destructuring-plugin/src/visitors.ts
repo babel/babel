@@ -15,6 +15,7 @@ import {
   isAnonymousFunctionDefinition,
   isCompletionObservable,
   isValueUsed,
+  keepsCompletionValue,
   markTemporary,
   needsLowering,
   referencesName,
@@ -315,11 +316,12 @@ function transformForXStatement(
     path.ensureBlock();
     statements.push(
       // The completion value of the loop is the one of the last iteration
-      // whose body did not complete empty (e.g. `;`, `var x;`, `continue;`):
-      // an expression statement would replace it, but a declaration
-      // completes empty. `var _ref = ({ a } = _ref)` keeps the value of
-      // `_ref`, which is only assigned by the loop head.
-      isCompletionObservable(path)
+      // whose body did not complete empty: when the body (e.g. `;`, `var x;`,
+      // `continue;`) keeps the value of the assignment, assign the pattern in
+      // a declaration, which completes empty. `var _ref = ({ a } = _ref)`
+      // keeps the value of `_ref`, only assigned by the loop head.
+      isCompletionObservable(path) &&
+        keepsCompletionValue((node.body as t.BlockStatement).body)
         ? t.variableDeclaration("var", [
             t.variableDeclarator(t.cloneNode(ref), assignment),
           ])
