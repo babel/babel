@@ -85,6 +85,13 @@ let locDataCache: Uint32Array | undefined;
 
 // ## Tokenizer
 
+// Lookup table for ASCII identifier characters, used by the hot `readWord1`
+// loop before falling back to the full Unicode check.
+const asciiIdentifierChar = new Uint8Array(128);
+for (let i = 0; i < 128; i++) {
+  asciiIdentifierChar[i] = isIdentifierChar(i) ? 1 : 0;
+}
+
 export default abstract class Tokenizer extends CommentsParser {
   isLookahead: boolean;
 
@@ -1367,26 +1374,36 @@ export default abstract class Tokenizer extends CommentsParser {
     this.state.containsEsc = false;
     let word = "";
     const start = this.state.pos;
-    let chunkStart = this.state.pos;
+    let chunkStart = start;
+    // This loop runs for every identifier character: keep the hot state in
+    // locals, and take the ASCII fast path before the full Unicode check.
+    const { input, length } = this;
+    let pos = start;
     if (firstCode !== undefined) {
-      this.state.pos += firstCode <= 0xffff ? 1 : 2;
+      pos += firstCode <= 0xffff ? 1 : 2;
     }
 
-    while (this.state.pos < this.length) {
-      const ch = this.codePointAtPos(this.state.pos);
-      if (isIdentifierChar(ch)) {
-        this.state.pos += ch <= 0xffff ? 1 : 2;
-      } else if (ch === charCodes.backslash) {
+    while (pos < length) {
+      let ch = input.charCodeAt(pos);
+      if (ch < 128) {
+        if (asciiIdentifierChar[ch] === 1) {
+          ++pos;
+          continue;
+        }
+        if (ch !== charCodes.backslash) break;
+
         this.state.containsEsc = true;
 
-        word += this.input.slice(chunkStart, this.state.pos);
+        word += input.slice(chunkStart, pos);
+        this.state.pos = pos;
         const escStart = this.state.curPosition();
         const identifierCheck =
-          this.state.pos === start ? isIdentifierStart : isIdentifierChar;
+          pos === start ? isIdentifierStart : isIdentifierChar;
 
-        if (this.input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU) {
+        if (input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU) {
           this.raise(Errors.MissingUnicodeEscape, this.state.curPosition());
           chunkStart = this.state.pos - 1;
+          pos = this.state.pos;
           continue;
         }
 
@@ -1399,12 +1416,23 @@ export default abstract class Tokenizer extends CommentsParser {
 
           word += String.fromCodePoint(esc);
         }
-        chunkStart = this.state.pos;
+        chunkStart = pos = this.state.pos;
       } else {
-        break;
+        if ((ch & 0xfc00) === 0xd800 && pos + 1 < length) {
+          const trail = input.charCodeAt(pos + 1);
+          if ((trail & 0xfc00) === 0xdc00) {
+            ch = 0x10000 + ((ch & 0x3ff) << 10) + (trail & 0x3ff);
+          }
+        }
+        if (isIdentifierChar(ch)) {
+          pos += ch <= 0xffff ? 1 : 2;
+        } else {
+          break;
+        }
       }
     }
-    return word + this.input.slice(chunkStart, this.state.pos);
+    this.state.pos = pos;
+    return word + input.slice(chunkStart, pos);
   }
 
   // Read an identifier or keyword token. Will check for reserved
