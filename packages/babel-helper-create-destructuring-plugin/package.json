@@ -18,6 +18,7 @@
     "babel-plugin"
   ],
   "dependencies": {
+    "@babel/helper-replace-supers": "workspace:^",
     "@babel/plugin-transform-parameters": "workspace:^",
     "verkit": "catalog:"
   },
