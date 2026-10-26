@@ -69,6 +69,8 @@ const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
       return parent.tag === node;
     case __node("TSNonNullExpression"):
       return true;
+    case __node("TSInstantiationExpression"):
+      return parent.expression === node;
   }
 
   return false;
