@@ -12,6 +12,13 @@ if (k) {
     var _ref2 = (a = _ref2.a, _ref2);
     ;
   }
+} else if (a) {
+  for (var _ref3 of [{
+    a: 1
+  }]) {
+    a = _ref3.a;
+    a;
+  }
 } else {
   var _a = {
     a: 2
