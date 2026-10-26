@@ -267,40 +267,48 @@ export function adoptMovedPaths(
   moved: ReadonlyMap<t.Node, NodePath>,
 ) {
   function visit(path: NodePath) {
-    registerPathScopeInfo(path);
     const { node } = path;
+    // Match Scope#crawl: type annotations do not reference runtime bindings.
+    if (node.type === "TSTypeAnnotation") return;
+    registerPathScopeInfo(path);
+
+    const children: [key: string, child: t.Node][] = [];
     for (const key of t.VISITOR_KEYS[node.type]) {
       // @ts-expect-error key is a visitor key of node
       const value: t.Node | null | (t.Node | null)[] = node[key];
       if (Array.isArray(value)) {
-        value.forEach(
-          (child, i) => child && visitChild(path, `${key}.${i}`, child),
-        );
+        value.forEach((child, i) => {
+          if (child) children.push([`${key}.${i}`, child]);
+        });
       } else if (value) {
-        visitChild(path, key, value);
+        children.push([key, value]);
       }
     }
-  }
-  function visitChild(parentPath: NodePath, key: string, node: t.Node) {
-    const old = moved.get(node);
-    if (!old) {
-      visit(parentPath.get(key) as NodePath);
-      return;
-    }
+
     // The path of a child is looked up by node in the paths of its parent
     // (`NodePath.get`): make it the old one, then set up at the new location.
-    // It must be seeded before getting the child, which would otherwise
-    // create a new path (and a new scope, crawled again).
-    (parentPath._store ??= new Map()).set(node, old);
-    const path = parentPath.get(key) as NodePath;
-    if (path === old) {
-      // `NodePath.get` sets up the container and key, but not the parent
-      // node, only updated by `resync`.
-      old.parent = parentPath.node;
-    } else {
-      // The paths can't be reused: register the moved subtree again.
-      forgetScopeInfo(old);
-      registerScopeInfo([path]);
+    // Every moved child must be seeded before getting any of them: getting
+    // one creates the paths of all its siblings, with new scopes crawled
+    // again.
+    for (const [, child] of children) {
+      const old = moved.get(child);
+      if (old) (path._store ??= new Map()).set(child, old);
+    }
+
+    for (const [key, child] of children) {
+      const childPath = path.get(key) as NodePath;
+      const old = moved.get(child);
+      if (!old) {
+        visit(childPath);
+      } else if (childPath === old) {
+        // `NodePath.get` sets up the container and key, but not the parent
+        // node, only updated by `resync`.
+        old.parent = node;
+      } else {
+        // The paths can't be reused: register the moved subtree again.
+        forgetScopeInfo(old);
+        registerScopeInfo([childPath]);
+      }
     }
   }
   visit(root);
