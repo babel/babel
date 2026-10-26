@@ -393,15 +393,34 @@ export default function convertFunctionParams(
     body.push(...transformedRestNodes);
   }
 
+  const { async, generator } = node;
+  const needsIIFE =
+    generator || state.needsOuterBinding || shadowedParams.size > 0;
+
   if (restNodes) {
     // The destructuring of the rest parameter happens after it is initialized
     path.ensureBlock();
-    (node.body as t.BlockStatement).body.unshift(...restNodes);
+    const bodyNode = node.body as t.BlockStatement;
+    bodyNode.body.unshift(...restNodes);
     // `convertFunctionRest` needs the binding of the new rest parameter. The
     // scope must not be crawled here: the parameters moved into the body are
     // not declared yet, and their references would resolve to outer bindings.
     scope.registerBinding("param", params[params.length - 1]);
-    convertFunctionRest(path);
+    if (needsIIFE) {
+      // The IIFE wrapping the body is passed the parameters it redeclares:
+      // like the other parameters, the rest parameter is initialized before
+      // it, not inside.
+      convertFunctionRest(path, loop => body.push(loop));
+      if (restNodes.length) {
+        bodyNode.body.splice(
+          bodyNode.body.indexOf(restNodes[0]),
+          restNodes.length,
+        );
+        body.push(...restNodes);
+      }
+    } else {
+      convertFunctionRest(path);
+    }
   }
 
   // we need to cut off all trailing parameters
@@ -413,8 +432,7 @@ export default function convertFunctionParams(
   path.ensureBlock();
   const path2 = path as NodePath<typeof path.node & { body: t.BlockStatement }>;
 
-  const { async, generator } = node;
-  if (generator || state.needsOuterBinding || shadowedParams.size > 0) {
+  if (needsIIFE) {
     body.push(buildScopeIIFE(shadowedParams, path2.node.body));
 
     path.set("body", t.blockStatement(body));
