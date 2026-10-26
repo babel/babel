@@ -3,9 +3,53 @@ import type { Scope } from "@babel/core";
 import {
   hasArrayRest,
   hasMemberTarget,
+  isInitializedReference,
   isSafeToEvaluate,
   mayRunUserCode,
 } from "./util.ts";
+
+/**
+ * Whether an element of an unpacked array literal can be evaluated when its
+ * target is assigned, after the targets before it, instead of before all of
+ * them: it can't throw, nor be affected by their assignment.
+ */
+export function isSafeUnpackedElement(
+  node: t.Node | null,
+  scope: Scope,
+): boolean {
+  return (
+    node === null ||
+    isSafeToEvaluate(node, scope) ||
+    // An initialized binding, which only the targets could reassign
+    isInitializedReference(node, scope)
+  );
+}
+
+/**
+ * Whether evaluating `node` only coerces plain values, which can throw or
+ * call user code (`valueOf`), but is evaluated before any target is
+ * assigned when unpacked (see `isSafeUnpackedElement`): unlike a call, that
+ * user code can't observe the unpacking.
+ */
+function isCoercion(node: t.Node, scope: Scope): boolean {
+  if (isSafeUnpackedElement(node, scope)) return true;
+  if (t.isUnaryExpression(node)) {
+    return node.operator !== "delete" && isCoercion(node.argument, scope);
+  }
+  if (t.isBinaryExpression(node)) {
+    return (
+      node.operator !== "in" &&
+      node.operator !== "instanceof" &&
+      !t.isPrivateName(node.left) &&
+      isCoercion(node.left, scope) &&
+      isCoercion(node.right, scope)
+    );
+  }
+  if (t.isTemplateLiteral(node)) {
+    return node.expressions.every(expr => isCoercion(expr, scope));
+  }
+  return false;
+}
 
 const STOP_TRAVERSAL = {};
 
@@ -29,12 +73,17 @@ const arrayUnpackVisitor = (
   }
 };
 
-/** Whether an array literal can be unpacked without changing evaluation order. */
+/**
+ * Whether an array literal can be unpacked without changing evaluation
+ * order: returns the index of the first target whose initialization has
+ * observable side effects (`Infinity` if none), the elements after which
+ * must be evaluated before any target; `false` otherwise.
+ */
 export function canUnpackArrayPattern(
   pattern: t.ArrayPattern,
   arr: t.ArrayExpression,
   scope: Scope,
-): boolean {
+): number | false {
   // pattern has fewer elements than the array and doesn't have a rest so some
   // elements won't be evaluated
   if (pattern.elements.length > arr.elements.length) return false;
@@ -44,7 +93,7 @@ export function canUnpackArrayPattern(
 
   // The first target whose initialization has observable side effects
   // (nested object patterns read properties, defaults are evaluated), if any.
-  let effectfulFrom = -1;
+  let effectfulFrom = Infinity;
   for (let i = 0; i < pattern.elements.length; i++) {
     const element = pattern.elements[i];
     // deopt on elisions
@@ -55,7 +104,7 @@ export function canUnpackArrayPattern(
     if (hasMemberTarget(element)) return false;
 
     if (
-      effectfulFrom === -1 &&
+      effectfulFrom === Infinity &&
       isEffectfulArrayTarget(element, arr.elements[i], scope)
     ) {
       effectfulFrom = i;
@@ -68,18 +117,15 @@ export function canUnpackArrayPattern(
     if (t.isSpreadElement(element)) return false;
 
     // The entire RHS runs before any target is bound, including nested
-    // calls, constructors and implicit coercions.
-    if (element && mayRunUserCode(element)) return false;
+    // calls and constructors, which could observe the targets assigned
+    // before an element.
+    if (element && mayRunUserCode(element) && !isCoercion(element, scope)) {
+      return false;
+    }
 
     // The array literal is fully evaluated before the pattern. If an earlier
     // target has side effects, later elements must not be affected by them.
-    if (
-      effectfulFrom !== -1 &&
-      i > effectfulFrom &&
-      !isSafeToEvaluate(element, scope)
-    ) {
-      return false;
-    }
+    if (i > effectfulFrom && !isSafeToEvaluate(element, scope)) return false;
   }
 
   // deopt on reference to left side identifiers
@@ -89,7 +135,7 @@ export function canUnpackArrayPattern(
     if (e !== STOP_TRAVERSAL) throw e;
     return false;
   }
-  return true;
+  return effectfulFrom;
 }
 
 /**
