@@ -736,7 +736,6 @@ export default abstract class ExpressionParser extends LValParser {
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression {
     const startLoc = this.state.startLoc;
-    this.setLoc(startLoc);
 
     if (
       refExpressionErrors != null &&
@@ -2930,7 +2929,6 @@ export default abstract class ExpressionParser extends LValParser {
     soloAwait?: boolean,
   ): N.AwaitExpression {
     const startIndex = startLoc.index;
-    this.setLoc(startLoc);
     const node = this.startNodeAt<N.AwaitExpression>(startLoc);
 
     this.expressionScope.recordParameterInitializerError(
@@ -2985,7 +2983,6 @@ export default abstract class ExpressionParser extends LValParser {
   // Parses yield expression inside generator.
 
   parseYield(this: Parser, startLoc: Position): N.YieldExpression {
-    this.setLoc(startLoc);
     const node = this.startNodeAt<N.YieldExpression>(startLoc);
 
     this.expressionScope.recordParameterInitializerError(
