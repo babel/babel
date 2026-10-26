@@ -34,3 +34,27 @@ function gen(_ref3) {
     yield [n, m];
   }();
 }
+function k() {
+  let _ref5 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+    d = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref5), _ref5)), []);
+  for (var _len4 = arguments.length, _ref4 = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+    _ref4[_key4 - 1] = arguments[_key4];
+  }
+  let [x] = _ref4;
+  return function (x) {
+    var x = 5;
+    return x;
+  }(x);
+}
+function m() {
+  let _ref7 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+    d = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref7), _ref7)), []);
+  for (var _len5 = arguments.length, _ref6 = new Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
+    _ref6[_key5 - 1] = arguments[_key5];
+  }
+  let [y, z = () => y] = _ref6;
+  return function (y) {
+    var y = 6;
+    return [y, z()];
+  }(y);
+}

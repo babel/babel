@@ -291,10 +291,13 @@ function optimiseLengthGetter(
 
 export default function convertFunctionRest(
   path: NodePath<t.Function>,
-  // Inserts the loop building the array of the rest parameter. By default, it
+  // For callers wrapping the body in an IIFE, which is passed the parameters
+  // redeclared in the body: inserts the statements initializing the rest
+  // parameter (the loop building its array, then the destructuring of a rest
+  // pattern) before the IIFE, which is not created here. By default, the loop
   // is inserted before the first reference to the parameter (out of loops),
   // or at the beginning of the body.
-  insertLoop?: (loop: t.Statement) => void,
+  insertBeforeBody?: (statements: t.Statement[]) => void,
 ) {
   const { node, scope } = path;
   if (!hasRest(node)) return false;
@@ -303,7 +306,7 @@ export default function convertFunctionRest(
     `params.${node.params.length - 1}.argument`,
   ) as NodePath<t.ArrayPattern | t.ObjectPattern | t.Identifier>;
 
-  if (!restPath.isIdentifier()) {
+  if (!restPath.isIdentifier() && !insertBeforeBody) {
     const shadowedParams = new Set<string>();
     collectShadowedParamsNames(restPath, path.scope, shadowedParams);
 
@@ -331,12 +334,15 @@ export default function convertFunctionRest(
   let rest = restPath.node;
   node.params.pop(); // This returns 'rest'
 
+  // The destructuring of a rest pattern, in the body while its references to
+  // the rest parameter are collected
+  let declar: t.VariableDeclaration | undefined;
   if (t.isPattern(rest)) {
     const pattern = rest;
     rest = scope.generateUidIdentifier("ref");
 
-    const declar = t.variableDeclaration("let", [
-      t.variableDeclarator(pattern, rest),
+    declar = t.variableDeclaration("let", [
+      t.variableDeclarator(pattern, t.cloneNode(rest)),
     ]);
     path.ensureBlock();
     (node.body as t.BlockStatement).body.unshift(declar);
@@ -360,6 +366,13 @@ export default function convertFunctionRest(
 
   path.traverse(memberExpressionOptimisationVisitor, state);
 
+  const statementsBeforeBody: t.Statement[] = [];
+  if (insertBeforeBody && declar) {
+    const { body } = node.body as t.BlockStatement;
+    body.splice(body.indexOf(declar), 1);
+    statementsBeforeBody.push(declar);
+  }
+
   // There are only "shorthand" references
   if (!state.deopted && !state.references.length) {
     for (const { path, cause } of state.candidates) {
@@ -375,6 +388,7 @@ export default function convertFunctionRest(
           path.replaceWith(clonedArgsId);
       }
     }
+    insertBeforeBody?.(statementsBeforeBody);
     return true;
   }
 
@@ -417,8 +431,8 @@ export default function convertFunctionRest(
     LEN: len,
   });
 
-  if (insertLoop) {
-    insertLoop(loop);
+  if (insertBeforeBody) {
+    insertBeforeBody([loop, ...statementsBeforeBody]);
   } else if (state.deopted) {
     (node.body as t.BlockStatement).body.unshift(loop);
   } else {

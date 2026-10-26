@@ -9,3 +9,11 @@ function h({ ...i }, j = id(() => k), ...k) {
 function* gen({ ...l }, n = g(), ...m) {
   yield [n, m];
 }
+function k({ ...d } = {}, ...[x]) {
+  var x = 5;
+  return x;
+}
+function m({ ...d } = {}, ...[y, z = () => y]) {
+  var y = 6;
+  return [y, z()];
+}
