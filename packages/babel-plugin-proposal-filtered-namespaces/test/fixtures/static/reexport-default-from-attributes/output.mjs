@@ -6,6 +6,6 @@ const _ns = Object.freeze(Object.defineProperty({
 }, Symbol.toStringTag, {
   value: "Module"
 }));
+import { a as _a } from "x" with { type: "json" };
 export d from "x" with { type: "json" };
 export { _ns as ns };
-import { a as _a } from "x" with { type: "json" };

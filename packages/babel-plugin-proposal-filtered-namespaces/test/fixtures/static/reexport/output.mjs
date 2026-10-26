@@ -9,5 +9,5 @@ const _ns = Object.freeze(Object.defineProperty({
 }, Symbol.toStringTag, {
   value: "Module"
 }));
-export { _ns as ns };
 import { a as _a, b as _b } from "x";
+export { _ns as ns };

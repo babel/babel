@@ -116,29 +116,32 @@ export default declare(api => {
             const local = path.scope.generateUidIdentifier(
               getName(specifier.exported),
             );
-            const newExportDecl = t.exportNamedDeclaration(null, [
-              t.exportSpecifier(local, specifier.exported),
-            ]);
-            if (node.specifiers.length === 1) {
-              path.node.body[i] = newExportDecl;
-            } else {
-              node.specifiers.pop();
-              path.node.body.push(newExportDecl);
-            }
 
             const importNamespace = t.importNamespaceSpecifier(
               t.cloneNode(local),
             );
             importNamespace.exportsFilter = specifier.exportsFilter;
-            path.node.body.push(
-              t.importDeclaration(
-                [importNamespace],
-                t.cloneNode(node.source),
-                node.attributes?.map(attribute => t.cloneNode(attribute)),
-              ),
+
+            // Keep the new import in the same location as the export was, so
+            // that it executes the module at the right time.
+            path.node.body[i] = t.importDeclaration(
+              [importNamespace],
+              t.cloneNode(node.source),
+              node.attributes?.map(attribute => t.cloneNode(attribute)),
             );
 
-            continue; // The injected import will be visited later.
+            if (node.specifiers.length > 1) {
+              node.specifiers.pop();
+              path.node.body.push(node);
+            }
+            path.node.body.push(
+              t.exportNamedDeclaration(null, [
+                t.exportSpecifier(local, specifier.exported),
+              ]),
+            );
+
+            i--; // Re-visit the node
+            continue;
           }
 
           if (
