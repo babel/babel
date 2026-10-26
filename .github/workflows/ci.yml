@@ -791,7 +791,7 @@ jobs:
 
   codspeed:
     name: Codspeed
-    runs-on: ubuntu-latest
+    runs-on: codspeed-macro-arm64-graviton-ubuntu-22-04
     needs: prepare-yarn-cache
     steps:
       - name: Free Disk Space (Ubuntu)
