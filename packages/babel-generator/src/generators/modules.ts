@@ -29,7 +29,10 @@ function shouldPrintModuleSpecifierAlias(
 ) {
   if (!isSameModuleExportName(a, b)) return true;
   // keep redundant aliases in preserveFormat mode
-  return printer.tokenMap?.findMatching(node, "as") != null;
+  if (printer.tokenMap) {
+    return printer.tokenMap.findMatching(node, "as") !== null;
+  }
+  return false;
 }
 
 export function ImportSpecifier(this: Printer, node: t.ImportSpecifier) {
