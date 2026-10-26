@@ -570,7 +570,7 @@ target["new-version-checklist"] = function () {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!                                                   !!!!!!
 !!!!!! Update the minVersion for the immutableUint8Array !!!!!!
-!!!!!! helper                                            !!!!!!
+!!!!!! and processResponse helpers                       !!!!!!
 !!!!!!                                                   !!!!!!
 !!!!!!                                                   !!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
