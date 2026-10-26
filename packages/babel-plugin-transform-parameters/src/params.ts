@@ -10,6 +10,7 @@ import convertFunctionRest from "./rest.ts";
 import {
   getIIFEVisitor,
   collectShadowedParamsNames,
+  preserveAnnexBParameterExclusions,
   buildScopeIIFE,
 } from "./shadow-utils.ts";
 
@@ -276,6 +277,9 @@ export default function convertFunctionParams(
 
   const body: t.Statement[] = [];
   const shadowedParams = new Set<string>();
+  const paramNames = new Set(
+    params.flatMap(param => Object.keys(param.getBindingIdentifiers())),
+  );
 
   for (const param of params) {
     collectShadowedParamsNames(param, scope, shadowedParams);
@@ -417,6 +421,7 @@ export default function convertFunctionParams(
   const path2 = path as NodePath<typeof path.node & { body: t.BlockStatement }>;
 
   if (needsIIFE) {
+    preserveAnnexBParameterExclusions(path2.get("body"), paramNames);
     body.push(buildScopeIIFE(shadowedParams, path2.node.body));
 
     path.set("body", t.blockStatement(body));

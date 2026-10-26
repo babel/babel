@@ -69,6 +69,77 @@ export function collectShadowedParamsNames(
   }
 }
 
+/**
+ * Sloppy block functions whose names are parameters do not create Annex B
+ * `var` bindings. Once the body moves into an IIFE, preserve that exclusion
+ * with lexical declarations around their original block. The function's own
+ * block still shadows those declarations, so references keep their bindings.
+ */
+export function preserveAnnexBParameterExclusions(
+  body: NodePath<t.BlockStatement>,
+  paramNames: ReadonlySet<string>,
+) {
+  if (body.isInStrictMode()) return;
+  const protectedNodes = new WeakSet<t.Node>();
+  const blockers = (statements: t.Statement[]) => {
+    const names = new Set<string>();
+    for (const statement of statements) {
+      if (
+        t.isFunctionDeclaration(statement) &&
+        !statement.async &&
+        !statement.generator &&
+        statement.id &&
+        paramNames.has(statement.id.name)
+      ) {
+        names.add(statement.id.name);
+      }
+    }
+    return names.size
+      ? t.variableDeclaration(
+          "let",
+          [...names].map(name => t.variableDeclarator(t.identifier(name))),
+        )
+      : null;
+  };
+  body.traverse({
+    Function(path) {
+      if (path.isFunctionDeclaration() && path.parentPath.isIfStatement()) {
+        const declaration = blockers([path.node]);
+        if (declaration) {
+          path.replaceWith(
+            t.blockStatement([declaration, t.blockStatement([path.node])]),
+          );
+        }
+      }
+      path.skip();
+    },
+    BlockStatement(path) {
+      if (protectedNodes.has(path.node) || path.isInStrictMode()) return;
+      const declaration = blockers(path.node.body);
+      if (!declaration) return;
+      protectedNodes.add(path.node);
+      path.replaceWith(t.blockStatement([declaration, path.node]));
+    },
+    SwitchStatement(path) {
+      if (protectedNodes.has(path.node) || path.isInStrictMode()) return;
+      const declaration = blockers(
+        path.node.cases.flatMap(caseNode => caseNode.consequent),
+      );
+      if (!declaration) return;
+      protectedNodes.add(path.node);
+      // The discriminant runs outside the switch's lexical environment.
+      const discriminant = path.scope.generateUidIdentifier("discriminant");
+      const init = t.variableDeclaration("const", [
+        t.variableDeclarator(discriminant, path.node.discriminant),
+      ]);
+      path.node.discriminant = t.cloneNode(discriminant);
+      path.replaceWith(
+        t.blockStatement([init, t.blockStatement([declaration, path.node])]),
+      );
+    },
+  });
+}
+
 export function buildScopeIIFE(
   shadowedParams: Set<string>,
   body: t.BlockStatement,
