@@ -14,6 +14,14 @@ expect([d, e]).toEqual([1, 1]);
 // a declarator without initializer after a null check
 for (var { a: void } = obj, f; ; ) break;
 expect(f).toBe(undefined);
+// it keeps the existing value
+f = 42;
+for (var { a: void } = obj, f; ; ) break;
+expect(f).toBe(42);
+for (let { a: void } = obj, f; ; ) {
+  expect(f).toBe(undefined);
+  break;
+}
 
 // several null checks after the last declarator
 for (var g = 1, {} = y, {} = z; ; ) break;
