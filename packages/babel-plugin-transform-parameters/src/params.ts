@@ -72,7 +72,19 @@ export function isDefaultEvaluationObservable(
       isDefaultEvaluationObservable(expr, scope),
     );
   }
-  if (t.isTemplateLiteral(node)) return node.expressions.length !== 0;
+  if (t.isTemplateLiteral(node)) {
+    // Converting a primitive to a string doesn't run user code
+    return node.expressions.some(
+      expr =>
+        !(
+          t.isLiteral(expr) ||
+          t.isIdentifier(expr) ||
+          t.isUnaryExpression(expr)
+        ) ||
+        t.isRegExpLiteral(expr) ||
+        isDefaultEvaluationObservable(expr, scope),
+    );
+  }
   return true;
 }
 
