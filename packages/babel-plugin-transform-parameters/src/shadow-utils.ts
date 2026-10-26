@@ -75,11 +75,52 @@ export function collectShadowedParamsNames(
  * with lexical declarations around their original block. The function's own
  * block still shadows those declarations, so references keep their bindings.
  */
+/**
+ * Whether a function named like a parameter is declared in a block (or an
+ * `if` clause) of `body`, outside of nested functions: a cheap check before
+ * traversing the body with paths.
+ */
+function hasBlockFunctionDeclaration(
+  body: t.BlockStatement,
+  paramNames: ReadonlySet<string>,
+): boolean {
+  const visit = (node: t.Node, parent: t.Node): boolean => {
+    if (t.isFunctionDeclaration(node)) {
+      return (
+        parent !== body &&
+        !node.async &&
+        !node.generator &&
+        !!node.id &&
+        paramNames.has(node.id.name)
+      );
+    }
+    if (t.isFunction(node) || t.isClass(node)) return false;
+    for (const key of t.VISITOR_KEYS[node.type]) {
+      // @ts-expect-error key is a visitor key of node
+      const value: t.Node | null | (t.Node | null)[] = node[key];
+      if (Array.isArray(value)) {
+        for (const child of value) {
+          if (child && visit(child, node)) return true;
+        }
+      } else if (value && visit(value, node)) {
+        return true;
+      }
+    }
+    return false;
+  };
+  return body.body.some(statement => visit(statement, body));
+}
+
 export function preserveAnnexBParameterExclusions(
   body: NodePath<t.BlockStatement>,
   paramNames: ReadonlySet<string>,
 ): boolean {
-  if (body.isInStrictMode()) return false;
+  if (
+    body.isInStrictMode() ||
+    !hasBlockFunctionDeclaration(body.node, paramNames)
+  ) {
+    return false;
+  }
   let modified = false;
   const protectedNodes = new WeakSet<t.Node>();
   const blockers = (statements: t.Statement[]) => {
