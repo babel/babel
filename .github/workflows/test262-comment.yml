@@ -25,8 +25,9 @@ jobs:
       github.event.workflow_run.conclusion != 'cancelled'
     permissions:
       actions: read # to download artifacts from the CI run
+      contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Download test262 comment data
@@ -39,7 +40,7 @@ jobs:
           path: ${{ runner.temp }}/test262-comment-data
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@v9
         if: steps.download.outcome == 'success'
         env:
           DATA_DIR: ${{ runner.temp }}/test262-comment-data
