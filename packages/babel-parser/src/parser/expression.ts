@@ -1843,12 +1843,13 @@ export default abstract class ExpressionParser extends LValParser {
     const innerEndLoc = this.state.lastTokEndLoc!;
     this.expect(tt.parenR);
 
-    let arrowNode: Undone<N.ArrowFunctionExpression> | null | undefined =
-      this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
+    let arrowNode: Undone<N.ArrowFunctionExpression> | null | undefined;
     if (
       canStartArrow &&
       this.shouldParseArrow(exprList) &&
-      (arrowNode = this.parseArrow(arrowNode))
+      (arrowNode = this.parseArrow(
+        this.startNodeAt<N.ArrowFunctionExpression>(startLoc),
+      ))
     ) {
       this.checkDestructuringPrivate(refExpressionErrors);
       this.expressionScope.validateAsPattern();
