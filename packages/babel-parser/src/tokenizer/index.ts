@@ -397,33 +397,38 @@ export default abstract class Tokenizer extends CommentsParser {
     const spaceStart = this.state.pos;
     const attachComment = (this.optionFlags & OptionFlags.AttachComment) > 0;
     let comments: N.Comment[] | undefined;
-    loop: while (this.state.pos < this.length) {
-      const ch = this.input.charCodeAt(this.state.pos);
+    // This loop runs for every character between two tokens: keep the hot
+    // state in locals, and only write `pos` back to `this.state` when calling
+    // out to the comment-skipping helpers (and when leaving).
+    const { input, length } = this;
+    let pos = spaceStart;
+    loop: while (pos < length) {
+      const ch = input.charCodeAt(pos);
       switch (ch) {
         case charCodes.space:
         case charCodes.nonBreakingSpace:
         case charCodes.tab:
-          ++this.state.pos;
+          ++pos;
           break;
         case charCodes.carriageReturn:
-          if (
-            this.input.charCodeAt(this.state.pos + 1) === charCodes.lineFeed
-          ) {
-            ++this.state.pos;
+          if (input.charCodeAt(pos + 1) === charCodes.lineFeed) {
+            ++pos;
           }
         // fall through
         case charCodes.lineFeed:
         case charCodes.lineSeparator:
         case charCodes.paragraphSeparator:
-          ++this.state.pos;
+          ++pos;
           ++this.state.curLine;
-          this.state.lineStart = this.state.pos;
+          this.state.lineStart = pos;
           break;
 
         case charCodes.slash:
-          switch (this.input.charCodeAt(this.state.pos + 1)) {
+          switch (input.charCodeAt(pos + 1)) {
             case charCodes.asterisk: {
+              this.state.pos = pos;
               const comment = this.skipBlockComment("*/");
+              pos = this.state.pos;
               if (comment !== undefined) {
                 this.addComment(comment);
                 if (attachComment) {
@@ -434,7 +439,9 @@ export default abstract class Tokenizer extends CommentsParser {
             }
 
             case charCodes.slash: {
+              this.state.pos = pos;
               const comment = this.skipLineComment(2);
+              pos = this.state.pos;
               if (comment !== undefined) {
                 this.addComment(comment);
                 if (attachComment) {
@@ -451,20 +458,21 @@ export default abstract class Tokenizer extends CommentsParser {
 
         default:
           if (isWhitespace(ch)) {
-            ++this.state.pos;
+            ++pos;
           } else if (
             ch === charCodes.dash &&
             !this.inModule &&
             this.optionFlags & OptionFlags.AnnexB
           ) {
-            const pos = this.state.pos;
             if (
-              this.input.charCodeAt(pos + 1) === charCodes.dash &&
-              this.input.charCodeAt(pos + 2) === charCodes.greaterThan &&
+              input.charCodeAt(pos + 1) === charCodes.dash &&
+              input.charCodeAt(pos + 2) === charCodes.greaterThan &&
               (spaceStart === 0 || this.state.lineStart > spaceStart)
             ) {
               // A `-->` line comment
+              this.state.pos = pos;
               const comment = this.skipLineComment(3);
+              pos = this.state.pos;
               if (comment !== undefined) {
                 this.addComment(comment);
                 if (attachComment) {
@@ -479,14 +487,15 @@ export default abstract class Tokenizer extends CommentsParser {
             !this.inModule &&
             this.optionFlags & OptionFlags.AnnexB
           ) {
-            const pos = this.state.pos;
             if (
-              this.input.charCodeAt(pos + 1) === charCodes.exclamationMark &&
-              this.input.charCodeAt(pos + 2) === charCodes.dash &&
-              this.input.charCodeAt(pos + 3) === charCodes.dash
+              input.charCodeAt(pos + 1) === charCodes.exclamationMark &&
+              input.charCodeAt(pos + 2) === charCodes.dash &&
+              input.charCodeAt(pos + 3) === charCodes.dash
             ) {
               // `<!--`, an XML-style comment that should be interpreted as a line comment
+              this.state.pos = pos;
               const comment = this.skipLineComment(4);
+              pos = this.state.pos;
               if (comment !== undefined) {
                 this.addComment(comment);
                 if (attachComment) {
@@ -501,6 +510,7 @@ export default abstract class Tokenizer extends CommentsParser {
           }
       }
     }
+    this.state.pos = pos;
 
     if (comments?.length) {
       const end = this.state.pos;
