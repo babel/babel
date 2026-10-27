@@ -12,7 +12,6 @@ import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { collectScopeInfo, registerReplacement } from "./scope.ts";
 import { needsLowering } from "./util.ts";
 
-type Param = t.Function["params"][number];
 type Binding = Scope["bindings"][string];
 
 interface ConflictState {
@@ -20,7 +19,10 @@ interface ConflictState {
   functionScope: Scope;
   /** The index of the parameter being visited. */
   index: number;
-  isLowered: boolean;
+  /** The nodes of the patterns moved into the body. */
+  movedNodes: ReadonlySet<t.Node>;
+  /** How many moved patterns the visited node is nested in. */
+  movedDepth: number;
   conflict: boolean;
 }
 
@@ -36,32 +38,45 @@ function isRedeclaredInBody(binding: Binding): boolean {
   );
 }
 
-// If another parameter (e.g. a default value) references a binding that
-// will be moved into the body, or if a lowered parameter references an outer
-// binding that is shadowed in the body, moving things around would change
-// what the references resolve to.
+// If a part of the parameter list (e.g. a default value) references a
+// binding that will be moved into the body, or if a moved pattern references
+// an outer binding that is shadowed in the body, moving things around would
+// change what the references resolve to.
 const conflictVisitor: Visitor<ConflictState> = {
   "TypeAnnotation|TSTypeAnnotation|TypeParameterDeclaration|TSTypeParameterDeclaration"(
     path,
   ) {
     path.skip();
   },
+  ObjectPattern: {
+    enter(path, state) {
+      if (state.movedNodes.has(path.node)) state.movedDepth++;
+    },
+    exit(path, state) {
+      if (state.movedNodes.has(path.node)) state.movedDepth--;
+    },
+  },
   ReferencedIdentifier(path, state) {
     const { name } = path.node;
     const { ownerOf, functionScope } = state;
     const owner = ownerOf.get(name);
-    const binding = functionScope.getOwnBinding(name);
-    if (
-      (owner !== undefined &&
-        owner !== state.index &&
-        path.scope.getBinding(name) === functionScope.getBinding(name)) ||
-      (owner === undefined &&
-        binding &&
-        state.isLowered &&
-        // A parameter redeclared in the body is a different binding there,
-        // e.g. for closures: function f({ a = () => x }, x) { var x; }
-        (binding.kind !== "param" || isRedeclaredInBody(binding)))
-    ) {
+    const inMoved = state.movedDepth > 0;
+    let conflict: boolean;
+    if (owner !== undefined) {
+      // A name bound by a moved pattern, only initialized in the body, is
+      // read by another parameter or by a part of its own parameter staying
+      // in the list, e.g. function f([{ ...r }, b = r]) {}
+      conflict =
+        (owner !== state.index || !inMoved) &&
+        path.scope.getBinding(name) === functionScope.getBinding(name);
+    } else {
+      const binding = inMoved && functionScope.getOwnBinding(name);
+      // A parameter redeclared in the body is a different binding there,
+      // e.g. for closures: function f({ a = () => x }, x) { var x; }
+      conflict =
+        !!binding && (binding.kind !== "param" || isRedeclaredInBody(binding));
+    }
+    if (conflict) {
       state.conflict = true;
       path.stop();
     }
@@ -69,12 +84,60 @@ const conflictVisitor: Visitor<ConflictState> = {
 };
 
 /**
- * Replace parameters containing object rest or private keys with a
- * temporary identifier, destructured at the beginning of the function body.
+ * Collect the patterns of a parameter that are moved into the function body:
+ * the object patterns that need to be lowered. An array pattern stays in the
+ * parameter list, iterating its argument in order with the elements that
+ * don't need to be lowered: only the ones that do are replaced by
+ * temporaries.
+ */
+function collectMovedPatterns(
+  param: NodePath,
+  features: number,
+  moved: NodePath<t.ObjectPattern>[],
+) {
+  if (param.isAssignmentPattern()) {
+    collectMovedPatterns(param.get("left"), features, moved);
+  } else if (param.isRestElement()) {
+    collectMovedPatterns(param.get("argument"), features, moved);
+  } else if (param.isObjectPattern()) {
+    moved.push(param);
+  } else if (param.isArrayPattern()) {
+    for (const element of param.get("elements")) {
+      if (element.node && needsLowering(element.node, features)) {
+        collectMovedPatterns(element, features, moved);
+      }
+    }
+  }
+}
+
+/**
+ * Whether the parts of a lowered parameter staying in the parameter list,
+ * around the moved patterns, can run user code: its default values, and the
+ * iteration of its array patterns.
+ */
+function isNativePartObservable(param: t.Node, scope: Scope): boolean {
+  switch (param.type) {
+    case "AssignmentPattern":
+      return (
+        isDefaultEvaluationObservable(param.right, scope) ||
+        isNativePartObservable(param.left, scope)
+      );
+    case "RestElement":
+      return isNativePartObservable(param.argument, scope);
+    case "ArrayPattern":
+      return true;
+    default:
+      return false;
+  }
+}
+
+/**
+ * Replace the parameter patterns containing object rest or private keys with
+ * a temporary identifier, destructured at the beginning of the function body.
  *
  *   function f({ a, ...b }, [c, { ...d }]) {}
  * becomes
- *   function f(_ref, [c, _ref2]) { var { a, ...b } = _ref, { ...d } = _ref2; }
+ *   function f(_ref, [c, _ref2]) { var { a, ...b } = _ref; var { ...d } = _ref2; }
  *
  * The declarations are then lowered by the VariableDeclaration visitor.
  */
@@ -109,14 +172,22 @@ export function transformFunctionParams(
   const functionScope = path.scope;
   const keepArgumentsUnmapped = readsMappedArguments(path);
 
-  // Names bound by parameters that will be moved into the function body.
+  const movedPatterns: NodePath<t.ObjectPattern>[] = [];
+  // Names bound by the patterns moved into the function body, by parameter.
   const ownerOf = new Map<string, number>();
   params.forEach((param, i) => {
     if (!isLowered[i]) return;
-    for (const name of Object.keys(param.getBindingIdentifiers())) {
-      ownerOf.set(name, i);
+    const start = movedPatterns.length;
+    collectMovedPatterns(param, features, movedPatterns);
+    for (const pattern of movedPatterns.slice(start)) {
+      for (const name of Object.keys(pattern.getBindingIdentifiers())) {
+        ownerOf.set(name, i);
+      }
     }
   });
+  const movedNodes = new Set<t.Node>(
+    movedPatterns.map(pattern => pattern.node),
+  );
 
   let conflictIndex = -1;
   for (let i = 0; i < params.length; i++) {
@@ -124,7 +195,9 @@ export function transformFunctionParams(
       ownerOf,
       functionScope,
       index: i,
-      isLowered: isLowered[i],
+      movedNodes,
+      // The traversal doesn't visit the parameter itself
+      movedDepth: movedNodes.has(params[i].node) ? 1 : 0,
       conflict: false,
     };
     params[i].traverse(conflictVisitor, state);
@@ -144,18 +217,13 @@ export function transformFunctionParams(
     return binding && isRedeclaredInBody(binding);
   });
 
-  // The lowered parameters are destructured in the body: the following
+  // The moved patterns are destructured in the body: the following
   // parameters must not be evaluated before them.
   const reordered = params.some((param, i) => {
     if (i <= firstLowered) return false;
-    if (!isLowered[i]) {
-      return isParamEvaluationObservable(param.node, functionScope);
-    }
-    // Only the default value of a lowered parameter stays in the list
-    return (
-      param.isAssignmentPattern() &&
-      isDefaultEvaluationObservable(param.node.right, functionScope)
-    );
+    return isLowered[i]
+      ? isNativePartObservable(param.node, functionScope)
+      : isParamEvaluationObservable(param.node, functionScope);
   });
 
   // The parameters of generators are initialized when they are called, not
@@ -199,30 +267,17 @@ export function transformFunctionParams(
 
   const declarations: t.VariableDeclaration[] = [];
   const newParams: NodePath<t.Identifier>[] = [];
-
-  function replaceParam(
-    paramPath: NodePath<Param | t.AssignmentPattern["left"]>,
-  ) {
-    if (paramPath.isAssignmentPattern()) {
-      replaceParam(paramPath.get("left"));
-    } else if (paramPath.isRestElement()) {
-      replaceParam(paramPath.get("argument"));
-    } else if (paramPath.isObjectPattern() || paramPath.isArrayPattern()) {
-      const uid = functionScope.generateUidIdentifier("ref");
-      uid.typeAnnotation = paramPath.node.typeAnnotation;
-      declarations.push(
-        t.variableDeclaration("var", [
-          t.variableDeclarator(paramPath.node, t.cloneNode(uid)),
-        ]),
-      );
-      const [newParam] = paramPath.replaceWith(uid);
-      newParams.push(newParam);
-    }
+  for (const pattern of movedPatterns) {
+    const uid = functionScope.generateUidIdentifier("ref");
+    uid.typeAnnotation = pattern.node.typeAnnotation;
+    declarations.push(
+      t.variableDeclaration("var", [
+        t.variableDeclarator(pattern.node, t.cloneNode(uid)),
+      ]),
+    );
+    const [newParam] = pattern.replaceWith(uid);
+    newParams.push(newParam);
   }
-
-  params.forEach((param, i) => {
-    if (isLowered[i]) replaceParam(param);
-  });
 
   path.ensureBlock();
   const body = path.get("body") as NodePath<t.BlockStatement>;
