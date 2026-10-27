@@ -4,6 +4,7 @@ import type { NodePath, Visitor } from "@babel/core";
 import {
   getIIFEVisitor,
   collectShadowedParamsNames,
+  hasDirectEval,
   wrapBodyInScopeIIFE,
 } from "./shadow-utils.ts";
 
@@ -356,7 +357,11 @@ export default function convertFunctionRest(
     const pattern = rest;
     rest = scope.generateUidIdentifier("ref");
 
-    declar = t.variableDeclaration("let", [
+    // A direct eval of the body can redeclare the bindings with `var`, which
+    // would conflict with a lexical declaration (not with one before an IIFE).
+    const kind =
+      init || insertBeforeBody || !hasDirectEval(path) ? "let" : "var";
+    declar = t.variableDeclaration(kind, [
       t.variableDeclarator(pattern, t.cloneNode(rest)),
     ]);
     path.ensureBlock();
