@@ -1,10 +1,73 @@
 import { template, types as t, traverse } from "@babel/core";
-import type { NodePath, Scope, Visitor } from "@babel/core";
+import type { File, NodePath, Scope, Visitor } from "@babel/core";
 
 type State = {
   needsOuterBinding: boolean;
   scope: Scope;
 };
+
+// We can't use a symbol because this needs to always be the same, even if
+// this package isn't deduped by npm.
+const globalsUsageKey = "@babel/plugin-transform-parameters/globalsUsage";
+
+interface GlobalsUsage {
+  /** `arguments` is referenced outside of arrow functions */
+  arguments: boolean;
+  eval: boolean;
+}
+
+/**
+ * Record whether the file reads `arguments` or calls `eval` at all. It must
+ * be recorded before the file is transformed (in the `pre` hook of the
+ * plugins): the output of the plugins reads `arguments`. Most files don't,
+ * which saves traversing every function with non-simple parameters.
+ */
+export function recordArgumentsUsage(file: File) {
+  if (file.get(globalsUsageKey) === undefined) {
+    const { globals } = file.scope;
+    const has = (name: string) =>
+      Object.prototype.hasOwnProperty.call(globals, name);
+    const usage: GlobalsUsage = {
+      arguments: has("arguments"),
+      eval: has("eval"),
+    };
+    file.set(globalsUsageKey, usage);
+  }
+}
+
+export function getGlobalsUsage(path: NodePath): GlobalsUsage | undefined {
+  return (path.hub as { file?: File } | undefined)?.file?.get(globalsUsageKey);
+}
+
+/**
+ * Whether the body of the function contains a direct `eval` call, outside of
+ * nested functions (whose `var` declarations don't reach it): it can declare
+ * `var`s named like the parameters, which would conflict with the lexical
+ * declarations initializing the parameters moved into the body.
+ */
+export function hasDirectEval(path: NodePath<t.Function>): boolean {
+  if (getGlobalsUsage(path)?.eval === false) return false;
+  const visit = (node: t.Node): boolean => {
+    if (t.isFunction(node)) return false;
+    if (
+      t.isCallExpression(node) &&
+      t.isIdentifier(node.callee, { name: "eval" })
+    ) {
+      return true;
+    }
+    for (const key of t.VISITOR_KEYS[node.type]) {
+      // @ts-expect-error key is a visitor key of node
+      const value: t.Node | null | (t.Node | null)[] = node[key];
+      if (Array.isArray(value)) {
+        if (value.some(child => child && visit(child))) return true;
+      } else if (value && visit(value)) {
+        return true;
+      }
+    }
+    return false;
+  };
+  return visit(path.node.body);
+}
 
 let iifeVisitor: Visitor<State>;
 /**
