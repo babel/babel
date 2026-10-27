@@ -1,0 +1,55 @@
+{
+  "type": "File",
+  "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":14,"index":18}},
+  "errors": [
+    "SyntaxError: Unexpected keyword 'if'. (2:0)",
+    "SyntaxError: Escape sequence in keyword if. (2:0)",
+    "SyntaxError: Missing semicolon. (2:7)",
+    "SyntaxError: Missing semicolon. (2:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":14,"index":18}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":7,"index":11}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":11,"loc":{"start":{"line":2,"column":0,"index":4},"end":{"line":2,"column":7,"index":11}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":11,"loc":{"start":{"line":2,"column":0,"index":4},"end":{"line":2,"column":7,"index":11},"identifierName":"if"},
+              "name": "if"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":12,"end":15,"loc":{"start":{"line":2,"column":8,"index":12},"end":{"line":2,"column":11,"index":15}},
+        "expression": {
+          "type": "Identifier",
+          "start":13,"end":14,"loc":{"start":{"line":2,"column":9,"index":13},"end":{"line":2,"column":10,"index":14},"identifierName":"x"},
+          "name": "x",
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 12
+          }
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":16,"end":18,"loc":{"start":{"line":2,"column":12,"index":16},"end":{"line":2,"column":14,"index":18}},
+        "body": [],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}
