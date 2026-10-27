@@ -2,19 +2,21 @@ import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 import convertFunctionParams, {
   readsMappedArguments,
-  recordArgumentsUsage,
   unmapArguments,
 } from "./params.ts";
 import convertFunctionRest from "./rest.ts";
+import { recordArgumentsUsage } from "./shadow-utils.ts";
 export { convertFunctionParams };
 export {
   isDefaultEvaluationObservable,
   isParamEvaluationObservable,
   readsMappedArguments,
-  recordArgumentsUsage,
   unmapArguments,
 } from "./params.ts";
-export { preserveAnnexBParameterExclusions } from "./shadow-utils.ts";
+export {
+  preserveAnnexBParameterExclusions,
+  recordArgumentsUsage,
+} from "./shadow-utils.ts";
 
 export interface Options {
   /** @deprecated Use the `ignoreFunctionLength` assumption instead. */

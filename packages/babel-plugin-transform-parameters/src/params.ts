@@ -1,7 +1,6 @@
 import {
   template,
   types as t,
-  type File,
   type NodePath,
   type Scope,
   type Visitor,
@@ -11,6 +10,8 @@ import convertFunctionRest from "./rest.ts";
 import {
   getIIFEVisitor,
   collectShadowedParamsNames,
+  getGlobalsUsage,
+  hasDirectEval,
   wrapBodyInScopeIIFE,
 } from "./shadow-utils.ts";
 
@@ -211,27 +212,6 @@ function shadowsArguments(
     : binding.scope.path.isDescendant(fn);
 }
 
-// We can't use a symbol because this needs to always be the same, even if
-// this package isn't deduped by npm.
-const argumentsUsageKey = "@babel/plugin-transform-parameters/argumentsUsage";
-
-/**
- * Record whether the file reads `arguments` or calls `eval` at all. It must
- * be recorded before the file is transformed (in the `pre` hook of the
- * plugins): the output of the plugins reads `arguments`. Most files don't,
- * which saves traversing every function with non-simple parameters.
- */
-export function recordArgumentsUsage(file: File) {
-  if (file.get(argumentsUsageKey) === undefined) {
-    const { globals } = file.scope;
-    file.set(
-      argumentsUsageKey,
-      Object.prototype.hasOwnProperty.call(globals, "arguments") ||
-        Object.prototype.hasOwnProperty.call(globals, "eval"),
-    );
-  }
-}
-
 /**
  * In sloppy mode, a function whose parameter list is simple
  * (IsSimpleParameterList) has a mapped `arguments` object: assigning a
@@ -247,8 +227,8 @@ export function readsMappedArguments(path: NodePath<t.Function>): boolean {
   // A direct eval also reads the explicit binding when `arguments` is shadowed.
   if (shadowsArguments(path.scope.getOwnBinding("arguments"), path))
     return false;
-  const file = (path.hub as { file?: File } | undefined)?.file;
-  if (file?.get(argumentsUsageKey) === false) return false;
+  const usage = getGlobalsUsage(path);
+  if (usage && !usage.arguments && !usage.eval) return false;
   const state: ArgumentsUsage = {
     fn: path,
     readsElements: false,
@@ -389,6 +369,14 @@ export default function convertFunctionParams(
     }
   }
 
+  const { generator } = node;
+  const needsIIFE =
+    generator || state.needsOuterBinding || shadowedParams.size > 0;
+  // A direct eval of the body can redeclare the parameters with `var`, which
+  // would conflict with the lexical declarations initializing them.
+  const declarationKind =
+    !needsIIFE && hasDirectEval(path) ? "var" : ("let" as const);
+
   let firstOptionalIndex = null;
   let restNodes: t.Statement[] | undefined;
 
@@ -420,14 +408,14 @@ export default function convertFunctionParams(
         param.replaceWith(left.node);
       } else if (left.isObjectPattern() || left.isArrayPattern()) {
         const paramName = scope.generateUidIdentifier();
-        body.push(
-          buildLooseDestructuredDefaultParam({
-            ASSIGNMENT_IDENTIFIER: left.node,
-            DEFAULT_VALUE: right.node,
-            PARAMETER_NAME: t.cloneNode(paramName),
-            UNDEFINED: undefinedNode,
-          }),
-        );
+        const defNode = buildLooseDestructuredDefaultParam({
+          ASSIGNMENT_IDENTIFIER: left.node,
+          DEFAULT_VALUE: right.node,
+          PARAMETER_NAME: t.cloneNode(paramName),
+          UNDEFINED: undefinedNode,
+        }) as t.VariableDeclaration;
+        defNode.kind = declarationKind;
+        body.push(defNode);
         param.replaceWith(paramName);
       }
     } else if (paramIsAssignmentPattern) {
@@ -440,7 +428,8 @@ export default function convertFunctionParams(
         VARIABLE_NAME: left.node,
         DEFAULT_VALUE: right.node,
         ARGUMENT_KEY: t.numericLiteral(i - argumentsOffset),
-      });
+      }) as t.VariableDeclaration;
+      defNode.kind = declarationKind;
       body.push(defNode);
     } else if (param.isRestElement()) {
       // The rest parameter is usually converted before calling this function,
@@ -454,7 +443,8 @@ export default function convertFunctionParams(
       const defNode = buildSafeArgumentsAccess([
         param.node,
         t.numericLiteral(i - argumentsOffset),
-      ]);
+      ]) as t.VariableDeclaration;
+      defNode.kind = declarationKind;
       body.push(defNode);
     } else if (param.isObjectPattern() || param.isArrayPattern()) {
       const uid = path.scope.generateUidIdentifier("ref");
@@ -463,7 +453,7 @@ export default function convertFunctionParams(
       newParam.typeAnnotation = param.node.typeAnnotation;
       param.node.typeAnnotation = null;
 
-      const defNode = t.variableDeclaration("let", [
+      const defNode = t.variableDeclaration(declarationKind, [
         t.variableDeclarator(param.node, uid),
       ]);
       body.push(defNode);
@@ -473,10 +463,6 @@ export default function convertFunctionParams(
 
     body.push(...transformedRestNodes);
   }
-
-  const { generator } = node;
-  const needsIIFE =
-    generator || state.needsOuterBinding || shadowedParams.size > 0;
 
   if (restNodes) {
     // The destructuring of the rest parameter happens after it is initialized
