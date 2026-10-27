@@ -24,6 +24,7 @@ import {
   isStablePropertyKey,
   isTemporary,
   markTemporary,
+  mayRunUserCode,
   needsLowering,
   propertyNeedsLowering,
   splitArrayPattern,
@@ -853,11 +854,16 @@ export class Lowering {
       ref.discarded = true;
       const elisionToUndefined = (el: t.ArrayExpression["elements"][number]) =>
         el ? t.cloneNode(el as t.Expression) : t.buildUndefinedNode();
+      // Coercions are evaluated in temporaries before any target is bound.
+      // Earlier mutable reads must be captured before those coercions too.
+      const lastCoercion = ref.expr.elements.findLastIndex(
+        element => element && mayRunUserCode(element),
+      );
       // An element that could throw, or be affected by the effects of an
       // earlier target, is evaluated before any target is assigned.
       const values = ref.expr.elements.map((element, i) =>
         (
-          i > effectfulFrom
+          i > effectfulFrom || i < lastCoercion
             ? isSafeToEvaluate(element, this.scope)
             : isSafeUnpackedElement(element, this.scope)
         )
