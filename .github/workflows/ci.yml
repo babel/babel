@@ -801,7 +801,7 @@ jobs:
       - name: Install
         run: yarn install
       - name: Build
-        run: make build-bundle
+        run: yarn gulp build
         env:
           NODE_ENV: "production"
           BABEL_ENV: "production"
@@ -811,4 +811,4 @@ jobs:
         uses: CodSpeedHQ/action@v4
         with:
           mode: walltime
-          run: node --expose-gc ./benchmark/index.mjs --only-current
+          run: node --expose-gc --no-allocation-site-pretenuring ./benchmark/index.mjs --only-current
