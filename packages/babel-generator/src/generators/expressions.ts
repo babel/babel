@@ -86,18 +86,15 @@ export function NewExpression(
   node: t.NewExpression,
   parent: t.Node,
 ) {
+  const omitArguments =
+    this.format.minified && node.arguments.length === 0 && !node.typeArguments;
+  const wrapInParens = omitArguments && hasPostfixPart(node, parent);
+  if (wrapInParens) this.token("(");
   this.word("new");
   this.space();
   this.print(node.callee);
-  // Omit `()` in minified output, unless a postfix part would then extend
-  // the callee instead (e.g. `new F()?.b` vs `new F?.b`), or `()` is needed
-  // to print the type arguments.
-  if (
-    this.format.minified &&
-    node.arguments.length === 0 &&
-    !node.typeArguments &&
-    !hasPostfixPart(node, parent)
-  ) {
+  if (omitArguments) {
+    if (wrapInParens) this.token(")");
     return;
   }
 

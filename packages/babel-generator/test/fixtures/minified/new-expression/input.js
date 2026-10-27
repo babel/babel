@@ -14,3 +14,7 @@ new new x(a)(a);
 
 a[new F];
 new G(new F);
+
+new F().x.y;
+new F()[0];
+new (new F)().x;
