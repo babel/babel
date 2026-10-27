@@ -7,16 +7,28 @@ type State = {
 };
 
 let iifeVisitor: Visitor<State>;
+/**
+ * Whether the parameters reference a name declared by the function body,
+ * which they can't see: the body must be moved into an IIFE, so that its
+ * declarations don't shadow the outer binding for the parameters moved into
+ * the body.
+ */
 export const getIIFEVisitor: () => Visitor<State> = () =>
   (iifeVisitor ??= traverse.explode({
     "ReferencedIdentifier|BindingIdentifier"(path, state) {
       const { scope, node } = path;
       const { name } = node;
 
+      if (name !== "eval" && !state.scope.hasOwnBinding(name)) return;
+      const binding = scope.getBinding(name);
       if (
         name === "eval" ||
-        (scope.getBinding(name) === state.scope.parent!.getBinding(name) &&
-          state.scope.hasOwnBinding(name))
+        binding === state.scope.parent!.getBinding(name) ||
+        // A rest element is not a scope: unlike in the other parameters, the
+        // references of its pattern resolve to the declarations of the body.
+        (binding?.scope === state.scope &&
+          binding.kind !== "param" &&
+          binding.kind !== "local")
       ) {
         state.needsOuterBinding = true;
         path.stop();
