@@ -1,4 +1,4 @@
-import { types as t, traverse } from "@babel/core";
+import { template, types as t, traverse } from "@babel/core";
 import type { NodePath, Scope, Visitor } from "@babel/core";
 
 type State = {
@@ -198,10 +198,7 @@ export function preserveAnnexBParameterExclusions(
   return modified;
 }
 
-export function buildScopeIIFE(
-  shadowedParams: Set<string>,
-  body: t.BlockStatement,
-) {
+function buildScopeIIFE(shadowedParams: Set<string>, body: t.BlockStatement) {
   const args = [];
   const params = [];
 
@@ -214,4 +211,64 @@ export function buildScopeIIFE(
   return t.returnStatement(
     t.callExpression(t.arrowFunctionExpression(params, body), args),
   );
+}
+
+/**
+ * Move the body of the function into an IIFE called with the parameters it
+ * redeclares (`shadowedParams`), after the statements of `before`: its
+ * declarations don't shadow the outer bindings for the parameters moved
+ * before it. `paramNames` are the names bound by the original parameters.
+ * Generators and async functions initialize their parameters when they are
+ * called: the IIFE takes over the generator or async nature of the function.
+ * Returns the path of the IIFE callee (an arrow function, unless it had to
+ * be converted to a function expression), and the statement list where the
+ * parameters are initialized, before the IIFE: the body of the function, or
+ * of the `try` statement rejecting the errors of an async function.
+ */
+export function wrapBodyInScopeIIFE(
+  path: NodePath<t.Function>,
+  shadowedParams: Set<string>,
+  paramNames: ReadonlySet<string>,
+  before: t.Statement[] = [],
+): {
+  callee: NodePath<t.ArrowFunctionExpression | t.FunctionExpression>;
+  init: t.Statement[];
+} {
+  path.ensureBlock();
+  const path2 = path as NodePath<t.Function & { body: t.BlockStatement }>;
+  const { node } = path2;
+  const { async, generator } = node;
+
+  // The body becomes the body of the IIFE, whose parameters are only the
+  // shadowed ones: its block functions named like the other parameters
+  // would be hoisted (Annex B).
+  preserveAnnexBParameterExclusions(path2.get("body"), paramNames);
+  path.set(
+    "body",
+    t.blockStatement([...before, buildScopeIIFE(shadowedParams, node.body)]),
+  );
+  const statements = path2.get("body.body");
+  const callee = statements[statements.length - 1].get(
+    "argument.callee",
+  ) as NodePath<t.ArrowFunctionExpression | t.FunctionExpression>;
+  if (!generator && !async) return { callee, init: node.body.body };
+
+  // This is an IIFE, so we don't need to worry about the noNewArrows assumption
+  (callee as NodePath<t.ArrowFunctionExpression>).arrowFunctionToExpression();
+  callee.node.generator = generator;
+  callee.node.async = async;
+  node.generator = false;
+  node.async = false;
+  if (!async || generator) return { callee, init: node.body.body };
+
+  // If the initialization of a parameter throws, it must reject asynchronously.
+  const tryStatement = template.statement.ast`
+    try {
+      ${node.body.body}
+    } catch (e) {
+      return Promise.reject(e);
+    }
+  ` as t.TryStatement;
+  node.body = t.blockStatement([tryStatement]);
+  return { callee, init: tryStatement.block.body };
 }
