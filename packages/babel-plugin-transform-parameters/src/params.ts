@@ -11,8 +11,7 @@ import convertFunctionRest from "./rest.ts";
 import {
   getIIFEVisitor,
   collectShadowedParamsNames,
-  preserveAnnexBParameterExclusions,
-  buildScopeIIFE,
+  wrapBodyInScopeIIFE,
 } from "./shadow-utils.ts";
 
 const buildDefaultParam = template.statement(`
@@ -475,7 +474,7 @@ export default function convertFunctionParams(
     body.push(...transformedRestNodes);
   }
 
-  const { async, generator } = node;
+  const { generator } = node;
   const needsIIFE =
     generator || state.needsOuterBinding || shadowedParams.size > 0;
 
@@ -515,35 +514,17 @@ export default function convertFunctionParams(
   const path2 = path as NodePath<typeof path.node & { body: t.BlockStatement }>;
 
   if (needsIIFE) {
-    preserveAnnexBParameterExclusions(path2.get("body"), paramNames);
-    body.push(buildScopeIIFE(shadowedParams, path2.node.body));
-
-    path.set("body", t.blockStatement(body));
-
+    const { callee } = wrapBodyInScopeIIFE(
+      path,
+      shadowedParams,
+      paramNames,
+      body,
+    );
     // We inject an arrow and then transform it to a normal function, to be
     // sure that we correctly handle this and arguments.
-    const bodyPath = path2.get("body.body");
-    const arrowPath = bodyPath[bodyPath.length - 1].get(
-      "argument.callee",
-    ) as NodePath<t.ArrowFunctionExpression>;
-
-    // This is an IIFE, so we don't need to worry about the noNewArrows assumption
-    arrowPath.arrowFunctionToExpression();
-
-    arrowPath.node.generator = generator;
-    arrowPath.node.async = async;
-
-    node.generator = false;
-    node.async = false;
-    if (async && !generator) {
-      // If the default value of a parameter throws, it must reject asynchronously.
-      path2.node.body = template.statement.ast`{
-        try {
-          ${path2.node.body.body}
-        } catch (e) {
-          return Promise.reject(e);
-        }
-      }` as t.BlockStatement;
+    if (callee.isArrowFunctionExpression()) {
+      // This is an IIFE, so we don't need to worry about the noNewArrows assumption
+      callee.arrowFunctionToExpression();
     }
   } else {
     path2.get("body").unshiftContainer("body", body);
