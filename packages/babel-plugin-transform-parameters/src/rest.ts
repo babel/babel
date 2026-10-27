@@ -4,7 +4,7 @@ import type { NodePath, Visitor } from "@babel/core";
 import {
   getIIFEVisitor,
   collectShadowedParamsNames,
-  buildScopeIIFE,
+  wrapBodyInScopeIIFE,
 } from "./shadow-utils.ts";
 
 const buildRest = template.statement(`
@@ -306,6 +306,10 @@ export default function convertFunctionRest(
     `params.${node.params.length - 1}.argument`,
   ) as NodePath<t.ArrayPattern | t.ObjectPattern | t.Identifier>;
 
+  // The statements initializing the rest parameter are inserted at the
+  // beginning of this list: the body, unless it is moved into an IIFE.
+  let init: t.Statement[] | undefined;
+
   if (!restPath.isIdentifier() && !insertBeforeBody) {
     const shadowedParams = new Set<string>();
     collectShadowedParamsNames(restPath, path.scope, shadowedParams);
@@ -321,13 +325,12 @@ export default function convertFunctionRest(
     }
 
     if (needsIIFE) {
-      path.ensureBlock();
-      path.set(
-        "body",
-        t.blockStatement([
-          buildScopeIIFE(shadowedParams, path.node.body as t.BlockStatement),
-        ]),
+      const paramNames = new Set(
+        node.params.flatMap(param =>
+          Object.keys(t.getBindingIdentifiers(param)),
+        ),
       );
+      init = wrapBodyInScopeIIFE(path, shadowedParams, paramNames).init;
     }
   }
 
@@ -345,7 +348,8 @@ export default function convertFunctionRest(
       t.variableDeclarator(pattern, t.cloneNode(rest)),
     ]);
     path.ensureBlock();
-    (node.body as t.BlockStatement).body.unshift(declar);
+    init ??= (node.body as t.BlockStatement).body;
+    init.unshift(declar);
   } else if (rest.name === "arguments") {
     scope.rename(rest.name);
   }
@@ -368,8 +372,7 @@ export default function convertFunctionRest(
 
   const statementsBeforeBody: t.Statement[] = [];
   if (insertBeforeBody && declar) {
-    const { body } = node.body as t.BlockStatement;
-    body.splice(body.indexOf(declar), 1);
+    init!.splice(init!.indexOf(declar), 1);
     statementsBeforeBody.push(declar);
   }
 
@@ -434,7 +437,8 @@ export default function convertFunctionRest(
   if (insertBeforeBody) {
     insertBeforeBody([loop, ...statementsBeforeBody]);
   } else if (state.deopted) {
-    (node.body as t.BlockStatement).body.unshift(loop);
+    path.ensureBlock();
+    (init ?? (node.body as t.BlockStatement).body).unshift(loop);
   } else {
     let target = path
       .getEarliestCommonAncestorFrom(state.references)
