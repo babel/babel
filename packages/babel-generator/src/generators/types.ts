@@ -28,7 +28,7 @@ export function Identifier(this: Printer, node: t.Identifier) {
 
   let name = this.tokenMap ? lastRawIdentResult : node.name;
   if (name === "of" && this.tokenContext & TokenContext.usingForOfBinding) {
-    name = "\\u006ff";
+    name = "o\\u0066";
   }
   this.word(name);
 }
