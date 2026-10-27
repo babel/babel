@@ -131,7 +131,8 @@ interface ArgumentsUsage {
   readsElements: boolean;
   /**
    * `arguments` is written, or escapes: as a whole, or through a direct
-   * `eval`. The mapping is observable.
+   * `eval`; or its `callee` is read, which throws when it is unmapped. The
+   * mapping is observable.
    */
   escapes: boolean;
 }
@@ -164,8 +165,15 @@ const argumentsVisitor: Visitor<ArgumentsUsage> = {
       const { property, computed } = parentPath.node;
       // `arguments.length` is not mapped
       if (!computed && t.isIdentifier(property, { name: "length" })) return;
-      state.readsElements = true;
-      return;
+      // `callee` is a throwing accessor of unmapped arguments objects
+      if (
+        computed
+          ? !t.isStringLiteral(property, { value: "callee" })
+          : !t.isIdentifier(property, { name: "callee" })
+      ) {
+        state.readsElements = true;
+        return;
+      }
     }
     state.escapes = true;
     path.stop();
@@ -232,7 +240,8 @@ export function recordArgumentsUsage(file: File) {
  * default, rest or destructuring parameters have an unmapped `arguments`
  * object. This returns whether a function with such parameters could observe
  * the mapping once its parameter list is simple: `arguments` is written or
- * escapes, or its elements are read while a parameter is assigned.
+ * escapes, its `callee` is read (an accessor throwing a TypeError when it is
+ * unmapped), or its elements are read while a parameter is assigned.
  */
 export function readsMappedArguments(path: NodePath<t.Function>): boolean {
   if (path.isArrowFunctionExpression() || path.isInStrictMode()) return false;
