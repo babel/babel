@@ -310,18 +310,30 @@ export default function convertFunctionRest(
   // beginning of this list: the body, unless it is moved into an IIFE.
   let init: t.Statement[] | undefined;
 
-  if (!restPath.isIdentifier() && !insertBeforeBody) {
+  if (!insertBeforeBody) {
     const shadowedParams = new Set<string>();
-    collectShadowedParamsNames(restPath, path.scope, shadowedParams);
-
-    let needsIIFE = shadowedParams.size > 0;
-    if (!needsIIFE) {
-      const state = {
-        needsOuterBinding: false,
-        scope,
-      };
-      restPath.traverse(getIIFEVisitor(), state);
-      needsIIFE = state.needsOuterBinding;
+    let needsIIFE: boolean;
+    if (restPath.isIdentifier()) {
+      // The array is built in the body, after its function declarations are
+      // initialized: one redeclaring the parameter would be overwritten.
+      const { name } = restPath.node;
+      needsIIFE = !!scope
+        .getOwnBinding(name)
+        ?.constantViolations.some(violation =>
+          violation.isFunctionDeclaration(),
+        );
+      if (needsIIFE) shadowedParams.add(name);
+    } else {
+      collectShadowedParamsNames(restPath, path.scope, shadowedParams);
+      needsIIFE = shadowedParams.size > 0;
+      if (!needsIIFE) {
+        const state = {
+          needsOuterBinding: false,
+          scope,
+        };
+        restPath.traverse(getIIFEVisitor(), state);
+        needsIIFE = state.needsOuterBinding;
+      }
     }
 
     if (needsIIFE) {
