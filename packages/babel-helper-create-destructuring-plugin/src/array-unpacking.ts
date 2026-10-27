@@ -168,6 +168,9 @@ function isEffectfulArrayTarget(
       );
     case "ObjectPattern":
       return true;
+    case "Identifier":
+      // Assigning an undeclared name can call a setter of the global object
+      return !scope.hasBinding(element.name);
     default:
       return false;
   }
