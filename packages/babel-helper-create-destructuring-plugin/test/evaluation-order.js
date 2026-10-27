@@ -31,6 +31,29 @@ function expectSameEvaluation(
 
 const keyExpressions = ["key", "+key", "-key", "~key", "`${key}`", 'key + ""'];
 
+it.each(["+coercible", "`${coercible}`", "coercible + 0"])(
+  "captures earlier array values before coercing %s",
+  expression => {
+    for (const pattern of [
+      "const [first, second]",
+      "let first, second; [first, second]",
+      "const [first, ...second]",
+      "const [[first], second]",
+    ]) {
+      expectSameEvaluation(
+        `let value = 1;
+         const coercible = {
+           valueOf() { value = 2; return 3; },
+           toString() { value = 2; return "three"; }
+         };
+         ${pattern} = [${pattern.includes("[[") ? "[value]" : "value"}, ${expression}];
+         return [first, second];`,
+        FEATURES.destructuring,
+      );
+    }
+  },
+);
+
 it.each([
   `function f({ a, ...rest }, value = 1) { value = 2; return [arguments[1], (() => arguments[0])()]; } return f({ a: 1 }, 3);`,
   `function f({ a, ...rest }, value) { value = 2; return eval("arguments[1]"); } return f({ a: 1 }, 3);`,
