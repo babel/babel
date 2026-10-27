@@ -674,10 +674,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 537, gzip size: 258
+  // size: 436, gzip size: 242
   importDeferProxy: helper(
     "7.23.0",
-    "function _importDeferProxy(e){var t=null,constValue=function(e){return function(){return e}},proxy=function(r){return function(n,o,f){return null===t&&(t=e()),r(t,o,f)}};return new Proxy({},{defineProperty:constValue(!1),deleteProperty:constValue(!1),get:proxy(Reflect.get),getOwnPropertyDescriptor:proxy(Reflect.getOwnPropertyDescriptor),getPrototypeOf:constValue(null),isExtensible:constValue(!1),has:proxy(Reflect.has),ownKeys:proxy(Reflect.ownKeys),preventExtensions:constValue(!0),set:constValue(!1),setPrototypeOf:constValue(!1)})}",
+    "function _importDeferProxy(e){var t=null,r=function(){return!1},n=function(r){return function(n,o,u){return null===t&&(t=e()),r(t,o,u)}};return new Proxy({},{defineProperty:r,deleteProperty:r,get:n(Reflect.get),getOwnPropertyDescriptor:n(Reflect.getOwnPropertyDescriptor),getPrototypeOf:function(){return null},isExtensible:r,has:n(Reflect.has),ownKeys:n(Reflect.ownKeys),preventExtensions:function(){return!0},set:r,setPrototypeOf:r})}",
     {
       globals: ["Proxy", "Reflect"],
       locals: { _importDeferProxy: ["body.0.id"] },
