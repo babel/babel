@@ -1,14 +1,13 @@
 /* @minVersion 7.23.0 */
+/* @mangleFns */
 
 export default function _importDeferProxy<T extends object>(
   init: () => T,
 ): ProxyHandler<T> {
   var ns: T | null = null;
 
-  var constValue = function <V extends boolean | null>(v: V) {
-    return function (): V {
-      return v;
-    };
+  var constFalse = function () {
+    return false;
   };
 
   var proxy = function (run: Function) {
@@ -21,17 +20,21 @@ export default function _importDeferProxy<T extends object>(
   return new Proxy(
     {},
     {
-      defineProperty: constValue(false),
-      deleteProperty: constValue(false),
+      defineProperty: constFalse,
+      deleteProperty: constFalse,
       get: proxy(Reflect.get),
       getOwnPropertyDescriptor: proxy(Reflect.getOwnPropertyDescriptor),
-      getPrototypeOf: constValue(null),
-      isExtensible: constValue(false),
+      getPrototypeOf: function () {
+        return null;
+      },
+      isExtensible: constFalse,
       has: proxy(Reflect.has),
       ownKeys: proxy(Reflect.ownKeys),
-      preventExtensions: constValue(true),
-      set: constValue(false),
-      setPrototypeOf: constValue(false),
+      preventExtensions: function () {
+        return true;
+      },
+      set: constFalse,
+      setPrototypeOf: constFalse,
     },
   );
 }
