@@ -24,11 +24,7 @@
           "start":9,"end":10,"loc":{"start":{"line":2,"column":5,"index":9},"end":{"line":2,"column":6,"index":10},"identifierName":"E"},
           "name": "E"
         },
-        "body": {
-          "type": "TSEnumBody",
-          "start":11,"end":13,"loc":{"start":{"line":2,"column":7,"index":11},"end":{"line":2,"column":9,"index":13}},
-          "members": []
-        }
+        "members": []
       }
     ],
     "directives": []
