@@ -2,11 +2,7 @@ name: CI
 
 on:
   push:
-    # "personal" branches for stacked PRs; will run when opening the PR
-    branches-ignore:
-      - "nicolo-ribaudo/**"
-      - "jlhwung/**"
-      - "liuxingbaoyu/**"
+    branches: ["main"]
   pull_request:
 
 permissions:
@@ -791,23 +787,9 @@ jobs:
 
   codspeed:
     name: Codspeed
-    runs-on: ubuntu-latest
+    runs-on: codspeed-macro-arm64-graviton-ubuntu-22-04
     needs: prepare-yarn-cache
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          # this might remove tools that are actually needed,
-          # if set to "true" but frees about 6 GB
-          tool-cache: false
-          # all of these default to true, but feel free to set to
-          # "false" if necessary for your workflow
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: true
-          swap-storage: true
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use Node.js latest
@@ -819,9 +801,14 @@ jobs:
       - name: Install
         run: yarn install
       - name: Build
-        run: make prepublish-build
+        run: yarn gulp build
+        env:
+          NODE_ENV: "production"
+          BABEL_ENV: "production"
+          STRIP_BABEL_VERSION_FLAG: "true"
+          IS_PUBLISH: "true"
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v4
         with:
           mode: walltime
-          run: node --expose-gc ./benchmark/index.mjs --only-current
+          run: node --expose-gc --no-allocation-site-pretenuring ./benchmark/index.mjs --only-current
