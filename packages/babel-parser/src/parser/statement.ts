@@ -2974,14 +2974,14 @@ export default abstract class StatementParser extends ExpressionParser {
       if (singleBindingType !== "ImportDefaultSpecifier") {
         this.raise(
           Errors.SourcePhaseImportRequiresDefault,
-          specifiers[0].loc.start,
+          node.loc.start,
         );
       }
     } else if (node.phase === "defer") {
       if (singleBindingType !== "ImportNamespaceSpecifier") {
         this.raise(
           Errors.DeferImportRequiresNamespace,
-          specifiers[0].loc.start,
+          node.loc.start,
         );
       }
     } else if (node.module) {
