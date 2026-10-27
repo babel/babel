@@ -76,7 +76,7 @@ function calleeIIFE(a) {
   }(a);
 }
 function shadowedArguments(arguments, _ref) {
-  let {
+  var {
     a
   } = _ref;
   eval("");
@@ -90,7 +90,7 @@ function bodyArguments(a, _ref2) {
   return typeof arguments;
 }
 function lexicalArguments(a, _ref3) {
-  let {
+  var {
     b
   } = _ref3;
   const arguments = 7;
