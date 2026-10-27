@@ -60,20 +60,17 @@ function a7(_ref8 = {}) {
     } = _ref8,
     b1 = babelHelpers.objectWithoutProperties(_ref8, _excluded8);
 }
-function a8(_ref9) {
-  var [_ref0] = _ref9,
-    a1 = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref0), _ref0)), []);
+function a8([_ref9]) {
+  var a1 = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref9), _ref9)), []);
 }
-function a9(_ref1) {
-  var [_ref10] = _ref1,
-    {
+function a9([_ref0]) {
+  var {
       a1
-    } = _ref10,
-    a2 = babelHelpers.objectWithoutProperties(_ref10, _excluded9);
+    } = _ref0,
+    a2 = babelHelpers.objectWithoutProperties(_ref0, _excluded9);
 }
-function a10(_ref11) {
-  var [a1, _ref12] = _ref11,
-    a2 = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref12), _ref12)), []);
+function a10([a1, _ref1]) {
+  var a2 = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref1), _ref1)), []);
 }
 // Unchanged
 function b(a) {}
