@@ -26,10 +26,153 @@ function expectSameEvaluation(
       checkScopeInfo,
     ],
   });
-  expect(evaluate(code)).toEqual(evaluate(source));
+  const actual = evaluate(code);
+  const expected = evaluate(source);
+  if (actual instanceof Promise && expected instanceof Promise) {
+    return Promise.all([actual, expected]).then(([actual, expected]) => {
+      expect(actual).toEqual(expected);
+    });
+  }
+  expect(actual).toEqual(expected);
 }
 
 const keyExpressions = ["key", "+key", "-key", "~key", "`${key}`", 'key + ""'];
+
+it.each([
+  "while (i < 2 && objects.push(OBJECT)) { i++; }",
+  "do { i++; } while (i <= 2 && objects.push(OBJECT));",
+  "for (; i < 2 && objects.push(OBJECT); i++) {}",
+  "for (; i < 2; objects.push(OBJECT), i++) {}",
+  "for (let j = 0; i < 2 && objects.push(OBJECT); i++, j++) {}",
+  "for (var j = 0; i < 2 && objects.push(OBJECT); i++, j++) {}",
+  "for (const j = 0; i < 2 && objects.push(OBJECT); i++) {}",
+  "for (i = 0; i < 2 && objects.push(OBJECT); i++) {}",
+  "outer: inner: for (var j = 0; i < 2 && objects.push(OBJECT); i++) { continue outer; }",
+  "outer: do { i++; continue outer; } while (i <= 2 && objects.push(OBJECT));",
+])("captures each home object in %s", loop => {
+  expectSameEvaluation(
+    `const objects = [];
+     let i = 0;
+     ${loop.replace("OBJECT", "{ ...{}, __proto__: { x: i }, m() { return super.x; } }")}
+     return objects.map(object => object.m());`,
+    FEATURES.objectSpread,
+  );
+});
+
+it.each(["field", "#field"])(
+  "captures each home object in an instance %s",
+  field => {
+    expectSameEvaluation(
+      `let i = 0;
+       class C {
+         ${field} = { ...{}, __proto__: { x: ++i }, m() { return super.x; } };
+         get() { return this.${field}; }
+       }
+       const a = new C(), b = new C();
+       Object.setPrototypeOf(a.get(), { x: 7 });
+       return [a.get().m(), b.get().m()];`,
+      FEATURES.objectSpread,
+    );
+  },
+);
+
+it("keeps header and body home objects independent", () => {
+  expectSameEvaluation(
+    `const objects = [];
+     for (var i = 0; i < 2 && objects.push({
+       ...{}, __proto__: { x: i }, m() { return super.x; }
+     }); i++) {
+       objects.push({ ...{}, __proto__: { x: i + 2 }, m() { return super.x; } });
+     }
+     return objects.map(object => object.m());`,
+    FEATURES.objectSpread,
+  );
+});
+
+it.each([
+  "get x() { return super.x; }, set x(value) { this.value = value; }",
+  "set x(value) { this.value = value; }, get x() { return super.x; }",
+  "get x() { return super.x; }, set x(value) { super.value = value; }",
+])("preserves paired accessors in a loop header: %s", methods => {
+  expectSameEvaluation(
+    `const objects = [];
+     let i = 0;
+     while (i < 2 && objects.push({ ...{}, __proto__: { x: i }, ${methods} })) i++;
+     return objects.map(object => { object.x = 7; return [object.x, object.value]; });`,
+    FEATURES.objectSpread,
+  );
+});
+
+it("preserves computed method key suspensions in a loop header", () => {
+  expectSameEvaluation(
+    `function* make() {
+       const objects = [];
+       let i = 0;
+       while (i++ < 2 && objects.push({
+         ...{}, __proto__: { x: i }, [(yield i)]() { return super.x; }
+       })) {}
+       return objects.map(object => object.m());
+     }
+     const iterator = make();
+     return [iterator.next(), iterator.next("m"), iterator.next("m")];`,
+    FEATURES.objectSpread,
+  );
+});
+
+it("keeps user Object bindings out of accessor factories", () => {
+  expectSameEvaluation(
+    `function make(Object) {
+       const objects = [];
+       let i = 0;
+       while (i < 2 && objects.push({
+         ...{}, __proto__: { x: i }, get [Object.key]() { return super.x; }
+       })) i++;
+       return objects.map(object => object.x);
+     }
+     return make({ key: "x" });`,
+    FEATURES.objectSpread,
+  );
+});
+
+it("preserves await timing in a loop-header home object", async () => {
+  await expectSameEvaluation(
+    `return (async () => {
+       const objects = [], log = [];
+       let i = 0, ticks = 0;
+       const tick = () => { if (++ticks < 10) queueMicrotask(tick); };
+       queueMicrotask(tick);
+       while (i++ < 2 && objects.push({
+         ...{}, __proto__: { x: await Promise.resolve(i) }, m() { return super.x; }
+       })) {
+         log.push(ticks);
+       }
+       return [objects.map(object => object.m()), log];
+     })();`,
+    FEATURES.objectSpread,
+  );
+});
+
+it("preserves the environment and yields of a loop-header home object", () => {
+  expectSameEvaluation(
+    `class C extends class { get x() { return 3; } } {
+       *make(value) {
+         const objects = [];
+         let i = 0;
+         while (i++ < 2 && objects.push({
+           ...{ value: arguments[0] },
+           __proto__: { x: (yield i) + super.x + this.offset },
+           m() { return super.x + this.value; }
+         })) {}
+         return objects.map(object => object.m());
+       }
+     }
+     const instance = new C();
+     instance.offset = 4;
+     const iterator = instance.make(5);
+     return [iterator.next(), iterator.next(6), iterator.next(7)];`,
+    FEATURES.objectSpread,
+  );
+});
 
 it.each(["+coercible", "`${coercible}`", "coercible + 0"])(
   "captures earlier array values before coercing %s",

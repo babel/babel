@@ -9,6 +9,44 @@ function hasSpread(node: t.ObjectExpression): boolean {
   return node.properties.some(prop => t.isSpreadElement(prop));
 }
 
+/** A context that evaluates the literal repeatedly without a fresh scope. */
+function getRepeatedEvaluationContext(path: NodePath<t.ObjectExpression>) {
+  let child: NodePath = path;
+  let parent: NodePath | null = path.parentPath;
+  while (parent) {
+    if (
+      (parent.isFunction() &&
+        child.key !== "key" &&
+        child.listKey !== "decorators") ||
+      parent.isProgram() ||
+      parent.isStaticBlock()
+    ) {
+      return null;
+    }
+    if (
+      (parent.isClassProperty({ static: false }) ||
+        parent.isClassPrivateProperty({ static: false }) ||
+        parent.isClassAccessorProperty({ static: false })) &&
+      child.key === "value"
+    ) {
+      return parent;
+    }
+    if (parent.isLoop()) {
+      if (child.key === "body") return null;
+      if (
+        parent.isWhileStatement() ||
+        parent.isDoWhileStatement() ||
+        (parent.isForStatement() && child.key !== "init")
+      ) {
+        return parent;
+      }
+    }
+    child = parent;
+    parent = parent.parentPath;
+  }
+  return null;
+}
+
 /** `__proto__: value`, which sets the prototype of the object literal. */
 function isProtoSetter(
   prop: t.ObjectExpression["properties"][number],
@@ -44,15 +82,40 @@ export function transformObjectSpread(
 ) {
   if (!hasSpread(path.node)) return;
 
+  const repeatedContext = path.node.properties.some(prop =>
+    t.isObjectMethod(prop),
+  )
+    ? getRepeatedEvaluationContext(path)
+    : null;
+  const captureInHeader = repeatedContext?.isLoop();
+  const superMethods = new Set<t.ObjectMethod>();
   let objectRef: t.Identifier | undefined;
+  let seenSpread = false;
   for (const prop of path.get("properties")) {
+    if (prop.isSpreadElement()) seenSpread = true;
     if (!prop.isObjectMethod()) continue;
+    // The first object is the final target, so its native methods already
+    // have the right home object, without capturing a shared header binding.
+    if (captureInHeader && !seenSpread) continue;
     new ReplaceSupers({
       methodPath: prop,
       file: file.file,
-      getObjectRef: () =>
-        (objectRef ??= path.scope.generateUidIdentifier("obj")),
+      getObjectRef: () => {
+        superMethods.add(prop.node);
+        return (objectRef ??= path.scope.generateUidIdentifier("obj"));
+      },
     }).replace();
+  }
+  if (
+    captureInHeader &&
+    objectRef &&
+    path.node.properties.some(
+      prop => t.isObjectMethod(prop) && prop.kind !== "method",
+    ) &&
+    path.scope.hasBinding("Object", { noGlobals: true })
+  ) {
+    // Accessor factories read their descriptor through the global Object.
+    path.scope.rename("Object");
   }
 
   // The properties and spread arguments are only moved to the replacement:
@@ -108,6 +171,63 @@ export function transformObjectSpread(
     if (t.isSpreadElement(prop)) {
       make();
       exp!.arguments.push(prop.argument);
+    } else if (
+      captureInHeader &&
+      exp &&
+      t.isObjectMethod(prop) &&
+      objectRef &&
+      (superMethods.has(prop) || prop.kind !== "method")
+    ) {
+      if (props.length) make();
+      const params = [t.cloneNode(objectRef)];
+      const args: t.Expression[] = [exp];
+      let accessorKey: t.Identifier | undefined;
+      if (prop.computed || prop.kind !== "method") {
+        // Evaluate computed keys outside the closure, preserving lexical
+        // references and allowing yield/await in the original function.
+        if (prop.computed) {
+          moved.set(prop.key, moved.get(prop)!.get("key") as NodePath);
+        }
+        args.push(
+          prop.kind === "method"
+            ? prop.key
+            : t.callExpression(file.addHelper("toPropertyKey"), [
+                t.toComputedKey(prop) as t.Expression,
+              ]),
+        );
+        const key = path.scope.generateUidIdentifier("key");
+        params.push(key);
+        prop.key = t.cloneNode(key);
+        prop.computed = true;
+        accessorKey = key;
+      }
+      const object = t.objectExpression([prop]);
+      const body =
+        prop.kind === "method"
+          ? t.callExpression(t.cloneNode(helper), [
+              t.cloneNode(objectRef),
+              t.objectExpression([]),
+              object,
+            ])
+          : t.callExpression(file.addHelper("defineAccessor"), [
+              t.stringLiteral(prop.kind),
+              t.cloneNode(objectRef),
+              t.cloneNode(accessorKey!),
+              t.memberExpression(
+                t.callExpression(
+                  t.memberExpression(
+                    t.identifier("Object"),
+                    t.identifier("getOwnPropertyDescriptor"),
+                  ),
+                  [object, t.cloneNode(accessorKey!)],
+                ),
+                t.identifier(prop.kind),
+              ),
+            ]);
+      // Capture the target as a parameter of the method factory. Its key
+      // stays outside the closure, so yield/await retain their environment.
+      exp = t.callExpression(t.arrowFunctionExpression(params, body), args);
+      isHelperCall = false;
     } else if (exp && isProtoSetter(prop)) {
       // The object already exists: set its prototype when the property is
       // evaluated. A value that is neither an object nor null is ignored,
@@ -129,13 +249,29 @@ export function transformObjectSpread(
   if (props.length) make();
 
   const [replacement] = path.replaceWith(
-    objectRef
+    objectRef && !captureInHeader
       ? t.assignmentExpression("=", t.cloneNode(objectRef), exp!)
       : exp!,
   );
   adoptMovedPaths(replacement, moved);
 
   if (objectRef) {
+    if (captureInHeader) {
+      path.scope.getProgramParent().crawl();
+      return;
+    }
+    if (repeatedContext) {
+      // Each instance needs its own captured reference. An arrow preserves
+      // the field initializer's lexical this/super/new.target environment.
+      path.replaceWith(
+        t.callExpression(
+          t.arrowFunctionExpression([t.cloneNode(objectRef)], path.node),
+          [],
+        ),
+      );
+      path.scope.getProgramParent().crawl();
+      return;
+    }
     const scopePath = path.findParent(
       p =>
         p.isFunction() ||
