@@ -2972,17 +2972,11 @@ export default abstract class StatementParser extends ExpressionParser {
 
     if (node.phase === "source") {
       if (singleBindingType !== "ImportDefaultSpecifier") {
-        this.raise(
-          Errors.SourcePhaseImportRequiresDefault,
-          node.loc.start,
-        );
+        this.raise(Errors.SourcePhaseImportRequiresDefault, node.loc.start);
       }
     } else if (node.phase === "defer") {
       if (singleBindingType !== "ImportNamespaceSpecifier") {
-        this.raise(
-          Errors.DeferImportRequiresNamespace,
-          node.loc.start,
-        );
+        this.raise(Errors.DeferImportRequiresNamespace, node.loc.start);
       }
     } else if (node.module) {
       if (singleBindingType !== "ImportDefaultSpecifier") {
