@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":9,"index":27}},
+  "errors": [
+    "SyntaxError: Unexpected reserved word 'let'. (2:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":27,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":9,"index":27}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":14,"end":17,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":3,"index":17}},
+        "expression": {
+          "type": "Identifier",
+          "start":14,"end":17,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":3,"index":17},"identifierName":"let"},
+          "name": "let"
+        }
+      },
+      {
+        "type": "IfStatement",
+        "start":18,"end":27,"loc":{"start":{"line":3,"column":0,"index":18},"end":{"line":3,"column":9,"index":27}},
+        "test": {
+          "type": "Identifier",
+          "start":22,"end":23,"loc":{"start":{"line":3,"column":4,"index":22},"end":{"line":3,"column":5,"index":23},"identifierName":"x"},
+          "name": "x"
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "start":25,"end":27,"loc":{"start":{"line":3,"column":7,"index":25},"end":{"line":3,"column":9,"index":27}},
+          "body": [],
+          "directives": []
+        },
+        "alternate": null
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "value": {
+          "type": "DirectiveLiteral",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "extra": {
+            "rawValue": "use strict",
+            "raw": "\"use strict\"",
+            "expressionValue": "use strict"
+          },
+          "value": "use strict"
+        }
+      }
+    ]
+  }
+}
