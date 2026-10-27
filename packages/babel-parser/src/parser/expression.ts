@@ -1320,7 +1320,7 @@ export default abstract class ExpressionParser extends LValParser {
         ) {
           // None of these plugins is enabled, otherwise they would have
           // handled `<` by themselves.
-          throw this.expectOnePlugin(["jsx", "flow", "typescript"]);
+          this.expectOnePlugin(["jsx", "flow", "typescript"]);
         }
         throw this.unexpected();
       }
