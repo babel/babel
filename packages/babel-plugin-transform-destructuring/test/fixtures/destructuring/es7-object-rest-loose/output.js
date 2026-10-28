@@ -12,7 +12,7 @@ var _babelHelpers$toPrope = babelHelpers.toPropertyKey(x),
   x = _z3[_babelHelpers$toPrope],
   y = babelHelpers.objectWithoutProperties(_z3, [_babelHelpers$toPrope]);
 (function (_ref) {
-  var x = _ref.x,
+  let x = _ref.x,
     y = babelHelpers.objectWithoutProperties(_ref, _excluded);
 });
 x = (_o = o).x, y = _o.y, z = babelHelpers.objectWithoutProperties(_o, ["x", "y"]), _o;

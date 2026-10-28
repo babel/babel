@@ -1,7 +1,7 @@
 const _excluded = ["a"];
 (function (_ref, ...rest) {
   var _z, _f;
-  var {
+  let {
       a
     } = _ref,
     b = babelHelpers.objectWithoutProperties(_ref, _excluded);

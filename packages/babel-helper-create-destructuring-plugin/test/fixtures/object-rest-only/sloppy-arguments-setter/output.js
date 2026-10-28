@@ -7,7 +7,7 @@ var o = {
 
       return arguments;
     }.apply(void 0, arguments);
-    var {
+    let {
         a
       } = _ref,
       b = babelHelpers.objectWithoutProperties(_ref, _excluded);

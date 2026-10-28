@@ -4,6 +4,6 @@ class C {
     babelHelpers.classPrivateFieldInitSpec(this, _x, void 0);
   }
   m(a = 1, _ref, b, ...c) {
-    var x = babelHelpers.classPrivateFieldGet2(_x, _ref);
+    let x = babelHelpers.classPrivateFieldGet2(_x, _ref);
   }
 }

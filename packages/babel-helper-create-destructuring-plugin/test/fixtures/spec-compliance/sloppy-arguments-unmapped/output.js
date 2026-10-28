@@ -4,12 +4,12 @@ function f(b, _ref) {
 
     return arguments;
   }.apply(void 0, arguments);
-  var a = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref), _ref)), []);
+  let a = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref), _ref)), []);
   b = 9;
   return arguments[0];
 }
 function g(c, [d], _ref2) {
-  var e = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref2), _ref2)), []);
+  let e = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref2), _ref2)), []);
   arguments[0] = "changed";
   return c;
 }
@@ -32,7 +32,7 @@ function k(l, _ref4) {
 
     return arguments;
   }.apply(void 0, arguments);
-  var m = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref4), _ref4)), []);
+  let m = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref4), _ref4)), []);
   arguments;
   {
     function l() {}

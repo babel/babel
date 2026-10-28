@@ -8,6 +8,6 @@ class C {
       } = _ref3;
   }
   static n([_ref4, [b]]) {
-    var a = _ref4.#a;
+    let a = _ref4.#a;
   }
 }

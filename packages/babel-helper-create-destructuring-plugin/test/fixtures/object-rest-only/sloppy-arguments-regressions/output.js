@@ -54,7 +54,7 @@ function callee(_ref5) {
 
     return arguments;
   }.apply(void 0, arguments);
-  var r = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref5), _ref5)), []);
+  let r = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref5), _ref5)), []);
   return arguments;
 }
 function calleeIIFE(a, _ref6) {
@@ -76,7 +76,7 @@ function shadowedArguments(arguments, _ref7) {
   return arguments;
 }
 function bodyArguments(a, _ref8) {
-  var r = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref8), _ref8)), []);
+  let r = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref8), _ref8)), []);
   function arguments() {}
   return typeof arguments;
 }

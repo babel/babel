@@ -1,6 +1,6 @@
 var _y, _ref4, _ref5;
 function f([_ref, [a]]) {
-  var r = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref), _ref)), []);
+  let r = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref), _ref)), []);
   return [r, a];
 }
 var [_ref2, _ref3, c] = x,

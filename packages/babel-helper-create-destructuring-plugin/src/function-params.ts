@@ -2,22 +2,18 @@ import { types as t } from "@babel/core";
 import type { NodePath, PluginPass, Scope, Visitor } from "@babel/core";
 import {
   convertFunctionParams,
+  declareMovedParams,
   getParamNames,
   isDefaultEvaluationObservable,
-  isParamEvaluationObservable,
+  isPatternEvaluationObservable,
   isRedeclaredInBody,
-  preserveAnnexBParameterExclusions,
   readsMappedArguments,
   skipTypeAnnotationsVisitor,
   unmapArguments,
 } from "@babel/plugin-transform-parameters";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { collectScopeInfo, registerReplacement } from "./scope.ts";
-import {
-  getLoweredValues,
-  hasObservableEvaluation,
-  needsLowering,
-} from "./util.ts";
+import { getLoweredValues, needsLowering } from "./util.ts";
 
 interface ConflictState {
   ownerOf: Map<string, number>;
@@ -167,7 +163,11 @@ function collectMovedPatterns(
         reordered ||=
           nested || (hasMoved && isNativePartObservable(element.node, scope));
         hasMoved = true;
-      } else if (hasMoved && hasObservableEvaluation(element.node, scope)) {
+      } else if (
+        hasMoved &&
+        // Nested array patterns stay in the list, iterated in order
+        isPatternEvaluationObservable(element.node, scope, true)
+      ) {
         reordered = true;
       }
     }
@@ -185,10 +185,11 @@ type Pattern = t.ObjectPattern | t.ArrayPattern;
 function moveToTemporary(
   pattern: NodePath<Pattern>,
   scope: Scope,
+  kind: "let" | "var",
 ): [t.VariableDeclaration, NodePath<t.Identifier>] {
   const uid = scope.generateUidIdentifier("ref");
   uid.typeAnnotation = pattern.node.typeAnnotation;
-  const declaration = t.variableDeclaration("var", [
+  const declaration = t.variableDeclaration(kind, [
     t.variableDeclarator(pattern.node, t.cloneNode(uid)),
   ]);
   return [declaration, pattern.replaceWith(uid)[0]];
@@ -297,7 +298,7 @@ export function transformFunctionParams(
     if (i <= firstLowered) return false;
     return isLowered[i]
       ? isNativePartObservable(param.node, functionScope)
-      : isParamEvaluationObservable(param.node, functionScope);
+      : isPatternEvaluationObservable(param.node, functionScope);
   });
 
   // The parameters of generators are initialized when they are called, not
@@ -317,12 +318,16 @@ export function transformFunctionParams(
       path,
       ignoreFunctionLength,
       index => index >= start || isLowered[index],
-      (fnPath, paramPath, transformedRestNodes) => {
+      (fnPath, paramPath, transformedRestNodes, kind) => {
         if (!paramPath.isRestElement()) return;
         const argument = paramPath.get("argument");
         if (needsLowering(argument.node, features)) {
           transformedRestNodes.push(
-            moveToTemporary(argument as NodePath<Pattern>, fnPath.scope)[0],
+            moveToTemporary(
+              argument as NodePath<Pattern>,
+              fnPath.scope,
+              kind,
+            )[0],
           );
         }
       },
@@ -334,23 +339,25 @@ export function transformFunctionParams(
     return;
   }
 
+  path.ensureBlock();
+  // The names bound by the moved patterns are not parameters anymore
+  const { kind, blockers: annexB } = declareMovedParams(
+    path,
+    new Set(ownerOf.keys()),
+  );
   const declarations: t.VariableDeclaration[] = [];
   const newParams: NodePath<t.Identifier>[] = [];
   for (const pattern of movedPatterns) {
-    const [declaration, newParam] = moveToTemporary(pattern, functionScope);
+    const [declaration, newParam] = moveToTemporary(
+      pattern,
+      functionScope,
+      kind,
+    );
     declarations.push(declaration);
     newParams.push(newParam);
   }
 
-  path.ensureBlock();
   const body = path.get("body") as NodePath<t.BlockStatement>;
-  // In sloppy mode, a function declared in a block is also declared as a
-  // `var` of the function (Annex B), unless its name is a parameter: the
-  // names bound by the moved patterns are not parameters anymore.
-  const annexB = preserveAnnexBParameterExclusions(
-    body,
-    new Set(ownerOf.keys()),
-  );
   const declarationPaths = body.unshiftContainer("body", declarations);
 
   for (const param of newParams) {

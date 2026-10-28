@@ -12,5 +12,5 @@ function i(_ref3, _ref4) {
   let [b] = _ref4;
 }
 function pure(_ref5, b = 1, c) {
-  var a = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref5), _ref5)), []);
+  let a = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref5), _ref5)), []);
 }

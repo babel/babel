@@ -1,7 +1,7 @@
 const _excluded = ["a"];
 var x = "outer";
 function f(..._ref) {
-  var [_ref2] = _ref,
+  let [_ref2] = _ref,
     {
       a = () => x
     } = _ref2,
