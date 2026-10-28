@@ -11,10 +11,11 @@ export default declare(api => {
 
   const ignoreFunctionLength = api.assumption("ignoreFunctionLength");
   const objectRestNoSymbols = api.assumption("objectRestNoSymbols");
+  // Used when moving the parameters of arrow functions into their body
+  const noNewArrows = api.assumption("noNewArrows") ?? true;
 
   return createDestructuringPlugin({
     name: "proposal-destructuring-private",
-    api,
     feature: FEATURES.privateDestructuring,
     manipulateOptions: (_, parserOpts) =>
       parserOpts.plugins.push("destructuringPrivate"),
@@ -22,6 +23,7 @@ export default declare(api => {
       useBuiltIns: true,
       ignoreFunctionLength,
       objectRestNoSymbols,
+      noNewArrows,
     },
   });
 });
