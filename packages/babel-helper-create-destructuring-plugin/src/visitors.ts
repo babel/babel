@@ -8,9 +8,9 @@ import {
   transformObjectSpread,
 } from "./object-spread.ts";
 import {
+  collectForXHeadScopeInfo,
   collectScopeInfo,
   forgetReferences,
-  forgetScopeInfo,
   pushHoistedVars,
   registerReplacement,
   trackDeclaredBindings,
@@ -308,9 +308,7 @@ function transformForXStatement(
   // transform to:
   // for (const _ref of b) { const { a } = _ref; body; }
   // for (var _ref of b) { ({ a } = _ref); body; }
-  // The scope of the loop is crawled again: forget the information of its
-  // nodes first, as some of them get new paths.
-  forgetScopeInfo(path);
+  const forget = collectForXHeadScopeInfo(path);
   const ref = scope.generateUidIdentifier("ref");
   // Only assigned by the loop head, before each iteration
   markTemporary(scope, ref.name);
@@ -327,7 +325,6 @@ function transformForXStatement(
     );
   } else {
     const assignment = t.assignmentExpression("=", pattern, t.cloneNode(ref));
-    path.ensureBlock();
     statements.push(
       // The completion value of the loop is the one of the last iteration
       // whose body did not complete empty: when the body (e.g. `;`, `var x;`,
@@ -335,17 +332,21 @@ function transformForXStatement(
       // a declaration, which completes empty. `var _ref = ({ a } = _ref)`
       // keeps the value of `_ref`, only assigned by the loop head.
       isCompletionObservable(path) &&
-        keepsCompletionValue((node.body as t.BlockStatement).body)
+        keepsCompletionValue(
+          t.isBlockStatement(node.body) ? node.body.body : [node.body],
+        )
         ? t.variableDeclaration("var", [
             t.variableDeclarator(t.cloneNode(ref), assignment),
           ])
         : t.expressionStatement(assignment),
     );
   }
-  unshiftForXStatementBody(path, statements);
+  const paths = unshiftForXStatementBody(path, statements);
+  forget();
+  registerReplacement([path.get("left")], scope);
   // The pattern will be handled by the VariableDeclaration or
   // AssignmentExpression visitor.
-  scope.crawl();
+  registerReplacement(paths, path.get("body").scope);
 }
 
 function transformCatchClause(
@@ -360,16 +361,18 @@ function transformCatchClause(
   // catch ({ a }) { body }
   // transforms to:
   // catch (_ref) { let { a } = _ref; body }
+  const forget = collectScopeInfo(path.get("param") as NodePath);
   const ref = scope.generateUidIdentifier("ref");
   const declaration = t.variableDeclaration("let", [
     t.variableDeclarator(param, t.cloneNode(ref)),
   ]);
   // Inserted while the parameter is still the pattern, whose names it binds
-  unshiftCatchClauseBody(path, [declaration]);
+  const paths = unshiftCatchClauseBody(path, [declaration]);
   node.param = ref;
-  // The pattern will be handled by the VariableDeclaration visitor, which
-  // forgets the scope information registered again by this crawl.
-  scope.crawl();
+  forget();
+  scope.registerBinding("let", path);
+  // The pattern will be handled by the VariableDeclaration visitor.
+  registerReplacement(paths, scope);
 }
 
 function transformExportNamedDeclaration(

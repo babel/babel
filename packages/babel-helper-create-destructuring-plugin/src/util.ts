@@ -5,7 +5,7 @@ import {
   isPatternEvaluationObservable,
 } from "@babel/plugin-transform-parameters";
 import { FEATURES } from "./features.ts";
-import { forgetScopeInfo } from "./scope.ts";
+import { adoptMovedPaths } from "./scope.ts";
 
 export type PatternTarget =
   | t.LVal
@@ -430,25 +430,50 @@ export function referencesName(
 }
 
 /**
+ * Nest the body of `path` in a new block, keeping the paths of its nodes (and
+ * so their scope information).
+ */
+function wrapBodyInBlock(path: NodePath<t.ForXStatement | t.CatchClause>) {
+  const bodyPath = path.get("body") as NodePath<t.Statement>;
+  const body = bodyPath.node;
+  // Empty when its path is created, which crawls the new block scope
+  path.node.body = t.blockStatement([]);
+  const block = path.get("body") as NodePath<t.BlockStatement>;
+  block.node.body.push(body);
+  adoptMovedPaths(block, new Map([[body, bodyPath]]));
+  // Its scope was set up before its parent node was updated
+  bodyPath.setContext(bodyPath.context);
+  if (path.isCatchClause()) {
+    // The body of a catch clause shares its scope, unlike the nested block:
+    // the new scope of the block, crawled when set up, has the declarations
+    // of the body.
+    const { bindings } = bodyPath.scope;
+    for (const name of Object.keys(bindings)) {
+      if (
+        path.scope.getOwnBinding(name)?.identifier === bindings[name].identifier
+      ) {
+        path.scope.removeOwnBinding(name);
+      }
+    }
+  }
+}
+
+/**
  * Insert the statements destructuring a pattern at the start of the block
  * body of `path`. When the body declares a name they reference (one of
  * `bodyNames`), its declarations must not shadow it for them: the body is
- * nested in a new block instead, after them.
+ * nested in a new block instead, after them. Returns the inserted paths,
+ * whose scope information is not registered.
  */
 function unshiftBody(
   path: NodePath<t.ForXStatement | t.CatchClause>,
   statements: t.Statement[],
   bodyNames: string[],
-) {
-  const { node } = path;
-  const body = node.body as t.BlockStatement;
-  if (referencesName(statements, new Set(bodyNames))) {
-    // The nodes of the body get new paths, registered by the caller's crawl
-    forgetScopeInfo(path.get("body"));
-    node.body = t.blockStatement([...statements, body]);
-  } else {
-    body.body.unshift(...statements);
-  }
+): NodePath<t.Statement>[] {
+  if (referencesName(statements, new Set(bodyNames))) wrapBodyInBlock(path);
+  const body = path.get("body") as NodePath<t.BlockStatement>;
+  body.node.body.unshift(...statements);
+  return body.get("body").slice(0, statements.length);
 }
 
 /**
@@ -458,9 +483,11 @@ function unshiftBody(
 export function unshiftForXStatementBody(
   statementPath: NodePath<t.ForXStatement>,
   newStatements: t.Statement[],
-) {
-  statementPath.ensureBlock();
-  unshiftBody(
+): NodePath<t.Statement>[] {
+  if (!statementPath.get("body").isBlockStatement()) {
+    wrapBodyInBlock(statementPath);
+  }
+  return unshiftBody(
     statementPath,
     newStatements,
     Object.keys(statementPath.get("body").scope.bindings),
@@ -476,9 +503,9 @@ export function unshiftForXStatementBody(
 export function unshiftCatchClauseBody(
   path: NodePath<t.CatchClause>,
   statements: t.Statement[],
-) {
+): NodePath<t.Statement>[] {
   const paramNames = t.getBindingIdentifiers(path.node.param!);
-  unshiftBody(
+  return unshiftBody(
     path,
     statements,
     Object.keys(path.scope.bindings).filter(name => !paramNames[name]),
