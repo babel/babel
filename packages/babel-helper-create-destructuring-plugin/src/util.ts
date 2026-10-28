@@ -24,10 +24,11 @@ export function needsLowering(
   switch (target.type) {
     case "ObjectPattern":
       if (features & FEATURES.destructuring) return true;
-      return target.properties.some(prop =>
-        prop.type === "RestElement"
-          ? !!(features & FEATURES.objectRest)
-          : propertyNeedsLowering(prop, features),
+      return target.properties.some(
+        prop =>
+          isLoweredProperty(prop, features) ||
+          (prop.type === "ObjectProperty" &&
+            needsLowering(prop.value as PatternTarget, features)),
       );
     case "ArrayPattern":
       if (features & FEATURES.destructuring) return true;
@@ -41,16 +42,52 @@ export function needsLowering(
   }
 }
 
+/**
+ * Whether a property of an object pattern is lowered itself, as a rest
+ * element or a private key.
+ */
+function isLoweredProperty(
+  prop: t.ObjectProperty | t.RestElement,
+  features: number,
+): boolean {
+  return prop.type === "RestElement"
+    ? !!(features & FEATURES.objectRest)
+    : prop.key.type === "PrivateName" &&
+        !!(features & FEATURES.privateDestructuring);
+}
+
 /** Whether a property of an object pattern must be lowered. */
 export function propertyNeedsLowering(
   prop: t.ObjectProperty,
   features: number,
 ): boolean {
   return (
-    (prop.key.type === "PrivateName" &&
-      !!(features & FEATURES.privateDestructuring)) ||
+    isLoweredProperty(prop, features) ||
     needsLowering(prop.value as PatternTarget, features)
   );
+}
+
+/**
+ * In partial lowering, the values of an object pattern that need to be
+ * lowered, when the pattern itself can stay native with those values replaced
+ * by temporaries: null when one of its own properties is lowered.
+ */
+export function getLoweredValues(
+  pattern: t.ObjectPattern,
+  features: number,
+): t.ObjectProperty[] | null {
+  if (features & FEATURES.destructuring) return null;
+  const lowered: t.ObjectProperty[] = [];
+  for (const prop of pattern.properties) {
+    if (isLoweredProperty(prop, features)) return null;
+    if (
+      prop.type === "ObjectProperty" &&
+      needsLowering(prop.value as PatternTarget, features)
+    ) {
+      lowered.push(prop);
+    }
+  }
+  return lowered;
 }
 
 /** Whether one of the assignment targets of the pattern is a member expression. */
@@ -645,17 +682,18 @@ export function hasObservableEvaluation(target: t.Node, scope: Scope): boolean {
 /**
  * In partial lowering, replace the elements of an array pattern that need to
  * be lowered with temporaries, `hoist`ed to be destructured after the
- * pattern. The following elements stay in the native pattern, which keeps
- * iterating nested patterns before the iterator is closed, unless they read
- * a name bound by a hoisted element (e.g. in a default value), only
- * initialized afterwards, or run user code, which must stay after the
- * reads of the hoisted elements.
+ * pattern; the first one keeps its object pattern when only nested values
+ * are lowered (hoistNestedValues). The following elements stay in the native
+ * pattern, which keeps iterating nested patterns before the iterator is
+ * closed, unless they read a name bound by a hoisted element (e.g. in a
+ * default value), only initialized afterwards, or run user code, which must
+ * stay after the reads of the hoisted elements.
  */
 export function splitArrayPattern(
   pattern: t.ArrayPattern,
   features: number,
   scope: Scope,
-  hoist: (target: t.LVal | t.PatternLike, id: t.Identifier) => void,
+  hoist: Hoist,
 ) {
   const { elements } = pattern;
   const hoistedNames = new Set<string>();
@@ -674,17 +712,74 @@ export function splitArrayPattern(
         continue;
       }
     }
+    const first = !split;
     split = true;
     for (const name of Object.keys(t.getBindingIdentifiers(element))) {
       hoistedNames.add(name);
     }
-    const id = scope.generateUidIdentifier("ref");
     if (element.type === "RestElement") {
-      hoist(element.argument, id);
-      element.argument = t.cloneNode(id);
-    } else {
-      hoist(element, id);
-      elements[i] = t.cloneNode(id);
+      element.argument = replaceWithTemporary(element.argument, scope, hoist);
+    } else if (!first || !hoistNestedValues(element, features, scope, hoist)) {
+      elements[i] = replaceWithTemporary(element, scope, hoist);
     }
   }
+}
+
+type Hoist = (target: t.LVal | t.PatternLike, id: t.Identifier) => void;
+
+/** Replace `target` with a temporary, `hoist`ed to be destructured later. */
+function replaceWithTemporary(
+  target: t.LVal | t.PatternLike,
+  scope: Scope,
+  hoist: Hoist,
+): t.Identifier {
+  const id = scope.generateUidIdentifier("ref");
+  hoist(target, id);
+  return t.cloneNode(id);
+}
+
+/**
+ * Keep the first lowered element of an array pattern native when only some
+ * of its nested values need to be lowered, replacing those with temporaries
+ * to be `hoist`ed: `[k, { a: { ...r } }]` becomes `[k, { a: _ref }]`, and `a`
+ * is still read while iterating. Returns false when the element must be
+ * hoisted as a whole: one of its own properties is lowered, or its other
+ * keys, defaults and targets read a binding of the hoisted values.
+ */
+function hoistNestedValues(
+  element: t.Node,
+  features: number,
+  scope: Scope,
+  hoist: Hoist,
+): boolean {
+  const pattern = element.type === "AssignmentPattern" ? element.left : element;
+  const lowered =
+    pattern.type === "ObjectPattern" && getLoweredValues(pattern, features);
+  if (!lowered) return false;
+  const loweredSet = new Set<t.Node>(lowered);
+  const names = new Set(
+    lowered.flatMap(prop => Object.keys(t.getBindingIdentifiers(prop.value))),
+  );
+  for (const prop of pattern.properties) {
+    const native: t.Node[] = [];
+    if (prop.type === "RestElement") native.push(prop);
+    else {
+      if (prop.computed) native.push(prop.key);
+      if (!loweredSet.has(prop)) native.push(prop.value);
+    }
+    if (referencesName(native, names)) return false;
+  }
+  // Only the first value keeps its own pattern native: the following ones
+  // would be read before it is destructured.
+  lowered.forEach((prop, i) => {
+    if (i === 0 && hoistNestedValues(prop.value, features, scope, hoist)) {
+      return;
+    }
+    prop.value = replaceWithTemporary(
+      prop.value as t.PatternLike,
+      scope,
+      hoist,
+    );
+  });
+  return true;
 }
