@@ -1,4 +1,4 @@
-var _ref3;
+var _x, _ref3;
 const [a, _ref] = x,
   {
     b
@@ -9,10 +9,6 @@ let [d, _ref2] = x,
     e
   } = _ref2,
   f = babelHelpers.objectWithoutProperties(_ref2, ["e"]);
-var _x = x;
-[g, _ref3] = _x;
-({
+[g, _ref3] = _x = x, {
   h
-} = _ref3);
-i = babelHelpers.objectWithoutProperties(_ref3, ["h"]);
-_x;
+} = _ref3, i = babelHelpers.objectWithoutProperties(_ref3, ["h"]), _x;

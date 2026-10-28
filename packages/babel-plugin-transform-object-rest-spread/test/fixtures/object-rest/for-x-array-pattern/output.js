@@ -14,20 +14,16 @@ const _excluded = ["a"],
   }
   for (var _ref3 of []) {
     var _ref4;
-    [_ref4] = _ref3;
-    ({
+    [_ref4] = _ref3, {
       a
-    } = _ref4);
-    b = babelHelpers.objectWithoutProperties(_ref4, _excluded2);
+    } = _ref4, b = babelHelpers.objectWithoutProperties(_ref4, _excluded2);
   }
   async function f() {
     for await (var _ref5 of []) {
       var _ref6;
-      [_ref6] = _ref5;
-      ({
+      [_ref6] = _ref5, {
         a
-      } = _ref6);
-      b = babelHelpers.objectWithoutProperties(_ref6, _excluded3);
+      } = _ref6, b = babelHelpers.objectWithoutProperties(_ref6, _excluded3);
     }
   }
   for (const _ref7 of []) {

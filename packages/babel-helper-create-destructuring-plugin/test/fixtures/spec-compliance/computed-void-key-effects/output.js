@@ -1,12 +1,10 @@
+var _source;
 var _b = {
   b: 1
 };
 babelHelpers.toPropertyKey((log.push("key"), "a"));
 var b = _b.b;
-var _source = source;
-babelHelpers.objectDestructuringEmpty(_source);
-babelHelpers.toPropertyKey(key);
-_source;
+babelHelpers.objectDestructuringEmpty(_source = source), babelHelpers.toPropertyKey(key), _source;
 babelHelpers.objectDestructuringEmpty(source);
 babelHelpers.toPropertyKey({
   toString() {

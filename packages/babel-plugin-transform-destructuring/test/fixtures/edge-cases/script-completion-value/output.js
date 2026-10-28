@@ -20,10 +20,9 @@ if (k) {
     a;
   }
 } else {
-  var _a = {
+  var _a;
+  a = (_a = {
     a: 2
-  };
-  a = _a.a;
-  _a;
+  }).a, _a;
 }
 var z;

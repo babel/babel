@@ -13,9 +13,7 @@ babelHelpers.defineProperty(C, "b", "b");
 babelHelpers.defineProperty(C, "c", "c");
 (() => {
   let x, y, z;
-  x = _x._;
-  y = _y._;
-  z = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_C), _C)), []);
+  x = _x._, y = _y._, z = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_C), _C)), []);
   result = {
     x,
     y,

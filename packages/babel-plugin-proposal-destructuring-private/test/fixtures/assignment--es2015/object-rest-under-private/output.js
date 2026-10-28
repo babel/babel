@@ -10,15 +10,13 @@ var _x = {
   _: _C
 };
 (() => {
+  var _C$x;
   var x, y, z;
   ({
     x
-  } = _C);
-  var _C$x = _x._;
-  ({
+  } = _C), {
     y
-  } = _C$x);
-  z = babelHelpers.objectWithoutProperties(_C$x, _excluded);
+  } = _C$x = _x._, z = babelHelpers.objectWithoutProperties(_C$x, _excluded);
   result = {
     x,
     y,

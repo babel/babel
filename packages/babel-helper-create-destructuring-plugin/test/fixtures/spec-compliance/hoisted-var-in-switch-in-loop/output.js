@@ -1,8 +1,7 @@
 function f(o) {
-  var _a;
+  var _ref, _a;
   for (const x of [1]) switch (x) {
     case 1:
-      var _ref = {};
-      o.x = (_a = _ref.a) === void 0 ? 1 : _a;
+      _ref = {}, o.x = (_a = _ref.a) === void 0 ? 1 : _a;
   }
 }

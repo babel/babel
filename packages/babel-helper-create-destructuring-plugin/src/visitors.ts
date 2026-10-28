@@ -234,12 +234,14 @@ function transformAssignmentExpression(
   if (node.operator !== "=" || !t.isPattern(node.left)) return;
   if (!needsLowering(node.left, options.features)) return;
   const valueUsed = isValueUsed(path);
+  const isArrowBody = parentPath.isArrowFunctionExpression();
 
   const lowering = new Lowering({
     scope,
     options,
     addHelper: name => file.addHelper(name),
     isAssignment: true,
+    inlineTemps: !isArrowBody,
   });
   const forget = collectScopeInfo(path);
   const completion = lowering.lower(node.left, node.right, valueUsed);
@@ -247,22 +249,7 @@ function transformAssignmentExpression(
 
   forget();
 
-  if (parentPath.isExpressionStatement()) {
-    pushHoistedVars(scope, hoisted);
-    const statements = buildAssignmentStatements(steps, parentPath.node.loc);
-    if (completion) {
-      const statement = t.expressionStatement(completion);
-      statement.loc = parentPath.node.loc;
-      statements.push(statement);
-    }
-    const paths = parentPath.replaceWithMultiple(statements);
-    registerReplacement(paths, scope);
-    // `path` is now detached: don't let other visitors see it.
-    path.skip();
-    return;
-  }
-
-  if (parentPath.isArrowFunctionExpression()) {
+  if (isArrowBody) {
     // () => [a, b] = c;   ->   () => { ...; return _ref; }
     const statements = buildAssignmentStatements(steps, node.loc);
     const returnStatement = t.returnStatement(completion);
@@ -280,11 +267,16 @@ function transformAssignmentExpression(
 
   const expressions = steps.map(step => {
     if (step.kind !== StepKind.Temp) return stepToExpression(step);
-    hoisted.push(step.id);
+    // Declared in `hoisted`
     return t.assignmentExpression("=", t.cloneNode(step.id), step.init);
   });
   if (completion) expressions.push(completion);
   pushHoistedVars(scope, hoisted);
+  if (expressions.length === 0 && parentPath.isExpressionStatement()) {
+    // e.g. `({} = {});`
+    parentPath.remove();
+    return;
+  }
   const expression =
     expressions.length === 0
       ? // e.g. `({} = {}, x)`: nothing is evaluated and the value is unused.

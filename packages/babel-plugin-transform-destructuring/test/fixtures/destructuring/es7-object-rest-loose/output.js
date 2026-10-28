@@ -1,3 +1,4 @@
+var _o;
 const _excluded = ["x"];
 var z = {};
 var _z = z,
@@ -14,8 +15,4 @@ var _babelHelpers$toPrope = babelHelpers.toPropertyKey(x),
   var x = _ref.x,
     y = babelHelpers.objectWithoutProperties(_ref, _excluded);
 });
-var _o = o;
-x = _o.x;
-y = _o.y;
-z = babelHelpers.objectWithoutProperties(_o, ["x", "y"]);
-_o;
+x = (_o = o).x, y = _o.y, z = babelHelpers.objectWithoutProperties(_o, ["x", "y"]), _o;
