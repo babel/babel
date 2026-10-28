@@ -13,7 +13,11 @@ import {
 } from "@babel/plugin-transform-parameters";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { collectScopeInfo, registerReplacement } from "./scope.ts";
-import { hasObservableEvaluation, needsLowering } from "./util.ts";
+import {
+  getLoweredValues,
+  hasObservableEvaluation,
+  needsLowering,
+} from "./util.ts";
 
 interface ConflictState {
   ownerOf: Map<string, number>;
@@ -105,28 +109,61 @@ function isNativePartObservable(param: t.Node, scope: Scope): boolean {
  * the object patterns that need to be lowered. An array pattern stays in the
  * parameter list, iterating its argument in order with the elements that
  * don't need to be lowered: only the ones that do are replaced by
- * temporaries. Returns whether an element following a moved pattern runs
- * user code, which must not happen before the moved pattern is destructured.
+ * temporaries, and the first one keeps its object pattern (`keepPattern`)
+ * when only nested values are lowered, like splitArrayPattern. Returns
+ * whether an element following a moved pattern runs user code, which must
+ * not happen before the moved pattern is destructured.
  */
 function collectMovedPatterns(
   param: NodePath,
   features: number,
   scope: Scope,
   moved: NodePath<t.ObjectPattern>[],
+  keepPattern = false,
 ): boolean {
   if (param.isAssignmentPattern()) {
-    return collectMovedPatterns(param.get("left"), features, scope, moved);
+    return collectMovedPatterns(
+      param.get("left"),
+      features,
+      scope,
+      moved,
+      keepPattern,
+    );
   } else if (param.isRestElement()) {
     return collectMovedPatterns(param.get("argument"), features, scope, moved);
   } else if (param.isObjectPattern()) {
-    moved.push(param);
+    const lowered = keepPattern && getLoweredValues(param.node, features);
+    const values =
+      lowered &&
+      param
+        .get("properties")
+        .filter((prop): prop is NodePath<t.ObjectProperty> =>
+          lowered.includes(prop.node as t.ObjectProperty),
+        )
+        .map(prop => prop.get("value"));
+    if (
+      values &&
+      !values.slice(1).some(value => isNativePartObservable(value.node, scope))
+    ) {
+      values.forEach((value, i) => {
+        collectMovedPatterns(value, features, scope, moved, i === 0);
+      });
+    } else {
+      moved.push(param);
+    }
   } else if (param.isArrayPattern()) {
     let reordered = false;
     let hasMoved = false;
     for (const element of param.get("elements")) {
       if (!element.node) continue;
       if (needsLowering(element.node, features)) {
-        const nested = collectMovedPatterns(element, features, scope, moved);
+        const nested = collectMovedPatterns(
+          element,
+          features,
+          scope,
+          moved,
+          !hasMoved,
+        );
         reordered ||=
           nested || (hasMoved && isNativePartObservable(element.node, scope));
         hasMoved = true;
