@@ -434,8 +434,12 @@ export default function convertFunctionParams(
     } else if (param.isRestElement()) {
       // The rest parameter is usually converted before calling this function,
       // but callers that only transform some parameters may keep it. It must
-      // be converted if the parameters are cut off below.
-      if (firstOptionalIndex !== null) {
+      // be converted if the parameters are cut off below, or if its pattern
+      // must be destructured after the parameters moved into the body.
+      if (
+        firstOptionalIndex !== null ||
+        !param.get("argument").isIdentifier()
+      ) {
         restNodes = transformedRestNodes;
         continue;
       }
