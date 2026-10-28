@@ -22,7 +22,7 @@ for (const _ref2 of list) {
 function f([k, {
   a: _ref6
 }], v) {
-  var u = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref6), _ref6)), []);
+  let u = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref6), _ref6)), []);
 }
 // The default and the key read a hoisted binding: the element is hoisted
 const [_ref7] = it,

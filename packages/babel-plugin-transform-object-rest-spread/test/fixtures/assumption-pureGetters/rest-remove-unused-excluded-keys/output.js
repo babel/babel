@@ -16,7 +16,7 @@ function render() {
   return React.createElement("input", props);
 }
 function smth(_ref) {
-  var {} = _ref,
+  let {} = _ref,
     rest = babelHelpers.objectWithoutProperties(_ref, _excluded2);
   call(rest);
 }

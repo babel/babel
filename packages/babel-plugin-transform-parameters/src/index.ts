@@ -9,11 +9,12 @@ import { recordArgumentsUsage } from "./shadow-utils.ts";
 export { convertFunctionParams };
 export {
   isDefaultEvaluationObservable,
-  isParamEvaluationObservable,
+  isPatternEvaluationObservable,
   readsMappedArguments,
   unmapArguments,
 } from "./params.ts";
 export {
+  declareMovedParams,
   getParamNames,
   isRedeclaredInBody,
   preserveAnnexBParameterExclusions,
