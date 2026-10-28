@@ -681,10 +681,14 @@ export function TSImportEqualsDeclaration(
   this: Printer,
   node: t.TSImportEqualsDeclaration,
 ) {
-  const { id, moduleReference } = node;
+  const { id, moduleReference, importKind } = node;
 
   this.word("import");
   this.space();
+  if (importKind === "type") {
+    this.word("type");
+    this.space();
+  }
   this.print(id);
   this.space();
   this.token("=");
