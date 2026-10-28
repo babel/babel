@@ -765,7 +765,7 @@ export function TSImportEqualsDeclaration(
   this: Printer,
   node: t.TSImportEqualsDeclaration,
 ) {
-  const { id, moduleReference } = node;
+  const { id, moduleReference, importKind } = node;
   if (
     !process.env.BABEL_8_BREAKING &&
     // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
@@ -776,6 +776,10 @@ export function TSImportEqualsDeclaration(
   }
   this.word("import");
   this.space();
+  if (importKind === "type") {
+    this.word("type");
+    this.space();
+  }
   this.print(id);
   this.space();
   this.token("=");
