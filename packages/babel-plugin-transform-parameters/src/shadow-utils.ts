@@ -24,12 +24,10 @@ interface GlobalsUsage {
  */
 export function recordArgumentsUsage(file: File) {
   if (file.get(globalsUsageKey) === undefined) {
-    const { globals } = file.scope;
-    const has = (name: string) =>
-      Object.prototype.hasOwnProperty.call(globals, name);
+    const { scope } = file;
     const usage: GlobalsUsage = {
-      arguments: has("arguments"),
-      eval: has("eval"),
+      arguments: scope.hasGlobal("arguments"),
+      eval: scope.hasGlobal("eval"),
     };
     file.set(globalsUsageKey, usage);
   }
@@ -47,37 +45,32 @@ export function getGlobalsUsage(path: NodePath): GlobalsUsage | undefined {
  */
 export function hasDirectEval(path: NodePath<t.Function>): boolean {
   if (getGlobalsUsage(path)?.eval === false) return false;
-  const visit = (node: t.Node): boolean => {
-    if (t.isFunction(node)) return false;
-    if (
-      t.isCallExpression(node) &&
-      t.isIdentifier(node.callee, { name: "eval" })
-    ) {
-      return true;
-    }
-    for (const key of t.VISITOR_KEYS[node.type]) {
-      // @ts-expect-error key is a visitor key of node
-      const value: t.Node | null | (t.Node | null)[] = node[key];
-      if (Array.isArray(value)) {
-        if (value.some(child => child && visit(child))) return true;
-      } else if (value && visit(value)) {
-        return true;
-      }
-    }
-    return false;
-  };
-  return visit(path.node.body);
+  return t.traverseFast(path.node.body, findDirectEval);
 }
 
+function findDirectEval(node: t.Node) {
+  if (t.isFunction(node)) return t.traverseFast.skip;
+  if (
+    t.isCallExpression(node) &&
+    t.isIdentifier(node.callee, { name: "eval" })
+  ) {
+    return t.traverseFast.stop;
+  }
+}
+
+/** Type annotations don't use or introduce "real" bindings. */
+export const skipTypeAnnotationsVisitor = {
+  "TypeAnnotation|TSTypeAnnotation|TypeParameterDeclaration|TSTypeParameterDeclaration"(
+    path: NodePath,
+  ) {
+    path.skip();
+  },
+};
+
 let iifeVisitor: Visitor<State>;
-/**
- * Whether the parameters reference a name declared by the function body,
- * which they can't see: the body must be moved into an IIFE, so that its
- * declarations don't shadow the outer binding for the parameters moved into
- * the body.
- */
-export const getIIFEVisitor: () => Visitor<State> = () =>
+const getIIFEVisitor: () => Visitor<State> = () =>
   (iifeVisitor ??= traverse.explode({
+    ...skipTypeAnnotationsVisitor,
     "ReferencedIdentifier|BindingIdentifier"(path, state) {
       const { scope, node } = path;
       const { name } = node;
@@ -97,10 +90,44 @@ export const getIIFEVisitor: () => Visitor<State> = () =>
         path.stop();
       }
     },
-    // type annotations don't use or introduce "real" bindings
-    "TypeAnnotation|TSTypeAnnotation|TypeParameterDeclaration|TSTypeParameterDeclaration":
-      (path: NodePath) => path.skip(),
   }));
+
+/**
+ * Whether the parameters reference a name declared by the function body,
+ * which they can't see: the body must be moved into an IIFE, so that its
+ * declarations don't shadow the outer binding for the parameters moved into
+ * the body.
+ */
+export function referencesBodyDeclaration(
+  params: NodePath[],
+  scope: Scope,
+): boolean {
+  const state: State = { needsOuterBinding: false, scope };
+  for (const param of params) {
+    if (!param.isIdentifier()) param.traverse(getIIFEVisitor(), state);
+    if (state.needsOuterBinding) break;
+  }
+  return state.needsOuterBinding;
+}
+
+/** The names bound by the parameters of a function. */
+export function getParamNames(params: t.Node[]): Set<string> {
+  return new Set(
+    params.flatMap(param => Object.keys(t.getBindingIdentifiers(param))),
+  );
+}
+
+/**
+ * Whether a parameter is redeclared in the function body, which then has its
+ * own binding for that name.
+ */
+export function isRedeclaredInBody(binding: Scope["bindings"][string]) {
+  return binding.constantViolations.some(
+    violation =>
+      // A lexical declaration with the same name is an early error
+      violation.isVariableDeclarator() || violation.isFunctionDeclaration(),
+  );
+}
 
 export function collectShadowedParamsNames(
   param: NodePath<t.Function["params"][number]>,
@@ -144,12 +171,20 @@ export function collectShadowedParamsNames(
   }
 }
 
-/**
- * Sloppy block functions whose names are parameters do not create Annex B
- * `var` bindings. Once the body moves into an IIFE, preserve that exclusion
- * with lexical declarations around their original block. The function's own
- * block still shadows those declarations, so references keep their bindings.
- */
+/** A sloppy block function named like a parameter: not hoisted (Annex B). */
+function isParameterNamedFunction(
+  node: t.Node,
+  paramNames: ReadonlySet<string>,
+): node is t.FunctionDeclaration & { id: t.Identifier } {
+  return (
+    t.isFunctionDeclaration(node) &&
+    !node.async &&
+    !node.generator &&
+    !!node.id &&
+    paramNames.has(node.id.name)
+  );
+}
+
 /**
  * Whether a function named like a parameter is declared in a block (or an
  * `if` clause) of `body`, outside of nested functions: a cheap check before
@@ -159,33 +194,25 @@ function hasBlockFunctionDeclaration(
   body: t.BlockStatement,
   paramNames: ReadonlySet<string>,
 ): boolean {
-  const visit = (node: t.Node, parent: t.Node): boolean => {
-    if (t.isFunctionDeclaration(node)) {
-      return (
-        parent !== body &&
-        !node.async &&
-        !node.generator &&
-        !!node.id &&
-        paramNames.has(node.id.name)
-      );
-    }
-    if (t.isFunction(node) || t.isClass(node)) return false;
-    for (const key of t.VISITOR_KEYS[node.type]) {
-      // @ts-expect-error key is a visitor key of node
-      const value: t.Node | null | (t.Node | null)[] = node[key];
-      if (Array.isArray(value)) {
-        for (const child of value) {
-          if (child && visit(child, node)) return true;
-        }
-      } else if (value && visit(value, node)) {
-        return true;
-      }
-    }
-    return false;
-  };
-  return body.body.some(statement => visit(statement, body));
+  return body.body.some(
+    statement =>
+      !t.isFunctionDeclaration(statement) &&
+      t.traverseFast(statement, node =>
+        isParameterNamedFunction(node, paramNames)
+          ? t.traverseFast.stop
+          : t.isFunction(node) || t.isClass(node)
+            ? t.traverseFast.skip
+            : undefined,
+      ),
+  );
 }
 
+/**
+ * Sloppy block functions whose names are parameters do not create Annex B
+ * `var` bindings. Once the body moves into an IIFE, preserve that exclusion
+ * with lexical declarations around their original block. The function's own
+ * block still shadows those declarations, so references keep their bindings.
+ */
 export function preserveAnnexBParameterExclusions(
   body: NodePath<t.BlockStatement>,
   paramNames: ReadonlySet<string>,
@@ -201,13 +228,7 @@ export function preserveAnnexBParameterExclusions(
   const blockers = (statements: t.Statement[]) => {
     const names = new Set<string>();
     for (const statement of statements) {
-      if (
-        t.isFunctionDeclaration(statement) &&
-        !statement.async &&
-        !statement.generator &&
-        statement.id &&
-        paramNames.has(statement.id.name)
-      ) {
+      if (isParameterNamedFunction(statement, paramNames)) {
         names.add(statement.id.name);
       }
     }
@@ -280,7 +301,8 @@ function buildScopeIIFE(shadowedParams: Set<string>, body: t.BlockStatement) {
  * Move the body of the function into an IIFE called with the parameters it
  * redeclares (`shadowedParams`), after the statements of `before`: its
  * declarations don't shadow the outer bindings for the parameters moved
- * before it. `paramNames` are the names bound by the original parameters.
+ * before it. `paramNames` are the names bound by the original parameters,
+ * which a caller that already changed them must pass.
  * Generators and async functions initialize their parameters when they are
  * called: the IIFE takes over the generator or async nature of the function.
  * Returns the path of the IIFE callee (an arrow function, unless it had to
@@ -291,7 +313,7 @@ function buildScopeIIFE(shadowedParams: Set<string>, body: t.BlockStatement) {
 export function wrapBodyInScopeIIFE(
   path: NodePath<t.Function>,
   shadowedParams: Set<string>,
-  paramNames: ReadonlySet<string>,
+  paramNames: ReadonlySet<string> = getParamNames(path.node.params),
   before: t.Statement[] = [],
 ): {
   callee: NodePath<t.ArrowFunctionExpression | t.FunctionExpression>;

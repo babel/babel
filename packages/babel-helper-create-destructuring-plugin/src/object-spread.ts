@@ -1,6 +1,6 @@
 import { types as t } from "@babel/core";
 import type { NodePath, PluginPass } from "@babel/core";
-import type { ResolvedOptions } from "./features.ts";
+import { FEATURES, type ResolvedOptions } from "./features.ts";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import { adoptMovedPaths } from "./scope.ts";
 import { getExtendsHelper } from "./util.ts";
@@ -81,7 +81,9 @@ export function transformObjectSpread(
   file: PluginPass,
   options: ResolvedOptions,
 ) {
-  if (!hasSpread(path.node)) return;
+  if (!(options.features & FEATURES.objectSpread) || !hasSpread(path.node)) {
+    return;
+  }
 
   const repeatedContext = path.node.properties.some(prop =>
     t.isObjectMethod(prop),
@@ -256,24 +258,18 @@ export function transformObjectSpread(
   );
   adoptMovedPaths(replacement, moved);
 
-  if (objectRef) {
-    if (captureInHeader) {
-      path.scope.getProgramParent().crawl();
-      return;
-    }
-    if (repeatedContext) {
-      // Each instance or call needs its own captured reference. An arrow
-      // preserves the lexical this/super/new.target/arguments environment of
-      // the field initializer or parameter.
-      path.replaceWith(
-        t.callExpression(
-          t.arrowFunctionExpression([t.cloneNode(objectRef)], path.node),
-          [],
-        ),
-      );
-      path.scope.getProgramParent().crawl();
-      return;
-    }
+  if (!objectRef) return;
+  if (repeatedContext && !captureInHeader) {
+    // Each instance or call needs its own captured reference. An arrow
+    // preserves the lexical this/super/new.target/arguments environment of
+    // the field initializer or parameter.
+    path.replaceWith(
+      t.callExpression(
+        t.arrowFunctionExpression([t.cloneNode(objectRef)], path.node),
+        [],
+      ),
+    );
+  } else if (!captureInHeader) {
     const scopePath = path.findParent(
       p =>
         p.isFunction() ||
@@ -288,7 +284,7 @@ export function transformObjectSpread(
     } else {
       path.scope.push({ id: objectRef });
     }
-    // Replacing super introduced references inside the moved methods.
-    path.scope.getProgramParent().crawl();
   }
+  // Replacing super introduced references inside the moved methods.
+  path.scope.getProgramParent().crawl();
 }

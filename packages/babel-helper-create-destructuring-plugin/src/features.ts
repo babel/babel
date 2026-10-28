@@ -41,6 +41,7 @@ export function enableFeature(
   file: File,
   feature: number,
   options: FeatureOptions,
+  noNewArrows: boolean | undefined,
 ) {
   file.set(featuresKey, file.get(featuresKey) | feature);
   const allOptions: Map<number, FeatureOptions> =
@@ -53,16 +54,8 @@ export function enableFeature(
   }
   file.set(optionsKey, allOptions);
   file.set(resolvedKey, null);
-}
-
-/**
- * Assumptions are shared by all the plugins of a Babel configuration, so
- * unlike plugin options they don't need to be merged.
- */
-export function setAssumptions(
-  file: File,
-  { noNewArrows }: { noNewArrows: boolean | undefined },
-) {
+  // Assumptions are shared by all the plugins of a Babel configuration, so
+  // unlike plugin options they don't need to be merged.
   file.set(noNewArrowsKey, noNewArrows ?? true);
 }
 
@@ -97,8 +90,7 @@ export function getResolvedOptions(file: File): ResolvedOptions {
   let resolved: ResolvedOptions | null = file.get(resolvedKey);
   if (resolved) return resolved;
 
-  // Set by `enableFeature` and `setAssumptions`, in the `pre` hook of the
-  // plugins
+  // Set by `enableFeature`, in the `pre` hook of the plugins
   const features: number = file.get(featuresKey);
   const allOptions: Map<number, FeatureOptions> = file.get(optionsKey);
 

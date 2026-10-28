@@ -8,10 +8,11 @@ import {
 import convertFunctionRest from "./rest.ts";
 
 import {
-  getIIFEVisitor,
   collectShadowedParamsNames,
   getGlobalsUsage,
+  getParamNames,
   hasDirectEval,
+  referencesBodyDeclaration,
   wrapBodyInScopeIIFE,
 } from "./shadow-utils.ts";
 
@@ -223,12 +224,13 @@ function shadowsArguments(
  * unmapped), or its elements are read while a parameter is assigned.
  */
 export function readsMappedArguments(path: NodePath<t.Function>): boolean {
-  if (path.isArrowFunctionExpression() || path.isInStrictMode()) return false;
+  if (path.isArrowFunctionExpression()) return false;
+  const usage = getGlobalsUsage(path);
+  if (usage && !usage.arguments && !usage.eval) return false;
+  if (path.isInStrictMode()) return false;
   // A direct eval also reads the explicit binding when `arguments` is shadowed.
   if (shadowsArguments(path.scope.getOwnBinding("arguments"), path))
     return false;
-  const usage = getGlobalsUsage(path);
-  if (usage && !usage.arguments && !usage.eval) return false;
   const state: ArgumentsUsage = {
     fn: path,
     readsElements: false,
@@ -349,29 +351,15 @@ export default function convertFunctionParams(
     : 0;
 
   const body: t.Statement[] = [];
+  const paramNames = getParamNames(node.params);
   const shadowedParams = new Set<string>();
-  const paramNames = new Set(
-    params.flatMap(param => Object.keys(param.getBindingIdentifiers())),
-  );
-
   for (const param of params) {
     collectShadowedParamsNames(param, scope, shadowedParams);
   }
-
-  const state = {
-    needsOuterBinding: false,
-    scope,
-  };
-  if (shadowedParams.size === 0) {
-    for (const param of params) {
-      if (!param.isIdentifier()) param.traverse(getIIFEVisitor(), state);
-      if (state.needsOuterBinding) break;
-    }
-  }
-
-  const { generator } = node;
   const needsIIFE =
-    generator || state.needsOuterBinding || shadowedParams.size > 0;
+    node.generator ||
+    shadowedParams.size > 0 ||
+    referencesBodyDeclaration(params, scope);
   // A direct eval of the body can redeclare the parameters with `var`, which
   // would conflict with the lexical declarations initializing them.
   const declarationKind =
@@ -482,13 +470,12 @@ export default function convertFunctionParams(
       // like the other parameters, the rest parameter is initialized before
       // it, not inside.
       convertFunctionRest(path, statements => body.push(...statements));
-      if (restNodes.length) {
-        bodyNode.body.splice(
+      body.push(
+        ...bodyNode.body.splice(
           bodyNode.body.indexOf(restNodes[0]),
           restNodes.length,
-        );
-        body.push(...restNodes);
-      }
+        ),
+      );
     } else {
       convertFunctionRest(path);
     }
