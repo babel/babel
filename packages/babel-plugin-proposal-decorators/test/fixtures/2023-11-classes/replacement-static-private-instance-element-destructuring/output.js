@@ -9,15 +9,15 @@ new class extends babelHelpers.identity {
       _staticBlock = function () {
         staticThis = this;
         getX = _ref => {
-          var x = _ref.#x;
+          let x = _ref.#x;
           return x;
         };
         getA = _ref2 => {
-          var a = _ref2.#a;
+          let a = _ref2.#a;
           return a;
         };
         callM = _ref3 => {
-          var m = _ref3.#m;
+          let m = _ref3.#m;
           return m();
         };
       };

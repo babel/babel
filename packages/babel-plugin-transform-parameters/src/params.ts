@@ -9,9 +9,9 @@ import convertFunctionRest from "./rest.ts";
 
 import {
   collectShadowedParamsNames,
+  declareMovedParams,
   getGlobalsUsage,
   getParamNames,
-  hasDirectEval,
   referencesBodyDeclaration,
   wrapBodyInScopeIIFE,
 } from "./shadow-utils.ts";
@@ -102,23 +102,41 @@ export function isDefaultEvaluationObservable(
 }
 
 /**
- * Whether evaluating the parameter can run user code, or read bindings that
- * user code could modify.
+ * Whether destructuring `target` (a parameter, or an element of a pattern)
+ * can run user code besides reading the value, or read bindings that user
+ * code could modify: default values, computed keys, member expression
+ * targets, the property reads and null check of object patterns, and the
+ * iteration of array patterns, unless the caller keeps those native anyway
+ * (`nativeArrays`).
  */
-export function isParamEvaluationObservable(
-  param: t.Function["params"][number],
+export function isPatternEvaluationObservable(
+  target: t.Node,
   scope: Scope,
+  nativeArrays = false,
 ): boolean {
-  switch (param.type) {
+  switch (target.type) {
     case "Identifier":
+    case "VoidPattern":
       return false;
     case "AssignmentPattern":
       return (
-        !t.isIdentifier(param.left) ||
-        isDefaultEvaluationObservable(param.right, scope)
+        isDefaultEvaluationObservable(target.right, scope) ||
+        isPatternEvaluationObservable(target.left, scope, nativeArrays)
       );
     case "RestElement":
-      return !t.isIdentifier(param.argument);
+      return isPatternEvaluationObservable(
+        target.argument,
+        scope,
+        nativeArrays,
+      );
+    case "ArrayPattern":
+      return (
+        !nativeArrays ||
+        target.elements.some(
+          element =>
+            element && isPatternEvaluationObservable(element, scope, true),
+        )
+      );
     default:
       return true;
   }
@@ -284,6 +302,7 @@ export default function convertFunctionParams(
     path: NodePath<t.Function>,
     paramPath: NodePath<t.Function["params"][number]>,
     transformedRestNodes: t.Statement[],
+    declarationKind: "let" | "var",
   ) => void,
   noNewArrows: boolean = true,
   keepArgumentsUnmapped?: boolean,
@@ -323,7 +342,7 @@ export default function convertFunctionParams(
       readsArguments ||
       !shouldTransformParam ||
       shouldTransformParam(i) ||
-      (moved && isParamEvaluationObservable(param, path.scope))
+      (moved && isPatternEvaluationObservable(param, path.scope))
     ) {
       shouldTransform[i] = moved = true;
       if (!isLoose && t.isAssignmentPattern(param)) readsArguments = true;
@@ -360,10 +379,10 @@ export default function convertFunctionParams(
     node.generator ||
     shadowedParams.size > 0 ||
     referencesBodyDeclaration(params, scope);
-  // A direct eval of the body can redeclare the parameters with `var`, which
-  // would conflict with the lexical declarations initializing them.
-  const declarationKind =
-    !needsIIFE && hasDirectEval(path) ? "var" : ("let" as const);
+  // The IIFE isolates the body, and its direct eval, from the declarations.
+  const declarationKind = needsIIFE
+    ? "let"
+    : declareMovedParams(path, paramNames).kind;
 
   let firstOptionalIndex = null;
   let restNodes: t.Statement[] | undefined;
@@ -375,7 +394,7 @@ export default function convertFunctionParams(
 
     const transformedRestNodes: t.Statement[] = [];
     if (replaceRestElement) {
-      replaceRestElement(path, param, transformedRestNodes);
+      replaceRestElement(path, param, transformedRestNodes, declarationKind);
     }
 
     const paramIsAssignmentPattern = param.isAssignmentPattern();

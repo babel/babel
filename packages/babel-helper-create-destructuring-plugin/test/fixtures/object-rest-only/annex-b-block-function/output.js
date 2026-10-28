@@ -1,10 +1,7 @@
 function f(_ref, b = 1) {
-  var r = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref), _ref)), []);
+  let r = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref), _ref)), []);
   {
-    let r;
-    {
-      function r() {}
-    }
+    function r() {}
   }
   return r;
 }

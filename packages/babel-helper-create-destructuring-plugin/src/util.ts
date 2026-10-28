@@ -1,7 +1,11 @@
 import { types as t } from "@babel/core";
 import type { File, NodePath, Scope } from "@babel/core";
-import { isDefaultEvaluationObservable } from "@babel/plugin-transform-parameters";
+import {
+  isDefaultEvaluationObservable,
+  isPatternEvaluationObservable,
+} from "@babel/plugin-transform-parameters";
 import { FEATURES } from "./features.ts";
+import { forgetScopeInfo } from "./scope.ts";
 
 export type PatternTarget =
   | t.LVal
@@ -425,25 +429,60 @@ export function referencesName(
   return false;
 }
 
+/**
+ * Insert the statements destructuring a pattern at the start of the block
+ * body of `path`. When the body declares a name they reference (one of
+ * `bodyNames`), its declarations must not shadow it for them: the body is
+ * nested in a new block instead, after them.
+ */
+function unshiftBody(
+  path: NodePath<t.ForXStatement | t.CatchClause>,
+  statements: t.Statement[],
+  bodyNames: string[],
+) {
+  const { node } = path;
+  const body = node.body as t.BlockStatement;
+  if (referencesName(statements, new Set(bodyNames))) {
+    // The nodes of the body get new paths, registered by the caller's crawl
+    forgetScopeInfo(path.get("body"));
+    node.body = t.blockStatement([...statements, body]);
+  } else {
+    body.body.unshift(...statements);
+  }
+}
+
+/**
+ *   for (const { a = b } of z) { let b; }
+ *   ->  for (const _ref of z) { const { a = b } = _ref; { let b; } }
+ */
 export function unshiftForXStatementBody(
   statementPath: NodePath<t.ForXStatement>,
   newStatements: t.Statement[],
 ) {
   statementPath.ensureBlock();
-  const { scope, node } = statementPath;
-  const bodyNames = Object.keys(statementPath.get("body").scope.bindings);
-  const hasShadowedBlockScopedBindings =
-    bodyNames.some(name => scope.hasBinding(name)) ||
-    // e.g. globals, which have no binding
-    referencesName(newStatements, new Set(bodyNames));
+  unshiftBody(
+    statementPath,
+    newStatements,
+    Object.keys(statementPath.get("body").scope.bindings),
+  );
+}
 
-  if (hasShadowedBlockScopedBindings) {
-    // handle shadowed variables referenced in computed keys:
-    // var a = 0;for (const { #x: x, [a++]: y } of z) { const a = 1; }
-    node.body = t.blockStatement([...newStatements, node.body]);
-  } else {
-    (node.body as t.BlockStatement).body.unshift(...newStatements);
-  }
+/**
+ * The body of a catch clause shares its scope: its own declarations are the
+ * bindings that are not the parameter's (called before the parameter is
+ * replaced).
+ *   catch ({ a = b }) { let b; }  ->  catch (_ref) { let { a = b } = _ref; { let b; } }
+ */
+export function unshiftCatchClauseBody(
+  path: NodePath<t.CatchClause>,
+  statements: t.Statement[],
+) {
+  const paramNames = t.getBindingIdentifiers(path.node.param!);
+  unshiftBody(
+    path,
+    statements,
+    Object.keys(path.scope.bindings).filter(name => !paramNames[name]),
+  );
 }
 
 export interface ExcludedKey {
@@ -652,34 +691,6 @@ export function buildObjectExcludingKeys(
 }
 
 /**
- * Whether destructuring `target` runs user code besides reading the value:
- * default values, computed keys, member expression targets and object
- * patterns.
- */
-export function hasObservableEvaluation(target: t.Node, scope: Scope): boolean {
-  switch (target.type) {
-    case "Identifier":
-    case "VoidPattern":
-      return false;
-    case "AssignmentPattern":
-      return (
-        isDefaultEvaluationObservable(target.right, scope) ||
-        hasObservableEvaluation(target.left, scope)
-      );
-    case "RestElement":
-      return hasObservableEvaluation(target.argument, scope);
-    case "ArrayPattern":
-      return target.elements.some(
-        element => element && hasObservableEvaluation(element, scope),
-      );
-    default:
-      // Object patterns read properties, which may run getters, and check
-      // their value for null or undefined.
-      return true;
-  }
-}
-
-/**
  * In partial lowering, replace the elements of an array pattern that need to
  * be lowered with temporaries, `hoist`ed to be destructured after the
  * pattern; the first one keeps its object pattern when only nested values
@@ -707,7 +718,8 @@ export function splitArrayPattern(
       if (
         !split ||
         (!referencesName(element, hoistedNames) &&
-          !hasObservableEvaluation(element, scope))
+          // Nested array patterns stay native: see above
+          !isPatternEvaluationObservable(element, scope, true))
       ) {
         continue;
       }

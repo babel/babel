@@ -6,7 +6,7 @@ function f(_ref) {
   for (var _len = arguments.length, _ref2 = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
     _ref2[_key - 2] = arguments[_key];
   }
-  var [_ref3] = _ref2,
+  let [_ref3] = _ref2,
     c = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref3), _ref3)), []);
 }
 function g(_ref4) {
@@ -15,7 +15,7 @@ function g(_ref4) {
   for (var _len2 = arguments.length, _ref5 = new Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
     _ref5[_key2 - 2] = arguments[_key2];
   }
-  var {
+  let {
       length
     } = _ref5,
     d = babelHelpers.objectWithoutProperties(_ref5, _excluded);

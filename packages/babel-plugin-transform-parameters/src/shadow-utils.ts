@@ -282,6 +282,31 @@ export function preserveAnnexBParameterExclusions(
   return modified;
 }
 
+/**
+ * The declarations initializing the parameters moved into the body use
+ * `let`: a sloppy block function named like one of them is not hoisted over
+ * the declaration, like it isn't over a parameter (Annex B). When a direct
+ * eval of the body could redeclare them with `var`, which would conflict
+ * with lexical declarations, they use `var` instead and that exclusion is
+ * kept with blockers around the block functions (see
+ * preserveAnnexBParameterExclusions). Returns the kind, and whether blockers
+ * were inserted (their blocks have new scopes).
+ */
+export function declareMovedParams(
+  path: NodePath<t.Function>,
+  names: ReadonlySet<string>,
+): { kind: "let" | "var"; blockers: boolean } {
+  if (!hasDirectEval(path)) return { kind: "let", blockers: false };
+  path.ensureBlock();
+  return {
+    kind: "var",
+    blockers: preserveAnnexBParameterExclusions(
+      path.get("body") as NodePath<t.BlockStatement>,
+      names,
+    ),
+  };
+}
+
 function buildScopeIIFE(shadowedParams: Set<string>, body: t.BlockStatement) {
   const args = [];
   const params = [];
