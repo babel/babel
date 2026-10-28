@@ -4,7 +4,7 @@ import type { types as t, NodePath } from "@babel/core";
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION("^8.0.6"));
   const t: typeof api.types = api.types;
-  const { template } = api;
+  const { template, traverse } = api;
 
   function getName(name: t.Identifier | t.StringLiteral) {
     return name.type === "Identifier" ? name.name : name.value;
@@ -56,19 +56,23 @@ export default declare(api => {
     return { property, names };
   }
 
+  const awaitOrYieldVisitor = traverse.visitors.environmentVisitor<{
+    found: boolean;
+  }>({
+    "AwaitExpression|YieldExpression"(path, state) {
+      state.found = true;
+      path.stop();
+    },
+    ArrowFunctionExpression(path) {
+      path.skip();
+    },
+  });
+
   function containsAwaitOrYield(path: NodePath) {
     if (path.isAwaitExpression() || path.isYieldExpression()) return true;
-    let found = false;
-    path.traverse({
-      "AwaitExpression|YieldExpression"(path) {
-        found = true;
-        path.stop();
-      },
-      Function(path) {
-        path.skip();
-      },
-    });
-    return found;
+    const state = { found: false };
+    path.traverse(awaitOrYieldVisitor, state);
+    return state.found;
   }
 
   const processedDynamicImports = new WeakSet<t.Node>();
