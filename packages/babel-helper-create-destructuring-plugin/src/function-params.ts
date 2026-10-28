@@ -42,6 +42,35 @@ function isRedeclaredInBody(binding: Binding): boolean {
 // binding that will be moved into the body, or if a moved pattern references
 // an outer binding that is shadowed in the body, moving things around would
 // change what the references resolve to.
+function checkConflict(
+  path: NodePath<t.Identifier | t.JSXIdentifier>,
+  state: ConflictState,
+) {
+  const { name } = path.node;
+  const { ownerOf, functionScope } = state;
+  const owner = ownerOf.get(name);
+  const inMoved = state.movedDepth > 0;
+  let conflict: boolean;
+  if (owner !== undefined) {
+    // A name bound by a moved pattern, only initialized in the body, is
+    // read by another parameter or by a part of its own parameter staying
+    // in the list, e.g. function f([{ ...r }, b = r]) {}
+    conflict =
+      (owner !== state.index || !inMoved) &&
+      path.scope.getBinding(name) === functionScope.getBinding(name);
+  } else {
+    const binding = inMoved && functionScope.getOwnBinding(name);
+    // A parameter redeclared in the body is a different binding there,
+    // e.g. for closures: function f({ a = () => x }, x) { var x; }
+    conflict =
+      !!binding && (binding.kind !== "param" || isRedeclaredInBody(binding));
+  }
+  if (conflict) {
+    state.conflict = true;
+    path.stop();
+  }
+}
+
 const conflictVisitor: Visitor<ConflictState> = {
   "TypeAnnotation|TSTypeAnnotation|TypeParameterDeclaration|TSTypeParameterDeclaration"(
     path,
@@ -56,30 +85,12 @@ const conflictVisitor: Visitor<ConflictState> = {
       if (state.movedNodes.has(path.node)) state.movedDepth--;
     },
   },
-  ReferencedIdentifier(path, state) {
-    const { name } = path.node;
-    const { ownerOf, functionScope } = state;
-    const owner = ownerOf.get(name);
-    const inMoved = state.movedDepth > 0;
-    let conflict: boolean;
-    if (owner !== undefined) {
-      // A name bound by a moved pattern, only initialized in the body, is
-      // read by another parameter or by a part of its own parameter staying
-      // in the list, e.g. function f([{ ...r }, b = r]) {}
-      conflict =
-        (owner !== state.index || !inMoved) &&
-        path.scope.getBinding(name) === functionScope.getBinding(name);
-    } else {
-      const binding = inMoved && functionScope.getOwnBinding(name);
-      // A parameter redeclared in the body is a different binding there,
-      // e.g. for closures: function f({ a = () => x }, x) { var x; }
-      conflict =
-        !!binding && (binding.kind !== "param" || isRedeclaredInBody(binding));
-    }
-    if (conflict) {
-      state.conflict = true;
-      path.stop();
-    }
+  ReferencedIdentifier: checkConflict,
+  // Assigned names resolve like references, e.g. `y` in `{ v = (y = 5) }`
+  BindingIdentifier(path, state) {
+    // A declaration, not an assignment
+    if (path.scope.getBinding(path.node.name)?.identifier === path.node) return;
+    checkConflict(path, state);
   },
 };
 
