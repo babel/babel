@@ -4,6 +4,6 @@ class C {
   static {
     var _C$x;
     var x;
-    result = (_C$x = C.#x, x = _C$x === void 0 ? 2 : _C$x, C);
+    result = (x = (_C$x = C.#x) === void 0 ? 2 : _C$x, C);
   }
 }

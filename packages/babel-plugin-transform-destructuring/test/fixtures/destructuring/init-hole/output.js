@@ -16,7 +16,7 @@ const _ref = [, bar.next().value],
   b = _ref[1];
 expect(a).toEqual(2);
 expect(b).toEqual(1);
-const arr = (_ref2 = [,], _ref2$ = _ref2[0], c = _ref2$ === void 0 ? 42 : _ref2$, _ref2);
+const arr = (c = (_ref2$ = (_ref2 = [,])[0]) === void 0 ? 42 : _ref2$, _ref2);
 expect(c).toEqual(42);
 expect(arr).toStrictEqual([,]);
 var iterCount = 0;

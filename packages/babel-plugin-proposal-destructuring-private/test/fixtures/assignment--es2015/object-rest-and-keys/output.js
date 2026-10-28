@@ -14,11 +14,9 @@ babelHelpers.defineProperty(C, "b", "b");
 babelHelpers.defineProperty(C, "c", "c");
 (() => {
   let x, y, z;
-  x = _x._;
-  ({
+  x = _x._, {
     y
-  } = _C);
-  z = babelHelpers.objectWithoutProperties(_C, _excluded);
+  } = _C, z = babelHelpers.objectWithoutProperties(_C, _excluded);
   result = {
     x,
     y,

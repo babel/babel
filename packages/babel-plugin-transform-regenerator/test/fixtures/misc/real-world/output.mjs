@@ -167,8 +167,7 @@ export function buildRootChain(opts, context) {
         }
         return _context2.d(babelHelpers.regeneratorValues(findRelativeConfig(pkgData, context.envName, context.caller)), 13);
       case 13:
-        _yield$findRelativeCo = _context2.v;
-        ignoreFile = _yield$findRelativeCo.ignore;
+        ignoreFile = (_yield$findRelativeCo = _context2.v).ignore;
         babelrcFile = _yield$findRelativeCo.config;
         if (ignoreFile) {
           fileChain.files.add(ignoreFile.filepath);
