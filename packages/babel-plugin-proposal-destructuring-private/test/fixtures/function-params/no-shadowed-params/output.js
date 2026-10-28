@@ -1,6 +1,6 @@
 class C {
   #x;
   m(a = 1, _ref, b, ...c) {
-    var x = _ref.#x;
+    let x = _ref.#x;
   }
 }

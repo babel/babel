@@ -18,7 +18,7 @@ class Comp extends React.Component {
   }
 }
 function smth(_ref) {
-  var {} = _ref,
+  let {} = _ref,
     rest = babelHelpers.objectWithoutPropertiesLoose(_ref, _excluded2);
   call(rest);
 }

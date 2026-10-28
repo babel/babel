@@ -23,7 +23,7 @@ import {
   keepsCompletionValue,
   markTemporary,
   needsLowering,
-  referencesName,
+  unshiftCatchClauseBody,
   unshiftForXStatementBody,
 } from "./util.ts";
 
@@ -348,23 +348,6 @@ function transformForXStatement(
   scope.crawl();
 }
 
-/**
- * Whether the body of a catch clause declares a name referenced by the
- * default values or computed keys of its parameter, which can't see the
- * declarations of the body.
- */
-function bodyShadowsPatternReference(
-  param: t.CatchClause["param"] & {},
-  scope: Scope,
-): boolean {
-  // The body shares the scope of the catch clause
-  const paramNames = t.getBindingIdentifiers(param);
-  return referencesName(
-    param,
-    new Set(Object.keys(scope.bindings).filter(name => !paramNames[name])),
-  );
-}
-
 function transformCatchClause(
   path: NodePath<t.CatchClause>,
   _: PluginPass,
@@ -378,20 +361,12 @@ function transformCatchClause(
   // transforms to:
   // catch (_ref) { let { a } = _ref; body }
   const ref = scope.generateUidIdentifier("ref");
-  node.param = ref;
   const declaration = t.variableDeclaration("let", [
     t.variableDeclarator(param, t.cloneNode(ref)),
   ]);
-  if (bodyShadowsPatternReference(param, scope)) {
-    // catch ({ a = b }) { let b; }
-    // transforms to:
-    // catch (_ref) { let { a = b } = _ref; { let b; } }
-    // The nodes of the body get new paths, registered by the crawl below.
-    forgetScopeInfo(path.get("body"));
-    node.body = t.blockStatement([declaration, node.body]);
-  } else {
-    node.body.body.unshift(declaration);
-  }
+  // Inserted while the parameter is still the pattern, whose names it binds
+  unshiftCatchClauseBody(path, [declaration]);
+  node.param = ref;
   // The pattern will be handled by the VariableDeclaration visitor, which
   // forgets the scope information registered again by this crawl.
   scope.crawl();

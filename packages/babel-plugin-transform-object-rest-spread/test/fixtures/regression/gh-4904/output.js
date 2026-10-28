@@ -14,7 +14,7 @@ const _bar = bar(),
 const {
   a
 } = foo(_ref => {
-  var {
+  let {
       b
     } = _ref,
     c = babelHelpers.objectWithoutProperties(_ref, _excluded);
