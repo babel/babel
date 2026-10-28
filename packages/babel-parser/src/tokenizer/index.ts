@@ -95,7 +95,9 @@ for (let i = 0; i < 128; i++) {
 // Keywords indexed by (length, first char code), so that classifying an
 // identifier does not need to hash the freshly sliced string, as a Map lookup
 // would. Each bucket is a flat [word, type, word, type, ...] array.
-const keywordBuckets: (string | TokenType)[][] = [];
+// See the snapshot in test/unit/tokenizer/keywords.skip-bundled.js for the
+// contents of each bucket.
+export const keywordBuckets: (string | TokenType)[][] = [];
 let maxKeywordLength = 0;
 // Not `for...of` over the Map: the parser is compiled with the
 // `iterableIsArray` assumption when building babel-standalone.
@@ -1445,6 +1447,9 @@ export default abstract class Tokenizer extends CommentsParser {
         }
         chunkStart = pos = this.state.pos;
       } else {
+        /**
+         * Handle surrogate pairs for non-BMP characters, see {@link codePointAtPos}
+         */
         if ((ch & 0xfc00) === 0xd800 && pos + 1 < length) {
           const trail = input.charCodeAt(pos + 1);
           if ((trail & 0xfc00) === 0xdc00) {
