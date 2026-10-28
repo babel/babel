@@ -338,6 +338,11 @@ export default function convertFunctionRest(
     }
 
     if (needsIIFE) {
+      // The IIFE is also passed the other parameters redeclared in the body.
+      const params = path.get("params");
+      for (let i = 0; i < params.length - 1; i++) {
+        collectShadowedParamsNames(params[i], scope, shadowedParams);
+      }
       const paramNames = new Set(
         node.params.flatMap(param =>
           Object.keys(t.getBindingIdentifiers(param)),
