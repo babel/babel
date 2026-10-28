@@ -839,10 +839,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 452, gzip size: 316
+  // size: 441, gzip size: 315
   jsx: helper(
     "7.0.0-beta.0",
-    'var e;function _createRawReactElement(r,l,o,n){e||(e="function"==typeof Symbol&&Symbol.for&&Symbol.for("react.element")||60103);var t=r&&r.defaultProps,f=arguments.length-3;if(l||0===f||(l={children:void 0}),1===f)l.children=n;else if(f>1){for(var i=Array(f),a=0;a<f;a++)i[a]=arguments[a+3];l.children=i}if(l&&t)for(var c in t)void 0===l[c]&&(l[c]=t[c]);else l||(l=t||{});return{$$typeof:e,type:r,key:void 0===o?null:""+o,ref:null,props:l,_owner:null}}',
+    'var e;function _createRawReactElement(r,o,l,n){e||(e="function"==typeof Symbol&&Symbol.for&&Symbol.for("react.element")||60103);var t=r&&r.defaultProps,f=arguments.length-3;if(o||0===f||(o={children:void 0}),f>0){var a=n;if(f>1){a=Array(f);for(var i=0;i<f;i++)a[i]=arguments[i+3]}o.children=a}if(o&&t)for(var u in t)void 0===o[u]&&(o[u]=t[u]);else o||(o=t||{});return{$$typeof:e,type:r,key:void 0===l?null:""+l,ref:null,props:o,_owner:null}}',
     {
       globals: ["Symbol", "Array"],
       locals: {

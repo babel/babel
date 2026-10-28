@@ -51,12 +51,13 @@ export default function _createRawReactElement(
     props = { children: void 0 };
   }
 
-  if (childrenLength === 1) {
-    props.children = children;
-  } else if (childrenLength > 1) {
-    var childArray = new Array(childrenLength);
-    for (var i = 0; i < childrenLength; i++) {
-      childArray[i] = arguments[i + 3];
+  if (childrenLength > 0) {
+    var childArray: any = children;
+    if (childrenLength > 1) {
+      childArray = new Array(childrenLength);
+      for (var i = 0; i < childrenLength; i++) {
+        childArray[i] = arguments[i + 3];
+      }
     }
     props.children = childArray;
   }
