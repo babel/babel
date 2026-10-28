@@ -634,7 +634,8 @@ export function buildObjectExcludingKeys(
 
 /**
  * Whether destructuring `target` runs user code besides reading the value:
- * default values, computed keys and member expression targets.
+ * default values, computed keys, member expression targets and object
+ * patterns.
  */
 function hasObservableEvaluation(target: t.Node, scope: Scope): boolean {
   switch (target.type) {
@@ -653,12 +654,9 @@ function hasObservableEvaluation(target: t.Node, scope: Scope): boolean {
         element => element && hasObservableEvaluation(element, scope),
       );
     case "ObjectPattern":
-      return target.properties.some(prop =>
-        prop.type === "RestElement"
-          ? hasObservableEvaluation(prop.argument, scope)
-          : (prop.computed && !isSafeToEvaluate(prop.key, scope)) ||
-            hasObservableEvaluation(prop.value, scope),
-      );
+      // Reading the properties may run getters, and the value is checked
+      // for null or undefined.
+      return true;
     default:
       return true;
   }
