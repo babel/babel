@@ -509,7 +509,18 @@ function adoptMovedChild(
  * would register them) rather than in the scope of the block declaring them.
  */
 export function pushHoistedVars(scope: Scope, ids: t.Identifier[]) {
+  if (ids.length === 0) return;
   const functionScope = scope.getFunctionParent() ?? scope.getProgramParent();
+  // `scope.push` would wrap the body of a loop in a block, whose new scope is
+  // crawled: the references of the nodes being lowered would be registered
+  // again, through stale paths. Declare them in the function instead.
+  const { path: blockParent } = scope.getBlockParent();
+  if (
+    blockParent.isLoop() &&
+    !(blockParent.get("body") as NodePath).isBlockStatement()
+  ) {
+    scope = functionScope;
+  }
   for (const id of ids) {
     scope.push({ id });
     const binding = findPushedBinding(scope, functionScope, id.name);
