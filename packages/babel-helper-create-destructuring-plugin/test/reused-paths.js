@@ -8,11 +8,10 @@ function transform(code, probe) {
     babelrc: false,
     sourceType: "script",
     plugins: [
-      api =>
+      () =>
         createDestructuringPlugin({
           name: "test-destructuring",
           feature: FEATURES.objectSpread,
-          api,
         }),
       probe,
     ],

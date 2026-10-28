@@ -6,10 +6,9 @@ import {
 import transformClassProperties from "@babel/plugin-transform-class-properties";
 
 function plugin(feature, older = false) {
-  return api => {
+  return () => {
     const result = createDestructuringPlugin({
       name: `test-destructuring-${feature}`,
-      api,
       feature,
       manipulateOptions(_, parserOpts) {
         if (feature & FEATURES.privateDestructuring) {
