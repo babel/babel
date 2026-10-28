@@ -14,6 +14,7 @@ function getRepeatedEvaluationContext(path: NodePath<t.ObjectExpression>) {
   let child: NodePath = path;
   let parent: NodePath | null = path.parentPath;
   while (parent) {
+    if (parent.isFunction() && child.listKey === "params") return parent;
     if (
       (parent.isFunction() &&
         child.key !== "key" &&
@@ -261,8 +262,9 @@ export function transformObjectSpread(
       return;
     }
     if (repeatedContext) {
-      // Each instance needs its own captured reference. An arrow preserves
-      // the field initializer's lexical this/super/new.target environment.
+      // Each instance or call needs its own captured reference. An arrow
+      // preserves the lexical this/super/new.target/arguments environment of
+      // the field initializer or parameter.
       path.replaceWith(
         t.callExpression(
           t.arrowFunctionExpression([t.cloneNode(objectRef)], path.node),
