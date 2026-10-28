@@ -60,11 +60,12 @@ interface EffectStep {
 }
 export type Step = TempStep | BindStep | EffectStep;
 
-function replaceInPlace(target: t.Node, source: t.Node) {
-  for (const key of Object.keys(target)) {
-    // @ts-expect-error dynamic key
-    delete target[key];
-  }
+/** Turn the placeholder `target` (a fresh identifier) into `source`. */
+function replaceInPlace(target: t.Identifier, source: t.Node) {
+  // Overwrite the key of the identifier rather than deleting it: deleting
+  // properties turns the node into a slow dictionary-mode object in V8.
+  // @ts-expect-error not an identifier anymore
+  target.name = undefined;
   Object.assign(target, source);
 }
 
