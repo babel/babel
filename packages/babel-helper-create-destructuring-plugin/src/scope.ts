@@ -117,8 +117,30 @@ export function collectScopeInfo(path: NodePath): () => void {
     path.parentPath?.parent ?? null,
     info,
   );
-  const { references, violations } = info;
+  return forgetCollected(info);
+}
 
+/**
+ * Like `collectScopeInfo`, for the head of a for-in/of statement: its left
+ * side and the statement itself, which assigns it, but not its body.
+ */
+export function collectForXHeadScopeInfo(
+  path: NodePath<t.ForXStatement>,
+): () => void {
+  const { node } = path;
+  const info: CollectedScopeInfo = {
+    scope: path.scope,
+    references: new Map(),
+    violations: new Map(),
+  };
+  forEachAssignedIdentifier(node, id => {
+    recordNode(info.violations, info.scope, id.name, node);
+  });
+  collectNodeScopeInfo(node.left, node, path.parent, info);
+  return forgetCollected(info);
+}
+
+function forgetCollected({ references, violations }: CollectedScopeInfo) {
   return () => {
     for (const [binding, nodes] of references) {
       forgetReferences(binding, nodes);
@@ -232,7 +254,7 @@ function removePaths(paths: NodePath[], nodes: ReadonlySet<t.Node>): number {
  * when nothing reads the scope information before they are registered again
  * (e.g. by a crawl).
  */
-export function forgetScopeInfo(path: NodePath) {
+function forgetScopeInfo(path: NodePath) {
   collectScopeInfo(path)();
 }
 
