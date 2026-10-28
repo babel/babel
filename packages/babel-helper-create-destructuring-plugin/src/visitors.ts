@@ -13,8 +13,7 @@ import {
   forgetScopeInfo,
   pushHoistedVars,
   registerReplacement,
-  removeUndeclaredBindings,
-  snapshotDeclaredBindings,
+  trackDeclaredBindings,
 } from "./scope.ts";
 import {
   hasPrivateClassElement,
@@ -197,8 +196,8 @@ function transformVariableDeclaration(
   });
 
   const forget = collectScopeInfo(path);
-  const declared = options.pureGetters
-    ? snapshotDeclaredBindings(node, scope)
+  const removeUndeclared = options.pureGetters
+    ? trackDeclaredBindings(node, scope)
     : null;
   declarations.forEach((declarator, i) =>
     lowering.lowerDeclarator(declarator, i === declarations.length - 1),
@@ -222,7 +221,7 @@ function transformVariableDeclaration(
     paths = path.replaceWithMultiple(nodes);
   }
   registerReplacement(paths, scope);
-  if (declared) removeUndeclaredBindings(declared);
+  removeUndeclared?.();
 }
 
 function transformAssignmentExpression(
@@ -290,6 +289,7 @@ function transformAssignmentExpression(
 
 function transformForXStatement(
   path: NodePath<t.ForXStatement>,
+  _: PluginPass,
   options: ResolvedOptions,
 ) {
   const { node, scope } = path;
@@ -367,6 +367,7 @@ function bodyShadowsPatternReference(
 
 function transformCatchClause(
   path: NodePath<t.CatchClause>,
+  _: PluginPass,
   options: ResolvedOptions,
 ) {
   const { node, scope } = path;
@@ -398,6 +399,7 @@ function transformCatchClause(
 
 function transformExportNamedDeclaration(
   path: NodePath<t.ExportNamedDeclaration>,
+  _: PluginPass,
   options: ResolvedOptions,
 ) {
   const declaration = path.get("declaration");
@@ -440,33 +442,14 @@ export type Guard = <T extends t.Node>(
 
 export function buildDestructuringVisitor(guard: Guard): Visitor<PluginPass> {
   const visitor: Visitor<PluginPass> = {
-    ExportNamedDeclaration: guard<t.ExportNamedDeclaration>(
-      (path, _, options) => transformExportNamedDeclaration(path, options),
-    ),
-    ForXStatement: guard<t.ForXStatement>((path, _, options) =>
-      transformForXStatement(path, options),
-    ),
-    CatchClause: guard<t.CatchClause>((path, _, options) =>
-      transformCatchClause(path, options),
-    ),
+    ExportNamedDeclaration: guard(transformExportNamedDeclaration),
+    ForXStatement: guard(transformForXStatement),
+    CatchClause: guard(transformCatchClause),
     AssignmentExpression: guard(transformAssignmentExpression),
     VariableDeclaration: guard(transformVariableDeclaration),
-    Function: guard<t.Function>((path, _, options) => {
-      if (
-        options.features &
-        (FEATURES.objectRest | FEATURES.privateDestructuring)
-      ) {
-        transformFunctionParams(path, options);
-      }
-    }),
-    ObjectExpression: guard<t.ObjectExpression>((path, state, options) => {
-      if (options.features & FEATURES.objectSpread) {
-        transformObjectSpread(path, state, options);
-      }
-    }),
-    Loop: {
-      exit: guard<t.Loop>(path => finishObjectSpreadLoop(path)),
-    },
+    Function: guard(transformFunctionParams),
+    ObjectExpression: guard(transformObjectSpread),
+    Loop: { exit: guard(finishObjectSpreadLoop) },
   };
 
   // Private names in patterns must be lowered to private member

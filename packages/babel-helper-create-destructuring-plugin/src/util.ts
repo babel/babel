@@ -53,37 +53,25 @@ export function propertyNeedsLowering(
   );
 }
 
-/**
- * Whether `predicate` holds for one of the assignment targets of the pattern
- * (identifiers, member expressions, `void`, ...).
- */
-export function someTarget(
-  target: PatternTarget,
-  predicate: (target: NonNullable<PatternTarget>) => boolean,
-): boolean {
+/** Whether one of the assignment targets of the pattern is a member expression. */
+export function hasMemberTarget(target: PatternTarget): boolean {
   if (!target) return false;
   switch (target.type) {
     case "ObjectPattern":
       return target.properties.some(prop =>
-        someTarget(
+        hasMemberTarget(
           prop.type === "RestElement" ? prop : (prop.value as PatternTarget),
-          predicate,
         ),
       );
     case "ArrayPattern":
-      return target.elements.some(element => someTarget(element, predicate));
+      return target.elements.some(hasMemberTarget);
     case "AssignmentPattern":
-      return someTarget(target.left, predicate);
+      return hasMemberTarget(target.left);
     case "RestElement":
-      return someTarget(target.argument, predicate);
+      return hasMemberTarget(target.argument);
     default:
-      return predicate(target);
+      return t.isMemberExpression(target);
   }
-}
-
-/** Whether `target` assigns to a member expression. */
-export function hasMemberTarget(target: PatternTarget): boolean {
-  return someTarget(target, node => t.isMemberExpression(node));
 }
 
 export function hasPrivateClassElement(node: t.ClassBody): boolean {
@@ -92,19 +80,13 @@ export function hasPrivateClassElement(node: t.ClassBody): boolean {
   );
 }
 
-export function hasObjectRest(pattern: t.ObjectPattern): boolean {
-  const { properties } = pattern;
-  return (
-    properties.length > 0 &&
-    properties[properties.length - 1].type === "RestElement"
-  );
-}
-
-export function hasArrayRest(pattern: t.ArrayPattern): boolean {
-  const { elements } = pattern;
-  return (
-    elements.length > 0 && elements[elements.length - 1]?.type === "RestElement"
-  );
+/** Whether the last property or element of the pattern is a rest element. */
+export function hasRestElement(
+  pattern: t.ObjectPattern | t.ArrayPattern,
+): boolean {
+  const list =
+    pattern.type === "ObjectPattern" ? pattern.properties : pattern.elements;
+  return list.length > 0 && list[list.length - 1]?.type === "RestElement";
 }
 
 export function isPureVoid(node: t.Node, scope: Scope): boolean {
@@ -653,11 +635,9 @@ export function hasObservableEvaluation(target: t.Node, scope: Scope): boolean {
       return target.elements.some(
         element => element && hasObservableEvaluation(element, scope),
       );
-    case "ObjectPattern":
-      // Reading the properties may run getters, and the value is checked
-      // for null or undefined.
-      return true;
     default:
+      // Object patterns read properties, which may run getters, and check
+      // their value for null or undefined.
       return true;
   }
 }

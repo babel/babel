@@ -2,9 +2,9 @@ import { template, types as t } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/core";
 
 import {
-  getIIFEVisitor,
   collectShadowedParamsNames,
   hasDirectEval,
+  referencesBodyDeclaration,
   wrapBodyInScopeIIFE,
 } from "./shadow-utils.ts";
 
@@ -326,15 +326,8 @@ export default function convertFunctionRest(
       if (needsIIFE) shadowedParams.add(name);
     } else {
       collectShadowedParamsNames(restPath, path.scope, shadowedParams);
-      needsIIFE = shadowedParams.size > 0;
-      if (!needsIIFE) {
-        const state = {
-          needsOuterBinding: false,
-          scope,
-        };
-        restPath.traverse(getIIFEVisitor(), state);
-        needsIIFE = state.needsOuterBinding;
-      }
+      needsIIFE =
+        shadowedParams.size > 0 || referencesBodyDeclaration([restPath], scope);
     }
 
     if (needsIIFE) {
@@ -343,12 +336,7 @@ export default function convertFunctionRest(
       for (let i = 0; i < params.length - 1; i++) {
         collectShadowedParamsNames(params[i], scope, shadowedParams);
       }
-      const paramNames = new Set(
-        node.params.flatMap(param =>
-          Object.keys(t.getBindingIdentifiers(param)),
-        ),
-      );
-      init = wrapBodyInScopeIIFE(path, shadowedParams, paramNames).init;
+      init = wrapBodyInScopeIIFE(path, shadowedParams).init;
     }
   }
 
@@ -392,11 +380,8 @@ export default function convertFunctionRest(
 
   path.traverse(memberExpressionOptimisationVisitor, state);
 
-  const statementsBeforeBody: t.Statement[] = [];
-  if (insertBeforeBody && declar) {
-    init!.splice(init!.indexOf(declar), 1);
-    statementsBeforeBody.push(declar);
-  }
+  const statementsBeforeBody: t.Statement[] =
+    insertBeforeBody && declar ? init!.splice(init!.indexOf(declar), 1) : [];
 
   // There are only "shorthand" references
   if (!state.deopted && !state.references.length) {
