@@ -10,7 +10,7 @@ import {
 } from "@babel/plugin-transform-parameters";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { collectScopeInfo, registerReplacement } from "./scope.ts";
-import { needsLowering } from "./util.ts";
+import { hasObservableEvaluation, needsLowering } from "./util.ts";
 
 type Binding = Scope["bindings"][string];
 
@@ -95,33 +95,6 @@ const conflictVisitor: Visitor<ConflictState> = {
 };
 
 /**
- * Collect the patterns of a parameter that are moved into the function body:
- * the object patterns that need to be lowered. An array pattern stays in the
- * parameter list, iterating its argument in order with the elements that
- * don't need to be lowered: only the ones that do are replaced by
- * temporaries.
- */
-function collectMovedPatterns(
-  param: NodePath,
-  features: number,
-  moved: NodePath<t.ObjectPattern>[],
-) {
-  if (param.isAssignmentPattern()) {
-    collectMovedPatterns(param.get("left"), features, moved);
-  } else if (param.isRestElement()) {
-    collectMovedPatterns(param.get("argument"), features, moved);
-  } else if (param.isObjectPattern()) {
-    moved.push(param);
-  } else if (param.isArrayPattern()) {
-    for (const element of param.get("elements")) {
-      if (element.node && needsLowering(element.node, features)) {
-        collectMovedPatterns(element, features, moved);
-      }
-    }
-  }
-}
-
-/**
  * Whether the parts of a lowered parameter staying in the parameter list,
  * around the moved patterns, can run user code: its default values, and the
  * iteration of its array patterns.
@@ -140,6 +113,48 @@ function isNativePartObservable(param: t.Node, scope: Scope): boolean {
     default:
       return false;
   }
+}
+
+/**
+ * Collect the patterns of a parameter that are moved into the function body:
+ * the object patterns that need to be lowered. An array pattern stays in the
+ * parameter list, iterating its argument in order with the elements that
+ * don't need to be lowered: only the ones that do are replaced by
+ * temporaries. Returns whether an element following a moved pattern runs
+ * user code, which must not happen before the moved pattern is destructured.
+ */
+function collectMovedPatterns(
+  param: NodePath,
+  features: number,
+  scope: Scope,
+  moved: NodePath<t.ObjectPattern>[],
+): boolean {
+  if (param.isAssignmentPattern()) {
+    return collectMovedPatterns(param.get("left"), features, scope, moved);
+  } else if (param.isRestElement()) {
+    return collectMovedPatterns(param.get("argument"), features, scope, moved);
+  } else if (param.isObjectPattern()) {
+    moved.push(param);
+  } else if (param.isArrayPattern()) {
+    let reordered = false;
+    let hasMoved = false;
+    for (const element of param.get("elements")) {
+      if (!element.node) continue;
+      if (needsLowering(element.node, features)) {
+        if (hasMoved && isNativePartObservable(element.node, scope)) {
+          reordered = true;
+        }
+        if (collectMovedPatterns(element, features, scope, moved)) {
+          reordered = true;
+        }
+        hasMoved = true;
+      } else if (hasMoved && hasObservableEvaluation(element.node, scope)) {
+        reordered = true;
+      }
+    }
+    return reordered;
+  }
+  return false;
 }
 
 /**
@@ -186,10 +201,15 @@ export function transformFunctionParams(
   const movedPatterns: NodePath<t.ObjectPattern>[] = [];
   // Names bound by the patterns moved into the function body, by parameter.
   const ownerOf = new Map<string, number>();
+  // Whether an element following a moved pattern would be destructured before
+  // it, when the pattern is replaced in place
+  let elementReordered = false;
   params.forEach((param, i) => {
     if (!isLowered[i]) return;
     const start = movedPatterns.length;
-    collectMovedPatterns(param, features, movedPatterns);
+    if (collectMovedPatterns(param, features, functionScope, movedPatterns)) {
+      elementReordered = true;
+    }
     for (const pattern of movedPatterns.slice(start)) {
       for (const name of Object.keys(pattern.getBindingIdentifiers())) {
         ownerOf.set(name, i);
@@ -228,14 +248,17 @@ export function transformFunctionParams(
     return binding && isRedeclaredInBody(binding);
   });
 
-  // The moved patterns are destructured in the body: the following
-  // parameters must not be evaluated before them.
-  const reordered = params.some((param, i) => {
-    if (i <= firstLowered) return false;
-    return isLowered[i]
-      ? isNativePartObservable(param.node, functionScope)
-      : isParamEvaluationObservable(param.node, functionScope);
-  });
+  // The moved patterns are destructured in the body: the elements following
+  // them in their array patterns and the following parameters must not be
+  // evaluated before them.
+  const reordered =
+    elementReordered ||
+    params.some((param, i) => {
+      if (i <= firstLowered) return false;
+      return isLowered[i]
+        ? isNativePartObservable(param.node, functionScope)
+        : isParamEvaluationObservable(param.node, functionScope);
+    });
 
   // The parameters of generators are initialized when they are called, not
   // when they are first resumed: convertFunctionParams evaluates them in a

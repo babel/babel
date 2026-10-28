@@ -637,7 +637,7 @@ export function buildObjectExcludingKeys(
  * default values, computed keys, member expression targets and object
  * patterns.
  */
-function hasObservableEvaluation(target: t.Node, scope: Scope): boolean {
+export function hasObservableEvaluation(target: t.Node, scope: Scope): boolean {
   switch (target.type) {
     case "Identifier":
     case "VoidPattern":
