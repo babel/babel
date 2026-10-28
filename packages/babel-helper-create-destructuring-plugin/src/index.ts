@@ -1,4 +1,4 @@
-import type { PluginAPI, PluginObject } from "@babel/core";
+import type { PluginObject } from "@babel/core";
 import { isLessThan } from "verkit";
 import { recordArgumentsUsage } from "@babel/plugin-transform-parameters";
 
@@ -23,7 +23,6 @@ export interface Options {
   feature: number;
   options?: FeatureOptions;
   manipulateOptions?: PluginObject["manipulateOptions"];
-  api: PluginAPI;
 }
 
 /**
@@ -36,11 +35,7 @@ export function createDestructuringPlugin({
   feature,
   options = {},
   manipulateOptions,
-  api,
 }: Options): PluginObject {
-  // Used when moving parameters of arrow functions into their body.
-  const noNewArrows = api.assumption("noNewArrows");
-
   // Only the newest helper copy lowers, with the union of the features
   // enabled by all the plugins, including the ones using an older copy.
   const guard: Guard = handler => (path, state) => {
@@ -54,7 +49,7 @@ export function createDestructuringPlugin({
     manipulateOptions,
 
     pre(file) {
-      enableFeature(file, feature, options, noNewArrows);
+      enableFeature(file, feature, options);
       recordArgumentsUsage(file);
 
       if (
