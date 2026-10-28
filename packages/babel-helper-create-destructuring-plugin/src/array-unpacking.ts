@@ -1,8 +1,8 @@
 import { types as t } from "@babel/core";
 import type { Scope } from "@babel/core";
 import {
-  hasArrayRest,
   hasMemberTarget,
+  hasRestElement,
   isInitializedReference,
   isSafeToEvaluate,
   mayRunUserCode,
@@ -87,7 +87,10 @@ export function canUnpackArrayPattern(
   // pattern has fewer elements than the array and doesn't have a rest so some
   // elements won't be evaluated
   if (pattern.elements.length > arr.elements.length) return false;
-  if (pattern.elements.length < arr.elements.length && !hasArrayRest(pattern)) {
+  if (
+    pattern.elements.length < arr.elements.length &&
+    !hasRestElement(pattern)
+  ) {
     return false;
   }
 

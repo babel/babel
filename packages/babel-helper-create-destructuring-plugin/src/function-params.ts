@@ -1,18 +1,19 @@
 import { types as t } from "@babel/core";
-import type { NodePath, Scope, Visitor } from "@babel/core";
+import type { NodePath, PluginPass, Scope, Visitor } from "@babel/core";
 import {
   convertFunctionParams,
+  getParamNames,
   isDefaultEvaluationObservable,
   isParamEvaluationObservable,
+  isRedeclaredInBody,
   preserveAnnexBParameterExclusions,
   readsMappedArguments,
+  skipTypeAnnotationsVisitor,
   unmapArguments,
 } from "@babel/plugin-transform-parameters";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { collectScopeInfo, registerReplacement } from "./scope.ts";
 import { hasObservableEvaluation, needsLowering } from "./util.ts";
-
-type Binding = Scope["bindings"][string];
 
 interface ConflictState {
   ownerOf: Map<string, number>;
@@ -24,18 +25,6 @@ interface ConflictState {
   /** How many moved patterns the visited node is nested in. */
   movedDepth: number;
   conflict: boolean;
-}
-
-/**
- * Whether a parameter is redeclared in the function body, which then has its
- * own binding for that name.
- */
-function isRedeclaredInBody(binding: Binding): boolean {
-  return binding.constantViolations.some(
-    violation =>
-      // A lexical declaration with the same name is an early error
-      violation.isVariableDeclarator() || violation.isFunctionDeclaration(),
-  );
 }
 
 // If a part of the parameter list (e.g. a default value) references a
@@ -72,11 +61,7 @@ function checkConflict(
 }
 
 const conflictVisitor: Visitor<ConflictState> = {
-  "TypeAnnotation|TSTypeAnnotation|TypeParameterDeclaration|TSTypeParameterDeclaration"(
-    path,
-  ) {
-    path.skip();
-  },
+  ...skipTypeAnnotationsVisitor,
   ObjectPattern: {
     enter(path, state) {
       if (state.movedNodes.has(path.node)) state.movedDepth++;
@@ -141,12 +126,9 @@ function collectMovedPatterns(
     for (const element of param.get("elements")) {
       if (!element.node) continue;
       if (needsLowering(element.node, features)) {
-        if (hasMoved && isNativePartObservable(element.node, scope)) {
-          reordered = true;
-        }
-        if (collectMovedPatterns(element, features, scope, moved)) {
-          reordered = true;
-        }
+        const nested = collectMovedPatterns(element, features, scope, moved);
+        reordered ||=
+          nested || (hasMoved && isNativePartObservable(element.node, scope));
         hasMoved = true;
       } else if (hasMoved && hasObservableEvaluation(element.node, scope)) {
         reordered = true;
@@ -155,6 +137,24 @@ function collectMovedPatterns(
     return reordered;
   }
   return false;
+}
+
+type Pattern = t.ObjectPattern | t.ArrayPattern;
+
+/**
+ * Replace a parameter pattern with a temporary, destructured by the returned
+ * declaration.
+ */
+function moveToTemporary(
+  pattern: NodePath<Pattern>,
+  scope: Scope,
+): [t.VariableDeclaration, NodePath<t.Identifier>] {
+  const uid = scope.generateUidIdentifier("ref");
+  uid.typeAnnotation = pattern.node.typeAnnotation;
+  const declaration = t.variableDeclaration("var", [
+    t.variableDeclarator(pattern.node, t.cloneNode(uid)),
+  ]);
+  return [declaration, pattern.replaceWith(uid)[0]];
 }
 
 /**
@@ -169,18 +169,23 @@ function collectMovedPatterns(
  */
 export function transformFunctionParams(
   path: NodePath<t.Function>,
+  _: PluginPass,
   options: ResolvedOptions,
 ) {
-  const { ignoreFunctionLength } = options;
   // Plain destructuring parameters are handled by
   // @babel/plugin-transform-parameters: only extract the parameters
   // containing object rest or private keys.
-  const features = options.features & ~FEATURES.destructuring;
+  const features =
+    options.features & (FEATURES.objectRest | FEATURES.privateDestructuring);
+  if (!features) return;
+  const firstLowered = path.node.params.findIndex(param =>
+    needsLowering(param, features),
+  );
+  if (firstLowered === -1) return;
   const isLowered = path.node.params.map(param =>
     needsLowering(param, features),
   );
-  const firstLowered = isLowered.indexOf(true);
-  if (firstLowered === -1) return;
+  const { ignoreFunctionLength } = options;
 
   const params = path.get("params");
   const tsParameterProperty = params.find(param =>
@@ -203,12 +208,12 @@ export function transformFunctionParams(
   const ownerOf = new Map<string, number>();
   // Whether an element following a moved pattern would be destructured before
   // it, when the pattern is replaced in place
-  let elementReordered = false;
+  let reordered = false;
   params.forEach((param, i) => {
     if (!isLowered[i]) return;
     const start = movedPatterns.length;
     if (collectMovedPatterns(param, features, functionScope, movedPatterns)) {
-      elementReordered = true;
+      reordered = true;
     }
     for (const pattern of movedPatterns.slice(start)) {
       for (const name of Object.keys(pattern.getBindingIdentifiers())) {
@@ -241,9 +246,9 @@ export function transformFunctionParams(
   // A body function redeclaring even an unlowered parameter must be isolated
   // before the mapped arguments object is copied.
   const shadowedNames = keepArgumentsUnmapped
-    ? params.flatMap(param => Object.keys(param.getBindingIdentifiers()))
-    : [...ownerOf.keys()];
-  const shadowed = shadowedNames.some(name => {
+    ? getParamNames(path.node.params)
+    : ownerOf.keys();
+  const shadowed = [...shadowedNames].some(name => {
     const binding = functionScope.getOwnBinding(name);
     return binding && isRedeclaredInBody(binding);
   });
@@ -251,14 +256,12 @@ export function transformFunctionParams(
   // The moved patterns are destructured in the body: the elements following
   // them in their array patterns and the following parameters must not be
   // evaluated before them.
-  const reordered =
-    elementReordered ||
-    params.some((param, i) => {
-      if (i <= firstLowered) return false;
-      return isLowered[i]
-        ? isNativePartObservable(param.node, functionScope)
-        : isParamEvaluationObservable(param.node, functionScope);
-    });
+  reordered ||= params.some((param, i) => {
+    if (i <= firstLowered) return false;
+    return isLowered[i]
+      ? isNativePartObservable(param.node, functionScope)
+      : isParamEvaluationObservable(param.node, functionScope);
+  });
 
   // The parameters of generators are initialized when they are called, not
   // when they are first resumed: convertFunctionParams evaluates them in a
@@ -280,19 +283,14 @@ export function transformFunctionParams(
       (fnPath, paramPath, transformedRestNodes) => {
         if (!paramPath.isRestElement()) return;
         const argument = paramPath.get("argument");
-        if (!needsLowering(argument.node, features)) return;
-        const uid = fnPath.scope.generateUidIdentifier("ref");
-        transformedRestNodes.push(
-          t.variableDeclaration("var", [
-            t.variableDeclarator(
-              argument.node as t.VariableDeclarator["id"],
-              uid,
-            ),
-          ]),
-        );
-        argument.replaceWith(t.cloneNode(uid));
+        if (needsLowering(argument.node, features)) {
+          transformedRestNodes.push(
+            moveToTemporary(argument as NodePath<Pattern>, fnPath.scope)[0],
+          );
+        }
       },
       options.noNewArrows,
+      keepArgumentsUnmapped,
     );
     forgetScopeInfo();
     functionScope.crawl();
@@ -302,14 +300,8 @@ export function transformFunctionParams(
   const declarations: t.VariableDeclaration[] = [];
   const newParams: NodePath<t.Identifier>[] = [];
   for (const pattern of movedPatterns) {
-    const uid = functionScope.generateUidIdentifier("ref");
-    uid.typeAnnotation = pattern.node.typeAnnotation;
-    declarations.push(
-      t.variableDeclaration("var", [
-        t.variableDeclarator(pattern.node, t.cloneNode(uid)),
-      ]),
-    );
-    const [newParam] = pattern.replaceWith(uid);
+    const [declaration, newParam] = moveToTemporary(pattern, functionScope);
+    declarations.push(declaration);
     newParams.push(newParam);
   }
 

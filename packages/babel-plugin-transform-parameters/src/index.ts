@@ -14,8 +14,11 @@ export {
   unmapArguments,
 } from "./params.ts";
 export {
+  getParamNames,
+  isRedeclaredInBody,
   preserveAnnexBParameterExclusions,
   recordArgumentsUsage,
+  skipTypeAnnotationsVisitor,
 } from "./shadow-utils.ts";
 
 export interface Options {

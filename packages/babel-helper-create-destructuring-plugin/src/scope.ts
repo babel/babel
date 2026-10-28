@@ -65,33 +65,28 @@ export function registerReplacement(paths: NodePath[], scope: Scope) {
 }
 
 /**
- * The declared bindings of a variable declaration about to be lowered, to
- * remove the ones that are not declared anymore (with `pureGetters`, the
- * properties bound to unused identifiers are not read).
+ * Record the bindings declared by a variable declaration about to be lowered.
+ * The returned function removes the ones that are not declared anymore (with
+ * `pureGetters`, the properties bound to unused identifiers are not read).
  */
-export function snapshotDeclaredBindings(
+export function trackDeclaredBindings(
   node: t.VariableDeclaration,
   scope: Scope,
-): [string, t.Identifier, Binding | undefined][] {
-  return Object.entries(t.getBindingIdentifiers(node)).map(([name, id]) => [
-    name,
-    id,
-    scope.getBinding(name),
-  ]);
-}
-
-export function removeUndeclaredBindings(
-  declared: ReturnType<typeof snapshotDeclaredBindings>,
-) {
-  for (const [name, id, binding] of declared) {
-    // Still the binding declared by the old declaration: it is gone
-    if (
-      binding?.identifier === id &&
-      binding.scope.getOwnBinding(name) === binding
-    ) {
-      binding.scope.removeOwnBinding(name);
+): () => void {
+  const declared = Object.entries(t.getBindingIdentifiers(node)).map(
+    ([name, id]) => [name, id, scope.getBinding(name)] as const,
+  );
+  return () => {
+    for (const [name, id, binding] of declared) {
+      // Still the binding declared by the old declaration: it is gone
+      if (
+        binding?.identifier === id &&
+        binding.scope.getOwnBinding(name) === binding
+      ) {
+        binding.scope.removeOwnBinding(name);
+      }
     }
-  }
+  };
 }
 
 /**
@@ -254,7 +249,7 @@ export function forgetReferences(binding: Binding, nodes: ReadonlySet<t.Node>) {
  * like `Scope#crawl` would. When `p` was just created, it can't be registered
  * already: it is added without the linear search of `Binding#reference`.
  */
-function registerPathScopeInfo(p: NodePath, isNewPath = false) {
+function registerPathScopeInfo(p: NodePath, isNewPath: boolean) {
   if (p.isReferencedIdentifier()) {
     const binding = p.scope.getBinding(p.node.name);
     if (binding && isNewPath) {

@@ -12,9 +12,8 @@ import {
 } from "./named-evaluation.ts";
 import {
   buildObjectExcludingKeys,
-  hasArrayRest,
   hasMemberTarget,
-  hasObjectRest,
+  hasRestElement,
   isAnonymousFunctionDefinition,
   isInitializedReference,
   isObjectCoercible,
@@ -184,21 +183,16 @@ class Ref {
           : Decision.Effect;
     } else if (readsStatic) {
       // Every read is a copy of the expression
-    } else if (
-      !this.forceTemp &&
-      // A retained value only read as the completion value is inlined there
-      placeholders.length === 1 &&
-      placeholders[0].index === this.#insertAt
-    ) {
-      // Nothing is evaluated between the value and its only read: inline it.
-      this.#decision = Decision.Inline;
-    } else if (
-      this.#lowering.inlineTemps &&
-      !this.forceTemp &&
-      placeholders[0].index === this.#insertAt
-    ) {
-      // Nothing is evaluated between the value and its first read
-      this.#decision = Decision.InlineTemp;
+    } else if (!this.forceTemp && placeholders[0].index === this.#insertAt) {
+      // Nothing is evaluated between the value and its first read: inline
+      // it when it is the only one (a retained value only read as the
+      // completion value is inlined there), or assign the temporary there.
+      this.#decision =
+        placeholders.length === 1
+          ? Decision.Inline
+          : this.#lowering.inlineTemps
+            ? Decision.InlineTemp
+            : Decision.Temp;
     } else {
       this.#decision = Decision.Temp;
     }
@@ -464,8 +458,8 @@ export class Lowering {
     });
   }
 
-  #temp(init: t.Expression, nameHint: t.Node = init): t.Identifier {
-    const id = this.scope.generateUidIdentifierBasedOnNode(nameHint);
+  #temp(init: t.Expression): t.Identifier {
+    const id = this.scope.generateUidIdentifierBasedOnNode(init);
     markTemporary(this.scope, id.name);
     if (this.inlineTemps) this.hoist(t.cloneNode(id));
     this.steps.push({
@@ -665,7 +659,7 @@ export class Lowering {
         plan === PropertyPlan.Lower && prop.value.type !== "VoidPattern";
       // Assignment references run before the property read, so they cannot
       // perform the pattern's initial RequireObjectCoercible check for us.
-      const hasMemberTarget =
+      const assignsMember =
         isRead &&
         this.#isMemberTarget(
           prop.value.type === "AssignmentPattern"
@@ -678,12 +672,12 @@ export class Lowering {
         // which performs the check before coercing the key: `ref[key]`
         return !(
           isRead &&
-          !hasMemberTarget &&
+          !assignsMember &&
           !lowersRest &&
           isInitializedReference(prop.key, this.scope)
         );
       }
-      if (isRead) return hasMemberTarget;
+      if (isRead) return assignsMember;
     }
     return true;
   }
@@ -726,7 +720,7 @@ export class Lowering {
     // The pattern is only lowered when it needs to be (see `lowerTarget`): if
     // there is a rest element, either it or a property before it has to be
     // lowered, and then the rest element is usually lowered too.
-    const hasRest = hasObjectRest(pattern);
+    const hasRest = hasRestElement(pattern);
     const plans = this.#planProperties(properties, hasRest);
     const lowersRest = hasRest && !this.#canKeepNativeRest(properties, plans);
     if (hasRest && !lowersRest) plans[plans.length - 1] = PropertyPlan.Native;
@@ -750,11 +744,7 @@ export class Lowering {
       computed: boolean,
       primitive = isPropertyKeyExpression(key, scope),
     ) => {
-      excluded.push({
-        key,
-        computed,
-        primitive,
-      });
+      excluded.push({ key, computed, primitive });
     };
 
     // In partial mode, consecutive properties that don't need to be lowered
@@ -958,7 +948,7 @@ export class Lowering {
 
     // if we have a rest then we need all the elements so don't tell
     // `toArray` to only get a certain amount
-    const count = hasArrayRest(pattern) ? null : elements.length;
+    const count = hasRestElement(pattern) ? null : elements.length;
     const arr = this.#toArray(ref, count);
 
     for (let i = 0; i < elements.length; i++) {
