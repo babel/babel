@@ -3,15 +3,13 @@ import { isLessThan } from "verkit";
 import { recordArgumentsUsage } from "@babel/plugin-transform-parameters";
 
 import {
-  FEATURES,
   enableFeature,
   getResolvedOptions,
-  setAssumptions,
   type FeatureOptions,
 } from "./features.ts";
 import { buildDestructuringVisitor, type Guard } from "./visitors.ts";
 
-export { FEATURES };
+export { FEATURES } from "./features.ts";
 export {
   buildObjectExcludingKeys,
   isAnonymousFunctionDefinition,
@@ -56,8 +54,7 @@ export function createDestructuringPlugin({
     manipulateOptions,
 
     pre(file) {
-      enableFeature(file, feature, options);
-      setAssumptions(file, { noNewArrows });
+      enableFeature(file, feature, options, noNewArrows);
       recordArgumentsUsage(file);
 
       if (
