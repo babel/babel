@@ -86,6 +86,8 @@ const enum Decision {
   None,
   Inline,
   Temp,
+  /** A temporary assigned where it is first read: `{ a } = _ref = f()` */
+  InlineTemp,
   Effect,
 }
 
@@ -106,6 +108,8 @@ class Ref {
   readonly #lowering: Lowering;
   /** The index in `lowering.steps` where the value must be evaluated. */
   readonly #insertAt: number;
+  /** The order in which the temporary is declared, if it is hoisted. */
+  readonly #hoistOrder: number;
   /**
    * A node whose identifiers are used to name the temporary variable. It
    * is resolved lazily, so that it can refer to the temporaries of the
@@ -140,6 +144,7 @@ class Ref {
   ) {
     this.#lowering = lowering;
     this.#insertAt = insertAt;
+    this.#hoistOrder = lowering.nextHoistOrder();
     this.#nameHint = nameHint;
   }
 
@@ -181,12 +186,19 @@ class Ref {
       // Every read is a copy of the expression
     } else if (
       !this.forceTemp &&
-      !this.retained &&
+      // A retained value only read as the completion value is inlined there
       placeholders.length === 1 &&
       placeholders[0].index === this.#insertAt
     ) {
       // Nothing is evaluated between the value and its only read: inline it.
       this.#decision = Decision.Inline;
+    } else if (
+      this.#lowering.inlineTemps &&
+      !this.forceTemp &&
+      placeholders[0].index === this.#insertAt
+    ) {
+      // Nothing is evaluated between the value and its first read
+      this.#decision = Decision.InlineTemp;
     } else {
       this.#decision = Decision.Temp;
     }
@@ -199,7 +211,7 @@ class Ref {
    */
   hoistDependencies(refs: Ref[]) {
     const { readAfter } = this;
-    if (!readAfter || this.#decision !== Decision.Inline) return;
+    if (!readAfter || !this.#isInline) return;
     const nodes = new Set<t.Node>();
     t.traverseFast(this.expr, node => {
       nodes.add(node);
@@ -208,7 +220,7 @@ class Ref {
     const { scope } = this.#lowering;
     for (const dep of refs) {
       if (
-        dep.#decision === Decision.Inline &&
+        dep.#isInline &&
         nodes.has(dep.#placeholders[0].node) &&
         // Reordering is only observable if one of them can affect the other
         (targetMayRunUserCode || !isSafeToEvaluate(dep.expr, scope))
@@ -218,14 +230,30 @@ class Ref {
     }
   }
 
+  /** Whether the value is evaluated where it is first read. */
+  get #isInline(): boolean {
+    return (
+      this.#decision === Decision.Inline ||
+      this.#decision === Decision.InlineTemp
+    );
+  }
+
   assignName() {
-    if (this.#decision !== Decision.Temp) return;
+    if (
+      this.#decision !== Decision.Temp &&
+      this.#decision !== Decision.InlineTemp
+    ) {
+      return;
+    }
     const { scope } = this.#lowering;
     let id = scope.generateUidIdentifierBasedOnNode(this.hint());
     // e.g. `[][0]` only produces digits: fall back to a generic name
     if (/^_\d*$/.test(id.name)) id = scope.generateUidIdentifier("ref");
     this.tempId = id;
     for (const { node } of this.#placeholders) node.name = id.name;
+    if (this.#lowering.inlineTemps) {
+      this.#lowering.hoist(t.cloneNode(id), this.#hoistOrder);
+    }
   }
 
   apply() {
@@ -236,6 +264,12 @@ class Ref {
     switch (this.#decision) {
       case Decision.Inline:
         replaceInPlace(this.#placeholders[0].node, this.expr);
+        break;
+      case Decision.InlineTemp:
+        replaceInPlace(
+          this.#placeholders[0].node,
+          t.assignmentExpression("=", t.cloneNode(this.tempId!), expr()),
+        );
         break;
       case Decision.Temp:
         steps.splice(insertAt, 0, {
@@ -274,29 +308,46 @@ interface LoweringOptions {
   addHelper: File["addHelper"];
   /** Whether we are lowering a destructuring assignment (vs a declaration). */
   isAssignment: boolean;
+  /**
+   * Whether the steps are evaluated as a single expression, whose
+   * temporaries are declared in `hoisted`: they are then assigned where they
+   * are first read when possible.
+   */
+  inlineTemps?: boolean;
 }
 
 export class Lowering {
   readonly steps: Step[] = [];
   /**
    * Identifiers that must be declared as uninitialized `var`s in the
-   * enclosing function (they are assigned inline, in expression position).
+   * enclosing function (they are assigned inline, in expression position),
+   * in the order of the values they hold.
    */
   readonly hoisted: t.Identifier[] = [];
+  readonly #hoistOrders: number[] = [];
+  #nextHoistOrder = 0;
   readonly #refs: Ref[] = [];
 
   readonly scope: Scope;
   readonly options: ResolvedOptions;
   readonly addHelper: File["addHelper"];
   readonly isAssignment: boolean;
+  readonly inlineTemps: boolean;
   /** Whether every pattern is lowered (the `destructuring` feature). */
   readonly full: boolean;
 
-  constructor({ scope, options, addHelper, isAssignment }: LoweringOptions) {
+  constructor({
+    scope,
+    options,
+    addHelper,
+    isAssignment,
+    inlineTemps = false,
+  }: LoweringOptions) {
     this.scope = scope;
     this.options = options;
     this.addHelper = addHelper;
     this.isAssignment = isAssignment;
+    this.inlineTemps = inlineTemps;
     this.full = !!(options.features & FEATURES.destructuring);
   }
 
@@ -343,6 +394,19 @@ export class Lowering {
       const last = steps[steps.length - 1];
       if (last.kind === StepKind.Bind) last.inherits = declarator;
     }
+  }
+
+  nextHoistOrder() {
+    return this.#nextHoistOrder++;
+  }
+
+  /** Declare `id` in `hoisted`, at `order` (by default, after the others). */
+  hoist(id: t.Identifier, order = this.nextHoistOrder()) {
+    const orders = this.#hoistOrders;
+    let i = orders.length;
+    while (i > 0 && orders[i - 1] > order) i--;
+    orders.splice(i, 0, order);
+    this.hoisted.splice(i, 0, id);
   }
 
   #finalize() {
@@ -403,6 +467,7 @@ export class Lowering {
   #temp(init: t.Expression, nameHint: t.Node = init): t.Identifier {
     const id = this.scope.generateUidIdentifierBasedOnNode(nameHint);
     markTemporary(this.scope, id.name);
+    if (this.inlineTemps) this.hoist(t.cloneNode(id));
     this.steps.push({
       kind: StepKind.Temp,
       id,
@@ -503,7 +568,7 @@ export class Lowering {
       // The target reference must be evaluated before reading the value:
       //   target.x = (_tmp = ref.x) === void 0 ? initializer : _tmp
       const tmp = scope.generateUidIdentifierBasedOnNode(ref.hint());
-      this.hoisted.push(tmp);
+      this.hoist(tmp);
       this.#bindRef(
         target,
         ref,
@@ -749,7 +814,7 @@ export class Lowering {
           // object while preserving the evaluation order:
           //   { [_key = f()]: x, ...rest }
           const id = scope.generateUidIdentifierBasedOnNode(key);
-          this.hoisted.push(id);
+          this.hoist(id);
           nativeProp = {
             ...prop,
             key: t.assignmentExpression(
@@ -991,7 +1056,7 @@ export class Lowering {
       this.options.features,
       this.scope,
       (target, id) => {
-        if (this.isAssignment) this.hoisted.push(id);
+        if (this.isAssignment) this.hoist(id);
         queue.push([target, id]);
       },
     );

@@ -7,5 +7,5 @@ var _x = {
 };
 (_C$x => {
   var x;
-  result = (_C$x = _x._, x = _C$x === void 0 ? 2 : _C$x, _C);
+  result = (x = (_C$x = _x._) === void 0 ? 2 : _C$x, _C);
 })();
