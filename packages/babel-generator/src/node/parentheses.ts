@@ -229,9 +229,10 @@ export function TSAsExpression(
   parentId: number,
 ): boolean {
   if (
-    (parentId === __node("AssignmentExpression") ||
+    parentId === __node("UpdateExpression") ||
+    ((parentId === __node("AssignmentExpression") ||
       parentId === __node("AssignmentPattern")) &&
-    parent.left === node
+      parent.left === node)
   ) {
     return true;
   }
@@ -247,7 +248,19 @@ export function TSAsExpression(
 
 export { TSAsExpression as TSSatisfiesExpression };
 
-export { UnaryLike as TSTypeAssertion };
+export function TSTypeAssertion(
+  node: t.TSTypeAssertion,
+  parent: any,
+  parentId: number,
+): boolean {
+  return (
+    parentId === __node("UpdateExpression") ||
+    ((parentId === __node("AssignmentExpression") ||
+      parentId === __node("AssignmentPattern")) &&
+      parent.left === node) ||
+    UnaryLike(node, parent, parentId)
+  );
+}
 
 export function TSConditionalType(
   node: t.TSConditionalType,
