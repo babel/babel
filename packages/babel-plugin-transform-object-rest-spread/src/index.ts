@@ -39,10 +39,11 @@ export default declare((api, opts: Options) => {
   const objectRestNoSymbols = api.assumption("objectRestNoSymbols") ?? loose;
   const pureGetters = api.assumption("pureGetters") ?? loose;
   const setSpreadProperties = api.assumption("setSpreadProperties") ?? loose;
+  // Used when moving the parameters of arrow functions into their body
+  const noNewArrows = api.assumption("noNewArrows") ?? true;
 
   return createDestructuringPlugin({
     name: "transform-object-rest-spread",
-    api,
     feature: FEATURES.objectRest | FEATURES.objectSpread,
     options: {
       useBuiltIns,
@@ -50,6 +51,7 @@ export default declare((api, opts: Options) => {
       objectRestNoSymbols,
       pureGetters,
       setSpreadProperties,
+      noNewArrows,
     },
   });
 });

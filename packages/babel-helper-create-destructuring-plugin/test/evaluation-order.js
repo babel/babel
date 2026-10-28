@@ -16,12 +16,11 @@ function expectSameEvaluation(
     sourceType: "script",
     parserOpts: { allowReturnOutsideFunction: true },
     plugins: [
-      api =>
+      () =>
         createDestructuringPlugin({
           name: "test-destructuring",
           feature,
           options,
-          api,
         }),
       checkScopeInfo,
     ],

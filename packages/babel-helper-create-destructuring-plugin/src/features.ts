@@ -23,11 +23,11 @@ export interface FeatureOptions {
   pureGetters?: boolean;
   setSpreadProperties?: boolean;
   ignoreFunctionLength?: boolean;
+  noNewArrows?: boolean;
 }
 
 export type ResolvedOptions = Required<FeatureOptions> & {
   features: number;
-  noNewArrows: boolean;
 };
 
 // We can't use a symbol because this needs to always be the same, even if
@@ -35,13 +35,11 @@ export type ResolvedOptions = Required<FeatureOptions> & {
 const featuresKey = "@babel/plugin-destructuring/featuresKey";
 const optionsKey = "@babel/plugin-destructuring/optionsKey";
 const resolvedKey = "@babel/plugin-destructuring/resolvedKey";
-const noNewArrowsKey = "@babel/plugin-destructuring/noNewArrows";
 
 export function enableFeature(
   file: File,
   feature: number,
   options: FeatureOptions,
-  noNewArrows: boolean | undefined,
 ) {
   file.set(featuresKey, file.get(featuresKey) | feature);
   const allOptions: Map<number, FeatureOptions> =
@@ -54,9 +52,6 @@ export function enableFeature(
   }
   file.set(optionsKey, allOptions);
   file.set(resolvedKey, null);
-  // Assumptions are shared by all the plugins of a Babel configuration, so
-  // unlike plugin options they don't need to be merged.
-  file.set(noNewArrowsKey, noNewArrows ?? true);
 }
 
 const restFirst = [
@@ -65,6 +60,8 @@ const restFirst = [
   FEATURES.privateDestructuring,
 ];
 const destructuringFirst = [FEATURES.destructuring, FEATURES.objectRest];
+/** The features whose patterns can be moved into the function body. */
+const movesParams = [FEATURES.objectRest, FEATURES.privateDestructuring];
 
 /**
  * The features whose plugin options are used for each option, in order. The
@@ -79,7 +76,8 @@ const precedence: Record<keyof FeatureOptions, number[]> = {
   objectRestNoSymbols: restFirst,
   pureGetters: restFirst,
   setSpreadProperties: restFirst,
-  ignoreFunctionLength: [FEATURES.objectRest, FEATURES.privateDestructuring],
+  ignoreFunctionLength: movesParams,
+  noNewArrows: movesParams,
 };
 
 /**
@@ -94,10 +92,7 @@ export function getResolvedOptions(file: File): ResolvedOptions {
   const features: number = file.get(featuresKey);
   const allOptions: Map<number, FeatureOptions> = file.get(optionsKey);
 
-  resolved = {
-    features,
-    noNewArrows: file.get(noNewArrowsKey),
-  } as ResolvedOptions;
+  resolved = { features } as ResolvedOptions;
   for (const key of Object.keys(precedence) as (keyof FeatureOptions)[]) {
     resolved[key] = false;
     for (const feature of precedence[key]) {

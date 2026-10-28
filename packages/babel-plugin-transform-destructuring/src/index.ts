@@ -38,7 +38,6 @@ export default declare((api, options: Options) => {
 
   return createDestructuringPlugin({
     name: "transform-destructuring",
-    api,
     feature: FEATURES.destructuring,
     options: {
       useBuiltIns,
