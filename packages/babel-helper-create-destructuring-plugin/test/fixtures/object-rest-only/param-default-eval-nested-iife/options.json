@@ -1,0 +1,4 @@
+{
+  "sourceType": "script",
+  "plugins": ["transform-object-rest-spread", "transform-parameters"]
+}
