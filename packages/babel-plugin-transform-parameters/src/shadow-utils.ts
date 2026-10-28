@@ -306,6 +306,14 @@ export function wrapBodyInScopeIIFE(
   // shadowed ones: its block functions named like the other parameters
   // would be hoisted (Annex B).
   preserveAnnexBParameterExclusions(path2.get("body"), paramNames);
+  // The aliases of `this`, `arguments`... declared by previous arrow function
+  // conversions move into the IIFE with the body: forget them, so that the
+  // next conversion declares its own in the function.
+  if (path.data) {
+    for (const key of Object.keys(path.data)) {
+      if (key.startsWith("binding:")) path.setData(key, undefined);
+    }
+  }
   path.set(
     "body",
     t.blockStatement([...before, buildScopeIIFE(shadowedParams, node.body)]),
