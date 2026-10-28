@@ -11,7 +11,7 @@ const _source = source,
     }))
   }.C : _source$C;
 let assigned;
-(_source2 = source, _source2$fn = _source2.fn, assigned = _source2$fn === void 0 ? babelHelpers.setFunctionName(((function () {})), "assigned") : _source2$fn, _source2);
+(assigned = (_source2$fn = (_source2 = source).fn) === void 0 ? babelHelpers.setFunctionName(((function () {})), "assigned") : _source2$fn, _source2);
 const _ref = (0, ((class {
     static seen = this.name;
   }))),

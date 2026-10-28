@@ -1,3 +1,4 @@
+var _ref;
 let a = 0,
   b;
 class C {
@@ -5,7 +6,4 @@ class C {
     a = 2;
   }
 }
-var _ref = [1, new C()];
-a = _ref[0];
-b = _ref[1];
-_ref;
+a = (_ref = [1, new C()])[0], b = _ref[1], _ref;

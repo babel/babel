@@ -10,13 +10,9 @@ class C {
     var a, b, x, y, z;
     ({
       [_C$a = babelHelpers.toPropertyKey(C.a)]: a
-    } = C);
-    x = C.#x;
-    ({
+    } = C), x = C.#x, {
       [_C$b = babelHelpers.toPropertyKey(C.b)]: b
-    } = C);
-    y = C.#y;
-    z = babelHelpers.objectWithoutProperties(C, [_C$a, _C$b]);
+    } = C, y = C.#y, z = babelHelpers.objectWithoutProperties(C, [_C$a, _C$b]);
     result = {
       a,
       b,

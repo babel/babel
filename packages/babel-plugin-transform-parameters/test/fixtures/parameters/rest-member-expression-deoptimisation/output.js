@@ -57,12 +57,11 @@ function x() {
   rest[0] = 0;
 }
 function swap() {
+  var _ref;
   for (var _len8 = arguments.length, rest = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
     rest[_key8] = arguments[_key8];
   }
-  var _ref = [rest[1], rest[0]];
-  rest[0] = _ref[0];
-  rest[1] = _ref[1];
+  _ref = [rest[1], rest[0]], rest[0] = _ref[0], rest[1] = _ref[1];
 }
 function forIn() {
   for (var _len9 = arguments.length, rest = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
@@ -106,12 +105,11 @@ function newExp() {
 // In addition to swap() above because at some point someone tried checking
 // grandparent path for isArrayExpression() to deopt.
 function arrayDestructure() {
+  var _x, _x2;
   for (var _len13 = arguments.length, rest = new Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
     rest[_key13] = arguments[_key13];
   }
-  var _x = x;
-  var _x2 = babelHelpers.slicedToArray(_x, 1);
-  rest[0] = _x2[0];
+  _x = x, _x2 = babelHelpers.slicedToArray(_x, 1), rest[0] = _x2[0];
 }
 function forOf() {
   for (var _len14 = arguments.length, rest = new Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
