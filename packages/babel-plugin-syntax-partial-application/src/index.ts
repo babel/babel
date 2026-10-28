@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 
-const VERSIONS = ["2018-07"] as const;
+const VERSIONS = ["2018-07", "2021-10"] as const;
 export interface Options {
   version: (typeof VERSIONS)[number];
 }

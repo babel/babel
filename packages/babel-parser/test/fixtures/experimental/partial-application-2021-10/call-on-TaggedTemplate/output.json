@@ -1,0 +1,111 @@
+{
+  "type": "File",
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":20,"index":35}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":20,"index":35}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "expression": {
+          "type": "PartialCallExpression",
+          "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+          "callee": {
+            "type": "TaggedTemplateExpression",
+            "start":0,"end":8,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":8,"index":8}},
+            "tag": {
+              "type": "Identifier",
+              "start":0,"end":3,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":3,"index":3},"identifierName":"foo"},
+              "name": "foo"
+            },
+            "quasi": {
+              "type": "TemplateLiteral",
+              "start":3,"end":8,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":8,"index":8}},
+              "expressions": [],
+              "quasis": [
+                {
+                  "type": "TemplateElement",
+                  "start":4,"end":7,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":7,"index":7}},
+                  "value": {
+                    "raw": "bar",
+                    "cooked": "bar"
+                  },
+                  "tail": true
+                }
+              ]
+            }
+          },
+          "arguments": [
+            {
+              "type": "ArgumentPlaceholder",
+              "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11}}
+            }
+          ]
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":15,"end":35,"loc":{"start":{"line":3,"column":0,"index":15},"end":{"line":3,"column":20,"index":35}},
+        "expression": {
+          "type": "TaggedTemplateExpression",
+          "start":15,"end":34,"loc":{"start":{"line":3,"column":0,"index":15},"end":{"line":3,"column":19,"index":34}},
+          "tag": {
+            "type": "PartialCallExpression",
+            "start":15,"end":29,"loc":{"start":{"line":3,"column":0,"index":15},"end":{"line":3,"column":14,"index":29}},
+            "callee": {
+              "type": "TaggedTemplateExpression",
+              "start":15,"end":23,"loc":{"start":{"line":3,"column":0,"index":15},"end":{"line":3,"column":8,"index":23}},
+              "tag": {
+                "type": "Identifier",
+                "start":15,"end":18,"loc":{"start":{"line":3,"column":0,"index":15},"end":{"line":3,"column":3,"index":18},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "quasi": {
+                "type": "TemplateLiteral",
+                "start":18,"end":23,"loc":{"start":{"line":3,"column":3,"index":18},"end":{"line":3,"column":8,"index":23}},
+                "expressions": [],
+                "quasis": [
+                  {
+                    "type": "TemplateElement",
+                    "start":19,"end":22,"loc":{"start":{"line":3,"column":4,"index":19},"end":{"line":3,"column":7,"index":22}},
+                    "value": {
+                      "raw": "bar",
+                      "cooked": "bar"
+                    },
+                    "tail": true
+                  }
+                ]
+              }
+            },
+            "arguments": [
+              {
+                "type": "RestPlaceholder",
+                "start":25,"end":28,"loc":{"start":{"line":3,"column":10,"index":25},"end":{"line":3,"column":13,"index":28}}
+              }
+            ]
+          },
+          "quasi": {
+            "type": "TemplateLiteral",
+            "start":29,"end":34,"loc":{"start":{"line":3,"column":14,"index":29},"end":{"line":3,"column":19,"index":34}},
+            "expressions": [],
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "start":30,"end":33,"loc":{"start":{"line":3,"column":15,"index":30},"end":{"line":3,"column":18,"index":33}},
+                "value": {
+                  "raw": "baz",
+                  "cooked": "baz"
+                },
+                "tail": true
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}
