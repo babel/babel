@@ -74,8 +74,9 @@ export function NewExpression(
     this.format.minified &&
     node.arguments.length === 0 &&
     !node.typeArguments &&
-    // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-    !node.optional;
+    (process.env.BABEL_8_BREAKING ||
+      // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
+      (!node.typeParameters && !node.optional));
   const wrapInParens = omitArguments && hasPostfixPart(node, parent);
   if (wrapInParens) this.token("(");
   this.word("new");
