@@ -2,11 +2,7 @@ name: CI
 
 on:
   push:
-    # "personal" branches for stacked PRs; will run when opening the PR
-    branches-ignore:
-      - "nicolo-ribaudo/**"
-      - "jlhwung/**"
-      - "liuxingbaoyu/**"
+    branches: ["main"]
   pull_request:
 
 permissions:
@@ -590,6 +586,8 @@ jobs:
     name: test262 - Prepare for running in parallel
     runs-on: ubuntu-latest
     if: github.repository == 'babel/babel'
+    outputs:
+      test262-commit: ${{ steps.test262-commit.outputs.sha1 }}
     steps:
       - name: Checkout Babel
         uses: actions/checkout@v7
@@ -606,6 +604,9 @@ jobs:
           ref: main
       - name: Download test262
         run: make bootstrap-test262
+      - name: Get test262 commit
+        id: test262-commit
+        run: echo "sha1=$(git -C build/test262 rev-parse HEAD)" >> $GITHUB_OUTPUT
       - name: Prepare test262 chunks
         run: |
           cd babel-test262-runner
@@ -680,7 +681,7 @@ jobs:
   test262-finish:
     name: test262 - Analyze results
     runs-on: ubuntu-latest
-    needs: test262
+    needs: [test262-prepare, test262]
     steps:
       - uses: actions/download-artifact@v8
         with: { name: test262-result-0 }
@@ -722,12 +723,32 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Compare previous main branch & current results
+        id: compare
         run: |
           cd babel-test262-runner
           node lib/compare-results ~/test262-main.tap ../test262.tap | tee ~/diff.tap
         # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
         # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
         shell: bash
+      # The comment is posted by the "Test262 comment" workflow, since this one
+      # does not have write permissions when running on PRs from forks.
+      - name: Prepare data for the PR comment
+        if: ${{ !cancelled() && github.event_name == 'pull_request' && steps.compare.outcome != 'skipped' }}
+        run: |
+          mkdir ~/test262-comment-data
+          cp ~/diff.tap ~/test262-comment-data/diff.tap
+          echo "$PR_NUMBER" > ~/test262-comment-data/pr-number
+          echo "$TEST262_COMMIT" > ~/test262-comment-data/test262-commit
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          TEST262_COMMIT: ${{ needs.test262-prepare.outputs.test262-commit }}
+      - name: Upload data for the PR comment
+        if: ${{ !cancelled() && github.event_name == 'pull_request' && steps.compare.outcome != 'skipped' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: test262-comment-data
+          path: ~/test262-comment-data
+          retention-days: 1
 
   ensure-npm-packages-exist:
     name: Ensure npm packages exist
@@ -763,3 +784,31 @@ jobs:
         run: make prepublish-no-lint
       - name: Publint
         run: node ./scripts/publint.ts
+
+  codspeed:
+    name: Codspeed
+    runs-on: codspeed-macro-arm64-graviton-ubuntu-22-04
+    needs: prepare-yarn-cache
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js latest
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          check-latest: true
+          cache: "yarn"
+      - name: Install
+        run: yarn install
+      - name: Build
+        run: yarn gulp build
+        env:
+          NODE_ENV: "production"
+          BABEL_ENV: "production"
+          STRIP_BABEL_VERSION_FLAG: "true"
+          IS_PUBLISH: "true"
+      - name: Run benchmarks
+        uses: CodSpeedHQ/action@v4
+        with:
+          mode: walltime
+          run: node --expose-gc --no-allocation-site-pretenuring ./benchmark/index.mjs --only-current

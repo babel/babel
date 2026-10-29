@@ -1,23 +1,27 @@
 import _Symbol from "core-js-pure/features/symbol/index.js";
 import _Symbol$for from "core-js-pure/features/symbol/for.js";
 var e;
-function _createRawReactElement(r, l, o, n) {
+function _createRawReactElement(r, o, l, n) {
   e || (e = "function" == typeof _Symbol && _Symbol$for && _Symbol$for("react.element") || 60103);
   var t = r && r.defaultProps,
     f = arguments.length - 3;
-  if (l || 0 === f || (l = {
+  if (o || 0 === f || (o = {
     children: void 0
-  }), 1 === f) l.children = n;else if (f > 1) {
-    for (var i = Array(f), a = 0; a < f; a++) i[a] = arguments[a + 3];
-    l.children = i;
+  }), f > 0) {
+    var a = n;
+    if (f > 1) {
+      a = Array(f);
+      for (var i = 0; i < f; i++) a[i] = arguments[i + 3];
+    }
+    o.children = a;
   }
-  if (l && t) for (var c in t) void 0 === l[c] && (l[c] = t[c]);else l || (l = t || {});
+  if (o && t) for (var u in t) void 0 === o[u] && (o[u] = t[u]);else o || (o = t || {});
   return {
     $$typeof: e,
     type: r,
-    key: void 0 === o ? null : "" + o,
+    key: void 0 === l ? null : "" + l,
     ref: null,
-    props: l,
+    props: o,
     _owner: null
   };
 }

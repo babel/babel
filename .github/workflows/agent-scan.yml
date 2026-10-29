@@ -24,7 +24,7 @@ jobs:
         uses: MatteoGabriele/agentscan-action@8112fb79b33fafb8506159df20129a34209ac410 # v2.5.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          allowed-users: "nicolo-ribaudo,JLHwung,liuxingbaoyu,babel-bot,fisker"
+          allowed-users: "fisker"
           trusted-author-associations: "owner,member,collaborator"
-          honeypot: true
           scan-issues: true
+          mode: "labels"

@@ -56,7 +56,7 @@ const isClassExtendsClause = (
   );
 };
 
-const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
+export const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
   switch (parentId) {
     case __node("MemberExpression"):
     case __node("OptionalMemberExpression"):
@@ -69,6 +69,8 @@ const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
       return parent.tag === node;
     case __node("TSNonNullExpression"):
       return true;
+    case __node("TSInstantiationExpression"):
+      return parent.expression === node;
   }
 
   return false;
@@ -227,9 +229,10 @@ export function TSAsExpression(
   parentId: number,
 ): boolean {
   if (
-    (parentId === __node("AssignmentExpression") ||
+    parentId === __node("UpdateExpression") ||
+    ((parentId === __node("AssignmentExpression") ||
       parentId === __node("AssignmentPattern")) &&
-    parent.left === node
+      parent.left === node)
   ) {
     return true;
   }
@@ -245,7 +248,19 @@ export function TSAsExpression(
 
 export { TSAsExpression as TSSatisfiesExpression };
 
-export { UnaryLike as TSTypeAssertion };
+export function TSTypeAssertion(
+  node: t.TSTypeAssertion,
+  parent: any,
+  parentId: number,
+): boolean {
+  return (
+    parentId === __node("UpdateExpression") ||
+    ((parentId === __node("AssignmentExpression") ||
+      parentId === __node("AssignmentPattern")) &&
+      parent.left === node) ||
+    UnaryLike(node, parent, parentId)
+  );
+}
 
 export function TSConditionalType(
   node: t.TSConditionalType,
@@ -344,6 +359,13 @@ export function TSInstantiationExpression(
     case __node("NewExpression"):
     case __node("TSInstantiationExpression"):
       return parent.typeArguments != null;
+    case __node("MemberExpression"):
+    case __node("OptionalMemberExpression"):
+      // `a<b>.c` is invalid, and `a<b>[0]` is parsed as a comparison
+      return parent.object === node;
+    case __node("TSNonNullExpression"):
+      // `a<b>!` is invalid
+      return true;
   }
 
   return false;
