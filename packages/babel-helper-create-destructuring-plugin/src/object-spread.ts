@@ -42,7 +42,8 @@ function getRepeatedEvaluationContext(path: NodePath<t.ObjectExpression>) {
       if (
         parent.isWhileStatement() ||
         parent.isDoWhileStatement() ||
-        (parent.isForStatement() && child.key !== "init")
+        (parent.isForStatement() && child.key !== "init") ||
+        (parent.isForXStatement() && child.key === "left")
       ) {
         return parent;
       }
