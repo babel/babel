@@ -1,15 +1,15 @@
 var _obj;
-const o = Object.assign(Object.assign(_obj = {}, a), {}, {
+const o = babelHelpers.defineAccessor("get", babelHelpers.objectSpread2(_obj = {}, a), "p", Object.getOwnPropertyDescriptor({
   get p() {
     return babelHelpers.superPropGet(_obj, "x", this);
   }
-});
+}, "p").get);
 for (let i = 0; o = babelHelpers.objectSpread2((_obj2 => babelHelpers.objectSpread2(_obj2, {}, {
   m() {
     return babelHelpers.superPropGet(_obj2, "x", this);
   }
-}))((_obj2 => babelHelpers.defineAccessor("set", _obj2, "p", Object.getOwnPropertyDescriptor({
+}))(babelHelpers.defineAccessor("set", babelHelpers.objectSpread2({}, a), "p", Object.getOwnPropertyDescriptor({
   set p(v) {}
-}, "p").set))(babelHelpers.objectSpread2({}, a))), {}, {
+}, "p").set)), {}, {
   p: 1
 }), i < 1; i++);
