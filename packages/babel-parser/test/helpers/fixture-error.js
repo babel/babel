@@ -10,18 +10,13 @@ const toContextError = error =>
   isArray(error) ? error.map(toContextError) : error.context || error;
 
 export default class FixtureError extends Error {
-  constructor(difference, { cause } = {}) {
-    super();
+  constructor(difference, options) {
+    super(undefined, options);
 
     // Sigh, still have to manually set the name unfortunately...
     named(this.constructor.name, this);
 
     this.difference = difference;
-
-    // Set cause ourselves, since node < 17 has a bug where it won't show it
-    // otherwise. Technically, we display it ourselves, but best to be defensive
-    // in case we modify this implementation later.
-    if (cause) this.cause = cause;
   }
 
   static toMessage() {

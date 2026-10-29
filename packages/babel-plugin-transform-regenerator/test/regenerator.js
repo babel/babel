@@ -5,13 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {
-  readFile,
-  writeFileSync,
-  copyFileSync,
-  mkdirSync,
-  readFileSync,
-} from "node:fs";
+import { readFile, writeFileSync, copyFileSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
 import { spawn } from "node:child_process";
 import { transformSync } from "@babel/core";
@@ -161,9 +155,7 @@ function enqueue(cmd, args = []) {
 try {
   mkdirSync(join(__dirname, "regenerator-fixtures/tmp"));
 } catch {}
-// TODO: Remove fallback after dropping Node.js 6
-// "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6
-(copyFileSync || ((from, to) => writeFileSync(to, readFileSync(from))))(
+copyFileSync(
   join(__dirname, "./regenerator-fixtures/shared.js"),
   join(__dirname, "./regenerator-fixtures/tmp/shared.js"),
 );

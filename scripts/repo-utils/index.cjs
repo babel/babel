@@ -1,11 +1,10 @@
 // NOTE: This file must be runnable on all Node.js version
 /* eslint-disable no-undef */
-/* eslint-disable unicorn/prefer-node-protocol */
 // @ts-check
 
-const path = require("path");
-const { fileURLToPath } = require("url");
-const { createRequire } = require("module");
+const path = require("node:path");
+const { fileURLToPath } = require("node:url");
+const { createRequire } = require("node:module");
 const { isGreaterThanOrEqual, isLessThan, satisfies } = require("verkit");
 
 // env vars from the cli are always strings, so !!ENV_VAR returns true for "false"
@@ -66,7 +65,6 @@ exports.commonJS = function (metaUrl) {
   return {
     __filename: filename,
     __dirname: dirname,
-    // Only available in Node.js 12+
-    require: createRequire ? createRequire(filename) : null,
+    require: createRequire(filename),
   };
 };
