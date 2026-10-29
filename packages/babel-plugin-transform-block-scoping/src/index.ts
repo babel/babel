@@ -6,6 +6,7 @@ import {
   getLoopBodyBindings,
   getUsageInBody,
   isVarInLoopHead,
+  moveCapturingTestAndUpdateIntoBody,
   wrapLoopBody,
 } from "./loop.ts";
 import { validateUsage } from "./validation.ts";
@@ -52,6 +53,8 @@ export default declare((api, opts: Options) => {
             }
             needsBodyWrap = true;
           };
+
+          if (path.isForStatement()) moveCapturingTestAndUpdateIntoBody(path);
 
           const body = path.get("body");
           let bodyScope: Scope | null;
