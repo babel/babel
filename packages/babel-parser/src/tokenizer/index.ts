@@ -1246,7 +1246,7 @@ export default abstract class Tokenizer extends CommentsParser {
     }
 
     if (isBigInt || (val !== null && val > Number.MAX_SAFE_INTEGER)) {
-      const str = this.input.slice(start, end).replaceAll("_", "");
+      const str = this.input.slice(start, end).replace(/_/g, "");
       if (isBigInt) {
         this.finishToken(tt.bigint, str);
         return;
@@ -1357,7 +1357,7 @@ export default abstract class Tokenizer extends CommentsParser {
     }
 
     // Exclude the `n` or `m` suffix and remove numeric separators before conversion.
-    const str = this.input.slice(start, end).replaceAll("_", "");
+    const str = this.input.slice(start, end).replace(/_/g, "");
     if (isBigInt) {
       this.finishToken(tt.bigint, str);
       return;
