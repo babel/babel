@@ -149,12 +149,20 @@ export function transformObjectSpread(
       },
     }).replace();
   }
-  if (
+  // In a loop header, the accessors after a spread are defined on the target
+  // by factories capturing it.
+  const firstSpread = path.node.properties.findIndex(prop =>
+    t.isSpreadElement(prop),
+  );
+  const definesAccessors =
     captureInHeader &&
     objectRef &&
     path.node.properties.some(
-      prop => t.isObjectMethod(prop) && prop.kind !== "method",
-    ) &&
+      (prop, i) =>
+        i > firstSpread && t.isObjectMethod(prop) && prop.kind !== "method",
+    );
+  if (
+    definesAccessors &&
     path.scope.hasBinding("Object", { noGlobals: true })
   ) {
     // Accessor factories read their descriptor through the global Object.
@@ -182,9 +190,12 @@ export function transformObjectSpread(
 
   const { useBuiltIns, pureGetters, setSpreadProperties } = options;
 
-  const helper = setSpreadProperties
-    ? getExtendsHelper(useBuiltIns, name => file.addHelper(name))
-    : file.addHelper("objectSpread2");
+  // Assigning the following properties to the target would call the
+  // accessors defined by the factories, instead of replacing them.
+  const helper =
+    setSpreadProperties && !definesAccessors
+      ? getExtendsHelper(useBuiltIns, name => file.addHelper(name))
+      : file.addHelper("objectSpread2");
 
   let exp: t.CallExpression | null = null;
   // Whether `exp` is a call to `helper`, which more arguments can be added to
@@ -197,7 +208,15 @@ export function transformObjectSpread(
     props = [];
 
     if (!exp) {
-      exp = t.callExpression(helper, [obj]);
+      // The first object is the target of every call, and the result. Its
+      // reference is assigned before copying the properties, which can call
+      // the getters using `super` (with `setSpreadProperties` or
+      // `pureGetters`).
+      exp = t.callExpression(helper, [
+        objectRef && !captureInHeader
+          ? t.assignmentExpression("=", t.cloneNode(objectRef), obj)
+          : obj,
+      ]);
       isHelperCall = true;
       return;
     }
@@ -303,13 +322,12 @@ export function transformObjectSpread(
 
   if (props.length) make();
 
-  let replacementNode: t.Expression = exp!;
+  const replacementNode: t.Expression = exp!;
   // Each instance or call needs its own captured reference.
   const wrapInIIFE = objectRef && repeatedContext && !captureInHeader;
   let loop: NodePath<t.Loop> | null = null;
-  if (objectRef && !captureInHeader) {
-    replacementNode = t.assignmentExpression("=", t.cloneNode(objectRef), exp!);
-    if (!repeatedContext) loop = declareObjectRef(path, objectRef);
+  if (objectRef && !repeatedContext) {
+    loop = declareObjectRef(path, objectRef);
   }
   const [replacement] = path.replaceWith(
     wrapInIIFE
