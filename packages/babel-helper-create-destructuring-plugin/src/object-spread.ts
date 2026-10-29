@@ -237,22 +237,24 @@ export function transformObjectSpread(
       forgetMoved(prop);
       const params = [t.cloneNode(objectRef)];
       const args: t.Expression[] = [exp];
-      let accessorKey: t.Identifier | undefined;
-      if (prop.computed || prop.kind !== "method") {
+      // The key of an accessor, to read its descriptor
+      let accessorKey: t.Expression | undefined;
+      if (prop.computed) {
         // Evaluate computed keys outside the closure, preserving lexical
         // references and allowing yield/await in the original function.
         args.push(
           prop.kind === "method"
             ? prop.key
-            : t.callExpression(file.addHelper("toPropertyKey"), [
-                t.toComputedKey(prop) as t.Expression,
-              ]),
+            : t.callExpression(file.addHelper("toPropertyKey"), [prop.key]),
         );
         const key = path.scope.generateUidIdentifier("key");
         params.push(key);
         prop.key = t.cloneNode(key);
-        prop.computed = true;
         accessorKey = key;
+      } else if (prop.kind !== "method") {
+        // A static key keeps the accessor name, without a computed key that
+        // transform-computed-properties would turn into a function expression.
+        accessorKey = t.toComputedKey(prop) as t.Expression;
       }
       const object = t.objectExpression([prop]);
       const body =
