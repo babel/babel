@@ -352,7 +352,7 @@ const noMovedPaths: ReadonlyMap<t.Node, NodePath> = new Map();
  * Register the references and constant violations of freshly inserted nodes,
  * like `Scope#crawl` would.
  */
-function registerScopeInfo(paths: NodePath[]) {
+export function registerScopeInfo(paths: NodePath[]) {
   for (const path of paths) adoptMovedPaths(path, noMovedPaths);
 }
 
@@ -521,6 +521,19 @@ function adoptMovedChild(
 }
 
 /**
+ * `ensureBlock` for an arrow with an expression body, keeping the path of the
+ * body: `ensureBlock` moves it under a new return statement without caching
+ * it there, so the next traversal creates other paths for it (and crawls its
+ * nested scopes again).
+ */
+function ensureArrowBlock(arrow: NodePath<t.ArrowFunctionExpression>) {
+  const bodyPath = arrow.get("body") as NodePath<t.Expression>;
+  const body = bodyPath.node;
+  arrow.node.body = t.blockStatement([t.returnStatement(body)]);
+  adoptMovedPaths(arrow.get("body"), new Map([[body, bodyPath]]));
+}
+
+/**
  * Declare `ids` as uninitialized `var`s of the enclosing function, like
  * `scope.push` does, but registered in the function scope (where a crawl
  * would register them) rather than in the scope of the block declaring them.
@@ -537,6 +550,13 @@ export function pushHoistedVars(scope: Scope, ids: t.Identifier[]) {
     !(blockParent.get("body") as NodePath).isBlockStatement()
   ) {
     scope = functionScope;
+  }
+  const { path: target } = scope.getBlockParent();
+  if (
+    target.isArrowFunctionExpression() &&
+    !target.get("body").isBlockStatement()
+  ) {
+    ensureArrowBlock(target);
   }
   for (const id of ids) {
     scope.push({ id });
