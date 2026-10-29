@@ -81,12 +81,33 @@ function hasArgumentsObject(scope: Scope): boolean {
   return fn !== null;
 }
 
+/** How a `Ref` is evaluated, decided by `Ref#decide`. */
 const enum Decision {
+  /**
+   * Nothing is emitted for the value itself: it is not read and is safe to
+   * evaluate (or discarded), or it is static and every read is a copy of it.
+   */
   None,
+  /**
+   * The value is read once, with nothing evaluated before that read: the
+   * expression replaces its only placeholder, `{ a } = f()` -> `a = f().a`
+   */
   Inline,
+  /**
+   * The value is stored in a temporary declared by a step at the evaluation
+   * position, before its reads: `var _f = f(), a = _f.a, b = _f.b`
+   */
   Temp,
-  /** A temporary assigned where it is first read: `{ a } = _ref = f()` */
+  /**
+   * Like `Temp`, but the temporary is assigned at its first read, and
+   * declared by a hoisted `var` (`inlineTemps`, in assignment expressions):
+   * `x = ({ a } = f())` -> `x = (a = (_f = f()).a, _f)`
+   */
   InlineTemp,
+  /**
+   * The value is not read, but it is evaluated for its side effects, in an
+   * expression step: `[] = f()` -> `f()` (with `iterableIsArray`)
+   */
   Effect,
 }
 
