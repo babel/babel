@@ -433,7 +433,7 @@ export function referencesName(
  * Nest the body of `path` in a new block, keeping the paths of its nodes (and
  * so their scope information).
  */
-function wrapBodyInBlock(path: NodePath<t.ForXStatement | t.CatchClause>) {
+export function wrapBodyInBlock(path: NodePath<t.Loop | t.CatchClause>) {
   const bodyPath = path.get("body") as NodePath<t.Statement>;
   const body = bodyPath.node;
   // Empty when its path is created, which crawls the new block scope

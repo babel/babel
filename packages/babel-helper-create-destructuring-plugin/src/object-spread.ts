@@ -2,8 +2,13 @@ import { types as t } from "@babel/core";
 import type { NodePath, PluginPass } from "@babel/core";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
 import ReplaceSupers from "@babel/helper-replace-supers";
-import { adoptMovedPaths } from "./scope.ts";
-import { getExtendsHelper } from "./util.ts";
+import {
+  adoptMovedPaths,
+  collectScopeInfo,
+  pushHoistedVars,
+  registerScopeInfo,
+} from "./scope.ts";
+import { getExtendsHelper, wrapBodyInBlock } from "./util.ts";
 
 function hasSpread(node: t.ObjectExpression): boolean {
   return node.properties.some(prop => t.isSpreadElement(prop));
@@ -63,13 +68,44 @@ function isProtoSetter(
 
 const loopRefsKey = "@babel/helper-create-destructuring-plugin/objectSuper";
 
+interface LoopObjectRef {
+  id: t.Identifier;
+  /** The lowered object expression, which references `id` */
+  replacement: NodePath;
+}
+
 export function finishObjectSpreadLoop(path: NodePath<t.Loop>) {
-  const refs: t.Identifier[] | undefined = path.getData(loopRefsKey);
+  const refs: LoopObjectRef[] | undefined = path.getData(loopRefsKey);
   if (!refs) return;
   path.setData(loopRefsKey, undefined);
-  for (const id of refs) path.scope.push({ id, kind: "let" });
-  path.scope.getProgramParent().crawl();
-  // Let transform-block-scoping see the new per-iteration bindings.
+  const replacements = refs
+    .map(ref => ref.replacement)
+    .filter(replacement => !replacement.removed);
+  // `scope.push` would wrap a body that is not a block in a new block, whose
+  // scope is crawled again through new paths.
+  if (!path.get("body").isBlockStatement()) {
+    const bodyPath = path.get("body");
+    wrapBodyInBlock(path);
+    // The paths from the body to the replacements still have the scope of
+    // the loop, which their children would get.
+    for (const replacement of replacements) {
+      const ancestors: NodePath[] = [];
+      for (let p = replacement; p !== bodyPath; p = p.parentPath!) {
+        ancestors.push(p);
+      }
+      for (const p of ancestors.reverse()) p.setContext(p.context);
+    }
+  }
+  const program = path.scope.getProgramParent();
+  for (const { id } of refs) {
+    path.scope.push({ id, kind: "let" });
+    // Its references were registered as a global before it was declared
+    delete program.globals[id.name];
+  }
+  registerScopeInfo(replacements);
+  // Let transform-block-scoping see the new per-iteration bindings: they are
+  // declared after it visited the loop, but before it visits the body
+  // declarations again (it would turn them into `var`s first).
   path.requeue();
 }
 
@@ -91,7 +127,9 @@ export function transformObjectSpread(
     ? getRepeatedEvaluationContext(path)
     : null;
   const captureInHeader = repeatedContext?.isLoop();
-  const superMethods = new Set<t.ObjectMethod>();
+  // The methods using `super`, with the function forgetting their scope
+  // information, collected before `super` is replaced (with clones of nodes)
+  const superMethods = new Map<t.Node, () => void>();
   let objectRef: t.Identifier | undefined;
   let seenSpread = false;
   for (const prop of path.get("properties")) {
@@ -100,11 +138,12 @@ export function transformObjectSpread(
     // The first object is the final target, so its native methods already
     // have the right home object, without capturing a shared header binding.
     if (captureInHeader && !seenSpread) continue;
+    const forget = collectScopeInfo(prop);
     new ReplaceSupers({
       methodPath: prop,
       file: file.file,
       getObjectRef: () => {
-        superMethods.add(prop.node);
+        superMethods.set(prop.node, forget);
         return (objectRef ??= path.scope.generateUidIdentifier("obj"));
       },
     }).replace();
@@ -128,6 +167,17 @@ export function transformObjectSpread(
     const movedPath = prop.isSpreadElement() ? prop.get("argument") : prop;
     moved.set(movedPath.node, movedPath);
   }
+  // Except the properties registered again with new paths: the methods whose
+  // `super` was replaced by nodes without scope information, and the ones
+  // moved into a new arrow, whose scope is crawled when its path is set up.
+  const forgets: (() => void)[] = [];
+  const forgetMoved = (prop: t.Node) => {
+    const propPath = moved.get(prop);
+    if (!propPath) return;
+    moved.delete(prop);
+    forgets.push(superMethods.get(prop) ?? collectScopeInfo(propPath));
+  };
+  for (const method of superMethods.keys()) forgetMoved(method);
 
   const { useBuiltIns, pureGetters, setSpreadProperties } = options;
 
@@ -182,15 +232,14 @@ export function transformObjectSpread(
       (superMethods.has(prop) || prop.kind !== "method")
     ) {
       if (props.length) make();
+      // Before its key is moved out of the closure
+      forgetMoved(prop);
       const params = [t.cloneNode(objectRef)];
       const args: t.Expression[] = [exp];
       let accessorKey: t.Identifier | undefined;
       if (prop.computed || prop.kind !== "method") {
         // Evaluate computed keys outside the closure, preserving lexical
         // references and allowing yield/await in the original function.
-        if (prop.computed) {
-          moved.set(prop.key, moved.get(prop)!.get("key") as NodePath);
-        }
         args.push(
           prop.kind === "method"
             ? prop.key
@@ -251,40 +300,59 @@ export function transformObjectSpread(
 
   if (props.length) make();
 
-  const [replacement] = path.replaceWith(
-    objectRef && !captureInHeader
-      ? t.assignmentExpression("=", t.cloneNode(objectRef), exp!)
-      : exp!,
-  );
-  adoptMovedPaths(replacement, moved);
-
-  if (!objectRef) return;
-  if (repeatedContext && !captureInHeader) {
-    // Each instance or call needs its own captured reference. An arrow
-    // preserves the lexical this/super/new.target/arguments environment of
-    // the field initializer or parameter.
-    path.replaceWith(
-      t.callExpression(
-        t.arrowFunctionExpression([t.cloneNode(objectRef)], path.node),
-        [],
-      ),
-    );
-  } else if (!captureInHeader) {
-    const scopePath = path.findParent(
-      p =>
-        p.isFunction() ||
-        p.isProgram() ||
-        // Loop headers cannot see declarations in the loop body.
-        (p.isLoop() && path.isDescendant(p.get("body"))),
-    )!;
-    if (scopePath.isLoop()) {
-      const refs: t.Identifier[] = scopePath.getData(loopRefsKey) ?? [];
-      refs.push(objectRef);
-      scopePath.setData(loopRefsKey, refs);
-    } else {
-      path.scope.push({ id: objectRef });
-    }
+  let replacementNode: t.Expression = exp!;
+  // Each instance or call needs its own captured reference.
+  const wrapInIIFE = objectRef && repeatedContext && !captureInHeader;
+  let loop: NodePath<t.Loop> | null = null;
+  if (objectRef && !captureInHeader) {
+    replacementNode = t.assignmentExpression("=", t.cloneNode(objectRef), exp!);
+    if (!repeatedContext) loop = declareObjectRef(path, objectRef);
   }
-  // Replacing super introduced references inside the moved methods.
-  path.scope.getProgramParent().crawl();
+  const [replacement] = path.replaceWith(
+    wrapInIIFE
+      ? // An arrow preserves the lexical this/super/new.target/arguments
+        // environment of the field initializer or parameter. Empty when its
+        // path is set up, which crawls its scope (declaring the parameter).
+        t.callExpression(
+          t.arrowFunctionExpression(
+            [t.cloneNode(objectRef!)],
+            t.buildUndefinedNode(),
+          ),
+          [],
+        )
+      : replacementNode,
+  );
+  if (wrapInIIFE) {
+    (
+      replacement.get("callee") as NodePath<t.ArrowFunctionExpression>
+    ).node.body = replacementNode;
+  }
+  for (const forget of forgets) forget();
+  adoptMovedPaths(replacement, moved);
+  if (loop) {
+    const refs: LoopObjectRef[] = loop.getData(loopRefsKey) ?? [];
+    refs.push({ id: objectRef!, replacement });
+    loop.setData(loopRefsKey, refs);
+  }
+}
+
+/**
+ * Declare the reference to the object whose methods use `super`. Returns the
+ * loop whose iterations need their own reference: it is declared when
+ * exiting the loop.
+ */
+function declareObjectRef(
+  path: NodePath<t.ObjectExpression>,
+  objectRef: t.Identifier,
+): NodePath<t.Loop> | null {
+  const scopePath = path.findParent(
+    p =>
+      p.isFunction() ||
+      p.isProgram() ||
+      // Loop headers cannot see declarations in the loop body.
+      (p.isLoop() && path.isDescendant(p.get("body"))),
+  )!;
+  if (scopePath.isLoop()) return scopePath;
+  pushHoistedVars(path.scope, [objectRef]);
+  return null;
 }
