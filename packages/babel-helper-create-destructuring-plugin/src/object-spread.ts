@@ -149,18 +149,15 @@ export function transformObjectSpread(
       },
     }).replace();
   }
-  // In a loop header, the accessors after a spread are defined on the target
-  // by factories capturing it.
+  // Accessors after a spread must be defined individually on the target:
+  // copying their full descriptors would erase an earlier getter or setter.
   const firstSpread = path.node.properties.findIndex(prop =>
     t.isSpreadElement(prop),
   );
-  const definesAccessors =
-    captureInHeader &&
-    objectRef &&
-    path.node.properties.some(
-      (prop, i) =>
-        i > firstSpread && t.isObjectMethod(prop) && prop.kind !== "method",
-    );
+  const definesAccessors = path.node.properties.some(
+    (prop, i) =>
+      i > firstSpread && t.isObjectMethod(prop) && prop.kind !== "method",
+  );
   if (
     definesAccessors &&
     path.scope.hasBinding("Object", { noGlobals: true })
@@ -191,11 +188,11 @@ export function transformObjectSpread(
   const { useBuiltIns, pureGetters, setSpreadProperties } = options;
 
   // Assigning the following properties to the target would call the
-  // accessors defined by the factories, instead of replacing them.
-  const helper =
-    setSpreadProperties && !definesAccessors
-      ? getExtendsHelper(useBuiltIns, name => file.addHelper(name))
-      : file.addHelper("objectSpread2");
+  // accessors defined individually, instead of replacing them.
+  const assigns = setSpreadProperties && !definesAccessors;
+  const helper = assigns
+    ? getExtendsHelper(useBuiltIns, name => file.addHelper(name))
+    : file.addHelper("objectSpread2");
 
   let exp: t.CallExpression | null = null;
   // Whether `exp` is a call to `helper`, which more arguments can be added to
@@ -243,24 +240,41 @@ export function transformObjectSpread(
   for (const prop of path.node.properties) {
     if (t.isSpreadElement(prop)) {
       make();
+      // objectSpread2 copies its odd arguments with [[Get]]: a spread
+      // following another one in a merged call (pureGetters) must not be
+      // copied with its property descriptors.
+      if (!assigns && exp!.arguments.length % 2 === 0) {
+        exp!.arguments.push(t.objectExpression([]));
+      }
       exp!.arguments.push(prop.argument);
     } else if (
-      captureInHeader &&
       exp &&
       t.isObjectMethod(prop) &&
-      objectRef &&
-      (superMethods.has(prop) || prop.kind !== "method")
+      (prop.kind !== "method" || (captureInHeader && superMethods.has(prop)))
     ) {
       if (props.length) make();
       // Before its key is moved out of the closure
       forgetMoved(prop);
-      const params = [t.cloneNode(objectRef)];
-      const args: t.Expression[] = [exp];
-      // The key of an accessor, to read its descriptor
-      let accessorKey: t.Expression | undefined;
-      if (prop.computed) {
-        // Evaluate computed keys outside the closure, preserving lexical
-        // references and allowing yield/await in the original function.
+      // A factory capturing the target defines the property: in a loop
+      // header, each evaluation captures its own reference for `super`; and
+      // the coerced computed key of an accessor is used twice. The key stays
+      // outside the closure, so yield/await retain their environment.
+      const params: t.Identifier[] = [];
+      const args: t.Expression[] = [];
+      let target: t.Expression = exp;
+      const captures = captureInHeader && superMethods.has(prop);
+      if (captures || (prop.computed && prop.kind !== "method")) {
+        // Outside of a loop header, the reference of the target is the same
+        const id = objectRef ?? path.scope.generateUidIdentifier("obj");
+        params.push(t.cloneNode(id));
+        args.push(exp);
+        target = t.cloneNode(id);
+      }
+      // The key of an accessor, to read its descriptor. A static key keeps
+      // the accessor name, without a computed key that
+      // transform-computed-properties would turn into a function expression.
+      let accessorKey = t.toComputedKey(prop) as t.Expression;
+      if (prop.computed && params.length) {
         args.push(
           prop.kind === "method"
             ? prop.key
@@ -270,37 +284,33 @@ export function transformObjectSpread(
         params.push(key);
         prop.key = t.cloneNode(key);
         accessorKey = key;
-      } else if (prop.kind !== "method") {
-        // A static key keeps the accessor name, without a computed key that
-        // transform-computed-properties would turn into a function expression.
-        accessorKey = t.toComputedKey(prop) as t.Expression;
       }
       const object = t.objectExpression([prop]);
-      const body =
+      const definition: t.CallExpression =
         prop.kind === "method"
           ? t.callExpression(t.cloneNode(helper), [
-              t.cloneNode(objectRef),
+              target,
               t.objectExpression([]),
               object,
             ])
           : t.callExpression(file.addHelper("defineAccessor"), [
               t.stringLiteral(prop.kind),
-              t.cloneNode(objectRef),
-              t.cloneNode(accessorKey!),
+              target,
+              t.cloneNode(accessorKey),
               t.memberExpression(
                 t.callExpression(
                   t.memberExpression(
                     t.identifier("Object"),
                     t.identifier("getOwnPropertyDescriptor"),
                   ),
-                  [object, t.cloneNode(accessorKey!)],
+                  [object, t.cloneNode(accessorKey)],
                 ),
                 t.identifier(prop.kind),
               ),
             ]);
-      // Capture the target as a parameter of the method factory. Its key
-      // stays outside the closure, so yield/await retain their environment.
-      exp = t.callExpression(t.arrowFunctionExpression(params, body), args);
+      exp = params.length
+        ? t.callExpression(t.arrowFunctionExpression(params, definition), args)
+        : definition;
       isHelperCall = false;
     } else if (exp && isProtoSetter(prop)) {
       // The object already exists: set its prototype when the property is

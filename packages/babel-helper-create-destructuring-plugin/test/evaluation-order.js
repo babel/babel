@@ -38,6 +38,62 @@ function expectSameEvaluation(
 const keyExpressions = ["key", "+key", "-key", "~key", "`${key}`", 'key + ""'];
 
 it.each([
+  "get x() { return 1; }, ...{}, set x(value) { this.value = value; }",
+  "set x(value) { this.value = value; }, ...{}, get x() { return 1; }",
+  "...{}, get x() { return 1; }, ...{}, set x(value) { this.value = value; }",
+  "get x() { return 1; }, ...{ x: 2 }, set x(value) { this.value = value; }",
+  "set x(value) { this.value = value; }, ...{ x: 2 }, get x() { return 1; }",
+])("preserves accessor definitions across spreads: %s", properties => {
+  for (const options of [
+    {},
+    { pureGetters: true },
+    { setSpreadProperties: true },
+    { pureGetters: true, setSpreadProperties: true },
+  ]) {
+    expectSameEvaluation(
+      `const object = { ${properties} };
+       object.x = 7;
+       const descriptor = Object.getOwnPropertyDescriptor(object, "x");
+       return [object.x, object.value, descriptor.get?.name, descriptor.set?.name,
+         descriptor.enumerable, descriptor.configurable];`,
+      FEATURES.objectSpread,
+      options,
+    );
+  }
+});
+
+it("coerces accessor keys once and preserves symbol names across spreads", () => {
+  expectSameEvaluation(
+    `const log = [], symbol = Symbol("key");
+     const key = { [Symbol.toPrimitive]() { log.push("key"); return symbol; } };
+     const object = {
+       get [key]() { return 1; },
+       ...{},
+       set [key](value) { this.value = value; },
+       after: log.push("after"),
+     };
+     object[symbol] = 7;
+     const descriptor = Object.getOwnPropertyDescriptor(object, symbol);
+     return [log, object[symbol], object.value, descriptor.get.name, descriptor.set.name];`,
+    FEATURES.objectSpread,
+  );
+});
+
+it("keeps accessor key yields outside the factory", () => {
+  expectSameEvaluation(
+    `function* make() {
+       return { get x() { return 1; }, ...{}, set [yield "key"](value) { this.value = value; } };
+     }
+     const iterator = make();
+     const first = iterator.next();
+     const object = iterator.next("x").value;
+     object.x = 7;
+     return [first, object.x, object.value];`,
+    FEATURES.objectSpread,
+  );
+});
+
+it.each([
   "const [{ a: { ...rest }, b = log.push('default') }] = [source];",
   "let rest, b; ([{ a: { ...rest }, b = log.push('default') }] = [source]);",
   "function f([{ a: { ...rest }, b = log.push('default') }]) {} f([source]);",
@@ -58,7 +114,6 @@ it.each([
     );
   }
 });
-
 it.each([
   "while (i < 2 && objects.push(OBJECT)) { i++; }",
   "do { i++; } while (i <= 2 && objects.push(OBJECT));",
