@@ -327,7 +327,11 @@ export default function convertFunctionRest(
     } else {
       collectShadowedParamsNames(restPath, path.scope, shadowedParams);
       needsIIFE =
-        shadowedParams.size > 0 || referencesBodyDeclaration([restPath], scope);
+        // The parameters of generators are initialized when they are called,
+        // not when they are first resumed.
+        node.generator ||
+        shadowedParams.size > 0 ||
+        referencesBodyDeclaration([restPath], scope);
     }
 
     if (needsIIFE) {
