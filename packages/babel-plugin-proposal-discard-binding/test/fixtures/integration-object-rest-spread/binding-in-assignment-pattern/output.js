@@ -1,10 +1,9 @@
-const [, _ref, ...rest2] = [0],
-  _ref2 = _ref === void 0 ? {
+const [, _ref = {
     p: 1,
     q: 2,
     r: 3
-  } : _ref,
+  }, ...rest2] = [0],
   {
     p: _
-  } = _ref2,
-  rest1 = babelHelpers.objectWithoutProperties(_ref2, ["p"]);
+  } = _ref,
+  rest1 = babelHelpers.objectWithoutProperties(_ref, ["p"]);
