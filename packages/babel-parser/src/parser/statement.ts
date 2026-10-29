@@ -1751,7 +1751,7 @@ export default abstract class StatementParser extends ExpressionParser {
       // The name of a function expression is not part of an enclosing async
       // arrow head, so `await` must not be recorded as an error there:
       // `async (x = function await() {}) => {}` is valid.
-      this.expressionScope.enter(newExpressionScope());
+      this.expressionScope.enter(sharedExpressionScope);
       node.id = this.parseFunctionId();
       this.expressionScope.exit();
     }
