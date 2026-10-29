@@ -25,6 +25,46 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.0.10 (2026-10-29)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#18420](https://github.com/babel/babel/pull/18420) fix(parser): improve radix literal rounding ([@JLHwung](https://github.com/JLHwung))
+  * [#18372](https://github.com/babel/babel/pull/18372) fix(parser): allow parenthesized assignment target in arrow initializer ([@JLHwung](https://github.com/JLHwung))
+  * [#18410](https://github.com/babel/babel/pull/18410) fix(parser): do not record strict mode errors during lookahead ([@JLHwung](https://github.com/JLHwung))
+  * [#18433](https://github.com/babel/babel/pull/18433) fix(parser): invalid expectOnePlugin usage ([@JLHwung](https://github.com/JLHwung))
+  * [#18409](https://github.com/babel/babel/pull/18409) fix(parser): handle ASI after let followed by a reserved word on the next line ([@JLHwung](https://github.com/JLHwung))
+  * [#18406](https://github.com/babel/babel/pull/18406) fix(parser): parser should not crash for `import defer {}` ([@JLHwung](https://github.com/JLHwung))
+  * [#18407](https://github.com/babel/babel/pull/18407) fix(parser): record start location in `startNodeAt` ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-block-scoping`
+  * [#18371](https://github.com/babel/babel/pull/18371) fix: closures in for-loop test and update capture wrong binding ([@joellemd](https://github.com/joellemd))
+* `babel-generator`
+  * [#18418](https://github.com/babel/babel/pull/18418) fix(generator): keep aliases of string-literal module specifiers ([@JLHwung](https://github.com/JLHwung))
+  * [#18427](https://github.com/babel/babel/pull/18427) Fix missing parentheses around TypeScript assertion targets ([@dagemawinegash](https://github.com/dagemawinegash))
+  * [#18324](https://github.com/babel/babel/pull/18324) fix: invalid `minified: true` output for new expression ([@JLHwung](https://github.com/JLHwung))
+  * [#18437](https://github.com/babel/babel/pull/18437) fix(generator): preserve type modifier in TSImportEqualsDeclaration ([@saiyam-jain-dev](https://github.com/saiyam-jain-dev))
+  * [#18424](https://github.com/babel/babel/pull/18424) Keep parentheses around TSInstantiationExpression operand ([@yulman2207](https://github.com/yulman2207))
+  * [#18417](https://github.com/babel/babel/pull/18417) fix(generator): do not disallow line break after import source ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-optional-chaining`, `babel-traverse`
+  * [#18422](https://github.com/babel/babel/pull/18422) fix: `Scope#push` should not push iife param after rest element ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#18224](https://github.com/babel/babel/pull/18224) fix: avoid removable fields as decorator evaluation hosts ([@nyan-left](https://github.com/nyan-left))
+* `babel-types`
+  * [#18411](https://github.com/babel/babel/pull/18411) Allow member expression values in `ObjectPattern` properties ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-classes`
+  * [#18384](https://github.com/babel/babel/pull/18384) Leave loose class prototype mutable with accessors ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-build-external-helpers`, `babel-core`, `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-regenerator`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#18397](https://github.com/babel/babel/pull/18397) Mangle top level names in helpers ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-traverse`
+  * [#18413](https://github.com/babel/babel/pull/18413) perf(traverse): improve generateUid and push ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-helpers`, `babel-runtime-corejs3`
+  * [#18325](https://github.com/babel/babel/pull/18325) Shrink jsx helper size ([@JLHwung](https://github.com/JLHwung))
 ## v8.0.8 (2026-10-23)
 
 #### :eyeglasses: Spec Compliance
