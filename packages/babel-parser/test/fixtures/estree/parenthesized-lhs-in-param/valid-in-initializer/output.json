@@ -129,7 +129,10 @@
                       }
                     }
                   },
-                  "kind": "init"
+                  "kind": "init",
+                  "extra": {
+                    "shorthand": true
+                  }
                 }
               ]
             }
@@ -274,7 +277,10 @@
                     }
                   }
                 },
-                "kind": "init"
+                "kind": "init",
+                "extra": {
+                  "shorthand": true
+                }
               }
             ]
           }
