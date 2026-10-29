@@ -13,7 +13,7 @@ import {
 } from "@babel/plugin-transform-parameters";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { collectScopeInfo, registerReplacement } from "./scope.ts";
-import { getLoweredValues, needsLowering } from "./util.ts";
+import { getLoweredValue, needsLowering } from "./util.ts";
 
 interface ConflictState {
   ownerOf: Map<string, number>;
@@ -106,7 +106,7 @@ function isNativePartObservable(param: t.Node, scope: Scope): boolean {
  * parameter list, iterating its argument in order with the elements that
  * don't need to be lowered: only the ones that do are replaced by
  * temporaries, and the first one keeps its object pattern (`keepPattern`)
- * when only nested values are lowered, like splitArrayPattern. Returns
+ * when only its last value is lowered, like splitArrayPattern. Returns
  * whether an element following a moved pattern runs user code, which must
  * not happen before the moved pattern is destructured.
  */
@@ -128,22 +128,13 @@ function collectMovedPatterns(
   } else if (param.isRestElement()) {
     return collectMovedPatterns(param.get("argument"), features, scope, moved);
   } else if (param.isObjectPattern()) {
-    const lowered = keepPattern && getLoweredValues(param.node, features);
-    const values =
-      lowered &&
-      param
-        .get("properties")
-        .filter((prop): prop is NodePath<t.ObjectProperty> =>
-          lowered.includes(prop.node as t.ObjectProperty),
-        )
-        .map(prop => prop.get("value"));
-    if (
-      values &&
-      !values.slice(1).some(value => isNativePartObservable(value.node, scope))
-    ) {
-      values.forEach((value, i) => {
-        collectMovedPatterns(value, features, scope, moved, i === 0);
-      });
+    if (keepPattern && getLoweredValue(param.node, features)) {
+      // Only its last value is moved
+      const properties = param.get("properties");
+      const last = properties[
+        properties.length - 1
+      ] as NodePath<t.ObjectProperty>;
+      collectMovedPatterns(last.get("value"), features, scope, moved, true);
     } else {
       moved.push(param);
     }
