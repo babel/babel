@@ -19,11 +19,11 @@ while (i < 2) {
 }
 outer: for (let j = 0; j < 2; j++) {
   let _obj3;
-  const o = babelHelpers.objectSpread2(babelHelpers.objectSpread2(_obj3 = {}, proto), {}, {
-    get [k]() {
+  const o = ((_obj3, _key) => babelHelpers.defineAccessor("get", _obj3, _key, Object.getOwnPropertyDescriptor({
+    get [_key]() {
       return babelHelpers.superPropGet(_obj3, "x", this) + j;
     }
-  });
+  }, _key).get))(babelHelpers.objectSpread2(_obj3 = {}, proto), babelHelpers.toPropertyKey(k));
   for (const p of [o]) {
     let _obj4;
     g(babelHelpers.objectSpread2(babelHelpers.objectSpread2(_obj4 = {}, p), {}, {
