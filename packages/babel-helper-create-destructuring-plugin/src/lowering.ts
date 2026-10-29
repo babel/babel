@@ -1,10 +1,7 @@
 import { types as t, template } from "@babel/core";
 import type { File, Scope } from "@babel/core";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
-import {
-  canUnpackArrayPattern,
-  isSafeUnpackedElement,
-} from "./array-unpacking.ts";
+import { unpackArrayLiteral } from "./array-unpacking.ts";
 import {
   buildNamedDefault,
   isIdentifierRef,
@@ -23,7 +20,6 @@ import {
   isStablePropertyKey,
   isTemporary,
   markTemporary,
-  mayRunUserCode,
   needsLowering,
   propertyNeedsLowering,
   splitArrayPattern,
@@ -914,58 +910,22 @@ export class Lowering {
       return;
     }
 
-    const { elements } = pattern;
-
-    // optimise basic array destructuring of an array expression
-    //
-    // we can't do this to a pattern of unequal size to it's right hand
-    // array expression as then there will be values that won't be evaluated
-    //
-    // eg: let [a, b] = [1, 2];
-    const effectfulFrom =
-      // the array itself is used as the completion value
+    // The array itself can't be unpacked when it is the completion value
+    const unpacked =
       t.isArrayExpression(ref.expr) && !ref.retained
-        ? canUnpackArrayPattern(pattern, ref.expr, this.scope)
-        : false;
-    if (t.isArrayExpression(ref.expr) && effectfulFrom !== false) {
+        ? unpackArrayLiteral(pattern, ref.expr, this.scope, init =>
+            this.#temp(init),
+          )
+        : null;
+    if (unpacked) {
       ref.discarded = true;
-      const elisionToUndefined = (el: t.ArrayExpression["elements"][number]) =>
-        el ? t.cloneNode(el as t.Expression) : t.buildUndefinedNode();
-      // Coercions are evaluated in temporaries before any target is bound.
-      // Earlier mutable reads must be captured before those coercions too.
-      const lastCoercion = ref.expr.elements.findLastIndex(
-        element => element && mayRunUserCode(element),
-      );
-      // An element that could throw, or be affected by the effects of an
-      // earlier target, is evaluated before any target is assigned.
-      const values = ref.expr.elements.map((element, i) =>
-        (
-          i > effectfulFrom || i < lastCoercion
-            ? isSafeToEvaluate(element, this.scope)
-            : isSafeUnpackedElement(element, this.scope)
-        )
-          ? element
-          : this.#temp(element as t.Expression),
-      );
-      for (let i = 0; i < elements.length; i++) {
-        const element = elements[i]!;
-        if (element.type === "RestElement") {
-          this.#lowerTarget(
-            element.argument,
-            this.#createRef(
-              t.arrayExpression(values.slice(i).map(elisionToUndefined)),
-              { isArray: true },
-            ),
-          );
-        } else {
-          this.#lowerTarget(
-            element,
-            this.#createRef(elisionToUndefined(values[i])),
-          );
-        }
+      for (const { target, value, isArray } of unpacked) {
+        this.#lowerTarget(target, this.#createRef(value, { isArray }));
       }
       return;
     }
+
+    const { elements } = pattern;
 
     // if we have a rest then we need all the elements so don't tell
     // `toArray` to only get a certain amount
