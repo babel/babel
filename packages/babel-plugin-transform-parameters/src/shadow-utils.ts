@@ -361,6 +361,14 @@ export function wrapBodyInScopeIIFE(
       if (key.startsWith("binding:")) path.setData(key, undefined);
     }
   }
+  // `var arguments` redeclares the arguments object of the function (unlike
+  // in an arrow function), which the IIFE gets as a parameter of that name.
+  if (
+    !path.isArrowFunctionExpression() &&
+    path.scope.getOwnBinding("arguments")?.kind === "var"
+  ) {
+    shadowedParams = new Set(shadowedParams).add("arguments");
+  }
   path.set(
     "body",
     t.blockStatement([...before, buildScopeIIFE(shadowedParams, node.body)]),
