@@ -14,44 +14,61 @@ function hasSpread(node: t.ObjectExpression): boolean {
   return node.properties.some(prop => t.isSpreadElement(prop));
 }
 
-/** A context that evaluates the literal repeatedly without a fresh scope. */
-function getRepeatedEvaluationContext(path: NodePath<t.ObjectExpression>) {
+/**
+ * Where the reference to an object literal, captured by its methods using
+ * `super`, is bound: it depends on the context evaluating the literal.
+ */
+type ObjectRefSite =
+  /** A loop header, evaluated by each iteration: each definition captures it. */
+  | { kind: "header"; loop: NodePath<t.Loop> }
+  /** A parameter or instance field, evaluated by each call or instance: an IIFE. */
+  | { kind: "evaluation" }
+  /** A loop body, which the header can't see: a `let` declared on exit. */
+  | { kind: "body"; loop: NodePath<t.Loop> }
+  /** A `var` of the enclosing function. */
+  | { kind: "hoisted" };
+
+const hoistedSite: ObjectRefSite = { kind: "hoisted" };
+
+function getObjectRefSite(path: NodePath<t.ObjectExpression>): ObjectRefSite {
   let child: NodePath = path;
   let parent: NodePath | null = path.parentPath;
   while (parent) {
-    if (parent.isFunction() && child.listKey === "params") return parent;
-    if (
-      (parent.isFunction() &&
-        child.key !== "key" &&
-        child.listKey !== "decorators") ||
-      parent.isProgram() ||
-      parent.isStaticBlock()
-    ) {
-      return null;
-    }
-    if (
+    if (parent.isFunction()) {
+      if (child.listKey === "params") return { kind: "evaluation" };
+      // Computed keys and decorators are evaluated in the enclosing context
+      if (child.key !== "key" && child.listKey !== "decorators") {
+        return hoistedSite;
+      }
+    } else if (parent.isProgram() || parent.isStaticBlock()) {
+      return hoistedSite;
+    } else if (
       (parent.isClassProperty({ static: false }) ||
         parent.isClassPrivateProperty({ static: false }) ||
         parent.isClassAccessorProperty({ static: false })) &&
       child.key === "value"
     ) {
-      return parent;
-    }
-    if (parent.isLoop()) {
-      if (child.key === "body") return null;
+      return { kind: "evaluation" };
+    } else if (parent.isLoop()) {
+      if (child.key === "body") return { kind: "body", loop: parent };
       if (
         parent.isWhileStatement() ||
         parent.isDoWhileStatement() ||
         (parent.isForStatement() && child.key !== "init") ||
         (parent.isForXStatement() && child.key === "left")
       ) {
-        return parent;
+        return { kind: "header", loop: parent };
       }
     }
     child = parent;
     parent = parent.parentPath;
   }
-  return null;
+  return hoistedSite;
+}
+
+/** For `t.traverseFast`: stop at a `super` node. */
+function stopAtSuper(node: t.Node) {
+  return t.isSuper(node) ? t.traverseFast.stop : undefined;
 }
 
 /** `__proto__: value`, which sets the prototype of the object literal. */
@@ -122,23 +139,27 @@ export function transformObjectSpread(
     return;
   }
 
-  const repeatedContext = path.node.properties.some(prop =>
-    t.isObjectMethod(prop),
-  )
-    ? getRepeatedEvaluationContext(path)
-    : null;
-  const captureInHeader = repeatedContext?.isLoop();
+  const properties = path.get("properties");
+  const site = properties.some(prop => prop.isObjectMethod())
+    ? getObjectRefSite(path)
+    : hoistedSite;
+  const captureInHeader = site.kind === "header";
   // The methods using `super`, with the function forgetting their scope
   // information, collected before `super` is replaced (with clones of nodes)
   const superMethods = new Map<t.Node, () => void>();
   let objectRef: t.Identifier | undefined;
   let seenSpread = false;
-  for (const prop of path.get("properties")) {
+  // Accessors after a spread must be defined individually on the target:
+  // copying their full descriptors would erase an earlier getter or setter.
+  let definesAccessors = false;
+  for (const prop of properties) {
     if (prop.isSpreadElement()) seenSpread = true;
     if (!prop.isObjectMethod()) continue;
+    if (seenSpread && prop.node.kind !== "method") definesAccessors = true;
     // The first object is the final target, so its native methods already
     // have the right home object, without capturing a shared header binding.
     if (captureInHeader && !seenSpread) continue;
+    if (!t.traverseFast(prop.node, stopAtSuper)) continue;
     const forget = collectScopeInfo(prop);
     new ReplaceSupers({
       methodPath: prop,
@@ -149,27 +170,18 @@ export function transformObjectSpread(
       },
     }).replace();
   }
-  // Accessors after a spread must be defined individually on the target:
-  // copying their full descriptors would erase an earlier getter or setter.
-  const firstSpread = path.node.properties.findIndex(prop =>
-    t.isSpreadElement(prop),
-  );
-  const definesAccessors = path.node.properties.some(
-    (prop, i) =>
-      i > firstSpread && t.isObjectMethod(prop) && prop.kind !== "method",
-  );
   if (
     definesAccessors &&
     path.scope.hasBinding("Object", { noGlobals: true })
   ) {
-    // Accessor factories read their descriptor through the global Object.
+    // The descriptors of the accessors are read through the global Object.
     path.scope.rename("Object");
   }
 
   // The properties and spread arguments are only moved to the replacement:
   // they keep their paths, and their scope information.
   const moved = new Map<t.Node, NodePath>();
-  for (const prop of path.get("properties")) {
+  for (const prop of properties) {
     const movedPath = prop.isSpreadElement() ? prop.get("argument") : prop;
     moved.set(movedPath.node, movedPath);
   }
@@ -334,10 +346,9 @@ export function transformObjectSpread(
 
   const replacementNode: t.Expression = exp!;
   // Each instance or call needs its own captured reference.
-  const wrapInIIFE = objectRef && repeatedContext && !captureInHeader;
-  let loop: NodePath<t.Loop> | null = null;
-  if (objectRef && !repeatedContext) {
-    loop = declareObjectRef(path, objectRef);
+  const wrapInIIFE = objectRef && site.kind === "evaluation";
+  if (objectRef && site.kind === "hoisted") {
+    pushHoistedVars(path.scope, [objectRef]);
   }
   const [replacement] = path.replaceWith(
     wrapInIIFE
@@ -360,30 +371,10 @@ export function transformObjectSpread(
   }
   for (const forget of forgets) forget();
   adoptMovedPaths(replacement, moved);
-  if (loop) {
-    const refs: LoopObjectRef[] = loop.getData(loopRefsKey) ?? [];
-    refs.push({ id: objectRef!, replacement });
-    loop.setData(loopRefsKey, refs);
+  if (objectRef && site.kind === "body") {
+    // Declared when exiting the loop, for each iteration
+    const refs: LoopObjectRef[] = site.loop.getData(loopRefsKey) ?? [];
+    refs.push({ id: objectRef, replacement });
+    site.loop.setData(loopRefsKey, refs);
   }
-}
-
-/**
- * Declare the reference to the object whose methods use `super`. Returns the
- * loop whose iterations need their own reference: it is declared when
- * exiting the loop.
- */
-function declareObjectRef(
-  path: NodePath<t.ObjectExpression>,
-  objectRef: t.Identifier,
-): NodePath<t.Loop> | null {
-  const scopePath = path.findParent(
-    p =>
-      p.isFunction() ||
-      p.isProgram() ||
-      // Loop headers cannot see declarations in the loop body.
-      (p.isLoop() && path.isDescendant(p.get("body"))),
-  )!;
-  if (scopePath.isLoop()) return scopePath;
-  pushHoistedVars(path.scope, [objectRef]);
-  return null;
 }
