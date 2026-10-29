@@ -6,6 +6,7 @@ import {
   isInitializedReference,
   isSafeToEvaluate,
   mayRunUserCode,
+  type PatternTarget,
 } from "./util.ts";
 
 /**
@@ -13,10 +14,7 @@ import {
  * target is assigned, after the targets before it, instead of before all of
  * them: it can't throw, nor be affected by their assignment.
  */
-export function isSafeUnpackedElement(
-  node: t.Node | null,
-  scope: Scope,
-): boolean {
+function isSafeUnpackedElement(node: t.Node | null, scope: Scope): boolean {
   return (
     node === null ||
     isSafeToEvaluate(node, scope) ||
@@ -79,7 +77,7 @@ const arrayUnpackVisitor = (
  * observable side effects (`Infinity` if none), the elements after which
  * must be evaluated before any target; `false` otherwise.
  */
-export function canUnpackArrayPattern(
+function canUnpackArrayPattern(
   pattern: t.ArrayPattern,
   arr: t.ArrayExpression,
   scope: Scope,
@@ -139,6 +137,62 @@ export function canUnpackArrayPattern(
     return false;
   }
   return effectfulFrom;
+}
+
+export interface UnpackedElement {
+  target: PatternTarget;
+  value: t.Expression;
+  /** The value is a fresh array literal, for a rest element. */
+  isArray: boolean;
+}
+
+/**
+ * Unpack an array literal destructured by `pattern`, without iterating it:
+ *   let [a, b] = [1, 2];  ->  let a = 1, b = 2;
+ * Returns the value of each target, or null when the literal can't be
+ * unpacked without changing the evaluation order: e.g. a pattern of unequal
+ * size to the literal would not evaluate some of its elements. Elements that
+ * must be evaluated before any target is bound are stored with `temp`.
+ */
+export function unpackArrayLiteral(
+  pattern: t.ArrayPattern,
+  arr: t.ArrayExpression,
+  scope: Scope,
+  temp: (init: t.Expression) => t.Identifier,
+): UnpackedElement[] | null {
+  const effectfulFrom = canUnpackArrayPattern(pattern, arr, scope);
+  if (effectfulFrom === false) return null;
+  const elisionToUndefined = (el: t.ArrayExpression["elements"][number]) =>
+    el ? t.cloneNode(el as t.Expression) : t.buildUndefinedNode();
+  // Coercions are evaluated in temporaries before any target is bound.
+  // Earlier mutable reads must be captured before those coercions too.
+  const lastCoercion = arr.elements.findLastIndex(
+    element => element && mayRunUserCode(element),
+  );
+  // An element that could throw, or be affected by the effects of an
+  // earlier target, is evaluated before any target is assigned.
+  const values = arr.elements.map((element, i) =>
+    (
+      i > effectfulFrom || i < lastCoercion
+        ? isSafeToEvaluate(element, scope)
+        : isSafeUnpackedElement(element, scope)
+    )
+      ? element
+      : temp(element as t.Expression),
+  );
+  return pattern.elements.map((element, i) =>
+    element!.type === "RestElement"
+      ? {
+          target: element.argument,
+          value: t.arrayExpression(values.slice(i).map(elisionToUndefined)),
+          isArray: true,
+        }
+      : {
+          target: element,
+          value: elisionToUndefined(values[i]),
+          isArray: false,
+        },
+  );
 }
 
 /**
