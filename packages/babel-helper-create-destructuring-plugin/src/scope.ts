@@ -21,7 +21,9 @@ type Binding = Scope["bindings"][string];
  * Register the bindings declared by a freshly inserted variable declaration.
  * Bindings that already existed (the declaration was created by lowering a
  * destructuring pattern that declared the same identifiers) keep their
- * reference information.
+ * references and constant violations: a `let` or `const` binding is moved to
+ * the new declaration, a `var` one is created again, which makes it
+ * non-constant when it is declared in a loop.
  */
 function registerLoweredDeclaration(
   declPath: NodePath<t.VariableDeclaration>,
@@ -34,18 +36,33 @@ function registerLoweredDeclaration(
       : scope;
 
   for (const declarator of declPath.get("declarations")) {
-    const ids = t.getBindingIdentifiers(declarator.node.id);
-    const transferred: [string, Binding][] = [];
-    for (const name of Object.keys(ids)) {
-      const old = scope.getBinding(name);
-      if (old?.identifier === ids[name]) {
-        old.scope.removeOwnBinding(name);
-        transferred.push([name, old]);
+    const recreated: Binding[] = [];
+    let declaresNewNames = false;
+    forEachAssignedIdentifier(declarator.node.id, id => {
+      const old = scope.getBinding(id.name);
+      if (old?.identifier !== id) {
+        declaresNewNames = true;
+      } else if (kind === "var") {
+        old.scope.removeOwnBinding(id.name);
+        recreated.push(old);
+        declaresNewNames = true;
+      } else {
+        if (old.scope !== registerScope) {
+          old.scope.moveBindingTo(id.name, registerScope);
+        }
+        old.kind = kind as Binding["kind"];
+        old.path = declarator;
       }
+    });
+    // It skips the names whose binding is already the moved one
+    if (declaresNewNames) {
+      registerScope.registerBinding(
+        kind as "var" | "let" | "const",
+        declarator,
+      );
     }
-    registerScope.registerBinding(kind as "var" | "let" | "const", declarator);
-    for (const [name, old] of transferred) {
-      const binding = registerScope.getOwnBinding(name)!;
+    for (const old of recreated) {
+      const binding = registerScope.getOwnBinding(old.identifier.name)!;
       binding.referencePaths = old.referencePaths;
       binding.references = old.references;
       binding.referenced = old.referenced;
@@ -74,13 +91,18 @@ export function trackDeclaredBindings(
   scope: Scope,
 ): () => void {
   const declared = Object.entries(t.getBindingIdentifiers(node)).map(
-    ([name, id]) => [name, id, scope.getBinding(name)] as const,
+    ([name, id]) => {
+      const binding = scope.getBinding(name);
+      return [name, id, binding, binding?.path] as const;
+    },
   );
   return () => {
-    for (const [name, id, binding] of declared) {
-      // Still the binding declared by the old declaration: it is gone
+    for (const [name, id, binding, path] of declared) {
+      // Still the binding declared by the old declaration (a moved binding
+      // has the path of the new one): it is gone
       if (
         binding?.identifier === id &&
+        binding.path === path &&
         binding.scope.getOwnBinding(name) === binding
       ) {
         binding.scope.removeOwnBinding(name);
@@ -204,8 +226,10 @@ function collectNodeScopeInfo(
       break;
     case "VariableDeclarator":
       // A duplicate `var` declaration is a constant violation
-      for (const name of Object.keys(t.getBindingIdentifiers(node.id))) {
-        recordNode(violations, scope, name, node);
+      if ((parent as t.VariableDeclaration).kind === "var") {
+        forEachAssignedIdentifier(node.id, id => {
+          recordNode(violations, scope, id.name, node);
+        });
       }
       break;
     case "AssignmentExpression":
@@ -279,13 +303,16 @@ function registerPathScopeInfo(p: NodePath, isNewPath: boolean) {
     } else {
       p.scope.getProgramParent().addGlobal(p.node);
     }
-  } else if (p.isVariableDeclarator()) {
-    const ids = t.getBindingIdentifiers(p.node.id);
-    for (const name of Object.keys(ids)) {
-      const binding = p.scope.getBinding(name);
+  } else if (
+    p.isVariableDeclarator() &&
+    // Only a `var` can redeclare an existing binding
+    p.parent.kind === "var"
+  ) {
+    forEachAssignedIdentifier(p.node.id, id => {
+      const binding = p.scope.getBinding(id.name);
       // A redeclaration of an existing binding
-      if (binding && binding.identifier !== ids[name]) binding.reassign(p);
-    }
+      if (binding && binding.identifier !== id) binding.reassign(p);
+    });
   } else if (
     p.isAssignmentExpression() ||
     p.isUpdateExpression() ||
@@ -305,7 +332,8 @@ function registerPathScopeInfo(p: NodePath, isNewPath: boolean) {
 /**
  * Call `callback` with the identifiers assigned by `node`, like
  * `t.getAssignmentIdentifiers` (an identifier assigned twice may be passed
- * twice), without allocating.
+ * twice), without allocating. For the pattern of a declarator, they are the
+ * identifiers it declares.
  */
 function forEachAssignedIdentifier(
   node: t.Node | null,
@@ -462,7 +490,7 @@ function needsPath(
  * A pattern only binding identifiers, without anything that can reference a
  * binding (computed keys, defaults, member expressions, types).
  */
-function isPlainPattern(node: t.Node | null): boolean {
+export function isPlainPattern(node: t.Node | null): boolean {
   if (!node) return true;
   switch (node.type) {
     case "Identifier":

@@ -13,7 +13,11 @@ import {
   unmapArguments,
 } from "@babel/plugin-transform-parameters";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
-import { collectScopeInfo, registerReplacement } from "./scope.ts";
+import {
+  collectScopeInfo,
+  isPlainPattern,
+  registerReplacement,
+} from "./scope.ts";
 import { getLoweredValue, needsLowering } from "./util.ts";
 
 interface ConflictState {
@@ -239,6 +243,8 @@ export function transformFunctionParams(
 
   let conflictIndex = -1;
   for (let i = 0; i < params.length; i++) {
+    // Nothing in it can reference a name
+    if (isPlainPattern(params[i].node)) continue;
     const state: ConflictState = {
       ownerOf,
       functionScope,
