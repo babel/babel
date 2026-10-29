@@ -720,8 +720,9 @@ export function buildObjectExcludingKeys(
 /**
  * In partial lowering, replace the elements of an array pattern that need to
  * be lowered with temporaries, `hoist`ed to be destructured after the
- * pattern; the first one keeps its object pattern when only nested values
- * are lowered (hoistNestedValues). The following elements stay in the native
+ * pattern; the first one keeps its default value, and its object pattern when
+ * only nested values are lowered (hoistNestedValues). The following elements
+ * stay in the native
  * pattern, which keeps iterating nested patterns before the iterator is
  * closed, unless they read a name bound by a hoisted element (e.g. in a
  * default value), only initialized afterwards, or run user code, which must
@@ -758,6 +759,13 @@ export function splitArrayPattern(
     }
     if (element.type === "RestElement") {
       element.argument = replaceWithTemporary(element.argument, scope, hoist);
+    } else if (first && element.type === "AssignmentPattern") {
+      // Its default stays in the pattern, evaluated while iterating before
+      // the next elements (which could initialize a binding it reads), as
+      // nothing hoisted before it has to be destructured first.
+      if (!hoistNestedValues(element, features, scope, hoist)) {
+        element.left = replaceWithTemporary(element.left, scope, hoist);
+      }
     } else if (!first || !hoistNestedValues(element, features, scope, hoist)) {
       elements[i] = replaceWithTemporary(element, scope, hoist);
     }
