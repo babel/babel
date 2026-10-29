@@ -294,10 +294,10 @@ function tsIsEntityName(
 function tsIsTypeCast(
   node: N.Node,
 ): node is
-  | N.TSAsExpression
-  | N.TSSatisfiesExpression
-  | N.TSNonNullExpression
-  | N.TSTypeAssertion {
+  | N.TsAsExpression
+  | N.TsSatisfiesExpression
+  | N.TsNonNullExpression
+  | N.TsTypeAssertion {
   switch (node.type) {
     case "TSAsExpression":
     case "TSSatisfiesExpression":
