@@ -212,14 +212,14 @@ function makeAnnexBAssignmentsExplicit(loopPath: NodePath<t.ForStatement>) {
   const names = new Set<string>();
   const renamed = new Map<Scope, Set<string>>();
   for (const path of declarations) {
-    const name = path.node.id!.name;
+    const name = path.node.id.name;
     names.add(name);
 
     // The scope of the enclosing block or `switch`
-    const declScope = path.scope.parent!;
+    const declScope = path.scope.parent;
     if (!renamed.has(declScope)) renamed.set(declScope, new Set());
-    if (!renamed.get(declScope)!.has(name)) {
-      renamed.get(declScope)!.add(name);
+    if (!renamed.get(declScope).has(name)) {
+      renamed.get(declScope).add(name);
       declScope.rename(name);
     }
     path.insertAfter(
@@ -227,7 +227,7 @@ function makeAnnexBAssignmentsExplicit(loopPath: NodePath<t.ForStatement>) {
         t.assignmentExpression(
           "=",
           t.identifier(name),
-          t.cloneNode(path.node.id!),
+          t.cloneNode(path.node.id),
         ),
       ),
     );

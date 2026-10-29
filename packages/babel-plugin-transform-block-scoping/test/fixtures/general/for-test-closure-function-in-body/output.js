@@ -5,7 +5,8 @@ var _loop = function (i) {
       return i;
     }), typeof g == "undefined" && n++ < 2)) return 1; // break
     {
-      g = function () {};
+      var _g = function () {};
+      g = _g;
     }
   },
   g;
