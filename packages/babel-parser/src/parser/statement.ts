@@ -3116,7 +3116,10 @@ export default abstract class StatementParser extends ExpressionParser {
     } else if (phase === "defer") {
       this.expectPlugin("deferredImportEvaluation", loc);
       (node as N.ImportDeclaration).phase = "defer";
-    } else if (this.hasPlugin("sourcePhaseImports")) {
+    } else if (
+      this.hasPlugin("sourcePhaseImports") ||
+      this.hasPlugin("deferredImportEvaluation")
+    ) {
       (node as N.ImportDeclaration).phase = null;
     }
   }
