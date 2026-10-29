@@ -1,0 +1,15 @@
+(f(): any) += 1;
+((f(): any): any) **= 1;
+(x: any) += 1;
+(a.b: any) += 1;
+(x: any) ||= 1;
+(f(): any) &&= 1;
+(f(): any) ??= 1;
+(arguments: any) += 1;
+(f() + 1: any) += 1;
+++(f(): any);
+((f(): any): any)--;
+++(obj.x: any);
+((x: any): any)--;
+(eval: any)++;
+(1: any)++;

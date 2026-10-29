@@ -1,0 +1,76 @@
+{
+  "type": "File",
+  "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":34}},
+  "errors": [
+    "SyntaxError: Did not expect a type annotation here. (1:8)",
+    "SyntaxError: Did not expect a type annotation here. (2:11)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":18,"index":34}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":15,"index":15}},
+        "expression": {
+          "type": "ImportExpression",
+          "start":0,"end":14,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":14,"index":14}},
+          "source": {
+            "type": "TSTypeCastExpression",
+            "start":7,"end":13,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":13,"index":13}},
+            "expression": {
+              "type": "Identifier",
+              "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8},"identifierName":"x"},
+              "name": "x"
+            },
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":8,"end":13,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":13,"index":13}},
+              "typeAnnotation": {
+                "type": "TSAnyKeyword",
+                "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13}}
+              }
+            }
+          },
+          "options": null
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":16,"end":34,"loc":{"start":{"line":2,"column":0,"index":16},"end":{"line":2,"column":18,"index":34}},
+        "expression": {
+          "type": "ImportExpression",
+          "start":16,"end":33,"loc":{"start":{"line":2,"column":0,"index":16},"end":{"line":2,"column":17,"index":33}},
+          "source": {
+            "type": "Identifier",
+            "start":23,"end":24,"loc":{"start":{"line":2,"column":7,"index":23},"end":{"line":2,"column":8,"index":24},"identifierName":"x"},
+            "name": "x"
+          },
+          "options": {
+            "type": "TSTypeCastExpression",
+            "start":26,"end":32,"loc":{"start":{"line":2,"column":10,"index":26},"end":{"line":2,"column":16,"index":32}},
+            "expression": {
+              "type": "Identifier",
+              "start":26,"end":27,"loc":{"start":{"line":2,"column":10,"index":26},"end":{"line":2,"column":11,"index":27},"identifierName":"y"},
+              "name": "y"
+            },
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":27,"end":32,"loc":{"start":{"line":2,"column":11,"index":27},"end":{"line":2,"column":16,"index":32}},
+              "typeAnnotation": {
+                "type": "TSAnyKeyword",
+                "start":29,"end":32,"loc":{"start":{"line":2,"column":13,"index":29},"end":{"line":2,"column":16,"index":32}}
+              }
+            }
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

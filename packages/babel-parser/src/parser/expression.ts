@@ -3085,6 +3085,7 @@ export default abstract class ExpressionParser extends LValParser {
   ): N.ImportExpression {
     this.expect(tt.parenL);
     const args = this.parseCallExpressionArguments();
+    this.toReferencedList(args);
     if (args.length === 0 || args.length > 2) {
       this.raise(Errors.ImportCallArity, node, node);
     } else {
