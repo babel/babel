@@ -151,6 +151,7 @@ export default abstract class Tokenizer extends CommentsParser {
       end: state.end,
       context: [this.curContext()],
       inType: state.inType,
+      strict: state.strict,
       startLoc: state.startLoc,
       lastTokEndLoc: state.lastTokEndLoc,
       curLine: state.curLine,
@@ -1402,6 +1403,11 @@ export default abstract class Tokenizer extends CommentsParser {
   }
 
   recordStrictModeErrors(toParseError: DeferredStrictError, at: Position) {
+    // The reduced LookaheadState has no `strictErrors`, and errors found
+    // during lookahead are discarded anyway (see `raise`): the token will be
+    // read again, and the error recorded then.
+    if (this.isLookahead) return;
+
     const index = at.index;
 
     if (this.state.strict && !this.state.strictErrors.has(index)) {
