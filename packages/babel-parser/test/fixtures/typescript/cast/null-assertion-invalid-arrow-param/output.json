@@ -4,7 +4,6 @@
   "errors": [
     "SyntaxError: Unexpected type cast in parameter position. (1:1)",
     "SyntaxError: Unexpected type cast in parameter position. (2:1)",
-    "SyntaxError: Unexpected type cast in parameter position. (2:1)",
     "SyntaxError: Unexpected type cast in parameter position. (3:2)",
     "SyntaxError: Unexpected type cast in parameter position. (4:5)",
     "SyntaxError: Unexpected type cast in parameter position. (5:5)",

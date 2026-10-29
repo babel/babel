@@ -39,6 +39,13 @@ type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   failState: FailState;
 };
 
+type ScopeStacksSnapshot = {
+  scopeDepth: number;
+  prodParamDepth: number;
+  classScopeDepth: number;
+  expressionScopeDepth: number;
+};
+
 // ## Parser utilities
 
 export default abstract class UtilParser extends Tokenizer {
@@ -158,6 +165,27 @@ export default abstract class UtilParser extends Tokenizer {
     }
   }
 
+  /**
+   * Record the depth of the scope stacks before a speculative parse, so that the
+   * scopes it left open when it threw can be exited by `restoreScopeStacks`.
+   */
+  snapshotScopeStacks(): ScopeStacksSnapshot {
+    return {
+      scopeDepth: this.scope.scopeStack.length,
+      prodParamDepth: this.prodParam.stacks.length,
+      classScopeDepth: this.classScope.stack.length,
+      expressionScopeDepth: this.expressionScope.stack.length,
+    };
+  }
+
+  restoreScopeStacks(snapshot: ScopeStacksSnapshot): void {
+    const { scope } = this;
+    while (scope.scopeStack.length > snapshot.scopeDepth) scope.exit();
+    this.prodParam.stacks.length = snapshot.prodParamDepth;
+    this.classScope.stack.length = snapshot.classScopeDepth;
+    this.expressionScope.stack.length = snapshot.expressionScopeDepth;
+  }
+
   // tryParse will clone parser state.
   // It is expensive and should be used with cautions
   tryParse<T extends Node | readonly Node[] | null>(
@@ -170,6 +198,7 @@ export default abstract class UtilParser extends Tokenizer {
     const abortSignal: {
       node: T | null;
     } = { node: null };
+    const scopeStacksSnapshot = this.snapshotScopeStacks();
     try {
       const node = fn((node = null as T) => {
         abortSignal.node = node;
@@ -202,6 +231,7 @@ export default abstract class UtilParser extends Tokenizer {
     } catch (error) {
       const failState = this.state;
       this.state = oldState;
+      this.restoreScopeStacks(scopeStacksSnapshot);
       if (error instanceof SyntaxError) {
         // @ts-expect-error casting general syntax error to parse error
         return { node: null, error, thrown: true, aborted: false, failState };
