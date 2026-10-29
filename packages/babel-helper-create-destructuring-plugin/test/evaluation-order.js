@@ -38,6 +38,28 @@ function expectSameEvaluation(
 const keyExpressions = ["key", "+key", "-key", "~key", "`${key}`", 'key + ""'];
 
 it.each([
+  "const [{ a: { ...rest }, b = log.push('default') }] = [source];",
+  "let rest, b; ([{ a: { ...rest }, b = log.push('default') }] = [source]);",
+  "function f([{ a: { ...rest }, b = log.push('default') }]) {} f([source]);",
+  "const [{ a: { ...rest }, [log.push('key')]: b }] = [source];",
+  "const [{ a: { ...rest }, c: { ...other } }] = [source];",
+])("keeps nested rest before later properties: %s", statement => {
+  for (const value of ["null", "{ get x() { log.push('rest'); return 1; } }"]) {
+    expectSameEvaluation(
+      `const log = [];
+       const source = {
+         a: ${value},
+         get b() { log.push('b'); },
+         get c() { log.push('c'); return {}; },
+       };
+       try { ${statement} } catch (error) { log.push(error.name); }
+       return log;`,
+      FEATURES.objectRest,
+    );
+  }
+});
+
+it.each([
   "while (i < 2 && objects.push(OBJECT)) { i++; }",
   "do { i++; } while (i <= 2 && objects.push(OBJECT));",
   "for (; i < 2 && objects.push(OBJECT); i++) {}",
