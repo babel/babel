@@ -244,7 +244,16 @@ function shadowsArguments(
 export function readsMappedArguments(path: NodePath<t.Function>): boolean {
   if (path.isArrowFunctionExpression()) return false;
   const usage = getGlobalsUsage(path);
-  if (usage && !usage.arguments && !usage.eval) return false;
+  if (
+    usage &&
+    !usage.arguments &&
+    !usage.eval &&
+    // The references to the arguments object redeclared by `var arguments`
+    // are not global
+    path.scope.getOwnBinding("arguments")?.kind !== "var"
+  ) {
+    return false;
+  }
   if (path.isInStrictMode()) return false;
   // A direct eval also reads the explicit binding when `arguments` is shadowed.
   if (shadowsArguments(path.scope.getOwnBinding("arguments"), path))
