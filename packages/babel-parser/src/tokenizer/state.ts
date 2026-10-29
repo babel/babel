@@ -218,6 +218,8 @@ export type LookaheadState = {
   curPosition: State["curPosition"];
   /* Used only in readToken_mult_modulo */
   inType: boolean;
+  /* Used only in readNumber */
+  strict: boolean;
   // These boolean properties are not initialized in createLookaheadState()
   // instead they will only be set by the tokenizer
   containsEsc?: boolean;
