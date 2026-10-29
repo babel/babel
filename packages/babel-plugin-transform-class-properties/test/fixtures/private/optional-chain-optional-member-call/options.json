@@ -1,4 +1,3 @@
 {
-  "plugins": ["transform-class-properties"],
-  "minNodeVersion": "14.0.0"
+  "plugins": ["transform-class-properties"]
 }

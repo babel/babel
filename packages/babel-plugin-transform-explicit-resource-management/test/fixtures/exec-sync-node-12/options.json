@@ -1,6 +1,5 @@
 {
   "plugins": [
     "transform-explicit-resource-management"
-  ],
-  "minNodeVersion": "12.0.0"
+  ]
 }

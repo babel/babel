@@ -1,4 +1,3 @@
 {
-  "plugins": ["transform-numeric-separator"],
-  "minNodeVersion": "10.4.0"
+  "plugins": ["transform-numeric-separator"]
 }

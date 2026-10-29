@@ -2,6 +2,5 @@
   "plugins": [["proposal-pipeline-operator", { "proposal": "fsharp" }]],
   "parserOpts": {
     "allowReturnOutsideFunction": true
-  },
-  "minNodeVersion": "8.0.0"
+  }
 }
