@@ -11,6 +11,7 @@ type ClassAssumptions = {
   noClassCalls: boolean;
   noClassPrototypeAssign: boolean;
   noConstructorPrimitiveReturn: boolean;
+  noUninitializedThis: boolean;
 };
 
 type ClassConstructor = t.ClassMethod & { kind: "constructor" };
@@ -352,6 +353,7 @@ export default function transformClass(
     };
 
     const buildAssertThisInitialized = function () {
+      if (assumptions.noUninitializedThis) return thisRef();
       return t.callExpression(file.addHelper("assertThisInitialized"), [
         thisRef(),
       ]);
@@ -480,6 +482,9 @@ export default function transformClass(
       };
     } else {
       wrapReturn = (returnArg: t.Expression | undefined) => {
+        if (returnArg == null && assumptions.noUninitializedThis) {
+          return thisRef();
+        }
         const returnParams: t.Expression[] = [thisRef()];
         if (returnArg != null) {
           returnParams.push(returnArg);
