@@ -1,0 +1,52 @@
+{
+  "type": "File",
+  "start":0,"end":148,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":39,"index":148}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":148,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":39,"index":148}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":0,"end":22,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":22,"index":22}},
+          "extra": {
+            "rawValue": 1152921504606847200,
+            "raw": "0x1_0000_0000_0000_081"
+          },
+          "value": 1152921504606847200
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":24,"end":108,"loc":{"start":{"line":2,"column":0,"index":24},"end":{"line":2,"column":84,"index":108}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":24,"end":107,"loc":{"start":{"line":2,"column":0,"index":24},"end":{"line":2,"column":83,"index":107}},
+          "extra": {
+            "rawValue": 18446744073709556000,
+            "raw": "0b1_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1000_0000_0001"
+          },
+          "value": 18446744073709556000
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":109,"end":148,"loc":{"start":{"line":3,"column":0,"index":109},"end":{"line":3,"column":39,"index":148}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":109,"end":147,"loc":{"start":{"line":3,"column":0,"index":109},"end":{"line":3,"column":38,"index":147}},
+          "extra": {
+            "rawValue": 8.89860895448126e+25,
+            "raw": "0o4_4633_4231_2214_6446_5553_0205_3161"
+          },
+          "value": 8.89860895448126e+25
+        }
+      }
+    ],
+    "directives": []
+  }
+}

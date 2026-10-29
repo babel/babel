@@ -149,7 +149,6 @@ export default {
     `Invalid optional chaining in the left-hand side of ${toNodeDescription(
       ancestor,
     )}.`,
-  InvalidNumber: "Invalid number.",
   InvalidOrMissingExponent:
     "Floating-point numbers require a valid exponent after the 'e'.",
   InvalidOrUnexpectedToken: ({ unexpected }: { unexpected: string }) =>
