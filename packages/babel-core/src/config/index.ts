@@ -141,12 +141,14 @@ type CreateConfigItem = {
 
 export const createConfigItem: CreateConfigItem = function createConfigItem(
   target: PluginTarget,
-  options?: CreateConfigItemOptions | CreateConfigItemCallback,
+  optionsOrCallback?: CreateConfigItemOptions | CreateConfigItemCallback,
   callback?: CreateConfigItemCallback,
 ) {
-  if (typeof options === "function") {
-    callback = options;
-    options = undefined;
+  let options: CreateConfigItemOptions | undefined;
+  if (typeof optionsOrCallback === "function") {
+    callback = optionsOrCallback;
+  } else {
+    options = optionsOrCallback;
   }
 
   if (callback === undefined) {
