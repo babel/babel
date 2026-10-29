@@ -2,7 +2,7 @@ var _obj;
 const proto = {
   x: 7
 };
-const obj = _obj = babelHelpers.objectSpread2(babelHelpers.setPrototypeOf(babelHelpers.objectSpread2({}, {}), babelHelpers.getPrototypeOf({
+const obj = babelHelpers.objectSpread2(babelHelpers.setPrototypeOf(babelHelpers.objectSpread2(_obj = {}, {}), babelHelpers.getPrototypeOf({
   __proto__: proto
 })), {}, {
   m() {
