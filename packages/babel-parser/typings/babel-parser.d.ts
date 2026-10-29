@@ -171,7 +171,6 @@ type ErrorInfoCompressed = {
   InvalidLhs: [{ ancestor: LValAncestor }];
   InvalidLhsBinding: [{ ancestor: LValAncestor }];
   InvalidLhsOptionalChaining: [{ ancestor: LValAncestor }];
-  InvalidNumber: [];
   InvalidOrMissingExponent: [];
   InvalidOrUnexpectedToken: [{ unexpected: string }];
   InvalidParenthesizedAssignment: [];

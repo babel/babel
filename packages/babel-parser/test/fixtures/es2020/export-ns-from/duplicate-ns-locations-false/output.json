@@ -1,0 +1,97 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 49,
+  "errors": [
+    "SyntaxError: `z` has already been exported. Exported identifiers must be unique. (3:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 49,
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 6,
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 5,
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 5,
+              "name": "x"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 7,
+        "end": 25,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 16,
+            "end": 22,
+            "local": {
+              "type": "Identifier",
+              "start": 16,
+              "end": 17,
+              "name": "x"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 21,
+              "end": 22,
+              "name": "z"
+            }
+          }
+        ],
+        "source": null,
+        "attributes": [],
+        "declaration": null
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 26,
+        "end": 49,
+        "specifiers": [
+          {
+            "type": "ExportNamespaceSpecifier",
+            "start": 33,
+            "end": 39,
+            "exported": {
+              "type": "Identifier",
+              "start": 38,
+              "end": 39,
+              "name": "z"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 45,
+          "end": 48,
+          "extra": {
+            "rawValue": "y",
+            "raw": "\"y\""
+          },
+          "value": "y"
+        },
+        "attributes": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

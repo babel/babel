@@ -1,0 +1,4 @@
+{
+  "errorRecovery": false,
+  "throws": "Invalid parenthesized assignment pattern. (1:24)"
+}

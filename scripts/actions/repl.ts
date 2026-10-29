@@ -1,4 +1,5 @@
 import type { getOctokit, context as _context } from "@actions/github";
+import { createOrUpdateComment } from "./_comment.ts";
 
 const COMMENT_PREFIX =
   "Build successful! You can test your changes in the REPL here: ";
@@ -15,20 +16,6 @@ export default async function (
   const { owner, repo } = context.repo;
   const pull_number = context.issue.number;
 
-  let commentId;
-
-  const comments = await github.rest.issues.listComments({
-    owner: owner,
-    repo: repo,
-    issue_number: pull_number,
-  });
-  for (const comment of comments.data) {
-    if (comment.body?.includes(COMMENT_PREFIX)) {
-      commentId = comment.id;
-      break;
-    }
-  }
-
   // Make sure Circleci is triggered.
   await sleep(60000);
   const circleciId = await getCircleciJobId(
@@ -38,28 +25,17 @@ export default async function (
       : process.env.GITHUB_HEAD_REF
   );
 
-  const commentBody = `${COMMENT_PREFIX}https://babeljs.io/repl/build/${circleciId}`;
-
-  if (commentId) {
-    await github.rest.issues.updateComment({
-      owner: owner,
-      repo: repo,
-      comment_id: commentId,
-      body: commentBody,
-    });
-  } else {
-    await github.rest.issues.createComment({
-      owner: owner,
-      repo: repo,
-      issue_number: pull_number,
-      body: commentBody,
-    });
-  }
+  await createOrUpdateComment(github, {
+    owner,
+    repo,
+    issue_number: pull_number,
+    marker: COMMENT_PREFIX,
+    body: `${COMMENT_PREFIX}https://babeljs.io/repl/build/${circleciId}`,
+  });
 }
 
 async function getCircleciJobId(branch: string) {
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  let resp = (await (
+  let resp: any = await (
     await fetch(
       "https://circleci.com/api/v2/project/github/babel/babel/pipeline?branch=" +
         branch,
@@ -67,15 +43,14 @@ async function getCircleciJobId(branch: string) {
         method: "GET",
       }
     )
-  ).json()) as any;
+  ).json();
   const pipeline = resp.items[0].id;
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  resp = (await (
+  resp = await (
     await fetch(`https://circleci.com/api/v2/pipeline/${pipeline}/workflow`, {
       method: "GET",
     })
-  ).json()) as any;
+  ).json();
   const workflow = resp.items[0].id;
 
   // Wait up to 10 minutes

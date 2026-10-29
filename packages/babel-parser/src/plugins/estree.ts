@@ -11,9 +11,11 @@ import type { ExpressionErrors } from "../parser/util.ts";
 import type { ParseResult, File } from "../index.ts";
 
 function toESTreeLocation(node: any) {
-  const { start, end } = node.loc;
-  node.loc.start = new Position(start.line, start.column);
-  node.loc.end = new Position(end.line, end.column);
+  if (node.loc) {
+    const { start, end } = node.loc;
+    node.loc.start = new Position(start.line, start.column);
+    node.loc.end = new Position(end.line, end.column);
+  }
 
   return node;
 }

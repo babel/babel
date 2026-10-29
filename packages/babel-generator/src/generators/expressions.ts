@@ -1,14 +1,8 @@
 import type Printer from "../printer.ts";
-import {
-  isCallExpression,
-  isLiteral,
-  isMemberExpression,
-  isNewExpression,
-  isPattern,
-} from "@babel/types";
+import { isLiteral, isMemberExpression, isPattern } from "@babel/types";
 import * as charCodes from "charcodes";
 import type * as t from "@babel/types";
-import { TokenContext } from "../node/index.ts";
+import { TokenContext, hasPostfixPart } from "../node/index.ts";
 
 export function UnaryExpression(this: Printer, node: t.UnaryExpression) {
   const { operator } = node;
@@ -92,16 +86,15 @@ export function NewExpression(
   node: t.NewExpression,
   parent: t.Node,
 ) {
+  const omitArguments =
+    this.format.minified && node.arguments.length === 0 && !node.typeArguments;
+  const wrapInParens = omitArguments && hasPostfixPart(node, parent);
+  if (wrapInParens) this.token("(");
   this.word("new");
   this.space();
   this.print(node.callee);
-  if (
-    this.format.minified &&
-    node.arguments.length === 0 &&
-    !isCallExpression(parent, { callee: node }) &&
-    !isMemberExpression(parent) &&
-    !isNewExpression(parent)
-  ) {
+  if (omitArguments) {
+    if (wrapInParens) this.token(")");
     return;
   }
 
@@ -110,7 +103,8 @@ export function NewExpression(
   if (
     node.arguments.length === 0 &&
     this.tokenMap &&
-    !this.tokenMap.endMatches(node, ")")
+    !this.tokenMap.endMatches(node, ")") &&
+    (!hasPostfixPart(node, parent) || node.extra?.parenthesized)
   ) {
     return;
   }

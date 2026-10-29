@@ -1,0 +1,88 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+  "errors": [
+    "SyntaxError: Legacy octal literals are not allowed in strict mode. (1:20)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "InterfaceDeclaration",
+        "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"B"},
+          "name": "B"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start":12,"end":33,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":33,"index":33}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":14,"end":31,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":31,"index":31}},
+              "key": {
+                "type": "Identifier",
+                "start":14,"end":17,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":17,"index":17},"identifierName":"foo"},
+                "name": "foo"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":14,"end":31,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":31,"index":31}},
+                "params": [
+                  {
+                    "type": "FunctionTypeParam",
+                    "start":18,"end":24,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":24,"index":24}},
+                    "name": null,
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "TupleTypeAnnotation",
+                      "start":18,"end":24,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":24,"index":24}},
+                      "types": [
+                        {
+                          "type": "NumberLiteralTypeAnnotation",
+                          "start":20,"end":22,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":22,"index":22}},
+                          "extra": {
+                            "rawValue": 2,
+                            "raw": "02"
+                          },
+                          "value": 2
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "rest": null,
+                "typeParameters": null,
+                "this": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start":27,"end":31,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":31,"index":31}}
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

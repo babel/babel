@@ -9,8 +9,14 @@ import {
 } from "../tokenizer/types.ts";
 import ExpressionParser from "./expression.ts";
 import { Errors } from "../parse-error.ts";
-import { isIdentifierChar, isIdentifierStart } from "../util/identifier.ts";
+import {
+  isIdentifierChar,
+  isIdentifierStart,
+  isKeyword,
+  isReservedWord,
+} from "../util/identifier.ts";
 import * as charCodes from "charcodes";
+import { hasNewLine } from "../util/whitespace.ts";
 import {
   ScopeFlag,
   ClassElementType,
@@ -19,8 +25,8 @@ import {
 import { ExpressionErrors } from "./util.ts";
 import { ParamKind, functionFlags } from "../util/production-parameter.ts";
 import {
-  newExpressionScope,
-  newParameterDeclarationScope,
+  parameterDeclarationScope,
+  sharedExpressionScope,
 } from "../util/expression-scope.ts";
 import { OptionFlags } from "../options.ts";
 import type { Token } from "../tokenizer/index.ts";
@@ -57,6 +63,9 @@ export const enum ParseStatementFlag {
 const loneSurrogate = /[\uD800-\uDFFF]/u;
 
 const keywordRelationalOperator = /in(?:stanceof)?/y;
+
+// Every keyword is 2 (`do`) to 10 (`instanceof`) lowercase ASCII letters.
+export const keywordLikeWord = /[a-z]{2,10}/y;
 
 /**
  * Prepare exported tokens.
@@ -256,6 +265,34 @@ export default abstract class StatementParser extends ExpressionParser {
     } else {
       return false;
     }
+  }
+
+  /**
+   * Assuming we have seen a contextual `let`, check if the token starting at
+   * `pos` is an unescaped reserved word (other than `yield` and `await`) on a
+   * new line, e.g. `let \n if (x) {}`. A reserved word can never be a
+   * BindingIdentifier, so ASI applies and `let` is an identifier reference.
+   * On the same line it is an error either way, and parsing a declaration
+   * gives a better error.
+   */
+  isReservedWordOnNewLineAfterLet(pos: number): boolean {
+    if (!hasNewLine(this.input, this.state.end, pos)) {
+      return false;
+    }
+    keywordLikeWord.lastIndex = pos;
+    if (!keywordLikeWord.test(this.input)) {
+      return false;
+    }
+    const end = keywordLikeWord.lastIndex;
+    const endCh = this.codePointAtPos(end);
+    if (isIdentifierChar(endCh) || endCh === charCodes.backslash) {
+      return false;
+    }
+    const word = this.input.slice(pos, end);
+    // Pass `inModule: false` so that only `enum` is checked, even in modules:
+    // `await` is a valid BindingIdentifier in the grammar and is only
+    // disallowed in modules by an early error.
+    return isKeyword(word) || isReservedWord(word, false);
   }
 
   chStartsBindingPattern(ch: number) {
@@ -472,6 +509,7 @@ export default abstract class StatementParser extends ExpressionParser {
           ) {
             break;
           }
+          if (this.isReservedWordOnNewLineAfterLet(next)) break;
         }
       }
       // fall through
@@ -1489,7 +1527,7 @@ export default abstract class StatementParser extends ExpressionParser {
       // The name of a function expression is not part of an enclosing async
       // arrow head, so `await` must not be recorded as an error there:
       // `async (x = function await() {}) => {}` is valid.
-      this.expressionScope.enter(newExpressionScope());
+      this.expressionScope.enter(sharedExpressionScope);
       node.id = this.parseFunctionId();
       this.expressionScope.exit();
     }
@@ -1526,7 +1564,7 @@ export default abstract class StatementParser extends ExpressionParser {
     isConstructor?: boolean,
   ): void {
     this.expect(tt.parenL);
-    this.expressionScope.enter(newParameterDeclarationScope());
+    this.expressionScope.enter(parameterDeclarationScope);
     node.params = this.parseBindingList(
       tt.parenR,
       charCodes.rightParenthesis,
@@ -2132,7 +2170,7 @@ export default abstract class StatementParser extends ExpressionParser {
     >,
   ): void {
     this.scope.enter(ScopeFlag.CLASS | ScopeFlag.SUPER);
-    this.expressionScope.enter(newExpressionScope());
+    this.expressionScope.enter(sharedExpressionScope);
     this.prodParam.enter(ParamKind.PARAM);
     node.value = this.eat(tt.eq) ? this.parseMaybeAssignAllowIn() : null;
     this.expressionScope.exit();
@@ -2407,7 +2445,8 @@ export default abstract class StatementParser extends ExpressionParser {
     if (
       this.match(tt._const) ||
       this.match(tt._var) ||
-      this.isLet() ||
+      (this.isLet() &&
+        !this.isReservedWordOnNewLineAfterLet(this.nextTokenStart())) ||
       this.isUsing() ||
       this.isAwaitUsing()
     ) {
@@ -2432,6 +2471,15 @@ export default abstract class StatementParser extends ExpressionParser {
         false,
       );
       return node;
+    }
+    if (this.isContextual(tt._let)) {
+      // isLet() has seen a binding after `let`. ASI cannot turn `let` into an
+      // expression after `export`, so parse a declaration even for
+      // `export let \n if`, where parseStatementContent would apply ASI.
+      return this.parseVarStatement(
+        this.startNode<N.VariableDeclaration>(),
+        "let",
+      );
     }
     return this.parseStatementListItem() as N.ExportNamedDeclaration["declaration"];
   }
@@ -2693,17 +2741,20 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   checkImportPhase(node: Undone<N.ImportDeclaration>) {
+    if (node.phase == null) {
+      return;
+    }
     const { specifiers } = node;
     const singleBindingType =
       specifiers.length === 1 ? specifiers[0].type : null;
 
     if (node.phase === "source") {
       if (singleBindingType !== "ImportDefaultSpecifier") {
-        this.raise(Errors.SourcePhaseImportRequiresDefault, specifiers[0]);
+        this.raise(Errors.SourcePhaseImportRequiresDefault, node);
       }
     } else if (node.phase === "defer") {
       if (singleBindingType !== "ImportNamespaceSpecifier") {
-        this.raise(Errors.DeferImportRequiresNamespace, specifiers[0]);
+        this.raise(Errors.DeferImportRequiresNamespace, node);
       }
     }
   }
