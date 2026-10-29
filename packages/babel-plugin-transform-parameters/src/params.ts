@@ -12,6 +12,8 @@ import {
   declareMovedParams,
   getGlobalsUsage,
   getParamNames,
+  moveParamToTemporary,
+  redeclaresArguments,
   referencesBodyDeclaration,
   wrapBodyInScopeIIFE,
 } from "./shadow-utils.ts";
@@ -244,14 +246,9 @@ function shadowsArguments(
 export function readsMappedArguments(path: NodePath<t.Function>): boolean {
   if (path.isArrowFunctionExpression()) return false;
   const usage = getGlobalsUsage(path);
-  if (
-    usage &&
-    !usage.arguments &&
-    !usage.eval &&
-    // The references to the arguments object redeclared by `var arguments`
-    // are not global
-    path.scope.getOwnBinding("arguments")?.kind !== "var"
-  ) {
+  // The references to the arguments object redeclared by `var arguments`
+  // are not global
+  if (usage && !usage.arguments && !usage.eval && !redeclaresArguments(path)) {
     return false;
   }
   if (path.isInStrictMode()) return false;
@@ -467,18 +464,7 @@ export default function convertFunctionParams(
       defNode.kind = declarationKind;
       body.push(defNode);
     } else if (param.isObjectPattern() || param.isArrayPattern()) {
-      const uid = path.scope.generateUidIdentifier("ref");
-      // Move the type annotation to the new parameter
-      const newParam = t.cloneNode(uid);
-      newParam.typeAnnotation = param.node.typeAnnotation;
-      param.node.typeAnnotation = null;
-
-      const defNode = t.variableDeclaration(declarationKind, [
-        t.variableDeclarator(param.node, uid),
-      ]);
-      body.push(defNode);
-
-      param.replaceWith(newParam);
+      body.push(moveParamToTemporary(param, path.scope, declarationKind)[0]);
     }
 
     body.push(...transformedRestNodes);

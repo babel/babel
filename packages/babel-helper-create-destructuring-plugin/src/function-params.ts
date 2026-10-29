@@ -1,4 +1,4 @@
-import { types as t } from "@babel/core";
+import type { types as t } from "@babel/core";
 import type { NodePath, PluginPass, Scope, Visitor } from "@babel/core";
 import {
   convertFunctionParams,
@@ -7,6 +7,7 @@ import {
   isDefaultEvaluationObservable,
   isPatternEvaluationObservable,
   isRedeclaredInBody,
+  moveParamToTemporary,
   readsMappedArguments,
   skipTypeAnnotationsVisitor,
   unmapArguments,
@@ -74,7 +75,7 @@ const conflictVisitor: Visitor<ConflictState> = {
   // Assigned names resolve like references, e.g. `y` in `{ v = (y = 5) }`
   BindingIdentifier(path, state) {
     // A declaration, not an assignment
-    if (path.scope.getBinding(path.node.name)?.identifier === path.node) return;
+    if (path.scope.bindingIdentifierEquals(path.node.name, path.node)) return;
     checkConflict(path, state);
   },
 };
@@ -170,23 +171,6 @@ function collectMovedPatterns(
 type Pattern = t.ObjectPattern | t.ArrayPattern;
 
 /**
- * Replace a parameter pattern with a temporary, destructured by the returned
- * declaration.
- */
-function moveToTemporary(
-  pattern: NodePath<Pattern>,
-  scope: Scope,
-  kind: "let" | "var",
-): [t.VariableDeclaration, NodePath<t.Identifier>] {
-  const uid = scope.generateUidIdentifier("ref");
-  uid.typeAnnotation = pattern.node.typeAnnotation;
-  const declaration = t.variableDeclaration(kind, [
-    t.variableDeclarator(pattern.node, t.cloneNode(uid)),
-  ]);
-  return [declaration, pattern.replaceWith(uid)[0]];
-}
-
-/**
  * Replace the parameter patterns containing object rest or private keys with
  * a temporary identifier, destructured at the beginning of the function body.
  *
@@ -214,7 +198,6 @@ export function transformFunctionParams(
   const isLowered = path.node.params.map(param =>
     needsLowering(param, features),
   );
-  const { ignoreFunctionLength } = options;
 
   const params = path.get("params");
   const tsParameterProperty = params.find(param =>
@@ -307,14 +290,14 @@ export function transformFunctionParams(
     const forgetScopeInfo = collectScopeInfo(path);
     convertFunctionParams(
       path,
-      ignoreFunctionLength,
+      options.ignoreFunctionLength,
       index => index >= start || isLowered[index],
       (fnPath, paramPath, transformedRestNodes, kind) => {
         if (!paramPath.isRestElement()) return;
         const argument = paramPath.get("argument");
         if (needsLowering(argument.node, features)) {
           transformedRestNodes.push(
-            moveToTemporary(
+            moveParamToTemporary(
               argument as NodePath<Pattern>,
               fnPath.scope,
               kind,
@@ -339,7 +322,7 @@ export function transformFunctionParams(
   const declarations: t.VariableDeclaration[] = [];
   const newParams: NodePath<t.Identifier>[] = [];
   for (const pattern of movedPatterns) {
-    const [declaration, newParam] = moveToTemporary(
+    const [declaration, newParam] = moveParamToTemporary(
       pattern,
       functionScope,
       kind,
