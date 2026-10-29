@@ -20,9 +20,11 @@ import FlowScopeHandler from "./scope.ts";
 import { BindingFlag, ScopeFlag } from "../../util/scopeflags.ts";
 import type { ExpressionErrors } from "../../parser/util.ts";
 import type { ParseStatementFlag } from "../../parser/statement.ts";
+import { unwrapParenthesizedExpression } from "../../parser/lval.ts";
 import {
   Errors,
   ParseErrorEnum,
+  type LValAncestor,
   type ParseErrorTemplates,
 } from "../../parse-error.ts";
 import type { Undone } from "../../parser/node.ts";
@@ -2510,6 +2512,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): void {
       const node = exprList[index];
       if (node.type === "TypeCastExpression") {
+        // The cast and its parentheses are dropped below, so report them now.
+        if (node.extra?.parenthesized) {
+          this.raiseOnce(Errors.InvalidParenthesizedAssignment, node);
+        }
         exprList[index] = this.typeCastToParameter(node);
       }
       super.toAssignableListItem(exprList, index, isLHS);
@@ -2563,6 +2569,19 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           (exprList.length > 1 || !isParenthesizedExpr)
         ) {
           this.raise(FlowErrors.TypeCastInPattern, expr.typeAnnotation);
+        } else if (
+          expr?.type === "AssignmentExpression" &&
+          !expr.extra?.parenthesized
+        ) {
+          // `x: T = 1` is only valid as an arrow parameter, which this list has
+          // turned out not to be. checkLVal accepted this target until now.
+          const left = expr.left as N.Node;
+          if (
+            left.type === "TypeCastExpression" &&
+            !left.extra?.parenthesized
+          ) {
+            this.raise(FlowErrors.TypeCastInPattern, left.typeAnnotation);
+          }
         }
       }
 
@@ -2597,6 +2616,48 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           isParenthesized,
           binding,
         )
+      );
+    }
+
+    checkLVal(
+      expression:
+        | N.Expression
+        | N.ObjectMember
+        | N.RestElement
+        | N.Pattern
+        | N.TSParameterProperty
+        | N.TSTypeCastExpression,
+      ancestor: LValAncestor,
+      binding: BindingFlag = BindingFlag.TYPE_NONE,
+      checkClashes: Set<string> | false = false,
+      strictModeChanged: boolean = false,
+      hasParenthesizedAncestor: boolean = false,
+      disallowCallExpression: boolean = false,
+    ): void {
+      // A parenthesized cast is never a valid target. toAssignable reports it
+      // in the targets it converts, but `+=` and `++` targets are not converted.
+      if (
+        ancestor.type === "UpdateExpression" ||
+        (ancestor.type === "AssignmentExpression" &&
+          (ancestor as unknown as N.AssignmentExpression).operator !== "=")
+      ) {
+        const inner = unwrapParenthesizedExpression(expression);
+        if (
+          inner.type === "TypeCastExpression" &&
+          (inner !== expression || inner.extra?.parenthesized)
+        ) {
+          this.raise(Errors.InvalidLhs, inner, { ancestor });
+          return;
+        }
+      }
+      super.checkLVal(
+        expression,
+        ancestor,
+        binding,
+        checkClashes,
+        strictModeChanged,
+        hasParenthesizedAncestor,
+        disallowCallExpression,
       );
     }
 

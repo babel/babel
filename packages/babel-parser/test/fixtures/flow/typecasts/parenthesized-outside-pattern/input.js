@@ -1,0 +1,14 @@
+(x: any);
+((x: any));
+foo((x: any));
+async ((x: any));
+[(x: any)];
+x = (y: any);
+[x = (y: any)] = z;
+(x: any).y = 1;
+(x: any).y += 1;
+(x: any).y++;
+x += (y: any);
+import((x: any));
+import((x: any), (y: T));
+(x: any = 1) => import(x);
