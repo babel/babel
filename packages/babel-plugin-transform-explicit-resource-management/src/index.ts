@@ -49,7 +49,6 @@ export default declare(api => {
         const { kind } = left;
         left.kind = "const";
 
-        path.ensureBlock();
         unshiftForXStatementBody(path, [
           t.variableDeclaration(kind, [
             t.variableDeclarator(id, t.cloneNode(tmpId)),

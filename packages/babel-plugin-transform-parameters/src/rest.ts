@@ -51,7 +51,6 @@ type State = {
   references: NodePath<t.Identifier | t.JSXIdentifier>[];
   offset: number;
 
-  argumentsNode: t.Identifier;
   outerBinding: t.Identifier;
 
   // candidate member expressions we could optimise if there are no other references
@@ -375,7 +374,6 @@ export default function convertFunctionRest(
   const state: State = {
     references: [],
     offset: paramsCount,
-    argumentsNode: argsId,
     outerBinding: scope.getBindingIdentifier(rest.name)!,
     candidates: [],
     name: rest.name,

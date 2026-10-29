@@ -259,8 +259,8 @@ function transformAssignmentExpression(
       .replaceWith(t.blockStatement(statements));
     pushHoistedVars(parentPath.scope, hoisted);
     registerReplacement(bodyPath.get("body"), parentPath.scope);
-    // Unlike in the other cases, `path` is now the path of the new body
-    // (the same container key): don't skip it, so that other plugins see it.
+    // `path` is the body of the arrow, now the new block: the traversal
+    // continues into it, and the other plugins visit it.
     return;
   }
 

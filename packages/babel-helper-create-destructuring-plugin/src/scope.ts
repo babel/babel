@@ -106,11 +106,7 @@ export function collectScopeInfo(path: NodePath): () => void {
   // The bindings of nested scopes don't need to be forgotten: their
   // references keep their paths, as their parent nodes don't change, or the
   // scope is created again when visiting its new path.
-  const info: CollectedScopeInfo = {
-    scope: path.scope,
-    references: new Map(),
-    violations: new Map(),
-  };
+  const info = createScopeInfo(path.scope);
   collectNodeScopeInfo(
     path.node,
     path.parent,
@@ -128,11 +124,7 @@ export function collectForXHeadScopeInfo(
   path: NodePath<t.ForXStatement>,
 ): () => void {
   const { node } = path;
-  const info: CollectedScopeInfo = {
-    scope: path.scope,
-    references: new Map(),
-    violations: new Map(),
-  };
+  const info = createScopeInfo(path.scope);
   forEachAssignedIdentifier(node, id => {
     recordNode(info.violations, info.scope, id.name, node);
   });
@@ -166,6 +158,10 @@ interface CollectedScopeInfo {
   scope: Scope;
   references: Map<Binding, Set<t.Node>>;
   violations: Map<Binding, Set<t.Node>>;
+}
+
+function createScopeInfo(scope: Scope): CollectedScopeInfo {
+  return { scope, references: new Map(), violations: new Map() };
 }
 
 function recordNode(
@@ -541,17 +537,14 @@ function ensureArrowBlock(arrow: NodePath<t.ArrowFunctionExpression>) {
 export function pushHoistedVars(scope: Scope, ids: t.Identifier[]) {
   if (ids.length === 0) return;
   const functionScope = scope.getFunctionParent() ?? scope.getProgramParent();
+  let { path: target } = scope.getBlockParent();
   // `scope.push` would wrap the body of a loop in a block, whose new scope is
   // crawled: the references of the nodes being lowered would be registered
   // again, through stale paths. Declare them in the function instead.
-  const { path: blockParent } = scope.getBlockParent();
-  if (
-    blockParent.isLoop() &&
-    !(blockParent.get("body") as NodePath).isBlockStatement()
-  ) {
+  if (target.isLoop() && !(target.get("body") as NodePath).isBlockStatement()) {
     scope = functionScope;
+    target = functionScope.path;
   }
-  const { path: target } = scope.getBlockParent();
   if (
     target.isArrowFunctionExpression() &&
     !target.get("body").isBlockStatement()

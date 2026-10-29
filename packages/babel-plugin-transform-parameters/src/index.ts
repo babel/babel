@@ -17,7 +17,7 @@ export {
   declareMovedParams,
   getParamNames,
   isRedeclaredInBody,
-  preserveAnnexBParameterExclusions,
+  moveParamToTemporary,
   recordArgumentsUsage,
   skipTypeAnnotationsVisitor,
 } from "./shadow-utils.ts";
@@ -53,9 +53,9 @@ export default declare((api, options: Options) => {
       Function(path) {
         if (
           path.isArrowFunctionExpression() &&
-          path
-            .get("params")
-            .some(param => param.isRestElement() || param.isAssignmentPattern())
+          path.node.params.some(
+            param => t.isRestElement(param) || t.isAssignmentPattern(param),
+          )
         ) {
           // default/rest visitors require access to `arguments`, so it cannot be an arrow
           path.arrowFunctionToExpression({
