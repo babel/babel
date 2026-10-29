@@ -1186,13 +1186,42 @@ export default abstract class Tokenizer extends CommentsParser {
     return n;
   }
 
+  readLiteralInt(radix: number): number | null {
+    let pos = this.state.pos;
+    let val = 0;
+    let code: number;
+    for (;;) {
+      code = this.input.charCodeAt(pos);
+      let digit: number;
+      if (code >= charCodes.digit0 && code <= charCodes.digit9) {
+        digit = code - charCodes.digit0;
+      } else {
+        digit = (code | 0x20) - charCodes.lowercaseA;
+        if (digit < 0 || digit > 5) break;
+        digit += 10;
+      }
+      if (digit >= radix) break;
+      val = val * radix + digit;
+      ++pos;
+    }
+    if (
+      code === charCodes.underscore ||
+      (code >= charCodes.digit0 && code <= charCodes.digit9)
+    ) {
+      return this.readInt(radix);
+    }
+    if (pos === this.state.pos) return null;
+    this.state.pos = pos;
+    return val;
+  }
+
   readRadixNumber(radix: number): void {
     const start = this.state.pos;
     const startLoc = this.state.curPosition();
-    let isBigInt = false;
 
     this.state.pos += 2; // 0x
-    const val = this.readInt(radix);
+    let val = this.readLiteralInt(radix);
+    const end = this.state.pos;
     if (val == null) {
       this.raise(
         Errors.InvalidDigit,
@@ -1204,10 +1233,10 @@ export default abstract class Tokenizer extends CommentsParser {
       );
     }
     const next = this.input.charCodeAt(this.state.pos);
+    const isBigInt = next === charCodes.lowercaseN;
 
-    if (next === charCodes.lowercaseN) {
+    if (isBigInt) {
       ++this.state.pos;
-      isBigInt = true;
     } else if (next === charCodes.lowercaseM) {
       throw this.raise(Errors.InvalidDecimal, startLoc);
     }
@@ -1216,10 +1245,20 @@ export default abstract class Tokenizer extends CommentsParser {
       throw this.raise(Errors.NumberIdentifier, this.state.curPosition());
     }
 
-    if (isBigInt) {
-      const str = this.input.slice(start, this.state.pos).replace(/[_n]/g, "");
-      this.finishToken(tt.bigint, str);
-      return;
+    if (isBigInt || (val !== null && val > Number.MAX_SAFE_INTEGER)) {
+      const str = this.input.slice(start, end).replace(/_/g, "");
+      if (isBigInt) {
+        this.finishToken(tt.bigint, str);
+        return;
+      }
+
+      // Reparse the original digits to round once instead of at each step.
+      // Preserve readInt's invalid-digit recovery before conversion.
+      val = Number(
+        radix !== 16 && this.optionFlags & OptionFlags.ErrorRecovery
+          ? str.replace(radix === 2 ? /[2-9]/g : /[89]/g, "0")
+          : str,
+      );
     }
 
     this.finishToken(tt.num, val);
@@ -1231,13 +1270,10 @@ export default abstract class Tokenizer extends CommentsParser {
     const start = this.state.pos;
     const startLoc = this.state.curPosition();
     let isFloat = false;
-    let isBigInt = false;
     let hasExponent = false;
     let isOctal = false;
 
-    if (!startsWithDot && this.readInt(10) === null) {
-      this.raise(Errors.InvalidNumber, this.state.curPosition());
-    }
+    const integerValue = startsWithDot ? 0 : this.readLiteralInt(10)!;
     const hasLeadingZero =
       this.state.pos - start >= 2 &&
       this.input.charCodeAt(start) === charCodes.digit0;
@@ -1256,13 +1292,13 @@ export default abstract class Tokenizer extends CommentsParser {
           );
         }
       }
-      isOctal = hasLeadingZero && !/[89]/.test(integer);
+      isOctal = !/[89]/.test(integer);
     }
 
     let next = this.input.charCodeAt(this.state.pos);
     if (next === charCodes.dot && !isOctal) {
       ++this.state.pos;
-      this.readInt(10);
+      this.readLiteralInt(10);
       isFloat = true;
       next = this.input.charCodeAt(this.state.pos);
     }
@@ -1275,7 +1311,7 @@ export default abstract class Tokenizer extends CommentsParser {
       if (next === charCodes.plusSign || next === charCodes.dash) {
         ++this.state.pos;
       }
-      if (this.readInt(10) === null) {
+      if (this.readLiteralInt(10) === null) {
         this.raise(Errors.InvalidOrMissingExponent, startLoc);
       }
       isFloat = true;
@@ -1283,14 +1319,16 @@ export default abstract class Tokenizer extends CommentsParser {
       next = this.input.charCodeAt(this.state.pos);
     }
 
-    if (next === charCodes.lowercaseN) {
+    const end = this.state.pos;
+    const isBigInt = next === charCodes.lowercaseN;
+
+    if (isBigInt) {
       // disallow floats, legacy octal syntax and non octal decimals
       // new style octal ("0o") is handled in this.readRadixNumber
       if (isFloat || hasLeadingZero) {
         this.raise(Errors.InvalidBigIntLiteral, startLoc);
       }
       ++this.state.pos;
-      isBigInt = true;
     }
 
     if (!process.env.BABEL_8_BREAKING && next === charCodes.lowercaseM) {
@@ -1307,9 +1345,19 @@ export default abstract class Tokenizer extends CommentsParser {
       throw this.raise(Errors.NumberIdentifier, this.state.curPosition());
     }
 
-    // remove "_" for numeric literal separator, and trailing `m` or `n`
-    const str = this.input.slice(start, this.state.pos).replace(/[_mn]/g, "");
+    if (
+      !isFloat &&
+      !isBigInt &&
+      (process.env.BABEL_8_BREAKING || !isDecimal!) &&
+      !hasLeadingZero &&
+      integerValue <= Number.MAX_SAFE_INTEGER
+    ) {
+      this.finishToken(tt.num, integerValue);
+      return;
+    }
 
+    // Exclude the `n` or `m` suffix and remove numeric separators before conversion.
+    const str = this.input.slice(start, end).replace(/_/g, "");
     if (isBigInt) {
       this.finishToken(tt.bigint, str);
       return;
