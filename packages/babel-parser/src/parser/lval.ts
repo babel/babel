@@ -30,7 +30,11 @@ import {
 import { NodeUtils, type Undone } from "./node.ts";
 import { BindingFlag } from "../util/scopeflags.ts";
 import type { ExpressionErrors } from "./util.ts";
-import { Errors, type LValAncestor } from "../parse-error.ts";
+import {
+  Errors,
+  type LValAncestor,
+  type ParseErrorConstructor,
+} from "../parse-error.ts";
 import type Parser from "./index.ts";
 import { OptionFlags } from "../options.ts";
 
@@ -82,6 +86,30 @@ export default abstract class LValParser extends NodeUtils {
   abstract parseDecorator(): Decorator;
 
   /**
+   * Raise the error unless the same error has been reported at the same position.
+   *
+   * The LHS of an assignment has been converted by `parseMaybeAssign`, and it is
+   * converted again when the assignment is converted to a pattern, so the errors
+   * raised or recorded in the first conversion would be reported twice, e.g.
+   * `[([a]) = 1] = 2` and `((a) = 1) => {}`
+   */
+  raiseOnce(toParseError: ParseErrorConstructor<object>, node: Node): void {
+    const { errors } = this.state;
+    const length = errors.length;
+    const error = this.raise(toParseError, node);
+    if (errors.length === length) return;
+    for (let i = length - 1; i >= 0; i--) {
+      if (
+        errors[i].pos === error.pos &&
+        errors[i].reasonCode === error.reasonCode
+      ) {
+        errors.pop();
+        return;
+      }
+    }
+  }
+
+  /**
    * Convert existing expression atom to assignable pattern
    * if possible. Also checks invalid destructuring targets:
    *
@@ -119,10 +147,10 @@ export default abstract class LValParser extends NodeUtils {
           // A parenthesized member expression can be in LHS but not in pattern.
           // If the LHS is later interpreted as a pattern, `checkLVal` will throw for member expression binding
           // i.e. `([(a.b) = []] = []) => {}`
-          this.raise(Errors.InvalidParenthesizedAssignment, node);
+          this.raiseOnce(Errors.InvalidParenthesizedAssignment, node);
         }
       } else {
-        this.raise(Errors.InvalidParenthesizedAssignment, node);
+        this.raiseOnce(Errors.InvalidParenthesizedAssignment, node);
       }
     }
 
