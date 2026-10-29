@@ -1,7 +1,3 @@
 {
-  "plugins": [
-    "transform-object-rest-spread",
-    "transform-block-scoping",
-    ["../../../helpers/checkScopeInfo.js", { "strict": false }]
-  ]
+  "plugins": ["transform-object-rest-spread", "transform-block-scoping"]
 }
