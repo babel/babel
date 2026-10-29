@@ -25,6 +25,25 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.12 (2026-10-29)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#18445](https://github.com/babel/babel/pull/18445) fix(parser): improve radix literal rounding ([@babel-bot](https://github.com/babel-bot))
+  * [#18442](https://github.com/babel/babel/pull/18442) fix: allow parenthesized assignment target in arrow initializer ([@babel-bot](https://github.com/babel-bot))
+  * [#18440](https://github.com/babel/babel/pull/18440) fix(parser): do not record strict mode errors during lookahead ([@babel-bot](https://github.com/babel-bot))
+  * [#18434](https://github.com/babel/babel/pull/18434) fix(parser): invalid expectOnePlugin usage ([@babel-bot](https://github.com/babel-bot))
+  * [#18431](https://github.com/babel/babel/pull/18431) fix(parser): parser should not crash for `import defer {}` ([@babel-bot](https://github.com/babel-bot))
+  * [#18432](https://github.com/babel/babel/pull/18432) fix(parser): handle ASI after let followed by a reserved word on the next line ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-block-scoping`
+  * [#18441](https://github.com/babel/babel/pull/18441) fix: closures in for-loop test and update capture wrong binding ([@babel-bot](https://github.com/babel-bot))
+* `babel-generator`
+  * [#18439](https://github.com/babel/babel/pull/18439) fix(generator): keep aliases of string-literal module specifiers ([@babel-bot](https://github.com/babel-bot))
+  * [#18426](https://github.com/babel/babel/pull/18426) Keep parentheses around TSInstantiationExpression operand ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-optional-chaining`, `babel-traverse`
+  * [#18428](https://github.com/babel/babel/pull/18428) fix: `Scope#push` should not push iife param after rest element ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#18225](https://github.com/babel/babel/pull/18225) [7.x backport] fix: avoid removable fields as decorator evaluation hosts ([@nyan-left](https://github.com/nyan-left))
 ## v7.29.11 (2026-10-23)
 
 #### :eyeglasses: Spec Compliance
