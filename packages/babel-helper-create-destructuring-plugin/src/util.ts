@@ -82,7 +82,6 @@ export function getLoweredValue(
   pattern: t.ObjectPattern,
   features: number,
 ): t.ObjectProperty | null {
-  if (features & FEATURES.destructuring) return null;
   const { properties } = pattern;
   const last = properties[properties.length - 1];
   if (
@@ -134,7 +133,7 @@ export function hasRestElement(
 ): boolean {
   const list =
     pattern.type === "ObjectPattern" ? pattern.properties : pattern.elements;
-  return list.length > 0 && list[list.length - 1]?.type === "RestElement";
+  return list[list.length - 1]?.type === "RestElement";
 }
 
 export function isPureVoid(node: t.Node, scope: Scope): boolean {

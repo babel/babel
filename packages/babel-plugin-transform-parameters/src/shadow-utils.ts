@@ -118,6 +118,38 @@ export function getParamNames(params: t.Node[]): Set<string> {
 }
 
 /**
+ * Replace a parameter pattern with a temporary, destructured by the returned
+ * declaration at the beginning of the function body. The new parameter gets
+ * the type annotation of the pattern.
+ */
+export function moveParamToTemporary(
+  param: NodePath<t.ObjectPattern | t.ArrayPattern>,
+  scope: Scope,
+  kind: "let" | "var",
+): [t.VariableDeclaration, NodePath<t.Identifier>] {
+  const uid = scope.generateUidIdentifier("ref");
+  const newParam = t.cloneNode(uid);
+  newParam.typeAnnotation = param.node.typeAnnotation;
+  param.node.typeAnnotation = null;
+  const declaration = t.variableDeclaration(kind, [
+    t.variableDeclarator(param.node, uid),
+  ]);
+  return [declaration, param.replaceWith(newParam)[0]];
+}
+
+/**
+ * Whether the function redeclares its arguments object with `var arguments`,
+ * which keeps its value (unlike in an arrow function, where it declares a
+ * new binding).
+ */
+export function redeclaresArguments(fn: NodePath<t.Function>): boolean {
+  return (
+    !fn.isArrowFunctionExpression() &&
+    fn.scope.getOwnBinding("arguments")?.kind === "var"
+  );
+}
+
+/**
  * Whether a parameter is redeclared in the function body, which then has its
  * own binding for that name.
  */
@@ -213,7 +245,7 @@ function hasBlockFunctionDeclaration(
  * with lexical declarations around their original block. The function's own
  * block still shadows those declarations, so references keep their bindings.
  */
-export function preserveAnnexBParameterExclusions(
+function preserveAnnexBParameterExclusions(
   body: NodePath<t.BlockStatement>,
   paramNames: ReadonlySet<string>,
 ): boolean {
@@ -361,12 +393,9 @@ export function wrapBodyInScopeIIFE(
       if (key.startsWith("binding:")) path.setData(key, undefined);
     }
   }
-  // `var arguments` redeclares the arguments object of the function (unlike
-  // in an arrow function), which the IIFE gets as a parameter of that name.
-  if (
-    !path.isArrowFunctionExpression() &&
-    path.scope.getOwnBinding("arguments")?.kind === "var"
-  ) {
+  // The arguments object redeclared by `var arguments` is passed to the IIFE
+  // as a parameter of that name.
+  if (redeclaresArguments(path)) {
     shadowedParams = new Set(shadowedParams).add("arguments");
   }
   path.set(

@@ -139,7 +139,7 @@ function canUnpackArrayPattern(
   return effectfulFrom;
 }
 
-export interface UnpackedElement {
+interface UnpackedElement {
   target: PatternTarget;
   value: t.Expression;
   /** The value is a fresh array literal, for a rest element. */
