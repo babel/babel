@@ -4,14 +4,14 @@ let i = 0,
 const proto = {
   x: 1
 };
-const a = _obj = babelHelpers.objectSpread2(babelHelpers.objectSpread2({}, proto), {}, {
+const a = babelHelpers.objectSpread2(babelHelpers.objectSpread2(_obj = {}, proto), {}, {
   m() {
     return babelHelpers.superPropGet(_obj, "x", this) + i;
   }
 });
 while (i < 2) {
   let _obj2;
-  f(_obj2 = babelHelpers.objectSpread2(babelHelpers.objectSpread2({}, proto), {}, {
+  f(babelHelpers.objectSpread2(babelHelpers.objectSpread2(_obj2 = {}, proto), {}, {
     m() {
       return babelHelpers.superPropGet(_obj2, k, this);
     }
@@ -19,14 +19,14 @@ while (i < 2) {
 }
 outer: for (let j = 0; j < 2; j++) {
   let _obj3;
-  const o = _obj3 = babelHelpers.objectSpread2(babelHelpers.objectSpread2({}, proto), {}, {
+  const o = babelHelpers.objectSpread2(babelHelpers.objectSpread2(_obj3 = {}, proto), {}, {
     get [k]() {
       return babelHelpers.superPropGet(_obj3, "x", this) + j;
     }
   });
   for (const p of [o]) {
     let _obj4;
-    g(_obj4 = babelHelpers.objectSpread2(babelHelpers.objectSpread2({}, p), {}, {
+    g(babelHelpers.objectSpread2(babelHelpers.objectSpread2(_obj4 = {}, p), {}, {
       m() {
         return babelHelpers.superPropSet(_obj4, "x", p, this, 0);
       }
@@ -41,14 +41,14 @@ do i++; while (i < 5 && f((_obj5 => babelHelpers.objectSpread2(_obj5, {}, {
 }))(babelHelpers.setPrototypeOf(babelHelpers.objectSpread2({}, proto), babelHelpers.getPrototypeOf({
   __proto__: proto
 })))));
-for (const o = _obj6 = babelHelpers.objectSpread2(babelHelpers.objectSpread2({}, proto), {}, {
+for (const o = babelHelpers.objectSpread2(babelHelpers.objectSpread2(_obj6 = {}, proto), {}, {
   m() {
     return () => babelHelpers.superPropGet(_obj6, "x", this);
   }
 }); i; i--) f(o);
 const make = value => {
   var _obj7;
-  return _obj7 = babelHelpers.objectSpread2(babelHelpers.setPrototypeOf(babelHelpers.objectSpread2({}, {}), babelHelpers.getPrototypeOf({
+  return babelHelpers.objectSpread2(babelHelpers.setPrototypeOf(babelHelpers.objectSpread2(_obj7 = {}, {}), babelHelpers.getPrototypeOf({
     __proto__: {
       x: value
     }
@@ -59,13 +59,13 @@ const make = value => {
   });
 };
 class A {
-  field = (_obj8 => _obj8 = babelHelpers.objectSpread2(babelHelpers.objectSpread2({}, proto), {}, {
+  field = (_obj8 => babelHelpers.objectSpread2(babelHelpers.objectSpread2(_obj8 = {}, proto), {}, {
     m() {
       return babelHelpers.superPropGet(_obj8, "x", this);
     }
   }))();
 }
-function h(o = (_obj9 => _obj9 = babelHelpers.objectSpread2(babelHelpers.objectSpread2({}, proto), {}, {
+function h(o = (_obj9 => babelHelpers.objectSpread2(babelHelpers.objectSpread2(_obj9 = {}, proto), {}, {
   m() {
     return babelHelpers.superPropGet(_obj9, "x", this);
   }
@@ -74,7 +74,7 @@ function h(o = (_obj9 => _obj9 = babelHelpers.objectSpread2(babelHelpers.objectS
 }
 function* gen() {
   var _obj0;
-  const o = _obj0 = babelHelpers.objectSpread2(babelHelpers.setPrototypeOf(babelHelpers.objectSpread2({}, proto), babelHelpers.getPrototypeOf({
+  const o = babelHelpers.objectSpread2(babelHelpers.setPrototypeOf(babelHelpers.objectSpread2(_obj0 = {}, proto), babelHelpers.getPrototypeOf({
     __proto__: {
       x: yield 1
     }
