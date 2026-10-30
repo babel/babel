@@ -137,9 +137,10 @@ function runCacheableScriptInTestContext(
   };
   moduleCache[filename] = module;
 
+  const dirname = path.dirname(filename);
   const req = (id: string) =>
     runModuleInTestContext(id, filename, context, moduleCache);
-  const dirname = path.dirname(filename);
+  req.resolve = (id: string) => resolve.sync(id, { basedir: dirname });
 
   script
     .runInContext(context)
@@ -199,6 +200,7 @@ export function runCodeInTestContext(
   const moduleCache = contextModuleCache.get(context);
   const req = (id: string) =>
     runModuleInTestContext(id, filename, context, moduleCache);
+  req.resolve = (id: string) => resolve.sync(id, { basedir: dirname });
 
   const module: Module = {
     id: filename,

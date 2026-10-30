@@ -1,0 +1,2 @@
+const j = await (typeof process === "object" && process.versions?.node ? Promise.all([import("fs"), import("module")]).then(([fs, module]) => fs.promises.readFile(module.createRequire(import.meta.url).resolve("./x"))).then(_ => String(_).replace(/^\uFEFF/, "")) : _processResponse(fetch(import.meta.resolve?.("./x") ?? new URL("./x", import.meta.url)), "text"));
+function _processResponse(t, e, r) { return t.then(function (t) { if (t.ok) return t = t[e](), r ? t.then(r) : t; throw TypeError("Fetch failed: " + t.status + " " + t.statusText); }); }

@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "plugins": ["proposal-text-modules", "syntax-import-defer"],
+  "throws": "text modules do not support phase modifiers."
+}

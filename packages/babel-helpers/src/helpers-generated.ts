@@ -661,6 +661,19 @@ const helpers: Record<string, Helper> = {
     dependencies: {},
     internal: false,
   }),
+  // size: 176, gzip size: 138
+  immutableUint8Array: helper(
+    "8.0.0-rc.2",
+    'function _immutableUint8Array(e){return"buffer"in e&&(e=e.buffer.slice(e.byteOffset,e.byteOffset+e.byteLength)),new Uint8Array(e.transferToImmutable?e.transferToImmutable():e)}',
+    {
+      globals: ["Uint8Array"],
+      locals: { _immutableUint8Array: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_immutableUint8Array",
+      dependencies: {},
+      internal: false,
+    },
+  ),
   // size: 537, gzip size: 258
   importDeferProxy: helper(
     "7.23.0",
@@ -1008,6 +1021,19 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         assertThisInitialized: ["body.0.body.body.2.argument.callee"],
       },
+      internal: false,
+    },
+  ),
+  // size: 159, gzip size: 141
+  processResponse: helper(
+    "8.0.0",
+    'function _processResponse(t,e,r){return t.then(function(t){if(t.ok)return t=t[e](),r?t.then(r):t;throw TypeError("Fetch failed: "+t.status+" "+t.statusText)})}',
+    {
+      globals: ["TypeError"],
+      locals: { _processResponse: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_processResponse",
+      dependencies: {},
       internal: false,
     },
   ),
