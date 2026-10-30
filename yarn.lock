@@ -479,7 +479,7 @@ __metadata:
     "@types/debug": "npm:^4.1.0"
     "@types/gensync": "condition:BABEL_8_BREAKING ? ^1.0.0 :"
     "@types/resolve": "npm:^1.3.2"
-    "@types/semver": "npm:^5.4.0"
+    "@types/semver": "npm:^6.2.7"
     convert-source-map: "npm:^2.0.0"
     debug: "npm:^4.1.0"
     gensync: "npm:^1.0.0-beta.2"
@@ -700,7 +700,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-validator-option": "workspace:^"
     "@types/lru-cache": "npm:^5.1.1"
-    "@types/semver": "npm:^5.5.0"
+    "@types/semver": "npm:^6.2.7"
     browserslist: "npm:^4.24.0"
     lru-cache: "condition:BABEL_8_BREAKING ? ^7.14.1 : ^5.1.1"
     semver: "condition:BABEL_8_BREAKING ? ^7.3.4 : ^6.3.1"
@@ -6082,10 +6082,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^5.4.0, @types/semver@npm:^5.5.0":
-  version: 5.5.0
-  resolution: "@types/semver@npm:5.5.0"
-  checksum: 10/ed79e6806dd6228f953294460a8d9194e307150bbaaa91e2abfa39cbd74d77e1ddfa59e598721ef90845f41e780b69311b3badb9341b124aa2ec14e13222f306
+"@types/semver@npm:^6.2.7":
+  version: 6.2.7
+  resolution: "@types/semver@npm:6.2.7"
+  checksum: 10/48ae2b4a48072a48573fca2af369c2e118d481569dab31cc78cc273f7b0cd856708e7a8f24215ed44651a8ca33b2f3055ac8e7baacccef51c0427278f1309d25
   languageName: node
   linkType: hard
 

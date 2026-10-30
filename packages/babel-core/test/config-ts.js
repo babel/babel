@@ -15,9 +15,12 @@ const versionHasStripTypes = "^22.18.0 || >=23.6.0";
 const versionDoesNotHaveStripTypes = "<22.18.0 || ^23.0.0 <23.6.0";
 const versionHasRequireESM = "^20.19.0 || >=22.12.0";
 
+const currentNodeSatisfies = version =>
+  semver.satisfies(process.version, version, { includePrerelease: true });
+
 const nodeVersionDoesNotHaveStripTypes_andRequireBabelPackages =
-  semver.satisfies(process.version, versionDoesNotHaveStripTypes) &&
-  (!USE_ESM || semver.satisfies(process.version, versionHasRequireESM))
+  currentNodeSatisfies(versionDoesNotHaveStripTypes) &&
+  (!USE_ESM || currentNodeSatisfies(versionHasRequireESM))
     ? it
     : it.skip;
 
