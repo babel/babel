@@ -7,6 +7,7 @@ function initialize(babel: typeof import("@babel/core")) {
   exports.version = babel.version;
   exports.DEFAULT_EXTENSIONS = babel.DEFAULT_EXTENSIONS;
   exports.loadOptionsAsync = babel.loadOptionsAsync;
+  exports.loadPartialConfigAsync = babel.loadPartialConfigAsync;
   exports.transformAsync = babel.transformAsync;
   exports.getEnv = babel.getEnv;
 
@@ -14,6 +15,7 @@ function initialize(babel: typeof import("@babel/core")) {
     // @ts-expect-error Babel 7
     exports.OptionManager = babel.OptionManager;
     exports.transformSync = babel.transformSync;
+    exports.loadPartialConfigSync = babel.loadPartialConfigSync;
   }
 
   cache.initializeCacheFilename();

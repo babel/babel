@@ -62,8 +62,12 @@ async function transform(input: string, filename: string) {
     filename,
   });
 
-  // Bail out ASAP if the file has been ignored.
-  if (opts === null) return null;
+  if (opts === null) {
+    // Bail out if the file has been ignored.
+    // This can only happen if the config changes between the isFileIgnored and
+    // the loadOptionsAsync call.
+    return null;
+  }
 
   const { cached, store } = cacheLookup(opts, filename);
   if (cached) return cached;
@@ -77,9 +81,40 @@ async function transform(input: string, filename: string) {
   return store({ code, map });
 }
 
-export = { setOptions, transform };
+function getIgnoreCheckOptions(filename: string) {
+  return {
+    ...cloneDeep(transformOpts),
+    filename,
+    showIgnoredFiles: true,
+    // @babel/register does not support ignore/only in config files,
+    // so we can skip checking those files
+    babelrc: false,
+    configFile: false,
+    browserslistConfigFile: false,
+    plugins: [],
+    presets: [],
+    targets: { browsers: undefined },
+  };
+}
+
+async function isFileIgnored(filename: string) {
+  const opts = await babel.loadPartialConfigAsync(
+    getIgnoreCheckOptions(filename),
+  );
+
+  // Ignored via programmatic API.
+  return opts === null;
+}
+
+export = { setOptions, transform, isFileIgnored };
 
 if (!process.env.BABEL_8_BREAKING) {
+  module.exports.isFileIgnoredSync = function (filename: string) {
+    return (
+      babel.loadPartialConfigSync(getIgnoreCheckOptions(filename)) === null
+    );
+  };
+
   module.exports.transformSync = function (input: string, filename: string) {
     const opts = new babel.OptionManager().init({
       // sourceRoot can be overwritten

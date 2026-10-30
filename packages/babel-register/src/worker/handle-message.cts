@@ -13,10 +13,18 @@ export = function handleMessage(action: ACTIONS, payload: any) {
       return;
     case "TRANSFORM":
       return transform.transform(payload.code, payload.filename);
+    case "IS_FILE_IGNORED":
+      return transform.isFileIgnored(payload);
     case "TRANSFORM_SYNC":
       if (!process.env.BABEL_8_BREAKING) {
         // @ts-expect-error Babel 7
         return transform.transformSync(payload.code, payload.filename);
+      }
+      break;
+    case "IS_FILE_IGNORED_SYNC":
+      if (!process.env.BABEL_8_BREAKING) {
+        // @ts-expect-error Babel 7
+        return transform.isFileIgnoredSync(payload);
       }
   }
 
