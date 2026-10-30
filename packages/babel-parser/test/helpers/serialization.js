@@ -7,6 +7,11 @@ const { parse: JSONParse, stringify } = JSON;
 // function.
 const isExtended = filename => /\.extended\.json$/.test(filename);
 
+// Only estree includes the BigInt value in the Literal node. If the JS
+// environment doesn't support bigint, then estree will just use null for the
+// value, so it is safe to deserialize to null on older versions of Node.
+const toBigInt = global.BigInt || (() => null);
+
 const SerializationKey = "$$ babel internal serialized type";
 
 // RegExp: RegExpLiteral#value
@@ -28,7 +33,7 @@ export const deserialize = (filename, options, string) =>
               ? value
               : value[SerializationKey] === "RegExp"
                 ? new RegExp(value.source, value.flags)
-                : BigInt(value.value)),
+                : toBigInt(value.value)),
       ),
   );
 
@@ -84,11 +89,14 @@ export function serialize(value) {
         : value instanceof Error
           ? value + ""
           : value;
-  const serialized = stringify(value, encode, 2)?.replace(
-    CompactRegExp,
-    // This is safe since none of the values can have spaces in them.
-    string => string.replace(/\s+/g, () => ""),
-  );
+  const json = stringify(value, encode, 2);
+  const serialized =
+    json &&
+    json.replace(
+      CompactRegExp,
+      // This is safe since none of the values can have spaces in them.
+      string => string.replace(/\s+/g, () => ""),
+    );
 
   return [extended, serialized];
 }
