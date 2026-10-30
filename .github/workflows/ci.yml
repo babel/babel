@@ -2,6 +2,7 @@ name: CI
 
 on:
   push:
+    branches: ["7.x"]
   pull_request:
   merge_group:
 
