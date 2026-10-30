@@ -1,0 +1,1 @@
+{"version":3,"file":"a.js","names":[],"sources":["../src/a.js"],"sourcesContent":["function add(a, b) {\n  return a + b;\n}"],"mappings":"AAAA,mBAAmB;EACjB;AACF","ignoreList":[],"rangeMappings":"A;A"}

@@ -1,0 +1,4 @@
+{
+  "args": ["src", "--source-maps", "--out-dir", "lib"],
+  "noDefaultPlugins": true
+}

@@ -1,0 +1,5 @@
+{
+  "args": ["src/a.js", "src/b.js", "--source-maps", "--out-file", "out.js"],
+  "noDefaultPlugins": true,
+  "stderrContains": true
+}

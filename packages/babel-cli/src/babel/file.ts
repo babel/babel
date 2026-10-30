@@ -39,6 +39,15 @@ export default async function ({
 
       hasRawMap = !!result.map;
 
+      // @jridgewell/trace-mapping does not support range mappings yet, so we
+      // cannot compose source maps that use them
+      if ((result.map as { rangeMappings?: string })?.rangeMappings) {
+        throw new Error(
+          "Range mappings (`generatorOpts.sourceMapRanges`) are not supported" +
+            " when compiling to a single output file.",
+        );
+      }
+
       mapSections.push({
         offset: { line: offset, column: 0 },
         map: (result.map as EncodedSourceMap) || {
