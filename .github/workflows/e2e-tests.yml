@@ -25,7 +25,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           cache: "yarn"
       - name: Publish
         run: ./scripts/integration-tests/publish-local.sh
@@ -65,10 +65,10 @@ jobs:
       # The create-react-app e2e breaking test throws
       # http fetch GET https://localhost:4873/zwitch/-/zwitch-1.0.5.tgz attempt 3 failed with ERR_SSL_WRONG_VERSION_NUMBER
       # when installing on Node.js 24. It might be an npm issue.
-      - name: Use Node.js ${{ matrix.project == 'create-react-app' && '22' || 'latest' }}
+      - name: Use Node.js ${{ matrix.project == 'create-react-app' && '22' || '26' }}
         uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.project == 'create-react-app' && '22' || 'latest' }}
+          node-version: ${{ matrix.project == 'create-react-app' && '22' || '26' }}
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
