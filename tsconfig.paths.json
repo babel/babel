@@ -62,6 +62,9 @@
       "@babel/helper-module-transforms": [
         "./packages/babel-helper-module-transforms/src"
       ],
+      "@babel/helper-named-evaluation": [
+        "./packages/babel-helper-named-evaluation/src"
+      ],
       "@babel/helper-optimise-call-expression": [
         "./packages/babel-helper-optimise-call-expression/src"
       ],

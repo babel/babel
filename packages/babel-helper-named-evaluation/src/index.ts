@@ -1,5 +1,19 @@
-import { types as t } from "@babel/core";
-import type { File } from "@babel/core";
+import {
+  callExpression,
+  cloneNode,
+  identifier,
+  isArrowFunctionExpression,
+  isClassExpression,
+  isFunctionExpression,
+  isIdentifier,
+  memberExpression,
+  numericLiteral,
+  objectExpression,
+  objectProperty,
+  sequenceExpression,
+  stringLiteral,
+} from "@babel/types";
+import type * as t from "@babel/types";
 import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";
 
 /**
@@ -9,8 +23,8 @@ import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-
  */
 export function isAnonymousFunctionDefinition(node: t.Node): boolean {
   node = skipTransparentExprWrapperNodes(node);
-  if (t.isArrowFunctionExpression(node)) return true;
-  if (t.isFunctionExpression(node) || t.isClassExpression(node)) {
+  if (isArrowFunctionExpression(node)) return true;
+  if (isFunctionExpression(node) || isClassExpression(node)) {
     return !node.id;
   }
   return false;
@@ -22,39 +36,48 @@ export function isAnonymousFunctionDefinition(node: t.Node): boolean {
  * functions assigned to it are not named.
  */
 export function isIdentifierRef(node: t.Node): node is t.Identifier {
-  return t.isIdentifier(node) && !node.extra?.parenthesized;
+  return isIdentifier(node) && !node.extra?.parenthesized;
 }
 
 /**
  * The defaultValue of `target`: its Initializer, named after it if it is an
  * anonymous function definition, as it would be by the destructuring pattern
- * or the parameter list.
+ * or the parameter list. `addHelper` returns a reference to a runtime helper
+ * (`setFunctionName`).
  * https://tc39.es/ecma262/#sec-runtime-semantics-namedevaluation
  */
 export function buildNamedDefault(
   target: t.Node,
   initializer: t.Expression,
-  addHelper: File["addHelper"],
+  addHelper: (name: string) => t.Expression,
 ): t.Expression {
   if (!isIdentifierRef(target) || !isAnonymousFunctionDefinition(initializer)) {
     return initializer;
   }
-  if (!t.isClassExpression(skipTransparentExprWrapperNodes(initializer))) {
-    return t.callExpression(addHelper("setFunctionName"), [
+  if (!isClassExpression(skipTransparentExprWrapperNodes(initializer))) {
+    return callExpression(addHelper("setFunctionName"), [
       initializer,
-      t.stringLiteral(target.name),
+      stringLiteral(target.name),
     ]);
   }
   // Property definitions infer the name before static initialization:
   //   { x: class {} }.x
   // `__proto__: value` would set the prototype instead: use a computed key.
   const computed = target.name === "__proto__";
-  const key = computed
-    ? t.stringLiteral(target.name)
-    : t.identifier(target.name);
-  return t.memberExpression(
-    t.objectExpression([t.objectProperty(key, initializer, computed)]),
-    t.cloneNode(key),
+  const key = computed ? stringLiteral(target.name) : identifier(target.name);
+  return memberExpression(
+    objectExpression([objectProperty(key, initializer, computed)]),
+    cloneNode(key),
     computed,
   );
+}
+
+/**
+ * Wrap an anonymous function definition in `(0, fn)`, so that it doesn't
+ * get the name of the identifier it is assigned to.
+ */
+export function preventNamedEvaluation(expr: t.Expression): t.Expression {
+  return isAnonymousFunctionDefinition(expr)
+    ? sequenceExpression([numericLiteral(0), expr])
+    : expr;
 }

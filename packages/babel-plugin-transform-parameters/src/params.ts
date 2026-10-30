@@ -6,7 +6,7 @@ import {
   type Visitor,
 } from "@babel/core";
 import convertFunctionRest from "./rest.ts";
-import { buildNamedDefault } from "./named-evaluation.ts";
+import { buildNamedDefault } from "@babel/helper-named-evaluation";
 
 import {
   collectShadowedParamsNames,
