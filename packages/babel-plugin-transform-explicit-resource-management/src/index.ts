@@ -1,8 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
-import {
-  isAnonymousFunctionDefinition,
-  unshiftForXStatementBody,
-} from "@babel/helper-create-destructuring-plugin";
+import { isAnonymousFunctionDefinition } from "@babel/helper-named-evaluation";
+import { unshiftForXStatementBody } from "@babel/helper-create-destructuring-plugin";
 import { types as t, template, traverse } from "@babel/core";
 import type { NodePath, Visitor, PluginPass } from "@babel/core";
 
