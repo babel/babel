@@ -1,5 +1,6 @@
 import type { ESLint, Rule } from "eslint";
 import newCap from "./rules/new-cap.ts";
+import noEmpty from "./rules/no-empty.ts";
 import noUndef from "./rules/no-undef.ts";
 import noUnusedExpressions from "./rules/no-unused-expressions.ts";
 import * as recommendedConfig from "./configs/recommended.ts";
@@ -10,16 +11,18 @@ const meta: ESLint.Plugin["meta"] = {
   version: PACKAGE_JSON.version,
 };
 
-type Rules = "new-cap" | "no-undef" | "no-unused-expressions";
+type Rules = "new-cap" | "no-empty" | "no-undef" | "no-unused-expressions";
 
 const rules: Record<Rules, Rule.RuleModule> = {
   "new-cap": newCap,
+  "no-empty": noEmpty,
   "no-undef": noUndef,
   "no-unused-expressions": noUnusedExpressions,
 };
 
 const rulesConfig = {
   "new-cap": "off",
+  "no-empty": "off",
   "no-undef": "off",
   "no-unused-expressions": "off",
 };
