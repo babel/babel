@@ -4,6 +4,7 @@ import {
   convertFunctionParams,
   declareMovedParams,
   getParamNames,
+  getParamsInitBlock,
   isDefaultEvaluationObservable,
   isPatternEvaluationObservable,
   isRedeclaredInBody,
@@ -337,8 +338,9 @@ export function transformFunctionParams(
     newParams.push(newParam);
   }
 
-  const body = path.get("body") as NodePath<t.BlockStatement>;
-  const declarationPaths = body.unshiftContainer("body", declarations);
+  // The body, or the `try` block of an async function wrapper
+  const initBlock = getParamsInitBlock(path);
+  const declarationPaths = initBlock.unshiftContainer("body", declarations);
 
   for (const param of newParams) {
     functionScope.registerBinding("param", param);
@@ -346,7 +348,7 @@ export function transformFunctionParams(
   // The references of the moved patterns are registered again through
   // their new paths; they are forgotten by node when the declarations are
   // lowered.
-  registerReplacement(declarationPaths, functionScope);
+  registerReplacement(declarationPaths, initBlock.scope);
 
   const unmapped = keepArgumentsUnmapped && unmapArguments(path);
   if (unmapped) {

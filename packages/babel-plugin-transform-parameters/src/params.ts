@@ -12,6 +12,7 @@ import {
   declareMovedParams,
   getGlobalsUsage,
   getParamNames,
+  getParamsInitBlock,
   moveParamToTemporary,
   redeclaresArguments,
   referencesBodyDeclaration,
@@ -518,7 +519,7 @@ export default function convertFunctionParams(
       callee.arrowFunctionToExpression();
     }
   } else {
-    path2.get("body").unshiftContainer("body", body);
+    getParamsInitBlock(path).unshiftContainer("body", body);
   }
 
   if (prologue) path2.get("body").unshiftContainer("body", prologue);
