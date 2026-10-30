@@ -4,10 +4,10 @@ import {
   buildNamedDefault,
   isAnonymousFunctionDefinition,
   isIdentifierRef,
-} from "@babel/plugin-transform-parameters";
+  preventNamedEvaluation,
+} from "@babel/helper-named-evaluation";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { unpackArrayLiteral } from "./array-unpacking.ts";
-import { preventNamedEvaluation } from "./named-evaluation.ts";
 import {
   buildObjectExcludingKeys,
   hasMemberTarget,

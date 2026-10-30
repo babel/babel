@@ -837,6 +837,7 @@ __metadata:
   resolution: "@babel/helper-create-destructuring-plugin@workspace:packages/babel-helper-create-destructuring-plugin"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-named-evaluation": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-replace-supers": "workspace:^"
     "@babel/plugin-transform-class-properties": "workspace:^"
@@ -1031,6 +1032,17 @@ __metadata:
     "@babel/traverse": "workspace:^"
   peerDependencies:
     "@babel/core": ^8.0.0
+  languageName: unknown
+  linkType: soft
+
+"@babel/helper-named-evaluation@workspace:^, @babel/helper-named-evaluation@workspace:packages/babel-helper-named-evaluation":
+  version: 0.0.0-use.local
+  resolution: "@babel/helper-named-evaluation@workspace:packages/babel-helper-named-evaluation"
+  dependencies:
+    "@babel/generator": "workspace:^"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
+    "@babel/parser": "workspace:^"
+    "@babel/types": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -2502,6 +2514,7 @@ __metadata:
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-create-destructuring-plugin": "workspace:^"
+    "@babel/helper-named-evaluation": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
@@ -3074,9 +3087,9 @@ __metadata:
   resolution: "@babel/plugin-transform-parameters@workspace:packages/babel-plugin-transform-parameters"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-named-evaluation": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
   peerDependencies:
     "@babel/core": ^8.0.0
   languageName: unknown

@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "@babel/helper-create-destructuring-plugin": "workspace:^",
+    "@babel/helper-named-evaluation": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {

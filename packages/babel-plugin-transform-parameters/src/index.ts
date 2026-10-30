@@ -14,11 +14,6 @@ export {
   unmapArguments,
 } from "./params.ts";
 export {
-  buildNamedDefault,
-  isAnonymousFunctionDefinition,
-  isIdentifierRef,
-} from "./named-evaluation.ts";
-export {
   declareMovedParams,
   getParamNames,
   getParamsInitBlock,

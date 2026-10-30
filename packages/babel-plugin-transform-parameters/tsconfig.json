@@ -12,10 +12,10 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-plugin-utils"
+      "path": "../../packages/babel-helper-named-evaluation"
     },
     {
-      "path": "../../packages/babel-helper-skip-transparent-expression-wrappers"
+      "path": "../../packages/babel-helper-plugin-utils"
     },
     {
       "path": "../../packages/babel-core"

@@ -1,6 +1,6 @@
 import { types as t } from "@babel/core";
 import type { NodePath, PluginPass, Scope, Visitor } from "@babel/core";
-import { isAnonymousFunctionDefinition } from "@babel/plugin-transform-parameters";
+import { isAnonymousFunctionDefinition } from "@babel/helper-named-evaluation";
 import { FEATURES, type ResolvedOptions } from "./features.ts";
 import { transformFunctionParams } from "./function-params.ts";
 import { Lowering, StepKind, type Step } from "./lowering.ts";
