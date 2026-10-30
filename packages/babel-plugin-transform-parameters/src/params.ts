@@ -9,6 +9,7 @@ import convertFunctionRest from "./rest.ts";
 import { buildNamedDefault } from "@babel/helper-named-evaluation";
 
 import {
+  collectRetainedShadowedParamsNames,
   collectShadowedParamsNames,
   declareMovedParams,
   getGlobalsUsage,
@@ -380,8 +381,28 @@ export default function convertFunctionParams(
   const body: t.Statement[] = [];
   const paramNames = getParamNames(node.params);
   const shadowedParams = new Set<string>();
-  for (const param of params) {
+  // While the parameters staying in the list have expressions (e.g. a default
+  // value), the body declarations redeclaring them are separate bindings,
+  // initialized with their values: they are kept. Otherwise, they become the
+  // same bindings, as for the moved parameters.
+  const movedParams: typeof params = [];
+  const retainedParams: typeof params = [];
+  params.forEach((param, i) =>
+    (shouldTransform[i] ? movedParams : retainedParams).push(param),
+  );
+  const keepsParameterExpressions = retainedParams.some(
+    param => !param.isIdentifier(),
+  );
+  for (const param of keepsParameterExpressions ? movedParams : params) {
     collectShadowedParamsNames(param, scope, shadowedParams);
+  }
+  if (keepsParameterExpressions) {
+    collectRetainedShadowedParamsNames(
+      retainedParams,
+      movedParams,
+      scope,
+      shadowedParams,
+    );
   }
   const needsIIFE =
     node.generator ||
