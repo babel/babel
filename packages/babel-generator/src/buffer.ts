@@ -290,14 +290,6 @@ export default class Buffer {
     return queuedChar !== 0 ? queuedChar : this._last;
   }
 
-  /**
-   * This will only detect at most 1 newline after a call to `flush()`,
-   * but this has not been found so far, and an accurate count can be achieved if needed later.
-   */
-  getNewlineCount(): number {
-    return this._queuedChar === 0 && this._last === charcodes.lineFeed ? 1 : 0;
-  }
-
   hasContent(): boolean {
     return this._last !== 0; /*|| this._queuedChar !== 0*/
   }
