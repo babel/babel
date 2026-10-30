@@ -40,6 +40,25 @@ if (!process.env.BABEL_8_BREAKING) {
   const internalModuleCache = Module._cache;
 
   // eslint-disable-next-line no-var
+  var matchBabel7 = function matchBabel7(client: IClient, filename: string) {
+    // @ts-expect-error Babel 7 property
+    if (!client.isLocalClient) return !client.isFileIgnored(filename);
+
+    // Do not compile files loaded while Babel itself is being loaded
+    if (compiling) return false;
+
+    const globalModuleCache = Module._cache;
+    try {
+      compiling = true;
+      Module._cache = internalModuleCache;
+      return !client.isFileIgnored(filename);
+    } finally {
+      compiling = false;
+      Module._cache = globalModuleCache;
+    }
+  };
+
+  // eslint-disable-next-line no-var
   var compileBabel7 = function compileBabel7(
     client: IClient,
     code: string,
@@ -83,9 +102,9 @@ function register(client: IClient, opts: Options = {}) {
     {
       exts: opts.extensions ?? client.getDefaultExtensions(),
       ignoreNodeModules: false,
-      matcher(filename: string) {
-        return !client.isFileIgnored(filename);
-      },
+      matcher: (process.env.BABEL_8_BREAKING
+        ? (filename: string) => !client.isFileIgnored(filename)
+        : matchBabel7.bind(null, client)) as (filename: string) => boolean,
     },
   );
 

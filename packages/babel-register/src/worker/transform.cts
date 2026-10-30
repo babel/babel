@@ -110,7 +110,9 @@ export = { setOptions, transform, isFileIgnored };
 
 if (!process.env.BABEL_8_BREAKING) {
   module.exports.isFileIgnoredSync = function (filename: string) {
-    return babel.loadPartialConfigSync(getIgnoreCheckOptions(filename)) === null;
+    return (
+      babel.loadPartialConfigSync(getIgnoreCheckOptions(filename)) === null
+    );
   };
 
   module.exports.transformSync = function (input: string, filename: string) {

@@ -436,8 +436,9 @@ describe("@babel/register", function () {
       // We can't use the test runner because the mocked `pirates`
       // does not support the `matcher` option.
       test("via programmatic options ignored", async () => {
-        const entryFile =
-          require.resolve("./fixtures/ignore-programmatic/index.ts");
+        const entryFile = require.resolve(
+          "./fixtures/ignore-programmatic/index.ts",
+        );
         const output = await spawnNodeAsync(
           [entryFile],
           path.dirname(entryFile),
@@ -447,8 +448,9 @@ describe("@babel/register", function () {
         );
       });
       test("via programmatic options only", async () => {
-        const entryFile =
-          require.resolve("./fixtures/only-programmatic/index.ts");
+        const entryFile = require.resolve(
+          "./fixtures/only-programmatic/index.ts",
+        );
         const output = await spawnNodeAsync(
           [entryFile],
           path.dirname(entryFile),
