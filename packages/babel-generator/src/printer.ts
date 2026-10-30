@@ -3,7 +3,7 @@
 import Buffer from "./buffer.ts";
 import type { Loc, Pos } from "./buffer.ts";
 import { isLastChild, parentNeedsParens } from "./node/index.ts";
-import { generatorInfosMap } from "./nodes.ts";
+import { generatorInfos } from "./nodes.ts";
 import type * as t from "@babel/types";
 import {
   isExpression,
@@ -709,7 +709,7 @@ class Printer {
       changedFlags = true;
     }
 
-    const nodeInfo = generatorInfosMap.get(type);
+    const nodeInfo = generatorInfos[type];
     if (nodeInfo === undefined) {
       throw new ReferenceError(
         `unknown node of type ${JSON.stringify(
