@@ -56,7 +56,7 @@ const isClassExtendsClause = (
   );
 };
 
-const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
+export const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
   switch (parentId) {
     case __node("MemberExpression"):
     case __node("OptionalMemberExpression"):
@@ -354,6 +354,13 @@ export function TSInstantiationExpression(
           : // @ts-ignore(Babel 7 vs Babel 8) Babel 7 AST
             parent.typeParameters) != null
       );
+    case __node("MemberExpression"):
+    case __node("OptionalMemberExpression"):
+      // `a<b>.c` is invalid, and `a<b>[0]` is parsed as a comparison
+      return parent.object === node;
+    case __node("TSNonNullExpression"):
+      // `a<b>!` is invalid
+      return true;
   }
 
   return false;
