@@ -123,24 +123,35 @@ export function createConfigItemSync(
 ) {
   return beginHiddenCallStack(createConfigItemRunner.sync)(...args);
 }
-export function createConfigItem(
+type CreateConfigItemOptions = Parameters<typeof createConfigItemImpl>[1];
+
+type CreateConfigItemCallback = (
+  err: Error | undefined,
+  val: ConfigItem<PluginAPI> | null,
+) => void;
+
+type CreateConfigItem = {
+  (target: PluginTarget, callback: CreateConfigItemCallback): void;
+  (
+    target: PluginTarget,
+    options: CreateConfigItemOptions,
+    callback: CreateConfigItemCallback,
+  ): void;
+};
+
+export const createConfigItem: CreateConfigItem = function createConfigItem(
   target: PluginTarget,
-  options: Parameters<typeof createConfigItemImpl>[1],
-  callback?: (err: Error, val: ConfigItem<PluginAPI> | null) => void,
+  optionsOrCallback?: CreateConfigItemOptions | CreateConfigItemCallback,
+  callback?: CreateConfigItemCallback,
 ) {
-  if (callback !== undefined) {
-    beginHiddenCallStack(createConfigItemRunner.errback)(
-      target,
-      options,
-      callback,
-    );
-  } else if (typeof options === "function") {
-    beginHiddenCallStack(createConfigItemRunner.errback)(
-      target,
-      undefined,
-      callback,
-    );
+  let options: CreateConfigItemOptions | undefined;
+  if (typeof optionsOrCallback === "function") {
+    callback = optionsOrCallback;
   } else {
+    options = optionsOrCallback;
+  }
+
+  if (callback === undefined) {
     if (process.env.BABEL_8_BREAKING) {
       throw new Error(
         "Starting from Babel 8.0.0, the 'createConfigItem' function expects a callback. If you need to call it synchronously, please use 'createConfigItemSync'.",
@@ -149,4 +160,10 @@ export function createConfigItem(
       return createConfigItemSync(target, options);
     }
   }
-}
+
+  beginHiddenCallStack(createConfigItemRunner.errback)(
+    target,
+    options,
+    callback,
+  );
+};
