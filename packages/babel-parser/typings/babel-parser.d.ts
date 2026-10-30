@@ -58,6 +58,7 @@ type Plugin$1 =
   | "moduleBlocks"
   | "placeholders"
   | "sourcePhaseImports"
+  | "structs"
   | "throwExpressions"
   | "v8intrinsic"
   | ParserPluginWithOptions[0];

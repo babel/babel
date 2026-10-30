@@ -48,10 +48,11 @@ const isClassExtendsClause = (
   node: t.Node,
   parent: any,
   parentId: number,
-): parent is t.Class => {
+): parent is t.Class | t.StructDeclaration => {
   return (
     (parentId === __node("ClassDeclaration") ||
-      parentId === __node("ClassExpression")) &&
+      parentId === __node("ClassExpression") ||
+      parentId === __node("StructDeclaration")) &&
     parent.superClass === node
   );
 };
@@ -426,7 +427,10 @@ export function SequenceExpression(
   ) {
     return false;
   }
-  if (parentId === __node("ClassDeclaration")) {
+  if (
+    parentId === __node("ClassDeclaration") ||
+    parentId === __node("StructDeclaration")
+  ) {
     return true;
   }
   if (parentId === __node("ForOfStatement")) {
