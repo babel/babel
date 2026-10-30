@@ -893,6 +893,7 @@ export interface ExportNamedDeclaration extends BaseNode {
   source?: StringLiteral | null;
   attributes?: ImportAttribute[] | null;
   exportKind?: "type" | "value" | null;
+  phase?: "defer" | null;
 }
 
 export interface ExportSpecifier extends BaseNode {
