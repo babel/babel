@@ -15,6 +15,7 @@ export type Plugin =
   | "importSync"
   | "jsx"
   | "moduleBlocks"
+  | "namespaceImportFilter"
   | "placeholders"
   | "sourcePhaseImports"
   | "structs"
