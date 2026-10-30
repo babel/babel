@@ -3,6 +3,6 @@ function a() {
   let c;
 }
 function d() {
-  let e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : <T>() => {};
+  let e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : babelHelpers.setFunctionName(<T>() => {}, "e");
   let T;
 }
