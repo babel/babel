@@ -4,6 +4,7 @@ on:
   push:
     branches: ["main"]
   pull_request:
+  merge_group:
 
 permissions:
   contents: read
@@ -817,3 +818,25 @@ jobs:
         with:
           mode: walltime
           run: node --expose-gc --no-allocation-site-pretenuring ./benchmark/index.mjs --only-current
+  
+  required-checks:
+    name: Required Checks
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - yarn-validate
+      - prepublish-windows
+      - publint
+      - lint
+      - test
+      - test-coverage
+      - test-windows-mac
+      - runtime-interop
+      - eslint-version-test
+      - external-parser-tests
+      - test262-finish
+    steps:
+      - name: Check whether the needed jobs succeeded
+        uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35 # v1.3.0
+        with:
+          jobs: ${{ toJSON(needs) }}
