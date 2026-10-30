@@ -53,6 +53,7 @@ type Plugin$1 =
   | "flowComments"
   | "functionBind"
   | "functionSent"
+  | "importSync"
   | "jsx"
   | "moduleBlocks"
   | "placeholders"
@@ -157,9 +158,15 @@ type ErrorInfoCompressed = {
   IllegalLanguageModeDirective: [];
   IllegalReturn: [];
   ImportBindingIsString: [{ importName: string }];
-  ImportCallArity: [{ phase?: string | null | undefined }];
-  ImportCallNotNewExpression: [{ phase?: string | null | undefined }];
-  ImportCallSpreadArgument: [{ phase?: string | null | undefined }];
+  ImportCallArity: [
+    { phase?: string | null | undefined; sync?: boolean | null | undefined },
+  ];
+  ImportCallNotNewExpression: [
+    { phase?: string | null | undefined; sync?: boolean | null | undefined },
+  ];
+  ImportCallSpreadArgument: [
+    { phase?: string | null | undefined; sync?: boolean | null | undefined },
+  ];
   IncompatibleRegExpUVFlags: [];
   InvalidBigIntLiteral: [];
   InvalidCodePoint: [];
