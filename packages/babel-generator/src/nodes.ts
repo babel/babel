@@ -8,14 +8,16 @@ declare global {
   function __node(type: t.Node["type"]): number;
 }
 
-const generatorInfosMap = new Map<
-  string,
-  [
-    (this: Printer, node: t.Node, parent?: t.Node | null) => void,
-    number,
-    NodeHandler<boolean> | undefined,
-  ]
->();
+type GeneratorInfo = [
+  (this: Printer, node: t.Node, parent?: t.Node | null) => void,
+  number,
+  NodeHandler<boolean> | undefined,
+];
+
+// A plain object is faster than a Map for string-keyed lookups, since
+// V8 can inline the dictionary lookup in the keyed load IC.
+const generatorInfos: Record<string, GeneratorInfo | undefined> =
+  Object.create(null);
 let index = 0;
 
 for (const key of Object.keys(generatorFunctions).sort() as Exclude<
@@ -23,7 +25,7 @@ for (const key of Object.keys(generatorFunctions).sort() as Exclude<
   `_${string}`
 >[]) {
   if (key.startsWith("_")) continue;
-  generatorInfosMap.set(key, [
+  generatorInfos[key] = [
     generatorFunctions[key] as (
       this: Printer,
       node: t.Node,
@@ -31,7 +33,7 @@ for (const key of Object.keys(generatorFunctions).sort() as Exclude<
     ) => void,
     index++,
     undefined,
-  ]);
+  ];
 }
 
-export { generatorInfosMap };
+export { generatorInfos };
