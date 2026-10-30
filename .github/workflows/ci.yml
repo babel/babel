@@ -235,10 +235,15 @@ jobs:
     name: Test on Node.js ${{matrix.node-version}}
     needs: build
     runs-on: ubuntu-latest
+    # Unreleased Node.js versions are tested, but their failures do not fail the CI
+    continue-on-error: ${{ matrix.allow-failure == true }}
     strategy:
       fail-fast: false
       matrix:
         node-version: [24, 22]
+        include:
+          - node-version: "^27.0.0-alpha"
+            allow-failure: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
