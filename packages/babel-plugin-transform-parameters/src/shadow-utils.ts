@@ -204,6 +204,55 @@ export function collectShadowedParamsNames(
   }
 }
 
+interface RetainedState {
+  /** The names of the retained parameters redeclared in the body */
+  names: Set<string>;
+  functionScope: Scope;
+  shadowedParams: Set<string>;
+}
+
+let retainedVisitor: Visitor<RetainedState>;
+const getRetainedVisitor: () => Visitor<RetainedState> = () =>
+  (retainedVisitor ??= traverse.explode({
+    ...skipTypeAnnotationsVisitor,
+    // Assigned names too, e.g. `{ a = (value = 1) }`
+    "ReferencedIdentifier|BindingIdentifier"(path, state) {
+      const { name } = path.node;
+      if (
+        state.names.has(name) &&
+        path.scope.getBinding(name) === state.functionScope.bindings[name]
+      ) {
+        state.shadowedParams.add(name);
+      }
+    },
+  }));
+
+/**
+ * Collect into `shadowedParams` the names of the parameters staying in the
+ * list (`retained`) that are redeclared by the body and referenced by the
+ * moved parameters (`moved`): once in the body, they would see the body
+ * declaration (e.g. a hoisted function, or for a closure, the variable that
+ * the body assigns) instead of the parameter.
+ */
+export function collectRetainedShadowedParamsNames(
+  retained: NodePath<t.Function["params"][number]>[],
+  moved: NodePath<t.Function["params"][number]>[],
+  functionScope: Scope,
+  shadowedParams: Set<string>,
+) {
+  const names = new Set(
+    [...getParamNames(retained.map(param => param.node))].filter(name => {
+      const binding = functionScope.bindings[name];
+      return binding && isRedeclaredInBody(binding);
+    }),
+  );
+  if (names.size === 0) return;
+  const state: RetainedState = { names, functionScope, shadowedParams };
+  for (const param of moved) {
+    if (!param.isIdentifier()) param.traverse(getRetainedVisitor(), state);
+  }
+}
+
 /** A sloppy block function named like a parameter: not hoisted (Annex B). */
 function isParameterNamedFunction(
   node: t.Node,
