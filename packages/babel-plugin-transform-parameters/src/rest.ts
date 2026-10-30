@@ -3,6 +3,7 @@ import type { NodePath, Visitor } from "@babel/core";
 
 import {
   collectShadowedParamsNames,
+  getParamsInitBlock,
   hasDirectEval,
   referencesBodyDeclaration,
   wrapBodyInScopeIIFE,
@@ -360,8 +361,7 @@ export default function convertFunctionRest(
     declar = t.variableDeclaration(kind, [
       t.variableDeclarator(pattern, t.cloneNode(rest)),
     ]);
-    path.ensureBlock();
-    init ??= (node.body as t.BlockStatement).body;
+    init ??= getParamsInitBlock(path).node.body;
     init.unshift(declar);
   } else if (rest.name === "arguments") {
     scope.rename(rest.name);
@@ -446,8 +446,7 @@ export default function convertFunctionRest(
   if (insertBeforeBody) {
     insertBeforeBody([loop, ...statementsBeforeBody]);
   } else if (state.deopted) {
-    path.ensureBlock();
-    (init ?? (node.body as t.BlockStatement).body).unshift(loop);
+    (init ?? getParamsInitBlock(path).node.body).unshift(loop);
   } else {
     let target = path
       .getEarliestCommonAncestorFrom(state.references)
