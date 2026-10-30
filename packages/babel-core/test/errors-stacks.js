@@ -86,8 +86,8 @@ function expectError(run) {
       stack = stack.replace(/\n\s*at <anonymous>$/g, "");
       // Node.js 6
       stack = stack.replace(
-        /(at (\w+) \([^)]+\)\n\s*at) next \(native\)/g,
-        "$1 $2.next (<anonymous>)",
+        /(at \w+ \([^)]+\)\n\s*at) next \(native\)/g,
+        "$1 next (<anonymous>)",
       );
     }
 

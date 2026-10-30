@@ -9,6 +9,9 @@ const { fileURLToPath } = require("url");
 const { createRequire } = require("module");
 const semver = require("semver");
 
+const currentNodeSatisfies = version =>
+  semver.satisfies(process.version, version, { includePrerelease: true });
+
 exports.repoRoot = path.resolve(__dirname, "../../");
 
 let USE_ESM = false;
@@ -46,7 +49,7 @@ if (typeof jest !== "undefined") {
     return semver.lt(process.version, version) ? it : dummy;
   };
   exports.itSatisfies = function (version) {
-    return semver.satisfies(process.version, version) ? it : dummy;
+    return currentNodeSatisfies(version) ? it : dummy;
   };
   exports.itNegate = function (jestIt) {
     return jestIt === dummy ? it : dummy;
@@ -68,9 +71,7 @@ if (typeof jest !== "undefined") {
     return semver.gte(process.version, version) ? describe : describe.skip;
   };
   exports.describeSatisfies = function (version) {
-    return semver.satisfies(process.version, version)
-      ? describe
-      : describe.skip;
+    return currentNodeSatisfies(version) ? describe : describe.skip;
   };
   exports.describeNoCITGM = __dirname.includes("citgm_tmp")
     ? describe.skip

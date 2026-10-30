@@ -31,6 +31,7 @@ export const supportsESM = semver.satisfies(
   // older versions, starting from 10, support the dynamic
   // import syntax but always return a rejected promise.
   "^12.17 || >=13.2",
+  { includePrerelease: true },
 );
 
 const LOADING_CJS_FILES = new Set();
