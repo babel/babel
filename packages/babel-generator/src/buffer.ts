@@ -19,6 +19,13 @@ for (let i = 0; i < 32; i++) {
   spaceIndents.push(" ".repeat(i * 2));
 }
 
+// V8 represents `a += b` as a tree of "cons strings" rather than copying the
+// characters. This makes appending cheap, but every garbage collection has
+// to copy all the live cons cells, which gets slow for outputs of several
+// megabytes. To bound the number of live cons cells, the pending chunk is
+// flattened once it grows past this size (in characters).
+const CHUNK_SIZE = 65536;
+
 export default class Buffer {
   constructor(map: SourceMap | null, indentChar: string) {
     this._map = map;
@@ -26,9 +33,9 @@ export default class Buffer {
   }
 
   _map: SourceMap | null = null;
+  // The already flattened chunks of the output, and the pending chunk.
   _buf = "";
   _str = "";
-  _appendCount = 0;
   _last = 0;
   _canMarkIdName = true;
   _indentChar = "";
@@ -149,6 +156,7 @@ export default class Buffer {
           ? String.fromCharCode(char).repeat(repeat)
           : String.fromCharCode(char);
     }
+    if (this._str.length > CHUNK_SIZE) this._flattenChunk();
 
     const isSpace = char === charcodes.space;
     const position = this._position;
@@ -189,15 +197,8 @@ export default class Buffer {
 
     this._last = -1; /* LAST_CHAR_KINDS.NORMAL */
 
-    if (++this._appendCount > 4096) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      +this._str; // Unexplainable huge performance boost. Ref: https://github.com/davidmarkclements/flatstr License: MIT
-      this._buf += this._str;
-      this._str = str;
-      this._appendCount = 0;
-    } else {
-      this._str += str;
-    }
+    this._str += str;
+    if (this._str.length > CHUNK_SIZE) this._flattenChunk();
 
     const hasMap = !ignoreMapping && this._map !== null;
 
@@ -264,6 +265,15 @@ export default class Buffer {
       i = str.indexOf("\n", last);
     }
     position.column += len - last;
+  }
+
+  _flattenChunk(): void {
+    // Force V8 to flatten the pending chunk in place. Note that neither
+    // `+str` (the "flatstr" trick) nor `str.charCodeAt(0)` flatten a cons
+    // string: they walk it. Searching does.
+    this._str.includes("\0");
+    this._buf += this._str;
+    this._str = "";
   }
 
   removeLastSemicolon(): void {
