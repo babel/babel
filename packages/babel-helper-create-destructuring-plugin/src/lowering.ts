@@ -1,17 +1,17 @@
 import { types as t, template } from "@babel/core";
 import type { File, Scope } from "@babel/core";
-import { FEATURES, type ResolvedOptions } from "./features.ts";
-import { unpackArrayLiteral } from "./array-unpacking.ts";
 import {
   buildNamedDefault,
+  isAnonymousFunctionDefinition,
   isIdentifierRef,
-  preventNamedEvaluation,
-} from "./named-evaluation.ts";
+} from "@babel/plugin-transform-parameters";
+import { FEATURES, type ResolvedOptions } from "./features.ts";
+import { unpackArrayLiteral } from "./array-unpacking.ts";
+import { preventNamedEvaluation } from "./named-evaluation.ts";
 import {
   buildObjectExcludingKeys,
   hasMemberTarget,
   hasRestElement,
-  isAnonymousFunctionDefinition,
   isInitializedReference,
   isObjectCoercible,
   isPropertyKeyExpression,
