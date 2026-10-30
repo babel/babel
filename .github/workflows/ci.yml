@@ -22,7 +22,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: 'Check or update Yarn cache (fix w/ "yarn install")'
@@ -43,7 +43,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: 'Check for unmet constraints (fix w/ "yarn constraints --fix")'
@@ -75,7 +75,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -125,7 +125,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -149,7 +149,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -168,7 +168,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -209,7 +209,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -235,17 +235,22 @@ jobs:
     name: Test on Node.js ${{matrix.node-version}}
     needs: build
     runs-on: ubuntu-latest
+    # Unreleased Node.js versions are tested, but their failures do not fail the CI
+    continue-on-error: ${{ matrix.allow-failure == true }}
     strategy:
       fail-fast: false
       matrix:
         node-version: [24, 22]
+        include:
+          - node-version: "^27.0.0-alpha"
+            allow-failure: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
       - name: Use Node.js latest # Run yarn on latest node
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -283,7 +288,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -309,7 +314,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Build babel artifacts
@@ -342,7 +347,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -366,7 +371,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -402,7 +407,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -426,7 +431,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -453,7 +458,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
@@ -519,7 +524,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       # See https://github.com/babel/babel/pull/12906
@@ -570,7 +575,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           cache: "yarn"
       - name: Install
         run: yarn install
@@ -594,7 +599,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
       - name: Checkout test runner
         uses: actions/checkout@v7
@@ -634,7 +639,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
       - name: Install
         run: yarn install
@@ -760,7 +765,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Install
@@ -777,7 +782,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: "*"
+          node-version: 26
           cache: "yarn"
       - name: Build
         # Linting is done by the "Lint" job
@@ -795,7 +800,7 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: "yarn"
       - name: Install
