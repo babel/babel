@@ -7,15 +7,9 @@ const { parse: JSONParse, stringify } = JSON;
 // function.
 const isExtended = filename => /\.extended\.json$/.test(filename);
 
-// We've only serialized one BigInt in the entire test suite:
-//
-// packages/babel-parser/test/fixtures/estree/bigInt/basic/output.extended.json
-//
-// This is because only estree actually includes the BigInt value in the Literal
-// node. If the JS environment doesn't support bigint, then estree will just
-// use null for the value. We also happen to just throw the AST information away
-// with estree tests, so in the event that we're running on an older version of
-// Node that doesn't support bigint, it is safe to deserialize to null.
+// Only estree includes the BigInt value in the Literal node. If the JS
+// environment doesn't support bigint, then estree will just use null for the
+// value, so it is safe to deserialize to null on older versions of Node.
 const toBigInt = global.BigInt || (() => null);
 
 const SerializationKey = "$$ babel internal serialized type";
@@ -95,11 +89,14 @@ export function serialize(value) {
         : value instanceof Error
           ? value + ""
           : value;
-  const serialized = stringify(value, encode, 2).replace(
-    CompactRegExp,
-    // This is safe since none of the values can have spaces in them.
-    string => string.replace(/\s+/g, () => ""),
-  );
+  const json = stringify(value, encode, 2);
+  const serialized =
+    json &&
+    json.replace(
+      CompactRegExp,
+      // This is safe since none of the values can have spaces in them.
+      string => string.replace(/\s+/g, () => ""),
+    );
 
   return [extended, serialized];
 }
