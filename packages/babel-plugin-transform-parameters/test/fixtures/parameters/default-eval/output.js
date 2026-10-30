@@ -5,9 +5,9 @@ function outer() {
 
     return arguments;
   }.apply(void 0, arguments);
-  var a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {
+  var a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : babelHelpers.setFunctionName(function () {
     return eval("x");
-  };
+  }, "a");
   return function () {
     var x = "inside";
     return a();

@@ -6,6 +6,7 @@ import {
   type Visitor,
 } from "@babel/core";
 import convertFunctionRest from "./rest.ts";
+import { buildNamedDefault } from "./named-evaluation.ts";
 
 import {
   collectShadowedParamsNames,
@@ -440,7 +441,10 @@ export default function convertFunctionParams(
 
       const defNode = buildDefaultParam({
         VARIABLE_NAME: left.node,
-        DEFAULT_VALUE: right.node,
+        // The conditional expression would not name it
+        DEFAULT_VALUE: buildNamedDefault(left.node, right.node, name =>
+          path.hub.addHelper(name),
+        ),
         ARGUMENT_KEY: t.numericLiteral(i - argumentsOffset),
       }) as t.VariableDeclaration;
       defNode.kind = declarationKind;

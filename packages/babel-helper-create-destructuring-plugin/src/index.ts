@@ -10,11 +10,8 @@ import {
 import { buildDestructuringVisitor, type Guard } from "./visitors.ts";
 
 export { FEATURES } from "./features.ts";
-export {
-  buildObjectExcludingKeys,
-  isAnonymousFunctionDefinition,
-  unshiftForXStatementBody,
-} from "./util.ts";
+export { buildObjectExcludingKeys, unshiftForXStatementBody } from "./util.ts";
+export { isAnonymousFunctionDefinition } from "@babel/plugin-transform-parameters";
 
 const versionKey = "@babel/plugin-destructuring/version";
 
