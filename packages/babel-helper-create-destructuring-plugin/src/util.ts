@@ -290,20 +290,6 @@ export function isSafeToEvaluate(node: t.Node | null, scope: Scope): boolean {
 }
 
 /**
- * https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
- */
-export function isAnonymousFunctionDefinition(node: t.Node): boolean {
-  if (t.isParenthesizedExpression(node)) {
-    return isAnonymousFunctionDefinition(node.expression);
-  }
-  if (t.isArrowFunctionExpression(node)) return true;
-  if (t.isFunctionExpression(node) || t.isClassExpression(node)) {
-    return !node.id;
-  }
-  return false;
-}
-
-/**
  * The completion of a statement list, as far as it is statically known:
  * "empty" when every statement completes empty, "value" when a statement
  * produces a value (`if`, loops or `try` complete with `undefined` at least)

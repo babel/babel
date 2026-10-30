@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "transform-typescript",
+    "transform-object-rest-spread",
+    "../../../helpers/checkScopeInfo.js"
+  ]
+}
