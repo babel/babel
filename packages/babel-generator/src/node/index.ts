@@ -3,7 +3,7 @@ import { VISITOR_KEYS } from "@babel/types";
 import type * as t from "@babel/types";
 import * as charCodes from "charcodes";
 
-import { generatorInfosMap } from "../nodes.ts";
+import { generatorInfos } from "../nodes.ts";
 
 export const enum TokenContext {
   normal = 0,
@@ -40,8 +40,9 @@ export type NodeHandler<R> = (
 
 for (const type of Object.keys(parens) as (keyof typeof parens)[]) {
   const func = parens[type];
-  if (generatorInfosMap.has(type)) {
-    generatorInfosMap.get(type)![2] = func as NodeHandler<boolean>;
+  const info = generatorInfos[type];
+  if (info !== undefined) {
+    info[2] = func as NodeHandler<boolean>;
   }
 }
 
@@ -50,7 +51,7 @@ for (const type of Object.keys(parens) as (keyof typeof parens)[]) {
 export function hasPostfixPart(node: t.Node, parent: t.Node | null): boolean {
   return (
     parent != null &&
-    parens.hasPostfixPart(node, parent, generatorInfosMap.get(parent.type)![1])
+    parens.hasPostfixPart(node, parent, generatorInfos[parent.type]![1])
   );
 }
 
@@ -108,8 +109,8 @@ function isWrappedOptionalChain(node: t.Node): boolean {
 
 // Whether `child` is printed in parentheses inside `parent`.
 function printsParens(child: t.Node, parent: t.Node): boolean {
-  const parentId = generatorInfosMap.get(parent.type)![1];
-  const needsParens = generatorInfosMap.get(child.type)?.[2];
+  const parentId = generatorInfos[parent.type]![1];
+  const needsParens = generatorInfos[child.type]?.[2];
   return (
     parentNeedsParens(child, parent, parentId) ||
     (needsParens != null && !!needsParens(child, parent, parentId))
