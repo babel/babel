@@ -16,6 +16,7 @@ export {
 export {
   declareMovedParams,
   getParamNames,
+  getParamsInitBlock,
   isRedeclaredInBody,
   moveParamToTemporary,
   recordArgumentsUsage,

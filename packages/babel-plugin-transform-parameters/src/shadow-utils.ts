@@ -9,6 +9,7 @@ type State = {
 // We can't use a symbol because this needs to always be the same, even if
 // this package isn't deduped by npm.
 const globalsUsageKey = "@babel/plugin-transform-parameters/globalsUsage";
+const asyncWrapperKey = "@babel/plugin-transform-parameters/asyncWrapper";
 
 interface GlobalsUsage {
   /** `arguments` is referenced outside of arrow functions */
@@ -365,7 +366,9 @@ function buildScopeIIFE(shadowedParams: Set<string>, body: t.BlockStatement) {
  * Returns the path of the IIFE callee (an arrow function, unless it had to
  * be converted to a function expression), and the statement list where the
  * parameters are initialized, before the IIFE: the body of the function, or
- * of the `try` statement rejecting the errors of an async function.
+ * of the `try` statement rejecting the errors of an async function. When the
+ * body of an async function is already in an IIFE, the new one is created in
+ * that `try` statement.
  */
 export function wrapBodyInScopeIIFE(
   path: NodePath<t.Function>,
@@ -398,6 +401,18 @@ export function wrapBodyInScopeIIFE(
   if (redeclaresArguments(path)) {
     shadowedParams = new Set(shadowedParams).add("arguments");
   }
+  const wrapperBlock = getAsyncWrapper(path, path2.get("body"))?.get("block");
+  if (wrapperBlock) {
+    wrapperBlock.set("body", [
+      ...before,
+      buildScopeIIFE(shadowedParams, t.blockStatement(wrapperBlock.node.body)),
+    ]);
+    const statements = wrapperBlock.get("body");
+    const callee = statements[statements.length - 1].get(
+      "argument.callee",
+    ) as NodePath<t.ArrowFunctionExpression>;
+    return { callee, init: wrapperBlock.node.body };
+  }
   path.set(
     "body",
     t.blockStatement([...before, buildScopeIIFE(shadowedParams, node.body)]),
@@ -425,5 +440,35 @@ export function wrapBodyInScopeIIFE(
     }
   ` as t.TryStatement;
   node.body = t.blockStatement([tryStatement]);
+  path.setData(asyncWrapperKey, tryStatement);
   return { callee, init: tryStatement.block.body };
+}
+
+/**
+ * The `try` statement rejecting the errors of the parameters of an async
+ * function, whose body was moved into an IIFE by `wrapBodyInScopeIIFE`, in
+ * the statements of `body`, the body of `path`.
+ */
+function getAsyncWrapper(
+  path: NodePath<t.Function>,
+  body: NodePath<t.BlockStatement>,
+): NodePath<t.TryStatement> | undefined {
+  const tryStatement: t.TryStatement | undefined =
+    path.getData(asyncWrapperKey);
+  if (!tryStatement) return undefined;
+  return body.get("body").find(statement => statement.node === tryStatement) as
+    NodePath<t.TryStatement> | undefined;
+}
+
+/**
+ * The block whose start initializes the parameters of `path`: its body, or
+ * the `try` statement of an async function whose body was moved into an
+ * IIFE, rejecting the errors of their initialization.
+ */
+export function getParamsInitBlock(
+  path: NodePath<t.Function>,
+): NodePath<t.BlockStatement> {
+  path.ensureBlock();
+  const body = path.get("body") as NodePath<t.BlockStatement>;
+  return getAsyncWrapper(path, body)?.get("block") ?? body;
 }
