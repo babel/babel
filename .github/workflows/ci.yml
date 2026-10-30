@@ -1,6 +1,10 @@
 name: CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: ["7.x"]
+  pull_request:
+  merge_group:
 
 permissions:
   contents: read
@@ -654,3 +658,24 @@ jobs:
         # Specify bash to enable pipefail, so that "| tee" does not suppress the failure exit code.
         # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
         shell: bash
+
+  required-checks:
+    name: Required Checks
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - yarn-validate
+      - lint
+      - test
+      - test-coverage
+      - test-windows-mac
+      - runtime-interop
+      - eslint7-test
+      - eslint8-test
+      - external-parser-tests
+      - test262-finish
+    steps:
+      - name: Check whether the needed jobs succeeded
+        uses: re-actors/alls-green@b5b5b37504aa4183270bd3d855c52a67f212be35 # v1.3.0
+        with:
+          jobs: ${{ toJSON(needs) }}
