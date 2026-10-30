@@ -1005,7 +1005,7 @@ export default abstract class StatementParser extends ExpressionParser {
     // adding statements to.
 
     let cur;
-    for (let sawDefault; !this.match(tt.braceR); ) {
+    for (let sawDefault; !this.match(tt.braceR);) {
       if (this.match(tt._case) || this.match(tt._default)) {
         const isCase = this.match(tt._case);
         if (cur) this.finishNode(cur, "SwitchCase");
@@ -3051,9 +3051,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   parseImportSpecifierLocal<
     T extends
-      | N.ImportSpecifier
-      | N.ImportDefaultSpecifier
-      | N.ImportNamespaceSpecifier,
+      N.ImportSpecifier | N.ImportDefaultSpecifier | N.ImportNamespaceSpecifier,
   >(
     node: Undone<N.ImportDeclaration>,
     specifier: Undone<T>,
@@ -3065,9 +3063,7 @@ export default abstract class StatementParser extends ExpressionParser {
 
   finishImportSpecifier<
     T extends
-      | N.ImportSpecifier
-      | N.ImportDefaultSpecifier
-      | N.ImportNamespaceSpecifier,
+      N.ImportSpecifier | N.ImportDefaultSpecifier | N.ImportNamespaceSpecifier,
   >(
     specifier: Undone<T>,
     type: T["type"],
