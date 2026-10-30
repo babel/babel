@@ -30,6 +30,23 @@ import * as charCodes from "charcodes";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
+
+// const NON_DECIMAL_LITERAL = /^0[box]/;
+function isNonDecimalLiteral(str: string) {
+  if (str.length > 2 && str.charCodeAt(0) === charCodes.digit0) {
+    const secondChar = str.charCodeAt(1);
+    return (
+      secondChar === charCodes.lowercaseB ||
+      secondChar === charCodes.lowercaseO ||
+      secondChar === charCodes.lowercaseX
+    );
+  }
+  return false;
+}
+
+// Cache of the regexes used to strip the original indentation of
+// multi-line block comments, indexed by the indentation width.
+const commentIndentRegexes: RegExp[] = [];
 const HAS_NEWLINE = /[\n\r\u2028\u2029]/;
 const HAS_NEWLINE_OR_BlOCK_COMMENT_END = /[\n\r\u2028\u2029]|\*\//;
 
@@ -336,7 +353,7 @@ class Printer {
 
     if (flags & PRINTER_FLAGS.PRESERVE_FORMAT) this._catchUpToCurrentToken(str);
 
-    const lastChar = this.getLastChar();
+    const lastChar = this._buf._last;
 
     if (
       lastChar === LAST_CHAR_KINDS.INTEGER ||
@@ -357,18 +374,6 @@ class Printer {
    */
 
   number(str: string, number?: number): void {
-    // const NON_DECIMAL_LITERAL = /^0[box]/;
-    function isNonDecimalLiteral(str: string) {
-      if (str.length > 2 && str.charCodeAt(0) === charCodes.digit0) {
-        const secondChar = str.charCodeAt(1);
-        return (
-          secondChar === charCodes.lowercaseB ||
-          secondChar === charCodes.lowercaseO ||
-          secondChar === charCodes.lowercaseX
-        );
-      }
-      return false;
-    }
     this.word(str);
 
     // Integer tokens need special handling because they cannot have '.'s inserted immediately after them.
@@ -418,38 +423,33 @@ class Printer {
 
     if (mayNeedSpace) {
       const strFirst = str.charCodeAt(0);
+      const lastChar = this._buf._last;
       if (
         // space is mandatory to avoid outputting <!--
         // http://javascript.spec.whatwg.org/#comment-syntax
         (((strFirst === charCodes.dash && str === "--") ||
           // Needs spaces to avoid changing a! == 0 to a!== 0
           strFirst === charCodes.equalsTo) &&
-          this.getLastChar() === charCodes.exclamationMark) ||
+          lastChar === charCodes.exclamationMark) ||
         // Need spaces for operators of the same kind to avoid: `a+++b`
-        (strFirst === charCodes.plusSign &&
-          this.getLastChar() === charCodes.plusSign) ||
-        (strFirst === charCodes.dash &&
-          this.getLastChar() === charCodes.dash) ||
+        (strFirst === charCodes.plusSign && lastChar === charCodes.plusSign) ||
+        (strFirst === charCodes.dash && lastChar === charCodes.dash) ||
         // Hack pipe topic tokens next to operators: `^^ ^ 2` must not become
         // `^^^2`, and `% % 2` must not become `%%2`
-        (strFirst === charCodes.caret &&
-          this.getLastChar() === charCodes.caret) ||
+        (strFirst === charCodes.caret && lastChar === charCodes.caret) ||
         (strFirst === charCodes.percentSign &&
-          this.getLastChar() === charCodes.percentSign) ||
+          lastChar === charCodes.percentSign) ||
         // Needs spaces to avoid changing `a < <div />` to `a<<div />`, which
         // would be tokenized as `a << div />`.
-        (strFirst === charCodes.lessThan &&
-          this.getLastChar() === charCodes.lessThan) ||
+        (strFirst === charCodes.lessThan && lastChar === charCodes.lessThan) ||
         // Needs spaces to avoid changing `f<T> == x` to `f<T>==x`, which would
         // be tokenized as `f < T >= =x`. Any other `>` is a token on its own:
         // `x as A<B>==c` and `<a />==c` are tokenized as written.
         ((strFirst === charCodes.equalsTo ||
           strFirst === charCodes.greaterThan) &&
-          this.getLastChar() ===
-            LAST_CHAR_KINDS.TS_INSTANTIATION_TYPE_ARGUMENTS) ||
+          lastChar === LAST_CHAR_KINDS.TS_INSTANTIATION_TYPE_ARGUMENTS) ||
         // Needs spaces to avoid changing '34' to '34.', which would still be a valid number.
-        (strFirst === charCodes.dot &&
-          this.getLastChar() === LAST_CHAR_KINDS.INTEGER)
+        (strFirst === charCodes.dot && lastChar === LAST_CHAR_KINDS.INTEGER)
       ) {
         this._space();
       }
@@ -473,13 +473,13 @@ class Printer {
       this._catchUpToCurrentToken(char, occurrenceCount);
     }
 
+    const lastChar = this._buf._last;
     if (
       // Need spaces for operators of the same kind to avoid: `a+++b`
-      (char === charCodes.plusSign &&
-        this.getLastChar() === charCodes.plusSign) ||
-      (char === charCodes.dash && this.getLastChar() === charCodes.dash) ||
+      (char === charCodes.plusSign && lastChar === charCodes.plusSign) ||
+      (char === charCodes.dash && lastChar === charCodes.dash) ||
       // Needs spaces to avoid changing '34' to '34.', which would still be a valid number.
-      (char === charCodes.dot && this.getLastChar() === LAST_CHAR_KINDS.INTEGER)
+      (char === charCodes.dot && lastChar === LAST_CHAR_KINDS.INTEGER)
     ) {
       this._space();
     }
@@ -489,9 +489,9 @@ class Printer {
 
   /**
    * Add a newline (or many newlines), maintaining formatting.
-   * This function checks the number of newlines in the queue and subtracts them.
-   * It currently has some limitations.
-   * @see {Buffer#getNewlineCount}
+   * This function checks whether the buffer already ends with a newline
+   * and subtracts it. It only detects at most 1 trailing newline, but this
+   * has not been found to be a problem so far.
    */
   newline(i: number = 1, flags = this._flags): void {
     if (i <= 0) return;
@@ -507,7 +507,8 @@ class Printer {
 
     if (i > 2) i = 2; // Max two lines
 
-    i -= this._buf.getNewlineCount();
+    const buf = this._buf;
+    if (buf._queuedChar === 0 && buf._last === charCodes.lineFeed) i--;
 
     for (let j = 0; j < i; j++) {
       this._newline();
@@ -716,7 +717,7 @@ class Printer {
 
     this._innerCommentsState = INNER_COMMENTS_STATE.DISALLOWED;
 
-    const { type, loc, extra } = node;
+    const { type, extra } = node;
 
     const flags = this._flags;
     let changedFlags = false;
@@ -751,7 +752,7 @@ class Printer {
     let oldInAux;
     if (flags & PRINTER_FLAGS.AUX_COMMENTS) {
       oldInAux = this._insideAux;
-      this._insideAux = loc == null;
+      this._insideAux = node.loc == null;
       this._maybeAddAuxComment(this._insideAux && !oldInAux);
     }
 
@@ -815,8 +816,8 @@ class Printer {
       this._noLineTerminator &&
       (node.leadingComments?.some(commentIsNewline) ||
         (flags & PRINTER_FLAGS.RETAIN_LINES &&
-          loc &&
-          loc.start.line > this._buf.getCurrentLine()))
+          node.loc &&
+          node.loc.start.line > this._buf.getCurrentLine()))
     ) {
       if (canBeParenthesized(node)) {
         shouldPrintParens = true;
@@ -870,11 +871,18 @@ class Printer {
       }
     }
 
-    if (
-      loc == null ||
+    const buf = this._buf;
+    const loc =
+      (buf._map === null &&
+        !(
+          flags &
+          (PRINTER_FLAGS.PRESERVE_FORMAT | PRINTER_FLAGS.RETAIN_LINES)
+        )) ||
       nodeId === __node("Program") ||
       nodeId === __node("File")
-    ) {
+        ? null
+        : node.loc;
+    if (loc == null) {
       printMethod.call(this, node, parent);
     } else {
       if (
@@ -883,7 +891,6 @@ class Printer {
       ) {
         this._catchUp("start", loc);
       }
-      const buf = this._buf;
       if (buf._map === null) {
         printMethod.call(this, node, parent);
       } else {
@@ -1316,10 +1323,16 @@ class Printer {
     let val;
     if (isBlockComment) {
       val = `/*${comment.value}*/`;
-      if (this.format.indent.adjustMultilineComment) {
+      if (
+        this.format.indent.adjustMultilineComment &&
+        comment.value.includes("\n")
+      ) {
         const offset = comment.loc?.start.column;
         if (offset) {
-          const newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
+          const newlineRegex = (commentIndentRegexes[offset] ??= new RegExp(
+            "\\n\\s{1," + offset + "}",
+            "g",
+          ));
           val = val.replace(newlineRegex, "\n");
         }
         if (this._flags & PRINTER_FLAGS.CONCISE) {
