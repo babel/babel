@@ -1,0 +1,97 @@
+{
+  "type": "File",
+  "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":61}},
+  "errors": [
+    "SyntaxError: Export 'a' is not defined. (1:9)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":61,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":61}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+              "name": "a"
+            },
+            "exportKind": "value",
+            "exported": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+              "name": "a"
+            }
+          }
+        ],
+        "source": null,
+        "attributes": [],
+        "declaration": null
+      },
+      {
+        "type": "TSModuleDeclaration",
+        "start":14,"end":61,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":4,"column":1,"index":61}},
+        "kind": "module",
+        "id": {
+          "type": "StringLiteral",
+          "start":29,"end":32,"loc":{"start":{"line":2,"column":15,"index":29},"end":{"line":2,"column":18,"index":32}},
+          "extra": {
+            "rawValue": "m",
+            "raw": "\"m\""
+          },
+          "value": "m"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":33,"end":61,"loc":{"start":{"line":2,"column":19,"index":33},"end":{"line":4,"column":1,"index":61}},
+          "body": [
+            {
+              "type": "ImportDeclaration",
+              "start":37,"end":59,"loc":{"start":{"line":3,"column":2,"index":37},"end":{"line":3,"column":24,"index":59}},
+              "importKind": "value",
+              "specifiers": [
+                {
+                  "type": "ImportSpecifier",
+                  "start":46,"end":47,"loc":{"start":{"line":3,"column":11,"index":46},"end":{"line":3,"column":12,"index":47}},
+                  "imported": {
+                    "type": "Identifier",
+                    "start":46,"end":47,"loc":{"start":{"line":3,"column":11,"index":46},"end":{"line":3,"column":12,"index":47},"identifierName":"a"},
+                    "name": "a"
+                  },
+                  "importKind": "value",
+                  "local": {
+                    "type": "Identifier",
+                    "start":46,"end":47,"loc":{"start":{"line":3,"column":11,"index":46},"end":{"line":3,"column":12,"index":47},"identifierName":"a"},
+                    "name": "a"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start":55,"end":58,"loc":{"start":{"line":3,"column":20,"index":55},"end":{"line":3,"column":23,"index":58}},
+                "extra": {
+                  "rawValue": "x",
+                  "raw": "\"x\""
+                },
+                "value": "x"
+              },
+              "attributes": []
+            }
+          ]
+        },
+        "declare": true
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

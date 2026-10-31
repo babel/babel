@@ -1,0 +1,67 @@
+{
+  "type": "File",
+  "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":23,"index":37}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":37,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":23,"index":37}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":13,"index":13}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
+            "local": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+              "name": "a"
+            },
+            "exportKind": "value",
+            "exported": {
+              "type": "Identifier",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"a"},
+              "name": "a"
+            }
+          }
+        ],
+        "source": null,
+        "attributes": [],
+        "declaration": null
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":14,"end":37,"loc":{"start":{"line":2,"column":0,"index":14},"end":{"line":2,"column":23,"index":37}},
+        "importKind": "value",
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start":21,"end":27,"loc":{"start":{"line":2,"column":7,"index":21},"end":{"line":2,"column":13,"index":27}},
+            "local": {
+              "type": "Identifier",
+              "start":26,"end":27,"loc":{"start":{"line":2,"column":12,"index":26},"end":{"line":2,"column":13,"index":27},"identifierName":"a"},
+              "name": "a"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":33,"end":36,"loc":{"start":{"line":2,"column":19,"index":33},"end":{"line":2,"column":22,"index":36}},
+          "extra": {
+            "rawValue": "x",
+            "raw": "\"x\""
+          },
+          "value": "x"
+        },
+        "attributes": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
