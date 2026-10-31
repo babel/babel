@@ -4,7 +4,7 @@ import {
   hasMemberTarget,
   hasRestElement,
   isInitializedReference,
-  isSafeToEvaluate,
+  isNullOrEvaluationUnobservable,
   mayRunUserCode,
   type PatternTarget,
 } from "./util.ts";
@@ -17,7 +17,7 @@ import {
 function isSafeUnpackedElement(node: t.Node | null, scope: Scope): boolean {
   return (
     node === null ||
-    isSafeToEvaluate(node, scope) ||
+    isNullOrEvaluationUnobservable(node, scope) ||
     // An initialized binding, which only the targets could reassign
     isInitializedReference(node, scope)
   );
@@ -126,7 +126,8 @@ function canUnpackArrayPattern(
 
     // The array literal is fully evaluated before the pattern. If an earlier
     // target has side effects, later elements must not be affected by them.
-    if (i > effectfulFrom && !isSafeToEvaluate(element, scope)) return false;
+    if (i > effectfulFrom && !isNullOrEvaluationUnobservable(element, scope))
+      return false;
   }
 
   // deopt on reference to left side identifiers
@@ -174,7 +175,7 @@ export function unpackArrayLiteral(
   const values = arr.elements.map((element, i) =>
     (
       i > effectfulFrom || i < lastCoercion
-        ? isSafeToEvaluate(element, scope)
+        ? isNullOrEvaluationUnobservable(element, scope)
         : isSafeUnpackedElement(element, scope)
     )
       ? element

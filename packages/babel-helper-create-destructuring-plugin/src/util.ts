@@ -73,7 +73,7 @@ export function propertyNeedsLowering(
 
 /**
  * In partial lowering, the property of an object pattern whose value needs to
- * be lowered, when the pattern itself can stay native with that value
+ * be lowered, when the pattern itself can stay untranspiled with that value
  * replaced by a temporary: only its last property can be. A following
  * property (even a plain identifier, whose read can call a getter) would be
  * evaluated before the value is destructured, and its abrupt completion.
@@ -213,7 +213,8 @@ export function isInitializedReference(node: t.Node, scope: Scope): boolean {
  * key (registered symbols), and well-known symbols are not writable.
  */
 export function isStablePropertyKey(node: t.Node, scope: Scope): boolean {
-  if (isPrimitiveExpression(node)) return isSafeToEvaluate(node, scope);
+  if (isPrimitiveExpression(node))
+    return isNullOrEvaluationUnobservable(node, scope);
   if (isWellKnownSymbol(node, scope)) return true;
   return (
     isSymbolFor(node, scope) &&
@@ -285,7 +286,10 @@ export function targetReferenceMayRunUserCode(
  * Whether evaluating a value (or an array hole) can be delayed or omitted
  * without observable effects or errors.
  */
-export function isSafeToEvaluate(node: t.Node | null, scope: Scope): boolean {
+export function isNullOrEvaluationUnobservable(
+  node: t.Node | null,
+  scope: Scope,
+): boolean {
   return node === null || !isDefaultEvaluationObservable(node, scope);
 }
 
@@ -712,10 +716,10 @@ export function buildObjectExcludingKeys(
 /**
  * In partial lowering, replace the elements of an array pattern that need to
  * be lowered with temporaries, `hoist`ed to be destructured after the
- * pattern; the first one keeps its native parts (hoistFirstTarget). The
- * following elements stay in the native pattern, which keeps iterating
- * nested patterns before the iterator is closed, unless they read a name
- * bound by a hoisted element (e.g. in a default value), only initialized
+ * pattern; the first one keeps its untranspiled parts (hoistFirstTarget).
+ * The following elements stay in the untranspiled pattern, which keeps
+ * iterating nested patterns before the iterator is closed, unless they read a
+ * name bound by a hoisted element (e.g. in a default value), only initialized
  * afterwards, or run user code, which must stay after the reads of the
  * hoisted elements.
  */
@@ -737,7 +741,7 @@ export function splitArrayPattern(
       if (
         !split ||
         (!referencesName(element, hoistedNames) &&
-          // Nested array patterns stay native: see above
+          // Nested array patterns stay untranspiled: see above
           !isPatternEvaluationObservable(element, scope, true))
       ) {
         continue;
@@ -773,8 +777,8 @@ function replaceWithTemporary(
 
 /**
  * Replace the lowered part of the first hoisted target of an array pattern
- * with a temporary to be `hoist`ed, keeping the parts evaluated before it
- * natively, while iterating: its default value, and its object pattern when
+ * with a temporary to be `hoist`ed, keeping untranspiled the parts evaluated
+ * before it, while iterating: its default value, and its object pattern when
  * only its last value is lowered (getLoweredValue). `[k, { a: { ...r } }]`
  * becomes `[k, { a: _ref }]`, and `a` is still read while iterating. Nothing
  * hoisted before has to be destructured first.

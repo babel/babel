@@ -16,7 +16,7 @@ import {
   isObjectCoercible,
   isPropertyKeyExpression,
   isPureVoid,
-  isSafeToEvaluate,
+  isNullOrEvaluationUnobservable,
   isStablePropertyKey,
   isTemporary,
   markTemporary,
@@ -31,7 +31,10 @@ import {
 export const enum StepKind {
   /** `id = init`, where `id` is a fresh, write-once temporary. */
   Temp,
-  /** `target = init`, where `target` is a user binding or a native pattern. */
+  /**
+   * `target = init`, where `target` is a user binding or an untranspiled
+   * pattern.
+   */
   Bind,
   /** An expression evaluated for its side effects only. */
   Effect,
@@ -121,7 +124,7 @@ const enum Decision {
  * or can be inlined, and patches the placeholders accordingly.
  */
 class Ref {
-  readonly #placeholders: { node: t.Identifier; index: number }[] = [];
+  readonly #memoisers: { node: t.Identifier; index: number }[] = [];
   #decision = Decision.None;
   #staticUsed = false;
   readonly #lowering: Lowering;
@@ -188,27 +191,29 @@ class Ref {
     }
     // The name is assigned once we know that this will be a temporary.
     const node = t.identifier("_ref");
-    this.#placeholders.push({ node, index: this.#lowering.steps.length });
+    this.#memoisers.push({ node, index: this.#lowering.steps.length });
     return node;
   }
 
   decide() {
-    const placeholders = this.#placeholders;
+    const memoisers = this.#memoisers;
     const readsStatic = this.#readsStatic;
-    if (readsStatic ? !this.#staticUsed : placeholders.length === 0) {
+    if (readsStatic && this.#staticUsed) {
+      // Every read is a copy of the expression
+      return;
+    } else if (readsStatic || memoisers.length === 0) {
       // The value might still need to be evaluated for its side effects.
       this.#decision =
-        this.discarded || isSafeToEvaluate(this.expr, this.#lowering.scope)
+        this.discarded ||
+        isNullOrEvaluationUnobservable(this.expr, this.#lowering.scope)
           ? Decision.None
           : Decision.Effect;
-    } else if (readsStatic) {
-      // Every read is a copy of the expression
-    } else if (!this.forceTemp && placeholders[0].index === this.#insertAt) {
+    } else if (!this.forceTemp && memoisers[0].index === this.#insertAt) {
       // Nothing is evaluated between the value and its first read: inline
       // it when it is the only one (a retained value only read as the
       // completion value is inlined there), or assign the temporary there.
       this.#decision =
-        placeholders.length === 1
+        memoisers.length === 1
           ? Decision.Inline
           : this.#lowering.inlineTemps
             ? Decision.InlineTemp
@@ -227,7 +232,7 @@ class Ref {
    * observable.
    *   [obj[f()]] = g()  ->  _g = g(), _g2 = slicedToArray(_g, 1), obj[f()] = _g2[0];
    * rather than
-   *   obj[f()] = slicedToArray(_g, 1)[0];
+   *   _g = g(), obj[f()] = slicedToArray(_g, 1)[0];
    * which would iterate `_g` after calling `f()`.
    */
   hoistDependencies(refs: Ref[]) {
@@ -243,9 +248,10 @@ class Ref {
       if (dep === this) break;
       if (
         dep.#isInline &&
-        nodes.has(dep.#placeholders[0].node) &&
+        nodes.has(dep.#memoisers[0].node) &&
         // Reordering is only observable if one of them can affect the other
-        (targetMayRunUserCode || !isSafeToEvaluate(dep.expr, scope))
+        (targetMayRunUserCode ||
+          !isNullOrEvaluationUnobservable(dep.expr, scope))
       ) {
         dep.#decision = Decision.Temp;
       }
@@ -268,11 +274,9 @@ class Ref {
       return;
     }
     const { scope } = this.#lowering;
-    let id = scope.generateUidIdentifierBasedOnNode(this.hint());
-    // e.g. `[][0]` only produces digits: fall back to a generic name
-    if (/^_\d*$/.test(id.name)) id = scope.generateUidIdentifier("ref");
+    const id = scope.generateUidIdentifierBasedOnNode(this.hint());
     this.tempId = id;
-    for (const { node } of this.#placeholders) node.name = id.name;
+    for (const { node } of this.#memoisers) node.name = id.name;
     if (this.#lowering.inlineTemps) {
       this.#lowering.hoist(t.cloneNode(id), this.#hoistOrder);
     }
@@ -285,11 +289,11 @@ class Ref {
     const expr = () => (this.isStatic ? t.cloneNode(this.expr) : this.expr);
     switch (this.#decision) {
       case Decision.Inline:
-        replaceInPlace(this.#placeholders[0].node, this.expr);
+        replaceInPlace(this.#memoisers[0].node, this.expr);
         break;
       case Decision.InlineTemp:
         replaceInPlace(
-          this.#placeholders[0].node,
+          this.#memoisers[0].node,
           t.assignmentExpression("=", t.cloneNode(this.tempId!), expr()),
         );
         break;
@@ -313,8 +317,8 @@ class Ref {
 const enum PropertyPlan {
   /** The rest element */
   Rest,
-  /** Kept in a native pattern (partial mode) */
-  Native,
+  /** Kept in an untranspiled pattern (partial mode) */
+  Untranspiled,
   /**
    * Not read: with `pureGetters`, a property excluded from the rest object
    * whose binding is never used
@@ -525,23 +529,23 @@ export class Lowering {
    * DestructuringAssignmentEvaluation of an assignment pattern or element.
    */
   #lowerTarget(target: PatternTarget, ref: Ref) {
-    const isNative =
+    const isUntranspiled =
       !this.full &&
       target!.type !== "AssignmentPattern" &&
       !needsLowering(target, this.options.features);
     if (
       this.isAssignment &&
-      // Native patterns, including the array patterns of partial lowering,
-      // read the value once before evaluating their targets.
+      // Untranspiled patterns, including the array patterns of partial
+      // lowering, read the value once before evaluating their targets.
       (t.isObjectPattern(target) || (t.isArrayPattern(target) && this.full)) &&
-      !isNative &&
+      !isUntranspiled &&
       hasMemberTarget(target)
     ) {
       // The whole value is read before evaluating any nested target,
       // including targets that can throw without running user code.
       ref.forceTemp = true;
     }
-    if (isNative) {
+    if (isUntranspiled) {
       this.#bindRef(target as t.LVal, ref);
       return;
     }
@@ -651,7 +655,7 @@ export class Lowering {
       }
       return full || propertyNeedsLowering(prop, features)
         ? PropertyPlan.Lower
-        : PropertyPlan.Native;
+        : PropertyPlan.Untranspiled;
     });
   }
 
@@ -677,8 +681,8 @@ export class Lowering {
     for (let i = 0; i < properties.length; i++) {
       const plan = plans[i];
       if (plan === PropertyPlan.Rest) return hasExcludedKey;
-      // The native pattern performs the check
-      if (plan === PropertyPlan.Native) return false;
+      // The untranspiled pattern performs the check
+      if (plan === PropertyPlan.Untranspiled) return false;
       const prop = properties[i] as t.ObjectProperty;
       // private keys are not enumerable, so they are never excluded
       if (prop.key.type !== "PrivateName") hasExcludedKey = true;
@@ -712,19 +716,19 @@ export class Lowering {
 
   /**
    * In partial lowering, a rest element that doesn't need to be lowered can
-   * stay in the native pattern of the properties before it, if it would
-   * exclude the same keys: the lowered properties before them must all have
-   * private keys, which are never copied to the rest object.
+   * stay in the untranspiled pattern of the properties before it, if it
+   * would exclude the same keys: the lowered properties before them must all
+   * have private keys, which are never copied to the rest object.
    *
    *   const { #x: x, y, ...z } = obj;  ->  const x = obj.#x, { y, ...z } = obj;
    */
-  #canKeepNativeRest(
+  #canKeepUntranspiledRest(
     properties: t.ObjectPattern["properties"],
     plans: PropertyPlan[],
   ): boolean {
     if (this.full || this.options.features & FEATURES.objectRest) return false;
     let i = properties.length - 2;
-    while (i >= 0 && plans[i] === PropertyPlan.Native) i--;
+    while (i >= 0 && plans[i] === PropertyPlan.Untranspiled) i--;
     for (; i >= 0; i--) {
       if (
         plans[i] !== PropertyPlan.Lower ||
@@ -750,8 +754,11 @@ export class Lowering {
     // lowered, and then the rest element is usually lowered too.
     const hasRest = hasRestElement(pattern);
     const plans = this.#planProperties(properties, hasRest);
-    const lowersRest = hasRest && !this.#canKeepNativeRest(properties, plans);
-    if (hasRest && !lowersRest) plans[plans.length - 1] = PropertyPlan.Native;
+    const lowersRest =
+      hasRest && !this.#canKeepUntranspiledRest(properties, plans);
+    if (hasRest && !lowersRest) {
+      plans[plans.length - 1] = PropertyPlan.Untranspiled;
+    }
 
     if (this.#needsRequireObjectCoercible(properties, plans, ref, lowersRest)) {
       if (full) {
@@ -761,7 +768,7 @@ export class Lowering {
           ]),
         );
       } else {
-        // An empty native pattern performs the check
+        // An empty untranspiled pattern performs the check
         this.#bind(t.objectPattern([]), ref.use());
       }
     }
@@ -776,7 +783,7 @@ export class Lowering {
     };
 
     // In partial mode, consecutive properties that don't need to be lowered
-    // are kept together in a native pattern.
+    // are kept together in an untranspiled pattern.
     let chunk: (t.ObjectProperty | t.RestElement)[] = [];
     const flush = () => {
       if (chunk.length === 0) return;
@@ -825,15 +832,15 @@ export class Lowering {
         continue;
       }
 
-      if (plans[i] === PropertyPlan.Native) {
-        let nativeProp = prop;
+      if (plans[i] === PropertyPlan.Untranspiled) {
+        let untranspiledProp = prop;
         if (lowersRest && unstableKey) {
           // Memoise the key inline so that it can be excluded from the rest
           // object while preserving the evaluation order:
           //   { [_key = f()]: x, ...rest }
           const id = scope.generateUidIdentifierBasedOnNode(key);
           this.hoist(id);
-          nativeProp = {
+          untranspiledProp = {
             ...prop,
             key: t.assignmentExpression(
               "=",
@@ -845,7 +852,7 @@ export class Lowering {
         } else {
           exclude(key, computed);
         }
-        chunk.push(nativeProp);
+        chunk.push(untranspiledProp);
         continue;
       }
 
