@@ -674,10 +674,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 436, gzip size: 242
+  // size: 395, gzip size: 235
   importDeferProxy: helper(
     "7.23.0",
-    "function _importDeferProxy(e){var t=null,r=function(){return!1},n=function(r){return function(n,o,u){return null===t&&(t=e()),r(t,o,u)}};return new Proxy({},{defineProperty:r,deleteProperty:r,get:n(Reflect.get),getOwnPropertyDescriptor:n(Reflect.getOwnPropertyDescriptor),getPrototypeOf:function(){return null},isExtensible:r,has:n(Reflect.has),ownKeys:n(Reflect.ownKeys),preventExtensions:function(){return!0},set:r,setPrototypeOf:r})}",
+    "function _importDeferProxy(e){var t;function r(){return!1}function n(r){return function(n,o,f){return r(t||(t=e()),o,f)}}return new Proxy({__proto__:null},{defineProperty:r,deleteProperty:r,get:n(Reflect.get),getOwnPropertyDescriptor:n(Reflect.getOwnPropertyDescriptor),isExtensible:r,has:n(Reflect.has),ownKeys:n(Reflect.ownKeys),preventExtensions:function(){return!0},set:r,setPrototypeOf:r})}",
     {
       globals: ["Proxy", "Reflect"],
       locals: { _importDeferProxy: ["body.0.id"] },

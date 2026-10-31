@@ -4,37 +4,30 @@
 export default function _importDeferProxy<T extends object>(
   init: () => T,
 ): ProxyHandler<T> {
-  var ns: T | null = null;
+  var ns: T;
 
-  var constFalse = function () {
+  function constFalse() {
     return false;
-  };
+  }
 
-  var proxy = function (run: Function) {
+  function proxy(run: Function) {
     return function (_target: T, p?: string | symbol, receiver?: any) {
-      if (ns === null) ns = init();
-      return run(ns, p, receiver);
+      return run(ns || (ns = init()), p, receiver);
     };
-  };
+  }
 
-  return new Proxy(
-    {},
-    {
-      defineProperty: constFalse,
-      deleteProperty: constFalse,
-      get: proxy(Reflect.get),
-      getOwnPropertyDescriptor: proxy(Reflect.getOwnPropertyDescriptor),
-      getPrototypeOf: function () {
-        return null;
-      },
-      isExtensible: constFalse,
-      has: proxy(Reflect.has),
-      ownKeys: proxy(Reflect.ownKeys),
-      preventExtensions: function () {
-        return true;
-      },
-      set: constFalse,
-      setPrototypeOf: constFalse,
+  return new Proxy({ __proto__: null } as T, {
+    defineProperty: constFalse,
+    deleteProperty: constFalse,
+    get: proxy(Reflect.get),
+    getOwnPropertyDescriptor: proxy(Reflect.getOwnPropertyDescriptor),
+    isExtensible: constFalse,
+    has: proxy(Reflect.has),
+    ownKeys: proxy(Reflect.ownKeys),
+    preventExtensions: function () {
+      return true;
     },
-  );
+    set: constFalse,
+    setPrototypeOf: constFalse,
+  });
 }

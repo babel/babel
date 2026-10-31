@@ -3,23 +3,22 @@ import _Reflect$getOwnPropertyDescriptor from "core-js-pure/features/reflect/get
 import _Reflect$has from "core-js-pure/features/reflect/has.js";
 import _Reflect$ownKeys from "core-js-pure/features/reflect/own-keys.js";
 function _importDeferProxy(e) {
-  var t = null,
-    r = function r() {
-      return !1;
-    },
-    n = function n(r) {
-      return function (n, o, u) {
-        return null === t && (t = e()), r(t, o, u);
-      };
+  var t;
+  function r() {
+    return !1;
+  }
+  function n(r) {
+    return function (n, o, f) {
+      return r(t || (t = e()), o, f);
     };
-  return new Proxy({}, {
+  }
+  return new Proxy({
+    __proto__: null
+  }, {
     defineProperty: r,
     deleteProperty: r,
     get: n(_Reflect$get),
     getOwnPropertyDescriptor: n(_Reflect$getOwnPropertyDescriptor),
-    getPrototypeOf: function getPrototypeOf() {
-      return null;
-    },
     isExtensible: r,
     has: n(_Reflect$has),
     ownKeys: n(_Reflect$ownKeys),
