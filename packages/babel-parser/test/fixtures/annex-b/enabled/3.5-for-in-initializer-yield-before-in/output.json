@@ -1,0 +1,156 @@
+{
+  "type": "File",
+  "start":0,"end":115,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":115}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":115,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":115}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":115,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":1,"index":115}},
+        "id": {
+          "type": "Identifier",
+          "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"g"},
+          "name": "g"
+        },
+        "generator": true,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":14,"end":115,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":5,"column":1,"index":115}},
+          "body": [
+            {
+              "type": "ForInStatement",
+              "start":18,"end":43,"loc":{"start":{"line":2,"column":2,"index":18},"end":{"line":2,"column":27,"index":43}},
+              "left": {
+                "type": "VariableDeclaration",
+                "start":23,"end":36,"loc":{"start":{"line":2,"column":7,"index":23},"end":{"line":2,"column":20,"index":36}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":27,"end":36,"loc":{"start":{"line":2,"column":11,"index":27},"end":{"line":2,"column":20,"index":36}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":27,"end":28,"loc":{"start":{"line":2,"column":11,"index":27},"end":{"line":2,"column":12,"index":28},"identifierName":"x"},
+                      "name": "x"
+                    },
+                    "init": {
+                      "type": "YieldExpression",
+                      "start":31,"end":36,"loc":{"start":{"line":2,"column":15,"index":31},"end":{"line":2,"column":20,"index":36}},
+                      "delegate": false,
+                      "argument": null
+                    }
+                  }
+                ],
+                "kind": "var"
+              },
+              "right": {
+                "type": "Identifier",
+                "start":40,"end":41,"loc":{"start":{"line":2,"column":24,"index":40},"end":{"line":2,"column":25,"index":41},"identifierName":"z"},
+                "name": "z"
+              },
+              "body": {
+                "type": "EmptyStatement",
+                "start":42,"end":43,"loc":{"start":{"line":2,"column":26,"index":42},"end":{"line":2,"column":27,"index":43}}
+              }
+            },
+            {
+              "type": "ForInStatement",
+              "start":46,"end":77,"loc":{"start":{"line":3,"column":2,"index":46},"end":{"line":3,"column":33,"index":77}},
+              "left": {
+                "type": "VariableDeclaration",
+                "start":51,"end":70,"loc":{"start":{"line":3,"column":7,"index":51},"end":{"line":3,"column":26,"index":70}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":55,"end":70,"loc":{"start":{"line":3,"column":11,"index":55},"end":{"line":3,"column":26,"index":70}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":55,"end":56,"loc":{"start":{"line":3,"column":11,"index":55},"end":{"line":3,"column":12,"index":56},"identifierName":"y"},
+                      "name": "y"
+                    },
+                    "init": {
+                      "type": "YieldExpression",
+                      "start":59,"end":70,"loc":{"start":{"line":3,"column":15,"index":59},"end":{"line":3,"column":26,"index":70}},
+                      "delegate": false,
+                      "argument": {
+                        "type": "YieldExpression",
+                        "start":65,"end":70,"loc":{"start":{"line":3,"column":21,"index":65},"end":{"line":3,"column":26,"index":70}},
+                        "delegate": false,
+                        "argument": null
+                      }
+                    }
+                  }
+                ],
+                "kind": "var"
+              },
+              "right": {
+                "type": "Identifier",
+                "start":74,"end":75,"loc":{"start":{"line":3,"column":30,"index":74},"end":{"line":3,"column":31,"index":75},"identifierName":"z"},
+                "name": "z"
+              },
+              "body": {
+                "type": "EmptyStatement",
+                "start":76,"end":77,"loc":{"start":{"line":3,"column":32,"index":76},"end":{"line":3,"column":33,"index":77}}
+              }
+            },
+            {
+              "type": "ForInStatement",
+              "start":80,"end":113,"loc":{"start":{"line":4,"column":2,"index":80},"end":{"line":4,"column":35,"index":113}},
+              "left": {
+                "type": "VariableDeclaration",
+                "start":85,"end":106,"loc":{"start":{"line":4,"column":7,"index":85},"end":{"line":4,"column":28,"index":106}},
+                "declarations": [
+                  {
+                    "type": "VariableDeclarator",
+                    "start":89,"end":106,"loc":{"start":{"line":4,"column":11,"index":89},"end":{"line":4,"column":28,"index":106}},
+                    "id": {
+                      "type": "Identifier",
+                      "start":89,"end":90,"loc":{"start":{"line":4,"column":11,"index":89},"end":{"line":4,"column":12,"index":90},"identifierName":"w"},
+                      "name": "w"
+                    },
+                    "init": {
+                      "type": "ConditionalExpression",
+                      "start":93,"end":106,"loc":{"start":{"line":4,"column":15,"index":93},"end":{"line":4,"column":28,"index":106}},
+                      "test": {
+                        "type": "Identifier",
+                        "start":93,"end":94,"loc":{"start":{"line":4,"column":15,"index":93},"end":{"line":4,"column":16,"index":94},"identifierName":"a"},
+                        "name": "a"
+                      },
+                      "consequent": {
+                        "type": "Identifier",
+                        "start":97,"end":98,"loc":{"start":{"line":4,"column":19,"index":97},"end":{"line":4,"column":20,"index":98},"identifierName":"b"},
+                        "name": "b"
+                      },
+                      "alternate": {
+                        "type": "YieldExpression",
+                        "start":101,"end":106,"loc":{"start":{"line":4,"column":23,"index":101},"end":{"line":4,"column":28,"index":106}},
+                        "delegate": false,
+                        "argument": null
+                      }
+                    }
+                  }
+                ],
+                "kind": "var"
+              },
+              "right": {
+                "type": "Identifier",
+                "start":110,"end":111,"loc":{"start":{"line":4,"column":32,"index":110},"end":{"line":4,"column":33,"index":111},"identifierName":"z"},
+                "name": "z"
+              },
+              "body": {
+                "type": "EmptyStatement",
+                "start":112,"end":113,"loc":{"start":{"line":4,"column":34,"index":112},"end":{"line":4,"column":35,"index":113}}
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

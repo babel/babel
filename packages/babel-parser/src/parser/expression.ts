@@ -3085,6 +3085,11 @@ export default abstract class ExpressionParser extends LValParser {
           // can start an AssignmentExpression
           if (!delegating) break;
         /* fallthrough */
+        case tt._in:
+          // `in` may follow an AssignmentExpression[~In] in an Annex B
+          // for-in initializer: `for (var x = yield in z)`
+          if (this.options.annexB && !delegating) break;
+        /* fallthrough */
         default:
           argument = this.parseMaybeAssign();
       }
