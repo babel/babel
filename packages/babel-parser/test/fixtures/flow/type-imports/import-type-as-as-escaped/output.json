@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":35,"index":35}},
+        "importKind": "value",
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start":8,"end":24,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":24,"index":24}},
+            "imported": {
+              "type": "Identifier",
+              "start":8,"end":12,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":12,"index":12},"identifierName":"type"},
+              "name": "type"
+            },
+            "importKind": null,
+            "local": {
+              "type": "Identifier",
+              "start":16,"end":24,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":24,"index":24},"identifierName":"asa"},
+              "name": "asa"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":31,"end":34,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":34,"index":34}},
+          "extra": {
+            "rawValue": "x",
+            "raw": "'x'"
+          },
+          "value": "x"
+        },
+        "attributes": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
