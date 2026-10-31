@@ -524,6 +524,19 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
+  // size: 379, gzip size: 277
+  createModuleNsFilter: helper(
+    "8.1.0",
+    'function _createModuleNsFilter(e){return r=>{for(var getter=e=>()=>r[e],t=Object.create(null),n=0;n<e.length;n++){var o=e[n];if(!(o in r))throw new ReferenceError("The requested module does not provide an export named \'"+o+"\'");o in t||Object.defineProperty(t,o,{enumerable:!0,get:getter(o)})}return Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.freeze(t)}}',
+    {
+      globals: ["Object", "ReferenceError", "Symbol"],
+      locals: { _createModuleNsFilter: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_createModuleNsFilter",
+      dependencies: {},
+      internal: false,
+    },
+  ),
   // size: 182, gzip size: 141
   createSuper: helper(
     "7.9.0",
@@ -607,6 +620,23 @@ const helpers: Record<string, Helper> = {
       exportBindingAssignments: ["body.0.body.body.0.argument.expressions.0"],
       exportName: "_extends",
       dependencies: {},
+      internal: false,
+    },
+  ),
+  // size: 433, gzip size: 269
+  filterModuleNamespace: helper(
+    "8.1.0",
+    'function _filterModuleNamespace(t){var e,o=!1;try{var i=t(function(r){if(Object(r)===r)try{var{exports:t}=r;if(void 0!==t){if(Object(t)!==t)throw new TypeError("import()\'s `exports` must be an object");for(var i of(e=[],t)){if("string"!=typeof i)throw new TypeError("import()\'s `exports` must be strings");e.push(i)}}}catch(r){throw o=!0,r}return r})}catch(r){if(o)return Promise.reject(r);throw r}return e?(e.sort(),i.then(r(e))):i}',
+    {
+      globals: ["Object", "TypeError", "Promise"],
+      locals: { _filterModuleNamespace: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_filterModuleNamespace",
+      dependencies: {
+        createModuleNsFilter: [
+          "body.0.body.body.2.argument.consequent.expressions.1.arguments.0.callee",
+        ],
+      },
       internal: false,
     },
   ),
