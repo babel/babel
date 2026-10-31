@@ -1,7 +1,7 @@
 class C {
   #x;
-  constructor(foo, _p) {
-    var x = _p.#x;
+  constructor(foo, _ref) {
+    let x = _ref.#x;
     this.foo = foo;
   }
 }

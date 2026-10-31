@@ -1,4 +1,3 @@
-var _o = o,
-  _o2 = babelHelpers.maybeArrayLike(babelHelpers.toArray, _o),
-  first = _o2[0],
-  rest = babelHelpers.arrayLikeToArray(_o2).slice(1);
+var _o = babelHelpers.maybeArrayLike(babelHelpers.toArray, o),
+  first = _o[0],
+  rest = babelHelpers.arrayLikeToArray(_o).slice(1);

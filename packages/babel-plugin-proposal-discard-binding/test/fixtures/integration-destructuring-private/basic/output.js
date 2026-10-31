@@ -3,58 +3,54 @@ class C {
   static #p;
   static #x;
   static {
-    var _p4, _5;
-    function f0(x, _p, _p2) {
-      var _ = _p.#p,
-        [z,,] = _p2;
+    var _ref7;
+    function f0(x, _ref, _ref2) {
+      let {} = _ref;
+      let [z,,] = _ref2;
     }
-    try {} catch (_e) {
-      let [, _p3] = _e,
-        _2 = _p3.#p,
+    try {} catch (_ref3) {
+      let [, _ref4] = _ref3,
         {
           ...rest
-        } = _p3;
+        } = _ref4;
     }
-    for (const _ref of []) {
-      const _3 = _ref.#x,
-        {
-          y
-        } = _ref;
+    for (const _ref5 of []) {
+      const {
+        y
+      } = _ref5;
       ;
     }
     for (let {
-      valueOf: _7,
+      valueOf: _,
       ...rest
     } in {});
-    for (const _ref2 of []) {
-      var _4;
-      _4 = _ref2.#x, {
+    for (var _ref6 of []) {
+      ({
         y
-      } = _ref2;
+      } = _ref6);
       ;
     }
     for ({
-      valueOf: _8,
+      valueOf: _2,
       ...rest
     } in {}) {
-      var _8;
+      var _2;
       ;
     }
-    [, _p4] = [0, {
+    [, _ref7] = [0, {
       p: 1,
       q: 2,
       r: 3
-    }], _5 = _p4.#p, {
+    }], {
       ...rest
-    } = _p4;
-    var [, _p5] = [0, {
+    } = _ref7;
+    var [, _ref8] = [0, {
         p: 1,
         q: 2,
         r: 3
       }],
-      _6 = _p5.#p,
       {
         ...rest
-      } = _p5;
+      } = _ref8;
   }
 }

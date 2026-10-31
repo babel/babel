@@ -3,9 +3,9 @@ let a = 0,
 for (const _ref of [["0", "1"]]) {
   var _a;
   const {
-      [_a = a++]: x
+      [_a = babelHelpers.toPropertyKey(a++)]: x
     } = _ref,
-    y = babelHelpers.objectWithoutProperties(_ref, [_a].map(babelHelpers.toPropertyKey));
+    y = babelHelpers.objectWithoutProperties(_ref, [_a]);
   {
     const a = 1;
     result = x;

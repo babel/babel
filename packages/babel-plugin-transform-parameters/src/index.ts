@@ -1,7 +1,27 @@
 import { declare } from "@babel/helper-plugin-utils";
-import convertFunctionParams from "./params.ts";
+import { types as t } from "@babel/core";
+import convertFunctionParams, {
+  readsMappedArguments,
+  unmapArguments,
+} from "./params.ts";
 import convertFunctionRest from "./rest.ts";
+import { recordArgumentsUsage } from "./shadow-utils.ts";
 export { convertFunctionParams };
+export {
+  isDefaultEvaluationObservable,
+  isPatternEvaluationObservable,
+  readsMappedArguments,
+  unmapArguments,
+} from "./params.ts";
+export {
+  declareMovedParams,
+  getParamNames,
+  getParamsInitBlock,
+  isRedeclaredInBody,
+  moveParamToTemporary,
+  recordArgumentsUsage,
+  skipTypeAnnotationsVisitor,
+} from "./shadow-utils.ts";
 
 export interface Options {
   /** @deprecated Use the `ignoreFunctionLength` assumption instead. */
@@ -26,13 +46,17 @@ export default declare((api, options: Options) => {
   return {
     name: "transform-parameters",
 
+    pre(file) {
+      recordArgumentsUsage(file);
+    },
+
     visitor: {
       Function(path) {
         if (
           path.isArrowFunctionExpression() &&
-          path
-            .get("params")
-            .some(param => param.isRestElement() || param.isAssignmentPattern())
+          path.node.params.some(
+            param => t.isRestElement(param) || t.isAssignmentPattern(param),
+          )
         ) {
           // default/rest visitors require access to `arguments`, so it cannot be an arrow
           path.arrowFunctionToExpression({
@@ -45,11 +69,23 @@ export default declare((api, options: Options) => {
           if (!path.isFunctionExpression()) return;
         }
 
+        // Read before `arguments` accesses are added for the rest parameter
+        const keepArgumentsUnmapped =
+          !path.node.params.every(param => t.isIdentifier(param)) &&
+          readsMappedArguments(path);
+
         const convertedRest = convertFunctionRest(path);
         const convertedParams = convertFunctionParams(
           path,
           ignoreFunctionLength,
+          undefined,
+          undefined,
+          undefined,
+          keepArgumentsUnmapped,
         );
+        if (convertedRest && !convertedParams && keepArgumentsUnmapped) {
+          unmapArguments(path);
+        }
 
         if (convertedRest || convertedParams) {
           // Manually reprocess this scope to ensure that the moved params are updated.

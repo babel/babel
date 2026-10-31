@@ -1,9 +1,9 @@
-var _m2, _C;
+var _C;
 let a;
 class C {
-  static m(r = (_m2 = C, {
+  static m(r = ({
     a
-  } = babelHelpers.assertClassBrand(C, _m2, _x)._, _m2)) {}
+  } = _x._, C)) {}
 }
 _C = C;
 var _x = {
@@ -13,10 +13,9 @@ var _x = {
   }
 };
 (() => {
-  var _m;
   let b;
-  (function f(r = (_m = _C, {
+  (function f(r = ({
     b
-  } = babelHelpers.assertClassBrand(_C, _m, _x)._, _m)) {})();
+  } = _x._, _C)) {})();
 })();
 C.m();

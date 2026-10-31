@@ -17,17 +17,18 @@ var _self = {
 };
 (() => {
   let cloned;
-  var _m = _x._,
-    _m2 = _m === void 0 ? _self._ : _m,
-    _m3 = _m2[_z._],
+  var _C$x = _x._,
+    _C$x2 = _C$x === void 0 ? _self._ : _C$x,
+    {} = _C$x2,
+    _C$x2$C$z = _C$x2[_z._],
     {
       b
-    } = _m3,
-    _m4 = babelHelpers.assertClassBrand(_C, _m3, _x)._,
-    y = _m4 === void 0 ? (_C.b = "bb", babelHelpers.assertClassBrand(_C, _self._, _y)._) : _m4,
-    _m5 = babelHelpers.assertClassBrand(_C, _m2, _x)._,
-    yy = _m5 === void 0 ? (delete _C.self, {
+    } = _C$x2$C$z,
+    _C$x2$C$z$x = babelHelpers.assertClassBrand(_C, _C$x2$C$z, _x)._,
+    y = _C$x2$C$z$x === void 0 ? (_C.b = "bb", babelHelpers.assertClassBrand(_C, _self._, _y)._) : _C$x2$C$z$x,
+    _C$x2$x = babelHelpers.assertClassBrand(_C, _C$x2, _x)._,
+    yy = _C$x2$x === void 0 ? (delete _C.self, {
       ...cloned
-    } = _C, _y._ = "yy") : _m5,
+    } = _C, _y._ = "yy") : _C$x2$x,
     yy2 = _y._;
 })();

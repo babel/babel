@@ -1,9 +1,13 @@
-let {
-    a,
-    nested: {
-      b,
-      c
-    },
+let _obj = obj,
+  {
+    a
+  } = _obj,
+  _obj$nested = _obj.nested,
+  {
+    b,
+    c
+  } = _obj$nested,
+  d = babelHelpers.objectWithoutPropertiesLoose(_obj$nested, ["b", "c"]),
+  {
     e
-  } = obj,
-  d = babelHelpers.objectWithoutPropertiesLoose(obj.nested, ["b", "c"]);
+  } = _obj;

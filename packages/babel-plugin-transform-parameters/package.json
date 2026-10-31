@@ -14,6 +14,7 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
+    "@babel/helper-named-evaluation": "workspace:^",
     "@babel/helper-plugin-utils": "workspace:^"
   },
   "keywords": [

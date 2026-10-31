@@ -1,3 +1,4 @@
+var _k, _k2, _k3, _k4, _k5;
 const a = {
   "3": "three",
   "foo": "bar"
@@ -23,13 +24,13 @@ const c = {
   [k5]: "5"
 };
 const {
-    [k1]: v1,
-    [k2]: v2,
-    [k3]: v3,
-    [k4]: v4,
-    [k5]: v5
+    [_k = babelHelpers.toPropertyKey(k1)]: v1,
+    [_k2 = babelHelpers.toPropertyKey(k2)]: v2,
+    [_k3 = babelHelpers.toPropertyKey(k3)]: v3,
+    [_k4 = babelHelpers.toPropertyKey(k4)]: v4,
+    [_k5 = babelHelpers.toPropertyKey(k5)]: v5
   } = c,
-  vrest = babelHelpers.objectWithoutProperties(c, [k1, k2, k3, k4, k5].map(babelHelpers.toPropertyKey));
+  vrest = babelHelpers.objectWithoutProperties(c, [_k, _k2, _k3, _k4, _k5]);
 expect(v1).toBe("1");
 expect(v2).toBe("2");
 expect(v3).toBe("3");

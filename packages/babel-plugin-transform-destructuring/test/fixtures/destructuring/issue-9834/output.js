@@ -1,9 +1,9 @@
 var input = {};
-var _ref = prefix + 'state',
-  _ref2 = `${prefix}consents`,
-  givenName = input.given_name,
+var givenName = input.given_name,
   lastName = input['last_name'],
   country = input[`country`],
-  state = input[_ref],
-  consents = input[_ref2],
-  rest = babelHelpers.objectWithoutProperties(input, ["given_name", "last_name", `country`, _ref, _ref2].map(babelHelpers.toPropertyKey));
+  _babelHelpers$toPrope = babelHelpers.toPropertyKey(prefix + 'state'),
+  state = input[_babelHelpers$toPrope],
+  _ref = `${prefix}consents`,
+  consents = input[_ref],
+  rest = babelHelpers.objectWithoutProperties(input, ["given_name", "last_name", `country`, _babelHelpers$toPrope, _ref]);

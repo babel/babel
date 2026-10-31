@@ -1,18 +1,15 @@
 class C {
-  static 0(..._p) {
-    var [..._p2] = _p,
-      x = babelHelpers.assertClassBrand(C, _p2[0], _x)._;
+  static 0(...[..._ref]) {
+    let x = babelHelpers.assertClassBrand(C, _ref[0], _x)._;
   }
-  static 1(a, b = 1, _p3, ..._p4) {
-    var x = babelHelpers.assertClassBrand(C, _p3, _x)._,
-      c = _p4;
+  static 1(a, b = 1, _ref2, ...c) {
+    let x = babelHelpers.assertClassBrand(C, _ref2, _x)._;
   }
-  static 2(a, b, _p5) {
-    var x = babelHelpers.assertClassBrand(C, _p5 === void 0 ? C : _p5, _x)._;
+  static 2(a, b, _ref3 = C) {
+    let x = babelHelpers.assertClassBrand(C, _ref3, _x)._;
   }
-  static 3(a, b, _p6, _p7) {
-    var x = babelHelpers.assertClassBrand(C, _p6, _x)._,
-      c = _p7 === void 0 ? 1 : _p7;
+  static 3(a, b, _ref4, c = 1) {
+    let x = babelHelpers.assertClassBrand(C, _ref4, _x)._;
   }
 }
 var _x = {

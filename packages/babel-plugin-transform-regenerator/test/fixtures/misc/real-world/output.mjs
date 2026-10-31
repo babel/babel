@@ -167,8 +167,7 @@ export function buildRootChain(opts, context) {
         }
         return _context2.d(babelHelpers.regeneratorValues(findRelativeConfig(pkgData, context.envName, context.caller)), 13);
       case 13:
-        _yield$findRelativeCo = _context2.v;
-        ignoreFile = _yield$findRelativeCo.ignore;
+        ignoreFile = (_yield$findRelativeCo = _context2.v).ignore;
         babelrcFile = _yield$findRelativeCo.config;
         if (ignoreFile) {
           fileChain.files.add(ignoreFile.filepath);
@@ -410,7 +409,7 @@ function makeChainWalker(_ref5) {
     var files = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new Set();
     var baseLogger = arguments.length > 3 ? arguments[3] : undefined;
     return /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
-      var dirname, flattenedConfigs, rootOpts, envOpts, chain, logger, _i, _flattenedConfigs, _flattenedConfigs$_i, config, index, envName;
+      var dirname, flattenedConfigs, rootOpts, envOpts, chain, logger, _i, _flattenedConfigs, _ref7, config, index, envName;
       return babelHelpers.regenerator().w(function (_context4) {
         while (1) switch (_context4.n) {
           case 0:
@@ -473,7 +472,8 @@ function makeChainWalker(_ref5) {
               _context4.n = 6;
               break;
             }
-            _flattenedConfigs$_i = _flattenedConfigs[_i], config = _flattenedConfigs$_i.config, index = _flattenedConfigs$_i.index, envName = _flattenedConfigs$_i.envName;
+            _ref7 = _flattenedConfigs[_i];
+            config = _ref7.config, index = _ref7.index, envName = _ref7.envName;
             return _context4.d(babelHelpers.regeneratorValues(mergeExtendsChain(chain, config.options, dirname, context, files, baseLogger)), 3);
           case 3:
             if (_context4.v) {
@@ -552,10 +552,10 @@ function mergeChain(target, source) {
   }
   return target;
 }
-function mergeChainOpts(target, _ref7) {
-  var options = _ref7.options,
-    plugins = _ref7.plugins,
-    presets = _ref7.presets;
+function mergeChainOpts(target, _ref8) {
+  var options = _ref8.options,
+    plugins = _ref8.plugins,
+    presets = _ref8.presets;
   return /*#__PURE__*/babelHelpers.regenerator().m(function _callee2(_target$plugins2, _target$presets2) {
     var _t, _t2, _t3, _t4, _t5, _t6;
     return babelHelpers.regenerator().w(function (_context6) {
@@ -653,8 +653,8 @@ function dedupDescriptors(items) {
     return acc;
   }, []);
 }
-function configIsApplicable(_ref8, dirname, context, configName) {
-  var options = _ref8.options;
+function configIsApplicable(_ref9, dirname, context, configName) {
+  var options = _ref9.options;
   return (options.test === undefined || configFieldIsApplicable(context, options.test, dirname, configName)) && (options.include === undefined || configFieldIsApplicable(context, options.include, dirname, configName)) && (options.exclude === undefined || !configFieldIsApplicable(context, options.exclude, dirname, configName));
 }
 function configFieldIsApplicable(context, test, dirname, configName) {

@@ -6,11 +6,8 @@ const defunct = {
     }
   }
 };
-const {
-    outer: {
-      inner: {
-        three
-      }
-    }
-  } = defunct,
-  other = babelHelpers.objectWithoutProperties(defunct.outer.inner, ["three"]);
+const _defunct$outer$inner = defunct.outer.inner,
+  {
+    three
+  } = _defunct$outer$inner,
+  other = babelHelpers.objectWithoutProperties(_defunct$outer$inner, ["three"]);

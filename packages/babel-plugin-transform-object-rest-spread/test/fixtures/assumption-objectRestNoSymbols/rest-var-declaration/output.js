@@ -1,5 +1,6 @@
-var {
+var _obj = obj,
+  {
     a,
     b
-  } = obj,
-  c = babelHelpers.objectWithoutPropertiesLoose(obj, ["a", "b"]);
+  } = _obj,
+  c = babelHelpers.objectWithoutPropertiesLoose(_obj, ["a", "b"]);

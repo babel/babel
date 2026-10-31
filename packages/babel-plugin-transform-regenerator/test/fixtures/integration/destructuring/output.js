@@ -1,13 +1,13 @@
 var _marked = /*#__PURE__*/babelHelpers.regenerator().m(foo),
   _marked2 = /*#__PURE__*/babelHelpers.regenerator().m(foo3);
 function foo() {
-  var _bar, bar;
+  var bar;
   return babelHelpers.regenerator().w(function (_context) {
     while (1) switch (_context.n) {
       case 0:
-        _bar = {
+        bar = {
           bar: "bar"
-        }, bar = _bar.bar;
+        }.bar;
         return _context.a(2, bar);
     }
   }, _marked);

@@ -7,8 +7,8 @@ class C {
     return C;
   }
   static {
-    var _p, _p2, _p3, _p4, _m;
+    var _ref, _ref2, _ref3, _ref4, _ref4$z;
     let x, y, z;
-    [_p, _p2,, _p3] = [this, this], x = (_p === void 0 ? C.self : _p).#x, [, _p4] = _p2.#y, _m = (_p4 === void 0 ? C.self : _p4).#z, y = _m === void 0 ? C.#self() : _m, z = _p3 === void 0 ? y.#y : _p3;
+    [_ref = C.self, _ref2,, _ref3] = [this, this], x = _ref.#x, [, _ref4 = C.self] = _ref2.#y, y = (_ref4$z = _ref4.#z) === void 0 ? C.#self() : _ref4$z, z = _ref3 === void 0 ? y.#y : _ref3;
   }
 }

@@ -1,4 +1,3 @@
-var _m2;
 let a;
 class C {
   static #x = {
@@ -6,14 +5,13 @@ class C {
     b: 2
   };
   static {
-    var _m;
     let b;
-    (function f(r = (_m = C, {
+    (function f(r = ({
       b
-    } = _m.#x, _m)) {})();
+    } = C.#x, C)) {})();
   }
-  static m(r = (_m2 = C, {
+  static m(r = ({
     a
-  } = _m2.#x, _m2)) {}
+  } = C.#x, C)) {}
 }
 C.m();

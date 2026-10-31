@@ -41,6 +41,9 @@
       "@babel/helper-create-class-features-plugin": [
         "./packages/babel-helper-create-class-features-plugin/src"
       ],
+      "@babel/helper-create-destructuring-plugin": [
+        "./packages/babel-helper-create-destructuring-plugin/src"
+      ],
       "@babel/helper-create-regexp-features-plugin": [
         "./packages/babel-helper-create-regexp-features-plugin/src"
       ],
@@ -58,6 +61,9 @@
       ],
       "@babel/helper-module-transforms": [
         "./packages/babel-helper-module-transforms/src"
+      ],
+      "@babel/helper-named-evaluation": [
+        "./packages/babel-helper-named-evaluation/src"
       ],
       "@babel/helper-optimise-call-expression": [
         "./packages/babel-helper-optimise-call-expression/src"

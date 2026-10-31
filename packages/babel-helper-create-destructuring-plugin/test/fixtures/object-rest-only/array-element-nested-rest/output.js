@@ -1,0 +1,35 @@
+var _it, _ref4, _ref4$a$c;
+const [k, {
+    a: _ref
+  }, z] = it,
+  {
+    b
+  } = _ref,
+  r = babelHelpers.objectWithoutProperties(_ref, ["b"]);
+for (const _ref2 of list) {
+  const [x, {
+      o: _ref3 = {}
+    }] = _ref2,
+    s = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref3), _ref3)), []);
+}
+[k, _ref4] = _it = it, t = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref4$a$c = _ref4.a.c), _ref4$a$c)), []), {
+  d
+} = _ref4, _it;
+function f([k, {
+  a: _ref5
+}], v) {
+  let u = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref5), _ref5)), []);
+}
+// The default and the key read a hoisted binding: the element is hoisted
+const [_ref6] = it,
+  _ref6$a = _ref6.a,
+  w = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref6$a), _ref6$a)), []),
+  {
+    b: y = w
+  } = _ref6;
+const [_ref7] = it,
+  _ref7$a = _ref7.a,
+  q = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref7$a), _ref7$a)), []),
+  {
+    [q.key]: p
+  } = _ref7;
