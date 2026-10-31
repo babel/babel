@@ -85,6 +85,38 @@ let locDataCache: Uint32Array | undefined;
 
 // ## Tokenizer
 
+// Lookup table for ASCII identifier characters, used by the hot `readWord1`
+// loop before falling back to the full Unicode check.
+const asciiIdentifierChar = new Uint8Array(128);
+for (let i = 0; i < 128; i++) {
+  asciiIdentifierChar[i] = isIdentifierChar(i) ? 1 : 0;
+}
+
+// Keywords indexed by (length, first char code), so that classifying an
+// identifier does not need to hash the freshly sliced string, as a Map lookup
+// would. Each bucket is a flat [word, type, word, type, ...] array.
+// See the snapshot in test/unit/tokenizer/keywords.skip-bundled.js for the
+// contents of each bucket.
+export const keywordBuckets: (string | TokenType)[][] = [];
+let maxKeywordLength = 0;
+keywordTypes.forEach((type, word) => {
+  const index = (word.length << 7) | word.charCodeAt(0);
+  (keywordBuckets[index] ??= []).push(word, type);
+  if (word.length > maxKeywordLength) maxKeywordLength = word.length;
+});
+
+function lookupKeyword(word: string, firstCode: number): TokenType | undefined {
+  const { length } = word;
+  if (length > maxKeywordLength || firstCode >= 128) return undefined;
+  const bucket = keywordBuckets[(length << 7) | firstCode];
+  if (bucket !== undefined) {
+    for (let i = 0; i < bucket.length; i += 2) {
+      if (bucket[i] === word) return bucket[i + 1] as TokenType;
+    }
+  }
+  return undefined;
+}
+
 export default abstract class Tokenizer extends CommentsParser {
   isLookahead: boolean;
 
@@ -398,33 +430,38 @@ export default abstract class Tokenizer extends CommentsParser {
     const spaceStart = this.state.pos;
     const attachComment = (this.optionFlags & OptionFlags.AttachComment) > 0;
     let comments: N.Comment[] | undefined;
-    loop: while (this.state.pos < this.length) {
-      const ch = this.input.charCodeAt(this.state.pos);
+    // This loop runs for every character between two tokens: keep the hot
+    // state in locals, and only write `pos` back to `this.state` when calling
+    // out to the comment-skipping helpers (and when leaving).
+    const { input, length } = this;
+    let pos = spaceStart;
+    loop: while (pos < length) {
+      const ch = input.charCodeAt(pos);
       switch (ch) {
         case charCodes.space:
         case charCodes.nonBreakingSpace:
         case charCodes.tab:
-          ++this.state.pos;
+          ++pos;
           break;
         case charCodes.carriageReturn:
-          if (
-            this.input.charCodeAt(this.state.pos + 1) === charCodes.lineFeed
-          ) {
-            ++this.state.pos;
+          if (input.charCodeAt(pos + 1) === charCodes.lineFeed) {
+            ++pos;
           }
         // fall through
         case charCodes.lineFeed:
         case charCodes.lineSeparator:
         case charCodes.paragraphSeparator:
-          ++this.state.pos;
+          ++pos;
           ++this.state.curLine;
-          this.state.lineStart = this.state.pos;
+          this.state.lineStart = pos;
           break;
 
         case charCodes.slash:
-          switch (this.input.charCodeAt(this.state.pos + 1)) {
+          switch (input.charCodeAt(pos + 1)) {
             case charCodes.asterisk: {
+              this.state.pos = pos;
               const comment = this.skipBlockComment("*/");
+              pos = this.state.pos;
               if (comment !== undefined) {
                 this.addComment(comment);
                 if (attachComment) {
@@ -435,7 +472,9 @@ export default abstract class Tokenizer extends CommentsParser {
             }
 
             case charCodes.slash: {
+              this.state.pos = pos;
               const comment = this.skipLineComment(2);
+              pos = this.state.pos;
               if (comment !== undefined) {
                 this.addComment(comment);
                 if (attachComment) {
@@ -452,20 +491,21 @@ export default abstract class Tokenizer extends CommentsParser {
 
         default:
           if (isWhitespace(ch)) {
-            ++this.state.pos;
+            ++pos;
           } else if (
             ch === charCodes.dash &&
             !this.inModule &&
             this.optionFlags & OptionFlags.AnnexB
           ) {
-            const pos = this.state.pos;
             if (
-              this.input.charCodeAt(pos + 1) === charCodes.dash &&
-              this.input.charCodeAt(pos + 2) === charCodes.greaterThan &&
+              input.charCodeAt(pos + 1) === charCodes.dash &&
+              input.charCodeAt(pos + 2) === charCodes.greaterThan &&
               (spaceStart === 0 || this.state.lineStart > spaceStart)
             ) {
               // A `-->` line comment
+              this.state.pos = pos;
               const comment = this.skipLineComment(3);
+              pos = this.state.pos;
               if (comment !== undefined) {
                 this.addComment(comment);
                 if (attachComment) {
@@ -480,14 +520,15 @@ export default abstract class Tokenizer extends CommentsParser {
             !this.inModule &&
             this.optionFlags & OptionFlags.AnnexB
           ) {
-            const pos = this.state.pos;
             if (
-              this.input.charCodeAt(pos + 1) === charCodes.exclamationMark &&
-              this.input.charCodeAt(pos + 2) === charCodes.dash &&
-              this.input.charCodeAt(pos + 3) === charCodes.dash
+              input.charCodeAt(pos + 1) === charCodes.exclamationMark &&
+              input.charCodeAt(pos + 2) === charCodes.dash &&
+              input.charCodeAt(pos + 3) === charCodes.dash
             ) {
               // `<!--`, an XML-style comment that should be interpreted as a line comment
+              this.state.pos = pos;
               const comment = this.skipLineComment(4);
+              pos = this.state.pos;
               if (comment !== undefined) {
                 this.addComment(comment);
                 if (attachComment) {
@@ -502,6 +543,7 @@ export default abstract class Tokenizer extends CommentsParser {
           }
       }
     }
+    this.state.pos = pos;
 
     if (comments?.length) {
       const end = this.state.pos;
@@ -1407,26 +1449,36 @@ export default abstract class Tokenizer extends CommentsParser {
     this.state.containsEsc = false;
     let word = "";
     const start = this.state.pos;
-    let chunkStart = this.state.pos;
+    let chunkStart = start;
+    // This loop runs for every identifier character: keep the hot state in
+    // locals, and take the ASCII fast path before the full Unicode check.
+    const { input, length } = this;
+    let pos = start;
     if (firstCode !== undefined) {
-      this.state.pos += firstCode <= 0xffff ? 1 : 2;
+      pos += firstCode <= 0xffff ? 1 : 2;
     }
 
-    while (this.state.pos < this.length) {
-      const ch = this.codePointAtPos(this.state.pos);
-      if (isIdentifierChar(ch)) {
-        this.state.pos += ch <= 0xffff ? 1 : 2;
-      } else if (ch === charCodes.backslash) {
+    while (pos < length) {
+      let ch = input.charCodeAt(pos);
+      if (ch < 128) {
+        if (asciiIdentifierChar[ch] === 1) {
+          ++pos;
+          continue;
+        }
+        if (ch !== charCodes.backslash) break;
+
         this.state.containsEsc = true;
 
-        word += this.input.slice(chunkStart, this.state.pos);
+        word += input.slice(chunkStart, pos);
+        this.state.pos = pos;
         const escStart = this.state.curPosition();
         const identifierCheck =
-          this.state.pos === start ? isIdentifierStart : isIdentifierChar;
+          pos === start ? isIdentifierStart : isIdentifierChar;
 
-        if (this.input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU) {
+        if (input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU) {
           this.raise(Errors.MissingUnicodeEscape, this.state.curPosition());
           chunkStart = this.state.pos - 1;
+          pos = this.state.pos;
           continue;
         }
 
@@ -1439,12 +1491,26 @@ export default abstract class Tokenizer extends CommentsParser {
 
           word += String.fromCodePoint(esc);
         }
-        chunkStart = this.state.pos;
+        chunkStart = pos = this.state.pos;
       } else {
-        break;
+        /**
+         * Handle surrogate pairs for non-BMP characters, see {@link codePointAtPos}
+         */
+        if ((ch & 0xfc00) === 0xd800 && pos + 1 < length) {
+          const trail = input.charCodeAt(pos + 1);
+          if ((trail & 0xfc00) === 0xdc00) {
+            ch = 0x10000 + ((ch & 0x3ff) << 10) + (trail & 0x3ff);
+          }
+        }
+        if (isIdentifierChar(ch)) {
+          pos += ch <= 0xffff ? 1 : 2;
+        } else {
+          break;
+        }
       }
     }
-    return word + this.input.slice(chunkStart, this.state.pos);
+    this.state.pos = pos;
+    return word + input.slice(chunkStart, pos);
   }
 
   // Read an identifier or keyword token. Will check for reserved
@@ -1452,7 +1518,10 @@ export default abstract class Tokenizer extends CommentsParser {
 
   readWord(firstCode?: number): void {
     const word = this.readWord1(firstCode);
-    const type = keywordTypes.get(word);
+    const type = lookupKeyword(
+      word,
+      firstCode === undefined ? word.charCodeAt(0) : firstCode,
+    );
     if (type !== undefined) {
       // We don't use word as state.value here because word is a dynamic string
       // while token label is a shared constant string

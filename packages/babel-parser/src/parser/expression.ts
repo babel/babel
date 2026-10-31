@@ -199,12 +199,14 @@ export default abstract class ExpressionParser extends LValParser {
     disallowIn?: boolean,
     refExpressionErrors?: ExpressionErrors,
   ): N.Expression {
-    if (disallowIn) {
-      return this.disallowInAnd(() =>
-        this.parseExpressionBase(refExpressionErrors),
-      );
+    if (disallowIn ? this.enterDisallowIn() : this.enterAllowIn()) {
+      try {
+        return this.parseExpressionBase(refExpressionErrors);
+      } finally {
+        this.prodParam.exit();
+      }
     }
-    return this.allowInAnd(() => this.parseExpressionBase(refExpressionErrors));
+    return this.parseExpressionBase(refExpressionErrors);
   }
 
   // https://tc39.es/ecma262/#prod-Expression
@@ -231,7 +233,14 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     refExpressionErrors?: ExpressionErrors | null,
   ) {
-    return this.disallowInAnd(() => this.parseMaybeAssign(refExpressionErrors));
+    if (this.enterDisallowIn()) {
+      try {
+        return this.parseMaybeAssign(refExpressionErrors);
+      } finally {
+        this.prodParam.exit();
+      }
+    }
+    return this.parseMaybeAssign(refExpressionErrors);
   }
 
   // Set [+In] parameter for assignment expression
@@ -249,9 +258,14 @@ export default abstract class ExpressionParser extends LValParser {
     refExpressionErrors?: ExpressionErrors | null,
     isParenItem?: boolean,
   ) {
-    return this.allowInAnd(() =>
-      this.parseMaybeAssign(refExpressionErrors, isParenItem),
-    );
+    if (this.enterAllowIn()) {
+      try {
+        return this.parseMaybeAssign(refExpressionErrors, isParenItem);
+      } finally {
+        this.prodParam.exit();
+      }
+    }
+    return this.parseMaybeAssign(refExpressionErrors, isParenItem);
   }
 
   // This method is only used by
@@ -657,9 +671,9 @@ export default abstract class ExpressionParser extends LValParser {
       if (!sawUnary) this.checkExponentialAfterUnary(expr);
       return expr;
     }
-    const update = this.match(tt.incDec);
-    const node = this.startNode<N.UnaryExpression | N.UpdateExpression>();
     if (tokenIsPrefix(this.state.type)) {
+      const update = this.match(tt.incDec);
+      const node = this.startNode<N.UnaryExpression | N.UpdateExpression>();
       node.operator = this.state.value;
       node.prefix = true;
       this.state.canStartArrow = false;
@@ -690,13 +704,16 @@ export default abstract class ExpressionParser extends LValParser {
         }
         return this.finishNode(node, "UnaryExpression");
       }
+
+      const result = this.finishNode(
+        node as Undone<N.UpdateExpression>,
+        "UpdateExpression",
+      );
+      this.checkLVal(result.argument, result);
+      return result;
     }
 
-    const expr = this.parseUpdate(
-      node as Undone<N.UpdateExpression>,
-      update,
-      refExpressionErrors,
-    );
+    const expr = this.parseUpdate(refExpressionErrors);
 
     if (isAwait) {
       const { type } = this.state;
@@ -715,16 +732,8 @@ export default abstract class ExpressionParser extends LValParser {
   // https://tc39.es/ecma262/#prod-UpdateExpression
   parseUpdate(
     this: Parser,
-    node: Undone<N.UpdateExpression>,
-    update: boolean,
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression {
-    if (update) {
-      const result = this.finishNode(node, "UpdateExpression");
-      this.checkLVal(result.argument, result);
-      return result;
-    }
-
     const startLoc = this.state.startLoc;
     let expr = this.parseExprSubscripts(refExpressionErrors);
     if (this.checkExpressionErrors(refExpressionErrors, false)) return expr;
@@ -1842,12 +1851,13 @@ export default abstract class ExpressionParser extends LValParser {
     const innerEndLoc = this.state.lastTokEndLoc!;
     this.expect(tt.parenR);
 
-    let arrowNode: Undone<N.ArrowFunctionExpression> | null | undefined =
-      this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
+    let arrowNode: Undone<N.ArrowFunctionExpression> | null | undefined;
     if (
       canStartArrow &&
       this.shouldParseArrow(exprList) &&
-      (arrowNode = this.parseArrow(arrowNode))
+      (arrowNode = this.parseArrow(
+        this.startNodeAt<N.ArrowFunctionExpression>(startLoc),
+      ))
     ) {
       this.checkDestructuringPrivate(refExpressionErrors);
       this.expressionScope.validateAsPattern();
@@ -3080,7 +3090,11 @@ export default abstract class ExpressionParser extends LValParser {
     }
   }
 
-  allowInAnd<T>(callback: () => T): T {
+  // Enter a production parameter frame with [+In] set, unless the current
+  // frame already has it. Returns whether a new frame was entered, in which
+  // case the caller must call `this.prodParam.exit()`.
+  // Lets hot-path callers manage the frame without allocating a closure.
+  enterAllowIn(): boolean {
     const flags = this.prodParam.currentFlags();
     const prodParamToSet =
       (ParamKind.PARAM_IN | ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY) &
@@ -3091,16 +3105,13 @@ export default abstract class ExpressionParser extends LValParser {
           ParamKind.PARAM_IN |
           ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY,
       );
-      try {
-        return callback();
-      } finally {
-        this.prodParam.exit();
-      }
+      return true;
     }
-    return callback();
+    return false;
   }
 
-  disallowInAnd<T>(callback: () => T): T {
+  // Same as `enterAllowIn`, but with [~In].
+  enterDisallowIn(): boolean {
     const flags = this.prodParam.currentFlags();
     const prodParamToClear = ParamKind.PARAM_IN & flags;
     const prodParamToSet =
@@ -3110,13 +3121,9 @@ export default abstract class ExpressionParser extends LValParser {
         (flags & ~ParamKind.PARAM_IN) |
           ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY,
       );
-      try {
-        return callback();
-      } finally {
-        this.prodParam.exit();
-      }
+      return true;
     }
-    return callback();
+    return false;
   }
 
   // Register the use of a topic reference within the current
