@@ -2614,7 +2614,7 @@ export default abstract class StatementParser extends ExpressionParser {
         if (
           nextChar === charCodes.leftCurlyBrace ||
           (this.chStartsBindingIdentifier(nextChar, next) &&
-            !this.input.startsWith("from", next))
+            !this.isUnparsedContextual(next, "from"))
         ) {
           if (type !== tt._struct) {
             this.expectOnePlugin(["flow", "typescript"]);
