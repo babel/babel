@@ -51,7 +51,7 @@ export function hoist(
         if (expr === null) {
           path.remove();
         } else {
-          for (const name of Object.keys(vars)) {
+          for (const name of Object.keys(path.getBindingIdentifiers())) {
             // Remove the binding, to avoid "duplicate declaration" errors when it will
             // be injected again.
             path.scope.removeBinding(name);
