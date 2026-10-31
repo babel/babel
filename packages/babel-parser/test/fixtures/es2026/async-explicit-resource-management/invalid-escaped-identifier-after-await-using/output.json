@@ -1,0 +1,67 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":49}},
+  "errors": [
+    "SyntaxError: Missing semicolon. (2:19)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":49}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":49}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":49,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":3,"column":1,"index":49}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":23,"end":40,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":19,"index":40}},
+              "expression": {
+                "type": "AwaitExpression",
+                "start":23,"end":40,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":19,"index":40}},
+                "argument": {
+                  "type": "Identifier",
+                  "start":29,"end":40,"loc":{"start":{"line":2,"column":8,"index":29},"end":{"line":2,"column":19,"index":40},"identifierName":"usinga"},
+                  "name": "usinga"
+                }
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start":41,"end":47,"loc":{"start":{"line":2,"column":20,"index":41},"end":{"line":2,"column":26,"index":47}},
+              "expression": {
+                "type": "AssignmentExpression",
+                "start":41,"end":46,"loc":{"start":{"line":2,"column":20,"index":41},"end":{"line":2,"column":25,"index":46}},
+                "operator": "=",
+                "left": {
+                  "type": "Identifier",
+                  "start":41,"end":42,"loc":{"start":{"line":2,"column":20,"index":41},"end":{"line":2,"column":21,"index":42},"identifierName":"x"},
+                  "name": "x"
+                },
+                "right": {
+                  "type": "Identifier",
+                  "start":45,"end":46,"loc":{"start":{"line":2,"column":24,"index":45},"end":{"line":2,"column":25,"index":46},"identifierName":"y"},
+                  "name": "y"
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}
