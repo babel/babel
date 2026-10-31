@@ -99,15 +99,11 @@ for (let i = 0; i < 128; i++) {
 // contents of each bucket.
 export const keywordBuckets: (string | TokenType)[][] = [];
 let maxKeywordLength = 0;
-// Not `for...of` over the Map: the parser is compiled with the
-// `iterableIsArray` assumption when building babel-standalone.
-const keywordEntries = Array.from(keywordTypes);
-for (let i = 0; i < keywordEntries.length; i++) {
-  const [word, type] = keywordEntries[i];
+keywordTypes.forEach((type, word) => {
   const index = (word.length << 7) | word.charCodeAt(0);
   (keywordBuckets[index] ??= []).push(word, type);
   if (word.length > maxKeywordLength) maxKeywordLength = word.length;
-}
+});
 
 function lookupKeyword(word: string, firstCode: number): TokenType | undefined {
   const { length } = word;

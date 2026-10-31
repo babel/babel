@@ -661,8 +661,8 @@ export default abstract class ExpressionParser extends LValParser {
       if (!sawUnary) this.checkExponentialAfterUnary(expr);
       return expr;
     }
-    const update = this.match(tt.incDec);
     if (tokenIsPrefix(this.state.type)) {
+      const update = this.match(tt.incDec);
       const node = this.startNode<N.UnaryExpression | N.UpdateExpression>();
       node.operator = this.state.value;
       node.prefix = true;
@@ -695,14 +695,15 @@ export default abstract class ExpressionParser extends LValParser {
         return this.finishNode(node, "UnaryExpression");
       }
 
-      return this.parseUpdate(
+      const result = this.finishNode(
         node as Undone<N.UpdateExpression>,
-        update,
-        refExpressionErrors,
+        "UpdateExpression",
       );
+      this.checkLVal(result.argument, result);
+      return result;
     }
 
-    const expr = this.parseUpdate(undefined, false, refExpressionErrors);
+    const expr = this.parseUpdate(refExpressionErrors);
 
     if (isAwait) {
       const { type } = this.state;
@@ -721,17 +722,8 @@ export default abstract class ExpressionParser extends LValParser {
   // https://tc39.es/ecma262/#prod-UpdateExpression
   parseUpdate(
     this: Parser,
-    // Only defined when `update` is true
-    node: Undone<N.UpdateExpression> | undefined,
-    update: boolean,
     refExpressionErrors?: ExpressionErrors | null,
   ): N.Expression {
-    if (update) {
-      const result = this.finishNode(node!, "UpdateExpression");
-      this.checkLVal(result.argument, result);
-      return result;
-    }
-
     const startLoc = this.state.startLoc;
     let expr = this.parseExprSubscripts(refExpressionErrors);
     if (this.checkExpressionErrors(refExpressionErrors, false)) return expr;
@@ -3085,7 +3077,7 @@ export default abstract class ExpressionParser extends LValParser {
   // Enter a production parameter frame with [+In] set, unless the current
   // frame already has it. Returns whether a new frame was entered, in which
   // case the caller must call `this.prodParam.exit()`.
-  // Used instead of `allowInAnd` on hot paths, to avoid allocating a closure.
+  // Lets hot-path callers manage the frame without allocating a closure.
   enterAllowIn(): boolean {
     const flags = this.prodParam.currentFlags();
     const prodParamToSet =
@@ -3116,45 +3108,6 @@ export default abstract class ExpressionParser extends LValParser {
       return true;
     }
     return false;
-  }
-
-  allowInAnd<T>(callback: () => T): T {
-    const flags = this.prodParam.currentFlags();
-    const prodParamToSet =
-      (ParamKind.PARAM_IN | ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY) &
-      ~flags;
-    if (prodParamToSet) {
-      this.prodParam.enter(
-        flags |
-          ParamKind.PARAM_IN |
-          ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY,
-      );
-      try {
-        return callback();
-      } finally {
-        this.prodParam.exit();
-      }
-    }
-    return callback();
-  }
-
-  disallowInAnd<T>(callback: () => T): T {
-    const flags = this.prodParam.currentFlags();
-    const prodParamToClear = ParamKind.PARAM_IN & flags;
-    const prodParamToSet =
-      ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY & ~flags;
-    if (prodParamToClear || prodParamToSet) {
-      this.prodParam.enter(
-        (flags & ~ParamKind.PARAM_IN) |
-          ParamKind.PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY,
-      );
-      try {
-        return callback();
-      } finally {
-        this.prodParam.exit();
-      }
-    }
-    return callback();
   }
 
   // Register the use of a topic reference within the current
