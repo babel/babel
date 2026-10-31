@@ -56,7 +56,10 @@ interface EffectStep {
 export type Step = TempStep | BindStep | EffectStep;
 
 /** Turn the placeholder `target` (a fresh identifier) into `source`. */
-function replaceInPlace(target: t.Identifier, source: t.Node): asserts target is never {
+function replaceInPlace(
+  target: t.Identifier,
+  source: t.Node,
+): asserts target is never {
   // Overwrite the key of the identifier rather than deleting it: deleting
   // properties turns the node into a slow dictionary-mode object in V8.
   // @ts-expect-error not an identifier anymore
@@ -143,11 +146,11 @@ class Ref {
   retained = false;
   discarded = false;
   /**
-   * Set when the value is read in the initializer of an assignment to this
-   * member expression, whose reference (`lref`) is evaluated before the
-   * initializer.
+   * The member expression this value is assigned to. Its reference (`obj`
+   * and the key of `obj[key]`) is evaluated before the value is read: see
+   * hoistDependencies.
    */
-  readAfter: t.MemberExpression | null = null;
+  memberTarget: t.MemberExpression | null = null;
 
   constructor(
     lowering: Lowering,
@@ -216,20 +219,28 @@ class Ref {
   }
 
   /**
-   * Reading this value (e.g. `_ref.x`) after evaluating `readAfter` is
-   * correct, but the values it is computed from must be evaluated before it:
-   *   ({ x: obj[f()] } = g())  ->  var _g = g(); obj[f()] = _g.x;
+   * Hoist the dependencies of a value assigned to a member target.
+   *
+   * The value is read after the reference of `memberTarget` is evaluated, as
+   * the spec does, but the refs inlined into its read must be evaluated
+   * before it: they are moved to temporaries, unless the reordering is not
+   * observable.
+   *   [obj[f()]] = g()  ->  _g = g(), _g2 = slicedToArray(_g, 1), obj[f()] = _g2[0];
+   * rather than
+   *   obj[f()] = slicedToArray(_g, 1)[0];
+   * which would iterate `_g` after calling `f()`.
    */
   hoistDependencies(refs: Ref[]) {
-    const { readAfter } = this;
-    if (!readAfter || !this.#isInline) return;
+    const { memberTarget } = this;
+    if (!memberTarget || !this.#isInline) return;
     const nodes = new Set<t.Node>();
     t.traverseFast(this.expr, node => {
       nodes.add(node);
     });
-    const targetMayRunUserCode = targetReferenceMayRunUserCode(readAfter);
+    const targetMayRunUserCode = targetReferenceMayRunUserCode(memberTarget);
     const { scope } = this.#lowering;
     for (const dep of refs) {
+      if (dep === this) break;
       if (
         dep.#isInline &&
         nodes.has(dep.#placeholders[0].node) &&
@@ -501,7 +512,7 @@ export class Lowering {
 
   /** `target = <expression reading ref>` */
   #bindRef(target: t.LVal, ref: Ref, init?: t.Expression) {
-    if (this.#isMemberTarget(target)) ref.readAfter = target;
+    if (this.#isMemberTarget(target)) ref.memberTarget = target;
     this.#bind(target, init ?? ref.use());
   }
 
