@@ -74,6 +74,7 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
         // Use "arguments" here for better compatibility and smaller bundle size
         // Intentionally casting "arguments" to an array for the type of func.apply
         this.n.apply(this.s, arguments as any as [] | [undefined]),
+        this.s,
       );
     },
     return: function (value) {
@@ -95,31 +96,72 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
         ),
       );
     },
-    throw: function (maybeError?: any) {
-      var thr = this.s["throw"];
+    throw: function () {
+      var s = this.s;
+      var thr = s["throw"];
       if (thr === undefined) {
-        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
-        return Promise.reject(maybeError);
+        // The sync iterator has no "throw": close it, then reject with a
+        // TypeError for the protocol violation. If "return" throws, reject
+        // with that error instead.
+        return new Promise<IteratorResult<T, TReturn>>(function (_, reject) {
+          var ret = s["return"];
+          if (ret != null) ret.call(s);
+          reject(
+            new TypeError("The iterator does not provide a 'throw' method"),
+          );
+        });
       }
       return AsyncFromSyncIteratorContinuation<T, TReturn>(
         // Use "arguments" here for better compatibility and smaller bundle size
         // Intentionally casting "arguments" to an array for the type of func.apply
-        thr.apply(this.s, arguments as any as [any]),
+        thr.apply(s, arguments as any as [any]),
+        s,
       );
     },
   } satisfies AsyncFromSyncIterator<T, TReturn, TNext>;
 
-  function AsyncFromSyncIteratorContinuation<T, TReturn>(r: any) {
+  // "s" is the sync iterator to close if the value rejects. It is omitted
+  // for "return", since the iterator is already being closed.
+  function AsyncFromSyncIteratorContinuation<T, TReturn>(
+    r: any,
+    s?: Iterator<T>,
+  ) {
     // This step is _before_ calling AsyncFromSyncIteratorContinuation in the spec.
     if (Object(r) !== r) {
       return Promise.reject(new TypeError(r + " is not an object."));
     }
 
-    var done = r.done;
-    return Promise.resolve(r.value).then<IteratorResult<T, TReturn>>(
+    var done = r.done,
+      value = r.value,
+      p: Promise<any>;
+    try {
+      p = Promise.resolve(value);
+    } catch (e) {
+      // If PromiseResolve throws, close the iterator synchronously.
+      if (s && !done) {
+        try {
+          var ret = s["return"];
+          if (ret != null) ret.call(s);
+        } catch (_) {}
+      }
+      // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+      return Promise.reject(e);
+    }
+    return p.then<IteratorResult<T, TReturn>>(
       function (value) {
         return { value: value, done: done };
       },
+      s && !done
+        ? function (e) {
+            // Close the sync iterator, ignoring any error from "return",
+            // then reject with the original error.
+            try {
+              var ret = s["return"];
+              if (ret != null) ret.call(s);
+            } catch (_) {}
+            throw e;
+          }
+        : undefined,
     );
   }
 
