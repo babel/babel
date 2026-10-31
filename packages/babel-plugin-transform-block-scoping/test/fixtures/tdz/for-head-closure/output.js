@@ -1,9 +1,8 @@
 function t() {
-  var f = babelHelpers.temporalUndefined;
   var _loop = function (i) {
       () => i;
       if (i > 1) return {
-        v: babelHelpers.temporalRef(f, "f")()
+        v: f()
       };
     },
     _ret;
