@@ -56,7 +56,7 @@ interface EffectStep {
 export type Step = TempStep | BindStep | EffectStep;
 
 /** Turn the placeholder `target` (a fresh identifier) into `source`. */
-function replaceInPlace(target: t.Identifier, source: t.Node) {
+function replaceInPlace(target: t.Identifier, source: t.Node): asserts target is never {
   // Overwrite the key of the identifier rather than deleting it: deleting
   // properties turns the node into a slow dictionary-mode object in V8.
   // @ts-expect-error not an identifier anymore
