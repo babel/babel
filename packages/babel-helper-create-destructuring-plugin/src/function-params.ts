@@ -90,15 +90,15 @@ const conflictVisitor: Visitor<ConflictState> = {
  * around the moved patterns, can run user code: its default values, and the
  * iteration of its array patterns.
  */
-function isNativePartObservable(param: t.Node, scope: Scope): boolean {
+function isUntranspiledPartObservable(param: t.Node, scope: Scope): boolean {
   switch (param.type) {
     case "AssignmentPattern":
       return (
         isDefaultEvaluationObservable(param.right, scope) ||
-        isNativePartObservable(param.left, scope)
+        isUntranspiledPartObservable(param.left, scope)
       );
     case "RestElement":
-      return isNativePartObservable(param.argument, scope);
+      return isUntranspiledPartObservable(param.argument, scope);
     case "ArrayPattern":
       return true;
     default:
@@ -158,7 +158,8 @@ function collectMovedPatterns(
           !hasMoved,
         );
         reordered ||=
-          nested || (hasMoved && isNativePartObservable(element.node, scope));
+          nested ||
+          (hasMoved && isUntranspiledPartObservable(element.node, scope));
         hasMoved = true;
       } else if (
         hasMoved &&
@@ -278,7 +279,7 @@ export function transformFunctionParams(
   reordered ||= params.some((param, i) => {
     if (i <= firstLowered) return false;
     return isLowered[i]
-      ? isNativePartObservable(param.node, functionScope)
+      ? isUntranspiledPartObservable(param.node, functionScope)
       : isPatternEvaluationObservable(param.node, functionScope);
   });
 

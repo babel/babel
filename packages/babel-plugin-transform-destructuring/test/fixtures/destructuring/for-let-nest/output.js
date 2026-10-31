@@ -1,1 +1,1 @@
-for (var _ref = [][0], _ref2 = _ref === void 0 ? [1] : _ref, x = babelHelpers.slicedToArray(_ref2, 1)[0];;) {}
+for (var _ = [][0], _ref = _ === void 0 ? [1] : _, x = babelHelpers.slicedToArray(_ref, 1)[0];;) {}
