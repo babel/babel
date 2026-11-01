@@ -68,7 +68,7 @@ function checkConflict(
 
 const conflictVisitor: Visitor<ConflictState> = {
   ...skipTypeAnnotationsVisitor,
-  ObjectPattern: {
+  "ObjectPattern|ArrayPattern": {
     enter(path, state) {
       if (state.movedNodes.has(path.node)) state.movedDepth++;
     },
@@ -120,7 +120,7 @@ function collectMovedPatterns(
   param: NodePath,
   features: number,
   scope: Scope,
-  moved: NodePath<t.ObjectPattern>[],
+  moved: NodePath<Pattern>[],
   keepPattern = false,
 ): boolean {
   if (param.isAssignmentPattern()) {
@@ -221,16 +221,32 @@ export function transformFunctionParams(
   const functionScope = path.scope;
   const keepArgumentsUnmapped = readsMappedArguments(path);
 
-  const movedPatterns: NodePath<t.ObjectPattern>[] = [];
+  const movedPatterns: NodePath<Pattern>[] = [];
+  // The patterns following the moved ones, destructured after them in the body
+  const movedLater = new Set<number>();
   // Names bound by the patterns moved into the function body, by parameter.
   const ownerOf = new Map<string, number>();
   // Whether an element following a moved pattern would be destructured before
   // it, when the pattern is replaced in place
   let reordered = false;
   params.forEach((param, i) => {
-    if (!isLowered[i]) return;
     const start = movedPatterns.length;
-    if (collectMovedPatterns(param, features, functionScope, movedPatterns)) {
+    if (!isLowered[i]) {
+      if (i < firstLowered) return;
+      // Its default value stays in the list when it can't run user code
+      const left = param.isAssignmentPattern() ? param.get("left") : param;
+      if (
+        !(left.isObjectPattern() || left.isArrayPattern()) ||
+        (param.isAssignmentPattern() &&
+          isDefaultEvaluationObservable(param.node.right, functionScope))
+      ) {
+        return;
+      }
+      movedLater.add(i);
+      movedPatterns.push(left);
+    } else if (
+      collectMovedPatterns(param, features, functionScope, movedPatterns)
+    ) {
       reordered = true;
     }
     for (const pattern of movedPatterns.slice(start)) {
@@ -277,7 +293,7 @@ export function transformFunctionParams(
   // them in their array patterns and the following parameters must not be
   // evaluated before them.
   reordered ||= params.some((param, i) => {
-    if (i <= firstLowered) return false;
+    if (i <= firstLowered || movedLater.has(i)) return false;
     return isLowered[i]
       ? isUntranspiledPartObservable(param.node, functionScope)
       : isPatternEvaluationObservable(param.node, functionScope);
@@ -330,11 +346,13 @@ export function transformFunctionParams(
   const declarations: t.VariableDeclaration[] = [];
   const newParams: NodePath<t.Identifier>[] = [];
   for (const pattern of movedPatterns) {
+    const forgetScopeInfo = collectScopeInfo(pattern);
     const [declaration, newParam] = moveParamToTemporary(
       pattern,
       functionScope,
       kind,
     );
+    forgetScopeInfo();
     declarations.push(declaration);
     newParams.push(newParam);
   }
@@ -347,8 +365,7 @@ export function transformFunctionParams(
     functionScope.registerBinding("param", param);
   }
   // The references of the moved patterns are registered again through
-  // their new paths; they are forgotten by node when the declarations are
-  // lowered.
+  // their new paths.
   registerReplacement(declarationPaths, initBlock.scope);
 
   const unmapped = keepArgumentsUnmapped && unmapArguments(path);
