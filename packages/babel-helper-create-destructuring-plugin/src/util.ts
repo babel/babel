@@ -719,8 +719,10 @@ export function buildObjectExcludingKeys(
  * destructured after the pattern; the first one keeps its untranspiled parts
  * (hoistFirstTarget). The following elements are hoisted too, as they must
  * not be bound before the hoisted parts run, which can run user code or throw;
- * their array patterns stay, iterated before the iterator is closed, with
- * all their elements hoisted (`split` is set).
+ * their array patterns only binding identifiers stay, iterated before the
+ * iterator is closed, with all their elements hoisted (`split` is set).
+ * Other array patterns are hoisted whole: an element default or pattern
+ * which throws must stop their iteration.
  */
 export function splitArrayPattern(
   pattern: t.ArrayPattern,
@@ -743,11 +745,29 @@ export function splitArrayPattern(
       element.argument = replaceWithTemporary(element.argument, scope, hoist);
     } else if (first) {
       elements[i] = hoistFirstTarget(element, features, scope, hoist);
-    } else if (element.type === "ArrayPattern") {
+    } else if (
+      element.type === "ArrayPattern" &&
+      bindsOnlyIdentifiers(element)
+    ) {
       splitArrayPattern(element, features, scope, hoist, true);
     } else {
       elements[i] = replaceWithTemporary(element, scope, hoist);
     }
+  }
+}
+
+function bindsOnlyIdentifiers(node: t.Node | null): boolean {
+  if (!node) return true;
+  switch (node.type) {
+    case "Identifier":
+    case "VoidPattern":
+      return true;
+    case "RestElement":
+      return bindsOnlyIdentifiers(node.argument);
+    case "ArrayPattern":
+      return node.elements.every(bindsOnlyIdentifiers);
+    default:
+      return false;
   }
 }
 
