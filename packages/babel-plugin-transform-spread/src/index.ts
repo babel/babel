@@ -214,14 +214,24 @@ export default declare((api, options: Options) => {
         }
 
         // callee.apply(...) read .apply from a nullish callee before the
-        // arguments are evaluated. Function.prototype.apply.call throws only
-        // when invoked, after the callee and arguments are evaluated.
-        // We use the original callee here, to preserve any types/parentheses
-        node.arguments.unshift(
-          node.callee as t.Expression,
-          t.cloneNode(contextLiteral),
-        );
-        node.callee = template.expression.ast`Function.prototype.apply.call`;
+        // arguments are evaluated while Function.prototype.apply.call throws
+        // only when invoked, after the callee and arguments are evaluated.
+        // We use the original callee here, to preserve any types/parentheses.
+        if (scope.hasBinding("Function", { noGlobals: true })) {
+          // Function is shadowed (e.g. by a named function expression),
+          // so we can't rely on Function.prototype.apply.call
+          node.callee = t.memberExpression(
+            node.callee as t.Expression,
+            t.identifier("apply"),
+          );
+          node.arguments.unshift(t.cloneNode(contextLiteral));
+        } else {
+          node.arguments.unshift(
+            node.callee as t.Expression,
+            t.cloneNode(contextLiteral),
+          );
+          node.callee = template.expression.ast`Function.prototype.apply.call`;
+        }
       },
 
       NewExpression(path): void {
