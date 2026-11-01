@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import wrapFunction from "@babel/helper-wrap-function";
-import { types as t, type Visitor } from "@babel/core";
+import { traverse, types as t } from "@babel/core";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
@@ -16,8 +16,10 @@ export default declare(api => {
     t.isAssignmentExpression(node) &&
     t.isIdentifier(node.left, { name: sentId });
 
-  const yieldVisitor: Visitor<{ sentId: string }> = {
-    Function(path) {
+  const yieldVisitor = traverse.visitors.environmentVisitor<{
+    sentId: string;
+  }>({
+    ArrowFunctionExpression(path) {
       path.skip();
     },
 
@@ -34,7 +36,7 @@ export default declare(api => {
         path.replaceWith(t.identifier(this.sentId));
       }
     },
-  };
+  });
 
   return {
     name: "proposal-function-sent",

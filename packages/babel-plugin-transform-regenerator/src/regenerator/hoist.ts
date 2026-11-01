@@ -128,8 +128,9 @@ export function hoist(
       path.skip();
     },
 
-    FunctionExpression: function (path) {
-      // Don't descend into nested function expressions.
+    "FunctionExpression|Method|StaticBlock": function (path) {
+      // Don't descend into nested functions or static blocks, which have their
+      // own var scope.
       path.skip();
     },
 
