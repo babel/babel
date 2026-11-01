@@ -680,7 +680,13 @@ export class Lowering {
     let hasExcludedKey = false;
     for (let i = 0; i < properties.length; i++) {
       const plan = plans[i];
-      if (plan === PropertyPlan.Rest) return hasExcludedKey;
+      // The object rest helper runs after a member target is evaluated
+      if (plan === PropertyPlan.Rest) {
+        return (
+          hasExcludedKey ||
+          this.#isMemberTarget((properties[i] as t.RestElement).argument)
+        );
+      }
       // The untranspiled pattern performs the check
       if (plan === PropertyPlan.Untranspiled) return false;
       const prop = properties[i] as t.ObjectProperty;
