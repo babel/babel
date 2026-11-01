@@ -1,6 +1,6 @@
 var obj = {
   foo: function foo() {
-    this.bar.apply(this, arguments);
-    this.blah.apply(this, arguments);
+    Function.prototype.apply.call(this.bar, this, arguments);
+    Function.prototype.apply.call(this.blah, this, arguments);
   }
 };
