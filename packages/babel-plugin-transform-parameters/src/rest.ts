@@ -90,9 +90,12 @@ const memberExpressionOptimisationVisitor: Visitor<State> = {
     path.skip();
   },
 
-  Function(path, state) {
-    // Detect whether any reference to rest is contained in nested functions to
-    // determine if deopt is necessary.
+  "Function|StaticBlock|ClassProperty|ClassPrivateProperty|ClassAccessorProperty"(
+    path,
+    state,
+  ) {
+    // Detect whether any reference to rest is contained in nested functions,
+    // static blocks or class fields to determine if deopt is necessary.
     const oldNoOptimise = state.noOptimise;
     state.noOptimise = true;
     path.traverse(memberExpressionOptimisationVisitor, state);
