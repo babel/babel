@@ -196,7 +196,7 @@ const argumentsVisitor = traverse.visitors.environmentVisitor<ArgumentsUsage>({
     const { parentPath } = path;
     if (
       parentPath.isMemberExpression({ object: path.node }) &&
-      !isWriteTarget(parentPath)
+      !exposesArguments(parentPath)
     ) {
       const { property, computed } = parentPath.node;
       const key = computed
@@ -215,9 +215,17 @@ const argumentsVisitor = traverse.visitors.environmentVisitor<ArgumentsUsage>({
   },
 });
 
-/** Whether a member expression is assigned, updated or deleted. */
-function isWriteTarget(path: NodePath<t.MemberExpression>): boolean {
+/**
+ * Whether `arguments` escapes through a member expression: an element is
+ * assigned, updated or deleted, or called with `arguments` as `this`.
+ */
+function exposesArguments(path: NodePath<t.MemberExpression>): boolean {
   const { parentPath, node } = path;
+  if (parentPath.isCallExpression() || parentPath.isOptionalCallExpression()) {
+    return parentPath.node.callee === node;
+  }
+  // A member expression can only be the tag
+  if (parentPath.isTaggedTemplateExpression()) return true;
   if (
     parentPath.isAssignmentExpression() ||
     parentPath.isAssignmentPattern() ||
@@ -226,7 +234,9 @@ function isWriteTarget(path: NodePath<t.MemberExpression>): boolean {
     return parentPath.node.left === node;
   }
   if (parentPath.isObjectProperty()) {
-    return parentPath.parentPath.isObjectPattern();
+    return (
+      parentPath.node.value === node && parentPath.parentPath.isObjectPattern()
+    );
   }
   return (
     parentPath.isUpdateExpression() ||
