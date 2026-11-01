@@ -45,11 +45,11 @@ const _excluded = ["X"];
     }
   } = _ref0;
 };
-(function (_ref1) {
+(_ref1, _ref10 = {
+  b: R => R
+}) => {
   let R = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref1), _ref1)), []);
   let {
     a = R => R
-  } = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
-    b: R => R
-  };
-});
+  } = _ref10;
+};
