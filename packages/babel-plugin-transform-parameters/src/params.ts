@@ -178,7 +178,7 @@ interface ArgumentsUsage {
 }
 
 const argumentsVisitor = traverse.visitors.environmentVisitor<ArgumentsUsage>({
-  Identifier(path, state) {
+  ReferencedIdentifier(path, state) {
     const { name } = path.node;
     if (name === "eval") {
       if (path.key === "callee" && path.parentPath.isCallExpression()) {
@@ -189,7 +189,6 @@ const argumentsVisitor = traverse.visitors.environmentVisitor<ArgumentsUsage>({
     }
     if (
       name !== "arguments" ||
-      !path.isReferencedIdentifier() ||
       shadowsArguments(path.scope.getBinding("arguments"), state.fn)
     ) {
       return;
