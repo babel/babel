@@ -209,16 +209,19 @@ export default declare((api, options: Options) => {
           }
         }
 
-        // We use the original callee here, to preserve any types/parentheses
-        node.callee = t.memberExpression(
-          node.callee as t.Expression,
-          t.identifier("apply"),
-        );
         if (t.isSuper(contextLiteral)) {
           contextLiteral = t.thisExpression();
         }
 
-        node.arguments.unshift(t.cloneNode(contextLiteral));
+        // callee.apply(...) read .apply from a nullish callee before the
+        // arguments are evaluated. Function.prototype.apply.call throws only
+        // when invoked, after the callee and arguments are evaluated.
+        // We use the original callee here, to preserve any types/parentheses
+        node.arguments.unshift(
+          node.callee as t.Expression,
+          t.cloneNode(contextLiteral),
+        );
+        node.callee = template.expression.ast`Function.prototype.apply.call`;
       },
 
       NewExpression(path): void {

@@ -13,6 +13,6 @@ function broken(x) {
     for (var _len = arguments.length, foo = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
       foo[_key - 1] = arguments[_key];
     }
-    return hello.apply(void 0, foo);
+    return Function.prototype.apply.call(hello, void 0, foo);
   }
 }

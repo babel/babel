@@ -71,7 +71,7 @@ function runQueue(queue) {
     args[_key7 - 1] = arguments[_key7];
   }
   for (var i = 0; i < queue.length; i++) {
-    queue[i].apply(queue, args);
+    Function.prototype.apply.call(queue[i], queue, args);
   }
 }
 
@@ -82,7 +82,7 @@ function runQueue(queue) {
       args[_key8 - 1] = arguments[_key8];
     }
     for (var i = 0; i < queue.length; i++) {
-      queue[i].apply(queue, args);
+      Function.prototype.apply.call(queue[i], queue, args);
     }
   }
 }

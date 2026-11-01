@@ -1,5 +1,5 @@
 class Foo {
   bar() {
-    super.bar.apply(this, babelHelpers.toConsumableArray(args));
+    Function.prototype.apply.call(super.bar, this, babelHelpers.toConsumableArray(args));
   }
 }

@@ -1,2 +1,2 @@
 var _a;
-((_a = a).b).apply(_a, babelHelpers.toConsumableArray(args));
+Function.prototype.apply.call(((_a = a).b), _a, babelHelpers.toConsumableArray(args));
