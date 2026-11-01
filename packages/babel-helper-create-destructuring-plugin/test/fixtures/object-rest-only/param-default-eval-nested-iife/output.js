@@ -8,7 +8,7 @@ function f() {
   let q = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : eval("1");
   return function () {
     var _arguments = _arguments2;
-    let [_ref = () => m] = _arguments2.length > 1 && _arguments2[1] !== undefined ? _arguments2[1] : [],
+    let [_ref = (0, () => m)] = _arguments2.length > 1 && _arguments2[1] !== undefined ? _arguments2[1] : [],
       m = babelHelpers.objectWithoutProperties(Object.assign(Object.create(null), (babelHelpers.objectDestructuringEmpty(_ref), _ref)), []);
     return function () {
       return [q, _arguments[0], _arguments.length];
