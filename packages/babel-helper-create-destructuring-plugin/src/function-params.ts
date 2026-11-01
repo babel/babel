@@ -1,4 +1,4 @@
-import type { types as t } from "@babel/core";
+import { types as t } from "@babel/core";
 import type { NodePath, PluginPass, Scope, Visitor } from "@babel/core";
 import {
   convertFunctionParams,
@@ -177,6 +177,18 @@ function collectMovedPatterns(
 type Pattern = t.ObjectPattern | t.ArrayPattern;
 
 /**
+ * Whether a parameter contains a direct `eval` call, also in its closures:
+ * moved into the body, it would see the declarations of the body.
+ */
+function containsDirectEval(node: t.Node): boolean {
+  return t.traverseFast(node, node =>
+    t.isCallExpression(node) && t.isIdentifier(node.callee, { name: "eval" })
+      ? t.traverseFast.stop
+      : undefined,
+  );
+}
+
+/**
  * Replace the parameter patterns containing object rest or private keys with
  * a temporary identifier, destructured at the beginning of the function body.
  *
@@ -238,7 +250,8 @@ export function transformFunctionParams(
       if (
         !(left.isObjectPattern() || left.isArrayPattern()) ||
         (param.isAssignmentPattern() &&
-          isDefaultEvaluationObservable(param.node.right, functionScope))
+          isDefaultEvaluationObservable(param.node.right, functionScope)) ||
+        containsDirectEval(left.node)
       ) {
         return;
       }
