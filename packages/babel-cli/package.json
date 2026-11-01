@@ -28,7 +28,7 @@
     "chokidar": "^5.0.0",
     "commander": "catalog:",
     "convert-source-map": "catalog:",
-    "glob": "^13.0.0",
+    "glob": "^14.0.0",
     "slash": "^5.1.0"
   },
   "peerDependencies": {
