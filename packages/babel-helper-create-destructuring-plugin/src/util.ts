@@ -718,16 +718,19 @@ export function buildObjectExcludingKeys(
  * first one that needs to be lowered with temporaries, `hoist`ed to be
  * destructured after the pattern; the first one keeps its untranspiled parts
  * (hoistFirstTarget). The following elements are hoisted too, as they must
- * not be bound before the hoisted parts run, which can run user code or throw.
+ * not be bound before the hoisted parts run, which can run user code or throw;
+ * their array patterns stay, iterated before the iterator is closed, with
+ * all their elements hoisted (`split` is set).
  */
 export function splitArrayPattern(
   pattern: t.ArrayPattern,
   features: number,
   scope: Scope,
   hoist: Hoist,
+  // Whether all the elements are hoisted
+  split = false,
 ) {
   const { elements } = pattern;
-  let split = false;
   for (let i = 0; i < elements.length; i++) {
     const element = elements[i];
     // Elisions and `void` don't bind anything: keep them in the pattern,
@@ -738,10 +741,12 @@ export function splitArrayPattern(
     split = true;
     if (element.type === "RestElement") {
       element.argument = replaceWithTemporary(element.argument, scope, hoist);
+    } else if (first) {
+      elements[i] = hoistFirstTarget(element, features, scope, hoist);
+    } else if (element.type === "ArrayPattern") {
+      splitArrayPattern(element, features, scope, hoist, true);
     } else {
-      elements[i] = first
-        ? hoistFirstTarget(element, features, scope, hoist)
-        : replaceWithTemporary(element, scope, hoist);
+      elements[i] = replaceWithTemporary(element, scope, hoist);
     }
   }
 }
