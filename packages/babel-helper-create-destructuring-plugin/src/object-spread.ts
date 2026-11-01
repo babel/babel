@@ -8,7 +8,11 @@ import {
   pushHoistedVars,
   registerScopeInfo,
 } from "./scope.ts";
-import { getExtendsHelper, wrapBodyInBlock } from "./util.ts";
+import {
+  getExtendsHelper,
+  getLiteralKeyString,
+  wrapBodyInBlock,
+} from "./util.ts";
 
 function hasSpread(node: t.ObjectExpression): boolean {
   return node.properties.some(prop => t.isSpreadElement(prop));
@@ -149,13 +153,35 @@ export function transformObjectSpread(
   const superMethods = new Map<t.Node, () => void>();
   let objectRef: t.Identifier | undefined;
   let seenSpread = false;
-  // Accessors after a spread must be defined individually on the target:
-  // copying their full descriptors would erase an earlier getter or setter.
-  let definesAccessors = false;
+  const { useBuiltIns, pureGetters, setSpreadProperties } = options;
+  // The accessors after a spread defined individually on the target: copying
+  // their descriptors would erase the other half of an earlier accessor with
+  // the same key (`null` if computed), and the properties are copied with
+  // [[Get]] with `setSpreadProperties` or `pureGetters`.
+  const individualAccessors = new Set<t.Node>();
+  const accessorKeys = new Set<string | null>();
   for (const prop of properties) {
     if (prop.isSpreadElement()) seenSpread = true;
     if (!prop.isObjectMethod()) continue;
-    if (seenSpread && prop.node.kind !== "method") definesAccessors = true;
+    const { node } = prop;
+    if (node.kind !== "method") {
+      const key = node.computed
+        ? null
+        : t.isIdentifier(node.key)
+          ? node.key.name
+          : getLiteralKeyString(node.key);
+      if (
+        seenSpread &&
+        (pureGetters ||
+          setSpreadProperties ||
+          key === null ||
+          accessorKeys.has(null) ||
+          accessorKeys.has(key))
+      ) {
+        individualAccessors.add(node);
+      }
+      accessorKeys.add(key);
+    }
     // The first object is the final target, so its native methods already
     // have the right home object, without capturing a shared header binding.
     if (captureInHeader && !seenSpread) continue;
@@ -170,6 +196,7 @@ export function transformObjectSpread(
       },
     }).replace();
   }
+  const definesAccessors = individualAccessors.size > 0;
   if (
     definesAccessors &&
     path.scope.hasBinding("Object", { noGlobals: true })
@@ -196,8 +223,6 @@ export function transformObjectSpread(
     forgets.push(superMethods.get(prop) ?? collectScopeInfo(propPath));
   };
   for (const method of superMethods.keys()) forgetMoved(method);
-
-  const { useBuiltIns, pureGetters, setSpreadProperties } = options;
 
   // Assigning the following properties to the target would call the
   // accessors defined individually, instead of replacing them.
@@ -262,7 +287,8 @@ export function transformObjectSpread(
     } else if (
       exp &&
       t.isObjectMethod(prop) &&
-      (prop.kind !== "method" || (captureInHeader && superMethods.has(prop)))
+      (individualAccessors.has(prop) ||
+        (captureInHeader && superMethods.has(prop)))
     ) {
       if (props.length) make();
       // Before its key is moved out of the closure

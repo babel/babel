@@ -578,7 +578,7 @@ function isSymbolFor(key: t.Node, scope: Scope): key is t.CallExpression {
   );
 }
 
-function getLiteralKeyString(key: t.Node): string | null {
+export function getLiteralKeyString(key: t.Node): string | null {
   switch (key.type) {
     case "StringLiteral":
       return key.value;
