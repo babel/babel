@@ -1,5 +1,6 @@
 import { template, types as t, traverse } from "@babel/core";
 import type { File, NodePath, Scope, Visitor } from "@babel/core";
+import { preventNamedEvaluation } from "@babel/helper-named-evaluation";
 
 type State = {
   needsOuterBinding: boolean;
@@ -132,6 +133,11 @@ export function moveParamToTemporary(
   const newParam = t.cloneNode(uid);
   newParam.typeAnnotation = param.node.typeAnnotation;
   param.node.typeAnnotation = null;
+  // The default value is not named after the temporary
+  const { parentPath } = param;
+  if (parentPath.isAssignmentPattern()) {
+    parentPath.node.right = preventNamedEvaluation(parentPath.node.right);
+  }
   const declaration = t.variableDeclaration(kind, [
     t.variableDeclarator(param.node, uid),
   ]);
