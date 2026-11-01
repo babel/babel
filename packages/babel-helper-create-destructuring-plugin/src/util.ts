@@ -1,5 +1,6 @@
 import { types as t } from "@babel/core";
 import type { File, NodePath, Scope } from "@babel/core";
+import { preventNamedEvaluation } from "@babel/helper-named-evaluation";
 import { isDefaultEvaluationObservable } from "@babel/plugin-transform-parameters";
 import { FEATURES } from "./features.ts";
 import { adoptMovedPaths } from "./scope.ts";
@@ -773,6 +774,10 @@ function hoistFirstTarget<T extends t.LVal | t.PatternLike>(
 ): T | t.Identifier {
   if (target.type === "AssignmentPattern") {
     target.left = hoistFirstTarget(target.left, features, scope, hoist);
+    // The default value is not named after the temporary
+    if (target.left.type === "Identifier") {
+      target.right = preventNamedEvaluation(target.right);
+    }
     return target;
   }
   if (target.type === "ArrayPattern") {
