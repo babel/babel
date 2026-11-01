@@ -6,10 +6,10 @@ var _x = {
   _: void 0
 };
 (() => {
-  var _ref, _ref$x;
+  var _ref, _ref2, _ref$x;
   [{
     y
-  }, _ref, ...z] = [{
+  }, _ref, ..._ref2] = [{
     y: 1
-  }, _C], x = (_ref$x = babelHelpers.assertClassBrand(_C, _ref, _x)._) === void 0 ? y : _ref$x;
+  }, _C], x = (_ref$x = babelHelpers.assertClassBrand(_C, _ref, _x)._) === void 0 ? y : _ref$x, z = _ref2;
 })();

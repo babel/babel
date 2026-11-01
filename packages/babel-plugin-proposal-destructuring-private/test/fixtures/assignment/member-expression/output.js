@@ -4,8 +4,8 @@ class C {
   static #y;
   static #z;
   static {
-    var _ref;
+    var _ref, _ref2;
     let z;
-    [C.#x, _ref, ...z] = [0, C], x = _ref.#x;
+    [C.#x, _ref, ..._ref2] = [0, C], x = _ref.#x, z = _ref2;
   }
 }
