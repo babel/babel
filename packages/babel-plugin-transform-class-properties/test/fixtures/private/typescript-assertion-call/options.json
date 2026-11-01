@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "transform-class-properties",
+    "transform-private-methods",
+    "transform-classes",
+    "transform-typescript"
+  ]
+}

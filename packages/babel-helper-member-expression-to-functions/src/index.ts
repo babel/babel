@@ -1,4 +1,5 @@
 import type { NodePath, Visitor } from "@babel/traverse";
+import { isTransparentExprWrapper } from "@babel/helper-skip-transparent-expression-wrappers";
 import {
   LOGICAL_OPERATORS,
   arrowFunctionExpression,
@@ -360,15 +361,26 @@ const handler = {
       return;
     }
 
+    // Transparent wrappers (e.g. `(MEMBER as any)`, `MEMBER!`) do not change the
+    // semantics of the code, so they must not hide how MEMBER is used: for
+    // example, `(MEMBER as any)(ARGS)` still needs to be called with the
+    // receiver of MEMBER.
+    let outerPath: NodePath = member;
+    while (isTransparentExprWrapper(outerPath.parent)) {
+      outerPath = outerPath.parentPath!;
+    }
+    const { node: outerNode, parent: outerParent } = outerPath;
+    const outerParentPath = outerPath.parentPath;
+
     // MEMBER++   ->   _set(MEMBER, (ref = _get(MEMBER), ref2 = ref++, ref)), ref2
     // ++MEMBER   ->   _set(MEMBER, (ref = _get(MEMBER), ++ref))
-    if (isUpdateExpression(parent, { argument: node })) {
+    if (isUpdateExpression(outerParent, { argument: outerNode })) {
       if (this.simpleSet) {
         member.replaceWith(this.simpleSet(member));
         return;
       }
 
-      const { operator, prefix } = parent;
+      const { operator, prefix } = outerParent;
 
       // Give the state handler a chance to memoise the member, since we'll
       // reference it twice. The second access (the set) should do the memo
@@ -388,7 +400,7 @@ const handler = {
 
         // (ref = _get(MEMBER), ++ref)
         const value = sequenceExpression(seq);
-        parentPath.replaceWith(this.set(member, value));
+        outerParentPath.replaceWith(this.set(member, value));
 
         return;
       } else {
@@ -406,7 +418,7 @@ const handler = {
 
         // (ref = _get(MEMBER), ref2 = ref++, ref)
         const value = sequenceExpression(seq);
-        parentPath.replaceWith(
+        outerParentPath.replaceWith(
           sequenceExpression([this.set(member, value), cloneNode(ref2)]),
         );
 
@@ -417,38 +429,40 @@ const handler = {
     // MEMBER = VALUE   ->   _set(MEMBER, VALUE)
     // MEMBER += VALUE   ->   _set(MEMBER, _get(MEMBER) + VALUE)
     // MEMBER ??= VALUE   ->   _get(MEMBER) ?? _set(MEMBER, VALUE)
-    if (parentPath.isAssignmentExpression({ left: node })) {
-      handleAssignment(this, member, parentPath);
+    if (outerParentPath.isAssignmentExpression({ left: outerNode })) {
+      handleAssignment(this, member, outerParentPath);
       return;
     }
 
     // MEMBER(ARGS) -> _call(MEMBER, ARGS)
-    if (parentPath.isCallExpression({ callee: node })) {
-      parentPath.replaceWith(this.call(member, parentPath.node.arguments));
+    if (outerParentPath.isCallExpression({ callee: outerNode })) {
+      outerParentPath.replaceWith(
+        this.call(member, outerParentPath.node.arguments),
+      );
       return;
     }
 
     // MEMBER?.(ARGS) -> _optionalCall(MEMBER, ARGS)
-    if (parentPath.isOptionalCallExpression({ callee: node })) {
+    if (outerParentPath.isOptionalCallExpression({ callee: outerNode })) {
       // Replace `function (a, x = a.b.#c?.()) {}` to `function (a, x = (() => a.b.#c?.())() ){}`
       // so the temporary variable can be injected in correct scope
       // This can be further optimized to avoid unnecessary IIFE
       if (scope.path.isPattern()) {
-        parentPath.replaceWith(
+        outerParentPath.replaceWith(
           // The injected member will be queued and eventually transformed when visited
-          callExpression(arrowFunctionExpression([], parentPath.node), []),
+          callExpression(arrowFunctionExpression([], outerParentPath.node), []),
         );
         return;
       }
-      parentPath.replaceWith(
-        this.optionalCall(member, parentPath.node.arguments),
+      outerParentPath.replaceWith(
+        this.optionalCall(member, outerParentPath.node.arguments),
       );
       return;
     }
 
     // delete MEMBER -> _delete(MEMBER)
-    if (parentPath.isUnaryExpression({ operator: "delete" })) {
-      parentPath.replaceWith(this.delete(member));
+    if (outerParentPath.isUnaryExpression({ operator: "delete" })) {
+      outerParentPath.replaceWith(this.delete(member));
       return;
     }
 
@@ -464,28 +478,28 @@ const handler = {
     if (
       // for (MEMBER of ARR)
       // for (MEMBER in ARR)
-      parentPath.isForXStatement({ left: node }) ||
+      outerParentPath.isForXStatement({ left: outerNode }) ||
       // { KEY: MEMBER } = OBJ
-      (parentPath.isObjectProperty({ value: node }) &&
-        parentPath.parentPath.isObjectPattern()) ||
+      (outerParentPath.isObjectProperty({ value: outerNode }) &&
+        outerParentPath.parentPath.isObjectPattern()) ||
       // { KEY: MEMBER = _VALUE } = OBJ
-      (parentPath.isAssignmentPattern({ left: node }) &&
-        parentPath.parentPath.isObjectProperty({ value: parent }) &&
-        parentPath.parentPath.parentPath.isObjectPattern()) ||
+      (outerParentPath.isAssignmentPattern({ left: outerNode }) &&
+        outerParentPath.parentPath.isObjectProperty({ value: outerParent }) &&
+        outerParentPath.parentPath.parentPath.isObjectPattern()) ||
       // [MEMBER] = ARR
-      parentPath.isArrayPattern() ||
+      outerParentPath.isArrayPattern() ||
       // [MEMBER = _VALUE] = ARR
-      (parentPath.isAssignmentPattern({ left: node }) &&
-        parentPath.parentPath.isArrayPattern()) ||
+      (outerParentPath.isAssignmentPattern({ left: outerNode }) &&
+        outerParentPath.parentPath.isArrayPattern()) ||
       // {...MEMBER}
       // [...MEMBER]
-      parentPath.isRestElement()
+      outerParentPath.isRestElement()
     ) {
       member.replaceWith(this.destructureSet(member));
       return;
     }
 
-    if (parentPath.isTaggedTemplateExpression()) {
+    if (outerParentPath.isTaggedTemplateExpression()) {
       // MEMBER   ->   _get(MEMBER).bind(this)
       member.replaceWith(this.boundGet(member));
     } else {
