@@ -345,13 +345,15 @@ export function keepsCompletionValue(statements: t.Node[], start = 0): boolean {
  * kept by the following statements.
  */
 export function isCompletionObservable(path: NodePath): boolean {
+  // After a `break` or `continue`, the following statements of the outer
+  // lists may be skipped: conservatively assume the value is kept.
+  let abrupt = false;
   for (let current = path; ; current = current.parentPath) {
     const { container, key, parentPath } = current;
-    if (
-      Array.isArray(container) &&
-      !keepsCompletionValue(container, (key as number) + 1)
-    ) {
-      return false;
+    if (!abrupt && Array.isArray(container)) {
+      const completion = getListCompletion(container, (key as number) + 1);
+      if (completion === "value") return false;
+      abrupt = completion === "abrupt";
     }
     if (parentPath.isProgram()) {
       return parentPath.node.sourceType !== "module";
