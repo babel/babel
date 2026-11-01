@@ -1,5 +1,5 @@
 import { parseExpression } from "@babel/parser";
-import _generate from "@babel/generator";
+import generate from "@babel/generator";
 import * as t from "@babel/types";
 import {
   buildNamedDefault,
@@ -7,8 +7,6 @@ import {
   isIdentifierRef,
   preventNamedEvaluation,
 } from "../lib/index.js";
-
-const generate = _generate.default || _generate;
 
 const parse = code =>
   parseExpression(code, {
