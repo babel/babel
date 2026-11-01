@@ -9,7 +9,12 @@ for (const source of [null, undefined]) {
   expect(() => ({ ["a"]: target().value } = source)).toThrow(TypeError);
   expect(() => ({ [log.push("key")]: target().value } = source)).toThrow(TypeError);
   expect(() => ({ nested: { a: target().value } } = { nested: source })).toThrow(TypeError);
+  expect(() => ({ ...target().value } = source)).toThrow(TypeError);
+  expect(() => ({ ...missing.value } = source)).toThrow(TypeError);
+  expect(() => ({ nested: { ...target().value } } = { nested: source })).toThrow(TypeError);
 }
 expect(log).toEqual([]);
 ({ a: target().value } = { get a() { log.push("get"); return 1; } });
 expect(log).toEqual(["target", "get"]);
+({ ...target().value } = { a: 1 });
+expect(log).toEqual(["target", "get", "target"]);
