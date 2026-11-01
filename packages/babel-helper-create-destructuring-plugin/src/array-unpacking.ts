@@ -49,26 +49,33 @@ function isCoercion(node: t.Node, scope: Scope): boolean {
   return false;
 }
 
-const STOP_TRAVERSAL = {};
+interface ArrayUnpackState {
+  bindings: Record<string, t.Identifier>;
+  ancestors: t.Node[];
+}
 
-// NOTE: This visitor is meant to be used via t.traverse. It stops the
-// traversal when the array literal references one of `bindings`.
-const arrayUnpackVisitor = (
-  node: t.Node,
-  ancestors: t.TraversalAncestors,
-  bindings: Record<string, t.Identifier>,
-) => {
-  if (!t.isIdentifier(node) || !bindings[node.name]) return;
-  const parent = ancestors[ancestors.length - 1].node;
-  const grandparent = ancestors[ancestors.length - 2]?.node;
-  // Both reads and writes, e.g. [a, b] = [1, a = 5]
-  if (
-    t.isReferenced(node, parent, grandparent) ||
-    t.isBinding(node, parent, grandparent)
-  ) {
-    // eslint-disable-next-line @typescript-eslint/only-throw-error
-    throw STOP_TRAVERSAL;
+// NOTE: This visitor is meant to be used via t.traverseFast. It stops the
+// traversal when the array literal references one of `bindings`. Each child
+// is visited by a nested traversal, which tracks its ancestors.
+const arrayUnpackVisitor = (node: t.Node, state?: ArrayUnpackState) => {
+  const { bindings, ancestors } = state!;
+  const parent = ancestors[ancestors.length - 1];
+  // The nested traversal first enters the node itself
+  if (node === parent) return;
+  if (t.isIdentifier(node) && bindings[node.name]) {
+    const grandparent = ancestors[ancestors.length - 2];
+    // Both reads and writes, e.g. [a, b] = [1, a = 5]
+    if (
+      t.isReferenced(node, parent, grandparent) ||
+      t.isBinding(node, parent, grandparent)
+    ) {
+      return t.traverseFast.stop;
+    }
   }
+  ancestors.push(node);
+  const found = t.traverseFast(node, arrayUnpackVisitor, state);
+  ancestors.pop();
+  return found ? t.traverseFast.stop : t.traverseFast.skip;
 };
 
 /**
@@ -131,10 +138,8 @@ function canUnpackArrayPattern(
   }
 
   // deopt on reference to left side identifiers
-  try {
-    t.traverse(arr, arrayUnpackVisitor, t.getBindingIdentifiers(pattern));
-  } catch (e) {
-    if (e !== STOP_TRAVERSAL) throw e;
+  const bindings = t.getBindingIdentifiers(pattern);
+  if (t.traverseFast(arr, arrayUnpackVisitor, { bindings, ancestors: [arr] })) {
     return false;
   }
   return effectfulFrom;
