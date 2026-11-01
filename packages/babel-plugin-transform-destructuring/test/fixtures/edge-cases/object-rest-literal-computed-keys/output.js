@@ -1,11 +1,10 @@
-var _obj3, _babelHelpers$toPrope2;
+var _obj3;
 const _obj = obj,
   a = _obj[true],
   b = _obj[null],
-  _babelHelpers$toPrope = babelHelpers.toPropertyKey(-1),
-  c = _obj[_babelHelpers$toPrope],
-  rest = babelHelpers.objectWithoutProperties(_obj, ["true", "null", _babelHelpers$toPrope]);
+  c = _obj[-1],
+  rest = babelHelpers.objectWithoutProperties(_obj, ["true", "null", -1].map(babelHelpers.toPropertyKey));
 const _obj2 = obj,
   o = _obj2["other"],
   rest3 = babelHelpers.objectWithoutProperties(_obj2, ["other"]);
-babelHelpers.objectDestructuringEmpty(_obj3 = obj), _babelHelpers$toPrope2 = babelHelpers.toPropertyKey(-1), d = _obj3[_babelHelpers$toPrope2], e = _obj3[!0], rest2 = babelHelpers.objectWithoutProperties(_obj3, [_babelHelpers$toPrope2, !0].map(babelHelpers.toPropertyKey)), _obj3;
+d = (_obj3 = obj)[-1], e = _obj3[!0], rest2 = babelHelpers.objectWithoutProperties(_obj3, [-1, !0].map(babelHelpers.toPropertyKey)), _obj3;

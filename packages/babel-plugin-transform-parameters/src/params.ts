@@ -58,23 +58,39 @@ export function isDefaultEvaluationObservable(
   node: t.Node,
   scope: Scope,
 ): boolean {
+  return !scope.isPure(node) || isPureEvaluationObservable(node, scope);
+}
+
+/**
+ * Whether reordering a pure expression is observable: `isPure` accepts the
+ * reads of bindings, conversions that could run user code, and expressions
+ * that throw.
+ */
+function isPureEvaluationObservable(node: t.Node, scope: Scope): boolean {
   if (t.isPureish(node)) return false;
   if (t.isIdentifier(node)) {
-    // Even a constant binding may still be in its TDZ.
-    return !(
-      ["undefined", "Infinity", "NaN"].includes(node.name) &&
-      !scope.hasBinding(node.name, { noGlobals: true })
-    );
+    // Even a constant binding may still be in its TDZ. Only `undefined`,
+    // `NaN` and `Infinity` are pure without a binding.
+    return scope.hasBinding(node.name, { noGlobals: true });
   }
   if (t.isUnaryExpression(node)) {
-    return (
-      !["void", "typeof", "!"].includes(node.operator) ||
-      isDefaultEvaluationObservable(node.argument, scope)
+    const { operator, argument } = node;
+    if (operator === "void" || operator === "typeof" || operator === "!") {
+      return isPureEvaluationObservable(argument, scope);
+    }
+    // Converting a primitive literal to a number doesn't run user code, but
+    // `+1n` throws. `throw x` always throws.
+    return !(
+      (operator === "-" || operator === "+" || operator === "~") &&
+      t.isLiteral(argument) &&
+      !t.isRegExpLiteral(argument) &&
+      !t.isTemplateLiteral(argument) &&
+      !(operator === "+" && t.isBigIntLiteral(argument))
     );
   }
   if (t.isArrayExpression(node)) {
     return node.elements.some(
-      element => element && isDefaultEvaluationObservable(element, scope),
+      element => element && isPureEvaluationObservable(element, scope),
     );
   }
   if (t.isObjectExpression(node)) {
@@ -82,12 +98,12 @@ export function isDefaultEvaluationObservable(
       prop =>
         !t.isObjectProperty(prop) ||
         prop.computed ||
-        isDefaultEvaluationObservable(prop.value, scope),
+        isPureEvaluationObservable(prop.value, scope),
     );
   }
   if (t.isSequenceExpression(node)) {
     return node.expressions.some(expr =>
-      isDefaultEvaluationObservable(expr, scope),
+      isPureEvaluationObservable(expr, scope),
     );
   }
   if (t.isTemplateLiteral(node)) {
@@ -100,7 +116,7 @@ export function isDefaultEvaluationObservable(
           t.isUnaryExpression(expr)
         ) ||
         t.isRegExpLiteral(expr) ||
-        isDefaultEvaluationObservable(expr, scope),
+        isPureEvaluationObservable(expr, scope),
     );
   }
   return true;
