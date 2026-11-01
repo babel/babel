@@ -1,9 +1,9 @@
 import {
   template,
+  traverse,
   types as t,
   type NodePath,
   type Scope,
-  type Visitor,
 } from "@babel/core";
 import convertFunctionRest from "./rest.ts";
 import { buildNamedDefault } from "@babel/helper-named-evaluation";
@@ -177,10 +177,7 @@ interface ArgumentsUsage {
   escapes: boolean;
 }
 
-const argumentsVisitor: Visitor<ArgumentsUsage> = {
-  Function(path) {
-    if (!path.isArrowFunctionExpression()) path.skip();
-  },
+const argumentsVisitor = traverse.visitors.environmentVisitor<ArgumentsUsage>({
   Identifier(path, state) {
     const { name } = path.node;
     if (name === "eval") {
@@ -218,7 +215,7 @@ const argumentsVisitor: Visitor<ArgumentsUsage> = {
     state.escapes = true;
     path.stop();
   },
-};
+});
 
 /** Whether a member expression is assigned, updated or deleted. */
 function isWriteTarget(path: NodePath<t.MemberExpression>): boolean {
