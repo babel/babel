@@ -199,14 +199,13 @@ const argumentsVisitor = traverse.visitors.environmentVisitor<ArgumentsUsage>({
       !isWriteTarget(parentPath)
     ) {
       const { property, computed } = parentPath.node;
+      const key = computed
+        ? t.isStringLiteral(property) && property.value
+        : t.isIdentifier(property) && property.name;
       // `arguments.length` is not mapped
-      if (!computed && t.isIdentifier(property, { name: "length" })) return;
+      if (key === "length") return;
       // `callee` is a throwing accessor of unmapped arguments objects
-      if (
-        computed
-          ? !t.isStringLiteral(property, { value: "callee" })
-          : !t.isIdentifier(property, { name: "callee" })
-      ) {
+      if (key !== "callee") {
         state.readsElements = true;
         return;
       }
@@ -349,7 +348,7 @@ export default function convertFunctionParams(
   // Read before `arguments` accesses are added for the moved parameters
   keepArgumentsUnmapped ??= readsMappedArguments(path);
 
-  const isLoose =
+  const isLooseFunctionLength =
     ignoreFunctionLength || t.isMethod(path.node, { kind: "set" });
 
   // Besides the parameters the caller asks for, we must move the parameters
@@ -366,7 +365,9 @@ export default function convertFunctionParams(
       (moved && isPatternEvaluationObservable(param, path.scope))
     ) {
       shouldTransform[i] = moved = true;
-      if (!isLoose && t.isAssignmentPattern(param)) readsArguments = true;
+      if (!isLooseFunctionLength && t.isAssignmentPattern(param)) {
+        readsArguments = true;
+      }
     }
   });
 
@@ -439,7 +440,7 @@ export default function convertFunctionParams(
     }
 
     const paramIsAssignmentPattern = param.isAssignmentPattern();
-    if (paramIsAssignmentPattern && isLoose) {
+    if (paramIsAssignmentPattern && isLooseFunctionLength) {
       const left = param.get("left");
       const right = param.get("right");
 
