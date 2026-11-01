@@ -26,6 +26,8 @@ var [{ ...r }, [a]] = iterable("o", [{}, iterable("i", [1, 2])]);
 expect(a).toBe(1);
 expect(log).toEqual(["onext", "onext", "inext", "ireturn", "oreturn"]);
 
+// With a default or a nested pattern, which can throw and must then stop the
+// iteration, the array pattern is iterated after the outer iterator is closed.
 log = [];
 var b, c, d;
 [{ ...r }, [b, [c] = [3], ...d]] = iterable("o", [
@@ -36,12 +38,22 @@ expect([b, c, d]).toEqual([1, 3, [4]]);
 expect(log).toEqual([
   "onext",
   "onext",
-  "inext",
-  "inext",
-  "inext",
-  "inext",
   "oreturn",
+  "inext",
+  "inext",
+  "inext",
+  "inext",
 ]);
+
+log = [];
+function* throwing() {
+  yield undefined;
+  log.push("past the throwing element");
+}
+expect(() => {
+  [{ ...r }, [[c] = null, b]] = [{}, throwing()];
+}).toThrow(TypeError);
+expect(log).toEqual([]);
 
 log = [];
 function* outer() {
