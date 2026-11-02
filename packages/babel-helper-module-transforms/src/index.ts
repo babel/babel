@@ -240,7 +240,9 @@ export function buildNamespaceInitStatements(
               }
             });
           `
-        : template.statement`EXPORTS.NAME = NAMESPACE;`)({
+        : metadata.stringSpecifiers.has(exportName)
+          ? template.statement`EXPORTS["NAME"] = NAMESPACE;`
+          : template.statement`EXPORTS.NAME = NAMESPACE;`)({
         EXPORTS: metadata.exportName,
         NAME: exportName,
         NAMESPACE: t.cloneNode(srcNamespace),
