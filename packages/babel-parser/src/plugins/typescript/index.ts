@@ -4589,10 +4589,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           hasTypeSpecifier = true;
           leftOfAs = firstAs;
         }
-      } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
+      } else if (this.tsIsStartOfModuleExportName()) {
         // { type something ...? }
         hasTypeSpecifier = true;
-        leftOfAs = this.parseIdentifier(true);
+        leftOfAs = this.parseModuleExportName();
       }
 
       node.imported = leftOfAs;
@@ -4623,7 +4623,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (this.isContextual(tt._as)) {
           // { type as as ...? }
           const secondAs = this.parseIdentifier();
-          if (tokenIsKeywordOrIdentifier(this.state.type)) {
+          if (this.tsIsStartOfModuleExportName()) {
             // { type as as something }
             hasTypeSpecifier = true;
             node.local = firstAs;
@@ -4632,7 +4632,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             // { type as as }
             node.exported = secondAs;
           }
-        } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
+        } else if (this.tsIsStartOfModuleExportName()) {
           // { type as something }
           node.exported = this.parseModuleExportName();
         } else {
@@ -4640,7 +4640,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           hasTypeSpecifier = true;
           node.local = firstAs;
         }
-      } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
+      } else if (this.tsIsStartOfModuleExportName()) {
         // { type something ...? }
         hasTypeSpecifier = true;
         node.local = this.parseModuleExportName();
@@ -4653,7 +4653,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       node.exported ??= this.eatContextual(tt._as)
         ? this.parseModuleExportName()
-        : this.cloneIdentifier(node.local as N.Identifier);
+        : this.isStringModuleExportName(node.local)
+          ? this.cloneStringLiteral(node.local)
+          : this.cloneIdentifier(node.local);
+    }
+
+    tsIsStartOfModuleExportName() {
+      return (
+        tokenIsKeywordOrIdentifier(this.state.type) || this.match(tt.string)
+      );
     }
 
     /**
