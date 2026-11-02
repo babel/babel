@@ -1,4 +1,4 @@
-/* @minVersion 8.0.0-rc.2 */
+/* @minVersion 8.1.0 */
 
 declare global {
   interface ArrayBuffer {

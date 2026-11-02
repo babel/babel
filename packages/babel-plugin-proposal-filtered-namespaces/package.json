@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-filtered-namespaces",
-  "version": "8.0.6",
+  "version": "8.1.0",
   "description": "Transform filtered namespace imports (`import { a, b } as ns from \"mod\"`) and the `exports` option of dynamic import",
   "repository": {
     "type": "git",
