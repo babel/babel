@@ -313,6 +313,9 @@ function buildReexportsFromMeta(
       namespaceImport,
     };
     if (constantReexports || t.isIdentifier(namespaceImport)) {
+      if (exportName === "__proto__") {
+        return buildInitStatement(meta, [exportName], namespaceImport);
+      }
       if (stringSpecifiers.has(exportName)) {
         return ReexportTemplate.constantComputed(astNodes);
       } else {
@@ -458,9 +461,13 @@ function buildExportInitializationStatements(
         data.names[0],
         buildInitStatement(metadata, data.names, t.identifier(localName)),
       ]);
-    } else if (!noIncompleteNsImportDetection) {
+    } else {
       for (const exportName of data.names) {
-        initStatements.push([exportName, null]);
+        // `__proto__` always needs its own property: assigning it would
+        // otherwise call the setter on `Object.prototype`.
+        if (!noIncompleteNsImportDetection || exportName === "__proto__") {
+          initStatements.push([exportName, null]);
+        }
       }
     }
   }
@@ -478,8 +485,8 @@ function buildExportInitializationStatements(
         initStatements.push([reexports[i], reexportsStatements[i]]);
       }
     }
-    if (!noIncompleteNsImportDetection) {
-      for (const exportName of data.reexportNamespace) {
+    for (const exportName of data.reexportNamespace) {
+      if (!noIncompleteNsImportDetection || exportName === "__proto__") {
         initStatements.push([exportName, null]);
       }
     }
@@ -496,8 +503,11 @@ function buildExportInitializationStatements(
 
   const results = [];
   if (noIncompleteNsImportDetection) {
-    for (const [, initStatement] of initStatements) {
-      results.push(initStatement!);
+    for (const [exportName, initStatement] of initStatements) {
+      results.push(
+        initStatement ??
+          buildInitStatement(metadata, [exportName], t.buildUndefinedNode()),
+      );
     }
   } else {
     // We generate init statements (`exports.a = exports.b = ... = void 0`)
@@ -558,6 +568,7 @@ const InitTemplate = {
   define: ({ exports, name, value }: InitParts) =>
     template.expression.ast`
       Object.defineProperty(${exports}, "${name}", {
+        configurable: true,
         enumerable: true,
         value: void 0,
         writable: true

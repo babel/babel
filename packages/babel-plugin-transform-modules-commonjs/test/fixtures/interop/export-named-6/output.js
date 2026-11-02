@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.a = Object.defineProperty(exports, "__proto__", {
+  configurable: true,
   enumerable: true,
   value: void 0,
   writable: true
