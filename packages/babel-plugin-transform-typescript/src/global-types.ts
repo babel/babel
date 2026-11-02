@@ -3,8 +3,11 @@ import type { NodePath, Scope } from "@babel/core";
 export const GLOBAL_TYPES = new WeakMap<Scope, Set<string>>();
 
 export function isGlobalType({ scope }: NodePath, name: string) {
-  if (scope.hasBinding(name)) return false;
+  if (scope.hasBinding(name, { noGlobals: true })) return false;
   if (GLOBAL_TYPES.get(scope)!.has(name)) return true;
+  // A builtin such as `Promise` or `undefined`: there is no declaration of
+  // that name in the file, so it is a value.
+  if (scope.hasBinding(name)) return false;
 
   console.warn(
     `The exported identifier "${name}" is not declared in Babel's scope tracker\n` +
