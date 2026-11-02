@@ -569,10 +569,9 @@ target["new-version-checklist"] = function () {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!                                                   !!!!!!
-!!!!!! Update the minVersion for the immutableUint8Array !!!!!!
-!!!!!! and processResponse helpers                       !!!!!!
+!!!!!! Write any important message here, and change the  !!!!!!
+!!!!!! if (0) above to if (1)                            !!!!!!
 !!!!!!                                                   !!!!!!
-!!!!!! Update min version in the filtered-namespaces transform
 !!!!!!                                                   !!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

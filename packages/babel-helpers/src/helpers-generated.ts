@@ -693,7 +693,7 @@ const helpers: Record<string, Helper> = {
   }),
   // size: 176, gzip size: 138
   immutableUint8Array: helper(
-    "8.0.0-rc.2",
+    "8.1.0",
     'function _immutableUint8Array(e){return"buffer"in e&&(e=e.buffer.slice(e.byteOffset,e.byteOffset+e.byteLength)),new Uint8Array(e.transferToImmutable?e.transferToImmutable():e)}',
     {
       globals: ["Uint8Array"],
@@ -1056,7 +1056,7 @@ const helpers: Record<string, Helper> = {
   ),
   // size: 159, gzip size: 141
   processResponse: helper(
-    "8.0.0",
+    "8.1.0",
     'function _processResponse(t,e,r){return t.then(function(t){if(t.ok)return t=t[e](),r?t.then(r):t;throw TypeError("Fetch failed: "+t.status+" "+t.statusText)})}',
     {
       globals: ["TypeError"],

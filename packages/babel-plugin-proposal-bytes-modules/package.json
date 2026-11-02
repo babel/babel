@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-bytes-modules",
-  "version": "8.0.0-rc.2",
+  "version": "8.1.0",
   "description": "Transform bytes modules imports (`import '...' with { type: 'bytes' }`) to work in browsers and Node.js.",
   "repository": {
     "type": "git",
