@@ -382,7 +382,7 @@ export class Lowering {
    * value of the assignment, if requested.
    */
   lower(
-    target: PatternTarget,
+    target: NonNullable<PatternTarget>,
     value: t.Expression,
     needsCompletion: boolean = false,
   ): t.Expression | null {
@@ -528,10 +528,10 @@ export class Lowering {
    * BindingInitialization of a binding pattern or element, or
    * DestructuringAssignmentEvaluation of an assignment pattern or element.
    */
-  #lowerTarget(target: PatternTarget, ref: Ref) {
+  #lowerTarget(target: NonNullable<PatternTarget>, ref: Ref) {
     const isUntranspiled =
       !this.full &&
-      target!.type !== "AssignmentPattern" &&
+      target.type !== "AssignmentPattern" &&
       !needsLowering(target, this.options.features);
     if (
       this.isAssignment &&
@@ -549,7 +549,7 @@ export class Lowering {
       this.#bindRef(target as t.LVal, ref);
       return;
     }
-    switch (target!.type) {
+    switch (target.type) {
       case "ObjectPattern":
         this.#lowerObjectPattern(target, ref);
         break;
@@ -902,7 +902,7 @@ export class Lowering {
       }
 
       this.#lowerTarget(
-        element as PatternTarget,
+        element as NonNullable<PatternTarget>,
         this.#createMemberRef(
           ref,
           keyExpr === key ? key : t.cloneNode(keyExpr),
@@ -1045,7 +1045,7 @@ export class Lowering {
   }
 
   #lowerArrayPatternPartial(pattern: t.ArrayPattern, ref: Ref) {
-    const queue: [PatternTarget, t.Identifier][] = [];
+    const queue: [NonNullable<PatternTarget>, t.Identifier][] = [];
     splitArrayPattern(
       pattern,
       this.options.features,

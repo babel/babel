@@ -146,7 +146,7 @@ function canUnpackArrayPattern(
 }
 
 interface UnpackedElement {
-  target: PatternTarget;
+  target: NonNullable<PatternTarget>;
   value: t.Expression;
   /** The value is a fresh array literal, for a rest element. */
   isArray: boolean;
@@ -194,7 +194,7 @@ export function unpackArrayLiteral(
           isArray: true,
         }
       : {
-          target: element,
+          target: element!,
           value: elisionToUndefined(values[i]),
           isArray: false,
         },
