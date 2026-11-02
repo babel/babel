@@ -5,6 +5,7 @@ define(["exports", "./input.js"], function (_exports, _input) {
     value: true
   });
   _exports.a = Object.defineProperty(_exports, "__proto__", {
+    configurable: true,
     enumerable: true,
     value: void 0,
     writable: true
