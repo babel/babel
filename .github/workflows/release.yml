@@ -211,7 +211,7 @@ jobs:
       always() &&
       needs.npm-release.result == 'success' &&
       needs.github-release.result == 'success' &&
-      needs.github-release.outputs.is-main
+      needs.github-release.outputs.is-main == 'true'
     steps:
       - uses: actions/checkout@v7
         with:
