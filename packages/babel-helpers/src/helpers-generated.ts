@@ -226,10 +226,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 66, gzip size: 74
+  // size: 48, gzip size: 66
   callSpread: helper(
     "8.2.0",
-    "function _callSpread(l,a,n){return function(){}.apply.call(l,a,n)}",
+    "function _callSpread(a,e,l){return a.apply(e,l)}",
     {
       globals: [],
       locals: { _callSpread: ["body.0.id"] },

@@ -1,4 +1,4 @@
-function _callSpread(l, a, n) {
-  return function () {}.apply.call(l, a, n);
+function _callSpread(a, e, l) {
+  return a.apply(e, l);
 }
 export { _callSpread as default };

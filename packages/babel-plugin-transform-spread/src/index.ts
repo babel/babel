@@ -218,12 +218,14 @@ export default declare((api, options: Options) => {
         // after the callee and arguments are evaluated.
         // The difference is only observed when the arguments have side
         // effects: the context is either already evaluated as part of the
-        // callee or side-effect-free, so we only need to check the array.
+        // callee or side-effect-free, so we only need to check the arguments.
         // We use the original callee here, to preserve any types/parentheses.
-        const spreadArgs = node.arguments[0];
+        const isPureArg = (arg: t.Node) =>
+          t.isIdentifier(arg, { name: "arguments" }) || scope.isPure(arg);
         if (
-          t.isIdentifier(spreadArgs, { name: "arguments" }) ||
-          scope.isPure(spreadArgs) ||
+          args.every(arg =>
+            t.isSpreadElement(arg) ? isPureArg(arg.argument) : isPureArg(arg!),
+          ) ||
           !this.availableHelper("callSpread")
         ) {
           node.callee = t.memberExpression(
