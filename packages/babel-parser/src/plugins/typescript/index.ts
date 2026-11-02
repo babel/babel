@@ -3932,6 +3932,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       call: N.CallExpression,
     ): N.ArrowFunctionExpression {
       if (this.match(tt.colon)) {
+        this.tsArrowReturnTypeAt.add(this.offsetToSourcePos(node.start!));
         node.returnType = this.tsParseTypeAnnotation();
       }
       return super.parseAsyncArrowFromCallExpression(node, call);
@@ -3968,6 +3969,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return node;
     }
 
+    // Source positions where an arrow function was parsed with a return type.
+    // Like noArrowAt, this is not reset when backtracking.
+    tsArrowReturnTypeAt = new Set<number>();
+
     tsParseMaybeArrowWithRestrictedReturnType(
       startPos: number,
       refExpressionErrors?: ExpressionErrors | null,
@@ -3977,35 +3982,44 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // async call can only have a return type if it's followed by `:`.
       // Otherwise, parse it again without the return type, so that the `:`
       // is the conditional's separator: `a ? (b) : c => d`.
-      const state = this.state.clone();
-      const { tokensLength } = state;
-      const result = this.tryParse(
-        () => this.tsParseMaybeAssign(refExpressionErrors, isParenItem),
-        state,
-      );
-      if (!result.thrown) {
-        if (result.error) this.state = result.failState!;
-        const node = result.node!;
-        if (
-          node.type !== "ArrowFunctionExpression" ||
-          !node.returnType ||
-          node.extra?.parenthesized ||
-          (this.match(tt.colon) &&
-            (!result.error || tsAreValidArrowParams(node.params))) ||
-          tsHasUnambiguousArrowParams(node.params)
-        ) {
-          return node;
+      // Like TypeScript's `notParenthesizedArrow`, remember in noArrowAt where
+      // it isn't an arrow function, to avoid trying again when backtracking.
+      const startOffset = this.sourceToOffsetPos(startPos);
+      if (!this.noArrowAt.has(startOffset)) {
+        const state = this.state.clone();
+        const { tokensLength } = state;
+        this.tsArrowReturnTypeAt.delete(startPos);
+        const result = this.tryParse(
+          () => this.tsParseMaybeAssign(refExpressionErrors, isParenItem),
+          state,
+        );
+        if (result.thrown) {
+          // Only parse again if the error might be caused by parsing an
+          // arrow function with a return type, as in `a ? (b, b) : c => d`.
+          // Otherwise, parsing again would just throw the same error.
+          if (!this.tsArrowReturnTypeAt.has(startPos)) throw result.error;
+        } else {
+          if (result.error) this.state = result.failState!;
+          const node = result.node!;
+          if (
+            node.type !== "ArrowFunctionExpression" ||
+            !node.returnType ||
+            node.extra?.parenthesized ||
+            (this.match(tt.colon) &&
+              (!result.error || tsAreValidArrowParams(node.params))) ||
+            tsHasUnambiguousArrowParams(node.params)
+          ) {
+            return node;
+          }
         }
+        this.noArrowAt.add(startOffset);
+        this.state = state;
+        // tryParse keeps the tokens of a parse with recoverable errors, but
+        // they are discarded when parsing again.
+        this.state.tokensLength = tokensLength;
       }
 
-      this.state = state;
-      // tryParse keeps the tokens of a parse with recoverable errors, but
-      // they are discarded when parsing again.
-      this.state.tokensLength = tokensLength;
-      this.state.noArrowAt.push(this.sourceToOffsetPos(startPos));
-      const node = this.tsParseMaybeAssign(refExpressionErrors, isParenItem);
-      this.state.noArrowAt.pop();
-      return node;
+      return this.tsParseMaybeAssign(refExpressionErrors, isParenItem);
     }
 
     tsParseMaybeAssign(
@@ -4175,7 +4189,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: Undone<N.ArrowFunctionExpression>,
     ): Undone<N.ArrowFunctionExpression> | null | undefined {
       if (this.match(tt.colon)) {
-        if (this.state.noArrowAt.includes(node.start!)) return;
+        if (this.noArrowAt.has(node.start!)) return;
 
         // This is different from how the TS parser does it.
         // TS uses lookahead. The Babel Parser parses it as a parenthesized expression and converts.
@@ -4194,6 +4208,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (result.error) this.state = result.failState;
           // @ts-expect-error refine typings
           node.returnType = result.node;
+          this.tsArrowReturnTypeAt.add(this.offsetToSourcePos(node.start!));
         }
       }
 
@@ -4483,7 +4498,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     atPossibleAsyncArrow(base: N.Expression | N.Super | N.Import): boolean {
       // `async(b)` followed by `:` can only be an arrow function with a
       // return type, which is not allowed here.
-      if (this.state.noArrowAt.includes(base.start!)) return false;
+      if (this.noArrowAt.has(base.start!)) return false;
       return super.atPossibleAsyncArrow(base);
     }
 
