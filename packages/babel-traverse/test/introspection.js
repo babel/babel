@@ -103,6 +103,19 @@ describe("path/introspection", function () {
   });
 
   describe("referencesImport", function () {
+    it("accepts a string import name", function () {
+      const program = getPath(
+        `import { "dep" as a, "a b" as b, "default" as c } from "source"; a; b; c;`,
+        { sourceType: "module" },
+      );
+      const ref = i => program.get(`body.${i}.expression`);
+      expect(ref(1).referencesImport("source", "dep")).toBe(true);
+      expect(ref(2).referencesImport("source", "a b")).toBe(true);
+      expect(ref(3).referencesImport("source", "default")).toBe(true);
+      expect(ref(1).referencesImport("source", "other")).toBe(false);
+      expect(ref(1).referencesImport("other", "dep")).toBe(false);
+    });
+
     it("accepts a default import", function () {
       const program = getPath(`import dep from "source"; dep;`, {
         sourceType: "module",
