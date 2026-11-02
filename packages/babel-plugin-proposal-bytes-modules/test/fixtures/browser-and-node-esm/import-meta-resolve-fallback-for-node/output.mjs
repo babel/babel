@@ -1,0 +1,1 @@
+const j = await (typeof process === "object" && process.versions?.node ? Promise.all([import("fs"), import("module")]).then(([fs, module]) => fs.promises.readFile(module.createRequire(import.meta.url).resolve("./x"))).then(babelHelpers.immutableUint8Array) : babelHelpers.processResponse(fetch(import.meta.resolve("./x")), "arrayBuffer", babelHelpers.immutableUint8Array));

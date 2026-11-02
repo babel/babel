@@ -1,0 +1,4 @@
+{
+  "parserOpts": { "plugins": ["deferredImportEvaluation", "deferredReexports"] },
+  "throws": "Transforming `export defer { x, y } as ns from '...'` is not supported yet."
+}

@@ -1,0 +1,2 @@
+const [j, j2] = await Promise.all([typeof process === "object" && process.versions?.node ? import("fs").then(fs => fs.promises.readFile(new URL(import.meta.resolve("./x")))).then(_ => String(_).replace(/^\uFEFF/, "")) : babelHelpers.processResponse(fetch(import.meta.resolve("./x")), "text"), typeof process === "object" && process.versions?.node ? import("fs").then(fs => fs.promises.readFile(new URL(import.meta.resolve("./x3")))).then(_ => String(_).replace(/^\uFEFF/, "")) : babelHelpers.processResponse(fetch(import.meta.resolve("./x3")), "text")]);
+someBody;

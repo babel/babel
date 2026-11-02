@@ -1,0 +1,89 @@
+{
+  "type": "File",
+  "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":18,"index":58}},
+  "errors": [
+    "SyntaxError: `S` has already been exported. Exported identifiers must be unique. (3:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":58,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":18,"index":58}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":16,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":16,"index":16}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":15,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":15,"index":15}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":11,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":11,"index":11},"identifierName":"value"},
+              "name": "value"
+            },
+            "init": {
+              "type": "NumericLiteral",
+              "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15}},
+              "extra": {
+                "rawValue": 0,
+                "raw": "0"
+              },
+              "value": 0
+            }
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":17,"end":39,"loc":{"start":{"line":2,"column":0,"index":17},"end":{"line":2,"column":22,"index":39}},
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":26,"end":36,"loc":{"start":{"line":2,"column":9,"index":26},"end":{"line":2,"column":19,"index":36}},
+            "local": {
+              "type": "Identifier",
+              "start":26,"end":31,"loc":{"start":{"line":2,"column":9,"index":26},"end":{"line":2,"column":14,"index":31},"identifierName":"value"},
+              "name": "value"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start":35,"end":36,"loc":{"start":{"line":2,"column":18,"index":35},"end":{"line":2,"column":19,"index":36},"identifierName":"S"},
+              "name": "S"
+            }
+          }
+        ],
+        "source": null,
+        "attributes": [],
+        "declaration": null
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":40,"end":58,"loc":{"start":{"line":3,"column":0,"index":40},"end":{"line":3,"column":18,"index":58}},
+        "specifiers": [],
+        "source": null,
+        "attributes": [],
+        "declaration": {
+          "type": "StructDeclaration",
+          "start":47,"end":58,"loc":{"start":{"line":3,"column":7,"index":47},"end":{"line":3,"column":18,"index":58}},
+          "id": {
+            "type": "Identifier",
+            "start":54,"end":55,"loc":{"start":{"line":3,"column":14,"index":54},"end":{"line":3,"column":15,"index":55},"identifierName":"S"},
+            "name": "S"
+          },
+          "superClass": null,
+          "body": {
+            "type": "StructBody",
+            "start":56,"end":58,"loc":{"start":{"line":3,"column":16,"index":56},"end":{"line":3,"column":18,"index":58}},
+            "body": []
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

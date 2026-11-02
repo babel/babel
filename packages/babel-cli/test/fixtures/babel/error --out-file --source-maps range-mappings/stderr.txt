@@ -1,0 +1,1 @@
+Range mappings (`generatorOpts.sourceMapRanges`) are not supported when compiling to a single output file.

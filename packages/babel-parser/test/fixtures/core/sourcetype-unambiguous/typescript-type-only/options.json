@@ -1,4 +1,6 @@
 {
   "sourceType": "unambiguous",
-  "plugins": ["typescript"]
+  "plugins": [
+    "typescript"
+  ]
 }

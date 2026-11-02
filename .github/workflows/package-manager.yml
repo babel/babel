@@ -21,6 +21,6 @@ jobs:
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
       - run: |
           node ./scripts/ensure-yarn-version-integrity.ts

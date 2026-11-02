@@ -9,17 +9,23 @@ export function buildDynamicImport(
   wrapWithPromise: boolean,
   builder: (specifier: t.Expression) => t.Expression,
 ): t.Expression {
-  const specifier = t.isCallExpression(node) ? node.arguments[0] : node.source;
+  const [specifier, options] = t.isCallExpression(node)
+    ? node.arguments
+    : [node.source, node.options];
 
   if (
     t.isStringLiteral(specifier) ||
     (t.isTemplateLiteral(specifier) && specifier.quasis.length === 0)
   ) {
-    if (deferToThen) {
-      return template.expression.ast`
-        Promise.resolve().then(() => ${builder(specifier)})
-      `;
-    } else return builder(specifier);
+    const result = deferToThen
+      ? template.expression.ast`
+          Promise.resolve().then(() => ${builder(specifier)})
+        `
+      : builder(specifier);
+    // The options are not used, but they must still be evaluated
+    return options
+      ? t.sequenceExpression([options as t.Expression, result])
+      : result;
   }
 
   const specifierToString = t.isTemplateLiteral(specifier)
@@ -29,22 +35,27 @@ export function buildDynamicImport(
         [t.identifier("specifier")],
       );
 
+  let call: t.CallExpression;
   if (deferToThen) {
-    return template.expression.ast`
+    call = template.expression.ast`
       (specifier =>
         new Promise(r => r(${specifierToString}))
           .then(s => ${builder(t.identifier("s"))})
       )(${specifier})
-    `;
+    ` as t.CallExpression;
   } else if (wrapWithPromise) {
-    return template.expression.ast`
+    call = template.expression.ast`
       (specifier =>
         new Promise(r => r(${builder(specifierToString)}))
       )(${specifier})
-    `;
+    ` as t.CallExpression;
   } else {
-    return template.expression.ast`
+    call = template.expression.ast`
       (specifier => ${builder(specifierToString)})(${specifier})
-    `;
+    ` as t.CallExpression;
   }
+  // The options are not used, but they must still be evaluated after the
+  // specifier
+  if (options) call.arguments.push(options);
+  return call;
 }

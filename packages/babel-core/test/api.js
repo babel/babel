@@ -172,6 +172,38 @@ describe("api", function () {
     expect(babel.tokTypes).toBeDefined();
   });
 
+  it("exposes generate", function () {
+    const ast = babel.parseSync("var foo = 42", {
+      configFile: false,
+      babelrc: false,
+    });
+    babel.traverse(ast, {
+      VariableDeclaration(path) {
+        path.node.kind = "let";
+      },
+    });
+    expect(babel.generate(ast).code).toBe("let foo = 42;");
+    expect(babel.generate(ast, { compact: true }).code).toBe("let foo=42;");
+  });
+
+  it("exposes generate in the plugin API", function () {
+    let code;
+    babel.transformSync("foo(1 + 2)", {
+      configFile: false,
+      babelrc: false,
+      plugins: [
+        api => ({
+          visitor: {
+            CallExpression(path) {
+              code = api.generate(path.node.arguments[0]).code;
+            },
+          },
+        }),
+      ],
+    });
+    expect(code).toBe("1 + 2");
+  });
+
   it("parse throws on undefined callback", () => {
     expect(() => parse("", {})).toThrowErrorMatchingInlineSnapshot(
       `"Starting from Babel 8.0.0, the 'parse' function expects a callback. If you need to call it synchronously, please use 'parseSync'."`,
@@ -653,6 +685,46 @@ describe("api", function () {
       line: 1,
       column: 6,
     });
+  });
+
+  it("source map merging disables range mappings", function () {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      const code = [
+        "let Foo = function Foo() {};",
+        "",
+        "//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0ZG91dCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztJQUFNLEdBQUcsWUFBSCxHQUFHO3dCQUFILEdBQUciLCJmaWxlIjoidW5kZWZpbmVkIiwic291cmNlc0NvbnRlbnQiOlsiY2xhc3MgRm9vIHt9XG4iXX0=",
+      ].join("\n");
+
+      const result = transformSync(code, {
+        filename: "input.js",
+        sourceMaps: true,
+        generatorOpts: { sourceMapRanges: true },
+      });
+
+      expect(result.map.rangeMappings).toBeUndefined();
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining(
+          "The code generator has disabled source map ranges for " +
+            path.join(cwd, "input.js"),
+        ),
+      );
+
+      // Without an input source map, the same options do generate ranges.
+      warn.mockClear();
+      const withRanges = transformSync("let Foo = function Foo() {};", {
+        filename: "input.js",
+        sourceMaps: true,
+        generatorOpts: { sourceMapRanges: true },
+      });
+
+      expect(withRanges.map.rangeMappings).toBeDefined();
+      expect(warn).not.toHaveBeenCalled();
+    } finally {
+      warn.mockRestore();
+    }
   });
 
   it("default source map filename", function () {

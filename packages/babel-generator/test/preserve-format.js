@@ -16,6 +16,8 @@ const FAILURES = [
   // Todo: support trailing comments spanned across trailing comma
   "import-phases/source-expression-comments/input.js",
   "import-phases/source-expression-options-comments/input.js",
+  "import-sync/comments/input.js",
+  "import-sync/options-comments/input.js",
 
   // These tests are either explicitly about re-formatting the decorators position,
   // or about an old decorators version

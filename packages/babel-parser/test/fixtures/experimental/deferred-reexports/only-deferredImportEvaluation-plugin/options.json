@@ -1,0 +1,7 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "deferredImportEvaluation"
+  ],
+  "throws": "This experimental syntax requires enabling the parser plugin: \"deferredReexports\". (1:7)"
+}

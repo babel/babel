@@ -524,6 +524,19 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
+  // size: 379, gzip size: 277
+  createModuleNsFilter: helper(
+    "8.1.0",
+    'function _createModuleNsFilter(e){return r=>{for(var getter=e=>()=>r[e],t=Object.create(null),n=0;n<e.length;n++){var o=e[n];if(!(o in r))throw new ReferenceError("The requested module does not provide an export named \'"+o+"\'");o in t||Object.defineProperty(t,o,{enumerable:!0,get:getter(o)})}return Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.freeze(t)}}',
+    {
+      globals: ["Object", "ReferenceError", "Symbol"],
+      locals: { _createModuleNsFilter: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_createModuleNsFilter",
+      dependencies: {},
+      internal: false,
+    },
+  ),
   // size: 182, gzip size: 141
   createSuper: helper(
     "7.9.0",
@@ -610,6 +623,23 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
+  // size: 433, gzip size: 269
+  filterModuleNamespace: helper(
+    "8.1.0",
+    'function _filterModuleNamespace(t){var e,o=!1;try{var i=t(function(r){if(Object(r)===r)try{var{exports:t}=r;if(void 0!==t){if(Object(t)!==t)throw new TypeError("import()\'s `exports` must be an object");for(var i of(e=[],t)){if("string"!=typeof i)throw new TypeError("import()\'s `exports` must be strings");e.push(i)}}}catch(r){throw o=!0,r}return r})}catch(r){if(o)return Promise.reject(r);throw r}return e?(e.sort(),i.then(r(e))):i}',
+    {
+      globals: ["Object", "TypeError", "Promise"],
+      locals: { _filterModuleNamespace: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_filterModuleNamespace",
+      dependencies: {
+        createModuleNsFilter: [
+          "body.0.body.body.2.argument.consequent.expressions.1.arguments.0.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
   // size: 251, gzip size: 192
   get: helper(
     "7.0.0-beta.0",
@@ -661,10 +691,23 @@ const helpers: Record<string, Helper> = {
     dependencies: {},
     internal: false,
   }),
-  // size: 537, gzip size: 258
+  // size: 176, gzip size: 138
+  immutableUint8Array: helper(
+    "8.1.0",
+    'function _immutableUint8Array(e){return"buffer"in e&&(e=e.buffer.slice(e.byteOffset,e.byteOffset+e.byteLength)),new Uint8Array(e.transferToImmutable?e.transferToImmutable():e)}',
+    {
+      globals: ["Uint8Array"],
+      locals: { _immutableUint8Array: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_immutableUint8Array",
+      dependencies: {},
+      internal: false,
+    },
+  ),
+  // size: 395, gzip size: 235
   importDeferProxy: helper(
     "7.23.0",
-    "function _importDeferProxy(e){var t=null,constValue=function(e){return function(){return e}},proxy=function(r){return function(n,o,f){return null===t&&(t=e()),r(t,o,f)}};return new Proxy({},{defineProperty:constValue(!1),deleteProperty:constValue(!1),get:proxy(Reflect.get),getOwnPropertyDescriptor:proxy(Reflect.getOwnPropertyDescriptor),getPrototypeOf:constValue(null),isExtensible:constValue(!1),has:proxy(Reflect.has),ownKeys:proxy(Reflect.ownKeys),preventExtensions:constValue(!0),set:constValue(!1),setPrototypeOf:constValue(!1)})}",
+    "function _importDeferProxy(e){var t;function r(){return!1}function n(r){return function(n,o,f){return r(t||(t=e()),o,f)}}return new Proxy({__proto__:null},{defineProperty:r,deleteProperty:r,get:n(Reflect.get),getOwnPropertyDescriptor:n(Reflect.getOwnPropertyDescriptor),isExtensible:r,has:n(Reflect.has),ownKeys:n(Reflect.ownKeys),preventExtensions:function(){return!0},set:r,setPrototypeOf:r})}",
     {
       globals: ["Proxy", "Reflect"],
       locals: { _importDeferProxy: ["body.0.id"] },
@@ -1008,6 +1051,19 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         assertThisInitialized: ["body.0.body.body.2.argument.callee"],
       },
+      internal: false,
+    },
+  ),
+  // size: 159, gzip size: 141
+  processResponse: helper(
+    "8.1.0",
+    'function _processResponse(t,e,r){return t.then(function(t){if(t.ok)return t=t[e](),r?t.then(r):t;throw TypeError("Fetch failed: "+t.status+" "+t.statusText)})}',
+    {
+      globals: ["TypeError"],
+      locals: { _processResponse: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_processResponse",
+      dependencies: {},
       internal: false,
     },
   ),
