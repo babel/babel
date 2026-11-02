@@ -535,9 +535,9 @@ function mergeExtendsChain(chain, opts, dirname, context, files, baseLogger) {
 }
 function mergeChain(target, source) {
   var _target$options, _target$plugins, _target$presets;
-  Function.prototype.apply.call((_target$options = target.options).push, _target$options, babelHelpers.toConsumableArray(source.options));
-  Function.prototype.apply.call((_target$plugins = target.plugins).push, _target$plugins, babelHelpers.toConsumableArray(source.plugins));
-  Function.prototype.apply.call((_target$presets = target.presets).push, _target$presets, babelHelpers.toConsumableArray(source.presets));
+  babelHelpers.callSpread((_target$options = target.options).push, _target$options, babelHelpers.toConsumableArray(source.options));
+  babelHelpers.callSpread((_target$plugins = target.plugins).push, _target$plugins, babelHelpers.toConsumableArray(source.plugins));
+  babelHelpers.callSpread((_target$presets = target.presets).push, _target$presets, babelHelpers.toConsumableArray(source.presets));
   var _iterator = babelHelpers.createForOfIteratorHelper(source.files),
     _step;
   try {
@@ -562,8 +562,8 @@ function mergeChainOpts(target, _ref7) {
       while (1) switch (_context6.n) {
         case 0:
           target.options.push(options);
-          _t = Function.prototype.apply;
-          _t2 = _t.call;
+          _t = babelHelpers;
+          _t2 = _t.callSpread;
           _t3 = (_target$plugins2 = target.plugins).push;
           _t4 = _target$plugins2;
           _t5 = babelHelpers;
@@ -571,8 +571,8 @@ function mergeChainOpts(target, _ref7) {
           return _context6.d(babelHelpers.regeneratorValues(plugins()), 1);
         case 1:
           _t2.call(_t, _t3, _t4, _t6.call(_t5, _context6.v));
-          _t7 = Function.prototype.apply;
-          _t8 = _t7.call;
+          _t7 = babelHelpers;
+          _t8 = _t7.callSpread;
           _t9 = (_target$presets2 = target.presets).push;
           _t0 = _target$presets2;
           _t1 = babelHelpers;

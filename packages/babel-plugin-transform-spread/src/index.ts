@@ -213,13 +213,19 @@ export default declare((api, options: Options) => {
           contextLiteral = t.thisExpression();
         }
 
-        // callee.apply(...) read .apply from a nullish callee before the
-        // arguments are evaluated while Function.prototype.apply.call throws
-        // only when invoked, after the callee and arguments are evaluated.
+        // callee.apply(...) reads .apply from a nullish callee before the
+        // arguments are evaluated, while the callSpread helper throws only
+        // after the callee and arguments are evaluated.
+        // The difference is only observed when the arguments have side
+        // effects: the context is either already evaluated as part of the
+        // callee or side-effect-free, so we only need to check the array.
         // We use the original callee here, to preserve any types/parentheses.
-        if (scope.hasBinding("Function", { noGlobals: true })) {
-          // Function is shadowed (e.g. by a named function expression),
-          // so we can't rely on Function.prototype.apply.call
+        const spreadArgs = node.arguments[0];
+        if (
+          t.isIdentifier(spreadArgs, { name: "arguments" }) ||
+          scope.isPure(spreadArgs) ||
+          !this.availableHelper("callSpread")
+        ) {
           node.callee = t.memberExpression(
             node.callee as t.Expression,
             t.identifier("apply"),
@@ -230,7 +236,7 @@ export default declare((api, options: Options) => {
             node.callee as t.Expression,
             t.cloneNode(contextLiteral),
           );
-          node.callee = template.expression.ast`Function.prototype.apply.call`;
+          node.callee = this.addHelper("callSpread");
         }
       },
 

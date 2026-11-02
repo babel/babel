@@ -1,5 +1,5 @@
 function foo() {
-  return Function.prototype.apply.call(bar, void 0, arguments);
+  return bar.apply(void 0, arguments);
 }
 function bar(one, two, three) {
   return [one, two, three];
