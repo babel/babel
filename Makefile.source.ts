@@ -386,7 +386,7 @@ function eslint(...extraArgs: string[]) {
   const chunks = [];
   // Linting everything at the same time needs too much memory and crashes
   // Do it in batches packages
-  for (let i = 0, chunkSize = 16; i < packagesPackages.length; i += chunkSize) {
+  for (let i = 0, chunkSize = 12; i < packagesPackages.length; i += chunkSize) {
     if (packagesPackages.length - i === 1) {
       // Only one package remaining
       chunks.push([`packages/${packagesPackages[i]}/**/*`]);
@@ -569,10 +569,9 @@ target["new-version-checklist"] = function () {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!                                                   !!!!!!
-!!!!!! Update the minVersion for the immutableUint8Array !!!!!!
-!!!!!! and processResponse helpers                       !!!!!!
+!!!!!! Write any important message here, and change the  !!!!!!
+!!!!!! if (0) above to if (1)                            !!!!!!
 !!!!!!                                                   !!!!!!
-!!!!!! Update min version in the filtered-namespaces transform
 !!!!!!                                                   !!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

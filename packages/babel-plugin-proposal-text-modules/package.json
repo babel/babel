@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-text-modules",
-  "version": "8.0.0-rc.2",
+  "version": "8.1.0",
   "description": "Transform text modules imports (`import '...' with { type: 'text' }`) to work in browsers and Node.js.",
   "repository": {
     "type": "git",

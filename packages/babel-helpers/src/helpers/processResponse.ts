@@ -1,4 +1,4 @@
-/* @minVersion 8.0.0 */
+/* @minVersion 8.1.0 */
 
 export default function _processResponse(
   responseP: Promise<Response>,
