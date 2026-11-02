@@ -795,6 +795,8 @@ jobs:
     name: Codspeed
     runs-on: codspeed-macro-arm64-graviton-ubuntu-22-04
     needs: prepare-yarn-cache
+    # CodSpeed does not support the merge_group event
+    if: github.event_name != 'merge_group'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -818,7 +820,7 @@ jobs:
         with:
           mode: walltime
           run: node --expose-gc --no-allocation-site-pretenuring ./benchmark/index.mjs --only-current
-  
+
   required-checks:
     name: Required Checks
     runs-on: ubuntu-latest
