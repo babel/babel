@@ -1,0 +1,1 @@
+{"version":3,"file":"b.js","names":[],"sources":["../src/b.js"],"sourcesContent":["const result = add(1, 2);\nconsole.log(result);"],"mappings":"AAAA;mBACmB","ignoreList":[],"rangeMappings":"A"}

@@ -1,0 +1,58 @@
+{
+  "type": "File",
+  "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":15,"index":44}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":44,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":15,"index":44}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "StructDeclaration",
+        "start":0,"end":13,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":13}},
+        "id": {
+          "type": "Identifier",
+          "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8},"identifierName":"S"},
+          "name": "S"
+        },
+        "superClass": null,
+        "body": {
+          "type": "StructBody",
+          "start":9,"end":13,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":3,"column":1,"index":13}},
+          "body": []
+        }
+      },
+      {
+        "type": "StructDeclaration",
+        "start":14,"end":28,"loc":{"start":{"line":4,"column":0,"index":14},"end":{"line":4,"column":14,"index":28}},
+        "id": {
+          "type": "Identifier",
+          "start":21,"end":22,"loc":{"start":{"line":4,"column":7,"index":21},"end":{"line":4,"column":8,"index":22},"identifierName":"T"},
+          "name": "T"
+        },
+        "superClass": null,
+        "body": {
+          "type": "StructBody",
+          "start":23,"end":28,"loc":{"start":{"line":4,"column":9,"index":23},"end":{"line":4,"column":14,"index":28}},
+          "body": []
+        }
+      },
+      {
+        "type": "StructDeclaration",
+        "start":29,"end":44,"loc":{"start":{"line":5,"column":0,"index":29},"end":{"line":5,"column":15,"index":44}},
+        "id": {
+          "type": "Identifier",
+          "start":36,"end":37,"loc":{"start":{"line":5,"column":7,"index":36},"end":{"line":5,"column":8,"index":37},"identifierName":"U"},
+          "name": "U"
+        },
+        "superClass": null,
+        "body": {
+          "type": "StructBody",
+          "start":38,"end":44,"loc":{"start":{"line":5,"column":9,"index":38},"end":{"line":5,"column":15,"index":44}},
+          "body": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

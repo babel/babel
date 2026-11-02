@@ -30,6 +30,7 @@ import type Parser from "./index.ts";
 
 import type ScopeHandler from "../util/scope.ts";
 import { OptionFlags } from "../options.ts";
+import * as charCodes from "charcodes";
 
 type TryParse<Node, Error, Thrown, Aborted, FailState> = {
   node: Node;
@@ -84,6 +85,9 @@ export default abstract class UtilParser extends Tokenizer {
       const nextCh = this.input.charCodeAt(nameStart + name.length);
       return !(
         isIdentifierChar(nextCh) ||
+        // a `\u` escape continues the identifier: `function\u{61}` is the
+        // IdentifierName `functiona`, not the keyword `function`
+        nextCh === charCodes.backslash ||
         // check if `nextCh is between 0xd800 - 0xdbff,
         // if `nextCh` is NaN, `NaN & 0xfc00` is 0, the function
         // returns true

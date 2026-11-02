@@ -199,7 +199,7 @@ jobs:
         if: steps.cherry-pick.outputs.status == 'clean'
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: 26
           check-latest: true
           cache: yarn
 
@@ -368,7 +368,7 @@ steps:
   - name: Use Node.js latest
     uses: actions/setup-node@v7
     with:
-      node-version: latest
+      node-version: 26
       check-latest: true
       cache: yarn
   - name: Build

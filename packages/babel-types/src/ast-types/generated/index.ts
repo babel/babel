@@ -200,6 +200,8 @@ export type Node =
   | StringLiteral
   | StringLiteralTypeAnnotation
   | StringTypeAnnotation
+  | StructBody
+  | StructDeclaration
   | Super
   | SwitchCase
   | SwitchStatement
@@ -864,6 +866,7 @@ export interface ExportDefaultDeclaration extends BaseNode {
     | FunctionDeclaration
     | ClassDeclaration
     | Expression
+    | StructDeclaration
     | TSDeclareFunction
     | TSInterfaceDeclaration
     | EnumDeclaration;
@@ -876,6 +879,7 @@ export interface ExportNamedDeclaration extends BaseNode {
     | VariableDeclaration
     | FunctionDeclaration
     | ClassDeclaration
+    | StructDeclaration
     | TSDeclareFunction
     | TSEnumDeclaration
     | TSImportEqualsDeclaration
@@ -893,6 +897,7 @@ export interface ExportNamedDeclaration extends BaseNode {
   source?: StringLiteral | null;
   attributes?: ImportAttribute[] | null;
   exportKind?: "type" | "value" | null;
+  phase?: "defer" | null;
 }
 
 export interface ExportSpecifier extends BaseNode {
@@ -939,6 +944,7 @@ export interface ImportDefaultSpecifier extends BaseNode {
 export interface ImportNamespaceSpecifier extends BaseNode {
   type: "ImportNamespaceSpecifier";
   local: Identifier;
+  exportsFilter?: (Identifier | StringLiteral)[] | null;
 }
 
 export interface ImportSpecifier extends BaseNode {
@@ -1055,6 +1061,7 @@ export interface ImportExpression extends BaseNode {
   source: Expression;
   options?: Expression | null;
   phase?: "source" | "defer" | null;
+  sync?: boolean | null;
 }
 
 export interface Import extends BaseNode {
@@ -1069,6 +1076,7 @@ export interface BigIntLiteral extends BaseNode {
 export interface ExportNamespaceSpecifier extends BaseNode {
   type: "ExportNamespaceSpecifier";
   exported: Identifier | StringLiteral;
+  exportsFilter?: (Identifier | StringLiteral)[] | null;
 }
 
 export interface OptionalMemberExpressionComputed extends BaseNode {
@@ -1767,6 +1775,25 @@ export interface VoidPattern extends BaseNode {
   type: "VoidPattern";
 }
 
+export interface StructDeclaration extends BaseNode {
+  type: "StructDeclaration";
+  id?: Identifier | null;
+  superClass?: Expression | null;
+  body: StructBody;
+}
+
+export interface StructBody extends BaseNode {
+  type: "StructBody";
+  body: (
+    | ClassMethod
+    | ClassPrivateMethod
+    | ClassProperty
+    | ClassPrivateProperty
+    | StaticBlock
+    | ClassAccessorProperty
+  )[];
+}
+
 export interface TSParameterProperty extends BaseNode {
   type: "TSParameterProperty";
   parameter: Identifier | AssignmentPattern;
@@ -2367,6 +2394,7 @@ export type Scopable =
   | ClassMethod
   | ClassPrivateMethod
   | StaticBlock
+  | StructDeclaration
   | TSModuleBlock;
 export type BlockParent =
   | BlockStatement
@@ -2427,6 +2455,7 @@ export type Statement =
   | OpaqueType
   | TypeAlias
   | EnumDeclaration
+  | StructDeclaration
   | TSDeclareFunction
   | TSInterfaceDeclaration
   | TSTypeAliasDeclaration
@@ -2504,6 +2533,7 @@ export type Declaration =
   | OpaqueType
   | TypeAlias
   | EnumDeclaration
+  | StructDeclaration
   | TSDeclareFunction
   | TSInterfaceDeclaration
   | TSTypeAliasDeclaration
@@ -2997,6 +3027,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -3107,6 +3138,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -3170,6 +3202,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -3245,6 +3278,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -3308,6 +3342,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -3396,6 +3431,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -3459,6 +3495,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -3547,6 +3584,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -3673,6 +3711,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -3697,7 +3736,7 @@ export interface ParentMaps {
     | WithStatement
     | YieldExpression;
   CatchClause: TryStatement;
-  ClassAccessorProperty: ClassBody;
+  ClassAccessorProperty: ClassBody | StructBody;
   ClassBody: ClassDeclaration | ClassExpression;
   ClassDeclaration:
     | BlockStatement
@@ -3755,6 +3794,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -3783,10 +3823,10 @@ export interface ParentMaps {
     | ClassExpression
     | DeclareClass
     | DeclareExportDeclaration;
-  ClassMethod: ClassBody;
-  ClassPrivateMethod: ClassBody;
-  ClassPrivateProperty: ClassBody;
-  ClassProperty: ClassBody;
+  ClassMethod: ClassBody | StructBody;
+  ClassPrivateMethod: ClassBody | StructBody;
+  ClassPrivateProperty: ClassBody | StructBody;
+  ClassProperty: ClassBody | StructBody;
   CommentBlock: File;
   CommentLine: File;
   ConditionalExpression:
@@ -3829,6 +3869,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -4095,6 +4136,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -4378,6 +4420,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -4531,6 +4574,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -4655,6 +4699,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -4829,6 +4874,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -4897,6 +4943,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -4988,6 +5035,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -5053,6 +5101,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -5117,6 +5166,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -5204,6 +5254,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -5267,6 +5318,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -5330,6 +5382,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -5492,6 +5545,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -5556,6 +5610,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -5694,6 +5749,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -5781,6 +5837,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -5844,6 +5901,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -5925,6 +5983,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -6021,6 +6080,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -6051,7 +6111,7 @@ export interface ParentMaps {
     | ObjectExpression
     | OptionalCallExpression;
   SpreadProperty: null;
-  StaticBlock: ClassBody;
+  StaticBlock: ClassBody | StructBody;
   StringLiteral:
     | ArrayExpression
     | ArrowFunctionExpression
@@ -6088,6 +6148,7 @@ export interface ParentMaps {
     | ImportAttribute
     | ImportDeclaration
     | ImportExpression
+    | ImportNamespaceSpecifier
     | ImportSpecifier
     | JSXAttribute
     | JSXExpressionContainer
@@ -6105,6 +6166,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -6180,6 +6242,23 @@ export interface ParentMaps {
     | TypeParameterInstantiation
     | TypeofTypeAnnotation
     | UnionTypeAnnotation;
+  StructBody: StructDeclaration;
+  StructDeclaration:
+    | BlockStatement
+    | DoWhileStatement
+    | ExportDefaultDeclaration
+    | ExportNamedDeclaration
+    | ForInStatement
+    | ForOfStatement
+    | ForStatement
+    | IfStatement
+    | LabeledStatement
+    | Program
+    | StaticBlock
+    | SwitchCase
+    | TSModuleBlock
+    | WhileStatement
+    | WithStatement;
   Super: CallExpression | MemberExpression;
   SwitchCase: SwitchStatement;
   SwitchStatement:
@@ -6306,6 +6385,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -6637,6 +6717,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -6905,6 +6986,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -7111,6 +7193,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -7328,6 +7411,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -7622,6 +7706,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -7686,6 +7771,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -7750,6 +7836,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -7857,6 +7944,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -7995,6 +8083,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -8113,6 +8202,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -8201,6 +8291,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression
@@ -8353,6 +8444,7 @@ export interface ParentMaps {
     | ReturnStatement
     | SequenceExpression
     | SpreadElement
+    | StructDeclaration
     | SwitchCase
     | SwitchStatement
     | TSAsExpression

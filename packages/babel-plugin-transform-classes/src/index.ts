@@ -19,7 +19,7 @@ const builtinClasses = new Set([
 builtinClasses.delete("Iterator");
 
 export interface Options {
-  /** @deprecated Use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead. */
+  /** @deprecated Use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', 'noClassCalls', 'noClassPrototypeAssign', and 'noConstructorPrimitiveReturn' assumptions instead. */
   loose?: boolean;
 }
 
@@ -29,7 +29,7 @@ export default declare((api, options: Options) => {
   if ("loose" in options) {
     console.warn(
       "@babel/plugin-transform-classes: The 'loose' option has been deprecated, " +
-        "use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', and 'noClassCalls' assumptions instead (https://babeljs.io/assumptions).",
+        "use the 'setClassMethods', 'constantSuper', 'superIsCallableConstructor', 'noClassCalls', 'noClassPrototypeAssign', and 'noConstructorPrimitiveReturn' assumptions instead (https://babeljs.io/assumptions).",
     );
   }
 
@@ -40,8 +40,11 @@ export default declare((api, options: Options) => {
   const superIsCallableConstructor =
     api.assumption("superIsCallableConstructor") ?? loose;
   const noClassCalls = api.assumption("noClassCalls") ?? loose;
-  const noClassPrototypeAssign = loose;
-  const noConstructorPrimitiveReturn = loose;
+  const noClassPrototypeAssign =
+    api.assumption("noClassPrototypeAssign") ?? loose;
+  const noConstructorPrimitiveReturn =
+    api.assumption("noConstructorPrimitiveReturn") ?? loose;
+  const noUninitializedThis = api.assumption("noUninitializedThis") ?? false;
   const supportUnicodeId = !isRequired(
     "transform-unicode-escapes",
     api.targets(),
@@ -94,6 +97,7 @@ export default declare((api, options: Options) => {
               noClassCalls,
               noClassPrototypeAssign,
               noConstructorPrimitiveReturn,
+              noUninitializedThis,
             },
             supportUnicodeId,
           ),

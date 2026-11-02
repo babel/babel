@@ -1,0 +1,9 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "deferredReexports",
+    "deferredImportEvaluation",
+    "typescript"
+  ],
+  "throws": "Unexpected token, expected \"=\" (1:18)"
+}

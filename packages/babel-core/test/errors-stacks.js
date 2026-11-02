@@ -33,6 +33,15 @@ function expectError(run) {
       /(?:\n\s*at ((?:async )?[\w.]+)? ?\((?:node:)?(internal|diagnostics_channel)[^\n]+)+/g,
       "\n    at $1 (... internal node frames ...)",
     );
+    // V8 omits the generator function name from `<fn>.next` frames when the
+    // caller has been optimized (e.g. after other tests warmed up @babel/core
+    // in the same worker), so the name depends on JIT state.
+    // See https://issues.chromium.org/issues/579500653.
+    // TODO: Remove this once that V8 issue is fixed.
+    stack = stack.replace(
+      /\bat [\w$]+\.next \(<anonymous>\)/g,
+      "at next (<anonymous>)",
+    );
     // Replace line/column numbers, since they are affected by how
     // the code is compiled. The first optional ?\d+ is added by Jest.
     stack = stack.replace(/(?:\?\d+)?:\d+:\d+(\)?)$/gm, ":_:_$1");
@@ -240,15 +249,15 @@ describe("@babel/core errors", function () {
       "Error: Internal error! This is a fake bug :)
           at Array.map (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
           at loadOneConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at loadOneConfig.next (<anonymous>)
+          at next (<anonymous>)
           at buildRootChain (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at buildRootChain.next (<anonymous>)
+          at next (<anonymous>)
           at loadPrivatePartialConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at loadPrivatePartialConfig.next (<anonymous>)
+          at next (<anonymous>)
           at loadFullConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at loadFullConfig.next (<anonymous>)
+          at next (<anonymous>)
           at parse (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at parse.next (<anonymous>)
+          at next (<anonymous>)
           at evaluateSync (<CWD>/node_modules/gensync/index.js:_:_)
           at sync (<CWD>/node_modules/gensync/index.js:_:_)
           at stopHiding - secret - don't use this - v1 (<BABEL_CORE_LIB_SOME_FILE>:_:_)

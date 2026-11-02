@@ -1,1 +1,1 @@
-const j = await fetch(import.meta.resolve("./x.json")).then(r => r.json());
+const j = await babelHelpers.processResponse(fetch(import.meta.resolve("./x.json")), "json");

@@ -894,6 +894,87 @@ describe("generation", function () {
     `);
   });
 
+  it("disables source map ranges when an inputSourceMap is provided", () => {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      const code = "var t = x => x * x;";
+      const opts = {
+        sourceMaps: true,
+        filename: "input.js",
+        inputSourceMap: {
+          version: 3,
+          names: ["t", "x"],
+          sources: ["source-maps/arrow-function/input.js"],
+          mappings:
+            "AAAA,IAAIA,CAAC,GAAG,SAAJA,CAACA,CAAGC,CAAC;EAAA,OAAIA,CAAC,GAAGA,CAAC;AAAA",
+        },
+      };
+
+      const withRanges = generate(parse(code), {
+        ...opts,
+        sourceMapRanges: true,
+      }).map;
+      const withoutRanges = generate(parse(code), opts).map;
+
+      expect(withRanges.rangeMappings).toBeUndefined();
+      expect(withRanges).toEqual(withoutRanges);
+
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining(
+          "The code generator has disabled source map ranges for input.js",
+        ),
+      );
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it("source map ranges do not drop named mappings in compact mode", () => {
+    const code = "var a = b;";
+    const ast = parse(code, { sourceFilename: "inline" });
+    t.traverseFast(ast, node => {
+      if (node.type === "Identifier") node.name += "_";
+    });
+
+    const { rawMappings } = generate(
+      ast,
+      { sourceMaps: true, sourceMapRanges: true, compact: true },
+      code,
+    );
+
+    expect(rawMappings.filter(m => m.name).map(m => m.name)).toEqual([
+      "a",
+      "b",
+    ]);
+  });
+
+  it("source map ranges do not drop mappings on different generated lines", () => {
+    const code = "debugger;";
+    const ast = parse(code, { sourceFilename: "inline" });
+    ast.program.body.push(t.cloneNode(ast.program.body[0], true, false));
+
+    const { rawMappings } = generate(
+      ast,
+      { sourceMaps: true, sourceMapRanges: true },
+      code,
+    );
+
+    expect(
+      rawMappings.map(({ generated, original }) => [generated, original]),
+    ).toEqual([
+      [
+        { line: 1, column: 0 },
+        { line: 1, column: 0 },
+      ],
+      [
+        { line: 2, column: 0 },
+        { line: 1, column: 0 },
+      ],
+    ]);
+  });
+
   it("should not throw when loc.column === 0 with inputSourceMap", () => {
     const ast = parseExpression("a(\n)");
 

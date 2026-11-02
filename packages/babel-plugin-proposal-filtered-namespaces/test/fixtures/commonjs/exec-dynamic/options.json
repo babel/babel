@@ -1,0 +1,6 @@
+{
+  "sourceType": "script",
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
+}

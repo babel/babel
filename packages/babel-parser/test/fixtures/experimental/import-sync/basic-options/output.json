@@ -1,0 +1,88 @@
+{
+  "type": "File",
+  "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":66,"index":66}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":66,"index":66}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":66,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":66,"index":66}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":65,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":65,"index":65}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":9,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":9,"index":9},"identifierName":"mod"},
+              "name": "mod"
+            },
+            "init": {
+              "type": "ImportExpression",
+              "start":12,"end":65,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":65,"index":65}},
+              "sync": true,
+              "source": {
+                "type": "StringLiteral",
+                "start":24,"end":36,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":36,"index":36}},
+                "extra": {
+                  "rawValue": "./foo.json",
+                  "raw": "\"./foo.json\""
+                },
+                "value": "./foo.json"
+              },
+              "options": {
+                "type": "ObjectExpression",
+                "start":38,"end":64,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":1,"column":64,"index":64}},
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start":40,"end":62,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":62,"index":62}},
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start":40,"end":44,"loc":{"start":{"line":1,"column":40,"index":40},"end":{"line":1,"column":44,"index":44},"identifierName":"with"},
+                      "name": "with"
+                    },
+                    "computed": false,
+                    "shorthand": false,
+                    "value": {
+                      "type": "ObjectExpression",
+                      "start":46,"end":62,"loc":{"start":{"line":1,"column":46,"index":46},"end":{"line":1,"column":62,"index":62}},
+                      "properties": [
+                        {
+                          "type": "ObjectProperty",
+                          "start":48,"end":60,"loc":{"start":{"line":1,"column":48,"index":48},"end":{"line":1,"column":60,"index":60}},
+                          "method": false,
+                          "key": {
+                            "type": "Identifier",
+                            "start":48,"end":52,"loc":{"start":{"line":1,"column":48,"index":48},"end":{"line":1,"column":52,"index":52},"identifierName":"type"},
+                            "name": "type"
+                          },
+                          "computed": false,
+                          "shorthand": false,
+                          "value": {
+                            "type": "StringLiteral",
+                            "start":54,"end":60,"loc":{"start":{"line":1,"column":54,"index":54},"end":{"line":1,"column":60,"index":60}},
+                            "extra": {
+                              "rawValue": "json",
+                              "raw": "\"json\""
+                            },
+                            "value": "json"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}
