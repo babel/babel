@@ -11,7 +11,7 @@ var Test = /*#__PURE__*/function (_Foo) {
     _this = babelHelpers.callSuper(this, Test, arguments);
     _this = babelHelpers.callSuper(this, Test, ["test"].concat(Array.prototype.slice.call(arguments)));
     _Foo.prototype.test.apply(_this, arguments);
-    Function.prototype.apply.call((_Foo$prototype$test = _Foo.prototype.test).call, _Foo$prototype$test, [_this, "test"].concat(Array.prototype.slice.call(arguments)));
+    babelHelpers.callSpread((_Foo$prototype$test = _Foo.prototype.test).call, _Foo$prototype$test, [_this, "test"].concat(Array.prototype.slice.call(arguments)));
     return _this;
   }
   babelHelpers.inherits(Test, _Foo);

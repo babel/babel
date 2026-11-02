@@ -8,6 +8,6 @@ var obj = {
 };
 switch (true) {
   case true:
-    Function.prototype.apply.call((_obj$obj = obj.obj).fn, _obj$obj, args);
+    (_obj$obj = obj.obj).fn.apply(_obj$obj, args);
     break;
 }

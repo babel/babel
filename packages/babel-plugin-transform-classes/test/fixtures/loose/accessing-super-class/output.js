@@ -8,9 +8,9 @@ var Test = /*#__PURE__*/function (_Foo) {
     _this = _Foo.call(this) || this;
     _Foo.prototype.test.call(_this);
     _this = _Foo.apply(this, arguments) || this;
-    _this = Function.prototype.apply.call(_Foo.call, _Foo, [this, "test"].concat(Array.prototype.slice.call(arguments))) || this;
+    _this = babelHelpers.callSpread(_Foo.call, _Foo, [this, "test"].concat(Array.prototype.slice.call(arguments))) || this;
     _Foo.prototype.test.apply(_this, arguments);
-    Function.prototype.apply.call((_Foo$prototype$test = _Foo.prototype.test).call, _Foo$prototype$test, [_this, "test"].concat(Array.prototype.slice.call(arguments)));
+    babelHelpers.callSpread((_Foo$prototype$test = _Foo.prototype.test).call, _Foo$prototype$test, [_this, "test"].concat(Array.prototype.slice.call(arguments)));
     return _this;
   }
   babelHelpers.inheritsLoose(Test, _Foo);
