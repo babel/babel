@@ -81,32 +81,46 @@ async function getTrustedPublishingError(name: string): Promise<string | null> {
 
 const packages = getPackagesToPublish();
 
-console.log(`Checking trusted publishing for ${packages.length} packages...`);
-
-const failures: { name: string; error: string }[] = [];
-const queue = [...packages];
-const checkQueue = async () => {
-  let name;
-  while ((name = queue.shift()) !== undefined) {
-    const error = await getTrustedPublishingError(name);
-    if (error !== null) failures.push({ name, error });
-  }
-};
-await Promise.all([checkQueue(), checkQueue(), checkQueue(), checkQueue()]);
-
-if (failures.length === 0) {
-  console.log("All packages can be published with trusted publishing :)");
-} else {
+// `yarn release-tool publish` succeeds without doing anything when HEAD is
+// not a release commit (for example, when a version tag has been moved to
+// the wrong commit), so that the release looks successful.
+if (packages.length === 0) {
+  const head = execSync("git log -1 --format='%h %s'", {
+    encoding: "utf-8",
+  }).trim();
   console.error(
-    "The following packages cannot be published with trusted publishing:"
-  );
-  for (const { name, error } of failures) {
-    console.error(`- ${name} (${error})`);
-  }
-  console.error(
-    `\nA maintainer needs to set up trusted publishing for them, logged in to npm with npm >= 11.15.0:\n` +
-      failures.map(({ name }) => `  ${getTrustCommand(name)}`).join("\n") +
-      "\nThen re-run this job. Nothing has been published."
+    `There are no packages to publish: no public package.json changed in ${head}.\n` +
+      "The release must run on the commit created by `yarn release-tool version`."
   );
   process.exitCode = 1;
+} else {
+  console.log(`Checking trusted publishing for ${packages.length} packages...`);
+
+  const failures: { name: string; error: string }[] = [];
+  const queue = [...packages];
+  const checkQueue = async () => {
+    let name;
+    while ((name = queue.shift()) !== undefined) {
+      const error = await getTrustedPublishingError(name);
+      if (error !== null) failures.push({ name, error });
+    }
+  };
+  await Promise.all([checkQueue(), checkQueue(), checkQueue(), checkQueue()]);
+
+  if (failures.length === 0) {
+    console.log("All packages can be published with trusted publishing :)");
+  } else {
+    console.error(
+      "The following packages cannot be published with trusted publishing:"
+    );
+    for (const { name, error } of failures) {
+      console.error(`- ${name} (${error})`);
+    }
+    console.error(
+      `\nA maintainer needs to set up trusted publishing for them, logged in to npm with npm >= 11.15.0:\n` +
+        failures.map(({ name }) => `  ${getTrustCommand(name)}`).join("\n") +
+        "\nThen re-run this job. Nothing has been published."
+    );
+    process.exitCode = 1;
+  }
 }
