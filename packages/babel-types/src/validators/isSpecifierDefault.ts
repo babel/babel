@@ -1,4 +1,8 @@
-import { isIdentifier, isImportDefaultSpecifier } from "./generated/index.ts";
+import {
+  isIdentifier,
+  isImportDefaultSpecifier,
+  isStringLiteral,
+} from "./generated/index.ts";
 import type * as t from "../index.ts";
 
 /**
@@ -7,11 +11,12 @@ import type * as t from "../index.ts";
 export default function isSpecifierDefault(
   specifier: t.ModuleSpecifier,
 ): boolean {
+  if (isImportDefaultSpecifier(specifier)) return true;
+
+  // @ts-expect-error todo(flow->ts): stricter type for specifier
+  const name = specifier.imported || specifier.exported;
   return (
-    isImportDefaultSpecifier(specifier) ||
-    // @ts-expect-error todo(flow->ts): stricter type for specifier
-    isIdentifier(specifier.imported || specifier.exported, {
-      name: "default",
-    })
+    isIdentifier(name, { name: "default" }) ||
+    isStringLiteral(name, { value: "default" })
   );
 }
