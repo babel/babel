@@ -124,6 +124,11 @@ jobs:
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
 
+      # Fail before building and publishing anything if some packages cannot be
+      # published, since a release that is published only partially cannot be resumed.
+      - name: Check npm trusted publishing
+        run: node ./scripts/check-trusted-publishing.ts
+
       - name: Build and Test
         run: make prepublish
         env:
