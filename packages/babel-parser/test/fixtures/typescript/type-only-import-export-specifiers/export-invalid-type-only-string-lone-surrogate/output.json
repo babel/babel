@@ -1,0 +1,56 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+  "errors": [
+    "SyntaxError: An export name cannot include a lone surrogate, found '\\ud83d'. (1:14)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":39,"index":39}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":9,"end":27,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":27,"index":27}},
+            "local": {
+              "type": "StringLiteral",
+              "start":14,"end":22,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":22,"index":22}},
+              "extra": {
+                "rawValue": "\ud83d",
+                "raw": "\"\\uD83D\""
+              },
+              "value": "\ud83d"
+            },
+            "exportKind": "type",
+            "exported": {
+              "type": "Identifier",
+              "start":26,"end":27,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":27,"index":27},"identifierName":"a"},
+              "name": "a"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":35,"end":38,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":38,"index":38}},
+          "extra": {
+            "rawValue": "m",
+            "raw": "\"m\""
+          },
+          "value": "m"
+        },
+        "attributes": [],
+        "declaration": null
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "type": "File",
+  "start":0,"end":68,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":34,"index":68}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":68,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":34,"index":68}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":9,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":9,"index":9}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":4,"end":8,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":8,"index":8}},
+            "id": {
+              "type": "Identifier",
+              "start":4,"end":8,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":8,"index":8},"identifierName":"type"},
+              "name": "type"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":10,"end":33,"loc":{"start":{"line":2,"column":0,"index":10},"end":{"line":2,"column":23,"index":33}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":19,"end":30,"loc":{"start":{"line":2,"column":9,"index":19},"end":{"line":2,"column":20,"index":30}},
+            "local": {
+              "type": "Identifier",
+              "start":19,"end":23,"loc":{"start":{"line":2,"column":9,"index":19},"end":{"line":2,"column":13,"index":23},"identifierName":"type"},
+              "name": "type"
+            },
+            "exported": {
+              "type": "StringLiteral",
+              "start":27,"end":30,"loc":{"start":{"line":2,"column":17,"index":27},"end":{"line":2,"column":20,"index":30}},
+              "extra": {
+                "rawValue": "a",
+                "raw": "\"a\""
+              },
+              "value": "a"
+            },
+            "exportKind": "value"
+          }
+        ],
+        "source": null,
+        "attributes": [],
+        "declaration": null
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":34,"end":68,"loc":{"start":{"line":3,"column":0,"index":34},"end":{"line":3,"column":34,"index":68}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":43,"end":56,"loc":{"start":{"line":3,"column":9,"index":43},"end":{"line":3,"column":22,"index":56}},
+            "local": {
+              "type": "Identifier",
+              "start":43,"end":47,"loc":{"start":{"line":3,"column":9,"index":43},"end":{"line":3,"column":13,"index":47},"identifierName":"type"},
+              "name": "type"
+            },
+            "exported": {
+              "type": "StringLiteral",
+              "start":51,"end":56,"loc":{"start":{"line":3,"column":17,"index":51},"end":{"line":3,"column":22,"index":56}},
+              "extra": {
+                "rawValue": "b c",
+                "raw": "\"b c\""
+              },
+              "value": "b c"
+            },
+            "exportKind": "value"
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":64,"end":67,"loc":{"start":{"line":3,"column":30,"index":64},"end":{"line":3,"column":33,"index":67}},
+          "extra": {
+            "rawValue": "m",
+            "raw": "\"m\""
+          },
+          "value": "m"
+        },
+        "attributes": [],
+        "declaration": null
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
