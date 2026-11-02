@@ -6,6 +6,7 @@ import jsesc from "jsesc";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 import { _methodHead } from "./methods.ts";
+import { TokenContext } from "../node/index.ts";
 
 let lastRawIdentResult: string = "";
 export function _getRawIdentifier(this: Printer, node: t.Identifier) {
@@ -23,7 +24,11 @@ export function Identifier(this: Printer, node: t.Identifier) {
     this.sourceIdentifierName(node.loc?.identifierName || node.name);
   }
 
-  this.word(this.tokenMap ? lastRawIdentResult : node.name);
+  let name = this.tokenMap ? lastRawIdentResult : node.name;
+  if (name === "of" && this.tokenContext & TokenContext.usingForOfBinding) {
+    name = "o\\u0066";
+  }
+  this.word(name);
 }
 
 export function ArgumentPlaceholder(this: Printer) {
