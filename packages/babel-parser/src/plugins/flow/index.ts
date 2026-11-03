@@ -3024,8 +3024,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     // todo description
-    shouldParseAsyncArrow(): boolean {
-      return this.match(tt.colon) || super.shouldParseAsyncArrow();
+    shouldParseAsyncArrow(startLoc: Position): boolean {
+      return this.match(tt.colon) || super.shouldParseAsyncArrow(startLoc);
     }
 
     // We need to support type parameter declarations for arrow functions. This
