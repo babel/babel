@@ -590,8 +590,8 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: babel-test262-runner/cache.lmdb*
-          key: test262-${{ matrix.chunk }}-${{ hashFiles('babel-test262-runner/package-lock.json', 'babel-test262-runner/lib/run-tests/**') }}-${{ github.sha }}
-          restore-keys: test262-${{ matrix.chunk }}-${{ hashFiles('babel-test262-runner/package-lock.json', 'babel-test262-runner/lib/run-tests/**') }}-
+          key: test262-7.x-${{ matrix.chunk }}-${{ hashFiles('babel-test262-runner/package-lock.json', 'babel-test262-runner/lib/run-tests/**') }}-${{ github.sha }}
+          restore-keys: test262-7.x-${{ matrix.chunk }}-${{ hashFiles('babel-test262-runner/package-lock.json', 'babel-test262-runner/lib/run-tests/**') }}-
       - name: Run test262
         run: |
           cd babel-test262-runner
@@ -606,11 +606,11 @@ jobs:
           CHUNKS_FILE: ../test262-chunks.json
           CHUNK: ${{ matrix.chunk }}
       - name: Save test262 result cache
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/7.x'
         uses: actions/cache/save@v6
         with:
           path: babel-test262-runner/cache.lmdb*
-          key: test262-${{ matrix.chunk }}-${{ hashFiles('babel-test262-runner/package-lock.json', 'babel-test262-runner/lib/run-tests/**') }}-${{ github.sha }}
+          key: test262-7.x-${{ matrix.chunk }}-${{ hashFiles('babel-test262-runner/package-lock.json', 'babel-test262-runner/lib/run-tests/**') }}-${{ github.sha }}
       - name: Create artifact with report results
         uses: actions/upload-artifact@v7
         with:
