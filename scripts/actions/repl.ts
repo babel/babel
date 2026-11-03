@@ -63,21 +63,22 @@ export async function getCircleciJobId(branch: string, headSha: string) {
   // Stop starting new requests after ten minutes.
   const deadline = Date.now() + 10 * 60 * 1000;
   while (true) {
-    const pipelines: Pipeline[] = [];
+    let pipeline: Pipeline | undefined;
     const pipelinesUrl = new URL(
       "https://circleci.com/api/v2/project/github/babel/babel/pipeline?" +
         new URLSearchParams({ branch }).toString()
     );
     while (true) {
       const body = await request(pipelinesUrl, deadline);
-      pipelines.push(...body.items);
-      if (!body.next_page_token) break;
+      const pipelines: Pipeline[] = body.items;
+      pipeline = latest(
+        pipelines.filter(item => item.vcs.revision === headSha),
+        item => item.created_at
+      );
+      // Pipelines are returned newest-first; later pages cannot have a newer match.
+      if (pipeline || !body.next_page_token) break;
       pipelinesUrl.searchParams.set("page-token", body.next_page_token);
     }
-    const pipeline = latest(
-      pipelines.filter(item => item.vcs.revision === headSha),
-      item => item.created_at
-    );
 
     if (pipeline) {
       // The v2 pipeline ID is a v3 run ID, not a v3 pipeline definition ID.
