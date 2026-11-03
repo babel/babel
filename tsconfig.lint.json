@@ -1,0 +1,37 @@
+{
+  "extends": [
+    "./tsconfig.base.json",
+    "./tsconfig.paths.json"
+  ],
+  "compilerOptions": {
+    "composite": false,
+    "incremental": false,
+    "declaration": false,
+    "declarationMap": false,
+    "emitDeclarationOnly": false,
+    "declarationDir": null,
+    "noEmit": true
+  },
+  "include": [
+    "*.mts",
+    "*.ts",
+    "lib/globals.d.ts",
+    "lib/libdom-minimal.d.ts",
+    "scripts/**/*.ts",
+    "scripts/**/*.cts",
+    "codemods/*/src/**/*.ts",
+    "codemods/*/src/**/*.cts",
+    "codemods/*/test/*.tst.ts",
+    "eslint/*/src/**/*.ts",
+    "eslint/*/src/**/*.cts",
+    "eslint/*/test/*.tst.ts",
+    "packages/*/src/**/*.ts",
+    "packages/*/src/**/*.cts",
+    "packages/*/src/**/*.mts",
+    "packages/*/scripts/**/*.ts",
+    "packages/*/test/*.tst.ts",
+    "packages/*/types.d.ts"
+  ],
+  "exclude": [],
+  "references": []
+}
