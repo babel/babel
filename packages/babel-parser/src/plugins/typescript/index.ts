@@ -372,25 +372,6 @@ function tsHasUnambiguousArrowParams(
   }
 }
 
-// Whether all the parameters of an arrow function are valid, such that it can
-// be an arrow function at all. For example, it is not valid in `async(1): T => a`
-// or `((a)): T => b`, while `(a, a): T => b` is an arrow function with an error.
-function tsAreValidArrowParams(params: readonly (N.Node | null)[]): boolean {
-  return params.every(param => {
-    switch (param?.type) {
-      case "Identifier":
-        return !param.extra?.parenthesized;
-      case "ObjectPattern":
-      case "ArrayPattern":
-      case "RestElement":
-      case "AssignmentPattern":
-        return true;
-      default:
-        return false;
-    }
-  });
-}
-
 export const enum tsParseEntityNameFlags {
   NONE = 0b00,
   ALLOW_RESERVED_WORDS = 0b01,
@@ -3932,7 +3913,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       call: N.CallExpression,
     ): N.ArrowFunctionExpression {
       if (this.match(tt.colon)) {
-        this.tsArrowReturnTypeAt.add(this.offsetToSourcePos(node.start!));
         node.returnType = this.tsParseTypeAnnotation();
       }
       return super.parseAsyncArrowFromCallExpression(node, call);
@@ -4004,10 +3984,25 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (
             node.type !== "ArrowFunctionExpression" ||
             !node.returnType ||
-            node.extra?.parenthesized ||
-            (this.match(tt.colon) &&
-              (!result.error || tsAreValidArrowParams(node.params))) ||
-            tsHasUnambiguousArrowParams(node.params)
+            node.extra?.parenthesized
+          ) {
+            return node;
+          }
+          // Like when an error is thrown, parse it again if the parameters are
+          // not valid, as in `a ? b ? ([(c)]) : d => e : f`. An error after the
+          // parameters, or for names that are not allowed but still make it an
+          // arrow function as in `(a, a)`, doesn't mean that it's not one.
+          const hasInvalidParams =
+            result.error != null &&
+            result.error.pos < node.returnType.start! &&
+            result.error.reasonCode !== "ParamDupe" &&
+            result.error.reasonCode !== "StrictEvalArgumentsBinding";
+          if (
+            (!hasInvalidParams && this.match(tt.colon)) ||
+            // `async(...[(a)])` is a valid call, while `(...[(a)])` is always
+            // an invalid arrow function.
+            (tsHasUnambiguousArrowParams(node.params) &&
+              !(hasInvalidParams && node.async))
           ) {
             return node;
           }
@@ -4476,7 +4471,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return super.shouldParseArrow(params);
     }
 
-    shouldParseAsyncArrow(): boolean {
+    shouldParseAsyncArrow(startLoc: Position): boolean {
       if (this.match(tt.colon)) {
         // `async(b): c => d` is an arrow function with a return type, but in
         // `a ? await async(b) : c` the `:` is the conditional's separator.
@@ -4490,9 +4485,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           return returnType;
         });
         this.state = state;
-        return !result.aborted && !result.thrown;
+        if (result.aborted || result.thrown) return false;
+        // Do this before validating the parameters, which might throw.
+        this.tsArrowReturnTypeAt.add(this.offsetToSourcePos(startLoc.index));
+        return true;
       }
-      return super.shouldParseAsyncArrow();
+      return super.shouldParseAsyncArrow(startLoc);
     }
 
     atPossibleAsyncArrow(base: N.Expression | N.Super | N.Import): boolean {

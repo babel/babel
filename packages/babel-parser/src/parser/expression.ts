@@ -1007,7 +1007,7 @@ export default abstract class ExpressionParser extends LValParser {
       N.CallExpression | N.OptionalCallExpression | N.ArrowFunctionExpression =
       this.finishCallExpression(node, optionalChainMember);
 
-    if (maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
+    if (maybeAsyncArrow && this.shouldParseAsyncArrow(startLoc) && !optional) {
       /*:: invariant(refExpressionErrors != null) */
       state.stop = true;
       this.checkDestructuringPrivate(refExpressionErrors!);
@@ -1116,7 +1116,8 @@ export default abstract class ExpressionParser extends LValParser {
     return elts;
   }
 
-  shouldParseAsyncArrow(): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- `startLoc` is used in typescript plugin
+  shouldParseAsyncArrow(startLoc: Position): boolean {
     return this.match(tt.arrow) && !this.canInsertSemicolon();
   }
 
