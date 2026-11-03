@@ -493,82 +493,9 @@ jobs:
         run: yarn test:runtime:bundlers
       - name: Test Node.js latest
         run: node test/runtime-integration/node.cjs
-      # Keep testing the remaining versions when one of them fails.
-      - name: Test Node.js 10
+      - name: Test older Node.js versions
         if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "10"
-      - name: Test Node.js 12.0
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "12.0"
-      - name: Test Node.js 12.12
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "12.12"
-      - name: Test Node.js 12.13
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "12.13"
-      - name: Test Node.js 12.15
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "12.15"
-      - name: Test Node.js 12.16
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "12.16"
-      - name: Test Node.js 13.2
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "13.2"
-      - name: Test Node.js 13.6
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "13.6"
-      - name: Test Node.js 13.7
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "13.7"
-      - name: Test Node.js 14.2
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "14.2"
-      - name: Test Node.js 16.5
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "16.5"
-      - name: Test Node.js 16.6
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "16.6"
-      - name: Test Node.js 22.11
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "22.11"
-      - name: Test Node.js 22.12
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "22.12"
-      - name: Test Node.js 23.10
-        if: ${{ !cancelled() }}
-        uses: ./.github/actions/test-runtime-on-node
-        with:
-          node-version: "23.10"
+        run: node test/runtime-integration/node-versions.mjs
 
   eslint-version-test:
     name: Test @babel/eslint-* with ESLint
