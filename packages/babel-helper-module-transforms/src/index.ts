@@ -359,12 +359,7 @@ function buildNamespaceReexport(
           VERIFY_NAME_LIST;
           if (key in EXPORTS && EXPORTS[key] === NAMESPACE[key]) return;
 
-          Object.defineProperty(EXPORTS, key, {
-            configurable: true,
-            enumerable: true,
-            value: NAMESPACE[key],
-            writable: true,
-          });
+          EXPORTS[key] = NAMESPACE[key];
         });
       `
       : // Also skip already assigned bindings if they are strictly equal
