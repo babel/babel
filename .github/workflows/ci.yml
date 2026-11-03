@@ -449,8 +449,8 @@ jobs:
       - name: Run TypeScript Tests
         run: make test-typescript
 
-  runtime-interop-prepare:
-    name: Prepare runtime integration tests
+  runtime-interop:
+    name: Test @babel/runtime integrations
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -493,74 +493,9 @@ jobs:
         run: yarn test:runtime:bundlers
       - name: Test Node.js latest
         run: node test/runtime-integration/node.cjs
-
-  runtime-interop:
-    name: Test @babel/runtime integrations on Node.js
-    needs: [build, runtime-interop-prepare]
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version:
-          [
-            10,
-            "12.0",
-            12.12,
-            12.13,
-            12.15,
-            12.16,
-            13.2,
-            13.6,
-            13.7,
-            14.2,
-            16.5,
-            16.6,
-            22.11,
-            22.12,
-            "23.10",
-          ]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
-      # See https://github.com/babel/babel/pull/12906
-      - name: Support self-references on old Node.js
-        run: |
-          echo '{
-            "type": "commonjs",
-            "private": true,
-            "devDependencies": {
-              "@babel/runtime": "workspace:^",
-              "@babel/runtime-corejs3": "workspace:^"
-            }
-          }' > packages/package.json
-          node -e "
-            const pkg = require('./package.json');
-            pkg.workspaces.push('packages');
-            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
-          "
-      - name: Install
-        run: yarn install
-        env:
-          # The "Support self-references on old Node.js" step mutates the
-          # package.json file, causing a yarn.lock update.
-          YARN_ENABLE_IMMUTABLE_INSTALLS: false
-      - uses: actions/download-artifact@v8
-        with:
-          name: babel-artifact
-      - name: Generate absoluteRuntime tests
-        run: yarn test:runtime:generate-absolute-runtime
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v7
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Test Node.js ${{ matrix.node-version }}
-        run: node test/runtime-integration/node.cjs
+      - name: Test older Node.js versions
+        if: ${{ !cancelled() }}
+        run: node test/runtime-integration/node-versions.mjs
 
   eslint-version-test:
     name: Test @babel/eslint-* with ESLint
