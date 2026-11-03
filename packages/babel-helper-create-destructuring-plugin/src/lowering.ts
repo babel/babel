@@ -21,7 +21,7 @@ import {
   isTemporary,
   markTemporary,
   needsLowering,
-  propertyNeedsLowering,
+  propertyNeedsLoweringDeep,
   splitArrayPattern,
   targetReferenceMayRunUserCode,
   type ExcludedKey,
@@ -653,7 +653,7 @@ export class Lowering {
           return PropertyPlan.Skip;
         }
       }
-      return full || propertyNeedsLowering(prop, features)
+      return full || propertyNeedsLoweringDeep(prop, features)
         ? PropertyPlan.Lower
         : PropertyPlan.Untranspiled;
     });

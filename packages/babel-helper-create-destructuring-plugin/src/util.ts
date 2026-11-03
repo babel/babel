@@ -28,7 +28,7 @@ export function needsLowering(
       if (features & FEATURES.destructuring) return true;
       return target.properties.some(
         prop =>
-          isLoweredProperty(prop, features) ||
+          propertyNeedsLowering(prop, features) ||
           (prop.type === "ObjectProperty" &&
             needsLowering(prop.value as PatternTarget, features)),
       );
@@ -48,7 +48,7 @@ export function needsLowering(
  * Whether a property of an object pattern is lowered itself, as a rest
  * element or a private key.
  */
-function isLoweredProperty(
+function propertyNeedsLowering(
   prop: t.ObjectProperty | t.RestElement,
   features: number,
 ): boolean {
@@ -59,12 +59,12 @@ function isLoweredProperty(
 }
 
 /** Whether a property of an object pattern must be lowered. */
-export function propertyNeedsLowering(
+export function propertyNeedsLoweringDeep(
   prop: t.ObjectProperty,
   features: number,
 ): boolean {
   return (
-    isLoweredProperty(prop, features) ||
+    propertyNeedsLowering(prop, features) ||
     needsLowering(prop.value as PatternTarget, features)
   );
 }
@@ -84,14 +84,16 @@ export function getLoweredValue(
   const last = properties[properties.length - 1];
   if (
     last?.type !== "ObjectProperty" ||
-    isLoweredProperty(last, features) ||
+    propertyNeedsLowering(last, features) ||
     !needsLowering(last.value as PatternTarget, features)
   ) {
     return null;
   }
   // A rest element can only be the last property
   for (let i = 0; i < properties.length - 1; i++) {
-    if (propertyNeedsLowering(properties[i] as t.ObjectProperty, features)) {
+    if (
+      propertyNeedsLoweringDeep(properties[i] as t.ObjectProperty, features)
+    ) {
       return null;
     }
   }
