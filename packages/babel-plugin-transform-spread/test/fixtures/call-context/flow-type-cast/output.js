@@ -1,2 +1,3 @@
 var _a;
-babelHelpers.callSpread(((_a = a).b: any), _a, babelHelpers.toConsumableArray(args));
+var args;
+((_a = a).b: any).apply(_a, babelHelpers.toConsumableArray(args));
