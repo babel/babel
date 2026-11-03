@@ -449,8 +449,8 @@ jobs:
       - name: Run TypeScript Tests
         run: make test-typescript
 
-  runtime-interop-prepare:
-    name: Prepare runtime integration tests
+  runtime-interop:
+    name: Test @babel/runtime integrations
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -493,74 +493,82 @@ jobs:
         run: yarn test:runtime:bundlers
       - name: Test Node.js latest
         run: node test/runtime-integration/node.cjs
-
-  runtime-interop:
-    name: Test @babel/runtime integrations on Node.js
-    needs: [build, runtime-interop-prepare]
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version:
-          [
-            10,
-            "12.0",
-            12.12,
-            12.13,
-            12.15,
-            12.16,
-            13.2,
-            13.6,
-            13.7,
-            14.2,
-            16.5,
-            16.6,
-            22.11,
-            22.12,
-            "23.10",
-          ]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
+      # Keep testing the remaining versions when one of them fails.
+      - name: Test Node.js 10
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
         with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
-      # See https://github.com/babel/babel/pull/12906
-      - name: Support self-references on old Node.js
-        run: |
-          echo '{
-            "type": "commonjs",
-            "private": true,
-            "devDependencies": {
-              "@babel/runtime": "workspace:^",
-              "@babel/runtime-corejs3": "workspace:^"
-            }
-          }' > packages/package.json
-          node -e "
-            const pkg = require('./package.json');
-            pkg.workspaces.push('packages');
-            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2))
-          "
-      - name: Install
-        run: yarn install
-        env:
-          # The "Support self-references on old Node.js" step mutates the
-          # package.json file, causing a yarn.lock update.
-          YARN_ENABLE_IMMUTABLE_INSTALLS: false
-      - uses: actions/download-artifact@v8
+          node-version: "10"
+      - name: Test Node.js 12.0
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
         with:
-          name: babel-artifact
-      - name: Generate absoluteRuntime tests
-        run: yarn test:runtime:generate-absolute-runtime
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v7
+          node-version: "12.0"
+      - name: Test Node.js 12.12
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Test Node.js ${{ matrix.node-version }}
-        run: node test/runtime-integration/node.cjs
+          node-version: "12.12"
+      - name: Test Node.js 12.13
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
+        with:
+          node-version: "12.13"
+      - name: Test Node.js 12.15
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
+        with:
+          node-version: "12.15"
+      - name: Test Node.js 12.16
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
+        with:
+          node-version: "12.16"
+      - name: Test Node.js 13.2
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
+        with:
+          node-version: "13.2"
+      - name: Test Node.js 13.6
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
+        with:
+          node-version: "13.6"
+      - name: Test Node.js 13.7
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
+        with:
+          node-version: "13.7"
+      - name: Test Node.js 14.2
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
+        with:
+          node-version: "14.2"
+      - name: Test Node.js 16.5
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
+        with:
+          node-version: "16.5"
+      - name: Test Node.js 16.6
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
+        with:
+          node-version: "16.6"
+      - name: Test Node.js 22.11
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
+        with:
+          node-version: "22.11"
+      - name: Test Node.js 22.12
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
+        with:
+          node-version: "22.12"
+      - name: Test Node.js 23.10
+        if: ${{ !cancelled() }}
+        uses: ./.github/actions/test-runtime-on-node
+        with:
+          node-version: "23.10"
 
   eslint-version-test:
     name: Test @babel/eslint-* with ESLint
