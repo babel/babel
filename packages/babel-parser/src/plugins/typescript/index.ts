@@ -3966,13 +3966,28 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // it isn't an arrow function, to avoid trying again when backtracking.
       const startOffset = this.sourceToOffsetPos(startPos);
       if (!this.noArrowAt.has(startOffset)) {
-        const state = this.state.clone();
+        const parse = () =>
+          this.tsParseMaybeAssign(refExpressionErrors, isParenItem);
+        let state = this.state.clone();
         const { tokensLength } = state;
         this.tsArrowReturnTypeAt.delete(startPos);
-        const result = this.tryParse(
-          () => this.tsParseMaybeAssign(refExpressionErrors, isParenItem),
-          state,
-        );
+        let result = this.tryParse(parse, state);
+        if (
+          result.thrown &&
+          this.tsArrowReturnTypeAt.has(startPos) &&
+          !(this.optionFlags & OptionFlags.ErrorRecovery)
+        ) {
+          // Whether the error must be reported depends on what follows the
+          // arrow function: it is in `a ? b ? (c, c): d => e : f`, while it's
+          // discarded in `a ? (c, c) : d => e`. Recover from it to find out.
+          state = this.state.clone();
+          this.optionFlags |= OptionFlags.ErrorRecovery;
+          try {
+            result = this.tryParse(parse, state);
+          } finally {
+            this.optionFlags &= ~OptionFlags.ErrorRecovery;
+          }
+        }
         if (result.thrown) {
           // Only parse again if the error might be caused by parsing an
           // arrow function with a return type, as in `a ? (b, b) : c => d`.
@@ -4004,6 +4019,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             (tsHasUnambiguousArrowParams(node.params) &&
               !(hasInvalidParams && node.async))
           ) {
+            if (
+              result.error &&
+              !(this.optionFlags & OptionFlags.ErrorRecovery)
+            ) {
+              throw result.error;
+            }
             return node;
           }
         }
