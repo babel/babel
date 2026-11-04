@@ -1589,15 +1589,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       parseConstituentType: () => N.TSType,
       operator: TokenType,
     ): N.TSType {
-      const node = this.startNode<N.TSUnionType | N.TSIntersectionType>();
+      const startLoc = this.state.startLoc;
       const hasLeadingOperator = this.eat(operator);
-      const types = [];
-      do {
-        types.push(parseConstituentType());
-      } while (this.eat(operator));
-      if (types.length === 1 && !hasLeadingOperator) {
-        return types[0];
+      const first = parseConstituentType();
+      if (!hasLeadingOperator && !this.match(operator)) {
+        return first;
       }
+      const node = this.startNodeAt<N.TSUnionType | N.TSIntersectionType>(
+        startLoc,
+      );
+      const types = [first];
+      while (this.eat(operator)) types.push(parseConstituentType());
       node.types = types;
       return this.finishNode(node, kind);
     }
@@ -1699,13 +1701,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         const t = this.startNode<N.TSTypeAnnotation>();
         this.expect(returnToken);
 
-        const node = this.startNode<N.TSTypePredicate>();
-
-        const asserts = !!this.tsTryParse(
-          this.tsParseTypePredicateAsserts.bind(this),
-        );
+        const startLoc = this.state.startLoc;
+        const asserts =
+          this.match(tt._asserts) &&
+          !!this.tsTryParse(this.tsParseTypePredicateAsserts.bind(this));
 
         if (asserts && this.match(tt._this)) {
+          const node = this.startNodeAt<N.TSTypePredicate>(startLoc);
           // When asserts is false, thisKeyword is handled by tsParseNonArrayType
           // : asserts this is type
           let thisTypePredicate = this.tsParseThisTypeOrThisTypePredicate();
@@ -1735,6 +1737,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           }
 
           // : asserts foo
+          const node = this.startNodeAt<N.TSTypePredicate>(startLoc);
           node.parameterName = this.parseIdentifier();
           node.asserts = asserts;
           (node as N.TSTypePredicate).typeAnnotation = null;
@@ -1743,6 +1746,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
 
         // : asserts foo is type
+        const node = this.startNodeAt<N.TSTypePredicate>(startLoc);
         const type = this.tsParseTypeAnnotation(/* eatColon */ false);
         node.parameterName = typePredicateVariable;
         node.typeAnnotation = type;

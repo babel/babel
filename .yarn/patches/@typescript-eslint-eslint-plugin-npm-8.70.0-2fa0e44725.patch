@@ -1,0 +1,17 @@
+diff --git a/dist/rules/no-unnecessary-type-assertion.js b/dist/rules/no-unnecessary-type-assertion.js
+index 98f6d72d333a54e9ce5311288bad020dc1b8f73d..fface39bab5c0d751dd8854339d8d962d1dd719b 100644
+--- a/dist/rules/no-unnecessary-type-assertion.js
++++ b/dist/rules/no-unnecessary-type-assertion.js
+@@ -680,10 +680,10 @@ exports.default = (0, util_1.createRule)({
+                         !containsAny(uncastType) &&
+                         anyInvolvedInContextualCheck &&
+                         !hasPhantomTypeArgumentMismatch(node, uncastType, contextualType) &&
+-                        (castIsAny || !genericsMismatch(uncastType, contextualType)) &&
++                        !isNullishLiteralToUnion &&
+                         (contextualTypeIsAny ||
+                             checker.isTypeAssignableTo(uncastType, contextualType)) &&
+-                        !isNullishLiteralToUnion;
++                        (castIsAny || !genericsMismatch(uncastType, contextualType));
+                     if (isContextuallyUnnecessary) {
+                         context.report({
+                             node,

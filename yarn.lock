@@ -6242,6 +6242,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript-eslint/eslint-plugin@patch:@typescript-eslint/eslint-plugin@npm%3A8.70.0#~/.yarn/patches/@typescript-eslint-eslint-plugin-npm-8.70.0-2fa0e44725.patch":
+  version: 8.70.0
+  resolution: "@typescript-eslint/eslint-plugin@patch:@typescript-eslint/eslint-plugin@npm%3A8.70.0#~/.yarn/patches/@typescript-eslint-eslint-plugin-npm-8.70.0-2fa0e44725.patch::version=8.70.0&hash=6cb9c3"
+  dependencies:
+    "@eslint-community/regexpp": "npm:^4.12.2"
+    "@typescript-eslint/scope-manager": "npm:8.70.0"
+    "@typescript-eslint/type-utils": "npm:8.70.0"
+    "@typescript-eslint/utils": "npm:8.70.0"
+    "@typescript-eslint/visitor-keys": "npm:8.70.0"
+    ignore: "npm:^7.0.5"
+    natural-compare: "npm:^1.4.0"
+    ts-api-utils: "npm:^2.5.0"
+  peerDependencies:
+    "@typescript-eslint/parser": ^8.70.0
+    eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
+    typescript: ">=4.8.4 <6.1.0"
+  checksum: 10/b9c4b72299dfa49392228232252a459e8f17de03b5fce626c4bdf4a5415382838f53b1640ac0f7e7273a6458390e94a9a90add80af866a33012af16af3366371
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/parser@npm:8.70.0":
   version: 8.70.0
   resolution: "@typescript-eslint/parser@npm:8.70.0"

@@ -263,7 +263,7 @@ function commaSeparatorWithNewline(this: Printer, occurrenceCount: number) {
 export function VariableDeclaration(
   this: Printer,
   node: t.VariableDeclaration,
-  parent: t.Node,
+  parent: t.Node | null,
 ) {
   if (node.declare) {
     // TS
@@ -284,6 +284,14 @@ export function VariableDeclaration(
       this.word(kind);
   }
   this.space();
+
+  if (
+    kind === "using" &&
+    parent?.type === "ForOfStatement" &&
+    parent.left === node
+  ) {
+    this.tokenContext |= TokenContext.usingForOfBinding;
+  }
 
   let hasInits = false;
   // don't add whitespace to loop heads

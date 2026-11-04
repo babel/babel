@@ -1041,12 +1041,17 @@ export class Emitter {
 
             injectFirstArg = newObject;
 
-            newCallee = t.memberExpression(
+            const newMethod = self.emitAssign(
+              self.makeTempVar(),
               t.memberExpression(
                 t.cloneNode(newObject),
                 newProperty,
                 calleePath.node.computed,
               ),
+            );
+
+            newCallee = t.memberExpression(
+              newMethod,
               t.identifier("call"),
               false,
             );

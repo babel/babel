@@ -1516,6 +1516,16 @@ describe("programmatic generation", function () {
     });
   });
 
+  describe("using declaration", () => {
+    it("can be generated without a parent", () => {
+      const usingDeclaration = t.variableDeclaration("using", [
+        t.variableDeclarator(t.identifier("of"), t.identifier("x")),
+      ]);
+      const output = generate(usingDeclaration).code;
+      expect(output).toBe("using of = x;");
+    });
+  });
+
   describe("identifier let", () => {
     it("detects open bracket from non-optional OptionalMemberExpression", () => {
       const ast = parse(`for (let?.[x];;);`, {

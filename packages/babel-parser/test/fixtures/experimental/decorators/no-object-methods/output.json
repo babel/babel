@@ -28,7 +28,7 @@
               "properties": [
                 {
                   "type": "ObjectMethod",
-                  "start":19,"end":30,"loc":{"start":{"line":3,"column":2,"index":19},"end":{"line":4,"column":3,"index":30}},
+                  "start":12,"end":30,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":4,"column":3,"index":30}},
                   "decorators": [
                     {
                       "type": "Decorator",

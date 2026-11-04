@@ -16,13 +16,11 @@ export default async function (
   const { owner, repo } = context.repo;
   const pull_number = context.issue.number;
 
-  // Make sure Circleci is triggered.
-  await sleep(60000);
   const circleciId = await getCircleciJobId(
-    // @ts-expect-error the pull_request payload must be defined for pull requests events
-    context.payload.pull_request.head.repo.fork
+    context.payload.pull_request!.head.repo.fork
       ? "pull/" + pull_number
-      : process.env.GITHUB_HEAD_REF
+      : process.env.GITHUB_HEAD_REF!,
+    context.payload.pull_request!.head.sha
   );
 
   await createOrUpdateComment(github, {
@@ -34,43 +32,137 @@ export default async function (
   });
 }
 
-async function getCircleciJobId(branch: string) {
-  let resp: any = await (
-    await fetch(
-      "https://circleci.com/api/v2/project/github/babel/babel/pipeline?branch=" +
-        branch,
-      {
-        method: "GET",
-      }
-    )
-  ).json();
-  const pipeline = resp.items[0].id;
+type Pipeline = {
+  id: string;
+  created_at: string;
+  vcs: { revision: string };
+};
 
-  resp = await (
-    await fetch(`https://circleci.com/api/v2/pipeline/${pipeline}/workflow`, {
-      method: "GET",
-    })
-  ).json();
-  const workflow = resp.items[0].id;
+type Workflow = {
+  id: string;
+  attributes: {
+    name: string;
+    created_at: string;
+    phase: string;
+    outcome?: string | null;
+  };
+};
 
-  // Wait up to 10 minutes
-  for (let i = 0; i < 60; i++) {
-    resp = await (
-      await fetch(`https://circleci.com/api/v2/workflow/${workflow}/job`, {
-        method: "GET",
-      })
-    ).json();
-    const { status, job_number } = resp.items[0];
-    if (status === "success") {
-      return job_number;
-    } else if (status !== "running") {
-      break;
+type Job = {
+  id: string;
+  attributes: {
+    name: string;
+    type: string;
+    phase: string;
+    outcome?: string | null;
+    number: number;
+  };
+};
+
+export async function getCircleciJobId(branch: string, headSha: string) {
+  // Stop starting new requests after ten minutes.
+  const deadline = Date.now() + 10 * 60 * 1000;
+  while (true) {
+    let pipeline: Pipeline | undefined;
+    const pipelinesUrl = new URL(
+      "https://circleci.com/api/v2/project/github/babel/babel/pipeline?" +
+        new URLSearchParams({ branch }).toString()
+    );
+    while (true) {
+      const body = await request(pipelinesUrl, deadline);
+      const pipelines: Pipeline[] = body.items;
+      pipeline = latest(
+        pipelines.filter(item => item.vcs.revision === headSha),
+        item => item.created_at
+      );
+      // Pipelines are returned newest-first; later pages cannot have a newer match.
+      if (pipeline || !body.next_page_token) break;
+      pipelinesUrl.searchParams.set("page-token", body.next_page_token);
     }
-    await sleep(10000);
+
+    if (pipeline) {
+      // The v2 pipeline ID is a v3 run ID, not a v3 pipeline definition ID.
+      const workflows: Workflow[] = [];
+      const workflowsUrl = new URL(
+        "https://circleci.com/api/v3/workflows?" +
+          new URLSearchParams({
+            "filter[run_id]": pipeline.id,
+            order_by: "created desc",
+            "page[limit]": "20",
+          }).toString()
+      );
+      while (true) {
+        const body = await request(workflowsUrl, deadline);
+        workflows.push(...body.data);
+        if (!body.page?.next) break;
+        workflowsUrl.searchParams.set("page[cursor]", body.page.next);
+      }
+      const workflow = latest(
+        workflows.filter(item => item.attributes.name === "build-standalone"),
+        item => item.attributes.created_at
+      );
+
+      if (workflow) {
+        checkCompletion(workflow.attributes, `workflow ${workflow.id}`);
+        const body = await request(
+          new URL(
+            "https://circleci.com/api/v3/jobs?" +
+              new URLSearchParams({
+                "filter[workflow_id]": workflow.id,
+              }).toString()
+          ),
+          deadline
+        );
+        const jobs: Job[] = body.data;
+        const matches = jobs.filter(
+          item =>
+            item.attributes.name === "build-standalone" &&
+            item.attributes.type === "build"
+        );
+        if (matches.length > 1) {
+          throw new Error(
+            `Ambiguous CircleCI build-standalone jobs in workflow ${workflow.id}`
+          );
+        }
+        const job = matches[0];
+        if (job && checkCompletion(job.attributes, `job ${job.id}`)) {
+          return job.attributes.number;
+        }
+      }
+    }
+    // Re-select both the run and the workflow so a rerun supersedes an old job.
+    await wait(10000);
   }
-  throw new Error("CircleCI job failed");
 }
 
-function sleep(ms: number) {
+function checkCompletion(
+  { phase, outcome }: Workflow["attributes"] | Job["attributes"],
+  name: string
+) {
+  if (phase !== "ended") return false;
+  if (outcome !== "succeeded") {
+    throw new Error(`CircleCI ${name} ended: ${outcome}`);
+  }
+  return true;
+}
+
+function latest<T>(items: T[], createdAt: (item: T) => string): T | undefined {
+  items.sort((a, b) => Date.parse(createdAt(b)) - Date.parse(createdAt(a)));
+  return items[0];
+}
+
+function wait(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function request(url: URL, deadline: number): Promise<any> {
+  if (Date.now() >= deadline) {
+    throw new Error("Timed out waiting for CircleCI build-standalone");
+  }
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { Accept: "application/json" },
+    signal: AbortSignal.timeout(10000),
+  });
+  return response.json();
 }
