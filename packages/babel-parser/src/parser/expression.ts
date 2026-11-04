@@ -2141,9 +2141,10 @@ export default abstract class ExpressionParser extends LValParser {
     refExpressionErrors?: ExpressionErrors | null,
   ): N.ObjectMember | N.SpreadElement {
     const decorators = [];
+    const decoratorsStartLoc = this.state.startLoc;
     if (this.match(tt.at)) {
       if (this.hasPlugin("decorators")) {
-        this.raise(Errors.UnsupportedPropertyDecorator, this.state.startLoc);
+        this.raise(Errors.UnsupportedPropertyDecorator, decoratorsStartLoc);
       }
 
       // we needn't check if decorators (stage 0) plugin is enabled since it's checked by
@@ -2153,15 +2154,17 @@ export default abstract class ExpressionParser extends LValParser {
       }
     }
 
-    const prop = this.startNode<N.ObjectProperty | N.ObjectMethod>();
-    let isAsync = false;
-    let isAccessor = false;
-    let startLoc;
-
     if (this.match(tt.ellipsis)) {
       if (decorators.length) this.unexpected();
       return this.parseSpread();
     }
+
+    const prop = this.startNodeAt<N.ObjectProperty | N.ObjectMethod>(
+      decoratorsStartLoc,
+    );
+    let isAsync = false;
+    let isAccessor = false;
+    let startLoc;
 
     if (decorators.length) {
       prop.decorators = decorators;
