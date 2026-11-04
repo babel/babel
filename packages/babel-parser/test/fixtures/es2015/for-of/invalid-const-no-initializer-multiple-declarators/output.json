@@ -1,0 +1,71 @@
+{
+  "type": "File",
+  "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+  "errors": [
+    "SyntaxError: Missing initializer in const declaration. (1:19)",
+    "SyntaxError: Missing semicolon. (1:19)",
+    "SyntaxError: Missing semicolon. (1:22)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForStatement",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+        "init": {
+          "type": "VariableDeclaration",
+          "start":5,"end":19,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":19,"index":19}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":11,"end":16,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":16,"index":16}},
+              "id": {
+                "type": "Identifier",
+                "start":11,"end":12,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":12,"index":12},"identifierName":"x"},
+                "name": "x"
+              },
+              "init": {
+                "type": "NumericLiteral",
+                "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "VariableDeclarator",
+              "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19}},
+              "id": {
+                "type": "Identifier",
+                "start":18,"end":19,"loc":{"start":{"line":1,"column":18,"index":18},"end":{"line":1,"column":19,"index":19},"identifierName":"y"},
+                "name": "y"
+              },
+              "init": null
+            }
+          ],
+          "kind": "const"
+        },
+        "test": {
+          "type": "Identifier",
+          "start":20,"end":22,"loc":{"start":{"line":1,"column":20,"index":20},"end":{"line":1,"column":22,"index":22},"identifierName":"of"},
+          "name": "of"
+        },
+        "update": {
+          "type": "Identifier",
+          "start":23,"end":24,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":24,"index":24},"identifierName":"z"},
+          "name": "z"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start":25,"end":26,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":26,"index":26}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

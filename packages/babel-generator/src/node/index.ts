@@ -17,6 +17,9 @@ export const enum TokenContext {
   // be reset after forIn or forInit head is printed
   forInOrInitHeadAccumulate = 1 << 7,
   forInOrInitHeadAccumulatePassThroughMask = 0b10000000,
+  // Set while printing the binding of a `using` declaration in a for-of head
+  // (see VariableDeclaration); cleared by the next printed token.
+  usingForOfBinding = 1 << 8,
 }
 
 export type NodeHandler<R> = (
@@ -36,6 +39,15 @@ for (const type of Object.keys(parens) as (keyof typeof parens)[]) {
   if (generatorInfosMap.has(type)) {
     generatorInfosMap.get(type)![2] = func as NodeHandler<boolean>;
   }
+}
+
+// Whether the parent prints something right after the node, such as `()` in
+// `node()`, `.x` in `node.x` or `!` in `node!`.
+export function hasPostfixPart(node: t.Node, parent: t.Node | null): boolean {
+  return (
+    parent != null &&
+    parens.hasPostfixPart(node, parent, generatorInfosMap.get(parent.type)![1])
+  );
 }
 
 function newCalleeNeedsParens(node: t.Node): boolean {

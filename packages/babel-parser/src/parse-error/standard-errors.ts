@@ -63,6 +63,8 @@ export default {
   DecoratorStaticBlock: "Decorators can't be used with a static block.",
   DeferImportRequiresNamespace:
     'Only `import defer * as x from "./module"` is valid.',
+  DeferExportInvalidAll:
+    '`export defer * from "./module"` is invalid. Explicitly list the re-exported names.',
   DeletePrivateField: "Deleting a private field is not allowed.",
   DestructureNamedImport:
     "ES2015 named imports do not destructure. Use another statement for destructuring after the import.",
@@ -84,7 +86,12 @@ export default {
     `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export { '${localName}' as '${exportName}' } from 'some-module'\`?`,
   ExportDefaultFromAsIdentifier:
     "'from' is not allowed as an identifier after 'export default'.",
-
+  FilteredNamespaceDuplicateName: ({ name }: { name: string }) =>
+    `Duplicate name '${name}' in filtered namespace.`,
+  FilteredNamespaceRename:
+    "Names in a filtered namespace cannot be renamed using `as`.",
+  FilteredNamespaceTypeModifier:
+    "Names in a filtered namespace cannot have a type modifier.",
   ForInOfLoopInitializer: ({
     type,
   }: {
@@ -111,12 +118,30 @@ export default {
   IllegalReturn: "'return' outside of function.",
   ImportBindingIsString: ({ importName }: { importName: string }) =>
     `A string literal cannot be used as an imported binding.\n- Did you mean \`import { "${importName}" as foo }\`?`,
-  ImportCallArity: ({ phase }: { phase?: string | null }) =>
-    `\`import${phase ? `.${phase}` : ""}()\` requires exactly one or two arguments.`,
-  ImportCallNotNewExpression: ({ phase }: { phase?: string | null }) =>
-    `Cannot use new with import${phase ? `.${phase}` : ""}().`,
-  ImportCallSpreadArgument: ({ phase }: { phase?: string | null }) =>
-    `\`...\` is not allowed in \`import${phase ? `.${phase}` : ""}()\`.`,
+  ImportCallArity: ({
+    phase,
+    sync,
+  }: {
+    phase?: string | null;
+    sync?: boolean | null;
+  }) =>
+    `\`import${phase ? `.${phase}` : sync ? ".sync" : ""}()\` requires exactly one or two arguments.`,
+  ImportCallNotNewExpression: ({
+    phase,
+    sync,
+  }: {
+    phase?: string | null;
+    sync?: boolean | null;
+  }) =>
+    `Cannot use new with import${phase ? `.${phase}` : sync ? ".sync" : ""}().`,
+  ImportCallSpreadArgument: ({
+    phase,
+    sync,
+  }: {
+    phase?: string | null;
+    sync?: boolean | null;
+  }) =>
+    `\`...\` is not allowed in \`import${phase ? `.${phase}` : sync ? ".sync" : ""}()\`.`,
   IncompatibleRegExpUVFlags:
     "The 'u' and 'v' regular expression flags cannot be enabled at the same time.",
   InvalidBigIntLiteral: "Invalid BigIntLiteral.",
@@ -140,7 +165,6 @@ export default {
     `Invalid optional chaining in the left-hand side of ${toNodeDescription(
       ancestor,
     )}.`,
-  InvalidNumber: "Invalid number.",
   InvalidOrMissingExponent:
     "Floating-point numbers require a valid exponent after the 'e'.",
   InvalidOrUnexpectedToken: ({ unexpected }: { unexpected: string }) =>

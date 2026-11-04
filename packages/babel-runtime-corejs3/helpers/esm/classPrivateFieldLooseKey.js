@@ -1,5 +1,5 @@
-var id = 0;
-function _classPrivateFieldKey(e) {
-  return "__private_" + id++ + "_" + e;
+var e = 0;
+function _classPrivateFieldKey(r) {
+  return "__private_" + e++ + "_" + r;
 }
 export { _classPrivateFieldKey as default };

@@ -11,9 +11,11 @@ import type { ExpressionErrors } from "../parser/util.ts";
 import type { ParseResult, File } from "../index.ts";
 
 function toESTreeLocation(node: any) {
-  const { start, end } = node.loc;
-  node.loc.start = new Position(start.line, start.column);
-  node.loc.end = new Position(end.line, end.column);
+  if (node.loc) {
+    const { start, end } = node.loc;
+    node.loc.start = new Position(start.line, start.column);
+    node.loc.end = new Position(end.line, end.column);
+  }
 
   return node;
 }
@@ -509,7 +511,10 @@ export default (superClass: typeof Parser) =>
         case "ExportNamedDeclaration":
           if (
             node.specifiers.length === 1 &&
-            node.specifiers[0].type === "ExportNamespaceSpecifier"
+            node.specifiers[0].type === "ExportNamespaceSpecifier" &&
+            // ESTree cannot represent `export { x, y } as ns from '...'`
+            // https://github.com/estree/estree/issues/339
+            !node.specifiers[0].exportsFilter
           ) {
             this.castNodeTo(node, "ExportAllDeclaration");
             // @ts-expect-error mutating AST types

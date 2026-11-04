@@ -272,6 +272,7 @@ target["prepublish-build"] = function () {
     {
       NODE_ENV: "production",
       STRIP_BABEL_VERSION_FLAG: "true",
+      IS_PUBLISH: "true",
     }
   );
 };
@@ -303,6 +304,20 @@ target["prepublish-prepare-dts-no-clean"] = function () {
   yarn(["gulp", "bundle-dts"]);
   target["build-typescript-legacy-typings"]();
   yarn(["tsc", "-p", "tsconfig.dts-bundles.json"]);
+};
+
+target["watch-perf"] = function () {
+  env(
+    () => {
+      yarn(["gulp", "watch-perf"]);
+    },
+    {
+      NODE_ENV: "production",
+      BABEL_ENV: "production",
+      STRIP_BABEL_8_FLAG: "true",
+      IS_PUBLISH: "true",
+    }
+  );
 };
 
 target["tscheck"] = function () {
@@ -354,24 +369,56 @@ target["clone-license"] = function () {
  * DEV
  */
 
-function eslint(...extraArgs: string[]) {
-  const eslintArgs = [
-    "--format",
-    "codeframe",
-    "--concurrency",
-    "auto",
-    "--flag",
-    "unstable_native_nodejs_ts_config",
-    ...extraArgs.filter(Boolean),
-  ];
+const ESLINT_ARGS = [
+  "--format",
+  "codeframe",
+  "--flag",
+  "unstable_native_nodejs_ts_config",
+];
+const ESLINT_NON_PACKAGES_SOURCES = [
+  "eslint",
+  "codemods",
+  "scripts",
+  "benchmark",
+  "*.{js,cjs,mjs,ts}",
+];
+
+function eslintCheck() {
+  // Use a single TS program (tsconfig.lint.json) for the whole repository, so
+  // that we don't need to split the work to stay under the heap size limit.
+  // Each worker has its own program: use a fixed number of workers, because
+  // the memory usage grows with it.
+  env(
+    () =>
+      yarn([
+        "eslint",
+        "packages",
+        ...ESLINT_NON_PACKAGES_SOURCES,
+        ...ESLINT_ARGS,
+        "--concurrency",
+        "2",
+      ]),
+    {
+      BABEL_ENV: "test",
+      BABEL_ESLINT_FLAT_TSCONFIG: "true",
+      // tsconfig.lint.json reports false positives when it's not a single run
+      TSESTREE_SINGLE_RUN: "true",
+      NODE_OPTIONS: "--max-old-space-size=6144",
+    }
+  );
+}
+
+function eslintFix() {
+  const eslintArgs = [...ESLINT_ARGS, "--concurrency", "auto", "--fix"];
 
   const packagesPackages = readdirSync("packages").filter(n =>
     existsSync(`packages/${n}/package.json`)
   );
   const chunks = [];
-  // Linting everything at the same time needs too much memory and crashes
+  // The project service keeps one TS program per package, and linting everything
+  // at the same time needs too much memory and crashes.
   // Do it in batches packages
-  for (let i = 0, chunkSize = 16; i < packagesPackages.length; i += chunkSize) {
+  for (let i = 0, chunkSize = 12; i < packagesPackages.length; i += chunkSize) {
     if (packagesPackages.length - i === 1) {
       // Only one package remaining
       chunks.push([`packages/${packagesPackages[i]}/**/*`]);
@@ -381,21 +428,23 @@ function eslint(...extraArgs: string[]) {
       ]);
     }
   }
-  const rest = [
-    "eslint",
-    "codemods",
-    "scripts",
-    "benchmark",
-    "*.{js,cjs,mjs,ts}",
-  ];
-  chunks.push(rest);
+  chunks.push(ESLINT_NON_PACKAGES_SOURCES);
 
   if (process.env.ESLINT_GO_BRRRR) {
     // Run in a single process with workers. Needs a lot of memory (23GiB).
-    env(() => yarn(["eslint", "packages", ...rest, ...eslintArgs]), {
-      BABEL_ENV: "test",
-      NODE_OPTIONS: "--max-old-space-size=8192",
-    });
+    env(
+      () =>
+        yarn([
+          "eslint",
+          "packages",
+          ...ESLINT_NON_PACKAGES_SOURCES,
+          ...eslintArgs,
+        ]),
+      {
+        BABEL_ENV: "test",
+        NODE_OPTIONS: "--max-old-space-size=8192",
+      }
+    );
   } else {
     let err = null;
     for (const chunk of chunks) {
@@ -421,14 +470,14 @@ function eslint(...extraArgs: string[]) {
 
 target["lint"] = function () {
   env(() => target["tscheck"](), { TSCHECK_SILENT: "true" });
-  eslint();
+  eslintCheck();
   yarn(["tstyche"]);
   target["lint-prettier"]();
 };
 
 target["lint-ci"] = function () {
   target["tscheck"]();
-  eslint();
+  eslintCheck();
   yarn(["tstyche"]);
   target["lint-prettier"]();
   target["prepublish-prepare-dts-no-clean"]();
@@ -445,7 +494,7 @@ target["fix"] = function () {
 
 target["fix-js"] = function () {
   env(() => target["tscheck"](), { TSCHECK_SILENT: "true" });
-  eslint("--fix");
+  eslintFix();
 };
 
 target["fix-prettier"] = function () {
@@ -548,7 +597,7 @@ target["bootstrap-flow"] = function () {
 
 target["new-version-checklist"] = function () {
   // eslint-disable-next-line no-constant-condition
-  if (0) {
+  if (1) {
     console.log(
       `
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

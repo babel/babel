@@ -24,6 +24,7 @@ export * as types from "@babel/types";
 export { tokTypes } from "@babel/parser";
 export { default as traverse } from "@babel/traverse";
 export { default as template } from "@babel/template";
+export { default as generate } from "@babel/generator";
 
 // rollup-plugin-dts assumes that all re-exported types are also valid values
 // Visitor is only a type, so we need to use this workaround to prevent
@@ -32,6 +33,8 @@ export { default as template } from "@babel/template";
 export type { NodePath, Scope } from "@babel/traverse";
 export type Visitor<S = unknown> = import("@babel/traverse").Visitor<S>;
 export type VisitorBase<S = unknown> = import("@babel/traverse").VisitorBase<S>;
+export type GeneratorOptions = import("@babel/generator").GeneratorOptions;
+export type GeneratorResult = import("@babel/generator").GeneratorResult;
 
 export {
   createConfigItem,

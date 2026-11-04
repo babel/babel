@@ -11,6 +11,30 @@ import type * as t from "@babel/types";
 import { TokenContext } from "../node/index.ts";
 import { _shouldPrintDecoratorsBeforeExport } from "./expressions.ts";
 
+function isSameModuleExportName(
+  a: t.Identifier | t.StringLiteral,
+  b: t.Identifier | t.StringLiteral,
+) {
+  if (a.type === "Identifier") {
+    return b.type === "Identifier" && a.name === b.name;
+  }
+  return b.type === "StringLiteral" && a.value === b.value;
+}
+
+function shouldPrintModuleSpecifierAlias(
+  printer: Printer,
+  node: t.ImportSpecifier | t.ExportSpecifier,
+  a: t.Identifier | t.StringLiteral,
+  b: t.Identifier | t.StringLiteral,
+) {
+  if (!isSameModuleExportName(a, b)) return true;
+  // keep redundant aliases in preserveFormat mode
+  if (printer.tokenMap) {
+    return printer.tokenMap.findMatching(node, "as") !== null;
+  }
+  return false;
+}
+
 export function ImportSpecifier(this: Printer, node: t.ImportSpecifier) {
   if (node.importKind === "type" || node.importKind === "typeof") {
     this.word(node.importKind);
@@ -18,8 +42,10 @@ export function ImportSpecifier(this: Printer, node: t.ImportSpecifier) {
   }
 
   this.print(node.imported);
-  // @ts-expect-error todo(flow-ts) maybe check node type instead of relying on name to be undefined on t.StringLiteral
-  if (node.local && node.local.name !== node.imported.name) {
+  if (
+    node.local &&
+    shouldPrintModuleSpecifierAlias(this, node, node.imported, node.local)
+  ) {
     this.space();
     this.word("as");
     this.space();
@@ -48,8 +74,10 @@ export function ExportSpecifier(this: Printer, node: t.ExportSpecifier) {
   }
 
   this.print(node.local);
-  // @ts-expect-error todo(flow-ts) maybe check node type instead of relying on name to be undefined on t.StringLiteral
-  if (node.exported && node.local.name !== node.exported.name) {
+  if (
+    node.exported &&
+    shouldPrintModuleSpecifierAlias(this, node, node.local, node.exported)
+  ) {
     this.space();
     this.word("as");
     this.space();
@@ -57,11 +85,28 @@ export function ExportSpecifier(this: Printer, node: t.ExportSpecifier) {
   }
 }
 
+function _printNamespaceFilter(
+  this: Printer,
+  exportsFilter: t.ImportNamespaceSpecifier["exportsFilter"],
+) {
+  if (exportsFilter) {
+    this.token("{");
+    if (exportsFilter.length) {
+      this.space();
+      this.printList(exportsFilter, this.shouldPrintTrailingComma("}"));
+      this.space();
+    }
+    this.token("}");
+  } else {
+    this.token("*");
+  }
+}
+
 export function ExportNamespaceSpecifier(
   this: Printer,
   node: t.ExportNamespaceSpecifier,
 ) {
-  this.token("*");
+  _printNamespaceFilter.call(this, node.exportsFilter);
   this.space();
   this.word("as");
   this.space();
@@ -97,16 +142,19 @@ export function ExportAllDeclaration(
     this.word("type");
     this.space();
   }
+  // `export defer * from` in error recovery mode
+  if ((node as { phase?: string | null }).phase === "defer") {
+    this.word("defer");
+    this.space();
+  }
   this.token("*");
   this.space();
   this.word("from");
   this.space();
+  this.print(node.source);
   if (node.attributes?.length) {
-    this.print(node.source, true);
     this.space();
     _printAttributes.call(this, node, false);
-  } else {
-    this.print(node.source);
   }
 
   this.semicolon();
@@ -142,6 +190,10 @@ export function ExportNamedDeclaration(
   } else {
     if (node.exportKind === "type") {
       this.word("type");
+      this.space();
+    }
+    if (node.phase === "defer") {
+      this.word("defer");
       this.space();
     }
 
@@ -182,12 +234,10 @@ export function ExportNamedDeclaration(
       this.space();
       this.word("from");
       this.space();
+      this.print(node.source);
       if (node.attributes?.length) {
-        this.print(node.source, true);
         this.space();
         _printAttributes.call(this, node, hasBrace);
-      } else {
-        this.print(node.source);
       }
     }
 
@@ -268,12 +318,10 @@ export function ImportDeclaration(this: Printer, node: t.ImportDeclaration) {
     this.space();
   }
 
+  this.print(node.source);
   if (node.attributes?.length) {
-    this.print(node.source, true);
     this.space();
     _printAttributes.call(this, node, hasBrace);
-  } else {
-    this.print(node.source);
   }
 
   this.semicolon();
@@ -290,7 +338,7 @@ export function ImportNamespaceSpecifier(
   this: Printer,
   node: t.ImportNamespaceSpecifier,
 ) {
-  this.token("*");
+  _printNamespaceFilter.call(this, node.exportsFilter);
   this.space();
   this.word("as");
   this.space();
@@ -302,6 +350,9 @@ export function ImportExpression(this: Printer, node: t.ImportExpression) {
   if (node.phase) {
     this.token(".");
     this.word(node.phase);
+  } else if (node.sync) {
+    this.token(".");
+    this.word("sync");
   }
   this.token("(");
   const shouldPrintTrailingComma = this.shouldPrintTrailingComma(")");

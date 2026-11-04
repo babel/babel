@@ -28,6 +28,23 @@ describe("validate", () => {
     });
   });
 
+  describe("ObjectPattern", () => {
+    const member = () =>
+      t.memberExpression(t.identifier("obj"), t.identifier("x"));
+
+    it("allows member expressions as property values", () => {
+      // ({ x: obj.x } = y)
+      expect(() =>
+        t.objectPattern([t.objectProperty(t.identifier("x"), member())]),
+      ).not.toThrow();
+    });
+
+    it("allows member expressions as rest arguments", () => {
+      // ({ ...obj.x } = y)
+      expect(() => t.objectPattern([t.restElement(member())])).not.toThrow();
+    });
+  });
+
   describe("VariableDeclarator", () => {
     const ast = t.variableDeclaration("const", [
       t.variableDeclarator(

@@ -977,6 +977,7 @@ defineType("ObjectProperty", {
     const pattern = assertNodeType(
       "Identifier",
       "Pattern",
+      "MemberExpression",
       "TSAsExpression",
       "TSSatisfiesExpression",
       "TSNonNullExpression",
@@ -1525,6 +1526,7 @@ defineType("ExportDefaultDeclaration", {
       "FunctionDeclaration",
       "ClassDeclaration",
       "Expression",
+      "StructDeclaration",
       "TSDeclareFunction",
       "TSInterfaceDeclaration",
       "EnumDeclaration",
@@ -1570,6 +1572,7 @@ defineType("ExportNamedDeclaration", {
               "VariableDeclaration",
               "FunctionDeclaration",
               "ClassDeclaration",
+              "StructDeclaration",
               "TSDeclareFunction",
               "TSEnumDeclaration",
               "TSImportEqualsDeclaration",
@@ -1586,6 +1589,10 @@ defineType("ExportNamedDeclaration", {
       ),
     },
     ...importAttributes,
+    phase: {
+      default: null,
+      validate: assertOneOf("defer"),
+    },
     specifiers: {
       default: [],
       validate: arrayOf(
@@ -1743,11 +1750,17 @@ defineType("ImportDefaultSpecifier", {
 });
 
 defineType("ImportNamespaceSpecifier", {
-  visitor: ["local"],
+  visitor: ["exportsFilter", "local"],
+  builder: ["local"],
   aliases: ["ModuleSpecifier"],
   fields: {
     local: {
       validate: assertNodeType("Identifier"),
+    },
+    exportsFilter: {
+      // import { a, b } as ns from "mod"
+      optional: true,
+      validate: arrayOfType("Identifier", "StringLiteral"),
     },
   },
 });
@@ -2100,6 +2113,11 @@ defineType("ImportExpression", {
       default: null,
       validate: assertOneOf("source", "defer"),
     },
+    // https://github.com/tc39/proposal-import-sync
+    sync: {
+      optional: true,
+      validate: assertValueType("boolean"),
+    },
     source: {
       validate: assertNodeType("Expression"),
     },
@@ -2127,11 +2145,17 @@ defineType("BigIntLiteral", {
 });
 
 defineType("ExportNamespaceSpecifier", {
-  visitor: ["exported"],
+  visitor: ["exportsFilter", "exported"],
+  builder: ["exported"],
   aliases: ["ModuleSpecifier"],
   fields: {
     exported: {
       validate: assertNodeType("Identifier", "StringLiteral"),
+    },
+    exportsFilter: {
+      // export { a, b } as ns from "mod"
+      optional: true,
+      validate: arrayOfType("Identifier", "StringLiteral"),
     },
   },
 });

@@ -1,0 +1,76 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+  "errors": [
+    "SyntaxError: The only valid numeric escape in strict mode is '\\0'. (1:17)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start":9,"end":27,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":27,"index":27}},
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start":11,"end":25,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":25,"index":25}},
+              "key": {
+                "type": "StringLiteral",
+                "start":15,"end":20,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":20,"index":20}},
+                "extra": {
+                  "rawValue": "\u0001",
+                  "raw": "\"\\01\""
+                },
+                "value": "\u0001"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "get",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start":11,"end":25,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":25,"index":25}},
+                "params": [],
+                "rest": null,
+                "typeParameters": null,
+                "this": null,
+                "returnType": {
+                  "type": "GenericTypeAnnotation",
+                  "start":24,"end":25,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":25,"index":25}},
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start":24,"end":25,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":25,"index":25},"identifierName":"x"},
+                    "name": "x"
+                  }
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false,
+          "inexact": false
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

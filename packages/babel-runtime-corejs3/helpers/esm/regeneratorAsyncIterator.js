@@ -2,34 +2,34 @@ import _Symbol from "core-js-pure/features/symbol/index.js";
 import _Symbol$asyncIterator from "core-js-pure/features/symbol/async-iterator.js";
 import OverloadYield from "./OverloadYield.js";
 import regeneratorDefine from "./regeneratorDefine.js";
-function AsyncIterator(t, e) {
-  function n(r, o, i, f) {
+function AsyncIterator(r, e) {
+  function o(n, i, c, u) {
     try {
-      var c = t[r](o),
-        u = c.value;
-      return u instanceof OverloadYield ? e.resolve(u.v).then(function (t) {
-        n("next", t, i, f);
+      var f = r[n](i),
+        a = f.value;
+      return a instanceof OverloadYield ? e.resolve(a.v).then(function (t) {
+        o("next", t, c, u);
       }, function (t) {
-        n("throw", t, i, f);
-      }) : e.resolve(u).then(function (t) {
-        c.value = t, i(c);
+        o("throw", t, c, u);
+      }) : e.resolve(a).then(function (t) {
+        f.value = t, c(f);
       }, function (t) {
-        return n("throw", t, i, f);
+        return o("throw", t, c, u);
       });
     } catch (t) {
-      f(t);
+      u(t);
     }
   }
-  var r;
+  var i;
   this.next || (regeneratorDefine(AsyncIterator.prototype), regeneratorDefine(AsyncIterator.prototype, "function" == typeof _Symbol && _Symbol$asyncIterator || "@asyncIterator", function () {
     return this;
-  })), regeneratorDefine(this, "_invoke", function (t, o, i) {
-    function f() {
-      return new e(function (e, r) {
-        n(t, i, e, r);
+  })), regeneratorDefine(this, "_invoke", function (t, n, r) {
+    function c() {
+      return new e(function (n, e) {
+        o(t, r, n, e);
       });
     }
-    return r = r ? r.then(f, f) : f();
+    return i = i ? i.then(c, c) : c();
   }, !0);
 }
 export { AsyncIterator as default };

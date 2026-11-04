@@ -1,0 +1,65 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 47,
+  "errors": [
+    "SyntaxError: Only one default export allowed per module. (2:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 47,
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
+        "end": 17,
+        "declaration": {
+          "type": "NumericLiteral",
+          "start": 15,
+          "end": 16,
+          "extra": {
+            "rawValue": 1,
+            "raw": "1"
+          },
+          "value": 1
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 18,
+        "end": 47,
+        "specifiers": [
+          {
+            "type": "ExportNamespaceSpecifier",
+            "start": 25,
+            "end": 37,
+            "exported": {
+              "type": "Identifier",
+              "start": 30,
+              "end": 37,
+              "name": "default"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 43,
+          "end": 46,
+          "extra": {
+            "rawValue": "y",
+            "raw": "\"y\""
+          },
+          "value": "y"
+        },
+        "attributes": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

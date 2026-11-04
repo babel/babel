@@ -12,6 +12,7 @@ export default (superClass: typeof Parser) =>
         const node = this.startNode<N.Identifier>();
         this.next(); // eat '%'
         if (tokenIsIdentifier(this.state.type)) {
+          this.setLoc(this.state.startLoc);
           const name = this.parseIdentifierName();
           const identifier = this.createIdentifier(node, name);
           this.castNodeTo(identifier, "V8IntrinsicIdentifier");

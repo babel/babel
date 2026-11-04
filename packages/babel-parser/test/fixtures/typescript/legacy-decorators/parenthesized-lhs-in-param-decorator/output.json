@@ -1,0 +1,163 @@
+{
+  "type": "File",
+  "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":84}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":84}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":84,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":84}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":84,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":3,"column":1,"index":84}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":12,"end":82,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":72,"index":82}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":12,"end":23,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":13,"index":23},"identifierName":"constructor"},
+                "name": "constructor"
+              },
+              "computed": false,
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "TSParameterProperty",
+                  "start":24,"end":47,"loc":{"start":{"line":2,"column":14,"index":24},"end":{"line":2,"column":37,"index":47}},
+                  "decorators": [
+                    {
+                      "type": "Decorator",
+                      "start":24,"end":37,"loc":{"start":{"line":2,"column":14,"index":24},"end":{"line":2,"column":27,"index":37}},
+                      "expression": {
+                        "type": "CallExpression",
+                        "start":25,"end":37,"loc":{"start":{"line":2,"column":15,"index":25},"end":{"line":2,"column":27,"index":37}},
+                        "callee": {
+                          "type": "Identifier",
+                          "start":25,"end":28,"loc":{"start":{"line":2,"column":15,"index":25},"end":{"line":2,"column":18,"index":28},"identifierName":"dec"},
+                          "name": "dec"
+                        },
+                        "arguments": [
+                          {
+                            "type": "AssignmentExpression",
+                            "start":29,"end":36,"loc":{"start":{"line":2,"column":19,"index":29},"end":{"line":2,"column":26,"index":36}},
+                            "operator": "=",
+                            "left": {
+                              "type": "Identifier",
+                              "start":30,"end":31,"loc":{"start":{"line":2,"column":20,"index":30},"end":{"line":2,"column":21,"index":31},"identifierName":"a"},
+                              "name": "a",
+                              "extra": {
+                                "parenthesized": true,
+                                "parenStart": 29
+                              }
+                            },
+                            "right": {
+                              "type": "NumericLiteral",
+                              "start":35,"end":36,"loc":{"start":{"line":2,"column":25,"index":35},"end":{"line":2,"column":26,"index":36}},
+                              "extra": {
+                                "rawValue": 1,
+                                "raw": "1"
+                              },
+                              "value": 1
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "accessibility": "private",
+                  "parameter": {
+                    "type": "Identifier",
+                    "start":46,"end":47,"loc":{"start":{"line":2,"column":36,"index":46},"end":{"line":2,"column":37,"index":47},"identifierName":"x"},
+                    "name": "x"
+                  }
+                },
+                {
+                  "type": "TSParameterProperty",
+                  "start":49,"end":78,"loc":{"start":{"line":2,"column":39,"index":49},"end":{"line":2,"column":68,"index":78}},
+                  "decorators": [
+                    {
+                      "type": "Decorator",
+                      "start":49,"end":69,"loc":{"start":{"line":2,"column":39,"index":49},"end":{"line":2,"column":59,"index":69}},
+                      "expression": {
+                        "type": "CallExpression",
+                        "start":50,"end":69,"loc":{"start":{"line":2,"column":40,"index":50},"end":{"line":2,"column":59,"index":69}},
+                        "callee": {
+                          "type": "Identifier",
+                          "start":50,"end":53,"loc":{"start":{"line":2,"column":40,"index":50},"end":{"line":2,"column":43,"index":53},"identifierName":"dec"},
+                          "name": "dec"
+                        },
+                        "arguments": [
+                          {
+                            "type": "AssignmentExpression",
+                            "start":54,"end":68,"loc":{"start":{"line":2,"column":44,"index":54},"end":{"line":2,"column":58,"index":68}},
+                            "operator": "=",
+                            "left": {
+                              "type": "TSAsExpression",
+                              "start":55,"end":63,"loc":{"start":{"line":2,"column":45,"index":55},"end":{"line":2,"column":53,"index":63}},
+                              "expression": {
+                                "type": "Identifier",
+                                "start":55,"end":56,"loc":{"start":{"line":2,"column":45,"index":55},"end":{"line":2,"column":46,"index":56},"identifierName":"a"},
+                                "name": "a"
+                              },
+                              "typeAnnotation": {
+                                "type": "TSAnyKeyword",
+                                "start":60,"end":63,"loc":{"start":{"line":2,"column":50,"index":60},"end":{"line":2,"column":53,"index":63}}
+                              },
+                              "extra": {
+                                "parenthesized": true,
+                                "parenStart": 54
+                              }
+                            },
+                            "right": {
+                              "type": "NumericLiteral",
+                              "start":67,"end":68,"loc":{"start":{"line":2,"column":57,"index":67},"end":{"line":2,"column":58,"index":68}},
+                              "extra": {
+                                "rawValue": 1,
+                                "raw": "1"
+                              },
+                              "value": 1
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "accessibility": "public",
+                  "parameter": {
+                    "type": "Identifier",
+                    "start":77,"end":78,"loc":{"start":{"line":2,"column":67,"index":77},"end":{"line":2,"column":68,"index":78},"identifierName":"y"},
+                    "name": "y"
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start":80,"end":82,"loc":{"start":{"line":2,"column":70,"index":80},"end":{"line":2,"column":72,"index":82}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

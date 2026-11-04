@@ -1,0 +1,4 @@
+{
+  "errorRecovery": false,
+  "throws": "Missing initializer in using declaration. (2:9)"
+}

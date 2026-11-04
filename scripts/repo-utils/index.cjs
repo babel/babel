@@ -51,9 +51,10 @@ if (typeof jest !== "undefined") {
   exports.describeSatisfies = function (version) {
     return satisfies(process.version, version) ? describe : describe.skip;
   };
-  exports.describeNoCITGM = __dirname.includes("citgm_tmp")
-    ? describe.skip
-    : describe;
+  exports.describeNoCITGM =
+    bool(process.env.CITGM) || __dirname.includes("citgm_tmp")
+      ? describe.skip
+      : describe;
 }
 
 exports.commonJS = function (metaUrl) {

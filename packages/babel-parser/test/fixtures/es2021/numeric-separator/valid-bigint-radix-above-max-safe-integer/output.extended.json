@@ -1,0 +1,70 @@
+{
+  "type": "File",
+  "start":0,"end":169,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":40,"index":169}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":169,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":40,"index":169}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":24,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":24,"index":24}},
+        "expression": {
+          "type": "BigIntLiteral",
+          "start":0,"end":23,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":23,"index":23}},
+          "extra": {
+            "rawValue": {
+              "$$ babel internal serialized type": "bigint",
+              "value": "1152921504606847105"
+            },
+            "raw": "0X1_0000_0000_0000_081n"
+          },
+          "value": {
+            "$$ babel internal serialized type": "bigint",
+            "value": "1152921504606847105"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":25,"end":128,"loc":{"start":{"line":2,"column":0,"index":25},"end":{"line":2,"column":103,"index":128}},
+        "expression": {
+          "type": "BigIntLiteral",
+          "start":25,"end":127,"loc":{"start":{"line":2,"column":0,"index":25},"end":{"line":2,"column":102,"index":127}},
+          "extra": {
+            "rawValue": {
+              "$$ babel internal serialized type": "bigint",
+              "value": "1111111110001000111111111"
+            },
+            "raw": "0B1110_1011_0100_1001_0111_0100_0011_0111_0010_1010_1111_0010_0110_0101_0100_1011_0111_1011_1100_0111n"
+          },
+          "value": {
+            "$$ babel internal serialized type": "bigint",
+            "value": "1111111110001000111111111"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":129,"end":169,"loc":{"start":{"line":3,"column":0,"index":129},"end":{"line":3,"column":40,"index":169}},
+        "expression": {
+          "type": "BigIntLiteral",
+          "start":129,"end":168,"loc":{"start":{"line":3,"column":0,"index":129},"end":{"line":3,"column":39,"index":168}},
+          "extra": {
+            "rawValue": {
+              "$$ babel internal serialized type": "bigint",
+              "value": "39999994999999999999999999"
+            },
+            "raw": "0O2_0426_2501_1354_3471_7343_0277_7777n"
+          },
+          "value": {
+            "$$ babel internal serialized type": "bigint",
+            "value": "39999994999999999999999999"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

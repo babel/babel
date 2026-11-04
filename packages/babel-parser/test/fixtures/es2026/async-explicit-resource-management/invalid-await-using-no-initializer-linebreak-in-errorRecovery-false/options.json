@@ -1,0 +1,4 @@
+{
+  "errorRecovery": false,
+  "throws": "Missing initializer in await using declaration. (2:15)"
+}

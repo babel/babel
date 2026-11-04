@@ -1,5 +1,5 @@
 import assertClassBrand from "./assertClassBrand.js";
-function _classPrivateGetter(s, r, a) {
-  return a(assertClassBrand(s, r));
+function _classPrivateGetter(t, e, a) {
+  return a(assertClassBrand(t, e));
 }
 export { _classPrivateGetter as default };

@@ -1344,7 +1344,7 @@ describe("for-in loop generator", function () {
       };
     }
     function gen() {
-      var key, _t23, _t24, _t25, _t26, _t27, _t28, _t29;
+      var key, _t23, _t24, _t25, _t26, _t27, _t28, _t29, _t30;
       return babelHelpers.regenerator().w(function (_context30) {
         while (1) switch (_context30.n) {
           case 0:
@@ -1369,23 +1369,24 @@ describe("for-in loop generator", function () {
             assert.ok(a.called);
             assert.ok(b.called);
             _t27 = assert;
+            _t28 = _t27.strictEqual;
             _context30.n = 4;
             return key;
           case 4:
-            _t27.strictEqual.call(_t27, _context30.v, 3);
+            _t28.call(_t27, _context30.v, 3);
             _context30.n = 3;
             break;
           case 5:
-            _t28 = babelHelpers.regeneratorKeys((a(1), {
+            _t29 = babelHelpers.regeneratorKeys((a(1), {
               foo: "foo",
               bar: "bar"
             }));
           case 6:
-            if ((_t29 = _t28()).done) {
+            if ((_t30 = _t29()).done) {
               _context30.n = 8;
               break;
             }
-            key = _t29.value;
+            key = _t30.value;
             _context30.n = 7;
             return key;
           case 7:
@@ -1412,17 +1413,17 @@ describe("for-in loop generator", function () {
       return obj;
     }
     function gen() {
-      var _t30, _t31;
+      var _t31, _t32;
       return babelHelpers.regenerator().w(function (_context31) {
         while (1) switch (_context31.n) {
           case 0:
-            _t30 = babelHelpers.regeneratorKeys(baz);
+            _t31 = babelHelpers.regeneratorKeys(baz);
           case 1:
-            if ((_t31 = _t30()).done) {
+            if ((_t32 = _t31()).done) {
               _context31.n = 3;
               break;
             }
-            foo().bar = _t31.value;
+            foo().bar = _t32.value;
             markers.push(obj.bar);
             _context31.n = 2;
             return obj.bar;
@@ -1440,17 +1441,17 @@ describe("for-in loop generator", function () {
   it("should work with primitives", function () {
     var _marked29 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen() {
-      var key, _t32, _t33;
+      var key, _t33, _t34;
       return babelHelpers.regenerator().w(function (_context32) {
         while (1) switch (_context32.n) {
           case 0:
-            _t32 = babelHelpers.regeneratorKeys("abc");
+            _t33 = babelHelpers.regeneratorKeys("abc");
           case 1:
-            if ((_t33 = _t32()).done) {
+            if ((_t34 = _t33()).done) {
               _context32.n = 3;
               break;
             }
-            key = _t33.value;
+            key = _t34.value;
             _context32.n = 2;
             return key;
           case 2:
@@ -1494,22 +1495,22 @@ describe("yield chain", function () {
 describe("call expression ordering", function test() {
   it("should be correct with chained calls (#244)", function () {
     var g = /*#__PURE__*/babelHelpers.regenerator().m(function gen() {
-      var _t34, _t35;
+      var _t35, _t36;
       return babelHelpers.regenerator().w(function (_context34) {
         while (1) switch (_context34.n) {
           case 0:
             _context34.n = 1;
             return 1;
           case 1:
-            _t34 = _context34.v;
+            _t35 = _context34.v;
             _context34.n = 2;
             return 2;
           case 2:
-            _t35 = _t34(_context34.v);
+            _t36 = _t35(_context34.v);
             _context34.n = 3;
             return 3;
           case 3:
-            return _context34.a(2, _t35(_context34.v));
+            return _context34.a(2, _t36(_context34.v));
         }
       }, gen);
     })();
@@ -1596,16 +1597,17 @@ describe("call expression ordering", function test() {
         };
       }
       var g = /*#__PURE__*/babelHelpers.regenerator().m(function fn() {
-        var _t36, _t37;
+        var _t37, _t38, _t39;
         return babelHelpers.regenerator().w(function (_context37) {
           while (1) switch (_context37.n) {
             case 0:
-              _t36 = step(1);
-              _t37 = step(2);
+              _t37 = step(1);
+              _t38 = _t37.method;
+              _t39 = step(2);
               _context37.n = 1;
               return;
             case 1:
-              _t36.method.call(_t36, _t37, _context37.v, step(3));
+              _t38.call(_t37, _t39, _context37.v, step(3));
             case 2:
               return _context37.a(2);
           }
@@ -1624,19 +1626,20 @@ describe("call expression ordering", function test() {
         };
       }
       var g = /*#__PURE__*/babelHelpers.regenerator().m(function fn() {
-        var _t38, _t39;
+        var _t40, _t41, _t42;
         return babelHelpers.regenerator().w(function (_context38) {
           while (1) switch (_context38.n) {
             case 0:
               _context38.n = 1;
               return;
             case 1:
-              _t38 = step(1);
-              _t39 = step(2);
+              _t40 = step(1);
+              _t41 = _t40.method;
+              _t42 = step(2);
               _context38.n = 2;
               return;
             case 2:
-              _t38.method.call(_t38, _t39, _context38.v, step(3));
+              _t41.call(_t40, _t42, _context38.v, step(3));
             case 3:
               return _context38.a(2);
           }
@@ -1652,24 +1655,24 @@ describe("call expression ordering", function test() {
 describe("object literal generator", function () {
   var _marked31 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
   function gen(a, b) {
-    var _t40, _t41, _t42, _t43;
+    var _t43, _t44, _t45, _t46;
     return babelHelpers.regenerator().w(function (_context39) {
       while (1) switch (_context39.n) {
         case 0:
-          _t40 = a;
+          _t43 = a;
           _context39.n = 1;
           return a;
         case 1:
-          _t41 = _context39.v;
-          _t42 = _t40 - _t41;
+          _t44 = _context39.v;
+          _t45 = _t43 - _t44;
           _context39.n = 2;
           return b;
         case 2:
-          _t43 = _context39.v;
+          _t46 = _context39.v;
           _context39.n = 3;
           return {
-            a: _t42,
-            b: _t43
+            a: _t45,
+            b: _t46
           };
         case 3:
           return _context39.a(2);
@@ -1690,49 +1693,49 @@ describe("object literal generator", function () {
 describe("switch statement generator", function () {
   var _marked32 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
   function gen(a) {
-    var _t44, _t45, _t46, _t47, _t48, _t49, _t50, _t51, _t52, _t53, _t54;
+    var _t47, _t48, _t49, _t50, _t51, _t52, _t53, _t54, _t55, _t56, _t57;
     return babelHelpers.regenerator().w(function (_context40) {
       while (1) switch (_context40.n) {
         case 0:
           _context40.n = 1;
           return a;
         case 1:
-          _t44 = _context40.v;
-          _t45 = _t44;
+          _t47 = _context40.v;
+          _t48 = _t47;
           _context40.n = 2;
           return "x";
         case 2:
-          _t46 = _context40.v;
-          _t47 = a;
-          _t48 = _t46 - _t47;
-          if (!(_t45 === _t48)) {
+          _t49 = _context40.v;
+          _t50 = a;
+          _t51 = _t49 - _t50;
+          if (!(_t48 === _t51)) {
             _context40.n = 3;
             break;
           }
-          _t49 = 8;
+          _t52 = 8;
           _context40.n = 7;
           break;
         case 3:
-          _t50 = _t44;
+          _t53 = _t47;
           _context40.n = 4;
           return "y";
         case 4:
-          _t51 = _context40.v;
-          _t52 = a;
-          _t53 = _t51 - _t52;
-          if (!(_t50 === _t53)) {
+          _t54 = _context40.v;
+          _t55 = a;
+          _t56 = _t54 - _t55;
+          if (!(_t53 === _t56)) {
             _context40.n = 5;
             break;
           }
-          _t54 = 9;
+          _t57 = 9;
           _context40.n = 6;
           break;
         case 5:
-          _t54 = 10;
+          _t57 = 10;
         case 6:
-          _t49 = _t54;
+          _t52 = _t57;
         case 7:
-          _context40.n = _t49;
+          _context40.n = _t52;
           break;
         case 8:
           return _context40.a(2, "first case");
@@ -1861,7 +1864,7 @@ describe("generator function expression", function () {
 describe("generator reentry attempt", function () {
   var _marked35 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
   function gen(x) {
-    var _t55;
+    var _t58;
     return babelHelpers.regenerator().w(function (_context44) {
       while (1) switch (_context44.p = _context44.n) {
         case 0:
@@ -1874,9 +1877,9 @@ describe("generator reentry attempt", function () {
           break;
         case 2:
           _context44.p = 2;
-          _t55 = _context44.v;
+          _t58 = _context44.v;
           _context44.n = 3;
-          return _t55;
+          return _t58;
         case 3:
           return _context44.a(2, x + 1);
       }
@@ -2065,7 +2068,7 @@ describe("delegated yield", function () {
       _marked44 = /*#__PURE__*/babelHelpers.regenerator().m(inner);
     var error = new Error("thrown");
     function outer(n) {
-      var _t56;
+      var _t59;
       return babelHelpers.regenerator().w(function (_context52) {
         while (1) switch (_context52.p = _context52.n) {
           case 0:
@@ -2082,9 +2085,9 @@ describe("delegated yield", function () {
             break;
           case 4:
             _context52.p = 4;
-            _t56 = _context52.v;
+            _t59 = _context52.v;
             _context52.n = 5;
-            return _t56.message;
+            return _t59.message;
           case 5:
             _context52.n = 6;
             return 4;
@@ -2127,7 +2130,7 @@ describe("delegated yield", function () {
       _marked46 = /*#__PURE__*/babelHelpers.regenerator().m(inner);
     var count = 0;
     function gen() {
-      var _t57;
+      var _t60;
       return babelHelpers.regenerator().w(function (_context54) {
         while (1) switch (_context54.p = _context54.n) {
           case 0:
@@ -2140,7 +2143,7 @@ describe("delegated yield", function () {
             break;
           case 3:
             _context54.p = 3;
-            _t57 = _context54.v;
+            _t60 = _context54.v;
           case 4:
             return _context54.d(babelHelpers.regeneratorValues(inner()), 5);
           case 5:
@@ -2183,7 +2186,7 @@ describe("delegated yield", function () {
     var thrownFromThrow = new Error("thrown from throw method");
     var thrownFromReturn = new Error("thrown from return method");
     function gen(delegate) {
-      var _t58;
+      var _t61;
       return babelHelpers.regenerator().w(function (_context56) {
         while (1) switch (_context56.p = _context56.n) {
           case 0:
@@ -2193,8 +2196,8 @@ describe("delegated yield", function () {
             return _context56.a(2, _context56.v);
           case 2:
             _context56.p = 2;
-            _t58 = _context56.v;
-            return _context56.a(2, _t58);
+            _t61 = _context56.v;
+            return _context56.a(2, _t61);
         }
       }, _marked47, null, [[0, 2]]);
     }
@@ -2458,14 +2461,14 @@ describe("delegated yield", function () {
       }, _marked53);
     }
     function gen(delegate) {
-      var _t59;
+      var _t62;
       return babelHelpers.regenerator().w(function (_context63) {
         while (1) switch (_context63.n) {
           case 0:
             return _context63.d(babelHelpers.regeneratorValues(delegate), 1);
           case 1:
-            _t59 = _context63.v;
-            return _context63.a(2, 1 + _t59);
+            _t62 = _context63.v;
+            return _context63.a(2, 1 + _t62);
         }
       }, _marked54);
     }
@@ -2593,7 +2596,7 @@ describe("generator return method", function () {
     var _marked59 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     var executedFinally = false;
     function gen() {
-      var _t60;
+      var _t63;
       return babelHelpers.regenerator().w(function (_context70) {
         while (1) switch (_context70.p = _context70.n) {
           case 0:
@@ -2605,7 +2608,7 @@ describe("generator return method", function () {
             break;
           case 2:
             _context70.p = 2;
-            _t60 = _context70.v;
+            _t63 = _context70.v;
             assert.ok(false, "should not have executed the catch handler");
           case 3:
             _context70.p = 3;
@@ -3138,7 +3141,7 @@ describe("catch parameter shadowing", function () {
   it("should leave outer variables unmodified", function () {
     var _marked78 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen(x) {
-      var y, _t61, _t62;
+      var y, _t64, _t65;
       return babelHelpers.regenerator().w(function (_context90) {
         while (1) switch (_context90.p = _context90.n) {
           case 0:
@@ -3147,13 +3150,13 @@ describe("catch parameter shadowing", function () {
             throw x + 2;
           case 2:
             _context90.p = 2;
-            _t61 = _context90.v;
+            _t64 = _context90.v;
             _context90.n = 3;
-            return _t61;
+            return _t64;
           case 3:
-            _t61 += 1;
+            _t64 += 1;
             _context90.n = 4;
-            return _t61;
+            return _t64;
           case 4:
             _context90.n = 5;
             return x;
@@ -3162,13 +3165,13 @@ describe("catch parameter shadowing", function () {
             throw x + 3;
           case 6:
             _context90.p = 6;
-            _t62 = _context90.v;
+            _t65 = _context90.v;
             _context90.n = 7;
-            return _t62;
+            return _t65;
           case 7:
-            _t62 *= 2;
+            _t65 *= 2;
             _context90.n = 8;
-            return _t62;
+            return _t65;
           case 8:
             _context90.n = 9;
             return y;
@@ -3185,7 +3188,7 @@ describe("catch parameter shadowing", function () {
   it("should not replace variables defined in inner scopes", function () {
     var _marked79 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen(x) {
-      var _t63;
+      var _t66;
       return babelHelpers.regenerator().w(function (_context91) {
         while (1) switch (_context91.p = _context91.n) {
           case 0:
@@ -3193,32 +3196,32 @@ describe("catch parameter shadowing", function () {
             throw x;
           case 1:
             _context91.p = 1;
-            _t63 = _context91.v;
+            _t66 = _context91.v;
             _context91.n = 2;
-            return _t63;
+            return _t66;
           case 2:
             _context91.n = 3;
             return function (x) {
               return x += 1;
-            }(_t63 + 1);
+            }(_t66 + 1);
           case 3:
             _context91.n = 4;
             return function () {
               var x = arguments[0];
               return x * 2;
-            }(_t63 + 2);
+            }(_t66 + 2);
           case 4:
             _context91.n = 5;
             return function () {
               function notCalled(x) {
                 throw x;
               }
-              _t63 >>= 1;
-              return _t63;
+              _t66 >>= 1;
+              return _t66;
             }();
           case 5:
             _context91.n = 6;
-            return _t63 -= 1;
+            return _t66 -= 1;
           case 6:
             _context91.n = 7;
             return x;
@@ -3233,7 +3236,7 @@ describe("catch parameter shadowing", function () {
   it("should allow nested catch parameters of the same name", function () {
     var _marked80 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen() {
-      var _t64, _t65;
+      var _t67, _t68;
       return babelHelpers.regenerator().w(function (_context92) {
         while (1) switch (_context92.p = _context92.n) {
           case 0:
@@ -3243,9 +3246,9 @@ describe("catch parameter shadowing", function () {
             break;
           case 1:
             _context92.p = 1;
-            _t64 = _context92.v;
+            _t67 = _context92.v;
             _context92.n = 2;
-            return _t64;
+            return _t67;
           case 2:
             _context92.p = 2;
             raise("e2");
@@ -3253,12 +3256,12 @@ describe("catch parameter shadowing", function () {
             break;
           case 3:
             _context92.p = 3;
-            _t65 = _context92.v;
+            _t68 = _context92.v;
             _context92.n = 4;
-            return _t65;
+            return _t68;
           case 4:
             _context92.n = 5;
-            return _t64;
+            return _t67;
           case 5:
             return _context92.a(2);
         }
@@ -3269,7 +3272,7 @@ describe("catch parameter shadowing", function () {
   it("should not interfere with non-referential identifiers", function () {
     var _marked81 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen() {
-      var _t66;
+      var _t69;
       return babelHelpers.regenerator().w(function (_context93) {
         while (1) switch (_context93.p = _context93.n) {
           case 0:
@@ -3285,14 +3288,14 @@ describe("catch parameter shadowing", function () {
             break;
           case 3:
             _context93.p = 3;
-            _t66 = _context93.v;
+            _t69 = _context93.v;
             _context93.n = 4;
             return 3;
           case 4:
-            _t66.e = "e.e";
-            _t66[_t66.message] = "e.oyez";
+            _t69.e = "e.e";
+            _t69[_t69.message] = "e.oyez";
             return _context93.a(2, {
-              e: _t66,
+              e: _t69,
               identity: function (x) {
                 var e = x;
                 return e;
@@ -3350,41 +3353,41 @@ describe("object literals with multiple yields", function () {
   it("should receive different sent values", function () {
     var _marked83 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen(fn) {
-      var _t67, _t68, _t69, _t70, _t71, _t72, _t73, _t74;
+      var _t70, _t71, _t72, _t73, _t74, _t75, _t76, _t77;
       return babelHelpers.regenerator().w(function (_context95) {
         while (1) switch (_context95.n) {
           case 0:
             _context95.n = 1;
             return "a";
           case 1:
-            _t67 = _context95.v;
+            _t70 = _context95.v;
             _context95.n = 2;
             return "b";
           case 2:
-            _t68 = _context95.v;
-            _t69 = fn;
+            _t71 = _context95.v;
+            _t72 = fn;
             _context95.n = 3;
             return "c";
           case 3:
-            _t70 = _context95.v;
+            _t73 = _context95.v;
             _context95.n = 4;
             return "d";
           case 4:
-            _t71 = _t69(_t70, _context95.v);
+            _t74 = _t72(_t73, _context95.v);
             _context95.n = 5;
             return "e";
           case 5:
-            _t72 = _context95.v;
+            _t75 = _context95.v;
             _context95.n = 6;
             return "f";
           case 6:
-            _t73 = _context95.v;
-            _t74 = [_t72, _t73];
+            _t76 = _context95.v;
+            _t77 = [_t75, _t76];
             return _context95.a(2, {
-              a: _t67,
-              b: _t68,
-              c: _t71,
-              d: _t74
+              a: _t70,
+              b: _t71,
+              c: _t74,
+              d: _t77
             });
         }
       }, _marked83);
@@ -3455,7 +3458,7 @@ describe("generator .throw method", function () {
     var _marked86 = /*#__PURE__*/babelHelpers.regenerator().m(outer),
       _marked87 = /*#__PURE__*/babelHelpers.regenerator().m(inner);
     function outer() {
-      var _t75;
+      var _t78;
       return babelHelpers.regenerator().w(function (_context98) {
         while (1) switch (_context98.p = _context98.n) {
           case 0:
@@ -3466,7 +3469,7 @@ describe("generator .throw method", function () {
             break;
           case 2:
             _context98.p = 2;
-            _t75 = _context98.v;
+            _t78 = _context98.v;
             return _context98.a(2, -1);
           case 3:
             return _context98.a(2, 1);
@@ -3474,7 +3477,7 @@ describe("generator .throw method", function () {
       }, _marked86, null, [[0, 2]]);
     }
     function inner() {
-      var _t76;
+      var _t79;
       return babelHelpers.regenerator().w(function (_context99) {
         while (1) switch (_context99.p = _context99.n) {
           case 0:
@@ -3486,7 +3489,7 @@ describe("generator .throw method", function () {
             break;
           case 2:
             _context99.p = 2;
-            _t76 = _context99.v;
+            _t79 = _context99.v;
             return _context99.a(2);
           case 3:
             return _context99.a(2);
@@ -3501,7 +3504,7 @@ describe("generator .throw method", function () {
     var _marked88 = /*#__PURE__*/babelHelpers.regenerator().m(outer),
       _marked89 = /*#__PURE__*/babelHelpers.regenerator().m(inner);
     function outer() {
-      var _t77;
+      var _t80;
       return babelHelpers.regenerator().w(function (_context100) {
         while (1) switch (_context100.p = _context100.n) {
           case 0:
@@ -3512,7 +3515,7 @@ describe("generator .throw method", function () {
             break;
           case 2:
             _context100.p = 2;
-            _t77 = _context100.v;
+            _t80 = _context100.v;
             return _context100.a(2, -1);
           case 3:
             return _context100.a(2, 1);
@@ -3546,15 +3549,15 @@ describe("unqualified function calls", function () {
     // might be null or undefined (in strict mode).
     var unqualifiedThis = getThis();
     function invoke() {
-      var _t78;
+      var _t81;
       return babelHelpers.regenerator().w(function (_context102) {
         while (1) switch (_context102.n) {
           case 0:
             _context102.n = 1;
             return "dummy";
           case 1:
-            _t78 = _context102.v;
-            return _context102.a(2, _t78());
+            _t81 = _context102.v;
+            return _context102.a(2, _t81());
         }
       }, _marked90);
     }
@@ -3616,34 +3619,34 @@ describe("yield* expression results", function () {
       }
     }
     function foo() {
-      var _t79, _t80;
+      var _t82, _t83;
       return babelHelpers.regenerator().w(function (_context105) {
         while (1) switch (_context105.n) {
           case 0:
             return _context105.d(babelHelpers.regeneratorValues(bar()), 1);
           case 1:
-            _t79 = _context105.v;
+            _t82 = _context105.v;
             return _context105.d(babelHelpers.regeneratorValues(bar()), 2);
           case 2:
-            _t80 = _context105.v;
-            return _context105.a(2, _t79 + _t80);
+            _t83 = _context105.v;
+            return _context105.a(2, _t82 + _t83);
         }
       }, _marked93);
     }
     function bar() {
-      var _t81, _t82;
+      var _t84, _t85;
       return babelHelpers.regenerator().w(function (_context106) {
         while (1) switch (_context106.n) {
           case 0:
             _context106.n = 1;
             return 2;
           case 1:
-            _t81 = _context106.v;
+            _t84 = _context106.v;
             _context106.n = 2;
             return 3;
           case 2:
-            _t82 = _context106.v;
-            return _context106.a(2, _t81 + _t82);
+            _t85 = _context106.v;
+            return _context106.a(2, _t84 + _t85);
         }
       }, _marked94);
     }
@@ -3700,24 +3703,24 @@ describe("new expressions", function () {
       this.second = second;
     }
     function gen() {
-      var _t83, _t84, _t85;
+      var _t86, _t87, _t88;
       return babelHelpers.regenerator().w(function (_context108) {
         while (1) switch (_context108.n) {
           case 0:
             _context108.n = 1;
             return 0;
           case 1:
-            _t83 = _context108.v;
+            _t86 = _context108.v;
             _context108.n = 2;
             return 1;
           case 2:
-            _t84 = _context108.v;
+            _t87 = _context108.v;
             _context108.n = 3;
             return 2;
           case 3:
-            _t85 = _context108.v;
+            _t88 = _context108.v;
             _context108.n = 4;
-            return new _t83(_t84, _t85);
+            return new _t86(_t87, _t88);
           case 4:
             return _context108.a(2, _context108.v);
         }
@@ -3838,19 +3841,19 @@ describe("newborn generators", function () {
     var _marked99 = /*#__PURE__*/babelHelpers.regenerator().m(inner),
       _marked100 = /*#__PURE__*/babelHelpers.regenerator().m(outer);
     function inner() {
-      var _t86, _t87;
+      var _t89, _t90;
       return babelHelpers.regenerator().w(function (_context111) {
         while (1) switch (_context111.n) {
           case 0:
             _context111.n = 1;
             return 1;
           case 1:
-            _t86 = _context111.v;
+            _t89 = _context111.v;
             _context111.n = 2;
             return 2;
           case 2:
-            _t87 = _context111.v;
-            return _context111.a(2, [_t86, _t87]);
+            _t90 = _context111.v;
+            return _context111.a(2, [_t89, _t90]);
         }
       }, _marked99);
     }
@@ -4392,7 +4395,7 @@ describe("for-of loops", function () {
   it("should work inside of generators", function () {
     var _marked112 = /*#__PURE__*/babelHelpers.regenerator().m(yieldPermutations);
     function yieldPermutations(list) {
-      var count, first, genRest, _iterator3, _step3, perm, i, prefix, suffix, _t88;
+      var count, first, genRest, _iterator3, _step3, perm, i, prefix, suffix, _t91;
       return babelHelpers.regenerator().w(function (_context125) {
         while (1) switch (_context125.p = _context125.n) {
           case 0:
@@ -4441,8 +4444,8 @@ describe("for-of loops", function () {
             break;
           case 10:
             _context125.p = 10;
-            _t88 = _context125.v;
-            _iterator3.e(_t88);
+            _t91 = _context125.v;
+            _iterator3.e(_t91);
           case 11:
             _context125.p = 11;
             _iterator3.f();
@@ -4476,18 +4479,18 @@ describe("expressions containing yield subexpressions", function () {
   it("should evaluate all subexpressions before yielding", function () {
     var _marked113 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen(x) {
-      var _t89, _t90;
+      var _t92, _t93;
       return babelHelpers.regenerator().w(function (_context126) {
         while (1) switch (_context126.n) {
           case 0:
-            _t89 = x;
+            _t92 = x;
             _context126.n = 1;
             return function (y) {
               x = y;
             };
           case 1:
-            _t90 = _context126.v;
-            return _context126.a(2, _t89 * _t90);
+            _t93 = _context126.v;
+            return _context126.a(2, _t92 * _t93);
         }
       }, _marked113);
     }
@@ -4503,16 +4506,16 @@ describe("expressions containing yield subexpressions", function () {
   it("should work even with getter member expressions", function () {
     var _marked114 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen() {
-      var _t91, _t92;
+      var _t94, _t95;
       return babelHelpers.regenerator().w(function (_context127) {
         while (1) switch (_context127.n) {
           case 0:
-            _t91 = a.b;
+            _t94 = a.b;
             _context127.n = 1;
             return "asdf";
           case 1:
-            _t92 = _context127.v;
-            return _context127.a(2, _t91 + _t92);
+            _t95 = _context127.v;
+            return _context127.a(2, _t94 + _t95);
         }
       }, _marked114);
     }
@@ -4538,17 +4541,17 @@ describe("expressions containing yield subexpressions", function () {
   it("should evaluate all array elements before yielding", function () {
     var _marked115 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen() {
-      var _t93, _t94, _t95;
+      var _t96, _t97, _t98;
       return babelHelpers.regenerator().w(function (_context128) {
         while (1) switch (_context128.n) {
           case 0:
-            _t93 = a;
+            _t96 = a;
             _context128.n = 1;
             return "asdf";
           case 1:
-            _t94 = _context128.v;
-            _t95 = a;
-            return _context128.a(2, [_t93, _t94, _t95]);
+            _t97 = _context128.v;
+            _t98 = a;
+            return _context128.a(2, [_t96, _t97, _t98]);
         }
       }, _marked115);
     }
@@ -4567,15 +4570,16 @@ describe("expressions containing yield subexpressions", function () {
   it("should handle callee member expressions correctly", function () {
     var _marked116 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen() {
-      var _t96;
+      var _t99, _t100;
       return babelHelpers.regenerator().w(function (_context129) {
         while (1) switch (_context129.n) {
           case 0:
-            _t96 = a.slice(0);
+            _t99 = a.slice(0);
+            _t100 = _t99.concat;
             _context129.n = 1;
             return "asdf";
           case 1:
-            a = _t96.concat.call(_t96, _context129.v);
+            a = _t100.call(_t99, _context129.v);
             return _context129.a(2, a);
         }
       }, _marked116);
@@ -4595,16 +4599,16 @@ describe("expressions containing yield subexpressions", function () {
   it("should handle implicit stringification correctly", function () {
     var _marked117 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen() {
-      var _t97, _t98;
+      var _t101, _t102;
       return babelHelpers.regenerator().w(function (_context130) {
         while (1) switch (_context130.n) {
           case 0:
-            _t97 = a;
+            _t101 = a;
             _context130.n = 1;
             return "asdf";
           case 1:
-            _t98 = _context130.v;
-            return _context130.a(2, _t97 + _t98);
+            _t102 = _context130.v;
+            return _context130.a(2, _t101 + _t102);
         }
       }, _marked117);
     }
@@ -4623,15 +4627,15 @@ describe("expressions containing yield subexpressions", function () {
   it("should work when yield is in an array spread", function () {
     var _marked118 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen() {
-      var _t99;
+      var _t103;
       return babelHelpers.regenerator().w(function (_context131) {
         while (1) switch (_context131.n) {
           case 0:
             _context131.n = 1;
             return "foo";
           case 1:
-            _t99 = _context131.v;
-            return _context131.a(2, [0, ..._t99, 3]);
+            _t103 = _context131.v;
+            return _context131.a(2, [0, ..._t103, 3]);
         }
       }, _marked118);
     }
@@ -4648,15 +4652,15 @@ describe("expressions containing yield subexpressions", function () {
   it("should work when yield is in a sparse array", function () {
     var _marked119 = /*#__PURE__*/babelHelpers.regenerator().m(gen);
     function gen() {
-      var _t100;
+      var _t104;
       return babelHelpers.regenerator().w(function (_context132) {
         while (1) switch (_context132.n) {
           case 0:
             _context132.n = 1;
             return "foo";
           case 1:
-            _t100 = _context132.v;
-            return _context132.a(2, [0, _t100,, 3]);
+            _t104 = _context132.v;
+            return _context132.a(2, [0, _t104,, 3]);
         }
       }, _marked119);
     }

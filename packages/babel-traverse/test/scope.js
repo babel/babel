@@ -690,6 +690,50 @@ describe("scope", () => {
       expect(path.scope.generateUid("Cls")).toBe("_Cls2");
     });
 
+    test("generateUid many times with the same name", function () {
+      const path = getPath("var _ref3;");
+
+      const uids = [];
+      for (let i = 0; i < 13; i++) uids.push(path.scope.generateUid("ref"));
+
+      expect(uids).toEqual([
+        "_ref",
+        "_ref2",
+        "_ref4",
+        "_ref5",
+        "_ref6",
+        "_ref7",
+        "_ref8",
+        "_ref9",
+        "_ref0",
+        "_ref1",
+        "_ref10",
+        "_ref11",
+        "_ref12",
+      ]);
+    });
+
+    test("generateUid after re-crawling releases the unused uids", function () {
+      const path = getPath("");
+
+      expect(path.scope.generateUid("ref")).toBe("_ref");
+      expect(path.scope.generateUid("ref")).toBe("_ref2");
+
+      path.scope.crawl();
+
+      expect(path.scope.generateUid("ref")).toBe("_ref");
+    });
+
+    test("generateUid collision check with labels in a nested scope", function () {
+      const program = getPath("{ _foo: { } }");
+      const block = program.get("body.0");
+
+      expect(block.scope.generateUid("foo")).toBe("_foo2");
+      // `_foo` is only a label of the nested scope
+      expect(program.scope.generateUid("foo")).toBe("_foo");
+      expect(block.scope.generateUid("foo")).toBe("_foo3");
+    });
+
     it("re-exports are not references", () => {
       const path = getPath("export { x } from 'y'", {
         sourceType: "module",
@@ -1110,6 +1154,18 @@ describe("scope", () => {
       expect(program.scope.hasOwnBinding("ref")).toBe(false);
     });
 
+    it("should not register the new binding within IIFunctionExpression when it has a rest parameter", () => {
+      const program = getPath("(function(a, ...b) {})()");
+      const functionBody = program.get("body.0.expression.callee.body");
+      functionBody.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "(function (a, ...b) {
+          var ref;
+        })();"
+      `);
+      expect(functionBody.scope.hasOwnBinding("ref")).toBe(true);
+      expect(program.scope.hasOwnBinding("ref")).toBe(false);
+    });
     it("should not register the new binding within IIFunctionExpression when it has a function name", () => {
       const program = getPath("(function f(a, b = f.length) {})()");
       const functionBody = program.get("body.0.expression.callee.body");
@@ -1147,6 +1203,28 @@ describe("scope", () => {
       `);
       expect(functionBody.scope.hasOwnBinding("ref")).toBe(true);
       expect(program.scope.hasOwnBinding("ref")).toBe(false);
+    });
+    it("registers the bindings of multiple declarators in the same declaration", () => {
+      const program = getPath("foo;");
+      for (const name of ["a", "b", "c"]) {
+        program.scope.push({ id: t.identifier(name) });
+      }
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "var a, b, c;
+        foo;"
+      `);
+      const declaration = program.get("body.0");
+      for (const name of ["a", "b", "c"]) {
+        expect(program.scope.getOwnBinding(name).path.context).toBe(
+          declaration.context,
+        );
+      }
+      const declarations = declaration.get("declarations");
+      for (const [i, name] of ["a", "b", "c"].entries()) {
+        const binding = program.scope.getOwnBinding(name);
+        expect(binding.path).toBe(declarations[i]);
+        expect(binding.path.key).toBe(i);
+      }
     });
   });
 

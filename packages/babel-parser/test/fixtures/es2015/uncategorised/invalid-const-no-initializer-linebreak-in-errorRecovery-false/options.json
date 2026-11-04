@@ -1,0 +1,4 @@
+{
+  "errorRecovery": false,
+  "throws": "Missing initializer in const declaration. (1:7)"
+}

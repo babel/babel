@@ -44,6 +44,7 @@ function BabelPluginProcessHelpersFactory(
         FunctionDeclaration: mangleFns
           ? path => {
               if (
+                path.parentPath.isExportDefaultDeclaration() ||
                 path.node.leadingComments?.find(c =>
                   c.value.includes("@no-mangle")
                 )
@@ -141,6 +142,7 @@ const helpers: Record<string, Helper> = {
     code = (
       await minify(code, {
         ecma: 5,
+        module: true,
         mangle: {
           keep_fnames: mangleFns
             ? noMangleFns.length

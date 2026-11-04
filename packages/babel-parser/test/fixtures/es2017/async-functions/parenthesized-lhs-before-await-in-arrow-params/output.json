@@ -1,0 +1,105 @@
+{
+  "type": "File",
+  "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+  "errors": [
+    "SyntaxError: Invalid parenthesized assignment pattern. (1:24)",
+    "SyntaxError: 'await' is not allowed in async function parameters. (1:37)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":53,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":53,"index":53}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":53,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":53,"index":53}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":21,"end":51,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":51,"index":51}},
+              "expression": {
+                "type": "ArrowFunctionExpression",
+                "start":21,"end":51,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":51,"index":51}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "AssignmentPattern",
+                    "start":22,"end":31,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":31,"index":31}},
+                    "left": {
+                      "type": "ArrayPattern",
+                      "start":22,"end":27,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":27,"index":27}},
+                      "elements": [
+                        {
+                          "type": "Identifier",
+                          "start":24,"end":25,"loc":{"start":{"line":1,"column":24,"index":24},"end":{"line":1,"column":25,"index":25},"identifierName":"a"},
+                          "name": "a",
+                          "extra": {
+                            "parenthesized": true,
+                            "parenStart": 23
+                          }
+                        }
+                      ]
+                    },
+                    "right": {
+                      "type": "NumericLiteral",
+                      "start":30,"end":31,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":31,"index":31}},
+                      "extra": {
+                        "rawValue": 1,
+                        "raw": "1"
+                      },
+                      "value": 1
+                    }
+                  },
+                  {
+                    "type": "AssignmentPattern",
+                    "start":33,"end":44,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":44,"index":44}},
+                    "left": {
+                      "type": "Identifier",
+                      "start":33,"end":34,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":34,"index":34},"identifierName":"b"},
+                      "name": "b"
+                    },
+                    "right": {
+                      "type": "AwaitExpression",
+                      "start":37,"end":44,"loc":{"start":{"line":1,"column":37,"index":37},"end":{"line":1,"column":44,"index":44}},
+                      "argument": {
+                        "type": "NumericLiteral",
+                        "start":43,"end":44,"loc":{"start":{"line":1,"column":43,"index":43},"end":{"line":1,"column":44,"index":44}},
+                        "extra": {
+                          "rawValue": 1,
+                          "raw": "1"
+                        },
+                        "value": 1
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start":49,"end":51,"loc":{"start":{"line":1,"column":49,"index":49},"end":{"line":1,"column":51,"index":51}},
+                  "body": [],
+                  "directives": []
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "type": "File",
+  "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":29,"index":47}},
+  "errors": [
+    "SyntaxError: Only one default export allowed per module. (2:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":47,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":29,"index":47}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":0,"end":17,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":17,"index":17}},
+        "declaration": {
+          "type": "NumericLiteral",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16}},
+          "extra": {
+            "rawValue": 1,
+            "raw": "1"
+          },
+          "value": 1
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":18,"end":47,"loc":{"start":{"line":2,"column":0,"index":18},"end":{"line":2,"column":29,"index":47}},
+        "specifiers": [
+          {
+            "type": "ExportNamespaceSpecifier",
+            "start":25,"end":37,"loc":{"start":{"line":2,"column":7,"index":25},"end":{"line":2,"column":19,"index":37}},
+            "exported": {
+              "type": "Identifier",
+              "start":30,"end":37,"loc":{"start":{"line":2,"column":12,"index":30},"end":{"line":2,"column":19,"index":37},"identifierName":"default"},
+              "name": "default"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":43,"end":46,"loc":{"start":{"line":2,"column":25,"index":43},"end":{"line":2,"column":28,"index":46}},
+          "extra": {
+            "rawValue": "y",
+            "raw": "\"y\""
+          },
+          "value": "y"
+        },
+        "attributes": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

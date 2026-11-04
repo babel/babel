@@ -39,7 +39,8 @@ const tSFunctionTypeAnnotationCommon = () => ({
 
 defineType("TSParameterProperty", {
   aliases: [],
-  visitor: ["parameter"],
+  builder: ["parameter"],
+  visitor: ["decorators" /* for legacy param decorators */, "parameter"],
   fields: {
     accessibility: {
       validate: assertOneOf("public", "private", "protected"),

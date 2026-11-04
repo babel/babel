@@ -1,0 +1,48 @@
+{
+  "type": "File",
+  "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+  "errors": [
+    "SyntaxError: Missing semicolon. (1:26)",
+    "SyntaxError: Missing semicolon. (1:28)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":0,"end":26,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":26,"index":26}},
+        "declaration": {
+          "type": "Identifier",
+          "start":15,"end":26,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":26,"index":26},"identifierName":"struct"},
+          "name": "struct"
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":27,"end":28,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":28,"index":28}},
+        "expression": {
+          "type": "Identifier",
+          "start":27,"end":28,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":28,"index":28},"identifierName":"S"},
+          "name": "S"
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":29,"end":31,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":31,"index":31}},
+        "body": [],
+        "directives": []
+      },
+      {
+        "type": "EmptyStatement",
+        "start":31,"end":32,"loc":{"start":{"line":1,"column":31,"index":31},"end":{"line":1,"column":32,"index":32}}
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

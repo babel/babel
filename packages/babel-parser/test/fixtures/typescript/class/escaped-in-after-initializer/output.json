@@ -1,0 +1,162 @@
+{
+  "type": "File",
+  "start":0,"end":98,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":98}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":98,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":98}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":98,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":9,"column":1,"index":98}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start":8,"end":98,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":9,"column":1,"index":98}},
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start":12,"end":17,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":7,"index":17}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":12,"end":13,"loc":{"start":{"line":2,"column":2,"index":12},"end":{"line":2,"column":3,"index":13},"identifierName":"x"},
+                "name": "x"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":16,"end":17,"loc":{"start":{"line":2,"column":6,"index":16},"end":{"line":2,"column":7,"index":17}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":20,"end":27,"loc":{"start":{"line":3,"column":2,"index":20},"end":{"line":3,"column":9,"index":27}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":20,"end":27,"loc":{"start":{"line":3,"column":2,"index":20},"end":{"line":3,"column":9,"index":27},"identifierName":"in"},
+                "name": "in"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":30,"end":41,"loc":{"start":{"line":4,"column":2,"index":30},"end":{"line":4,"column":13,"index":41}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":30,"end":31,"loc":{"start":{"line":4,"column":2,"index":30},"end":{"line":4,"column":3,"index":31},"identifierName":"y"},
+                "name": "y"
+              },
+              "computed": false,
+              "value": {
+                "type": "ArrowFunctionExpression",
+                "start":34,"end":41,"loc":{"start":{"line":4,"column":6,"index":34},"end":{"line":4,"column":13,"index":41}},
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "Identifier",
+                  "start":40,"end":41,"loc":{"start":{"line":4,"column":12,"index":40},"end":{"line":4,"column":13,"index":41},"identifierName":"a"},
+                  "name": "a"
+                }
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":44,"end":59,"loc":{"start":{"line":5,"column":2,"index":44},"end":{"line":5,"column":17,"index":59}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":44,"end":59,"loc":{"start":{"line":5,"column":2,"index":44},"end":{"line":5,"column":17,"index":59},"identifierName":"instanceof"},
+                "name": "instanceof"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start":62,"end":67,"loc":{"start":{"line":6,"column":2,"index":62},"end":{"line":6,"column":7,"index":67}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":62,"end":63,"loc":{"start":{"line":6,"column":2,"index":62},"end":{"line":6,"column":3,"index":63},"identifierName":"z"},
+                "name": "z"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":66,"end":67,"loc":{"start":{"line":6,"column":6,"index":66},"end":{"line":6,"column":7,"index":67}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start":70,"end":82,"loc":{"start":{"line":7,"column":2,"index":70},"end":{"line":7,"column":14,"index":82}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":70,"end":77,"loc":{"start":{"line":7,"column":2,"index":70},"end":{"line":7,"column":9,"index":77},"identifierName":"in"},
+                "name": "in"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":80,"end":82,"loc":{"start":{"line":7,"column":12,"index":80},"end":{"line":7,"column":14,"index":82}},
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassProperty",
+              "start":85,"end":96,"loc":{"start":{"line":8,"column":2,"index":85},"end":{"line":8,"column":13,"index":96}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":85,"end":92,"loc":{"start":{"line":8,"column":2,"index":85},"end":{"line":8,"column":9,"index":92},"identifierName":"in"},
+                "name": "in"
+              },
+              "computed": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start":95,"end":96,"loc":{"start":{"line":8,"column":12,"index":95},"end":{"line":8,"column":13,"index":96}},
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

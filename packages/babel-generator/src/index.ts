@@ -192,6 +192,13 @@ export interface GeneratorOptions {
   inputSourceMap?: any;
 
   /**
+   * Collapse consecutive mappings into range mappings, when possible.
+   * This option is currently ignored if `inputSourceMap` is provided.
+   * Defaults to `false`.
+   */
+  sourceMapRanges?: boolean;
+
+  /**
    * A root for all relative URLs in the source map.
    */
   sourceRoot?: string;

@@ -1,0 +1,138 @@
+{
+  "type": "File",
+  "start":0,"end":103,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":13,"column":1,"index":103}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":103,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":13,"column":1,"index":103}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start":0,"end":21,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":21}},
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start":4,"end":7,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":5,"index":7}},
+            "expression": {
+              "type": "Identifier",
+              "start":4,"end":7,"loc":{"start":{"line":2,"column":2,"index":4},"end":{"line":2,"column":5,"index":7},"identifierName":"let"},
+              "name": "let"
+            }
+          },
+          {
+            "type": "IfStatement",
+            "start":10,"end":19,"loc":{"start":{"line":3,"column":2,"index":10},"end":{"line":3,"column":11,"index":19}},
+            "test": {
+              "type": "Identifier",
+              "start":14,"end":15,"loc":{"start":{"line":3,"column":6,"index":14},"end":{"line":3,"column":7,"index":15},"identifierName":"x"},
+              "name": "x"
+            },
+            "consequent": {
+              "type": "BlockStatement",
+              "start":17,"end":19,"loc":{"start":{"line":3,"column":9,"index":17},"end":{"line":3,"column":11,"index":19}},
+              "body": [],
+              "directives": []
+            },
+            "alternate": null
+          }
+        ],
+        "directives": []
+      },
+      {
+        "type": "FunctionDeclaration",
+        "start":22,"end":54,"loc":{"start":{"line":5,"column":0,"index":22},"end":{"line":8,"column":1,"index":54}},
+        "id": {
+          "type": "Identifier",
+          "start":31,"end":32,"loc":{"start":{"line":5,"column":9,"index":31},"end":{"line":5,"column":10,"index":32},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":35,"end":54,"loc":{"start":{"line":5,"column":13,"index":35},"end":{"line":8,"column":1,"index":54}},
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start":39,"end":42,"loc":{"start":{"line":6,"column":2,"index":39},"end":{"line":6,"column":5,"index":42}},
+              "expression": {
+                "type": "Identifier",
+                "start":39,"end":42,"loc":{"start":{"line":6,"column":2,"index":39},"end":{"line":6,"column":5,"index":42},"identifierName":"let"},
+                "name": "let"
+              }
+            },
+            {
+              "type": "ReturnStatement",
+              "start":45,"end":52,"loc":{"start":{"line":7,"column":2,"index":45},"end":{"line":7,"column":9,"index":52}},
+              "argument": null
+            }
+          ],
+          "directives": []
+        }
+      },
+      {
+        "type": "SwitchStatement",
+        "start":55,"end":103,"loc":{"start":{"line":9,"column":0,"index":55},"end":{"line":13,"column":1,"index":103}},
+        "discriminant": {
+          "type": "Identifier",
+          "start":63,"end":64,"loc":{"start":{"line":9,"column":8,"index":63},"end":{"line":9,"column":9,"index":64},"identifierName":"a"},
+          "name": "a"
+        },
+        "cases": [
+          {
+            "type": "SwitchCase",
+            "start":70,"end":101,"loc":{"start":{"line":10,"column":2,"index":70},"end":{"line":12,"column":15,"index":101}},
+            "consequent": [
+              {
+                "type": "ExpressionStatement",
+                "start":82,"end":85,"loc":{"start":{"line":11,"column":4,"index":82},"end":{"line":11,"column":7,"index":85}},
+                "expression": {
+                  "type": "Identifier",
+                  "start":82,"end":85,"loc":{"start":{"line":11,"column":4,"index":82},"end":{"line":11,"column":7,"index":85},"identifierName":"let"},
+                  "name": "let"
+                }
+              },
+              {
+                "type": "ExpressionStatement",
+                "start":90,"end":101,"loc":{"start":{"line":12,"column":4,"index":90},"end":{"line":12,"column":15,"index":101}},
+                "expression": {
+                  "type": "UnaryExpression",
+                  "start":90,"end":100,"loc":{"start":{"line":12,"column":4,"index":90},"end":{"line":12,"column":14,"index":100}},
+                  "operator": "delete",
+                  "prefix": true,
+                  "argument": {
+                    "type": "MemberExpression",
+                    "start":97,"end":100,"loc":{"start":{"line":12,"column":11,"index":97},"end":{"line":12,"column":14,"index":100}},
+                    "object": {
+                      "type": "Identifier",
+                      "start":97,"end":98,"loc":{"start":{"line":12,"column":11,"index":97},"end":{"line":12,"column":12,"index":98},"identifierName":"x"},
+                      "name": "x"
+                    },
+                    "computed": false,
+                    "property": {
+                      "type": "Identifier",
+                      "start":99,"end":100,"loc":{"start":{"line":12,"column":13,"index":99},"end":{"line":12,"column":14,"index":100},"identifierName":"y"},
+                      "name": "y"
+                    }
+                  }
+                }
+              }
+            ],
+            "test": {
+              "type": "NumericLiteral",
+              "start":75,"end":76,"loc":{"start":{"line":10,"column":7,"index":75},"end":{"line":10,"column":8,"index":76}},
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,5 @@
+(new F)!;
+(new F)!.b;
+(new F)<T>;
+new F<T>();
+new (F<T>).b;

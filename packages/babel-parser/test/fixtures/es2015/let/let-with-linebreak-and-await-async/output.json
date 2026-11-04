@@ -1,0 +1,66 @@
+{
+  "type": "File",
+  "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":39}},
+  "errors": [
+    "SyntaxError: Can not use 'await' as identifier inside an async function. (3:2)",
+    "SyntaxError: Missing semicolon. (3:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":39}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start":0,"end":39,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":1,"index":39}},
+        "id": {
+          "type": "Identifier",
+          "start":15,"end":16,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":16,"index":16},"identifierName":"f"},
+          "name": "f"
+        },
+        "generator": false,
+        "async": true,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start":19,"end":39,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":4,"column":1,"index":39}},
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start":23,"end":34,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":3,"column":7,"index":34}},
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start":29,"end":34,"loc":{"start":{"line":3,"column":2,"index":29},"end":{"line":3,"column":7,"index":34}},
+                  "id": {
+                    "type": "Identifier",
+                    "start":29,"end":34,"loc":{"start":{"line":3,"column":2,"index":29},"end":{"line":3,"column":7,"index":34},"identifierName":"await"},
+                    "name": "await"
+                  },
+                  "init": null
+                }
+              ],
+              "kind": "let"
+            },
+            {
+              "type": "ExpressionStatement",
+              "start":35,"end":37,"loc":{"start":{"line":3,"column":8,"index":35},"end":{"line":3,"column":10,"index":37}},
+              "expression": {
+                "type": "NumericLiteral",
+                "start":35,"end":36,"loc":{"start":{"line":3,"column":8,"index":35},"end":{"line":3,"column":9,"index":36}},
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

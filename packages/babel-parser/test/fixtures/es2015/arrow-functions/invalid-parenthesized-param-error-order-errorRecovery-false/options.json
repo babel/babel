@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "errorRecovery": false,
+  "throws": "Invalid parenthesized assignment pattern. (1:3)"
+}

@@ -70,6 +70,14 @@ export default class State {
   //          ^
   noArrowParamsConversionAt: number[] = [];
 
+  // The end of the last token after which `/` or `/=` starts a regular
+  // expression although the parser has already parsed an expression before
+  // it: the `}` of an arrow function body or an argument-less `yield`.
+  // e.g. () => {}
+  //             ^
+  //      /=/
+  regExpAllowedAt: number = -1;
+
   // Flags to track
 
   /**
@@ -176,6 +184,7 @@ export default class State {
     state.errors = this.errors.slice();
     state.noArrowAt = this.noArrowAt.slice();
     state.noArrowParamsConversionAt = this.noArrowParamsConversionAt.slice();
+    state.regExpAllowedAt = this.regExpAllowedAt;
     state.labels = this.labels.slice();
     state.commentsLen = this.commentsLen;
     state.commentStack = this.commentStack.slice();
@@ -209,6 +218,8 @@ export type LookaheadState = {
   curPosition: State["curPosition"];
   /* Used only in readToken_mult_modulo */
   inType: boolean;
+  /* Used only in readNumber */
+  strict: boolean;
   // These boolean properties are not initialized in createLookaheadState()
   // instead they will only be set by the tokenizer
   containsEsc?: boolean;

@@ -1,0 +1,6 @@
+{
+  "assumptions": {
+    "noConstructorPrimitiveReturn": true,
+    "noUninitializedThis": true
+  }
+}

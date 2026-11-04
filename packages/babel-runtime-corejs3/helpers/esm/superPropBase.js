@@ -1,6 +1,6 @@
 import getPrototypeOf from "./getPrototypeOf.js";
-function _superPropBase(t, o) {
-  for (; !{}.hasOwnProperty.call(t, o) && null !== (t = getPrototypeOf(t)););
-  return t;
+function _superPropBase(o, t) {
+  for (; !{}.hasOwnProperty.call(o, t) && null !== (o = getPrototypeOf(o)););
+  return o;
 }
 export { _superPropBase as default };

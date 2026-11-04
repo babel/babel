@@ -1,0 +1,7 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "deferredReexports"
+  ],
+  "throws": "The 'deferredReexports' plugin requires 'deferredImportEvaluation'."
+}

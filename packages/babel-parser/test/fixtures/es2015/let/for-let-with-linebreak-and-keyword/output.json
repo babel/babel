@@ -1,0 +1,43 @@
+{
+  "type": "File",
+  "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":6,"index":15}},
+  "errors": [
+    "SyntaxError: Unexpected keyword 'if'. (2:0)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":6,"index":15}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForStatement",
+        "start":0,"end":15,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":6,"index":15}},
+        "init": {
+          "type": "VariableDeclaration",
+          "start":5,"end":11,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":2,"column":2,"index":11}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":9,"end":11,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":2,"index":11}},
+              "id": {
+                "type": "Identifier",
+                "start":9,"end":11,"loc":{"start":{"line":2,"column":0,"index":9},"end":{"line":2,"column":2,"index":11},"identifierName":"if"},
+                "name": "if"
+              },
+              "init": null
+            }
+          ],
+          "kind": "let"
+        },
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start":14,"end":15,"loc":{"start":{"line":2,"column":5,"index":14},"end":{"line":2,"column":6,"index":15}}
+        }
+      }
+    ],
+    "directives": []
+  }
+}

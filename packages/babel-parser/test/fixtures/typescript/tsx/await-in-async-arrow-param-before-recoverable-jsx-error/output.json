@@ -1,0 +1,80 @@
+{
+  "type": "File",
+  "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+  "errors": [
+    "SyntaxError: Expected corresponding JSX closing tag for <a>. (1:21)",
+    "SyntaxError: Can not use 'await' as identifier inside an async function. (1:15)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":33,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":33,"index":33}},
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start":0,"end":32,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":32,"index":32}},
+          "id": null,
+          "generator": false,
+          "async": true,
+          "params": [
+            {
+              "type": "AssignmentPattern",
+              "start":7,"end":25,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":25,"index":25}},
+              "left": {
+                "type": "Identifier",
+                "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8},"identifierName":"x"},
+                "name": "x"
+              },
+              "right": {
+                "type": "JSXElement",
+                "start":11,"end":25,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":25,"index":25}},
+                "openingElement": {
+                  "type": "JSXOpeningElement",
+                  "start":11,"end":14,"loc":{"start":{"line":1,"column":11,"index":11},"end":{"line":1,"column":14,"index":14}},
+                  "name": {
+                    "type": "JSXIdentifier",
+                    "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13}},
+                    "name": "a"
+                  },
+                  "attributes": [],
+                  "selfClosing": false
+                },
+                "closingElement": {
+                  "type": "JSXClosingElement",
+                  "start":21,"end":25,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":25,"index":25}},
+                  "name": {
+                    "type": "JSXIdentifier",
+                    "start":23,"end":24,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":24,"index":24}},
+                    "name": "b"
+                  }
+                },
+                "children": [
+                  {
+                    "type": "JSXExpressionContainer",
+                    "start":14,"end":21,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":21,"index":21}},
+                    "expression": {
+                      "type": "Identifier",
+                      "start":15,"end":20,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":1,"column":20,"index":20},"identifierName":"await"},
+                      "name": "await"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "body": {
+            "type": "BlockStatement",
+            "start":30,"end":32,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":32,"index":32}},
+            "body": [],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

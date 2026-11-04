@@ -315,6 +315,29 @@ function tsIsEntityName(
   }
 }
 
+/**
+ * Whether the node is a type cast, which is a valid assignment target but not
+ * a valid binding, e.g. `a as T`, `a satisfies T`, `a!` or `<T>a`.
+ * Note that `TSTypeCastExpression`, i.e. `(a: T)`, is not one of them.
+ */
+function tsIsTypeCast(
+  node: N.Node,
+): node is
+  | N.TSAsExpression
+  | N.TSSatisfiesExpression
+  | N.TSNonNullExpression
+  | N.TSTypeAssertion {
+  switch (node.type) {
+    case "TSAsExpression":
+    case "TSSatisfiesExpression":
+    case "TSNonNullExpression":
+    case "TSTypeAssertion":
+      return true;
+    default:
+      return false;
+  }
+}
+
 export const enum tsParseEntityNameFlags {
   NONE = 0b00,
   ALLOW_RESERVED_WORDS = 0b01,
@@ -427,9 +450,23 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (stopOnStartOfClassStaticBlock && this.tsIsStartOfStaticBlocks()) {
           return undefined;
         }
+        // An escaped `in` / `const` may still be an IdentifierName (e.g. a
+        // class member named `in`), so `next()` must not report the escape
+        // before we know that it is a modifier.
+        const escapedKeywordLoc =
+          this.state.containsEsc && !tokenIsIdentifier(this.state.type)
+            ? this.state.startLoc
+            : null;
+        if (escapedKeywordLoc) this.state.containsEsc = false;
         if (this.tsTryParse(this.tsNextTokenCanFollowModifier.bind(this))) {
+          if (escapedKeywordLoc) {
+            this.raise(Errors.InvalidEscapedReservedWord, escapedKeywordLoc, {
+              reservedWord: modifier,
+            });
+          }
           return modifier;
         }
+        if (escapedKeywordLoc) this.state.containsEsc = true;
       }
       return undefined;
     }
@@ -1552,15 +1589,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       parseConstituentType: () => N.TSType,
       operator: TokenType,
     ): N.TSType {
-      const node = this.startNode<N.TSUnionType | N.TSIntersectionType>();
+      const startLoc = this.state.startLoc;
       const hasLeadingOperator = this.eat(operator);
-      const types = [];
-      do {
-        types.push(parseConstituentType());
-      } while (this.eat(operator));
-      if (types.length === 1 && !hasLeadingOperator) {
-        return types[0];
+      const first = parseConstituentType();
+      if (!hasLeadingOperator && !this.match(operator)) {
+        return first;
       }
+      const node = this.startNodeAt<N.TSUnionType | N.TSIntersectionType>(
+        startLoc,
+      );
+      const types = [first];
+      while (this.eat(operator)) types.push(parseConstituentType());
       node.types = types;
       return this.finishNode(node, kind);
     }
@@ -1597,31 +1636,26 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         return true;
       }
 
-      if (this.match(tt.braceL)) {
-        // Return true if we can parse an object pattern without errors
+      const isObjectPattern = this.match(tt.braceL);
+      if (isObjectPattern || this.match(tt.bracketL)) {
+        if (!isObjectPattern) this.next();
+        // Return true if we can parse an object or array pattern without errors
         const { errors } = this.state;
         const previousErrorCount = errors.length;
+        const scopeStacksSnapshot = this.snapshotScopeStacks();
         try {
-          this.parseObjectLike(tt.braceR, true);
+          if (isObjectPattern) {
+            this.parseObjectLike(tt.braceR, true);
+          } else {
+            super.parseBindingList(
+              tt.bracketR,
+              charCodes.rightSquareBracket,
+              ParseBindingListFlags.ALLOW_EMPTY,
+            );
+          }
           return errors.length === previousErrorCount;
         } catch {
-          return false;
-        }
-      }
-
-      if (this.match(tt.bracketL)) {
-        this.next();
-        // Return true if we can parse an array pattern without errors
-        const { errors } = this.state;
-        const previousErrorCount = errors.length;
-        try {
-          super.parseBindingList(
-            tt.bracketR,
-            charCodes.rightSquareBracket,
-            ParseBindingListFlags.ALLOW_EMPTY,
-          );
-          return errors.length === previousErrorCount;
-        } catch {
+          this.restoreScopeStacks(scopeStacksSnapshot);
           return false;
         }
       }
@@ -1667,13 +1701,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         const t = this.startNode<N.TSTypeAnnotation>();
         this.expect(returnToken);
 
-        const node = this.startNode<N.TSTypePredicate>();
-
-        const asserts = !!this.tsTryParse(
-          this.tsParseTypePredicateAsserts.bind(this),
-        );
+        const startLoc = this.state.startLoc;
+        const asserts =
+          this.match(tt._asserts) &&
+          !!this.tsTryParse(this.tsParseTypePredicateAsserts.bind(this));
 
         if (asserts && this.match(tt._this)) {
+          const node = this.startNodeAt<N.TSTypePredicate>(startLoc);
           // When asserts is false, thisKeyword is handled by tsParseNonArrayType
           // : asserts this is type
           let thisTypePredicate = this.tsParseThisTypeOrThisTypePredicate();
@@ -1703,6 +1737,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           }
 
           // : asserts foo
+          const node = this.startNodeAt<N.TSTypePredicate>(startLoc);
           node.parameterName = this.parseIdentifier();
           node.asserts = asserts;
           (node as N.TSTypePredicate).typeAnnotation = null;
@@ -1711,6 +1746,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
 
         // : asserts foo is type
+        const node = this.startNodeAt<N.TSTypePredicate>(startLoc);
         const type = this.tsParseTypeAnnotation(/* eatColon */ false);
         node.parameterName = typePredicateVariable;
         node.typeAnnotation = type;
@@ -2497,8 +2533,6 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           : this.startNodeAtNode<N.TSParameterProperty>(decorators[0]);
         if (decorators.length) {
           pp.decorators = decorators;
-        } else {
-          this.setLoc(startLoc!);
         }
         if (accessibility) pp.accessibility = accessibility;
         if (readonly) pp.readonly = readonly;
@@ -4048,23 +4082,21 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     toAssignable(node: N.Node, isLHS: boolean = false): void {
+      if (tsIsTypeCast(node)) {
+        if (isLHS) {
+          this.expressionScope.recordArrowParameterBindingError(
+            TSErrors.UnexpectedTypeCastInParameter,
+            node,
+          );
+        } else {
+          this.raiseOnce(TSErrors.UnexpectedTypeCastInParameter, node);
+        }
+        this.toAssignable(node.expression, isLHS);
+        return;
+      }
       switch (node.type) {
         case "ParenthesizedExpression":
           this.toAssignableParenthesizedExpression(node, isLHS);
-          break;
-        case "TSAsExpression":
-        case "TSSatisfiesExpression":
-        case "TSNonNullExpression":
-        case "TSTypeAssertion":
-          if (isLHS) {
-            this.expressionScope.recordArrowParameterBindingError(
-              TSErrors.UnexpectedTypeCastInParameter,
-              node,
-            );
-          } else {
-            this.raise(TSErrors.UnexpectedTypeCastInParameter, node);
-          }
-          this.toAssignable(node.expression, isLHS);
           break;
         case "AssignmentExpression":
           // @ts-expect-error the left of AssignmentExpression must not be a TSTypeCastExpression
@@ -4082,29 +4114,21 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: N.ParenthesizedExpression,
       isLHS: boolean,
     ): void {
-      switch (node.expression.type) {
-        case "TSAsExpression":
-        case "TSSatisfiesExpression":
-        case "TSNonNullExpression":
-        case "TSTypeAssertion":
-        case "ParenthesizedExpression":
-          this.toAssignable(node.expression, isLHS);
-          break;
-        default:
-          super.toAssignable(node, isLHS);
+      if (
+        tsIsTypeCast(node.expression) ||
+        node.expression.type === "ParenthesizedExpression"
+      ) {
+        this.toAssignable(node.expression, isLHS);
+      } else {
+        super.toAssignable(node, isLHS);
       }
     }
 
     checkToRestConversion(node: N.Node, allowPattern: boolean): void {
-      switch (node.type) {
-        case "TSAsExpression":
-        case "TSSatisfiesExpression":
-        case "TSTypeAssertion":
-        case "TSNonNullExpression":
-          this.checkToRestConversion(node.expression, false);
-          break;
-        default:
-          super.checkToRestConversion(node, allowPattern);
+      if (tsIsTypeCast(node)) {
+        this.checkToRestConversion(node.expression, false);
+      } else {
+        super.checkToRestConversion(node, allowPattern);
       }
     }
 
@@ -4501,11 +4525,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       importedIsString: boolean,
       isInTypeOnlyImport: boolean,
       isMaybeTypeOnly: boolean,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      bindingType: BindingFlag | undefined,
     ): N.ImportSpecifier {
       if (!importedIsString && isMaybeTypeOnly) {
-        this.parseTypeOnlyImportSpecifier(specifier, isInTypeOnlyImport);
+        this.parseTypeOnlyImportSpecifier(specifier);
         return this.finishNode<N.ImportSpecifier>(specifier, "ImportSpecifier");
       }
       specifier.importKind = "value";
@@ -4514,16 +4536,27 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         importedIsString,
         isInTypeOnlyImport,
         isMaybeTypeOnly,
-        isInTypeOnlyImport
+      );
+    }
+
+    checkImportSpecifier(
+      specifier: N.ImportSpecifier,
+      isInTypeOnlyImport: boolean,
+    ): void {
+      const hasTypeSpecifier = specifier.importKind === "type";
+      if (hasTypeSpecifier && isInTypeOnlyImport) {
+        this.raise(TSErrors.TypeModifierIsUsedInTypeImports, specifier);
+      }
+      super.checkImportSpecifier(
+        specifier,
+        isInTypeOnlyImport,
+        hasTypeSpecifier || isInTypeOnlyImport
           ? BindingFlag.TYPE_TS_TYPE_IMPORT
           : BindingFlag.TYPE_TS_VALUE_IMPORT,
       );
     }
 
-    parseTypeOnlyImportSpecifier(
-      node: Undone<N.ImportSpecifier>,
-      isInTypeOnly: boolean,
-    ) {
+    parseTypeOnlyImportSpecifier(node: Undone<N.ImportSpecifier>) {
       let leftOfAs = node.imported;
 
       let hasTypeSpecifier = false;
@@ -4560,26 +4593,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // { type something ...? }
         hasTypeSpecifier = true;
         leftOfAs = this.parseIdentifier(true);
-        if (!this.isContextual(tt._as)) {
-          this.checkReservedWord(leftOfAs.name, leftOfAs.start!, true, true);
-        }
-      }
-      if (hasTypeSpecifier && isInTypeOnly) {
-        this.raise(TSErrors.TypeModifierIsUsedInTypeImports, node.imported);
       }
 
       node.imported = leftOfAs;
 
       node.importKind = hasTypeSpecifier ? "type" : "value";
 
-      this.checkIdentifier(
-        (node.local ??= this.eatContextual(tt._as)
-          ? this.parseIdentifier()
-          : this.cloneIdentifier(node.imported as N.Identifier)),
-        hasTypeSpecifier
-          ? BindingFlag.TYPE_TS_TYPE_IMPORT
-          : BindingFlag.TYPE_TS_VALUE_IMPORT,
-      );
+      node.local ??= this.eatContextual(tt._as)
+        ? this.parseIdentifier()
+        : this.cloneIdentifier(node.imported as N.Identifier);
     }
 
     parseTypeOnlyExportSpecifier(

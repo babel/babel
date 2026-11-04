@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "plugins": ["proposal-bytes-modules"],
+  "throws": "Unknown attribute for bytes modules."
+}

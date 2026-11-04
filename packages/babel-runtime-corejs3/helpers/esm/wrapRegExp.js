@@ -13,50 +13,50 @@ function _wrapRegExp() {
   _wrapRegExp = function _wrapRegExp(e, r) {
     return new BabelRegExp(e, void 0, r);
   };
-  var e = RegExp.prototype,
-    r = new _WeakMap();
-  function BabelRegExp(e, t, p) {
-    var o = RegExp(e, t);
-    return r.set(o, p || r.get(e)), setPrototypeOf(o, BabelRegExp.prototype);
+  var t = RegExp.prototype,
+    p = new _WeakMap();
+  function BabelRegExp(r, t, o) {
+    var n = RegExp(r, t);
+    return p.set(n, o || p.get(r)), setPrototypeOf(n, BabelRegExp.prototype);
   }
-  function buildGroups(e, t) {
+  function buildGroups(e, r) {
     var _context;
-    var p = r.get(t);
-    return _reduceInstanceProperty(_context = _Object$keys(p)).call(_context, function (r, t) {
-      var o = p[t];
-      if ("number" == typeof o) r[t] = e[o];else {
-        for (var i = 0; void 0 === e[o[i]] && i + 1 < o.length;) i++;
-        r[t] = e[o[i]];
+    var t = p.get(r);
+    return _reduceInstanceProperty(_context = _Object$keys(t)).call(_context, function (r, p) {
+      var o = t[p];
+      if ("number" == typeof o) r[p] = e[o];else {
+        for (var n = 0; void 0 === e[o[n]] && n + 1 < o.length;) n++;
+        r[p] = e[o[n]];
       }
       return r;
     }, _Object$create(null));
   }
-  return inherits(BabelRegExp, RegExp), BabelRegExp.prototype.exec = function (r) {
-    var t = e.exec.call(this, r);
-    if (t) {
-      t.groups = buildGroups(t, this);
-      var p = t.indices;
+  return inherits(BabelRegExp, RegExp), BabelRegExp.prototype.exec = function (e) {
+    var r = t.exec.call(this, e);
+    if (r) {
+      r.groups = buildGroups(r, this);
+      var p = r.indices;
       p && (p.groups = buildGroups(p, this));
     }
-    return t;
-  }, BabelRegExp.prototype[_Symbol$replace] = function (t, p) {
-    if ("string" == typeof p) {
-      var o = r.get(this);
-      return e[_Symbol$replace].call(this, t, p.replace(/\$<([^>]+)(>|$)/g, function (e, r, t) {
+    return r;
+  }, BabelRegExp.prototype[_Symbol$replace] = function (e, r) {
+    if ("string" == typeof r) {
+      var o = p.get(this);
+      return t[_Symbol$replace].call(this, e, r.replace(/\$<([^>]+)(>|$)/g, function (e, r, t) {
         if ("" === t) return e;
         var p = o[r];
         return _Array$isArray(p) ? "$" + p.join("$") : "number" == typeof p ? "$" + p : "";
       }));
     }
-    if ("function" == typeof p) {
-      var i = this;
-      return e[_Symbol$replace].call(this, t, function () {
+    if ("function" == typeof r) {
+      var n = this;
+      return t[_Symbol$replace].call(this, e, function () {
         var _context2;
         var e = arguments;
-        return "object" != _typeof(e[e.length - 1]) && _pushInstanceProperty(_context2 = e = _sliceInstanceProperty([]).call(e)).call(_context2, buildGroups(e, i)), p.apply(this, e);
+        return "object" != _typeof(e[e.length - 1]) && _pushInstanceProperty(_context2 = e = _sliceInstanceProperty([]).call(e)).call(_context2, buildGroups(e, n)), r.apply(this, e);
       });
     }
-    return e[_Symbol$replace].call(this, t, p);
+    return t[_Symbol$replace].call(this, e, r);
   }, _wrapRegExp.apply(this, arguments);
 }
 export { _wrapRegExp as default };

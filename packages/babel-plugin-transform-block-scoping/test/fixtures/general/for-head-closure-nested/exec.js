@@ -4,5 +4,4 @@ for (let k = 0; k < 2; k++) {
     if (i === k) fs.push(f);
   }
 }
-//TODO: expect(fs.map(f => f())).toEqual([0, 1]);
-expect(fs.map(f => f())).toEqual([1, 1]);
+expect(fs.map(f => f())).toEqual([0, 1]);

@@ -25,6 +25,118 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.1.0 (2026-11-02)
+
+#### :rocket: New Feature
+* `babel-helper-module-transforms`, `babel-helper-transform-fixture-test-runner`, `babel-helpers`, `babel-plugin-proposal-bytes-modules`, `babel-plugin-proposal-filtered-namespaces`, `babel-plugin-proposal-import-wasm-source`, `babel-plugin-proposal-text-modules`, `babel-plugin-transform-dynamic-import`, `babel-plugin-transform-json-modules`, `babel-runtime-corejs3`, `babel-runtime`, `babel-standalone`
+  * [#18316](https://github.com/babel/babel/pull/18316) Add transform support for filtered namespaces ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-helper-import-to-platform-api`, `babel-helper-module-transforms`, `babel-parser`, `babel-plugin-transform-export-namespace-from`, `babel-plugin-transform-json-modules`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-modules-umd`, `babel-traverse`, `babel-types`
+  * [#18311](https://github.com/babel/babel/pull/18311) Add parsing&printing support for filtered namespaces ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* Other
+  * [#18009](https://github.com/babel/babel/pull/18009) Add `babel/no-empty` eslint rule ([@JLHwung](https://github.com/JLHwung))
+  * [#17956](https://github.com/babel/babel/pull/17956) Add eslint-plugin configs ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-import-to-platform-api`, `babel-helper-transform-fixture-test-runner`, `babel-helpers`, `babel-plugin-proposal-bytes-modules`, `babel-plugin-proposal-import-wasm-source`, `babel-plugin-proposal-text-modules`, `babel-plugin-transform-json-modules`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#17817](https://github.com/babel/babel/pull/17817) Add support for `type: bytes` and `type: text` imports ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-generator`, `babel-parser`, `babel-traverse`, `babel-types`
+  * [#17624](https://github.com/babel/babel/pull/17624) Add parse support for the "structs" proposal (only non-shared) ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#17980](https://github.com/babel/babel/pull/17980) Parse Import Sync proposal ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-helper-module-transforms`, `babel-parser`, `babel-plugin-transform-export-namespace-from`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-modules-umd`, `babel-types`
+  * [#18310](https://github.com/babel/babel/pull/18310) Add parsing&printing support for `export defer` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-transform-fixture-test-runner`
+  * [#18006](https://github.com/babel/babel/pull/18006) Add experimental support for range mappings in source maps ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-core`
+  * [#18275](https://github.com/babel/babel/pull/18275) feat(core): export generate from babel-generator ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-plugin-transform-classes`
+  * [#18387](https://github.com/babel/babel/pull/18387) Add `noUninitializedThis` assumption ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+  * [#18386](https://github.com/babel/babel/pull/18386) Add `noClassPrototypeAssign` and `noConstructorPrimitiveReturn` ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#18444](https://github.com/babel/babel/pull/18444) fix(parser): allow lone `yield` before `in` in an Annex B for-in init ([@JLHwung](https://github.com/JLHwung))
+  * [#18443](https://github.com/babel/babel/pull/18443) fix(parser): respect unicode escape in `isUnparsedContextual` ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-skip-transparent-expression-wrappers`, `babel-plugin-transform-optional-chaining`
+  * [#18477](https://github.com/babel/babel/pull/18477) Fix optional call losing the receiver through a TS instantiation expression ([@Kjubikstronk](https://github.com/Kjubikstronk))
+
+#### :microscope: Output optimization
+* `babel-helpers`, `babel-runtime-corejs3`
+  * [#18435](https://github.com/babel/babel/pull/18435) polish: shrink `importDeferProxy` size ([@JLHwung](https://github.com/JLHwung))
+
+## v8.0.10 (2026-10-29)
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#18420](https://github.com/babel/babel/pull/18420) fix(parser): improve radix literal rounding ([@JLHwung](https://github.com/JLHwung))
+  * [#18372](https://github.com/babel/babel/pull/18372) fix(parser): allow parenthesized assignment target in arrow initializer ([@JLHwung](https://github.com/JLHwung))
+  * [#18410](https://github.com/babel/babel/pull/18410) fix(parser): do not record strict mode errors during lookahead ([@JLHwung](https://github.com/JLHwung))
+  * [#18433](https://github.com/babel/babel/pull/18433) fix(parser): invalid expectOnePlugin usage ([@JLHwung](https://github.com/JLHwung))
+  * [#18409](https://github.com/babel/babel/pull/18409) fix(parser): handle ASI after let followed by a reserved word on the next line ([@JLHwung](https://github.com/JLHwung))
+  * [#18406](https://github.com/babel/babel/pull/18406) fix(parser): parser should not crash for `import defer {}` ([@JLHwung](https://github.com/JLHwung))
+  * [#18407](https://github.com/babel/babel/pull/18407) fix(parser): record start location in `startNodeAt` ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-block-scoping`
+  * [#18371](https://github.com/babel/babel/pull/18371) fix: closures in for-loop test and update capture wrong binding ([@joellemd](https://github.com/joellemd))
+* `babel-generator`
+  * [#18418](https://github.com/babel/babel/pull/18418) fix(generator): keep aliases of string-literal module specifiers ([@JLHwung](https://github.com/JLHwung))
+  * [#18427](https://github.com/babel/babel/pull/18427) Fix missing parentheses around TypeScript assertion targets ([@dagemawinegash](https://github.com/dagemawinegash))
+  * [#18324](https://github.com/babel/babel/pull/18324) fix: invalid `minified: true` output for new expression ([@JLHwung](https://github.com/JLHwung))
+  * [#18437](https://github.com/babel/babel/pull/18437) fix(generator): preserve type modifier in TSImportEqualsDeclaration ([@saiyam-jain-dev](https://github.com/saiyam-jain-dev))
+  * [#18424](https://github.com/babel/babel/pull/18424) Keep parentheses around TSInstantiationExpression operand ([@yulman2207](https://github.com/yulman2207))
+  * [#18417](https://github.com/babel/babel/pull/18417) fix(generator): do not disallow line break after import source ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-optional-chaining`, `babel-traverse`
+  * [#18422](https://github.com/babel/babel/pull/18422) fix: `Scope#push` should not push iife param after rest element ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#18224](https://github.com/babel/babel/pull/18224) fix: avoid removable fields as decorator evaluation hosts ([@nyan-left](https://github.com/nyan-left))
+* `babel-types`
+  * [#18411](https://github.com/babel/babel/pull/18411) Allow member expression values in `ObjectPattern` properties ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-classes`
+  * [#18384](https://github.com/babel/babel/pull/18384) Leave loose class prototype mutable with accessors ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :house: Internal
+* `babel-build-external-helpers`, `babel-core`, `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-regenerator`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#18397](https://github.com/babel/babel/pull/18397) Mangle top level names in helpers ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :running_woman: Performance
+* `babel-traverse`
+  * [#18413](https://github.com/babel/babel/pull/18413) perf(traverse): improve generateUid and push ([@JLHwung](https://github.com/JLHwung))
+
+#### :microscope: Output optimization
+* `babel-helpers`, `babel-runtime-corejs3`
+  * [#18325](https://github.com/babel/babel/pull/18325) Shrink jsx helper size ([@JLHwung](https://github.com/JLHwung))
+## v8.0.8 (2026-10-23)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#18366](https://github.com/babel/babel/pull/18366) fix(parser): disallow named specifiers after * as ns ([@JLHwung](https://github.com/JLHwung))
+  * [#18336](https://github.com/babel/babel/pull/18336) fix(parser): disallow const x followed by linebreak and of ([@JLHwung](https://github.com/JLHwung))
+  * [#18343](https://github.com/babel/babel/pull/18343) fix(parser): reject delete (x) when createParenthesizedExpressions: true ([@JLHwung](https://github.com/JLHwung))
+  * [#18276](https://github.com/babel/babel/pull/18276) fix: report expression errors in object literals used as member base ([@JLHwung](https://github.com/JLHwung))
+  * [#18286](https://github.com/babel/babel/pull/18286) Disallow arrow functions as `new` callee and `await` operand ([@JLHwung](https://github.com/JLHwung))
+  * [#18309](https://github.com/babel/babel/pull/18309) Disallow call expressions as arrow function parameters in sloppy mode ([@JLHwung](https://github.com/JLHwung))
+  * [#18315](https://github.com/babel/babel/pull/18315) Disallow `eval` and `arguments` as class names ([@JLHwung](https://github.com/JLHwung))
+
+#### :bug: Bug Fix
+* `babel-parser`
+  * [#18392](https://github.com/babel/babel/pull/18392) fix(parser): set phase: null for non-deferred imports with deferredImportEvaluation (#18313) ([@bhushan4work](https://github.com/bhushan4work))
+  * [#18344](https://github.com/babel/babel/pull/18344) fix(parser): ASI between arrow body and `/=` regex ([@JLHwung](https://github.com/JLHwung))
+  * [#18342](https://github.com/babel/babel/pull/18342) fix(parser): allow arguments as a label in class ([@JLHwung](https://github.com/JLHwung))
+  * [#18365](https://github.com/babel/babel/pull/18365) fix(parser): allow ASI between property init and escaped in ([@JLHwung](https://github.com/JLHwung))
+  * [#18327](https://github.com/babel/babel/pull/18327) fix(parser): register function id in labeled function declaration ([@JLHwung](https://github.com/JLHwung))
+  * [#18323](https://github.com/babel/babel/pull/18323) Skip HTML-like comments in the parser's character lookahead ([@JLHwung](https://github.com/JLHwung))
+  * [#18322](https://github.com/babel/babel/pull/18322) Allow ASI after `export default from` without `exportDefaultFrom` ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-modules-commonjs`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#18186](https://github.com/babel/babel/pull/18186) Fix `_arrayWithHoles` bypassing custom `Symbol.iterator` on array-backed Proxies ([@webdevelopersrinu](https://github.com/webdevelopersrinu))
+* `babel-plugin-transform-typescript`, `babel-types`
+  * [#18380](https://github.com/babel/babel/pull/18380) fix(types): visit decorators of TSParameterProperty ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-block-scoping`
+  * [#18331](https://github.com/babel/babel/pull/18331) fix: wrap enclosing loop when a nested for head closure captures its bindings ([@joellemd](https://github.com/joellemd))
+
+#### :house: Internal
+* `babel-plugin-transform-classes`
+  * [#18383](https://github.com/babel/babel/pull/18383) Remove internal usage of `loose` in class transform ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+
+#### :microscope: Output optimization
+* `babel-plugin-transform-spread`
+  * [#18318](https://github.com/babel/babel/pull/18318) Avoid `arrayLikeToArray` for spreading literals ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
 ## v8.0.7 (2026-10-07)
 
 #### :bug: Bug Fix

@@ -7,6 +7,7 @@ import {
   getUsageInBody,
   isVarInLoopHead,
   isVarInForStatementInit,
+  moveCapturingTestAndUpdateIntoBody,
   wrapLoopBody,
 } from "./loop.ts";
 import { validateUsage } from "./validation.ts";
@@ -49,6 +50,8 @@ export default declare((api, opts: Options) => {
           }
           needsBodyWrap = true;
         };
+
+        if (path.isForStatement()) moveCapturingTestAndUpdateIntoBody(path);
 
         const body = path.get("body");
         let bodyScope: Scope | null | undefined;
@@ -269,8 +272,12 @@ function transformBlockScopedVariable(
     names: bindingNames,
   });
 
+  // Pushing to the loop's own scope would place the sentinel at the start of
+  // its body, overwriting the values assigned by the loop head. Initialize it
+  // before the loop instead.
+  const tdzScope = isVarInLoopHead(path) ? path.scope.parent! : path.scope;
   for (const name of dynamicTDZNames) {
-    path.scope.push({
+    tdzScope.push({
       id: t.identifier(name),
       init: state.addHelper("temporalUndefined"),
     });

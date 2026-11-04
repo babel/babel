@@ -1,0 +1,71 @@
+{
+  "type": "File",
+  "start":0,"end":189,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":29,"index":189}},
+  "errors": [
+    "SyntaxError: Expected number in radix 2. (1:2)",
+    "SyntaxError: Expected number in radix 2. (2:62)",
+    "SyntaxError: Expected number in radix 8. (3:2)",
+    "SyntaxError: Expected number in radix 8. (4:27)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":189,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":29,"index":189}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":64,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":64,"index":64}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":0,"end":63,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":63,"index":63}},
+          "extra": {
+            "rawValue": 1152921504606847000,
+            "raw": "0b2111111111111111111111111111111111111111111111111111111111111"
+          },
+          "value": 1152921504606847000
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":65,"end":129,"loc":{"start":{"line":2,"column":0,"index":65},"end":{"line":2,"column":64,"index":129}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":65,"end":128,"loc":{"start":{"line":2,"column":0,"index":65},"end":{"line":2,"column":63,"index":128}},
+          "extra": {
+            "rawValue": 2305843009213694000,
+            "raw": "0b1111111111111111111111111111111111111111111111111111111111112"
+          },
+          "value": 2305843009213694000
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":130,"end":159,"loc":{"start":{"line":3,"column":0,"index":130},"end":{"line":3,"column":29,"index":159}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":130,"end":158,"loc":{"start":{"line":3,"column":0,"index":130},"end":{"line":3,"column":28,"index":158}},
+          "extra": {
+            "rawValue": 3.777893186295716e+22,
+            "raw": "0o97777777777777777777777777"
+          },
+          "value": 3.777893186295716e+22
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":160,"end":189,"loc":{"start":{"line":4,"column":0,"index":160},"end":{"line":4,"column":29,"index":189}},
+        "expression": {
+          "type": "NumericLiteral",
+          "start":160,"end":188,"loc":{"start":{"line":4,"column":0,"index":160},"end":{"line":4,"column":28,"index":188}},
+          "extra": {
+            "rawValue": 3.022314549036573e+23,
+            "raw": "0o77777777777777777777777778"
+          },
+          "value": 3.022314549036573e+23
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,7 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { skipTransparentExprWrappers } from "@babel/helper-skip-transparent-expression-wrappers";
 import { types as t, template } from "@babel/core";
-import type { File, NodePath, Scope } from "@babel/core";
+import type { NodePath, Scope } from "@babel/core";
 
 type ListElement = t.SpreadElement | t.Expression | null;
 
@@ -66,10 +66,6 @@ export default declare((api, options: Options) => {
     }
   }
 
-  function hasHole(spread: t.ArrayExpression): boolean {
-    return spread.elements.includes(null);
-  }
-
   function hasSpread(nodes: (t.Node | null)[]): boolean {
     for (let i = 0; i < nodes.length; i++) {
       if (t.isSpreadElement(nodes[i])) {
@@ -85,23 +81,19 @@ export default declare((api, options: Options) => {
     return [];
   }
 
-  function build(
-    props: ListElement[],
-    scope: Scope,
-    file: File,
-  ): t.Expression[] {
+  function build(props: ListElement[], scope: Scope): t.Expression[] {
     const nodes: t.Expression[] = [];
     let _props: ListElement[] = [];
 
     for (const prop of props) {
       if (t.isSpreadElement(prop)) {
         _props = push(_props, nodes);
-        let spreadLiteral = getSpreadLiteral(prop, scope);
+        const spreadLiteral = getSpreadLiteral(prop, scope);
 
-        if (t.isArrayExpression(spreadLiteral) && hasHole(spreadLiteral)) {
-          spreadLiteral = t.callExpression(file.addHelper("arrayLikeToArray"), [
-            spreadLiteral,
-          ]);
+        if (t.isArrayExpression(spreadLiteral)) {
+          spreadLiteral.elements = spreadLiteral.elements.map(
+            el => el ?? t.buildUndefinedNode(),
+          );
         }
 
         nodes.push(spreadLiteral);
@@ -124,7 +116,7 @@ export default declare((api, options: Options) => {
         const elements = node.elements;
         if (!hasSpread(elements)) return;
 
-        const nodes = build(elements, scope, this.file);
+        const nodes = build(elements, scope);
         let first = nodes[0];
 
         // If there is only one element in the ArrayExpression and
@@ -185,7 +177,7 @@ export default declare((api, options: Options) => {
         ) {
           nodes = [(args[0] as t.SpreadElement).argument];
         } else {
-          nodes = build(args, scope, this.file);
+          nodes = build(args, scope);
         }
 
         const first = nodes.shift()!;
@@ -233,7 +225,7 @@ export default declare((api, options: Options) => {
         const { node, scope } = path;
         if (!hasSpread(node.arguments)) return;
 
-        const nodes = build(node.arguments as ListElement[], scope, this.file);
+        const nodes = build(node.arguments as ListElement[], scope);
 
         const first = nodes.shift()!;
 

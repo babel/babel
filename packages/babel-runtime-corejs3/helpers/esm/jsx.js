@@ -1,23 +1,27 @@
 import _Symbol from "core-js-pure/features/symbol/index.js";
 import _Symbol$for from "core-js-pure/features/symbol/for.js";
-var REACT_ELEMENT_TYPE;
-function _createRawReactElement(e, r, E, l) {
-  REACT_ELEMENT_TYPE || (REACT_ELEMENT_TYPE = "function" == typeof _Symbol && _Symbol$for && _Symbol$for("react.element") || 60103);
-  var o = e && e.defaultProps,
-    n = arguments.length - 3;
-  if (r || 0 === n || (r = {
+var e;
+function _createRawReactElement(r, o, l, n) {
+  e || (e = "function" == typeof _Symbol && _Symbol$for && _Symbol$for("react.element") || 60103);
+  var t = r && r.defaultProps,
+    f = arguments.length - 3;
+  if (o || 0 === f || (o = {
     children: void 0
-  }), 1 === n) r.children = l;else if (n > 1) {
-    for (var t = Array(n), f = 0; f < n; f++) t[f] = arguments[f + 3];
-    r.children = t;
+  }), f > 0) {
+    var a = n;
+    if (f > 1) {
+      a = Array(f);
+      for (var i = 0; i < f; i++) a[i] = arguments[i + 3];
+    }
+    o.children = a;
   }
-  if (r && o) for (var i in o) void 0 === r[i] && (r[i] = o[i]);else r || (r = o || {});
+  if (o && t) for (var u in t) void 0 === o[u] && (o[u] = t[u]);else o || (o = t || {});
   return {
-    $$typeof: REACT_ELEMENT_TYPE,
-    type: e,
-    key: void 0 === E ? null : "" + E,
+    $$typeof: e,
+    type: r,
+    key: void 0 === l ? null : "" + l,
     ref: null,
-    props: r,
+    props: o,
     _owner: null
   };
 }

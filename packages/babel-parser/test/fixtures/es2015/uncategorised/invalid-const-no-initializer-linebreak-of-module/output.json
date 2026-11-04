@@ -1,0 +1,45 @@
+{
+  "type": "File",
+  "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":2,"index":10}},
+  "errors": [
+    "SyntaxError: Missing initializer in const declaration. (1:7)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":2,"index":10}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":7,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":7,"index":7}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"x"},
+              "name": "x"
+            },
+            "init": null
+          }
+        ],
+        "kind": "const"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":8,"end":10,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":2,"index":10}},
+        "expression": {
+          "type": "Identifier",
+          "start":8,"end":10,"loc":{"start":{"line":2,"column":0,"index":8},"end":{"line":2,"column":2,"index":10},"identifierName":"of"},
+          "name": "of"
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

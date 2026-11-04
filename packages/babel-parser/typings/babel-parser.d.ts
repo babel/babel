@@ -45,6 +45,7 @@ type Plugin$1 =
   | "decorators-legacy"
   | "decoratorAutoAccessors"
   | "deferredImportEvaluation"
+  | "deferredReexports"
   | "destructuringPrivate"
   | "doExpressions"
   | "exportDefaultFrom"
@@ -52,10 +53,13 @@ type Plugin$1 =
   | "flowComments"
   | "functionBind"
   | "functionSent"
+  | "importSync"
   | "jsx"
   | "moduleBlocks"
+  | "namespaceImportFilter"
   | "placeholders"
   | "sourcePhaseImports"
+  | "structs"
   | "throwExpressions"
   | "v8intrinsic"
   | ParserPluginWithOptions[0];
@@ -135,6 +139,7 @@ type ErrorInfoCompressed = {
   DecoratorSemicolon: [];
   DecoratorStaticBlock: [];
   DeferImportRequiresNamespace: [];
+  DeferExportInvalidAll: [];
   DeletePrivateField: [];
   DestructureNamedImport: [];
   DuplicateConstructor: [];
@@ -146,6 +151,9 @@ type ErrorInfoCompressed = {
   EscapedCharNotAnIdentifier: [];
   ExportBindingIsString: [{ localName: string; exportName: string }];
   ExportDefaultFromAsIdentifier: [];
+  FilteredNamespaceDuplicateName: [{ name: string }];
+  FilteredNamespaceRename: [];
+  FilteredNamespaceTypeModifier: [];
   ForInOfLoopInitializer: [{ type: "ForInStatement" | "ForOfStatement" }];
   ForInUsing: [];
   ForOfAsync: [];
@@ -155,9 +163,15 @@ type ErrorInfoCompressed = {
   IllegalLanguageModeDirective: [];
   IllegalReturn: [];
   ImportBindingIsString: [{ importName: string }];
-  ImportCallArity: [{ phase?: string | null | undefined }];
-  ImportCallNotNewExpression: [{ phase?: string | null | undefined }];
-  ImportCallSpreadArgument: [{ phase?: string | null | undefined }];
+  ImportCallArity: [
+    { phase?: string | null | undefined; sync?: boolean | null | undefined },
+  ];
+  ImportCallNotNewExpression: [
+    { phase?: string | null | undefined; sync?: boolean | null | undefined },
+  ];
+  ImportCallSpreadArgument: [
+    { phase?: string | null | undefined; sync?: boolean | null | undefined },
+  ];
   IncompatibleRegExpUVFlags: [];
   InvalidBigIntLiteral: [];
   InvalidCodePoint: [];
@@ -171,7 +185,6 @@ type ErrorInfoCompressed = {
   InvalidLhs: [{ ancestor: LValAncestor }];
   InvalidLhsBinding: [{ ancestor: LValAncestor }];
   InvalidLhsOptionalChaining: [{ ancestor: LValAncestor }];
-  InvalidNumber: [];
   InvalidOrMissingExponent: [];
   InvalidOrUnexpectedToken: [{ unexpected: string }];
   InvalidParenthesizedAssignment: [];

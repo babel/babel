@@ -1,9 +1,9 @@
 import _Object$defineProperty from "core-js-pure/features/object/define-property.js";
 import toPropertyKey from "./toPropertyKey.js";
-function _defineProperties(e, r) {
-  for (var t = 0; t < r.length; t++) {
-    var o = r[t];
-    o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), _Object$defineProperty(e, toPropertyKey(o.key), o);
+function _defineProperties(r, t) {
+  for (var o = 0; o < t.length; o++) {
+    var i = t[o];
+    i.enumerable = i.enumerable || !1, i.configurable = !0, "value" in i && (i.writable = !0), _Object$defineProperty(r, toPropertyKey(i.key), i);
   }
 }
 function _createClass(e, r, t) {
