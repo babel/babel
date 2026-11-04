@@ -25,6 +25,61 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.13 (2026-11-04)
+
+#### :bug: Bug Fix
+* `babel-generator`, `babel-parser`
+  * [#18522](https://github.com/babel/babel/pull/18522) fix(parser): start decorated object members at their first decorator ([@babel-bot](https://github.com/babel-bot))
+* `babel-parser`
+  * [#18520](https://github.com/babel/babel/pull/18520) fix(parser): allow TS imports to define exports declared before them ([@babel-bot](https://github.com/babel-bot))
+  * [#18485](https://github.com/babel/babel/pull/18485) fix(parser): allow lone `yield` before `in` in an Annex B for-in init ([@babel-bot](https://github.com/babel-bot))
+  * [#18483](https://github.com/babel/babel/pull/18483) fix(parser): respect unicode escape in `isUnparsedContextual` ([@babel-bot](https://github.com/babel-bot))
+  * [#18452](https://github.com/babel/babel/pull/18452) fix(parser): remove non-decimal prefix from bigint ([@babel-bot](https://github.com/babel-bot))
+  * [#18449](https://github.com/babel/babel/pull/18449) fix(parser): allow await as a function expression name inside async arrow ([@babel-bot](https://github.com/babel-bot))
+  * [#18453](https://github.com/babel/babel/pull/18453) Disallow new import prop access ([@babel-bot](https://github.com/babel-bot))
+  * [#18450](https://github.com/babel/babel/pull/18450) Improve F# pipeline direct body check ([@babel-bot](https://github.com/babel-bot))
+  * [#18446](https://github.com/babel/babel/pull/18446) fix(parser): set phase: null for non-deferred imports with deferredImportEvaluation (#18313) ([@babel-bot](https://github.com/babel-bot))
+  * [#18448](https://github.com/babel/babel/pull/18448) Fix TypeScript parser failing on async calls in ternary consequent ([@babel-bot](https://github.com/babel-bot))
+* `babel-generator`
+  * [#18521](https://github.com/babel/babel/pull/18521) fix(generator): print override modifier of TSParameterProperty ([@babel-bot](https://github.com/babel-bot))
+  * [#18509](https://github.com/babel/babel/pull/18509) fix(generator): do not apply `jsesc` number radix to non-integer literals ([@babel-bot](https://github.com/babel-bot))
+  * [#18500](https://github.com/babel/babel/pull/18500) fix(generator): escape `of` binding of a using declaration in for-of head ([@babel-bot](https://github.com/babel-bot))
+  * [#18461](https://github.com/babel/babel/pull/18461) fix: invalid `minified: true` output for new expression ([@babel-bot](https://github.com/babel-bot))
+  * [#18476](https://github.com/babel/babel/pull/18476) fix: preserve trailing comma in optional call args ([@babel-bot](https://github.com/babel-bot))
+  * [#18456](https://github.com/babel/babel/pull/18456) fix(generator): keep parens for ?. chain in tag ([@babel-bot](https://github.com/babel-bot))
+  * [#18454](https://github.com/babel/babel/pull/18454) fix(generator): preserve type modifier in TSImportEqualsDeclaration ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-block-scoping`
+  * [#18518](https://github.com/babel/babel/pull/18518) Fix initialization of nested for loop head declarations ([@babel-bot](https://github.com/babel-bot))
+  * [#18465](https://github.com/babel/babel/pull/18465) fix: improve for loop closure environment check ([@babel-bot](https://github.com/babel-bot))
+  * [#18464](https://github.com/babel/babel/pull/18464) fix: assign closure body after handling return ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#18499](https://github.com/babel/babel/pull/18499) fix: commonjs namespace re-export with a string export name ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-skip-transparent-expression-wrappers`, `babel-plugin-transform-optional-chaining`
+  * [#18482](https://github.com/babel/babel/pull/18482) Fix optional call losing the receiver through a TS instantiation expression ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-proposal-partial-application`
+  * [#18479](https://github.com/babel/babel/pull/18479) fix(partial-app): support super method call ([@babel-bot](https://github.com/babel-bot))
+* `babel-register`
+  * [#18481](https://github.com/babel/babel/pull/18481) fix(register): skip hook for ignored files ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-transform-private-property-in-object`
+  * [#18462](https://github.com/babel/babel/pull/18462) Return false for `#x in` on static private fields before initialization ([@babel-bot](https://github.com/babel-bot))
+* `babel-traverse`
+  * [#18480](https://github.com/babel/babel/pull/18480) fix(babel-traverse): check variable shadowing for global object callees ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`
+  * [#18478](https://github.com/babel/babel/pull/18478) Fix decorators interaction with abstract/declare fields ([@babel-bot](https://github.com/babel-bot))
+* `babel-core`
+  * [#18463](https://github.com/babel/babel/pull/18463) fix(core): createConfigItem allows cb as 2nd arg ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-bugfix-safari-rest-destructuring-rhs-array`
+  * [#18457](https://github.com/babel/babel/pull/18457) fix(bugfix): bound check before array access ([@babel-bot](https://github.com/babel-bot))
+* Other
+  * [#18459](https://github.com/babel/babel/pull/18459) Fix eslint-parser AST definition of AccessorProperty ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-destructuring`
+  * [#18460](https://github.com/babel/babel/pull/18460) fix: only collapse the empty-object check when it targets the declared binding ([@babel-bot](https://github.com/babel-bot))
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-runtime-corejs3`
+  * [#18458](https://github.com/babel/babel/pull/18458) Fix `asyncIterator` helper forwarding `.throw()` to `.return()` ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-for-of`
+  * [#18455](https://github.com/babel/babel/pull/18455) Skip `for await` in `transform-for-of` ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-string-parser`, `babel-parser`
+  * [#18447](https://github.com/babel/babel/pull/18447) fix: polish error message for invalid binary 0b19 ([@babel-bot](https://github.com/babel-bot))
 ## v7.29.12 (2026-10-29)
 
 #### :bug: Bug Fix
