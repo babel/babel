@@ -3425,6 +3425,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           this.flowParseTypeParameterInstantiationInExpression();
         this.expect(tt.parenL);
         node.arguments = this.parseCallExpressionArguments();
+        this.toReferencedList(node.arguments);
         node.optional = true;
         return this.finishCallExpression(node, /* optional */ true);
       } else if (
