@@ -2154,17 +2154,17 @@ export default abstract class ExpressionParser extends LValParser {
       }
     }
 
+    if (this.match(tt.ellipsis)) {
+      if (decorators.length) this.unexpected();
+      return this.parseSpread();
+    }
+
     const prop = this.startNodeAt<N.ObjectProperty | N.ObjectMethod>(
       decoratorsStartLoc,
     );
     let isAsync = false;
     let isAccessor = false;
     let startLoc;
-
-    if (this.match(tt.ellipsis)) {
-      if (decorators.length) this.unexpected();
-      return this.parseSpread();
-    }
 
     if (decorators.length) {
       prop.decorators = decorators;
