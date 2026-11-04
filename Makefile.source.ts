@@ -221,13 +221,16 @@ target["prepublish"] = function () {
 };
 
 // The following variants are only meant for CI jobs that need the publish
-// build: linting the same sources is already done by the "Lint" CI jobs.
+// build: linting and type checking the same sources is already done by the
+// "Lint" CI jobs, so they only emit the declaration files.
 target["prepublish-no-lint"] = function () {
-  prepublish(() => target["test-only"]());
+  env(() => prepublish(() => target["test-only"]()), {
+    TSCHECK_EMIT_ONLY: "true",
+  });
 };
 
 target["prepublish-no-test"] = function () {
-  prepublish(() => {});
+  env(() => prepublish(() => {}), { TSCHECK_EMIT_ONLY: "true" });
 };
 
 function prepublish(check: () => void) {
@@ -302,7 +305,9 @@ target["bundle-babel-parser-dts"] = function () {
 
 target["prepublish-prepare-dts-no-clean"] = function () {
   yarn(["gulp", "bundle-dts"]);
-  yarn(["tsc", "-p", "tsconfig.dts-bundles.json"]);
+  if (!process.env.TSCHECK_EMIT_ONLY) {
+    yarn(["tsc", "-p", "tsconfig.dts-bundles.json"]);
+  }
 };
 
 target["watch-perf"] = function () {
@@ -322,7 +327,9 @@ target["watch-perf"] = function () {
 target["tscheck"] = function () {
   target["generate-tsconfig"]();
   node(["scripts/parallel-tsc/tsc.ts", "."]);
-  target["tscheck-helpers"]();
+  if (!process.env.TSCHECK_EMIT_ONLY) {
+    target["tscheck-helpers"]();
+  }
 };
 
 target["tscheck-babel-parser"] = function () {
