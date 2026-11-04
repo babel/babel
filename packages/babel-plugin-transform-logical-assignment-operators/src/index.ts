@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
+import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
@@ -10,11 +11,17 @@ export default declare(api => {
     visitor: {
       AssignmentExpression(path) {
         const { node, scope } = path;
-        const { operator, left, right } = node;
+        const { operator, right } = node;
         const operatorTrunc = operator.slice(0, -1);
         if (!t.LOGICAL_OPERATORS.includes(operatorTrunc)) {
           return;
         }
+
+        // Look through wrappers such as `!` and `as`, so that the object and key
+        // of a wrapped member expression are memoised and only evaluated once.
+        const left = skipTransparentExprWrapperNodes(
+          node.left,
+        ) as typeof node.left;
 
         const lhs = t.cloneNode(left) as t.Identifier | t.MemberExpression;
         if (t.isMemberExpression(left)) {
