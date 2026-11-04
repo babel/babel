@@ -21,7 +21,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
         with:
+          # "yarn release-tool version" looks for the latest tags in the
+          # commit history, but it doesn't need the old trees and blobs.
           fetch-depth: 0
+          filter: tree:0
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
