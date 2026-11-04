@@ -10,8 +10,8 @@ function read(Symbol) {
       a: 1,
       b: 2
     },
-    _babelHelpers$toPrope = babelHelpers.toPropertyKey(Symbol.for("key")),
-    a = _a$b[_babelHelpers$toPrope],
-    rest = babelHelpers.objectWithoutProperties(_a$b, [_babelHelpers$toPrope]);
+    _Symbol$for = babelHelpers.toPropertyKey(Symbol.for("key")),
+    a = _a$b[_Symbol$for],
+    rest = babelHelpers.objectWithoutProperties(_a$b, [_Symbol$for]);
   return [a, rest];
 }

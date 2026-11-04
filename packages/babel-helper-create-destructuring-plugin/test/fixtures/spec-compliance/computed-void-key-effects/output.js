@@ -14,6 +14,6 @@ babelHelpers.toPropertyKey({
 });
 var _source2 = source;
 babelHelpers.objectDestructuringEmpty(_source2);
-var _babelHelpers$toPrope = babelHelpers.toPropertyKey(key),
-  rest = babelHelpers.objectWithoutProperties(_source2, [_babelHelpers$toPrope]);
+var _key = babelHelpers.toPropertyKey(key),
+  rest = babelHelpers.objectWithoutProperties(_source2, [_key]);
 const c = source.c;

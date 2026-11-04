@@ -8,9 +8,9 @@ var _z2 = z,
   y = babelHelpers.objectWithoutPropertiesLoose(_z2, ["x"]);
 var _z3 = z;
 babelHelpers.objectDestructuringEmpty(_z3);
-var _babelHelpers$toPrope = babelHelpers.toPropertyKey(x),
-  x = _z3[_babelHelpers$toPrope],
-  y = babelHelpers.objectWithoutPropertiesLoose(_z3, [_babelHelpers$toPrope]);
+var _x = babelHelpers.toPropertyKey(x),
+  x = _z3[_x],
+  y = babelHelpers.objectWithoutPropertiesLoose(_z3, [_x]);
 (function (_ref) {
   let x = _ref.x,
     y = babelHelpers.objectWithoutPropertiesLoose(_ref, _excluded);
