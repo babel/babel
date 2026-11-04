@@ -13,6 +13,6 @@ const source = {
   b: 2
 };
 babelHelpers.objectDestructuringEmpty(source);
-const _babelHelpers$toPrope = babelHelpers.toPropertyKey(key),
-  a = source[_babelHelpers$toPrope],
-  rest = babelHelpers.objectWithoutProperties(source, [_babelHelpers$toPrope]);
+const _key = babelHelpers.toPropertyKey(key),
+  a = source[_key],
+  rest = babelHelpers.objectWithoutProperties(source, [_key]);
