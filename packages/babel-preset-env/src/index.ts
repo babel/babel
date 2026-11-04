@@ -22,6 +22,7 @@ import type { CallerMetadata, PluginItem, PresetAPI } from "@babel/core";
 
 import _pluginCoreJS3 from "babel-plugin-polyfill-corejs3";
 // TODO(Babel 8): Just use the default import
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 const pluginCoreJS3 = (_pluginCoreJS3.default ||
   _pluginCoreJS3) as typeof _pluginCoreJS3.default;
 

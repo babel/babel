@@ -11,7 +11,9 @@
     "declarationMap": false,
     "emitDeclarationOnly": false,
     "declarationDir": null,
-    "noEmit": true
+    "noEmit": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true
   },
   "include": [
     "lib/libdom-minimal.d.ts",
@@ -22,6 +24,7 @@
     "eslint/*/test/*.tst.ts",
     "packages/*/test/*.tst.ts",
     "scripts/repo-utils/index.d.cts",
+    "eslint/*/types.d.cts",
     "codemods/*/src/**/*.cts",
     "codemods/*/src/**/*.ts",
     "eslint/*/src/**/*.cts",

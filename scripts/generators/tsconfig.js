@@ -432,12 +432,16 @@ maybeWriteFile(
           emitDeclarationOnly: false,
           declarationDir: null,
           noEmit: true,
+          // Required by babel-parser, babel-traverse and babel-generator
+          strictNullChecks: true,
+          strictPropertyInitialization: true,
         },
         include: [
           "lib/libdom-minimal.d.ts",
           ...nonPackagesInclude,
           // ESLint's project service loads it with `allowDefaultProject`
           "scripts/repo-utils/index.d.cts",
+          "eslint/*/types.d.cts",
           ...Array.from(flatInclude).sort(),
         ],
         exclude: [],
