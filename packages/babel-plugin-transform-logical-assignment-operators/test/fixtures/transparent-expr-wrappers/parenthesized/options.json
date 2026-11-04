@@ -1,0 +1,4 @@
+{
+  "parserOpts": { "createParenthesizedExpressions": true },
+  "plugins": ["transform-logical-assignment-operators"]
+}

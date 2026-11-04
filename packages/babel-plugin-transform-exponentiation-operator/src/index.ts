@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, Scope } from "@babel/core";
+import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
@@ -48,11 +49,17 @@ export default declare(api => {
         const { node, scope } = path;
         if (node.operator !== "**=") return;
 
-        if (t.isMemberExpression(node.left)) {
+        // Look through wrappers such as `!` and `as`, so that the object and key
+        // of a wrapped member expression are memoised and only evaluated once.
+        const left = skipTransparentExprWrapperNodes(
+          node.left,
+        ) as typeof node.left;
+
+        if (t.isMemberExpression(left)) {
           let member1: t.Expression;
           let member2: t.Expression;
 
-          const object = maybeMemoize(node.left.object, scope);
+          const object = maybeMemoize(left.object, scope);
           if (!object) {
             // We need to inject a temp var, but we are in function parameters
             // and thus cannot. Wrap the expression in an IIFE. It will be
@@ -61,7 +68,7 @@ export default declare(api => {
             return;
           }
 
-          const { property, computed } = node.left;
+          const { property, computed } = left;
 
           if (computed) {
             const prop = maybeMemoize(property, scope)!;
@@ -83,12 +90,8 @@ export default declare(api => {
           path.replaceWith(
             t.assignmentExpression(
               "=",
-              node.left,
-              build(
-                // todo: it could be a t.AsExpression
-                t.cloneNode(node.left) as t.Identifier,
-                node.right,
-              ),
+              left,
+              build(t.cloneNode(left) as t.Identifier, node.right),
             ),
           );
         }
