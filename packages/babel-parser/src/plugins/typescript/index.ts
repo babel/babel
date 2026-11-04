@@ -26,6 +26,7 @@ import { ParseStatementFlag } from "../../parser/statement.ts";
 import { ParamKind } from "../../util/production-parameter.ts";
 import {
   Errors,
+  type ParseError,
   ParseErrorEnum,
   type ParseErrorTemplates,
 } from "../../parse-error.ts";
@@ -344,6 +345,29 @@ function tsIsTypeCast(
 // rather than a parenthesized expression or a call: `()`, `(...a)`, `(a: T)`
 // or `(a?)`. `params` can be either the arrow function's parameters, or the
 // expressions they are converted from.
+// Whether an error found while parsing an arrow function means that its
+// parameters can't be parameters, as in `([(a)]): b => c`. Errors after them, or
+// for parameters that are not allowed there, as in `(a, a): b => c`, still make
+// it an arrow function.
+function tsIsInvalidArrowParamsError(
+  error: ParseError,
+  returnTypeStart: number,
+): boolean {
+  if (error.pos >= returnTypeStart) return false;
+  switch (error.reasonCode) {
+    case "AwaitBindingIdentifier":
+    case "AwaitExpressionFormalParameter":
+    case "IllegalLanguageModeDirective":
+    case "ParamDupe":
+    case "StrictEvalArgumentsBinding":
+    case "VarRedeclaration":
+    case "YieldInParameter":
+      return false;
+    default:
+      return true;
+  }
+}
+
 function tsHasUnambiguousArrowParams(
   params: readonly (N.Node | null)[] | null | undefined,
 ): boolean {
@@ -3949,9 +3973,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return node;
     }
 
-    // Source positions where an arrow function was parsed with a return type.
+    // Source positions where an arrow function was parsed with a return type,
+    // and where that return type starts.
     // Like noArrowAt, this is not reset when backtracking.
-    tsArrowReturnTypeAt = new Set<number>();
+    tsArrowReturnTypeAt = new Map<number, number>();
 
     tsParseMaybeArrowWithRestrictedReturnType(
       startPos: number,
@@ -3972,9 +3997,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         const { tokensLength } = state;
         this.tsArrowReturnTypeAt.delete(startPos);
         let result = this.tryParse(parse, state);
+        const returnTypeStart = this.tsArrowReturnTypeAt.get(startPos);
         if (
           result.thrown &&
-          this.tsArrowReturnTypeAt.has(startPos) &&
+          returnTypeStart !== undefined &&
+          !tsIsInvalidArrowParamsError(result.error, returnTypeStart) &&
           !(this.optionFlags & OptionFlags.ErrorRecovery)
         ) {
           // Whether the error must be reported depends on what follows the
@@ -4004,14 +4031,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             return node;
           }
           // Like when an error is thrown, parse it again if the parameters are
-          // not valid, as in `a ? b ? ([(c)]) : d => e : f`. An error after the
-          // parameters, or for names that are not allowed but still make it an
-          // arrow function as in `(a, a)`, doesn't mean that it's not one.
+          // not valid, as in `a ? b ? ([(c)]) : d => e : f`. This checks all the
+          // errors because that one might not be the first, as in `(c, c, 1)`.
+          const { start } = node.returnType;
           const hasInvalidParams =
             result.error != null &&
-            result.error.pos < node.returnType.start! &&
-            result.error.reasonCode !== "ParamDupe" &&
-            result.error.reasonCode !== "StrictEvalArgumentsBinding";
+            this.state.errors
+              .slice(state.errors.length)
+              .some(error => tsIsInvalidArrowParamsError(error, start!));
           if (
             (!hasInvalidParams && this.match(tt.colon)) ||
             // `async(...[(a)])` is a valid call, while `(...[(a)])` is always
@@ -4210,6 +4237,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // This is different from how the TS parser does it.
         // TS uses lookahead. The Babel Parser parses it as a parenthesized expression and converts.
 
+        const returnTypeStart = this.sourceToOffsetPos(this.state.start);
         const result = this.tryParse(abort => {
           const returnType = this.tsParseTypeOrTypePredicateAnnotation(
             tt.colon,
@@ -4224,7 +4252,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (result.error) this.state = result.failState;
           // @ts-expect-error refine typings
           node.returnType = result.node;
-          this.tsArrowReturnTypeAt.add(this.offsetToSourcePos(node.start!));
+          this.tsArrowReturnTypeAt.set(
+            this.offsetToSourcePos(node.start!),
+            returnTypeStart,
+          );
         }
       }
 
@@ -4499,6 +4530,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         // Like for parenthesized arrow functions (see parseArrow), only parse
         // a return type if it's followed by `=>`. This is only a lookahead:
         // parseAsyncArrowFromCallExpression parses the return type.
+        const returnTypeStart = this.sourceToOffsetPos(this.state.start);
         const state = this.state.clone();
         const result = this.tryParse(abort => {
           const returnType = this.tsParseTypeAnnotation();
@@ -4508,7 +4540,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         this.state = state;
         if (result.aborted || result.thrown) return false;
         // Do this before validating the parameters, which might throw.
-        this.tsArrowReturnTypeAt.add(this.offsetToSourcePos(startLoc.index));
+        this.tsArrowReturnTypeAt.set(
+          this.offsetToSourcePos(startLoc.index),
+          returnTypeStart,
+        );
         return true;
       }
       return super.shouldParseAsyncArrow(startLoc);

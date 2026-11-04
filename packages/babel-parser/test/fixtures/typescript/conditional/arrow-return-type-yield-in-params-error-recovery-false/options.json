@@ -1,0 +1,4 @@
+{
+  "errorRecovery": false,
+  "throws": "Yield expression is not allowed in formal parameters. (1:29)"
+}
