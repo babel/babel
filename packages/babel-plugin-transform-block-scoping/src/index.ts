@@ -164,7 +164,25 @@ export default declare((api, opts: Options) => {
             //  for (let head of x) _loop();
             //
             // which references `head` in a scope where it's not visible.
-            transformBlockScopedVariable(headPath, state, tdzEnabled);
+            //
+            // wrapLoopBody moved the loop body to `_loop` (where captured
+            // head bindings are shadowed by its params), and might have moved
+            // the loop itself. Get fresh paths and bindings, so that TDZ checks
+            // are not injected based on stale references.
+            let loopPath = varPath.getSibling(
+              (varPath.key as number) + 1,
+            ) as NodePath;
+            while (loopPath.isLabeledStatement()) {
+              loopPath = loopPath.get("body");
+            }
+            loopPath.scope.crawl();
+            transformBlockScopedVariable(
+              loopPath.get(
+                isForStatement ? "init" : "left",
+              ) as NodePath<t.VariableDeclaration>,
+              state,
+              tdzEnabled,
+            );
           }
 
           (
