@@ -65,9 +65,6 @@ const FAILURES = [
   "importAttributesKeyword/attributes-with-to-with-legacy/input.js",
   "importAttributesKeyword/legacy-module-attributes-to-assert/input.js",
   "importAttributesKeyword/legacy-module-attributes-to-with/input.js",
-
-  // These tests are about old proposals
-  "types/Decorator/input.js",
 ];
 
 describe("experimental_preserveFormat", () => {
