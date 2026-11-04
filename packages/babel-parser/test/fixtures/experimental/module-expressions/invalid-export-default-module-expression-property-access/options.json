@@ -1,7 +1,3 @@
 {
-  "sourceType": "module",
-  "plugins": [
-    "moduleBlocks"
-  ],
   "throws": "Unexpected token (1:24)"
 }
