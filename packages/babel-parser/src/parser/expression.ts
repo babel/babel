@@ -2252,9 +2252,7 @@ export default abstract class ExpressionParser extends LValParser {
       return this.parseSpread();
     }
 
-    const prop = this.startNodeAt<N.ObjectProperty | N.ObjectMethod>(
-      decoratorsStartLoc,
-    );
+    const prop = this.startNodeAt<N.ObjectProperty>(decoratorsStartLoc);
     let isAsync = false;
     let isAccessor = false;
     let startLoc;
