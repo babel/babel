@@ -43,5 +43,6 @@ function test(name, command, directory, output, first) {
   } else {
     console.error("FAILED\n");
     console.error(out);
+    process.exitCode = 1;
   }
 }

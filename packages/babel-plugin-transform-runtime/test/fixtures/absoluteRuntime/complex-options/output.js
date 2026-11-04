@@ -21,15 +21,16 @@ function main() {
 }
 function _main() {
   _main = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-    var _t;
+    var _t, _t2;
     return _regenerator().w(function (_context2) {
       while (1) switch (_context2.n) {
         case 0:
           _t = console;
+          _t2 = _t.log;
           _context2.n = 1;
           return test();
         case 1:
-          _t.log.call(_t, _context2.v);
+          _t2.call(_t, _context2.v);
         case 2:
           return _context2.a(2);
       }
