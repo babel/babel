@@ -1,3 +1,4 @@
+var _ref2, _ref2$x, _y;
 var _ref = {},
   _ref$a = _ref.a,
   a = _ref$a === void 0 ? {
@@ -52,4 +53,32 @@ var _ref = {},
     j: class {
       static name() {}
     }
-  }.j : _ref$j;
+  }.j : _ref$j,
+  _ref$k = _ref.k,
+  l = _ref$k === void 0 ? {
+    l: class {}
+  }.l : _ref$k,
+  _ref$m = _ref.m,
+  n = _ref$m === void 0 ? class N {} : _ref$m,
+  _ref$o = _ref.o,
+  p = _ref$o === void 0 ? {
+    p: class {
+      static name = "own";
+    }
+  }.p : _ref$o,
+  _ref$q = _ref["q"],
+  r = _ref$q === void 0 ? {
+    r: class {}
+  }.r : _ref$q,
+  _ref$key = _ref[key],
+  s = _ref$key === void 0 ? {
+    s: class {}
+  }.s : _ref$key,
+  _ref$t = _ref.t,
+  _ref$t2 = _ref$t === void 0 ? class {} : _ref$t,
+  u = _ref$t2.name;
+var v,
+  w = {};
+_ref2 = {}, v = (_ref2$x = _ref2.x) === void 0 ? {
+  v: class {}
+}.v : _ref2$x, w.z = (_y = _ref2.y) === void 0 ? class {} : _y, _ref2;
