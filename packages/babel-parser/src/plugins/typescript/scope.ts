@@ -67,6 +67,7 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
   }
 
   declareName(name: string, bindingType: BindingFlag, loc: Position) {
+    const scope = this.currentScope();
     if (bindingType & BindingFlag.FLAG_TS_IMPORT) {
       if (this.hasImport(name, true)) {
         this.parser.raise(Errors.VarRedeclaration, loc, {
@@ -74,10 +75,10 @@ export default class TypeScriptScopeHandler extends ScopeHandler<TypeScriptScope
         });
       }
       this.importsStack[this.importsStack.length - 1].add(name);
+      this.maybeExportDefined(scope, name);
       return;
     }
 
-    const scope = this.currentScope();
     let type = scope.tsNames.get(name) || 0;
 
     if (bindingType & BindingFlag.FLAG_TS_EXPORT_ONLY) {
