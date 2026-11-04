@@ -1,7 +1,7 @@
-var _ref;
+var _ref2;
 const _obj = obj;
 babelHelpers.objectDestructuringEmpty(_obj);
-const _babelHelpers$toPrope = babelHelpers.toPropertyKey(1 + k),
-  v = _obj[_babelHelpers$toPrope],
-  r = babelHelpers.objectWithoutProperties(_obj, [_babelHelpers$toPrope]);
-a = (_ref = [1 + c, 1 === c])[0], b = _ref[1], _ref;
+const _ref = babelHelpers.toPropertyKey(1 + k),
+  v = _obj[_ref],
+  r = babelHelpers.objectWithoutProperties(_obj, [_ref]);
+a = (_ref2 = [1 + c, 1 === c])[0], b = _ref2[1], _ref2;

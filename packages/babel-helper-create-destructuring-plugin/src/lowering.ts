@@ -490,8 +490,8 @@ export class Lowering {
     });
   }
 
-  #temp(init: t.Expression): t.Identifier {
-    const id = this.scope.generateUidIdentifierBasedOnNode(init);
+  #temp(init: t.Expression, nameHint: t.Node = init): t.Identifier {
+    const id = this.scope.generateUidIdentifierBasedOnNode(nameHint);
     markTemporary(this.scope, id.name);
     if (this.inlineTemps) this.hoist(t.cloneNode(id));
     this.steps.push({
@@ -915,7 +915,7 @@ export class Lowering {
 
   /** Store the property key `key` in a temporary. */
   #tempKey(key: t.Expression): t.Identifier {
-    return this.#temp(this.#toPropertyKey(key));
+    return this.#temp(this.#toPropertyKey(key), key);
   }
 
   #toPropertyKey(key: t.Expression): t.Expression {

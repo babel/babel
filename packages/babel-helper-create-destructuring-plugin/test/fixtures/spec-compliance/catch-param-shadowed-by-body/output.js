@@ -7,9 +7,9 @@ try {
 } catch (_ref) {
   let _ref$a = _ref.a,
     a = _ref$a === void 0 ? b : _ref$a,
-    _babelHelpers$toPrope = babelHelpers.toPropertyKey(k),
-    c = _ref[_babelHelpers$toPrope],
-    rest = babelHelpers.objectWithoutProperties(_ref, ["a", _babelHelpers$toPrope]);
+    _k = babelHelpers.toPropertyKey(k),
+    c = _ref[_k],
+    rest = babelHelpers.objectWithoutProperties(_ref, ["a", _k]);
   {
     let b = 3;
     const k = "y";

@@ -1,4 +1,4 @@
-var _x, _babelHelpers$toPrope;
+var _x, _key;
 _x = {
   x: 1
-}, _babelHelpers$toPrope = babelHelpers.toPropertyKey(key()), target.x = _x[_babelHelpers$toPrope], _x;
+}, _key = babelHelpers.toPropertyKey(key()), target.x = _x[_key], _x;
