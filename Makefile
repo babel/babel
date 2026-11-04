@@ -200,12 +200,3 @@ new-version-checklist:
 new-version:
 	$(MAKEJS) new-version
 
-publish-test:
-ifneq ("$(I_AM_USING_VERDACCIO)", "I_AM_SURE")
-	echo "You probably don't know what you are doing"
-	exit 1
-endif
-	$(YARN) release-tool version $(VERSION) --all --yes --tag-version-prefix="version-e2e-test-"
-	$(MAKE) prepublish-no-test
-	YARN_NPM_PUBLISH_REGISTRY=http://localhost:4873 $(YARN) release-tool publish --yes --tag-version-prefix="version-e2e-test-"
-	$(MAKE) clean
