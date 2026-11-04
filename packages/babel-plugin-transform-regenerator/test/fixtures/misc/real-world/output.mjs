@@ -557,25 +557,29 @@ function mergeChainOpts(target, _ref7) {
     plugins = _ref7.plugins,
     presets = _ref7.presets;
   return /*#__PURE__*/babelHelpers.regenerator().m(function _callee2(_target$plugins2, _target$presets2) {
-    var _t, _t2, _t3, _t4, _t5, _t6, _t7, _t8;
+    var _t, _t2, _t3, _t4, _t5, _t6, _t7, _t8, _t9, _t0, _t1, _t10;
     return babelHelpers.regenerator().w(function (_context6) {
       while (1) switch (_context6.n) {
         case 0:
           target.options.push(options);
           _t = babelHelpers;
-          _t2 = (_target$plugins2 = target.plugins).push;
-          _t3 = _target$plugins2;
-          _t4 = babelHelpers;
+          _t2 = _t.callSpread;
+          _t3 = (_target$plugins2 = target.plugins).push;
+          _t4 = _target$plugins2;
+          _t5 = babelHelpers;
+          _t6 = _t5.toConsumableArray;
           return _context6.d(babelHelpers.regeneratorValues(plugins()), 1);
         case 1:
-          _t.callSpread.call(_t, _t2, _t3, _t4.toConsumableArray.call(_t4, _context6.v));
-          _t5 = babelHelpers;
-          _t6 = (_target$presets2 = target.presets).push;
-          _t7 = _target$presets2;
-          _t8 = babelHelpers;
+          _t2.call(_t, _t3, _t4, _t6.call(_t5, _context6.v));
+          _t7 = babelHelpers;
+          _t8 = _t7.callSpread;
+          _t9 = (_target$presets2 = target.presets).push;
+          _t0 = _target$presets2;
+          _t1 = babelHelpers;
+          _t10 = _t1.toConsumableArray;
           return _context6.d(babelHelpers.regeneratorValues(presets()), 2);
         case 2:
-          _t5.callSpread.call(_t5, _t6, _t7, _t8.toConsumableArray.call(_t8, _context6.v));
+          _t8.call(_t7, _t9, _t0, _t10.call(_t1, _context6.v));
           return _context6.a(2, target);
       }
     }, _callee2);
