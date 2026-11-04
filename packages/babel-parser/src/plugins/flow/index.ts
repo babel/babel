@@ -3455,6 +3455,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         if (result.node) {
           if (result.error) this.state = result.failState;
+          // Check this outside of tryParse: a thrown error would make us parse
+          // `f<T>(x: any)` again, as the comparison `f < T > (x: any)`.
+          this.toReferencedList(result.node.arguments);
           return result.node;
         }
       }
