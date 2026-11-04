@@ -354,20 +354,54 @@ target["clone-license"] = function () {
  * DEV
  */
 
-function eslint(...extraArgs) {
-  const eslintArgs = [
-    "--format",
-    "codeframe",
-    "--flag",
-    "unstable_native_nodejs_ts_config",
-    ...extraArgs.filter(Boolean),
-  ];
+const ESLINT_ARGS = [
+  "--format",
+  "codeframe",
+  "--flag",
+  "unstable_native_nodejs_ts_config",
+];
+const ESLINT_NON_PACKAGES_SOURCES = [
+  "eslint",
+  "codemods",
+  "scripts",
+  "benchmark",
+  "*.{js,cjs,mjs,ts}",
+];
+
+function eslintCheck() {
+  // Use a single TS program (tsconfig.lint.json) for the whole repository, so
+  // that we don't need to split the work to stay under the heap size limit.
+  // Each worker has its own program: use a fixed number of workers, because
+  // the memory usage grows with it.
+  env(
+    () =>
+      yarn([
+        "eslint",
+        "packages",
+        ...ESLINT_NON_PACKAGES_SOURCES,
+        ...ESLINT_ARGS,
+        "--concurrency",
+        "2",
+      ]),
+    {
+      BABEL_ENV: "test",
+      BABEL_ESLINT_FLAT_TSCONFIG: "true",
+      // tsconfig.lint.json reports false positives when it's not a single run
+      TSESTREE_SINGLE_RUN: "true",
+      NODE_OPTIONS: "--max-old-space-size=6144",
+    }
+  );
+}
+
+function eslintFix() {
+  const eslintArgs = [...ESLINT_ARGS, "--concurrency", "auto", "--fix"];
 
   const packagesPackages = readdirSync("packages").filter(n =>
     existsSync(`packages/${n}/package.json`)
   );
   const chunks = [];
-  // Linting everything at the same time needs too much memory and crashes
+  // The project service keeps one TS program per package, and linting everything
+  // at the same time needs too much memory and crashes.
   // Do it in batches packages
   for (let i = 0, chunkSize = 40; i < packagesPackages.length; i += chunkSize) {
     if (packagesPackages.length - i === 1) {
@@ -379,21 +413,23 @@ function eslint(...extraArgs) {
       ]);
     }
   }
-  const rest = [
-    "eslint",
-    "codemods",
-    "scripts",
-    "benchmark",
-    "*.{js,cjs,mjs,ts}",
-  ];
-  chunks.push(rest);
+  chunks.push(ESLINT_NON_PACKAGES_SOURCES);
 
   if (process.env.ESLINT_GO_BRRRR) {
-    // Run as a single process. Needs a lot of memory (12GB).
-    env(() => yarn(["eslint", "packages", ...rest, ...eslintArgs]), {
-      BABEL_ENV: "test",
-      NODE_OPTIONS: "--max-old-space-size=16384",
-    });
+    // Run in a single process with workers. Needs a lot of memory (12GB).
+    env(
+      () =>
+        yarn([
+          "eslint",
+          "packages",
+          ...ESLINT_NON_PACKAGES_SOURCES,
+          ...eslintArgs,
+        ]),
+      {
+        BABEL_ENV: "test",
+        NODE_OPTIONS: "--max-old-space-size=16384",
+      }
+    );
   } else {
     let err = null;
     for (const chunk of chunks) {
@@ -419,14 +455,14 @@ function eslint(...extraArgs) {
 
 target["lint"] = function () {
   env(() => target["tscheck"](), { TSCHECK_SILENT: "true" });
-  eslint();
+  eslintCheck();
   yarn(["tstyche"]);
   target["lint-prettier"]();
 };
 
 target["lint-ci"] = function () {
   target["tscheck"]();
-  eslint();
+  eslintCheck();
   yarn(["tstyche"]);
   target["lint-prettier"]();
   target["prepublish-prepare-dts-no-clean"]();
@@ -443,7 +479,7 @@ target["fix"] = function () {
 
 target["fix-js"] = function () {
   env(() => target["tscheck"](), { TSCHECK_SILENT: "true" });
-  eslint("--fix");
+  eslintFix();
 };
 
 target["fix-prettier"] = function () {
