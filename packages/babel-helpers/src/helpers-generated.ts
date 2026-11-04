@@ -171,10 +171,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 1385, gzip size: 562
+  // size: 1410, gzip size: 557
   asyncIterator: helper(
     "7.15.9",
-    'function _asyncIterator(r){var t,n,o,e=2;for("undefined"!=typeof Symbol&&(n=Symbol.asyncIterator,o=Symbol.iterator);e--;){if(n&&null!=(t=r[n]))return t.call(r);if(o&&null!=(t=r[o]))return new AsyncFromSyncIterator(t.call(r));n="@@asyncIterator",o="@@iterator"}throw new TypeError("Object is not async iterable")}function AsyncFromSyncIterator(r){function AsyncFromSyncIteratorContinuation(r,t){if(Object(r)!==r)return Promise.reject(new TypeError(r+" is not an object."));var n,o=r.done,e=r.value;try{n=Promise.resolve(e)}catch(r){if(t&&!o)try{var a=t.return;null!=a&&a.call(t)}catch(r){}return Promise.reject(r)}return n.then(function(r){return{value:r,done:o}},t&&!o?function(r){try{var n=t.return;null!=n&&n.call(t)}catch(r){}throw r}:void 0)}return AsyncFromSyncIterator=function(r){this.s=r,this.n=r.next},AsyncFromSyncIterator.prototype={s:null,n:null,next:function(){return AsyncFromSyncIteratorContinuation(this.n.apply(this.s,arguments),this.s)},return:function(r){var t=this.s.return;return void 0===t?Promise.resolve({value:r,done:!0}):AsyncFromSyncIteratorContinuation(t.apply(this.s,arguments))},throw:function(){var r=this.s,t=r.throw;return void 0===t?new Promise(function(t,n){var o=r.return;null!=o&&o.call(r),n(new TypeError("The iterator does not provide a \'throw\' method"))}):AsyncFromSyncIteratorContinuation(t.apply(r,arguments),r)}},new AsyncFromSyncIterator(r)}',
+    'function _asyncIterator(r){var t,n,o,e=2;for("undefined"!=typeof Symbol&&(n=Symbol.asyncIterator,o=Symbol.iterator);e--;){if(n&&null!=(t=r[n]))return t.call(r);if(o&&null!=(t=r[o]))return new AsyncFromSyncIterator(t.call(r));n="@@asyncIterator",o="@@iterator"}throw new TypeError("Object is not async iterable")}function AsyncFromSyncIterator(r){function AsyncFromSyncIteratorContinuation(r,t){if(Object(r)!==r)return Promise.reject(new TypeError(r+" is not an object."));var n,o=r.done,e=r.value;try{n=Promise.resolve(e)}catch(r){if(t&&!o)try{closeSyncIterator(t)}catch(r){}return Promise.reject(r)}return n.then(function(r){return{value:r,done:o}},t&&!o?function(r){try{closeSyncIterator(t)}catch(r){}throw r}:void 0)}function closeSyncIterator(r){var t=r.return;null!=t&&t.call(r)}return AsyncFromSyncIterator=function(r){this.s=r,this.n=r.next},AsyncFromSyncIterator.prototype={s:null,n:null,next:function(){return AsyncFromSyncIteratorContinuation(this.n.apply(this.s,arguments),this.s)},return:function(r){var t=this.s.return;return void 0===t?Promise.resolve({value:r,done:!0}):AsyncFromSyncIteratorContinuation(t.apply(this.s,arguments))},throw:function(){var r=this.s,t=r.throw;return void 0===t?new Promise(function(t,n){closeSyncIterator(r),n(new TypeError("The iterator does not provide a \'throw\' method"))}):AsyncFromSyncIteratorContinuation(t.apply(r,arguments),r)}},new AsyncFromSyncIterator(r)}',
     {
       globals: ["Symbol", "TypeError", "Object", "Promise"],
       locals: {
@@ -182,9 +182,9 @@ const helpers: Record<string, Helper> = {
         AsyncFromSyncIterator: [
           "body.1.id",
           "body.0.body.body.1.body.body.1.consequent.argument.callee",
-          "body.1.body.body.1.argument.expressions.1.left.object",
-          "body.1.body.body.1.argument.expressions.2.callee",
-          "body.1.body.body.1.argument.expressions.0.left",
+          "body.1.body.body.2.argument.expressions.1.left.object",
+          "body.1.body.body.2.argument.expressions.2.callee",
+          "body.1.body.body.2.argument.expressions.0.left",
         ],
       },
       exportBindingAssignments: [],

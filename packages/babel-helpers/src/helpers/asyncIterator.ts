@@ -104,8 +104,7 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
         // TypeError for the protocol violation. If "return" throws, reject
         // with that error instead.
         return new Promise<IteratorResult<T, TReturn>>(function (_, reject) {
-          var ret = s["return"];
-          if (ret != null) ret.call(s);
+          closeSyncIterator(s);
           reject(
             new TypeError("The iterator does not provide a 'throw' method"),
           );
@@ -140,8 +139,7 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
       // If PromiseResolve throws, close the iterator synchronously.
       if (s && !done) {
         try {
-          var ret = s["return"];
-          if (ret != null) ret.call(s);
+          closeSyncIterator(s);
         } catch (_) {}
       }
       // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
@@ -156,13 +154,18 @@ function AsyncFromSyncIterator<T, TReturn = any, TNext = undefined>(s: any) {
             // Close the sync iterator, ignoring any error from "return",
             // then reject with the original error.
             try {
-              var ret = s["return"];
-              if (ret != null) ret.call(s);
+              closeSyncIterator(s);
             } catch (_) {}
             throw e;
           }
         : undefined,
     );
+  }
+
+  // Callers that must keep their original error wrap this in a try/catch.
+  function closeSyncIterator(s: Iterator<any>) {
+    var ret = s["return"];
+    if (ret != null) ret.call(s);
   }
 
   return new AsyncFromSyncIterator(s);

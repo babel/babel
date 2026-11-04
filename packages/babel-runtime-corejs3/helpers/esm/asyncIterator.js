@@ -24,8 +24,7 @@ function AsyncFromSyncIterator(r) {
       n = _Promise.resolve(e);
     } catch (r) {
       if (t && !o) try {
-        var a = t["return"];
-        null != a && a.call(t);
+        closeSyncIterator(t);
       } catch (r) {}
       return _Promise.reject(r);
     }
@@ -36,11 +35,14 @@ function AsyncFromSyncIterator(r) {
       };
     }, t && !o ? function (r) {
       try {
-        var n = t["return"];
-        null != n && n.call(t);
+        closeSyncIterator(t);
       } catch (r) {}
       throw r;
     } : void 0);
+  }
+  function closeSyncIterator(r) {
+    var t = r["return"];
+    null != t && t.call(r);
   }
   return AsyncFromSyncIterator = function AsyncFromSyncIterator(r) {
     this.s = r, this.n = r.next;
@@ -61,8 +63,7 @@ function AsyncFromSyncIterator(r) {
       var r = this.s,
         t = r["throw"];
       return void 0 === t ? new _Promise(function (t, n) {
-        var o = r["return"];
-        null != o && o.call(r), n(new TypeError("The iterator does not provide a 'throw' method"));
+        closeSyncIterator(r), n(new TypeError("The iterator does not provide a 'throw' method"));
       }) : AsyncFromSyncIteratorContinuation(t.apply(r, arguments), r);
     }
   }, new AsyncFromSyncIterator(r);
