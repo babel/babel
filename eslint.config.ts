@@ -139,12 +139,20 @@ export default defineConfig([
       parser: typescriptEslint.parser,
       parserOptions: {
         allowAutomaticSingleRunInference: true,
-        projectService: {
-          allowDefaultProject: [
-            "scripts/repo-utils/index.d.cts",
-            "eslint/*/types.d.*",
-          ],
-        },
+        // `make lint` shares one TS program between all the files. It needs
+        // much less memory than one program per package, but it's slower when
+        // linting a few files and it does not work with `--fix`, so editors,
+        // lint-staged and `make fix` use the project service.
+        ...(process.env.BABEL_ESLINT_FLAT_TSCONFIG
+          ? { project: "./tsconfig.lint.json" }
+          : {
+              projectService: {
+                allowDefaultProject: [
+                  "scripts/repo-utils/index.d.cts",
+                  "eslint/*/types.d.*",
+                ],
+              },
+            }),
       },
     },
     plugins: {
