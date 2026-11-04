@@ -209,16 +209,37 @@ export default declare((api, options: Options) => {
           }
         }
 
-        // We use the original callee here, to preserve any types/parentheses
-        node.callee = t.memberExpression(
-          node.callee as t.Expression,
-          t.identifier("apply"),
-        );
         if (t.isSuper(contextLiteral)) {
           contextLiteral = t.thisExpression();
         }
 
-        node.arguments.unshift(t.cloneNode(contextLiteral));
+        // callee.apply(...) reads .apply from a nullish callee before the
+        // arguments are evaluated, while the callSpread helper throws only
+        // after the callee and arguments are evaluated.
+        // The difference is only observed when the arguments have side
+        // effects: the context is either already evaluated as part of the
+        // callee or side-effect-free, so we only need to check the arguments.
+        // We use the original callee here, to preserve any types/parentheses.
+        const isPureArg = (arg: t.Node) =>
+          t.isIdentifier(arg, { name: "arguments" }) || scope.isPure(arg);
+        if (
+          args.every(arg =>
+            t.isSpreadElement(arg) ? isPureArg(arg.argument) : isPureArg(arg!),
+          ) ||
+          !this.availableHelper("callSpread")
+        ) {
+          node.callee = t.memberExpression(
+            node.callee as t.Expression,
+            t.identifier("apply"),
+          );
+          node.arguments.unshift(t.cloneNode(contextLiteral));
+        } else {
+          node.arguments.unshift(
+            node.callee as t.Expression,
+            t.cloneNode(contextLiteral),
+          );
+          node.callee = this.addHelper("callSpread");
+        }
       },
 
       NewExpression(path): void {
