@@ -45,6 +45,11 @@ echo "export default () => () => {}" > src/main/create-print-pre-check-function.
 # Temporarily ignore tests, use `rm -f path/to/format.test.js`
 # rm -f path/to/format.test.js
 
+# These fixtures start a statement with `module {`, which
+# https://github.com/babel/babel/pull/15240 no longer parses as a module expression
+rm -f tests/format/js/module-block/module-blocks.js
+rm -f tests/format/js/explicit-resource-management/valid-module-block-top-level-using-binding.js
+
 yarn test "tests/format/(jsx?|misc|typescript|flow)/" --update-snapshot
 
 cleanup
