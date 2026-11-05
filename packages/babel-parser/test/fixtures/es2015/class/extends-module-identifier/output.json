@@ -1,0 +1,150 @@
+{
+  "type": "File",
+  "start":0,"end":150,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":33,"index":150}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":150,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":33,"index":150}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":25,"index":25}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"A"},
+          "name": "A"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":22,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":22,"index":22},"identifierName":"module"},
+          "name": "module"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":23,"end":25,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":25,"index":25}},
+          "body": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":26,"end":52,"loc":{"start":{"line":2,"column":0,"index":26},"end":{"line":2,"column":26,"index":52}},
+        "expression": {
+          "type": "ClassExpression",
+          "start":27,"end":50,"loc":{"start":{"line":2,"column":1,"index":27},"end":{"line":2,"column":24,"index":50}},
+          "id": null,
+          "superClass": {
+            "type": "Identifier",
+            "start":41,"end":47,"loc":{"start":{"line":2,"column":15,"index":41},"end":{"line":2,"column":21,"index":47},"identifierName":"module"},
+            "name": "module"
+          },
+          "body": {
+            "type": "ClassBody",
+            "start":48,"end":50,"loc":{"start":{"line":2,"column":22,"index":48},"end":{"line":2,"column":24,"index":50}},
+            "body": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 26
+          }
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":53,"end":82,"loc":{"start":{"line":3,"column":0,"index":53},"end":{"line":3,"column":29,"index":82}},
+        "id": {
+          "type": "Identifier",
+          "start":59,"end":60,"loc":{"start":{"line":3,"column":6,"index":59},"end":{"line":3,"column":7,"index":60},"identifierName":"B"},
+          "name": "B"
+        },
+        "superClass": {
+          "type": "NewExpression",
+          "start":69,"end":79,"loc":{"start":{"line":3,"column":16,"index":69},"end":{"line":3,"column":26,"index":79}},
+          "callee": {
+            "type": "Identifier",
+            "start":73,"end":79,"loc":{"start":{"line":3,"column":20,"index":73},"end":{"line":3,"column":26,"index":79},"identifierName":"module"},
+            "name": "module"
+          },
+          "arguments": []
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":80,"end":82,"loc":{"start":{"line":3,"column":27,"index":80},"end":{"line":3,"column":29,"index":82}},
+          "body": []
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":83,"end":116,"loc":{"start":{"line":4,"column":0,"index":83},"end":{"line":4,"column":33,"index":116}},
+        "id": {
+          "type": "Identifier",
+          "start":89,"end":90,"loc":{"start":{"line":4,"column":6,"index":89},"end":{"line":4,"column":7,"index":90},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": {
+          "type": "NewExpression",
+          "start":99,"end":113,"loc":{"start":{"line":4,"column":16,"index":99},"end":{"line":4,"column":30,"index":113}},
+          "callee": {
+            "type": "NewExpression",
+            "start":103,"end":113,"loc":{"start":{"line":4,"column":20,"index":103},"end":{"line":4,"column":30,"index":113}},
+            "callee": {
+              "type": "Identifier",
+              "start":107,"end":113,"loc":{"start":{"line":4,"column":24,"index":107},"end":{"line":4,"column":30,"index":113},"identifierName":"module"},
+              "name": "module"
+            },
+            "arguments": []
+          },
+          "arguments": []
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":114,"end":116,"loc":{"start":{"line":4,"column":31,"index":114},"end":{"line":4,"column":33,"index":116}},
+          "body": []
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":117,"end":150,"loc":{"start":{"line":5,"column":0,"index":117},"end":{"line":5,"column":33,"index":150}},
+        "id": {
+          "type": "Identifier",
+          "start":123,"end":124,"loc":{"start":{"line":5,"column":6,"index":123},"end":{"line":5,"column":7,"index":124},"identifierName":"D"},
+          "name": "D"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":133,"end":139,"loc":{"start":{"line":5,"column":16,"index":133},"end":{"line":5,"column":22,"index":139},"identifierName":"module"},
+          "name": "module"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":140,"end":150,"loc":{"start":{"line":5,"column":23,"index":140},"end":{"line":5,"column":33,"index":150}},
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start":142,"end":148,"loc":{"start":{"line":5,"column":25,"index":142},"end":{"line":5,"column":31,"index":148}},
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start":142,"end":143,"loc":{"start":{"line":5,"column":25,"index":142},"end":{"line":5,"column":26,"index":143},"identifierName":"m"},
+                "name": "m"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start":146,"end":148,"loc":{"start":{"line":5,"column":29,"index":146},"end":{"line":5,"column":31,"index":148}},
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

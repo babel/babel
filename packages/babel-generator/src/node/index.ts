@@ -20,6 +20,9 @@ export const enum TokenContext {
   // Set while printing the binding of a `using` declaration in a for-of head
   // (see VariableDeclaration); cleared by the next printed token.
   usingForOfBinding = 1 << 8,
+  // Set while printing a class heritage and the leading `new`s of its
+  // expression; cleared by the next printed token.
+  classHeritage = 1 << 9,
 }
 
 export type NodeHandler<R> = (
