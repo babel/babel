@@ -181,7 +181,17 @@ export default function normalizeModuleAndLoadMetadata(
     exportNameListName: null,
     hasExports,
     local,
-    source: sources,
+    source:
+      filename === undefined || filename === "unknown"
+        ? sources
+        : new Map(
+          [...sources].map(([key, value]) => [
+              key.startsWith(".")
+                ? new URL(key, new URL(filename, "file:///").href).pathname
+                : key,
+              value,
+            ]),
+          ),
     stringSpecifiers,
   };
 }
