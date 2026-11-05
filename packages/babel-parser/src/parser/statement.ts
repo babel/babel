@@ -31,7 +31,6 @@ import {
 import { OptionFlags } from "../options.ts";
 import type { Token } from "../tokenizer/index.ts";
 import type { Position } from "../util/location.ts";
-import { createPositionWithColumnOffset } from "../util/location.ts";
 import type { Undone } from "./node.ts";
 import type Parser from "./index.ts";
 import { ParseBindingListFlags } from "./lval.ts";
@@ -136,11 +135,13 @@ export default abstract class StatementParser extends ExpressionParser {
       // finish at eof for top level program
       finishedProgram = this.finishNode(program, "Program");
     } else {
-      // finish immediately before the end token
+      // finish immediately before the end token, which has already been
+      // consumed by parseBlockBody. Do not use the start of the next token
+      // since there may be comments or line breaks in between.
       finishedProgram = this.finishNodeAt(
         program,
         "Program",
-        createPositionWithColumnOffset(this.state.startLoc, -1),
+        this.state.lastTokStartLoc!,
       );
     }
     return finishedProgram;
@@ -568,6 +569,23 @@ export default abstract class StatementParser extends ExpressionParser {
 
         return result;
       }
+
+      case tt._module:
+        // "module [NLTH] {" is an explicit negative lookahead for
+        // ExpressionStatement
+        if (
+          !this.state.containsEsc &&
+          this.lookaheadInLineCharCode() === charCodes.leftCurlyBrace
+        ) {
+          // todo: support module declarations here. Currently
+          // we parse module as an identifier.
+          return this.parseExpressionStatement(
+            node,
+            this.parseIdentifier(),
+            flags,
+          );
+        }
+        break;
 
       default: {
         if (this.isAsyncFunction()) {
@@ -2551,6 +2569,11 @@ export default abstract class StatementParser extends ExpressionParser {
       this.isAwaitUsing()
     ) {
       throw this.raise(Errors.UnsupportedDefaultExport, this.state.startLoc);
+    }
+
+    if (this.isModuleExpression()) {
+      // todo: parse module declaration instead
+      return this.parseModuleExpression();
     }
 
     const res = this.parseMaybeAssignAllowIn();

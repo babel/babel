@@ -1,5 +1,5 @@
 const m = module { export const foo = "foo" };
-module {
+const m2= module {
   foo;
   bar;
 };
