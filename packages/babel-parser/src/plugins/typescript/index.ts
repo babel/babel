@@ -340,11 +340,6 @@ function tsIsTypeCast(
   }
 }
 
-// Like TypeScript's isParenthesizedArrowFunctionExpression, check if the
-// first parameter of an arrow function shows that it's an arrow function
-// rather than a parenthesized expression or a call: `()`, `(...a)`, `(a: T)`
-// or `(a?)`. `params` can be either the arrow function's parameters, or the
-// expressions they are converted from.
 // Whether an error found while parsing an arrow function means that its
 // parameters can't be parameters, as in `([(a)]): b => c`. Errors after them, or
 // for parameters that are not allowed there, as in `(a, a): b => c`, still make
@@ -368,6 +363,11 @@ function tsIsInvalidArrowParamsError(
   }
 }
 
+// Like TypeScript's isParenthesizedArrowFunctionExpression, check if the
+// first parameter of an arrow function shows that it's an arrow function
+// rather than a parenthesized expression or a call: `()`, `(...a)`, `(a: T)`
+// or `(a?)`. `params` can be either the arrow function's parameters, or the
+// expressions they are converted from.
 function tsHasUnambiguousArrowParams(
   params: readonly (N.Node | null)[] | null | undefined,
 ): boolean {
@@ -2507,11 +2507,19 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       if (!res) return;
 
-      return super.parseArrowExpression(
-        res,
-        /* params are already set */ null,
-        /* async */ true,
-      );
+      const parse = () =>
+        super.parseArrowExpression(
+          res,
+          /* params are already set */ null,
+          /* async */ true,
+        );
+      // Without JSX, this might also be a call with type arguments.
+      return !this.hasPlugin("jsx") &&
+        this.tsIsArrowReturnTypeRestrictedAt(
+          this.offsetToSourcePos(startLoc.index),
+        )
+        ? this.tsParseWithRestrictedArrowReturnType(parse)
+        : parse();
     }
 
     // Used when parsing type arguments from ES or JSX productions, where the first token
@@ -3960,7 +3968,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       const depth = this.state.noArrowParamsConversionAt.length;
       const node =
-        this.match(tt.parenL) || this.isContextual(tt._async)
+        this.match(tt.parenL) ||
+        this.match(tt.lt) ||
+        this.isContextual(tt._async)
           ? this.tsParseMaybeArrowWithRestrictedReturnType(
               startPos,
               refExpressionErrors,
@@ -3972,6 +3982,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       this.state.noArrowParamsConversionAt.length = depth;
       return node;
     }
+
+    // Source positions of the parameters of generic arrow functions, whose body
+    // inherits the restriction regardless of what those parameters look like.
+    // Like noArrowAt, this is not reset when backtracking.
+    tsGenericArrowParamsAt = new Set<number>();
 
     // Source positions where an arrow function was parsed with a return type,
     // and where that return type starts.
@@ -4039,12 +4054,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.state.errors
               .slice(state.errors.length)
               .some(error => tsIsInvalidArrowParamsError(error, start!));
+          // Type parameters might also be a type assertion or type arguments,
+          // unless JSX makes them unambiguous: `a ? <T>(b) : c => d`.
+          const isUnambiguous = node.typeParameters
+            ? this.hasPlugin("jsx")
+            : tsHasUnambiguousArrowParams(node.params);
           if (
             (!hasInvalidParams && this.match(tt.colon)) ||
             // `async(...[(a)])` is a valid call, while `(...[(a)])` is always
             // an invalid arrow function.
-            (tsHasUnambiguousArrowParams(node.params) &&
-              !(hasInvalidParams && node.async))
+            (isUnambiguous && !(hasInvalidParams && node.async))
           ) {
             if (
               result.error &&
@@ -4115,9 +4134,24 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       let typeParameters: N.TSTypeParameterDeclaration | undefined | null;
       // We need to explicitly annotate 'abort' for microsoft/TypeScript#58170
       const arrow = this.tryParse((abort: () => never) => {
+        if (this.noArrowAt.has(this.sourceToOffsetPos(this.state.start))) {
+          abort();
+        }
+        // JSX makes type parameters unambiguous, and they are not tt.lt there.
+        const isRestricted =
+          this.match(tt.lt) &&
+          this.tsIsArrowReturnTypeRestrictedAt(this.state.start);
         // This is similar to TypeScript's `tryParseParenthesizedArrowFunctionExpression`.
         typeParameters = this.tsParseTypeParameters(this.tsParseConstModifier);
-        const expr = super.parseMaybeAssign(refExpressionErrors, isParenItem);
+        let expr;
+        if (isRestricted) {
+          this.tsGenericArrowParamsAt.add(this.state.start);
+          expr = this.tsParseWithRestrictedArrowReturnType(() =>
+            super.parseMaybeAssign(refExpressionErrors, isParenItem),
+          );
+        } else {
+          expr = super.parseMaybeAssign(refExpressionErrors, isParenItem);
+        }
 
         if (
           expr.type !== "ArrowFunctionExpression" ||
@@ -4577,11 +4611,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       isAsync: boolean,
       trailingCommaLoc?: Position | null,
     ): N.ArrowFunctionExpression {
+      const startPos = this.offsetToSourcePos(node.start!);
       if (
-        this.tsIsArrowReturnTypeRestrictedAt(
-          this.offsetToSourcePos(node.start!),
-        ) &&
-        !tsHasUnambiguousArrowParams(params)
+        this.tsIsArrowReturnTypeRestrictedAt(startPos) &&
+        (this.tsGenericArrowParamsAt.has(startPos) ||
+          !tsHasUnambiguousArrowParams(params))
       ) {
         // The body of an arrow function inherits the restriction:
         //   a ? b => (c) : d => e
