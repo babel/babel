@@ -52,9 +52,20 @@ export interface Options extends PluginOptions {
   importFileExt?: string;
   /** @deprecated Use the `constantReexports` and `enumerableModuleMeta` assumptions instead. */
   loose?: boolean;
+  moduleIds?: boolean;
+  getModuleId?: (moduleName: string) => string | null | undefined;
   noInterop?: boolean;
   strict?: boolean;
   strictMode?: boolean;
+}
+
+function memberKey(name: string): t.Identifier | t.StringLiteral {
+  return t.isValidIdentifier(name) ? t.identifier(name) : t.stringLiteral(name);
+}
+
+function memberAccess(obj: t.Expression, name: string): t.MemberExpression {
+  const key = memberKey(name);
+  return t.memberExpression(obj, key, key.type === "StringLiteral");
 }
 
 export default declare((api, options: Options) => {
@@ -116,9 +127,9 @@ export default declare((api, options: Options) => {
                 GLOBAL_REFERENCE: t.cloneNode(accum),
               }),
             );
-            return t.memberExpression(accum, t.identifier(curr));
+            return memberAccess(accum, curr);
           },
-          t.memberExpression(t.identifier("global"), t.identifier(members[0])),
+          memberAccess(t.identifier("global"), members[0]),
         );
       }
     }
@@ -154,7 +165,7 @@ export default declare((api, options: Options) => {
           .split(".")
           .reduce(
             (accum: t.Identifier | t.MemberExpression, curr) =>
-              t.memberExpression(accum, t.identifier(curr)),
+              memberAccess(accum, curr),
             t.identifier("global"),
           ) as t.MemberExpression;
       } else {
