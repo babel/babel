@@ -2,6 +2,9 @@ import browserslist from "browserslist";
 import { findSuggestion } from "@babel/helper-validator-option";
 import browserModulesData from "@babel/compat-data/native-modules" with { type: "json" };
 import flru from "flru";
+import { findMinimumForRange, normalize } from "verkit";
+import fs from "node:fs";
+import path from "node:path";
 
 import {
   semverify,
@@ -140,13 +143,73 @@ function semverifyTarget(target: Target, value: string) {
 }
 
 // Parse `node: true` and `node: "current"` to version
-function nodeTargetParser(value: true | string) {
+function nodeTargetParser(value: true | string, configPath: string) {
+  if (value === true) {
+    // `node: true` targets the Node.js version declared in the closest
+    // `package.json`'s `engines.node` field. When no such field can be
+    // resolved, fall back to the currently running Node.js version.
+    const enginesRange = getEnginesNodeRange(configPath);
+    if (enginesRange !== undefined) {
+      try {
+        const minimum = findMinimumForRange(enginesRange);
+        // `*` and other unconstrained ranges resolve to 0.0.0, which
+        // carries no information — fall back to the current version.
+        if (minimum && normalize(minimum) !== "0.0.0") {
+          return ["node", normalize(minimum)] as const;
+        }
+      } catch {
+        // Unparsable range — fall back to the current version below.
+      }
+    }
+  }
   const parsed =
     value === true || value === "current"
       ? // Align with `browserslist` and strip prerelease tag.
         process.versions.node.split("-")[0]
       : semverifyTarget("node", value);
   return ["node", parsed] as const;
+}
+
+// Cache the `engines.node` range found for each config path, so repeated
+// `getTargets()` calls don't re-read `package.json` files every time.
+const enginesNodeCache = new Map<string, string | undefined>();
+
+// Find the `engines.node` range declared in the closest `package.json`
+// at or above `configPath`, mirroring how browserslist searches upwards
+// for its config file. Returns `undefined` when no such field exists.
+function getEnginesNodeRange(configPath: string): string | undefined {
+  if (enginesNodeCache.has(configPath)) {
+    return enginesNodeCache.get(configPath);
+  }
+
+  let range: string | undefined;
+  try {
+    let dir = path.resolve(configPath);
+    while (range === undefined) {
+      try {
+        const pkg = JSON.parse(
+          fs.readFileSync(path.join(dir, "package.json"), "utf8"),
+        );
+        const enginesNode = pkg?.engines?.node;
+        if (typeof enginesNode === "string" && enginesNode) {
+          range = enginesNode;
+        }
+      } catch {
+        // No (readable) package.json in this directory — keep looking upwards.
+      }
+      if (range !== undefined) break;
+      const parent = path.dirname(dir);
+      if (parent === dir) break;
+      dir = parent;
+    }
+  } catch {
+    // Filesystem access is unavailable (e.g. in a browser build, where
+    // `fs` is polyfilled) — fall back to the running Node.js version.
+    range = undefined;
+  }
+
+  enginesNodeCache.set(configPath, range);
+  return range;
 }
 
 function defaultTargetParser(
@@ -299,7 +362,7 @@ export default function getTargets(
 
     const [parsedTarget, parsedValue] =
       target === "node"
-        ? nodeTargetParser(value)
+        ? nodeTargetParser(value, configPath)
         : defaultTargetParser(target, value as string);
 
     if (parsedValue) {
