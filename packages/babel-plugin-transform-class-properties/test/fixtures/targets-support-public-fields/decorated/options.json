@@ -1,0 +1,9 @@
+{
+  "targets": {
+    "node": "12"
+  },
+  "plugins": [
+    ["proposal-decorators", { "version": "legacy" }],
+    "transform-class-properties"
+  ]
+}

@@ -221,6 +221,12 @@ function applyTargetDecorators(
       );
 
       WARNING_CALLS.add(node.value);
+      // This call can only be replaced once the class property is transformed,
+      // even when the targets support class properties natively.
+      state.file.set(
+        "@babel/plugin-class-features/hasLegacyDecoratedField",
+        true,
+      );
 
       acc.push(
         t.assignmentExpression(
