@@ -3059,7 +3059,7 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     node: Undone<N.ImportExpression>,
   ): N.ImportExpression {
-    this.next(); // eat `(`
+    this.expect(tt.parenL);
     const args = this.parseCallExpressionArguments();
     if (args.length === 0 || args.length > 2) {
       this.raise(Errors.ImportCallArity, node, node);
