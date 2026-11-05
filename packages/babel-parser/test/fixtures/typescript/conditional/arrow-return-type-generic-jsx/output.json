@@ -1,0 +1,225 @@
+{
+  "type": "File",
+  "start":0,"end":161,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":23,"index":161}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":161,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":23,"index":161}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":82,"end":106,"loc":{"start":{"line":2,"column":0,"index":82},"end":{"line":2,"column":24,"index":106}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":82,"end":105,"loc":{"start":{"line":2,"column":0,"index":82},"end":{"line":2,"column":23,"index":105}},
+          "test": {
+            "type": "Identifier",
+            "start":82,"end":83,"loc":{"start":{"line":2,"column":0,"index":82},"end":{"line":2,"column":1,"index":83},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start":86,"end":101,"loc":{"start":{"line":2,"column":4,"index":86},"end":{"line":2,"column":19,"index":101}},
+            "returnType": {
+              "type": "TSTypeAnnotation",
+              "start":93,"end":96,"loc":{"start":{"line":2,"column":11,"index":93},"end":{"line":2,"column":14,"index":96}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":95,"end":96,"loc":{"start":{"line":2,"column":13,"index":95},"end":{"line":2,"column":14,"index":96}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":95,"end":96,"loc":{"start":{"line":2,"column":13,"index":95},"end":{"line":2,"column":14,"index":96},"identifierName":"U"},
+                  "name": "U"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":91,"end":92,"loc":{"start":{"line":2,"column":9,"index":91},"end":{"line":2,"column":10,"index":92},"identifierName":"b"},
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":100,"end":101,"loc":{"start":{"line":2,"column":18,"index":100},"end":{"line":2,"column":19,"index":101},"identifierName":"c"},
+              "name": "c"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterDeclaration",
+              "start":86,"end":90,"loc":{"start":{"line":2,"column":4,"index":86},"end":{"line":2,"column":8,"index":90}},
+              "params": [
+                {
+                  "type": "TSTypeParameter",
+                  "start":87,"end":88,"loc":{"start":{"line":2,"column":5,"index":87},"end":{"line":2,"column":6,"index":88}},
+                  "name": {
+                    "type": "Identifier",
+                    "start":87,"end":88,"loc":{"start":{"line":2,"column":5,"index":87},"end":{"line":2,"column":6,"index":88},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ],
+              "extra": {
+                "trailingComma": 88
+              }
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start":104,"end":105,"loc":{"start":{"line":2,"column":22,"index":104},"end":{"line":2,"column":23,"index":105},"identifierName":"d"},
+            "name": "d"
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " JSX makes type parameters unambiguous, so these don't inherit the restriction.",
+            "start":0,"end":81,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":81,"index":81}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":107,"end":137,"loc":{"start":{"line":3,"column":0,"index":107},"end":{"line":3,"column":30,"index":137}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":107,"end":136,"loc":{"start":{"line":3,"column":0,"index":107},"end":{"line":3,"column":29,"index":136}},
+          "test": {
+            "type": "Identifier",
+            "start":107,"end":108,"loc":{"start":{"line":3,"column":0,"index":107},"end":{"line":3,"column":1,"index":108},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start":111,"end":132,"loc":{"start":{"line":3,"column":4,"index":111},"end":{"line":3,"column":25,"index":132}},
+            "typeParameters": {
+              "type": "TSTypeParameterDeclaration",
+              "start":117,"end":121,"loc":{"start":{"line":3,"column":10,"index":117},"end":{"line":3,"column":14,"index":121}},
+              "params": [
+                {
+                  "type": "TSTypeParameter",
+                  "start":118,"end":119,"loc":{"start":{"line":3,"column":11,"index":118},"end":{"line":3,"column":12,"index":119}},
+                  "name": {
+                    "type": "Identifier",
+                    "start":118,"end":119,"loc":{"start":{"line":3,"column":11,"index":118},"end":{"line":3,"column":12,"index":119},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ],
+              "extra": {
+                "trailingComma": 119
+              }
+            },
+            "params": [
+              {
+                "type": "Identifier",
+                "start":122,"end":123,"loc":{"start":{"line":3,"column":15,"index":122},"end":{"line":3,"column":16,"index":123},"identifierName":"b"},
+                "name": "b"
+              }
+            ],
+            "returnType": {
+              "type": "TSTypeAnnotation",
+              "start":124,"end":127,"loc":{"start":{"line":3,"column":17,"index":124},"end":{"line":3,"column":20,"index":127}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":126,"end":127,"loc":{"start":{"line":3,"column":19,"index":126},"end":{"line":3,"column":20,"index":127}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":126,"end":127,"loc":{"start":{"line":3,"column":19,"index":126},"end":{"line":3,"column":20,"index":127},"identifierName":"U"},
+                  "name": "U"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": true,
+            "body": {
+              "type": "Identifier",
+              "start":131,"end":132,"loc":{"start":{"line":3,"column":24,"index":131},"end":{"line":3,"column":25,"index":132},"identifierName":"c"},
+              "name": "c"
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start":135,"end":136,"loc":{"start":{"line":3,"column":28,"index":135},"end":{"line":3,"column":29,"index":136},"identifierName":"d"},
+            "name": "d"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":138,"end":161,"loc":{"start":{"line":4,"column":0,"index":138},"end":{"line":4,"column":23,"index":161}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":138,"end":160,"loc":{"start":{"line":4,"column":0,"index":138},"end":{"line":4,"column":22,"index":160}},
+          "test": {
+            "type": "Identifier",
+            "start":138,"end":139,"loc":{"start":{"line":4,"column":0,"index":138},"end":{"line":4,"column":1,"index":139},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start":142,"end":156,"loc":{"start":{"line":4,"column":4,"index":142},"end":{"line":4,"column":18,"index":156}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":147,"end":148,"loc":{"start":{"line":4,"column":9,"index":147},"end":{"line":4,"column":10,"index":148},"identifierName":"b"},
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":154,"end":155,"loc":{"start":{"line":4,"column":16,"index":154},"end":{"line":4,"column":17,"index":155},"identifierName":"c"},
+              "name": "c",
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 153
+              }
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterDeclaration",
+              "start":142,"end":146,"loc":{"start":{"line":4,"column":4,"index":142},"end":{"line":4,"column":8,"index":146}},
+              "params": [
+                {
+                  "type": "TSTypeParameter",
+                  "start":143,"end":144,"loc":{"start":{"line":4,"column":5,"index":143},"end":{"line":4,"column":6,"index":144}},
+                  "name": {
+                    "type": "Identifier",
+                    "start":143,"end":144,"loc":{"start":{"line":4,"column":5,"index":143},"end":{"line":4,"column":6,"index":144},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ],
+              "extra": {
+                "trailingComma": 144
+              }
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start":159,"end":160,"loc":{"start":{"line":4,"column":21,"index":159},"end":{"line":4,"column":22,"index":160},"identifierName":"d"},
+            "name": "d"
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " JSX makes type parameters unambiguous, so these don't inherit the restriction.",
+      "start":0,"end":81,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":81,"index":81}}
+    }
+  ]
+}
