@@ -10,6 +10,7 @@ import { _shouldPrintDecoratorsBeforeExport } from "./expressions.ts";
 import { _tsPrintClassMemberModifiers } from "./typescript.ts";
 import { _variance } from "./flow.ts";
 import { _methodHead } from "./methods.ts";
+import { TokenContext } from "../node/index.ts";
 
 export function ClassDeclaration(
   this: Printer,
@@ -54,6 +55,7 @@ export function ClassDeclaration(
     this.space();
     this.word("extends");
     this.space();
+    this.tokenContext |= TokenContext.classHeritage;
     this.print(node.superClass);
     this.print(node.superTypeArguments);
   }
@@ -307,6 +309,7 @@ export function StructDeclaration(this: Printer, node: t.StructDeclaration) {
     this.space();
     this.word("extends");
     this.space();
+    this.tokenContext |= TokenContext.classHeritage;
     this.print(node.superClass);
   }
 
