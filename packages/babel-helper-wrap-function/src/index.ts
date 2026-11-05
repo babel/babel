@@ -156,6 +156,8 @@ function plainFunction(
       // arrowFunctionToExpression returns undefined in @babel/traverse < 7.18.10
       path = path.arrowFunctionToExpression({ noNewArrows }) ?? path;
     }
+    // The assertion is only needed when linting with per-package tsconfigs
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     node = path.node as
       | t.FunctionDeclaration
       | t.FunctionExpression
