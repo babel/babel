@@ -2513,12 +2513,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           /* params are already set */ null,
           /* async */ true,
         );
-      // Without JSX, this might also be a call with type arguments.
-      return !this.hasPlugin("jsx") &&
-        this.tsIsArrowReturnTypeRestrictedAt(
-          this.offsetToSourcePos(startLoc.index),
-        )
-        ? this.tsParseWithRestrictedArrowReturnType(parse)
+      const startPos = this.offsetToSourcePos(startLoc.index);
+      return this.tsIsArrowReturnTypeRestrictedAt(startPos)
+        ? this.tsParseWithRestrictedArrowReturnType(
+            parse,
+            // Without JSX, this might also be a call with type arguments.
+            this.hasPlugin("jsx") ||
+              this.tsArrowReturnTypeAllowedAt.has(startPos),
+          )
         : parse();
     }
 
@@ -3555,9 +3557,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
-      const isRestricted = this.tsIsArrowReturnTypeRestrictedAt(
-        this.offsetToSourcePos(startLoc.index),
-      );
+      const startPos = this.offsetToSourcePos(startLoc.index);
+      const isRestricted = this.tsIsArrowReturnTypeRestrictedAt(startPos);
+      const allowsReturnType = this.tsArrowReturnTypeAllowedAt.has(startPos);
 
       this.next(); // eat `?`
       const node = this.startNodeAt<N.ConditionalExpression>(startLoc);
@@ -3573,8 +3575,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // The alternate inherits the restriction from the conditional itself:
       //   a ? b ? c : (d) : e => f
       node.alternate = isRestricted
-        ? this.tsParseWithRestrictedArrowReturnType(() =>
-            this.parseMaybeAssign(),
+        ? this.tsParseWithRestrictedArrowReturnType(
+            () => this.parseMaybeAssign(),
+            allowsReturnType,
           )
         : this.parseMaybeAssign();
       return this.finishNode(node, "ConditionalExpression");
@@ -3587,10 +3590,27 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return this.state.noArrowParamsConversionAt.includes(sourcePos);
     }
 
+    // Restrict the return type of an arrow function at the given source position.
+    // If allowsReturnType is true, it only has to have valid parameters, as in the
+    // body of `a ? () => ((b)) : c => d`: unambiguous parameters don't restrict
+    // the return type of the arrow functions in their body, but `((b))` can't be
+    // parameters. Otherwise, it also has to be followed by `:`.
+    tsRestrictArrowReturnTypeAt(sourcePos: number, allowsReturnType: boolean) {
+      this.state.noArrowParamsConversionAt.push(sourcePos);
+      if (allowsReturnType) {
+        this.tsArrowReturnTypeAllowedAt.add(sourcePos);
+      } else {
+        this.tsArrowReturnTypeAllowedAt.delete(sourcePos);
+      }
+    }
+
     // Parse an expression starting at the current position, restricting the
     // return type of an arrow function at its start.
-    tsParseWithRestrictedArrowReturnType<T>(parse: () => T): T {
-      this.state.noArrowParamsConversionAt.push(this.state.start);
+    tsParseWithRestrictedArrowReturnType<T>(
+      parse: () => T,
+      allowsReturnType: boolean = false,
+    ): T {
+      this.tsRestrictArrowReturnTypeAt(this.state.start, allowsReturnType);
       const result = parse();
       this.state.noArrowParamsConversionAt.pop();
       return result;
@@ -3988,6 +4008,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // Like noArrowAt, this is not reset when backtracking.
     tsGenericArrowParamsAt = new Set<number>();
 
+    // The restricted source positions where tsRestrictArrowReturnTypeAt allows a
+    // return type. It's only meaningful for the positions that are restricted.
+    tsArrowReturnTypeAllowedAt = new Set<number>();
+
     // Source positions where an arrow function was parsed with a return type,
     // and where that return type starts.
     // Like noArrowAt, this is not reset when backtracking.
@@ -4006,6 +4030,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // it isn't an arrow function, to avoid trying again when backtracking.
       const startOffset = this.sourceToOffsetPos(startPos);
       if (!this.noArrowAt.has(startOffset)) {
+        const allowsReturnType = this.tsArrowReturnTypeAllowedAt.has(startPos);
         const parse = () =>
           this.tsParseMaybeAssign(refExpressionErrors, isParenItem);
         let state = this.state.clone();
@@ -4060,7 +4085,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             ? this.hasPlugin("jsx")
             : tsHasUnambiguousArrowParams(node.params);
           if (
-            (!hasInvalidParams && this.match(tt.colon)) ||
+            (!hasInvalidParams && (allowsReturnType || this.match(tt.colon))) ||
             // `async(...[(a)])` is a valid call, while `(...[(a)])` is always
             // an invalid arrow function.
             (isUnambiguous && !(hasInvalidParams && node.async))
@@ -4137,17 +4162,19 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (this.noArrowAt.has(this.sourceToOffsetPos(this.state.start))) {
           abort();
         }
+        const startPos = this.state.start;
         // JSX makes type parameters unambiguous, and they are not tt.lt there.
-        const isRestricted =
-          this.match(tt.lt) &&
-          this.tsIsArrowReturnTypeRestrictedAt(this.state.start);
+        const allowsReturnType =
+          !this.match(tt.lt) || this.tsArrowReturnTypeAllowedAt.has(startPos);
+        const isRestricted = this.tsIsArrowReturnTypeRestrictedAt(startPos);
         // This is similar to TypeScript's `tryParseParenthesizedArrowFunctionExpression`.
         typeParameters = this.tsParseTypeParameters(this.tsParseConstModifier);
         let expr;
         if (isRestricted) {
           this.tsGenericArrowParamsAt.add(this.state.start);
-          expr = this.tsParseWithRestrictedArrowReturnType(() =>
-            super.parseMaybeAssign(refExpressionErrors, isParenItem),
+          expr = this.tsParseWithRestrictedArrowReturnType(
+            () => super.parseMaybeAssign(refExpressionErrors, isParenItem),
+            allowsReturnType,
           );
         } else {
           expr = super.parseMaybeAssign(refExpressionErrors, isParenItem);
@@ -4591,16 +4618,19 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     parseMaybeConditional(refExpressionErrors: ExpressionErrors): N.Expression {
-      const isRestricted = this.tsIsArrowReturnTypeRestrictedAt(
-        this.state.start,
-      );
+      const startPos = this.state.start;
+      const isRestricted = this.tsIsArrowReturnTypeRestrictedAt(startPos);
+      const allowsReturnType = this.tsArrowReturnTypeAllowedAt.has(startPos);
       const expr = super.parseMaybeConditional(refExpressionErrors);
       if (isRestricted && tokenIsAssignment(this.state.type)) {
         // The right-hand side of an assignment inherits the restriction:
         //   a ? b = (c) : d => e
         // It's popped by parseMaybeAssign, which is the only caller of
         // parseMaybeConditional.
-        this.state.noArrowParamsConversionAt.push(this.nextTokenStart());
+        this.tsRestrictArrowReturnTypeAt(
+          this.nextTokenStart(),
+          allowsReturnType,
+        );
       }
       return expr;
     }
@@ -4612,15 +4642,17 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       trailingCommaLoc?: Position | null,
     ): N.ArrowFunctionExpression {
       const startPos = this.offsetToSourcePos(node.start!);
-      if (
-        this.tsIsArrowReturnTypeRestrictedAt(startPos) &&
-        (this.tsGenericArrowParamsAt.has(startPos) ||
-          !tsHasUnambiguousArrowParams(params))
-      ) {
+      if (this.tsIsArrowReturnTypeRestrictedAt(startPos)) {
         // The body of an arrow function inherits the restriction:
         //   a ? b => (c) : d => e
-        return this.tsParseWithRestrictedArrowReturnType(() =>
-          super.parseArrowExpression(node, params, isAsync, trailingCommaLoc),
+        // Unambiguous parameters allow a return type in it:
+        //   a ? (b: T) => (c): d => e : f
+        return this.tsParseWithRestrictedArrowReturnType(
+          () =>
+            super.parseArrowExpression(node, params, isAsync, trailingCommaLoc),
+          this.tsArrowReturnTypeAllowedAt.has(startPos) ||
+            (!this.tsGenericArrowParamsAt.has(startPos) &&
+              tsHasUnambiguousArrowParams(params)),
         );
       }
       return super.parseArrowExpression(
