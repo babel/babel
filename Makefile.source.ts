@@ -606,6 +606,8 @@ target["new-version-checklist"] = function () {
 !!!!!! Write any important message here, and change the  !!!!!!
 !!!!!! if (0) above to if (1)                            !!!!!!
 !!!!!!                                                   !!!!!!
+!!!!!! - Update setObjectProto helper version            !!!!!!
+!!!!!!                                                   !!!!!!
 !!!!!!                                                   !!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
