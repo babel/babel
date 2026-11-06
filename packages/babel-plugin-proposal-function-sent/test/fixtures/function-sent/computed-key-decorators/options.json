@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "proposal-function-sent",
+    ["syntax-decorators", { "version": "2023-11" }]
+  ]
+}
