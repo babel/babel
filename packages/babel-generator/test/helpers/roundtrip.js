@@ -38,10 +38,6 @@ const PARSER_FAILURES = [
   // directive
   "es2019/json-strings/string-line-separator/input.js",
   "es2019/json-strings/string-paragraph-separator/input.js",
-
-  // `import {} from %%FILE%%` is printed as `import %%FILE%%;`, which is
-  // parsed without `attributes`
-  "placeholders/import/file-empty/input.mjs",
 ];
 
 // Parser fixtures whose generated code is expected to be rejected by the
