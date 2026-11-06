@@ -162,7 +162,6 @@ export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
   const value = node.value;
-  const str = value + "";
   // Only integers can use a non-decimal radix:
   // Workaround for https://github.com/mathiasbynens/jsesc/issues/79
   if (
@@ -172,8 +171,9 @@ export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
   ) {
     this.number(jsesc(value, opts), value);
   } else if (raw == null) {
-    this.number(str, value); // normalize
+    this.number(value + "", value); // normalize
   } else if (this.format.minified) {
+    const str = value + "";
     this.number(raw.length < str.length ? raw : str, value);
   } else {
     this.number(raw, value);

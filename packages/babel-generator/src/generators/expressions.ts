@@ -1,5 +1,5 @@
 import type Printer from "../printer.ts";
-import { isLiteral, isMemberExpression, isPattern } from "@babel/types";
+import { isLiteral, isPattern } from "@babel/types";
 import * as charCodes from "charcodes";
 import type * as t from "@babel/types";
 import { TokenContext, hasPostfixPart } from "../node/index.ts";
@@ -149,12 +149,19 @@ export function OptionalMemberExpression(
 
   this.print(node.object);
 
-  if (!computed && isMemberExpression(property)) {
-    throw new TypeError("Got a MemberExpression for MemberExpression property");
-  }
-
-  // @ts-expect-error todo(flow->ts) maybe instead of typeof check specific literal types?
-  if (isLiteral(property) && typeof property.value === "number") {
+  const propertyType = property.type;
+  if (propertyType === "MemberExpression") {
+    if (!computed) {
+      throw new TypeError(
+        "Got a MemberExpression for MemberExpression property",
+      );
+    }
+  } else if (
+    propertyType !== "Identifier" &&
+    isLiteral(property) &&
+    // @ts-expect-error todo(flow->ts) maybe instead of typeof check specific literal types?
+    typeof property.value === "number"
+  ) {
     computed = true;
   }
   if (optional) {
@@ -289,25 +296,34 @@ export function BindExpression(this: Printer, node: t.BindExpression) {
 export function MemberExpression(this: Printer, node: t.MemberExpression) {
   this.print(node.object);
 
-  if (!node.computed && isMemberExpression(node.property)) {
-    throw new TypeError("Got a MemberExpression for MemberExpression property");
-  }
-
+  const property = node.property;
+  const propertyType = property.type;
   let computed = node.computed;
-  // @ts-expect-error todo(flow->ts) maybe use specific literal types
-  if (isLiteral(node.property) && typeof node.property.value === "number") {
+
+  if (propertyType === "MemberExpression") {
+    if (!computed) {
+      throw new TypeError(
+        "Got a MemberExpression for MemberExpression property",
+      );
+    }
+  } else if (
+    propertyType !== "Identifier" &&
+    isLiteral(property) &&
+    // @ts-expect-error todo(flow->ts) maybe use specific literal types
+    typeof property.value === "number"
+  ) {
     computed = true;
   }
 
   if (computed) {
     const oldNoLineTerminatorAfterNode = this.enterDelimited();
     this.token("[");
-    this.print(node.property, undefined, true);
+    this.print(property, undefined, true);
     this.token("]");
     this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
   } else {
     this.token(".");
-    this.print(node.property);
+    this.print(property);
   }
 }
 
