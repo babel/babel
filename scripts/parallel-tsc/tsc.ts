@@ -59,6 +59,45 @@ const projectToDependents = new Map<string, Set<string>>();
   }
 }
 
+// tsc does not emit the hand-written declaration files
+async function copyDeclarationFiles(project: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  const { include: projectFiles } = JSON5.parse(
+    readFileSync(resolvePath(project, "tsconfig.json"), "utf8")
+  ) as { include?: string[] };
+  if (!projectFiles) return;
+  const globPatterns = projectFiles
+    .filter(file => file.endsWith("*.ts"))
+    .map(
+      file => `${project}/${file.slice(0, -3)}*.d.ts`.replace(/\\/g, "/") // glob doesn't support \ on Windows
+    );
+  const files = glob(globPatterns);
+  for await (const file of files) {
+    const out = joinPath(
+      process.cwd(),
+      "dts",
+      relativePath(process.cwd(), file)
+    );
+    mkdirSync(dirname(out), { recursive: true });
+    copyFileSync(file, out);
+  }
+}
+
+if (process.env.TSCHECK_EMIT_ONLY) {
+  // Without type checking, a single `tsc -b` that shares the parsed files
+  // between projects is as fast as the pool, using a third of the CPU time.
+  const { status } = cp.spawnSync(
+    process.execPath,
+    [tscPath, "-b", ...entryProjectsPaths, "--pretty", "--noCheck"],
+    { stdio: "inherit" }
+  );
+  await Promise.all(
+    [...ready, ...projectToDependencies.keys()].map(copyDeclarationFiles)
+  );
+  // eslint-disable-next-line n/no-process-exit
+  process.exit(status ?? 1);
+}
+
 class Pool {
   #filename;
   #concurrency;
@@ -199,30 +238,7 @@ const pool = new Pool({
   async onTaskDone(projects, code, duration) {
     if (code !== 0) process.exitCode = code;
 
-    await Promise.all(
-      projects.map(async project => {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-        const { include: projectFiles } = JSON5.parse(
-          readFileSync(resolvePath(project, "tsconfig.json"), "utf8")
-        ) as { include?: string[] };
-        if (!projectFiles) return;
-        const globPatterns = projectFiles
-          .filter(file => file.endsWith("*.ts"))
-          .map(
-            file => `${project}/${file.slice(0, -3)}*.d.ts`.replace(/\\/g, "/") // glob doesn't support \ on Windows
-          );
-        const files = glob(globPatterns);
-        for await (const file of files) {
-          const out = joinPath(
-            process.cwd(),
-            "dts",
-            relativePath(process.cwd(), file)
-          );
-          mkdirSync(dirname(out), { recursive: true });
-          copyFileSync(file, out);
-        }
-      })
-    );
+    await Promise.all(projects.map(copyDeclarationFiles));
 
     done += projects.length;
     if (!process.env.TSCHECK_SILENT) {
