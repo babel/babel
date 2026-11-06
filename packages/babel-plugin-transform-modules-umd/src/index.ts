@@ -69,7 +69,10 @@ function memberAccess(obj: t.Expression, name: string): t.MemberExpression {
 }
 
 export default declare((api, options: Options) => {
-  api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
+  // A literal range, not REQUIRED_VERSION(...): that macro becomes the exact
+  // @babel/core version of the monorepo unless the build runs with IS_PUBLISH,
+  // which is how 0.1.5 shipped requiring exactly "8.0.1".
+  api.assertVersion("^7.0.0-0 || ^8.0.0");
 
   if ("loose" in options) {
     console.warn(

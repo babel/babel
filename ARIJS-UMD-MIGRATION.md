@@ -150,3 +150,30 @@ The branch history was rewritten (rebased onto a new base), hence the force-push
 - **Fallback** if Babel 8 proves too costly: front-end can stay on the latest
   Babel **7.x** (it's still maintained/patched) and keep the existing @arijs
   packages unchanged.
+
+---
+
+## 8. Releasing the @arijs packages
+
+Reconstructed from how 0.1.4 (helper) and 0.1.5 (plugin) were shipped. The
+packages are assembled by hand in a staging folder next to this clone,
+`~/github/arijs-packages/<package>/`, holding only `package.json` and `lib/`.
+
+1. Test: `node_modules/.bin/jest packages/babel-plugin-transform-modules-umd packages/babel-helper-module-transforms`
+   (works offline; if corepack cannot download yarn, run
+   `node .yarn/releases/yarn-4.14.1.cjs` instead).
+2. Build: `node_modules/.bin/gulp build-no-bundle` writes `packages/*/lib`.
+3. Copy `packages/<package>/lib/index.js` and `index.js.map` (the plugin) or
+   the whole `lib/` (the helper) into the staging folder.
+4. In the plugin's `lib/index.js`, rename the helper import from
+   `@babel/helper-module-transforms` to `@arijs/babel-helper-module-transforms`.
+5. Bump `version` in the staging `package.json`. The monorepo `package.json`
+   keeps the upstream `@babel/*` name and version. Then, from the staging
+   folder: `npm pack --dry-run`, and `npm publish --otp=<code>`.
+
+Check before publishing: `grep assertVersion lib/index.js` must show the range
+`"^7.0.0-0 || ^8.0.0"`, never an exact version. 0.1.5 shipped `"8.0.1"`:
+without `IS_PUBLISH`, the build replaces `REQUIRED_VERSION(...)` with the exact
+`@babel/core` version of the monorepo, so the plugin refused any other core.
+Since 0.1.6 the plugin source uses the literal range, and the build environment
+no longer matters.
