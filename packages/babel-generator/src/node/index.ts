@@ -60,28 +60,13 @@ function newCalleeNeedsParens(node: t.Node): boolean {
       case "OptionalMemberExpression":
         return true;
       case "MemberExpression":
+        // `(a?.b).c` and `(a?.b!).c` already wrap the object in parentheses
+        if (parens.isOptionalChainOrTSWrapped(current.object)) return false;
         current = current.object;
         break;
       case "TaggedTemplateExpression":
         current = current.tag;
         break;
-      case "TSInstantiationExpression":
-      case "TSNonNullExpression":
-        current = current.expression;
-        break;
-      default:
-        return false;
-    }
-  }
-}
-
-function templateTagNeedsParens(node: t.Node): boolean {
-  let current: t.Node = node;
-  while (true) {
-    switch (current.type) {
-      case "OptionalCallExpression":
-      case "OptionalMemberExpression":
-        return true;
       case "TSInstantiationExpression":
       case "TSNonNullExpression":
         current = current.expression;
@@ -105,7 +90,7 @@ export function parentNeedsParens(
       break;
     case __node("TaggedTemplateExpression"):
       if (parent.tag === node) {
-        return templateTagNeedsParens(node);
+        return parens.isOptionalChainOrTSWrapped(node);
       }
       break;
     case __node("Decorator"):

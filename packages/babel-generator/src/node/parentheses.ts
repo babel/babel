@@ -77,6 +77,50 @@ export const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
   return false;
 };
 
+/**
+ * Whether `node` is an optional chain, possibly wrapped in TS non-null
+ * assertions or instantiation expressions: `a?.b`, `a?.b!`, `a?.b<T>`.
+ * Without parentheses, a postfix part after it would continue the chain.
+ */
+export function isOptionalChainOrTSWrapped(node: t.Node): boolean {
+  let current: t.Node = node;
+  while (true) {
+    switch (current.type) {
+      case "OptionalCallExpression":
+      case "OptionalMemberExpression":
+        return true;
+      case "TSInstantiationExpression":
+      case "TSNonNullExpression":
+        current = current.expression;
+        break;
+      default:
+        return false;
+    }
+  }
+}
+
+// `(a?.b!).c` and `(a?.b!)()` must keep the parentheses, otherwise the
+// postfix part becomes part of the optional chain.
+function breaksOptionalChain(
+  node: t.TSNonNullExpression | t.TSInstantiationExpression,
+  parent: any,
+  parentId: number,
+): boolean {
+  return (
+    ((parentId === __node("MemberExpression") && parent.object === node) ||
+      (parentId === __node("CallExpression") && parent.callee === node)) &&
+    isOptionalChainOrTSWrapped(node.expression)
+  );
+}
+
+export function TSNonNullExpression(
+  node: t.TSNonNullExpression,
+  parent: any,
+  parentId: number,
+): boolean {
+  return breaksOptionalChain(node, parent, parentId);
+}
+
 export function NullableTypeAnnotation(
   node: t.NullableTypeAnnotation,
   parent: any,
@@ -354,6 +398,7 @@ export function TSInstantiationExpression(
   parent: any,
   parentId: number,
 ) {
+  if (breaksOptionalChain(node, parent, parentId)) return true;
   switch (parentId) {
     case __node("CallExpression"):
     case __node("OptionalCallExpression"):

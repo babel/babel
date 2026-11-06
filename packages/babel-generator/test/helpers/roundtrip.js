@@ -26,10 +26,6 @@ const GENERATOR_FAILURES = [
   // `(a.b<c>)\`\`` is printed as `a.b<c>\`\``, which has the same runtime
   // semantics but is parsed as a tagged template with type arguments
   "parentheses/ts-tagged-template-expression/input.ts",
-
-  // `(a?.b!).c` is printed as `a?.b!.c`, which makes `.c` part of the
-  // optional chain
-  "parentheses/ts-new-callee/input.js",
 ];
 
 // Parser fixtures whose AST is expected to change shape, relative to
