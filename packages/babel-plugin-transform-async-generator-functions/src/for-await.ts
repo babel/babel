@@ -51,7 +51,54 @@ export default function (
       t.variableDeclarator(left.declarations[0].id, stepValue),
     ]);
   }
-  let template = buildForAwait({
+
+  // Per spec (ForIn/OfHeadEvaluation), const/let ForDeclarations create a TDZ
+  // scope before the iterable expression is evaluated. When bound names from
+  // the ForDeclaration are referenced in the iterable expression, wrap the
+  // iterator initialization in a labeled block with a break so that the let
+  // declarations are never reached and bindings stay in TDZ permanently.
+  let object: t.Expression = node.right;
+  let tdzNodes: t.Statement[] | undefined;
+
+  if (t.isVariableDeclaration(left) && left.kind !== "var") {
+    const boundNames = Object.keys(
+      t.getBindingIdentifiers(left.declarations[0].id),
+    );
+    const rightPath = path.get("right");
+    const needsTDZ = boundNames.some(name => {
+      const binding = scope.getBinding(name);
+      return binding?.referencePaths.some(
+        refPath =>
+          refPath.node === rightPath.node || refPath.isDescendant(rightPath),
+      );
+    });
+
+    if (needsTDZ) {
+      const objectUid = scope.generateUidIdentifier("object");
+      const initLabel = t.identifier("init");
+      tdzNodes = [
+        // var _object;
+        t.variableDeclaration("var", [t.variableDeclarator(objectUid)]),
+        // init: { _object = EXPR; break init; let name1, name2, ...; }
+        t.labeledStatement(
+          initLabel,
+          t.blockStatement([
+            t.expressionStatement(
+              t.assignmentExpression("=", t.cloneNode(objectUid), node.right),
+            ),
+            t.breakStatement(t.cloneNode(initLabel)),
+            t.variableDeclaration(
+              "let",
+              boundNames.map(name => t.variableDeclarator(t.identifier(name))),
+            ),
+          ]),
+        ),
+      ];
+      object = t.cloneNode(objectUid);
+    }
+  }
+
+  const tmpl = buildForAwait({
     ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
     ITERATOR_ABRUPT_COMPLETION: scope.generateUidIdentifier(
       "iteratorAbruptCompletion",
@@ -59,16 +106,24 @@ export default function (
     ITERATOR_ERROR_KEY: scope.generateUidIdentifier("iteratorError"),
     ITERATOR_KEY: scope.generateUidIdentifier("iterator"),
     GET_ITERATOR: getAsyncIterator,
-    OBJECT: node.right,
+    OBJECT: object,
     STEP_KEY: t.cloneNode(stepKey),
   });
 
   // remove async function wrapper
   // @ts-expect-error todo(flow->ts) improve type annotation for buildForAwait
-  template = template.body.body as t.Statement[];
+  const statements = tmpl.body.body as t.Statement[];
+
+  // Get the try statement reference before any splice
+  const tryStatement = statements[3] as t.TryStatement;
+
+  // Insert TDZ wrapper nodes before the try statement
+  if (tdzNodes) {
+    statements.splice(3, 0, ...tdzNodes);
+  }
 
   const isLabeledParent = t.isLabeledStatement(parent);
-  const tryBody = (template[3] as t.TryStatement).block.body;
+  const tryBody = tryStatement.block.body;
   const loop = tryBody[0] as t.ForStatement;
 
   if (isLabeledParent) {
@@ -77,7 +132,7 @@ export default function (
 
   return {
     replaceParent: isLabeledParent,
-    node: template,
+    node: statements,
     declar,
     loop,
   };
