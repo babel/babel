@@ -1,0 +1,10 @@
+type A = | B;
+type C = & D;
+type E = (| F)[];
+let g: | H;
+type I = | (| J);
+type K = L | (| M);
+type N = (| O) | P;
+type Q = & (& R);
+type S = (& T) & U;
+type V = W | & X;
