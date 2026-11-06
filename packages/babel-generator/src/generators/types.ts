@@ -291,7 +291,13 @@ export function TopicReference(this: Printer) {
   const { topicToken } = this.format;
 
   if (validTopicTokenSet.has(topicToken)) {
-    this.token(topicToken!);
+    this.token(topicToken!, false, 0, true);
+    this.setLastChar(
+      topicToken === "#"
+        ? // `# in y` must not become the private name `#in`
+          -3 /* LAST_CHAR_KINDS.WORD */
+        : topicToken!.charCodeAt(topicToken!.length - 1),
+    );
   } else {
     const givenTopicTokenJSON = JSON.stringify(topicToken);
     const validTopics = Array.from(validTopicTokenSet, v => JSON.stringify(v));
