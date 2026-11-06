@@ -489,7 +489,7 @@ export function SequenceExpression(
 }
 
 export function YieldExpression(
-  node: t.YieldExpression,
+  node: t.YieldExpression | t.AwaitExpression,
   parent: any,
   parentId: number,
 ): boolean {
@@ -506,7 +506,16 @@ export function YieldExpression(
   );
 }
 
-export { YieldExpression as AwaitExpression };
+export function AwaitExpression(
+  node: t.AwaitExpression,
+  parent: any,
+  parentId: number,
+): boolean {
+  // The argument-less `await` of F# pipelines (`x |> await`) is only valid
+  // as the pipeline body, and cannot be parenthesized
+  if (!node.argument) return false;
+  return YieldExpression(node, parent, parentId);
+}
 
 export function ClassExpression(
   node: t.ClassExpression,
@@ -540,7 +549,21 @@ function UnaryLike(
   );
 }
 
-export { UnaryLike as UnaryExpression, UnaryLike as SpreadElement };
+export function UnaryExpression(
+  node: t.UnaryExpression,
+  parent: any,
+  parentId: number,
+  tokenContext: number,
+): boolean {
+  return (
+    // `(throw a);` is not a throw statement
+    (node.operator === "throw" &&
+      (tokenContext & TokenContext.expressionStatement) > 0) ||
+    UnaryLike(node, parent, parentId)
+  );
+}
+
+export { UnaryLike as SpreadElement };
 
 export function FunctionExpression(
   node: t.FunctionExpression,
@@ -583,7 +606,20 @@ export function ConditionalExpression(
   return UnaryLike(node, parent, parentId);
 }
 
-export { ConditionalExpression as ArrowFunctionExpression };
+export function ArrowFunctionExpression(
+  node: t.ArrowFunctionExpression,
+  parent: any,
+  parentId: number,
+): boolean {
+  return (
+    // `a ? (b): c => d : e`: without parentheses, `: c` would be parsed as
+    // the alternate of the conditional expression
+    (parentId === __node("ConditionalExpression") &&
+      parent.consequent === node &&
+      node.returnType != null) ||
+    ConditionalExpression(node, parent, parentId)
+  );
+}
 
 export function OptionalMemberExpression(
   node: t.OptionalMemberExpression,
@@ -625,6 +661,12 @@ export function Identifier(
 ): boolean {
   if (getRawIdentifier && getRawIdentifier(node) !== node.name) {
     return false;
+  }
+
+  // With the `exportDefaultFrom` proposal, `export default from;` is
+  // ambiguous with `export default from "mod";`, so it is a syntax error
+  if (parentId === __node("ExportDefaultDeclaration") && node.name === "from") {
+    return true;
   }
 
   // 13.15.2 AssignmentExpression RS: Evaluation

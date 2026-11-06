@@ -39,10 +39,6 @@ const PARSER_FAILURES = [
   "es2019/json-strings/string-line-separator/input.js",
   "es2019/json-strings/string-paragraph-separator/input.js",
 
-  // `(throw a);` is printed without parentheses, as a throw statement
-  "experimental/throw-expression/comma/input.js",
-  "experimental/throw-expression/expression/input.js",
-
   // A single-member union type is printed without its leading `|`
   "typescript/types/union-intersection/input.ts",
 
@@ -77,26 +73,6 @@ const PARSER_REPARSE_ERRORS = [
 
   // The typescript plugin rejects `interface;` in sloppy mode
   "annex-b/enabled/1.1-html-comments-open-ts-interface/input.js",
-
-  // `export default (from);` is printed without parentheses, which
-  // `exportDefaultFrom` rejects
-  "experimental/export-extensions/default-from-identifier-escaped/input.js",
-  "experimental/export-extensions/default-from-identifier-parenthesized/input.js",
-
-  // The argument-less `await` of F# pipelines is printed in parentheses:
-  // `x |> (await)`
-  "experimental/pipeline-operator-fsharp/fsharp-proposal-await-end/input.js",
-  "experimental/pipeline-operator-fsharp/fsharp-proposal-await-followed-by-escaped-keyword-after-line-break/input.js",
-  "experimental/pipeline-operator-fsharp/fsharp-proposal-await-for-in/input.js",
-  "experimental/pipeline-operator-fsharp/fsharp-proposal-await/input.js",
-
-  // `(<div />) < x` is printed as `<div /> < x`, which starts another JSX
-  // element
-  "jsx/basic/16/input.js",
-
-  // `a ? (async (b): c => d) : e` is printed without parentheses, so
-  // `: c` is parsed as the alternate
-  "typescript/arrow-function/async-call-in-conditional/input.ts",
 ];
 
 // Keys that are expected to differ between the original AST and the AST of
