@@ -89,7 +89,6 @@ class Benchmark {
   constructor() {
     this.bench = withCodSpeed(
       new Bench({
-        iterations: 10,
         time: 5000,
         warmup: false,
         retainSamples: true,
