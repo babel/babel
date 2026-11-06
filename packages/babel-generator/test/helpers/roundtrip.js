@@ -39,9 +39,6 @@ const PARSER_FAILURES = [
   "es2019/json-strings/string-line-separator/input.js",
   "es2019/json-strings/string-paragraph-separator/input.js",
 
-  // A single-member union type is printed without its leading `|`
-  "typescript/types/union-intersection/input.ts",
-
   // `declare` and the variance of Flow private fields are not printed
   "flow/class-private-property/declare-field/input.js",
   "flow/class-private-property/variance/input.js",

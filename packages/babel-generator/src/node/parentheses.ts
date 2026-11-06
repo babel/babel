@@ -343,18 +343,24 @@ export function TSUnionType(
       return true;
     case __node("TSIndexedAccessType"):
       return parent.objectType === node;
+    case __node("TSUnionType"):
+      // A single-member union is printed with its leading `|`, which would
+      // merge with the parent: `A | (| B)` must not become `A | | B`
+      return node.type === "TSUnionType" && node.types.length === 1;
   }
   return false;
 }
 
 export function TSIntersectionType(
-  node: t.TSUnionType,
+  node: t.TSIntersectionType,
   parent: any,
   parentId: number,
 ): boolean {
   return (
     parentId === __node("TSTypeOperator") ||
-    TSTypeOperator(node, parent, parentId)
+    TSTypeOperator(node, parent, parentId) ||
+    // `A & (& B)` must not become `A & & B`
+    (parentId === __node("TSIntersectionType") && node.types.length === 1)
   );
 }
 
@@ -377,7 +383,7 @@ export function TSInferType(
 }
 
 export function TSTypeOperator(
-  node: t.TSTypeOperator | t.TSUnionType | t.TSInferType,
+  node: t.TSTypeOperator | t.TSUnionType | t.TSIntersectionType | t.TSInferType,
   parent: any,
   parentId: number,
 ): boolean {

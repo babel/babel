@@ -375,9 +375,15 @@ function tsPrintUnionOrIntersectionType(
   sep: "|" | "&",
 ) {
   let hasLeadingToken = 0;
-  if (printer.tokenMap?.startMatches(node, sep)) {
+  if (
+    // `type A = | B` is a union with a single member, print the leading `|`
+    // so that it is not parsed as `B`
+    node.types.length === 1 ||
+    printer.tokenMap?.startMatches(node, sep)
+  ) {
     hasLeadingToken = 1;
     printer.token(sep);
+    printer.space();
   }
 
   printer.printJoin(node.types, undefined, undefined, function (i) {
