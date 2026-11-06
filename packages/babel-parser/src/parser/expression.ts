@@ -1613,9 +1613,11 @@ export default abstract class ExpressionParser extends LValParser {
     if (isAsync) {
       // AsyncDoExpression :
       // async [no LineTerminator here] do Block[~Yield, +Await, ~Return]
+      this.expressionScope.enter(sharedExpressionScope);
       this.prodParam.enter(ParamKind.PARAM_AWAIT);
       node.body = this.parseBlock();
       this.prodParam.exit();
+      this.expressionScope.exit();
     } else {
       node.body = this.parseBlock();
     }
