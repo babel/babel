@@ -64,7 +64,7 @@ export default declare(api => {
 
         const sentId = path.scope.generateUid("function.sent");
 
-        fnPath.traverse(yieldVisitor, { sentId });
+        fnPath.get("body").traverse(yieldVisitor, { sentId });
         // @ts-expect-error A generator must not be an arrow function
         fnPath.node.body.body.unshift(
           t.variableDeclaration("let", [

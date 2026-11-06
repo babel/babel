@@ -116,7 +116,7 @@ export const getVisitor = (): Visitor<PluginPass> =>
           getArgsId: () => t.cloneNode(argsId),
         };
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        path.traverse(argumentsThisVisitor, context);
+        path.get("body").traverse(argumentsThisVisitor, context);
 
         if (context.usesArguments) {
           vars.push(
