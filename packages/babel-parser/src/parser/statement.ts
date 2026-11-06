@@ -2212,6 +2212,7 @@ export default abstract class StatementParser extends ExpressionParser {
   ): void {
     if (this.eat(tt._extends)) {
       this.state.canStartArrow = false;
+      this.classHeritageStart = this.state.start;
       node.superClass = this.parseExprSubscripts();
     } else {
       node.superClass = null;

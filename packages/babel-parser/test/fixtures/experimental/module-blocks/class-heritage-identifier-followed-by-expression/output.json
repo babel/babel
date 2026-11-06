@@ -1,0 +1,190 @@
+{
+  "type": "File",
+  "start":0,"end":145,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":2,"index":145}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":145,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":8,"column":2,"index":145}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start":0,"end":25,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":25,"index":25}},
+        "id": {
+          "type": "Identifier",
+          "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"C"},
+          "name": "C"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":16,"end":22,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":22,"index":22},"identifierName":"module"},
+          "name": "module"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":23,"end":25,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":25,"index":25}},
+          "body": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":25,"end":32,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":32,"index":32}},
+        "expression": {
+          "type": "ArrayExpression",
+          "start":25,"end":32,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":1,"column":32,"index":32}},
+          "elements": [
+            {
+              "type": "StringLiteral",
+              "start":26,"end":31,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":31,"index":31}},
+              "extra": {
+                "rawValue": "foo",
+                "raw": "\"foo\""
+              },
+              "value": "foo"
+            }
+          ]
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":33,"end":35,"loc":{"start":{"line":2,"column":0,"index":33},"end":{"line":2,"column":2,"index":35}},
+        "body": [],
+        "directives": []
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":36,"end":61,"loc":{"start":{"line":3,"column":0,"index":36},"end":{"line":3,"column":25,"index":61}},
+        "id": {
+          "type": "Identifier",
+          "start":42,"end":43,"loc":{"start":{"line":3,"column":6,"index":42},"end":{"line":3,"column":7,"index":43},"identifierName":"D"},
+          "name": "D"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":52,"end":58,"loc":{"start":{"line":3,"column":16,"index":52},"end":{"line":3,"column":22,"index":58},"identifierName":"module"},
+          "name": "module"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":59,"end":61,"loc":{"start":{"line":3,"column":23,"index":59},"end":{"line":3,"column":25,"index":61}},
+          "body": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":61,"end":68,"loc":{"start":{"line":3,"column":25,"index":61},"end":{"line":3,"column":32,"index":68}},
+        "expression": {
+          "type": "StringLiteral",
+          "start":62,"end":67,"loc":{"start":{"line":3,"column":26,"index":62},"end":{"line":3,"column":31,"index":67}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\"",
+            "parenthesized": true,
+            "parenStart": 61
+          },
+          "value": "foo"
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":69,"end":71,"loc":{"start":{"line":4,"column":0,"index":69},"end":{"line":4,"column":2,"index":71}},
+        "body": [],
+        "directives": []
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":72,"end":97,"loc":{"start":{"line":5,"column":0,"index":72},"end":{"line":5,"column":25,"index":97}},
+        "id": {
+          "type": "Identifier",
+          "start":78,"end":79,"loc":{"start":{"line":5,"column":6,"index":78},"end":{"line":5,"column":7,"index":79},"identifierName":"E"},
+          "name": "E"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start":88,"end":94,"loc":{"start":{"line":5,"column":16,"index":88},"end":{"line":5,"column":22,"index":94},"identifierName":"module"},
+          "name": "module"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":95,"end":97,"loc":{"start":{"line":5,"column":23,"index":95},"end":{"line":5,"column":25,"index":97}},
+          "body": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":97,"end":102,"loc":{"start":{"line":5,"column":25,"index":97},"end":{"line":5,"column":30,"index":102}},
+        "expression": {
+          "type": "TemplateLiteral",
+          "start":97,"end":102,"loc":{"start":{"line":5,"column":25,"index":97},"end":{"line":5,"column":30,"index":102}},
+          "expressions": [],
+          "quasis": [
+            {
+              "type": "TemplateElement",
+              "start":98,"end":101,"loc":{"start":{"line":5,"column":26,"index":98},"end":{"line":5,"column":29,"index":101}},
+              "value": {
+                "raw": "foo",
+                "cooked": "foo"
+              },
+              "tail": true
+            }
+          ]
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":103,"end":105,"loc":{"start":{"line":6,"column":0,"index":103},"end":{"line":6,"column":2,"index":105}},
+        "body": [],
+        "directives": []
+      },
+      {
+        "type": "ClassDeclaration",
+        "start":106,"end":135,"loc":{"start":{"line":7,"column":0,"index":106},"end":{"line":7,"column":29,"index":135}},
+        "id": {
+          "type": "Identifier",
+          "start":112,"end":113,"loc":{"start":{"line":7,"column":6,"index":112},"end":{"line":7,"column":7,"index":113},"identifierName":"F"},
+          "name": "F"
+        },
+        "superClass": {
+          "type": "NewExpression",
+          "start":122,"end":132,"loc":{"start":{"line":7,"column":16,"index":122},"end":{"line":7,"column":26,"index":132}},
+          "callee": {
+            "type": "Identifier",
+            "start":126,"end":132,"loc":{"start":{"line":7,"column":20,"index":126},"end":{"line":7,"column":26,"index":132},"identifierName":"module"},
+            "name": "module"
+          },
+          "arguments": []
+        },
+        "body": {
+          "type": "ClassBody",
+          "start":133,"end":135,"loc":{"start":{"line":7,"column":27,"index":133},"end":{"line":7,"column":29,"index":135}},
+          "body": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":135,"end":142,"loc":{"start":{"line":7,"column":29,"index":135},"end":{"line":7,"column":36,"index":142}},
+        "expression": {
+          "type": "StringLiteral",
+          "start":136,"end":141,"loc":{"start":{"line":7,"column":30,"index":136},"end":{"line":7,"column":35,"index":141}},
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\"",
+            "parenthesized": true,
+            "parenStart": 135
+          },
+          "value": "foo"
+        }
+      },
+      {
+        "type": "BlockStatement",
+        "start":143,"end":145,"loc":{"start":{"line":8,"column":0,"index":143},"end":{"line":8,"column":2,"index":145}},
+        "body": [],
+        "directives": []
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

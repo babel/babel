@@ -29,6 +29,10 @@ export default class BaseParser {
   declare exportedIdentifiers: Set<string>;
   sawUnambiguousESM: boolean = false;
   ambiguousScriptDifferentAst: boolean = false;
+  // Where a `module` token followed by `{` is an identifier followed by a class
+  // body rather than a module expression: the start of a class heritage, after
+  // skipping its leading `new`s.
+  classHeritageStart: number = -1;
 
   // Initialized by Tokenizer
   declare state: State;
