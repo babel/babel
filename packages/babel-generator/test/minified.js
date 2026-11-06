@@ -4,10 +4,6 @@ describe("minified roundtrip", () => {
   runRoundtripTests(
     { minified: true },
     {
-      generatorReparseErrors: [
-        // `declare module.exports: T` is not followed by a semicolon
-        "flow/declare-statements/input.js",
-      ],
       parserFailures: [
         // `("use strict");` is printed as a directive, but the `"\5"` that
         // follows is printed as `"\x05"`, which strict mode accepts

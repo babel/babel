@@ -41,7 +41,7 @@ declare interface I2<T> {
 }
 declare module.exports: {
   foo: string
-}
+};
 declare opaque type Foo<T>: Bar<T>;
 declare opaque type ID;
 declare opaque type num: number;
