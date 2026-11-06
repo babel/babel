@@ -1685,7 +1685,7 @@ export default abstract class ExpressionParser extends LValParser {
     this.next(); // eat `.`
 
     if (this.isContextual(tt._source) || this.isContextual(tt._defer)) {
-      const isSource = this.isContextual(tt._source);
+      const isSource = this.match(tt._source);
 
       this.expectPlugin(
         isSource ? "sourcePhaseImports" : "deferredImportEvaluation",
@@ -3061,7 +3061,7 @@ export default abstract class ExpressionParser extends LValParser {
     this: Parser,
     node: Undone<N.ImportExpression>,
   ): N.ImportExpression {
-    this.next(); // eat `(`
+    this.expect(tt.parenL);
     const args = this.parseCallExpressionArguments();
     if (args.length === 0 || args.length > 2) {
       this.raise(Errors.ImportCallArity, node, node);
