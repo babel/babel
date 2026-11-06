@@ -740,7 +740,7 @@ jobs:
 
   codspeed:
     name: Codspeed
-    runs-on: codspeed-macro-arm64-graviton-ubuntu-22-04
+    runs-on: ubuntu-24.04-arm
     needs: prepare-yarn-cache
     # CodSpeed does not support the merge_group event
     if: github.event_name != 'merge_group'
