@@ -29,6 +29,7 @@ export default function normalizeOptions(options: any = {}) {
 
     const TopLevelOptions = {
       development: "development",
+      developmentSourceSelf: "developmentSourceSelf",
       importSource: "importSource",
       pragma: "pragma",
       pragmaFrag: "pragmaFrag",
@@ -40,6 +41,11 @@ export default function normalizeOptions(options: any = {}) {
     const development = v.validateBooleanOption(
       TopLevelOptions.development,
       options.development,
+    );
+    const developmentSourceSelf = v.validateBooleanOption(
+      TopLevelOptions.developmentSourceSelf,
+      options.developmentSourceSelf,
+      false,
     );
     let importSource = v.validateStringOption(
       TopLevelOptions.importSource,
@@ -78,6 +84,7 @@ export default function normalizeOptions(options: any = {}) {
 
     return {
       development,
+      developmentSourceSelf,
       importSource,
       pragma,
       pragmaFrag,
@@ -105,8 +112,14 @@ export default function normalizeOptions(options: any = {}) {
     const development =
       options.development == null ? undefined : !!options.development;
 
+    const developmentSourceSelf =
+      options.developmentSourceSelf == null
+        ? true
+        : !!options.developmentSourceSelf;
+
     return {
       development,
+      developmentSourceSelf,
       importSource,
       pragma,
       pragmaFrag,
