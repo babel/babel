@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import wrapFunction from "@babel/helper-wrap-function";
-import { traverse, types as t } from "@babel/core";
+import { traverse, types as t, type NodePath } from "@babel/core";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
@@ -15,6 +15,16 @@ export default declare(api => {
   ): node is t.AssignmentExpression =>
     t.isAssignmentExpression(node) &&
     t.isIdentifier(node.left, { name: sentId });
+
+  // Like `path.getFunctionParent()`, but computed keys and decorators of a
+  // method are evaluated by the function enclosing the method.
+  const getEvaluatingFunction = (path: NodePath) =>
+    path.find(
+      p =>
+        !!p.parentPath?.isFunction() &&
+        p.key !== "key" &&
+        p.listKey !== "decorators",
+    )?.parentPath as NodePath<t.Function> | undefined;
 
   const yieldVisitor = traverse.visitors.environmentVisitor<{
     sentId: string;
@@ -46,9 +56,9 @@ export default declare(api => {
       MetaProperty(path, state) {
         if (!isFunctionSent(path.node)) return;
 
-        const fnPath = path.getFunctionParent()!;
+        const fnPath = getEvaluatingFunction(path);
 
-        if (!fnPath.node.generator) {
+        if (!fnPath?.node.generator) {
           throw new Error("Parent generator function not found");
         }
 
