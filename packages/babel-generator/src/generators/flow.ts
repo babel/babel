@@ -420,14 +420,9 @@ export function _variance(
     | t.ClassPrivateProperty
     | t.ClassAccessorProperty,
 ) {
-  const kind = node.variance?.kind;
-  if (kind != null) {
-    if (kind === "plus") {
-      this.token("+");
-    } else if (kind === "minus") {
-      this.token("-");
-    }
-  }
+  // Print the Variance node, so that `experimental_preserveFormat` can find
+  // its `+`/`-` token
+  this.print(node.variance);
 }
 
 export function InterfaceDeclaration(
@@ -768,11 +763,19 @@ export function UnionTypeAnnotation(
   this.printJoin(node.types, undefined, undefined, orSeparator);
 }
 
-export function TypeCastExpression(this: Printer, node: t.TypeCastExpression) {
-  this.token("(");
+export function TypeCastExpression(
+  this: Printer,
+  node: t.TypeCastExpression,
+  parent: t.Node,
+) {
+  // With `createParenthesizedExpressions`, `(a: T)` is parsed as a
+  // ParenthesizedExpression wrapping the TypeCastExpression, and both share
+  // the same parentheses.
+  const ownParens = parent?.type !== "ParenthesizedExpression";
+  if (ownParens) this.token("(");
   this.print(node.expression);
   this.print(node.typeAnnotation);
-  this.token(")");
+  if (ownParens) this.token(")");
 }
 
 export function Variance(this: Printer, node: t.Variance) {

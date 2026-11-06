@@ -37,7 +37,6 @@ const FAILURES = [
   "flow/interfaces-module-and-script/input.js",
   "flow/iterator-inside-declare/input.js",
   "flow/iterator-inside-interface/input.js",
-  "flow/iterator-inside-types/input.js",
   "flow/object-literal-types/input.js",
   "flow/opaque-type-alias/input.js",
   "flow/parentheses/input.js",

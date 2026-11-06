@@ -232,6 +232,7 @@ export function ClassPrivateProperty(
 ) {
   this.printJoin(node.decorators);
   _tsPrintClassMemberModifiers.call(this, node);
+  _variance.call(this, node);
   this.print(node.key);
   // TS
   if (node.optional) {
