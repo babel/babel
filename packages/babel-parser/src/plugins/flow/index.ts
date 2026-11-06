@@ -2483,6 +2483,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     }
 
     isAssignable(node: N.Node, isBinding?: boolean): boolean {
+      if (
+        isBinding &&
+        (node.extra?.parenthesized || node.type === "ParenthesizedExpression")
+      ) {
+        return false;
+      }
       if (node.type === "TypeCastExpression") {
         return this.isAssignable(node.expression, isBinding);
       } else {
