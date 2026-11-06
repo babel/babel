@@ -39,14 +39,6 @@ const PARSER_FAILURES = [
   "es2019/json-strings/string-line-separator/input.js",
   "es2019/json-strings/string-paragraph-separator/input.js",
 
-  // `declare` and the variance of Flow private fields are not printed
-  "flow/class-private-property/declare-field/input.js",
-  "flow/class-private-property/variance/input.js",
-
-  // With `createParenthesizedExpressions`, a Flow type cast is printed with
-  // a second pair of parentheses
-  "flow/typecasts/generic-arrow-func-parenthesized/input.js",
-
   // `import {} from %%FILE%%` is printed as `import %%FILE%%;`, which is
   // parsed without `attributes`
   "placeholders/import/file-empty/input.mjs",

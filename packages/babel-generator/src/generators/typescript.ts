@@ -772,7 +772,7 @@ export function _tsPrintClassMemberModifiers(
   const isPublicField =
     node.type === "ClassAccessorProperty" || node.type === "ClassProperty";
   printModifiersList(this, node, [
-    isPublicField && node.declare && "declare",
+    (isPublicField || isPrivateField) && node.declare && "declare",
     !isPrivateField && node.accessibility,
   ]);
   if (node.static) {
