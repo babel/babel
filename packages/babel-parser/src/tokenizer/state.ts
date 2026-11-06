@@ -56,16 +56,15 @@ export default class State {
 
   errors: ParseError[] = [];
 
-  // Used to signify the start of an expression which looks like a
-  // typed arrow function, but it isn't
-  // e.g. a ? (b) : c => d
-  //          ^
-  noArrowAt: number[] = [];
-
-  // Used to signify the start of an expression whose params, if it looks like
-  // an arrow function, shouldn't be converted to assignable nodes.
+  // Shared by the Flow and TypeScript plugins, which cannot be enabled at
+  // the same time. See also Parser#noArrowAt. Contains source positions.
+  // Flow: used to signify the start of an expression whose params, if it
+  // looks like an arrow function, shouldn't be converted to assignable nodes.
   // This is used to defer the validation of typed arrow functions inside
   // conditional expressions.
+  // TypeScript: used to signify the start of an expression where, like in
+  // TypeScript, an arrow function that might be a parenthesized expression
+  // can only have a return type if it's followed by `:`.
   // e.g. a ? (b) : c => d
   //          ^
   noArrowParamsConversionAt: number[] = [];
@@ -92,7 +91,6 @@ export default class State {
   @bit accessor isAmbientContext = false;
   @bit accessor inAbstractClass = false;
   @bit accessor inDisallowConditionalTypesContext = false;
-  @bit accessor inConditionalConsequent = false;
 
   // For the Hack-style pipelines plugin
   @bit accessor inHackPipelineBody = false;
@@ -182,7 +180,6 @@ export default class State {
     state.startLoc = this.startLoc;
     state.endLoc = this.endLoc;
     state.errors = this.errors.slice();
-    state.noArrowAt = this.noArrowAt.slice();
     state.noArrowParamsConversionAt = this.noArrowParamsConversionAt.slice();
     state.regExpAllowedAt = this.regExpAllowedAt;
     state.labels = this.labels.slice();
