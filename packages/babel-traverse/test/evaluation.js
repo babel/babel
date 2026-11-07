@@ -437,6 +437,88 @@ describe("evaluation", function () {
     expect(evalResult.confident).toBe(false);
   });
 
+  describe("var whose initializer may not have run", function () {
+    function evaluateX(code) {
+      let result;
+      traverse(parse(code, { sourceType: "module" }), {
+        ReferencedIdentifier(path) {
+          if (path.node.name === "x") result = path.evaluate();
+        },
+      });
+      return result;
+    }
+
+    it.each([
+      [
+        "read in a nested function",
+        "function f(c) { if (c) { var x = 1; } function g() { return x; } }",
+      ],
+      [
+        "read in an arrow function",
+        "function f(c) { if (c) { var x = 1; } () => x; }",
+      ],
+      [
+        "read in a sibling block",
+        "function f(a, b) { if (a) { var x = 1; } if (b) { x; } }",
+      ],
+      [
+        "read in the else branch",
+        "function f(c) { if (c) { var x = 1; } else { x; } }",
+      ],
+      [
+        "declared in a switch case",
+        "function f(c) { switch (c) { case 1: var x = 2; } x; }",
+      ],
+      [
+        "read in a later switch case",
+        "function f(c) { switch (c) { case 1: var x = 2; case 2: x; } }",
+      ],
+      [
+        "declared in an if without a block",
+        "function f(c) { if (c) var x = 1; x; }",
+      ],
+      [
+        "declared in a labeled block",
+        "function f(c) { l: { if (c) break l; { var x = 1; } } x; }",
+      ],
+    ])("deopts when %s", function (_, code) {
+      expect(evaluateX(code).confident).toBe(false);
+    });
+
+    it.each([
+      [
+        "read in a nested function",
+        "function f() { var x = 1; function g() { return x; } }",
+      ],
+      [
+        "read in a nested function, declared in a plain block",
+        "function f() { { var x = 1; } function g() { return x; } }",
+      ],
+      [
+        "read in a function in the same block",
+        "function f(c) { if (c) { var x = 1; function g() { return x; } } }",
+      ],
+      [
+        "read later in the same switch case",
+        "function f(c) { switch (c) { case 1: var x = 1; x; } }",
+      ],
+      [
+        "declared in a for initializer",
+        "function f(c) { for (var x = 1; c; ) {} x; }",
+      ],
+      ["exported", "export var x = 1; x;"],
+      ["declared with a label", "l: var x = 1; x;"],
+      [
+        "declared in nested plain blocks of a function",
+        "function f() { { { var x = 1; } } return x; }",
+      ],
+      ["declared in a static block", "class A { static { var x = 1; x; } }"],
+      ["read in a later declarator", "var x = 1, y = x;"],
+    ])("evaluates when %s", function (_, code) {
+      expect(evaluateX(code)).toMatchObject({ confident: true, value: 1 });
+    });
+  });
+
   it("should not evaluate arrays with multiple references", function () {
     const path = getPath(`
       const value = [];
