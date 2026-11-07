@@ -27,7 +27,7 @@
     "@babel/preset-typescript": "workspace:^",
     "@babel/traverse": "workspace:^",
     "@babel/types": "workspace:^",
-    "@codspeed/tinybench-plugin": "^6.1.0",
+    "@codspeed/tinybench-plugin": "^6.1.1",
     "benchmark": "^2.1.4",
     "tinybench": "^6.2.2"
   },

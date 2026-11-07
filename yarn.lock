@@ -332,7 +332,7 @@ __metadata:
     "@babel/preset-typescript": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
-    "@codspeed/tinybench-plugin": "npm:^6.1.0"
+    "@codspeed/tinybench-plugin": "npm:^6.1.1"
     benchmark: "npm:^2.1.4"
     tinybench: "npm:^6.2.2"
   languageName: unknown
@@ -4135,26 +4135,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codspeed/core@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "@codspeed/core@npm:6.1.0"
+"@codspeed/core@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "@codspeed/core@npm:6.1.1"
   dependencies:
-    axios: "npm:^1.4.0"
-    form-data: "npm:^4.0.4"
+    axios: "npm:^1.21.0"
+    form-data: "npm:^4.0.6"
     node-gyp-build: "npm:^4.6.0"
     stack-trace: "npm:1.0.0-pre2"
-  checksum: 10/1d60414d7202f966fbf9a22310523bfafb5f588a93a491aca2cb7b779f26bb61d91c92038383b35df90aa55c9e5aba29c3eb7875375f1d790eacca340513a9ca
+  checksum: 10/db568ca35d397004d840f34d607747d9c54d9b89f6d9b246c550dae59030c5aa315df41c7a8fc44fbeb36ad7bd084b8301e0df52c3a892a97d80ee1f50984a5e
   languageName: node
   linkType: hard
 
-"@codspeed/tinybench-plugin@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "@codspeed/tinybench-plugin@npm:6.1.0"
+"@codspeed/tinybench-plugin@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "@codspeed/tinybench-plugin@npm:6.1.1"
   dependencies:
-    "@codspeed/core": "npm:^6.1.0"
+    "@codspeed/core": "npm:^6.1.1"
   peerDependencies:
     tinybench: ">=4.0.1"
-  checksum: 10/1d1530cb7bc44e46c39ba0d8e45d22c3bab200857b80bbb326d6e02f0239061de59c763643a332b25b4a1bc6224dd5ef1fc22674695ef989d4f2a826eb493790
+  checksum: 10/012d283da1903133b84bac0a3297b9188c4a50d88d72e52b68d56c3f64f42f871d863aec9fbb6cae1460ef5df3521441d87746fd48fb9098d6482a9d83e79e09
   languageName: node
   linkType: hard
 
@@ -7480,15 +7480,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.4.0":
-  version: 1.19.0
-  resolution: "axios@npm:1.19.0"
+"axios@npm:^1.21.0":
+  version: 1.21.0
+  resolution: "axios@npm:1.21.0"
   dependencies:
     follow-redirects: "npm:^1.16.0"
     form-data: "npm:^4.0.6"
     https-proxy-agent: "npm:^5.0.1"
     proxy-from-env: "npm:^2.1.0"
-  checksum: 10/d27e263b003f2dc1e6d0e2ab062dbc7c2b15668c25723e1e2072f139505c1fbd1f8cffef77d5ec05bb8e3cefa6fc5325c6446e747669fd95d85519529fa0db0b
+  checksum: 10/1d350436e2bcda52ea62607452bbefa17fa04c43192ecb989d5650215306f9aabfd98bbd1690fcf24ee4c9587630af2e7795feab4e7931f80c43ddd6eceeecc9
   languageName: node
   linkType: hard
 
@@ -10546,7 +10546,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^4.0.0, form-data@npm:^4.0.4, form-data@npm:^4.0.6":
+"form-data@npm:^4.0.0, form-data@npm:^4.0.6":
   version: 4.0.6
   resolution: "form-data@npm:4.0.6"
   dependencies:
