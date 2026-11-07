@@ -18,7 +18,7 @@ const opts = {
   },
 };
 
-const fixtures = loadFixtures("mjs");
+const fixtures = loadFixtures(import.meta.url, "mjs");
 
 fixtures.forEach(({ name, content }) => {
   addBenchCase(
