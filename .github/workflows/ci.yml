@@ -741,6 +741,9 @@ jobs:
   codspeed:
     name: Codspeed (${{ matrix.mode }})
     runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: read # required for actions/checkout
+      id-token: write # required for OIDC authentication with CodSpeed
     needs: prepare-yarn-cache
     # CodSpeed does not support the merge_group event
     if: github.event_name != 'merge_group'
