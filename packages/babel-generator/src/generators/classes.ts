@@ -154,12 +154,12 @@ export function ClassProperty(this: Printer, node: t.ClassProperty) {
 
   _tsPrintClassMemberModifiers.call(this, node);
 
+  _variance.call(this, node);
   if (node.computed) {
     this.token("[");
     this.print(node.key);
     this.token("]");
   } else {
-    _variance.call(this, node);
     this.print(node.key);
   }
 
@@ -198,13 +198,13 @@ export function ClassAccessorProperty(
   this.word("accessor", true);
   this.space();
 
+  // Todo: Flow does not support class accessor property yet.
+  _variance.call(this, node);
   if (node.computed) {
     this.token("[");
     this.print(node.key);
     this.token("]");
   } else {
-    // Todo: Flow does not support class accessor property yet.
-    _variance.call(this, node);
     this.print(node.key);
   }
 
