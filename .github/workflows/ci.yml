@@ -787,9 +787,12 @@ jobs:
         uses: CodSpeedHQ/action@v5
         with:
           mode: ${{ matrix.mode }}
+          # CodSpeed's node wrapper first runs each process only to read the
+          # V8 flags the plugin needs. --import loads the plugin first, so that
+          # run ends before the Babel packages are loaded.
           run: >-
             xargs -P "${{ matrix.parallel }}" -L 1 sh -c
-            'exec node --expose-gc --no-allocation-site-pretenuring "./benchmark/$0" --only-current --fixture="$1" ${{ matrix.args }}'
+            'exec node --import @codspeed/tinybench-plugin --expose-gc --no-allocation-site-pretenuring "./benchmark/$0" --only-current --fixture="$1" ${{ matrix.args }}'
             < benchmark-cases.txt
 
   required-checks:
