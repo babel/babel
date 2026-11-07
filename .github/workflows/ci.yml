@@ -765,7 +765,7 @@ jobs:
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v4
         with:
-          mode: walltime
+          mode: simulation
           run: node --expose-gc --no-allocation-site-pretenuring ./benchmark/index.mjs --only-current
 
   required-checks:
