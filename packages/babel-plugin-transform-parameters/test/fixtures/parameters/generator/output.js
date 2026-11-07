@@ -1,4 +1,9 @@
 function fn(a, _ref) {
+  arguments = function () {
+    "use strict";
+
+    return arguments;
+  }.apply(void 0, arguments);
   var _arguments = arguments,
     _this = this;
   let [] = _ref;

@@ -8,6 +8,7 @@ function getPath(code) {
       ["decorators", { version: "2023-11", decoratorsBeforeExport: true }],
       "decoratorAutoAccessors",
       ["pipelineOperator", { proposal: "hack", topicToken: "%" }],
+      "throwExpressions",
     ],
   });
   let path;
@@ -44,6 +45,16 @@ describe("isPure() returns true", () => {
     `-1 || void 0`,
     `null ?? (true && false)`,
     `this`,
+    `-1n`,
+    `~1`,
+    `undefined`,
+    `[NaN, -Infinity]`,
+    `(0, void undefined)`,
+    // They throw, but have no side effects
+    `+1n`,
+    `"a" in "b"`,
+    `1 instanceof 2`,
+    `(throw 1)`,
   ])(`NodePath(%p).get("body.0.expression").isPure() should be true`, input => {
     const path = getPath(input).get("body.0.expression");
     expect(path.node).toBeTruthy();
@@ -75,7 +86,7 @@ describe("isPure() returns false", () => {
     expect(path.isPure()).toBe(false);
   });
 
-  it.each(["`${a}`", "tagged`foo`"])(
+  it.each(["`${a}`", "tagged`foo`", "delete 1", "(0, x)", "globalThis"])(
     `NodePath(%p).get("body.0.expression").isPure() should be false`,
     input => {
       const path = getPath(input).get("body.0.expression");

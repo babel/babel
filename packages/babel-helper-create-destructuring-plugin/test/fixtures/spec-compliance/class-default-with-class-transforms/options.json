@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "transform-destructuring",
+    "transform-class-properties",
+    "transform-classes"
+  ],
+  "targets": {
+    "ie": "11"
+  }
+}

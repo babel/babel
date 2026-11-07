@@ -18,17 +18,15 @@
   ],
   "dependencies": {
     "@babel/helper-compilation-targets": "workspace:^",
-    "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-transform-destructuring": "workspace:^",
-    "@babel/plugin-transform-parameters": "workspace:^"
+    "@babel/helper-create-destructuring-plugin": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-plugin-test-runner": "workspace:^",
-    "@babel/parser": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"

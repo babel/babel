@@ -129,6 +129,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel-baseline/plugin-proposal-destructuring-private@npm:@babel/plugin-proposal-destructuring-private@8.0.6":
+  version: 8.0.6
+  resolution: "@babel/plugin-proposal-destructuring-private@npm:8.0.6"
+  dependencies:
+    "@babel/helper-plugin-utils": "npm:^8.0.1"
+    "@babel/plugin-transform-destructuring": "npm:^8.0.5"
+    "@babel/plugin-transform-parameters": "npm:^8.0.5"
+  peerDependencies:
+    "@babel/core": ^8.0.0
+  checksum: 10/ca7d1bf7e20d0a74c2773cfc23194029e40708d18eab184e18cfc54466c2aa8a817a9ab840c47b848c5806f52a794ba2862ffadcf1cc4b809fac0e8d20f13b33
+  languageName: node
+  linkType: hard
+
+"@babel-baseline/plugin-transform-destructuring@npm:@babel/plugin-transform-destructuring@8.0.5, @babel/plugin-transform-destructuring@npm:^8.0.1, @babel/plugin-transform-destructuring@npm:^8.0.5":
+  version: 8.0.5
+  resolution: "@babel/plugin-transform-destructuring@npm:8.0.5"
+  dependencies:
+    "@babel/helper-plugin-utils": "npm:^8.0.1"
+  peerDependencies:
+    "@babel/core": ^8.0.0
+  checksum: 10/ee5ca59cf5a9dea20bc615c305b6dffd3e195ce75dfa1dd5a7dab5fdfb28687fb27da5888d9fae320296818eb651fb8f8e54abee0512b5f85dbf035ea47269b0
+  languageName: node
+  linkType: hard
+
 "@babel-baseline/plugin-transform-modules-commonjs@npm:@babel/plugin-transform-modules-commonjs@8.0.1, @babel/plugin-transform-modules-commonjs@npm:^8.0.1":
   version: 8.0.1
   resolution: "@babel/plugin-transform-modules-commonjs@npm:8.0.1"
@@ -138,6 +162,20 @@ __metadata:
   peerDependencies:
     "@babel/core": ^8.0.0
   checksum: 10/245e3f6488f1c138a9783ebf32f74660cd7e013652b107ce4452864370c2f27b0bed27ba69179708fcb92878d6842dd18f53dbe2fe6feb38fc82c0d6a38e0546
+  languageName: node
+  linkType: hard
+
+"@babel-baseline/plugin-transform-object-rest-spread@npm:@babel/plugin-transform-object-rest-spread@8.0.1, @babel/plugin-transform-object-rest-spread@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "@babel/plugin-transform-object-rest-spread@npm:8.0.1"
+  dependencies:
+    "@babel/helper-compilation-targets": "npm:^8.0.0"
+    "@babel/helper-plugin-utils": "npm:^8.0.1"
+    "@babel/plugin-transform-destructuring": "npm:^8.0.1"
+    "@babel/plugin-transform-parameters": "npm:^8.0.1"
+  peerDependencies:
+    "@babel/core": ^8.0.0
+  checksum: 10/ac8a801b61cf5e06cf71a9f88d2ae161892f0dd7cf23fb6110a05b66f5275ef7d5d517bc38465799b7876568845e625dd59128f2c4dfb7d58852cd155ae2436a
   languageName: node
   linkType: hard
 
@@ -315,7 +353,10 @@ __metadata:
     "@babel-baseline/helper-compilation-targets": "npm:@babel/helper-compilation-targets@8.0.7"
     "@babel-baseline/helper-validator-identifier": "npm:@babel/helper-validator-identifier@8.0.6"
     "@babel-baseline/parser": "npm:@babel/parser@8.0.7"
+    "@babel-baseline/plugin-proposal-destructuring-private": "npm:@babel/plugin-proposal-destructuring-private@8.0.6"
+    "@babel-baseline/plugin-transform-destructuring": "npm:@babel/plugin-transform-destructuring@8.0.5"
     "@babel-baseline/plugin-transform-modules-commonjs": "npm:@babel/plugin-transform-modules-commonjs@8.0.1"
+    "@babel-baseline/plugin-transform-object-rest-spread": "npm:@babel/plugin-transform-object-rest-spread@8.0.1"
     "@babel-baseline/preset-env": "npm:@babel/preset-env@8.0.7"
     "@babel-baseline/preset-typescript": "npm:@babel/preset-typescript@8.0.7"
     "@babel-baseline/traverse": "npm:@babel/traverse@8.0.7"
@@ -326,7 +367,10 @@ __metadata:
     "@babel/helper-compilation-targets": "workspace:^"
     "@babel/helper-validator-identifier": "workspace:^"
     "@babel/parser": "workspace:^"
+    "@babel/plugin-proposal-destructuring-private": "workspace:^"
+    "@babel/plugin-transform-destructuring": "workspace:^"
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
+    "@babel/plugin-transform-object-rest-spread": "workspace:^"
     "@babel/preset-env": "workspace:^"
     "@babel/preset-flow": "workspace:^"
     "@babel/preset-typescript": "workspace:^"
@@ -789,6 +833,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@babel/helper-create-destructuring-plugin@workspace:^, @babel/helper-create-destructuring-plugin@workspace:packages/babel-helper-create-destructuring-plugin":
+  version: 0.0.0-use.local
+  resolution: "@babel/helper-create-destructuring-plugin@workspace:packages/babel-helper-create-destructuring-plugin"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-named-evaluation": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-replace-supers": "workspace:^"
+    "@babel/plugin-transform-class-properties": "workspace:^"
+    "@babel/plugin-transform-parameters": "workspace:^"
+    verkit: "catalog:"
+  peerDependencies:
+    "@babel/core": ^8.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/helper-create-regexp-features-plugin@npm:^8.0.1":
   version: 8.0.1
   resolution: "@babel/helper-create-regexp-features-plugin@npm:8.0.1"
@@ -973,6 +1033,17 @@ __metadata:
     "@babel/traverse": "workspace:^"
   peerDependencies:
     "@babel/core": ^8.0.0
+  languageName: unknown
+  linkType: soft
+
+"@babel/helper-named-evaluation@workspace:^, @babel/helper-named-evaluation@workspace:packages/babel-helper-named-evaluation":
+  version: 0.0.0-use.local
+  resolution: "@babel/helper-named-evaluation@workspace:packages/babel-helper-named-evaluation"
+  dependencies:
+    "@babel/generator": "workspace:^"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
+    "@babel/parser": "workspace:^"
+    "@babel/types": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1527,14 +1598,11 @@ __metadata:
   resolution: "@babel/plugin-proposal-destructuring-private@workspace:packages/babel-plugin-proposal-destructuring-private"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-create-destructuring-plugin": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-transform-class-properties": "workspace:^"
     "@babel/plugin-transform-class-static-block": "workspace:^"
-    "@babel/plugin-transform-destructuring": "workspace:^"
-    "@babel/plugin-transform-parameters": "workspace:^"
-    "@babel/traverse": "workspace:^"
-    "@babel/types": "workspace:^"
   peerDependencies:
     "@babel/core": ^8.0.0
   languageName: unknown
@@ -2361,22 +2429,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-destructuring@npm:^8.0.1, @babel/plugin-transform-destructuring@npm:^8.0.5":
-  version: 8.0.5
-  resolution: "@babel/plugin-transform-destructuring@npm:8.0.5"
-  dependencies:
-    "@babel/helper-plugin-utils": "npm:^8.0.1"
-  peerDependencies:
-    "@babel/core": ^8.0.0
-  checksum: 10/ee5ca59cf5a9dea20bc615c305b6dffd3e195ce75dfa1dd5a7dab5fdfb28687fb27da5888d9fae320296818eb651fb8f8e54abee0512b5f85dbf035ea47269b0
-  languageName: node
-  linkType: hard
-
 "@babel/plugin-transform-destructuring@workspace:^, @babel/plugin-transform-destructuring@workspace:packages/babel-plugin-transform-destructuring":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-destructuring@workspace:packages/babel-plugin-transform-destructuring"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-create-destructuring-plugin": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:
@@ -2498,9 +2556,10 @@ __metadata:
   resolution: "@babel/plugin-transform-explicit-resource-management@workspace:packages/babel-plugin-transform-explicit-resource-management"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-create-destructuring-plugin": "workspace:^"
+    "@babel/helper-named-evaluation": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/plugin-transform-destructuring": "workspace:^"
   peerDependencies:
     "@babel/core": ^8.0.0
   languageName: unknown
@@ -2966,31 +3025,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-transform-object-rest-spread@npm:^8.0.1":
-  version: 8.0.1
-  resolution: "@babel/plugin-transform-object-rest-spread@npm:8.0.1"
-  dependencies:
-    "@babel/helper-compilation-targets": "npm:^8.0.0"
-    "@babel/helper-plugin-utils": "npm:^8.0.1"
-    "@babel/plugin-transform-destructuring": "npm:^8.0.1"
-    "@babel/plugin-transform-parameters": "npm:^8.0.1"
-  peerDependencies:
-    "@babel/core": ^8.0.0
-  checksum: 10/ac8a801b61cf5e06cf71a9f88d2ae161892f0dd7cf23fb6110a05b66f5275ef7d5d517bc38465799b7876568845e625dd59128f2c4dfb7d58852cd155ae2436a
-  languageName: node
-  linkType: hard
-
 "@babel/plugin-transform-object-rest-spread@workspace:^, @babel/plugin-transform-object-rest-spread@workspace:packages/babel-plugin-transform-object-rest-spread":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-transform-object-rest-spread@workspace:packages/babel-plugin-transform-object-rest-spread"
   dependencies:
     "@babel/core": "workspace:^"
     "@babel/helper-compilation-targets": "workspace:^"
+    "@babel/helper-create-destructuring-plugin": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
-    "@babel/parser": "workspace:^"
-    "@babel/plugin-transform-destructuring": "workspace:^"
-    "@babel/plugin-transform-parameters": "workspace:^"
   peerDependencies:
     "@babel/core": ^8.0.0
   languageName: unknown
@@ -3087,6 +3130,7 @@ __metadata:
   resolution: "@babel/plugin-transform-parameters@workspace:packages/babel-plugin-transform-parameters"
   dependencies:
     "@babel/core": "workspace:^"
+    "@babel/helper-named-evaluation": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
   peerDependencies:

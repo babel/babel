@@ -1,19 +1,20 @@
-const {
+const _a = a,
+  {
     x
-  } = a,
-  y = babelHelpers.objectWithoutProperties(a, ["x"]),
+  } = _a,
+  y = babelHelpers.objectWithoutProperties(_a, ["x"]),
   z = foo(y);
-const s = babelHelpers.extends({}, (babelHelpers.objectDestructuringEmpty(r), r)),
+const _r = r,
+  s = babelHelpers.objectWithoutProperties(babelHelpers.extends(Object.create(null), (babelHelpers.objectDestructuringEmpty(_r), _r)), []),
   t = foo(s);
 
 // ordering is preserved
 var l = foo(),
   _bar = bar(),
+  _bar$m = _bar.m,
   {
-    m: {
-      n
-    }
-  } = _bar,
-  o = babelHelpers.objectWithoutProperties(_bar.m, ["n"]),
+    n
+  } = _bar$m,
+  o = babelHelpers.objectWithoutProperties(_bar$m, ["n"]),
   p = babelHelpers.objectWithoutProperties(_bar, ["m"]),
   q = baz();

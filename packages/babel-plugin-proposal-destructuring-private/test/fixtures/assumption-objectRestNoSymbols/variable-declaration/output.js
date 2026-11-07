@@ -12,16 +12,16 @@ babelHelpers.defineProperty(C, "a", "a");
 babelHelpers.defineProperty(C, "b", "b");
 babelHelpers.defineProperty(C, "c", "c");
 (() => {
-  var _m, _m2;
+  var _C$a, _C$b;
   var {
-      [_m = _C.a]: a
+      [_C$a = babelHelpers.toPropertyKey(_C.a)]: a
     } = _C,
     x = _x._,
     {
-      [_m2 = _C.b]: b
+      [_C$b = babelHelpers.toPropertyKey(_C.b)]: b
     } = _C,
     y = _y._,
-    z = babelHelpers.objectWithoutPropertiesLoose(_C, [_m, _m2].map(babelHelpers.toPropertyKey));
+    z = babelHelpers.objectWithoutPropertiesLoose(_C, [_C$a, _C$b]);
   result = {
     a,
     b,

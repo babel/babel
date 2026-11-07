@@ -14,4 +14,4 @@ var [a, b] = [clazz.foo, bar];
 var [a, b] = [, 2];
 [a, b] = [1, 2];
 [a, b] = [, 2];
-; // Avoid completion record special case
+0; // Avoid completion record special case

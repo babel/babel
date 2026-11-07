@@ -6,13 +6,13 @@ class C {
   static b = "b";
   static c = "c";
   static {
-    var _m, _m2;
+    var _C$a, _C$b;
     var a, b, x, y, z;
     ({
-      [_m = C.a]: a
+      [_C$a = babelHelpers.toPropertyKey(C.a)]: a
     } = C), x = C.#x, {
-      [_m2 = C.b]: b
-    } = C, y = C.#y, z = babelHelpers.objectWithoutProperties(C, [_m, _m2].map(babelHelpers.toPropertyKey));
+      [_C$b = babelHelpers.toPropertyKey(C.b)]: b
+    } = C, y = C.#y, z = babelHelpers.objectWithoutProperties(C, [_C$a, _C$b]);
     result = {
       a,
       b,

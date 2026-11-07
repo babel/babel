@@ -1,0 +1,5 @@
+{
+  "plugins": ["transform-object-rest-spread", "transform-destructuring"],
+  "parserOpts": { "plugins": [["discardBinding", { "syntaxType": "void" }]] },
+  "targets": { "ie": "11" }
+}

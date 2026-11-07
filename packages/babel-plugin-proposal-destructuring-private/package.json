@@ -16,9 +16,8 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^",
-    "@babel/plugin-transform-destructuring": "workspace:^",
-    "@babel/plugin-transform-parameters": "workspace:^"
+    "@babel/helper-create-destructuring-plugin": "workspace:^",
+    "@babel/helper-plugin-utils": "workspace:^"
   },
   "peerDependencies": {
     "@babel/core": "^8.0.0"
@@ -27,9 +26,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/plugin-transform-class-properties": "workspace:^",
-    "@babel/plugin-transform-class-static-block": "workspace:^",
-    "@babel/traverse": "workspace:^",
-    "@babel/types": "workspace:^"
+    "@babel/plugin-transform-class-static-block": "workspace:^"
   },
   "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-destructuring-private",
   "engines": {

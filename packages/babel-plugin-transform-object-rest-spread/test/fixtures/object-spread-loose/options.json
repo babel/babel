@@ -1,6 +1,12 @@
 {
   "plugins": [
-    ["transform-object-rest-spread", { "loose": true }]
+    [
+      "transform-object-rest-spread",
+      {
+        "loose": true
+      }
+    ],
+    "../../helpers/checkScopeInfo.js"
   ],
   "targets": {
     "browsers": "ie 6"
