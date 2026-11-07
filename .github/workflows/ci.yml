@@ -784,7 +784,7 @@ jobs:
           node ./benchmark/index.mjs --list=${{ matrix.mode }} > benchmark-cases.txt
           cat benchmark-cases.txt
       - name: Run benchmarks
-        uses: CodSpeedHQ/action@v4
+        uses: CodSpeedHQ/action@v5
         with:
           mode: ${{ matrix.mode }}
           run: >-
