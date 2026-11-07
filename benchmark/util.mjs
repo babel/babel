@@ -42,10 +42,38 @@ const onlyFixtures = process.argv
   .filter(arg => arg.startsWith("--fixture="))
   .map(arg => arg.slice("--fixture=".length));
 // --list prints one "<suite> <fixture>" line per fixture that each suite
-// would run, largest fixture first, and runs nothing. Running the suite file
-// with --fixture=<fixture> runs that part of the benchmark on its own.
-const listOnly = process.argv.includes("--list");
+// would run, and runs nothing. Running the suite file with
+// --fixture=<fixture> runs that part of the benchmark on its own. Lines are
+// ordered longest first by ./simulation-durations.json, the seconds each line
+// took in CodSpeed's simulation mode on CI, so that parallel runs do not end
+// with one long case running alone. Lines missing from it come first, largest
+// fixture first.
+// --list=simulation and --list=walltime only print the cases that CI runs in
+// that CodSpeed mode.
+const listArg = process.argv.find(
+  arg => arg === "--list" || arg.startsWith("--list=")
+);
+const listOnly = listArg !== undefined;
+const listMode = listArg?.slice("--list=".length) || undefined;
+if (listMode !== undefined && !["simulation", "walltime"].includes(listMode)) {
+  throw new Error(`Unknown ${listArg}, expected simulation or walltime`);
+}
+// A single measured call of these fixtures takes 4 to 25 minutes under
+// Valgrind, so CI benchmarks them in walltime mode instead of simulation.
+const walltimeFixtures = new Set(["typescript-5.6.2.js", "ts-checker.mjs"]);
 const listed = [];
+// --iterations=<n> sets the minimum number of samples per case, which
+// otherwise defaults to tinybench's 64. Each case still runs for at least 5s.
+const iterationsArg = process.argv.find(arg => arg.startsWith("--iterations="));
+const iterations = iterationsArg
+  ? Number(iterationsArg.slice("--iterations=".length))
+  : undefined;
+if (
+  iterations !== undefined &&
+  !(Number.isInteger(iterations) && iterations > 0)
+) {
+  throw new Error(`Expected a positive integer in ${iterationsArg}`);
+}
 
 if (!globalThis.gc) {
   console.warn("Recommend running with --expose-gc.");
@@ -105,6 +133,12 @@ function loadFixtures(url, type = "*", { exclude = [] } = {}) {
   if (listOnly) {
     const suite = generateCaseName(url);
     for (const { file, name } of fixtures) {
+      if (
+        listMode !== undefined &&
+        walltimeFixtures.has(name) !== (listMode === "walltime")
+      ) {
+        continue;
+      }
       const { size } = statSync(path.join(__dirname, file));
       listed.push({ suite, name, size });
     }
@@ -127,6 +161,7 @@ class Benchmark {
     this.bench = withCodSpeed(
       new Bench({
         time: 5000,
+        iterations,
         warmup: false,
         retainSamples: true,
       })
@@ -188,9 +223,12 @@ function addBenchCase(name, baseline, current, args) {
 
 setTimeout(async () => {
   if (listOnly) {
-    // Largest fixture first, so that the slowest cases start first when the
-    // list is run in parallel.
-    listed.sort((a, b) => b.size - a.size);
+    const durations = JSON.parse(
+      readFileSync(path.join(__dirname, "simulation-durations.json"), "utf-8")
+    );
+    const duration = ({ suite, name }) =>
+      durations[`${suite} ${name}`] ?? Infinity;
+    listed.sort((a, b) => duration(b) - duration(a) || b.size - a.size);
     for (const { suite, name } of listed) console.log(`${suite} ${name}`);
     return;
   }

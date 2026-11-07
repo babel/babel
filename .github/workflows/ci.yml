@@ -739,16 +739,31 @@ jobs:
         run: node ./scripts/publint.ts
 
   codspeed:
-    name: Codspeed
+    name: Codspeed (${{ matrix.mode }})
     runs-on: ubuntu-24.04-arm
     needs: prepare-yarn-cache
     # CodSpeed does not support the merge_group event
     if: github.event_name != 'merge_group'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Valgrind runs all threads of a process on one core, so run one
+          # process per suite and fixture, as many at a time as there are
+          # cores.
+          - mode: simulation
+            parallel: "$(nproc)"
+            args: ""
+          # Cases too slow for simulation mode. Walltime measures elapsed
+          # time, so the cases run one at a time.
+          - mode: walltime
+            parallel: "1"
+            args: "--iterations=10"
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Use Node.js latest
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 26
           check-latest: true
@@ -763,18 +778,18 @@ jobs:
           STRIP_BABEL_VERSION_FLAG: "true"
           IS_PUBLISH: "true"
       # Listed outside of the CodSpeed step, which runs every process under
-      # Valgrind.
+      # Valgrind in simulation mode.
       - name: List benchmark cases
-        run: node ./benchmark/index.mjs --list | tee benchmark-cases.txt
+        run: |
+          node ./benchmark/index.mjs --list=${{ matrix.mode }} > benchmark-cases.txt
+          cat benchmark-cases.txt
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v4
         with:
-          mode: simulation
-          # Valgrind runs all threads of a process on one core, so run one
-          # process per suite and fixture, as many at a time as there are cores.
+          mode: ${{ matrix.mode }}
           run: >-
-            xargs -P "$(nproc)" -L 1 sh -c
-            'exec node --expose-gc --no-allocation-site-pretenuring "./benchmark/$0" --only-current --fixture="$1"'
+            xargs -P "${{ matrix.parallel }}" -L 1 sh -c
+            'exec node --expose-gc --no-allocation-site-pretenuring "./benchmark/$0" --only-current --fixture="$1" ${{ matrix.args }}'
             < benchmark-cases.txt
 
   required-checks:

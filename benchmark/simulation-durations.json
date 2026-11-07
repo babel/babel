@@ -1,0 +1,20 @@
+{
+  "babel-parser/real-case.mjs ts-checker.ts": 324,
+  "all/real-case-ts-mjs.mjs ts-parser.ts": 191,
+  "all/real-case-mjs-cjs.mjs ts-parser.mjs": 184,
+  "all/real-case-js-node6.mjs jquery-3.6.js": 155,
+  "babel-generator/real-case.mjs ts-checker.ts": 154,
+  "babel-traverse/real-case.mjs ts-parser.ts": 96,
+  "babel-traverse/real-case.mjs ts-parser.mjs": 83,
+  "babel-traverse/real-case.mjs jquery-3.6.js": 80,
+  "babel-parser/real-case.mjs ts-parser.ts": 79,
+  "all/real-case-ts-mjs.mjs babel-parser-express.ts": 63,
+  "babel-parser/real-case.mjs ts-parser.mjs": 62,
+  "babel-parser/real-case.mjs jquery-3.6.js": 61,
+  "babel-generator/real-case.mjs ts-parser.ts": 56,
+  "babel-generator/real-case.mjs ts-parser.mjs": 47,
+  "babel-generator/real-case.mjs jquery-3.6.js": 46,
+  "babel-traverse/real-case.mjs babel-parser-express.ts": 46,
+  "babel-parser/real-case.mjs babel-parser-express.ts": 42,
+  "babel-generator/real-case.mjs babel-parser-express.ts": 36
+}
