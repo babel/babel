@@ -766,7 +766,14 @@ jobs:
         uses: CodSpeedHQ/action@v4
         with:
           mode: simulation
-          run: node --expose-gc --no-allocation-site-pretenuring ./benchmark/index.mjs --only-current
+          run: |
+            pids=()
+            for f in babel-parser/real-case babel-traverse/real-case babel-generator/real-case \
+                     all/real-case-ts-mjs all/real-case-mjs-cjs all/real-case-js-node6; do
+              node --expose-gc --no-allocation-site-pretenuring ./benchmark/$f.mjs --only-current &
+              pids+=($!)
+            done
+            for p in "${pids[@]}"; do wait "$p"; done
 
   required-checks:
     name: Required Checks
