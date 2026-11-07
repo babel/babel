@@ -433,6 +433,16 @@ class Printer {
           this.getLastChar() === charCodes.plusSign) ||
         (strFirst === charCodes.dash &&
           this.getLastChar() === charCodes.dash) ||
+        // Hack pipe topic tokens next to operators: `^^ ^ 2` must not become
+        // `^^^2`, and `% % 2` must not become `%%2`
+        (strFirst === charCodes.caret &&
+          this.getLastChar() === charCodes.caret) ||
+        (strFirst === charCodes.percentSign &&
+          this.getLastChar() === charCodes.percentSign) ||
+        // Needs spaces to avoid changing `a < <div />` to `a<<div />`, which
+        // would be tokenized as `a << div />`.
+        (strFirst === charCodes.lessThan &&
+          this.getLastChar() === charCodes.lessThan) ||
         // Needs spaces to avoid changing '34' to '34.', which would still be a valid number.
         (strFirst === charCodes.dot &&
           this.getLastChar() === LAST_CHAR_KINDS.INTEGER)
