@@ -3,6 +3,12 @@ import { parse } from "@babel/parser";
 import generate from "@babel/generator";
 
 describe("cloneNode", function () {
+  it("should preserve comment-token aliasing", function () {
+    const cloned = t.cloneNode(parse("/*comment*/0;", { tokens: true }));
+    expect(cloned.tokens[0]).toBe(cloned.comments[0]);
+    expect(cloned.comments[0].value).toBe("comment");
+  });
+
   it("should handle undefined", function () {
     const node = undefined;
     const cloned = t.cloneNode(node);
