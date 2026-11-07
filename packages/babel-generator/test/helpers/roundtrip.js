@@ -155,8 +155,34 @@ function hasPlugin(plugins, name) {
  *
  * @param {object} [generatorOpts] Generator options forced on every fixture,
  *   overriding the fixture's own options
+ * @param {object} [options] Additional fixtures that fail only with these
+ *   generator options; fixtures whose AST changes take precedence over
+ *   fixtures whose generated code is rejected
+ * @param {string[]} [options.generatorFailures] Generator fixtures whose AST
+ *   is expected to change shape
+ * @param {string[]} [options.generatorReparseErrors] Generator fixtures whose
+ *   generated code is expected to be rejected by the parser
+ * @param {string[]} [options.parserFailures] Parser fixtures whose AST is
+ *   expected to change shape
+ * @param {string[]} [options.parserReparseErrors] Parser fixtures whose
+ *   generated code is expected to be rejected by the parser
  */
-export default function runRoundtripTests(generatorOpts = {}) {
+export default function runRoundtripTests(
+  generatorOpts = {},
+  {
+    generatorFailures = [],
+    generatorReparseErrors = [],
+    parserFailures = [],
+    parserReparseErrors = [],
+  } = {},
+) {
+  const generatorAstChanges = [...GENERATOR_FAILURES, ...generatorFailures];
+  const parserAstChanges = [...PARSER_FAILURES, ...parserFailures];
+  const parserReparseErrorList = [
+    ...PARSER_REPARSE_ERRORS,
+    ...parserReparseErrors,
+  ];
+
   describe("generator fixtures", () => {
     fixtures(GENERATOR_FIXTURES).forEach(testSuite => {
       describe(`${testSuite.title}`, () => {
@@ -179,7 +205,12 @@ export default function runRoundtripTests(generatorOpts = {}) {
               retainLines: false,
               ...generatorOpts,
             },
-            expectedResultOf(GENERATOR_FIXTURES, task, GENERATOR_FAILURES),
+            expectedResultOf(
+              GENERATOR_FIXTURES,
+              task,
+              generatorAstChanges,
+              generatorReparseErrors,
+            ),
           );
         });
       });
@@ -212,8 +243,8 @@ export default function runRoundtripTests(generatorOpts = {}) {
                 expectedResultOf(
                   PARSER_FIXTURES,
                   task,
-                  PARSER_FAILURES,
-                  PARSER_REPARSE_ERRORS,
+                  parserAstChanges,
+                  parserReparseErrorList,
                 ),
               );
             });
