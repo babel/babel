@@ -19,7 +19,7 @@ const opts = {
   targets: "node 6",
 };
 
-const fixtures = loadFixtures("js");
+const fixtures = loadFixtures(import.meta.url, "js");
 
 fixtures.forEach(({ name, content }) => {
   addBenchCase(

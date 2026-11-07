@@ -26,7 +26,7 @@ const opts = {
   },
 };
 
-const fixtures = loadFixtures("ts");
+const fixtures = loadFixtures(import.meta.url, "ts");
 
 fixtures.forEach(({ name, content }) => {
   if (name.includes("ts-checker.ts")) return;

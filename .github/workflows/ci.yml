@@ -740,7 +740,7 @@ jobs:
 
   codspeed:
     name: Codspeed
-    runs-on: codspeed-macro-arm64-graviton-ubuntu-22-04
+    runs-on: ubuntu-24.04-arm
     needs: prepare-yarn-cache
     # CodSpeed does not support the merge_group event
     if: github.event_name != 'merge_group'
@@ -762,11 +762,20 @@ jobs:
           BABEL_ENV: "production"
           STRIP_BABEL_VERSION_FLAG: "true"
           IS_PUBLISH: "true"
+      # Listed outside of the CodSpeed step, which runs every process under
+      # Valgrind.
+      - name: List benchmark cases
+        run: node ./benchmark/index.mjs --list | tee benchmark-cases.txt
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v4
         with:
-          mode: walltime
-          run: node --expose-gc --no-allocation-site-pretenuring ./benchmark/index.mjs --only-current
+          mode: simulation
+          # Valgrind runs all threads of a process on one core, so run one
+          # process per suite and fixture, as many at a time as there are cores.
+          run: >-
+            xargs -P "$(nproc)" -L 1 sh -c
+            'exec node --expose-gc --no-allocation-site-pretenuring "./benchmark/$0" --only-current --fixture="$1"'
+            < benchmark-cases.txt
 
   required-checks:
     name: Required Checks
