@@ -758,10 +758,11 @@ jobs:
             parallel: "$(nproc)"
             args: ""
           # Cases too slow for simulation mode. Walltime measures elapsed
-          # time, so the cases run one at a time.
+          # time, so the cases run one at a time. 48 samples per case make
+          # this job take about as long as the simulation one.
           - mode: walltime
             parallel: "1"
-            args: "--iterations=10"
+            args: "--iterations=48"
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
