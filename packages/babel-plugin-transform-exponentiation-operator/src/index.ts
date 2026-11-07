@@ -56,11 +56,14 @@ export default declare(api => {
         ) as typeof node.left;
 
         if (t.isMemberExpression(left)) {
-          let member1: t.Expression;
-          let member2: t.Expression;
+          const { property, computed } = left;
 
           const object = maybeMemoize(left.object, scope);
-          if (!object) {
+          const prop = computed
+            ? maybeMemoize(property, scope)
+            : { assign: property, ref: t.cloneNode(property) };
+
+          if (!object || !prop) {
             // We need to inject a temp var, but we are in function parameters
             // and thus cannot. Wrap the expression in an IIFE. It will be
             // eventually requeued and transformed.
@@ -68,23 +71,15 @@ export default declare(api => {
             return;
           }
 
-          const { property, computed } = left;
-
-          if (computed) {
-            const prop = maybeMemoize(property, scope)!;
-            member1 = t.memberExpression(object.assign, prop.assign, true);
-            member2 = t.memberExpression(object.ref, prop.ref, true);
-          } else {
-            member1 = t.memberExpression(object.assign, property, false);
-            member2 = t.memberExpression(
-              object.ref,
-              t.cloneNode(property),
-              false,
-            );
-          }
-
           path.replaceWith(
-            t.assignmentExpression("=", member1, build(member2, node.right)),
+            t.assignmentExpression(
+              "=",
+              t.memberExpression(object.assign, prop.assign, computed),
+              build(
+                t.memberExpression(object.ref, prop.ref, computed),
+                node.right,
+              ),
+            ),
           );
         } else {
           path.replaceWith(
