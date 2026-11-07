@@ -202,8 +202,11 @@ export function Import(this: Printer) {
 
 export function AwaitExpression(this: Printer, node: t.AwaitExpression) {
   this.word("await");
-  this.space();
-  this.print(node.argument);
+  // The argument is missing in F# pipelines: `x |> await`
+  if (node.argument) {
+    this.space();
+    this.print(node.argument);
+  }
 }
 
 export function YieldExpression(this: Printer, node: t.YieldExpression) {

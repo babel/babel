@@ -77,6 +77,50 @@ export const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
   return false;
 };
 
+/**
+ * Whether `node` is an optional chain, possibly wrapped in TS non-null
+ * assertions or instantiation expressions: `a?.b`, `a?.b!`, `a?.b<T>`.
+ * Without parentheses, a postfix part after it would continue the chain.
+ */
+export function isOptionalChainOrTSWrapped(node: t.Node): boolean {
+  let current: t.Node = node;
+  while (true) {
+    switch (current.type) {
+      case "OptionalCallExpression":
+      case "OptionalMemberExpression":
+        return true;
+      case "TSInstantiationExpression":
+      case "TSNonNullExpression":
+        current = current.expression;
+        break;
+      default:
+        return false;
+    }
+  }
+}
+
+// `(a?.b!).c` and `(a?.b!)()` must keep the parentheses, otherwise the
+// postfix part becomes part of the optional chain.
+function breaksOptionalChain(
+  node: t.TSNonNullExpression | t.TSInstantiationExpression,
+  parent: any,
+  parentId: number,
+): boolean {
+  return (
+    ((parentId === __node("MemberExpression") && parent.object === node) ||
+      (parentId === __node("CallExpression") && parent.callee === node)) &&
+    isOptionalChainOrTSWrapped(node.expression)
+  );
+}
+
+export function TSNonNullExpression(
+  node: t.TSNonNullExpression,
+  parent: any,
+  parentId: number,
+): boolean {
+  return breaksOptionalChain(node, parent, parentId);
+}
+
 export function NullableTypeAnnotation(
   node: t.NullableTypeAnnotation,
   parent: any,
@@ -299,18 +343,24 @@ export function TSUnionType(
       return true;
     case __node("TSIndexedAccessType"):
       return parent.objectType === node;
+    case __node("TSUnionType"):
+      // A single-member union is printed with its leading `|`, which would
+      // merge with the parent: `A | (| B)` must not become `A | | B`
+      return node.type === "TSUnionType" && node.types.length === 1;
   }
   return false;
 }
 
 export function TSIntersectionType(
-  node: t.TSUnionType,
+  node: t.TSIntersectionType,
   parent: any,
   parentId: number,
 ): boolean {
   return (
     parentId === __node("TSTypeOperator") ||
-    TSTypeOperator(node, parent, parentId)
+    TSTypeOperator(node, parent, parentId) ||
+    // `A & (& B)` must not become `A & & B`
+    (parentId === __node("TSIntersectionType") && node.types.length === 1)
   );
 }
 
@@ -333,7 +383,7 @@ export function TSInferType(
 }
 
 export function TSTypeOperator(
-  node: t.TSTypeOperator | t.TSUnionType | t.TSInferType,
+  node: t.TSTypeOperator | t.TSUnionType | t.TSIntersectionType | t.TSInferType,
   parent: any,
   parentId: number,
 ): boolean {
@@ -354,6 +404,7 @@ export function TSInstantiationExpression(
   parent: any,
   parentId: number,
 ) {
+  if (breaksOptionalChain(node, parent, parentId)) return true;
   switch (parentId) {
     case __node("CallExpression"):
     case __node("OptionalCallExpression"):
@@ -444,7 +495,7 @@ export function SequenceExpression(
 }
 
 export function YieldExpression(
-  node: t.YieldExpression,
+  node: t.YieldExpression | t.AwaitExpression,
   parent: any,
   parentId: number,
 ): boolean {
@@ -461,7 +512,16 @@ export function YieldExpression(
   );
 }
 
-export { YieldExpression as AwaitExpression };
+export function AwaitExpression(
+  node: t.AwaitExpression,
+  parent: any,
+  parentId: number,
+): boolean {
+  // The argument-less `await` of F# pipelines (`x |> await`) is only valid
+  // as the pipeline body, and cannot be parenthesized
+  if (!node.argument) return false;
+  return YieldExpression(node, parent, parentId);
+}
 
 export function ClassExpression(
   node: t.ClassExpression,
@@ -495,7 +555,21 @@ function UnaryLike(
   );
 }
 
-export { UnaryLike as UnaryExpression, UnaryLike as SpreadElement };
+export function UnaryExpression(
+  node: t.UnaryExpression,
+  parent: any,
+  parentId: number,
+  tokenContext: number,
+): boolean {
+  return (
+    // `(throw a);` is not a throw statement
+    (node.operator === "throw" &&
+      (tokenContext & TokenContext.expressionStatement) > 0) ||
+    UnaryLike(node, parent, parentId)
+  );
+}
+
+export { UnaryLike as SpreadElement };
 
 export function FunctionExpression(
   node: t.FunctionExpression,
@@ -538,7 +612,20 @@ export function ConditionalExpression(
   return UnaryLike(node, parent, parentId);
 }
 
-export { ConditionalExpression as ArrowFunctionExpression };
+export function ArrowFunctionExpression(
+  node: t.ArrowFunctionExpression,
+  parent: any,
+  parentId: number,
+): boolean {
+  return (
+    // `a ? (b): c => d : e`: without parentheses, `: c` would be parsed as
+    // the alternate of the conditional expression
+    (parentId === __node("ConditionalExpression") &&
+      parent.consequent === node &&
+      node.returnType != null) ||
+    ConditionalExpression(node, parent, parentId)
+  );
+}
 
 export function OptionalMemberExpression(
   node: t.OptionalMemberExpression,
@@ -580,6 +667,12 @@ export function Identifier(
 ): boolean {
   if (getRawIdentifier && getRawIdentifier(node) !== node.name) {
     return false;
+  }
+
+  // With the `exportDefaultFrom` proposal, `export default from;` is
+  // ambiguous with `export default from "mod";`, so it is a syntax error
+  if (parentId === __node("ExportDefaultDeclaration") && node.name === "from") {
+    return true;
   }
 
   // 13.15.2 AssignmentExpression RS: Evaluation

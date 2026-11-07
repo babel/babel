@@ -18,4 +18,4 @@ new (super()!`foo`)();
 
 // The following outer parentheses can be removed
 new f![g()]();
-new (f?.g!.h)();
+new (f?.g!).h();
