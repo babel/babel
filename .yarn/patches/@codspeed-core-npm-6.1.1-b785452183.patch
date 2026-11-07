@@ -1,0 +1,80 @@
+diff --git a/dist/index.cjs.js b/dist/index.cjs.js
+index 77b0627bb5e47f1a0d950606c8e7581468ab55df..2479a1cc45a5370a424b047c2c07187b1d6856ad 100644
+--- a/dist/index.cjs.js
++++ b/dist/index.cjs.js
+@@ -25540,25 +25540,19 @@ function warnOnUnsupportedNodeVersion() {
+ }
+ 
+ const optimizeFunction = async (fn) => {
+-  eval("%PrepareFunctionForOptimization(fn)");
+-  await fn();
+-  await fn();
+-  await fn();
+-  await fn();
+-  await fn();
+-  await fn();
+-  eval("%OptimizeFunctionOnNextCall(fn)");
++  // Patched by Babel: in simulation mode @codspeed/core passes --no-opt and
++  // --no-maglev, so %OptimizeFunctionOnNextCall is a no-op, and
++  // --always-sparkplug compiles each function on its first call. A single
++  // warmup call compiles the code and fills the inline caches. Upstream makes
++  // 7 warmup calls, so each task ran 8 times instead of 2 under Valgrind.
+   await fn();
+ };
+ const optimizeFunctionSync = (fn) => {
+-  eval("%PrepareFunctionForOptimization(fn)");
+-  fn();
+-  fn();
+-  fn();
+-  fn();
+-  fn();
+-  fn();
+-  eval("%OptimizeFunctionOnNextCall(fn)");
++  // Patched by Babel: in simulation mode @codspeed/core passes --no-opt and
++  // --no-maglev, so %OptimizeFunctionOnNextCall is a no-op, and
++  // --always-sparkplug compiles each function on its first call. A single
++  // warmup call compiles the code and fills the inline caches. Upstream makes
++  // 7 warmup calls, so each task ran 8 times instead of 2 under Valgrind.
+   fn();
+ };
+ 
+diff --git a/dist/index.es5.js b/dist/index.es5.js
+index f2f31d70a167c693a2bbbe20dff443c8bd3407ea..9546e4db9ad9144bd0a7fc4759a114363aaa4e85 100644
+--- a/dist/index.es5.js
++++ b/dist/index.es5.js
+@@ -25538,25 +25538,19 @@ function warnOnUnsupportedNodeVersion() {
+ }
+ 
+ const optimizeFunction = async (fn) => {
+-  eval("%PrepareFunctionForOptimization(fn)");
+-  await fn();
+-  await fn();
+-  await fn();
+-  await fn();
+-  await fn();
+-  await fn();
+-  eval("%OptimizeFunctionOnNextCall(fn)");
++  // Patched by Babel: in simulation mode @codspeed/core passes --no-opt and
++  // --no-maglev, so %OptimizeFunctionOnNextCall is a no-op, and
++  // --always-sparkplug compiles each function on its first call. A single
++  // warmup call compiles the code and fills the inline caches. Upstream makes
++  // 7 warmup calls, so each task ran 8 times instead of 2 under Valgrind.
+   await fn();
+ };
+ const optimizeFunctionSync = (fn) => {
+-  eval("%PrepareFunctionForOptimization(fn)");
+-  fn();
+-  fn();
+-  fn();
+-  fn();
+-  fn();
+-  fn();
+-  eval("%OptimizeFunctionOnNextCall(fn)");
++  // Patched by Babel: in simulation mode @codspeed/core passes --no-opt and
++  // --no-maglev, so %OptimizeFunctionOnNextCall is a no-op, and
++  // --always-sparkplug compiles each function on its first call. A single
++  // warmup call compiles the code and fills the inline caches. Upstream makes
++  // 7 warmup calls, so each task ran 8 times instead of 2 under Valgrind.
+   fn();
+ };
+ 

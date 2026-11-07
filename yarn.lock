@@ -4135,7 +4135,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codspeed/core@npm:^6.1.1":
+"@codspeed/core@npm:6.1.1":
   version: 6.1.1
   resolution: "@codspeed/core@npm:6.1.1"
   dependencies:
@@ -4144,6 +4144,18 @@ __metadata:
     node-gyp-build: "npm:^4.6.0"
     stack-trace: "npm:1.0.0-pre2"
   checksum: 10/db568ca35d397004d840f34d607747d9c54d9b89f6d9b246c550dae59030c5aa315df41c7a8fc44fbeb36ad7bd084b8301e0df52c3a892a97d80ee1f50984a5e
+  languageName: node
+  linkType: hard
+
+"@codspeed/core@patch:@codspeed/core@npm%3A6.1.1#~/.yarn/patches/@codspeed-core-npm-6.1.1-b785452183.patch":
+  version: 6.1.1
+  resolution: "@codspeed/core@patch:@codspeed/core@npm%3A6.1.1#~/.yarn/patches/@codspeed-core-npm-6.1.1-b785452183.patch::version=6.1.1&hash=db8ebd"
+  dependencies:
+    axios: "npm:^1.21.0"
+    form-data: "npm:^4.0.6"
+    node-gyp-build: "npm:^4.6.0"
+    stack-trace: "npm:1.0.0-pre2"
+  checksum: 10/dc0ed2ed66e48ddcf5daddce41913ec298cbc65296b76277274f462bcbde1ae03e489258998b5e55b26362e52cf59480b13c7e59badc1fe11fe64a04dc6f0bc4
   languageName: node
   linkType: hard
 
