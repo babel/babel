@@ -183,6 +183,7 @@ export default class Renamer {
 
     scope.removeOwnBinding(oldName);
     scope.bindings[newName] = binding;
+    scope.getProgramParent().referencesSet.add(newName);
     this.binding.identifier.name = newName;
 
     if (parentDeclar) {
