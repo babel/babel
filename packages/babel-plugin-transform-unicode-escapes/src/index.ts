@@ -74,7 +74,24 @@ export default declare(api => {
 
         const binding = scope.getBinding(name);
         if (binding) {
-          scope.rename(name, scope.generateUid(replaced));
+          const newName = scope.generateUid(replaced);
+          const statement = binding.path.find(p => p.isStatement());
+          if (statement?.parentPath.isExportDeclaration()) {
+            scope.rename(name, newName);
+            return;
+          }
+          binding.identifier.name = newName;
+          for (const ref of binding.referencePaths) {
+            (ref.node as t.Identifier).name = newName;
+          }
+          for (const violation of binding.constantViolations) {
+            const ids = violation.isAssignmentExpression()
+              ? t.getAssignmentIdentifiers(violation.node)
+              : violation.getOuterBindingIdentifiers();
+            if (ids[name]) ids[name].name = newName;
+          }
+          binding.scope.removeOwnBinding(name);
+          binding.scope.bindings[newName] = binding;
           return;
         }
 
