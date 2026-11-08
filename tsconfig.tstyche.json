@@ -4,8 +4,7 @@
     "./tsconfig.paths.json"
   ],
   "compilerOptions": {
-    "skipLibCheck": false,
-    "strict": true
+    "skipLibCheck": false
   },
   "include": [
     "packages/*/test/*.tst.ts"
