@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { types as t, type NodePath } from "@babel/core";
+import { types as t, type NodePath, type Scope } from "@babel/core";
 
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
@@ -36,6 +36,46 @@ export default declare(api => {
     return null;
   }
 
+  function replaceSurrogates(name: string) {
+    return name.replace(surrogate, c => {
+      return `_u${c.charCodeAt(0).toString(16)}`;
+    });
+  }
+
+  function renameBindings(scope: Scope) {
+    for (const name of Object.keys(scope.bindings)) {
+      const replaced = replaceSurrogates(name);
+      if (name === replaced) continue;
+
+      const binding = scope.bindings[name];
+      const statement = binding.path.find(p => p.isStatement());
+      if (
+        binding.kind === "module" ||
+        statement?.parentPath.isExportDeclaration()
+      ) {
+        continue;
+      }
+
+      // A class name is also bound inside the class, using the same node
+      const newName =
+        binding.identifier.name === name
+          ? scope.generateUid(replaced)
+          : binding.identifier.name;
+      binding.identifier.name = newName;
+      for (const ref of binding.referencePaths) {
+        (ref.node as t.Identifier).name = newName;
+      }
+      for (const violation of binding.constantViolations) {
+        const ids = violation.isAssignmentExpression()
+          ? t.getAssignmentIdentifiers(violation.node)
+          : violation.getOuterBindingIdentifiers();
+        if (ids[name]) ids[name].name = newName;
+      }
+      scope.removeOwnBinding(name);
+      scope.bindings[newName] = binding;
+    }
+  }
+
   return {
     name: "transform-unicode-escapes",
     manipulateOptions({ generatorOpts }) {
@@ -47,12 +87,22 @@ export default declare(api => {
       generatorOpts.jsescOption.minimal ??= false;
     },
     visitor: api.traverse.explode({
+      Program(path) {
+        const names = [...path.scope.getProgramParent().referencesSet];
+        if (names.every(name => replaceSurrogates(name) === name)) return;
+
+        renameBindings(path.scope);
+        path.traverse({
+          Scope(path) {
+            renameBindings(path.scope);
+          },
+        });
+      },
+
       Identifier(path) {
         const { node, key } = path;
         const { name } = node;
-        const replaced = name.replace(surrogate, c => {
-          return `_u${c.charCodeAt(0).toString(16)}`;
-        });
+        const replaced = replaceSurrogates(name);
         if (name === replaced) return;
 
         const str = t.inherits(t.stringLiteral(name), node);
@@ -74,24 +124,7 @@ export default declare(api => {
 
         const binding = scope.getBinding(name);
         if (binding) {
-          const newName = scope.generateUid(replaced);
-          const statement = binding.path.find(p => p.isStatement());
-          if (statement?.parentPath.isExportDeclaration()) {
-            scope.rename(name, newName);
-            return;
-          }
-          binding.identifier.name = newName;
-          for (const ref of binding.referencePaths) {
-            (ref.node as t.Identifier).name = newName;
-          }
-          for (const violation of binding.constantViolations) {
-            const ids = violation.isAssignmentExpression()
-              ? t.getAssignmentIdentifiers(violation.node)
-              : violation.getOuterBindingIdentifiers();
-            if (ids[name]) ids[name].name = newName;
-          }
-          binding.scope.removeOwnBinding(name);
-          binding.scope.bindings[newName] = binding;
+          scope.rename(name, scope.generateUid(replaced));
           return;
         }
 
