@@ -35,6 +35,10 @@ startLocalRegistry "$root"/verdaccio-config.yml
 yarn install --no-immutable
 yarn info
 
+# https://github.com/babel/babel/pull/18546 added `declare` to ClassPrivateProperty,
+# so this `@ts-expect-error` is now unused
+perl -0pi -e 's#[ \t]*// \@ts-expect-error -- Safe\n([ \t]*!nextNode\.declare)#$1#' src/language-js/print/class-body.js
+
 # Test typings for @babel/parser
 yarn lint:typecheck
 
