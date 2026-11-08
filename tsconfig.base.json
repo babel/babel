@@ -25,7 +25,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "strictFunctionTypes": true,
-    "useUnknownInCatchVariables": false,
+    "useUnknownInCatchVariables": true,
     "incremental": true,
     "stripInternal": true
   },

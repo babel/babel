@@ -1,5 +1,5 @@
 import type { Handler } from "gensync";
-import { parse, type ParseResult } from "@babel/parser";
+import { parse, type ParseError, type ParseResult } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
 import generateMissingPluginMessage from "./util/missing-plugin-helper.ts";
 import type { PluginPasses } from "../config/index.ts";
@@ -43,8 +43,11 @@ export default function* parser(
     // TODO: Add an error code
     throw new Error("More than one plugin attempted to override parsing.");
   } catch (err) {
-    if (err.code === "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED") {
-      err.message +=
+    if (
+      (err as NodeJS.ErrnoException).code ===
+      "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED"
+    ) {
+      (err as Error).message +=
         "\nConsider renaming the file to '.mjs', or setting sourceType:module " +
         "or sourceType:unambiguous in your Babel config for this file.";
       // err.code will be changed to BABEL_PARSE_ERROR later.
@@ -57,7 +60,7 @@ export default function* parser(
       code = " ".repeat(startColumn) + code;
     }
 
-    const { loc, missingPlugin } = err;
+    const { loc, missingPlugin } = err as Partial<ParseError>;
     if (loc) {
       const codeFrame = codeFrameColumns(
         code,
@@ -73,7 +76,7 @@ export default function* parser(
         },
       );
       if (missingPlugin) {
-        err.message =
+        (err as Error).message =
           `${filename}: ` +
           generateMissingPluginMessage(
             missingPlugin[0],
@@ -82,9 +85,10 @@ export default function* parser(
             filename,
           );
       } else {
-        err.message = `${filename}: ${err.message}\n\n` + codeFrame;
+        (err as Error).message =
+          `${filename}: ${(err as Error).message}\n\n` + codeFrame;
       }
-      err.code = "BABEL_PARSE_ERROR";
+      (err as NodeJS.ErrnoException).code = "BABEL_PARSE_ERROR";
     }
     throw err;
   }

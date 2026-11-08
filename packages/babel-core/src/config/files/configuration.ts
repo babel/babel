@@ -165,7 +165,7 @@ const readConfigJSON5 = makeStaticFileCache((filepath, content): ConfigFile => {
     options = json5.parse(content);
   } catch (err) {
     throw new ConfigError(
-      `Error while parsing config - ${err.message}`,
+      `Error while parsing config - ${(err as Error).message}`,
       filepath,
     );
   }

@@ -66,7 +66,7 @@ export default function parse(code: string, options: Options) {
         getVisitorKeys(),
       );
     } catch (err) {
-      throw convertError(err);
+      throw convertError(err as Error);
     }
   }
 
@@ -82,6 +82,6 @@ export default function parse(code: string, options: Options) {
       getVisitorKeys(),
     );
   } catch (err) {
-    throw convertError(err);
+    throw convertError(err as Error);
   }
 }

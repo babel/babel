@@ -35,7 +35,8 @@ export default async function maybeParse(
       ast: null,
     };
   } catch (err) {
-    if (!MULTIPLE_OVERRIDES.test(err.message)) {
+    // eslint-disable-next-line @typescript-eslint/prefer-includes -- keep runtime unchanged
+    if (!MULTIPLE_OVERRIDES.test((err as Error).message)) {
       throw err;
     }
   }
@@ -46,7 +47,7 @@ export default async function maybeParse(
   try {
     ast = await parseAsync(code, options);
   } catch (err) {
-    throw convertError(err);
+    throw convertError(err as Error);
   }
 
   return {

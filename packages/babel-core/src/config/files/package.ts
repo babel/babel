@@ -15,7 +15,7 @@ const readConfigPackage = makeStaticFileCache(
       options = JSON.parse(content) as unknown;
     } catch (err) {
       throw new ConfigError(
-        `Error while parsing JSON - ${err.message}`,
+        `Error while parsing JSON - ${(err as Error).message}`,
         filepath,
       );
     }

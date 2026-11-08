@@ -86,7 +86,8 @@ function standardizeName(type: "plugin" | "preset", name: string) {
   );
 }
 
-type Result<T> = { error: Error; value: null } | { error: null; value: T };
+type Result<T> =
+  { error: NodeJS.ErrnoException; value: null } | { error: null; value: T };
 
 function* resolveAlternativesHelper(
   type: "plugin" | "preset",
@@ -96,7 +97,6 @@ function* resolveAlternativesHelper(
   const { error, value } = yield standardizedName;
   if (!error) return value;
 
-  // @ts-expect-error code may not index error
   if (error.code !== "MODULE_NOT_FOUND") throw error;
 
   if (standardizedName !== name && !(yield name).error) {
@@ -142,7 +142,7 @@ function tryRequireResolve(
       return { error: null, value: require.resolve(id) };
     }
   } catch (error) {
-    return { error, value: null };
+    return { error, value: null } as Result<string>;
   }
 }
 
@@ -153,7 +153,7 @@ function tryImportMetaResolve(
   try {
     return { error: null, value: importMetaResolve(id, options) };
   } catch (error) {
-    return { error, value: null };
+    return { error, value: null } as Result<string>;
   }
 }
 
@@ -210,8 +210,8 @@ function resolveStandardizedName(
     try {
       return resolveStandardizedNameForRequire(type, name, dirname);
     } catch (e2) {
-      if (e.type === "MODULE_NOT_FOUND") throw e;
-      if (e2.type === "MODULE_NOT_FOUND") throw e2;
+      if ((e as { type?: string }).type === "MODULE_NOT_FOUND") throw e;
+      if ((e2 as { type?: string }).type === "MODULE_NOT_FOUND") throw e2;
       throw e;
     }
   }
@@ -233,7 +233,8 @@ function* requireModule(
         "which is only supported when running Babel asynchronously.",
     );
   } catch (err) {
-    err.message = `[BABEL]: ${err.message} (While processing: ${name})`;
+    (err as Error).message =
+      `[BABEL]: ${(err as Error).message} (While processing: ${name})`;
     throw err;
   }
 }

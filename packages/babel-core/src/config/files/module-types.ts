@@ -94,7 +94,7 @@ export default function* loadCodeDefault(
       try {
         return loadCjsDefault(filepath);
       } catch (e) {
-        if (e.code === "ERR_REQUIRE_ASYNC_MODULE") {
+        if ((e as NodeJS.ErrnoException).code === "ERR_REQUIRE_ASYNC_MODULE") {
           if (!(async ??= yield* isAsync())) {
             throw new ConfigError(tlaError, filepath);
           }

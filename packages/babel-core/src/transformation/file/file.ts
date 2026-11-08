@@ -95,7 +95,8 @@ export default class File {
     try {
       minVersion = helpers.minVersion(name);
     } catch (err) {
-      if (err.code !== "BABEL_HELPER_UNKNOWN") throw err;
+      if ((err as NodeJS.ErrnoException).code !== "BABEL_HELPER_UNKNOWN")
+        throw err;
 
       return false;
     }

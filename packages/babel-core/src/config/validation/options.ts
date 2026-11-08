@@ -373,8 +373,9 @@ export function validate(
       opts,
     );
   } catch (error) {
-    const configError = new ConfigError(error.message, filename);
-    if (error.code) configError.code = error.code;
+    const configError = new ConfigError((error as Error).message, filename);
+    if ((error as NodeJS.ErrnoException).code)
+      configError.code = (error as NodeJS.ErrnoException).code!;
     throw configError;
   }
 }
