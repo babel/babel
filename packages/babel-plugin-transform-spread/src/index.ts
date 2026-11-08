@@ -104,6 +104,20 @@ export default declare((api, options: Options) => {
 
     push(_props, nodes);
 
+    if (!iterableIsArray) {
+      let restIsPure = true;
+      for (let i = nodes.length - 1; i >= 0; i--) {
+        const node = nodes[i];
+        if (!restIsPure && t.isIdentifier(node)) {
+          nodes[i] = t.callExpression(
+            scope.path.hub.addHelper("toConsumableArray"),
+            [node],
+          );
+        }
+        restIsPure &&= scope.isPure(node);
+      }
+    }
+
     return nodes;
   }
 
