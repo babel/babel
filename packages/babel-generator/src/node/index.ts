@@ -108,6 +108,16 @@ export function parentNeedsParens(
         return templateTagNeedsParens(node);
       }
       break;
+    case __node("CallExpression"):
+      if (parent.callee === node) {
+        return templateTagNeedsParens(node);
+      }
+      break;
+    case __node("MemberExpression"):
+      if (parent.object === node) {
+        return templateTagNeedsParens(node);
+      }
+      break;
     case __node("Decorator"):
       return (
         !isDecoratorMemberExpression(node) &&
