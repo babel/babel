@@ -440,7 +440,7 @@ describe("evaluation", function () {
   describe("var whose initializer may not have run", function () {
     function evaluateX(code) {
       let result;
-      traverse(parse(code, { sourceType: "module" }), {
+      traverse(parse(code, { sourceType: "module", plugins: ["typescript"] }), {
         ReferencedIdentifier(path) {
           if (path.node.name === "x") result = path.evaluate();
         },
@@ -513,6 +513,7 @@ describe("evaluation", function () {
         "function f() { { { var x = 1; } } return x; }",
       ],
       ["declared in a static block", "class A { static { var x = 1; x; } }"],
+      ["declared in a TS namespace", "namespace N { var x = 1; x; }"],
       ["read in a later declarator", "var x = 1, y = x;"],
     ])("evaluates when %s", function (_, code) {
       expect(evaluateX(code)).toMatchObject({ confident: true, value: 1 });
