@@ -17,26 +17,27 @@ export default declare(api => {
     toPath,
     where = "trailing",
     optional = false,
-    comments = generateComment(ofPath, optional),
+    comments = generateComment(ofPath as NodePath, optional),
     keepType = false,
   }: {
-    ofPath?: NodePath;
-    toPath?: NodePath;
+    ofPath?: NodePath<t.Node | null>;
+    toPath?: NodePath<t.Node | null>;
     where?: t.CommentTypeShorthand;
     optional?: boolean;
     comments?: string | t.Comment | (string | t.Comment)[];
     keepType?: boolean;
   }) {
+    // `ofPath` must be passed when `toPath` may not have a node.
     if (!toPath?.node) {
-      toPath = ofPath.getPrevSibling();
+      toPath = ofPath!.getPrevSibling();
       where = "trailing";
     }
     if (!toPath.node) {
-      toPath = ofPath.getNextSibling();
+      toPath = ofPath!.getNextSibling();
       where = "leading";
     }
     if (!toPath.node) {
-      toPath = ofPath.parentPath;
+      toPath = ofPath!.parentPath!;
       where = "inner";
     }
     if (!Array.isArray(comments)) {
@@ -94,7 +95,7 @@ export default declare(api => {
     return comment;
   }
 
-  function isTypeImport(importKind: "type" | "typeof" | "value") {
+  function isTypeImport(importKind?: "type" | "typeof" | "value" | null) {
     return importKind === "type" || importKind === "typeof";
   }
 
@@ -273,7 +274,7 @@ export default declare(api => {
             if (node.id) {
               attachComment({
                 toPath: path.get("id"),
-                comments: comments,
+                comments: comments as (string | t.Comment)[],
               });
             } else {
               // Anonymous classes have no id, attach the comments to the class such
@@ -281,7 +282,7 @@ export default declare(api => {
               attachComment({
                 toPath: path,
                 where: "inner",
-                comments: comments,
+                comments: comments as (string | t.Comment)[],
               });
             }
             comments = [];
@@ -322,7 +323,7 @@ export default declare(api => {
           attachComment({
             toPath: path.get("body"),
             where: "leading",
-            comments: comments,
+            comments: comments as (string | t.Comment)[],
           });
         }
       },
