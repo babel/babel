@@ -182,12 +182,11 @@ export default function /* @no-mangle */ _regenerator() {
         if (!delegateIterator) {
           if (!method /* Next */) {
             ctx.v = arg;
-          } else if (method < 3 /* Throw | Return */) {
-            if (method > 1 /* Return */) ctx.n = ContextNext.End;
-            Context_dispatchExceptionOrFinishOrAbrupt(method, arg);
           } else {
-            /* Jump */
-            ctx.n = arg;
+            if (method > 1 /* Return | Jump */) {
+              ctx.n = method < 3 /* Return */ ? ContextNext.End : arg;
+            }
+            Context_dispatchExceptionOrFinishOrAbrupt(method, arg);
           }
         }
         try {
