@@ -232,6 +232,15 @@ export default declare(({ types: t, template, traverse, assertVersion }) => {
                 staticBlockClosureCall,
               ]),
             );
+            // The class path now points to the sequence expression, so the
+            // ancestors of the class body paths are stale: other plugins
+            // visiting the class members would not find the class (e.g. the
+            // arrow functions transform would not see that the constructor
+            // belongs to a derived class). The sequence expression has been
+            // requeued, so skip the class body here and let the class be
+            // visited later under its new path.
+            // Workaround for https://github.com/babel/babel/issues/18558
+            classBody.skip();
           } else {
             classBody.parentPath.insertAfter(
               t.expressionStatement(staticBlockClosureCall),
