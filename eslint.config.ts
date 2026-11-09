@@ -90,7 +90,6 @@ export default defineConfig([
       "dot-notation": "error",
       eqeqeq: ["error", "smart"],
       "linebreak-style": ["error", "unix"],
-      "no-case-declarations": "error",
       "no-confusing-arrow": "error",
       "no-empty": ["error", { allowEmptyCatch: true }],
       "no-useless-computed-key": "error",
@@ -214,13 +213,11 @@ export default defineConfig([
         "error",
         { requireNullish: true },
       ],
-      "@typescript-eslint/require-await": "error",
 
       // Todo: Investigate, for each of these, whether we want them
       "@typescript-eslint/consistent-type-definitions": "off",
       "@typescript-eslint/no-duplicate-type-constituents": "off",
       "@typescript-eslint/no-empty-function": "off",
-      "@typescript-eslint/no-empty-interface": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-this-alias": "off",
       "@typescript-eslint/no-unsafe-assignment": "off",
@@ -324,8 +321,6 @@ export default defineConfig([
           ].flatMap(testFnName => [testFnName, testFnName + ".each"]),
         },
       ],
-      "jest/no-test-callback": "off",
-      "jest/valid-describe": "off",
       "import/extensions": ["error", "always"],
       "no-restricted-imports": ["error", { patterns: ["**/src/**"] }],
     },
@@ -375,7 +370,6 @@ export default defineConfig([
     files: ["packages/babel-helpers/src/helpers/**.{js,ts}"],
     rules: {
       "no-var": "off",
-      "comma-dangle": "off",
       "no-func-assign": "off",
       "prefer-spread": "off",
       "import/no-unresolved": "off",
@@ -388,12 +382,6 @@ export default defineConfig([
     files: ["packages/babel-parser/typings/babel-parser.d.ts"],
     linterOptions: {
       reportUnusedDisableDirectives: "off",
-    },
-  },
-  {
-    files: ["Makefile.source.mjs"],
-    rules: {
-      "dot-notation": "off",
     },
   },
   {
