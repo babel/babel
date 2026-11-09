@@ -93,6 +93,63 @@ const Globals = new Map([
 ]);
 
 /**
+ * Whether the `var` declaration at `declaration` has always run by the time
+ * `reference` (which comes after it in the source) runs.
+ *
+ * Walks up from the declaration to the closest node that also contains the
+ * reference. Every step on the way must run its child unconditionally, in
+ * order: a statement in a block, a declarator in a declaration, or the `init`
+ * of a `for` statement. Anything else (`if`, loop bodies, `switch` cases,
+ * `try`, labeled statements, ...) may skip the declaration.
+ *
+ * Function boundaries need no special handling: a reference in a nested
+ * function only counts as safe if the function itself sits after the
+ * declaration in a block that is guaranteed to have run it.
+ */
+function isVarDeclarationReachedBefore(
+  declaration: NodePath,
+  reference: NodePath,
+): boolean {
+  // Ancestors that run the declaration unconditionally and in order. This is a
+  // contiguous chain starting from the declaration, usually just the
+  // declaration statement and the enclosing function body.
+  const sequentialAncestors = new Set<t.Node>();
+  for (
+    let child = declaration, parent = child.parentPath;
+    parent != null && isSequentialStep(child, parent);
+    child = parent, parent = child.parentPath
+  ) {
+    sequentialAncestors.add(parent.node);
+  }
+
+  // The first ancestor of the reference found in the chain is the closest
+  // common ancestor. If that one is not in the chain, no higher one is.
+  for (let p = reference.parentPath; p; p = p.parentPath) {
+    if (sequentialAncestors.has(p.node)) return true;
+  }
+  return false;
+}
+
+function isSequentialStep(child: NodePath, parent: NodePath): boolean {
+  const { listKey, key } = child;
+  return (
+    (listKey === "declarations" && parent.isVariableDeclaration()) ||
+    (listKey === "body" &&
+      (parent.isBlockStatement() ||
+        parent.isProgram() ||
+        parent.isStaticBlock() ||
+        parent.isTSModuleBlock())) ||
+    (listKey === "consequent" && parent.isSwitchCase()) ||
+    (key === "init" && parent.isForStatement()) ||
+    (key === "declaration" && parent.isExportNamedDeclaration()) ||
+    // `break` cannot target a label from inside a variable declaration
+    (key === "body" &&
+      parent.isLabeledStatement() &&
+      child.isVariableDeclaration())
+  );
+}
+
+/**
  * We wrap the _evaluate method so we can track `seen` nodes, we push an item
  * to the map before we actually evaluate it so we can deopt on self recursive
  * nodes such as:
@@ -237,22 +294,12 @@ function _evaluate(path: NodePath, state: State): any {
         deopt(binding.path, state);
         return;
       }
-      const bindingPathScope = binding.path.scope;
-      if (binding.kind === "var" && bindingPathScope !== binding.scope) {
-        let hasUnsafeBlock =
-          !bindingPathScope.path.parentPath.isBlockStatement();
-        for (let scope = bindingPathScope.parent; scope; scope = scope.parent) {
-          if (scope === path.scope) {
-            if (hasUnsafeBlock) {
-              deopt(binding.path, state);
-              return;
-            }
-            break;
-          }
-          if (scope.path.parentPath?.isBlockStatement()) {
-            hasUnsafeBlock = true;
-          }
-        }
+      if (
+        binding.kind === "var" &&
+        !isVarDeclarationReachedBefore(binding.path, path)
+      ) {
+        deopt(binding.path, state);
+        return;
       }
       if (binding.hasValue) {
         return binding.value;
