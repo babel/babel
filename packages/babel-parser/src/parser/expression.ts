@@ -463,7 +463,6 @@ export default abstract class ExpressionParser extends LValParser {
     if (this.shouldExitDescending(expr)) {
       return expr;
     }
-    this.state.canStartArrow = false;
 
     return this.parseExprOp(expr, startLoc, -1);
   }
@@ -617,6 +616,7 @@ export default abstract class ExpressionParser extends LValParser {
     prec: number,
   ): N.Expression {
     const startLoc = this.state.startLoc;
+    this.state.canStartArrow = false;
 
     return this.parseExprOp(
       this.parseMaybeUnaryOrPrivate(),
