@@ -621,10 +621,32 @@ function standardizeSuperProperty(
 }
 
 function hasSuperClass(thisEnvFn: NodePath<t.Function>) {
-  return (
-    thisEnvFn.isClassMethod() &&
-    !!thisEnvFn.parentPath.parentPath.node.superClass
-  );
+  if (!thisEnvFn.isClassMethod()) return false;
+
+  // Usually the class is the method's grandparent:
+  // ClassMethod -> ClassBody -> Class.
+  // However, some transforms replace the class expression with a wrapper
+  // expression — for example, @babel/plugin-transform-class-static-block
+  // replaces a class expression with a SequenceExpression containing the
+  // class and the static blocks call — so the class node is no longer
+  // reachable through the path chain. In that case the class is the element
+  // of the sequence whose body is this method's ClassBody.
+  const classBodyNode = thisEnvFn.parentPath.node as t.ClassBody;
+  let parent: NodePath | null = thisEnvFn.parentPath.parentPath;
+  while (parent) {
+    if (parent.isClass()) {
+      return !!parent.node.superClass;
+    }
+    if (parent.isSequenceExpression()) {
+      for (const expr of parent.get("expressions")) {
+        if (expr.isClass() && expr.node.body === classBodyNode) {
+          return !!expr.node.superClass;
+        }
+      }
+    }
+    parent = parent.parentPath;
+  }
+  return false;
 }
 
 const assignSuperThisVisitor = environmentVisitor<{
