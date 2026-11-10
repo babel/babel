@@ -61,9 +61,11 @@ function newCalleeNeedsParens(node: t.Node): boolean {
         return true;
       case "MemberExpression":
         current = current.object;
+        if (isWrappedOptionalChain(current)) return false;
         break;
       case "TaggedTemplateExpression":
         current = current.tag;
+        if (isWrappedOptionalChain(current)) return false;
         break;
       case "TSInstantiationExpression":
       case "TSNonNullExpression":
@@ -75,7 +77,11 @@ function newCalleeNeedsParens(node: t.Node): boolean {
   }
 }
 
-function templateTagNeedsParens(node: t.Node): boolean {
+// Whether `node` is an optional chain, possibly wrapped in `!` or type
+// arguments. When such a node is followed by a non-optional call, member access
+// or template, it must be parenthesized so that the chain ends before them:
+// `(a?.b!).c` is not the same as `a?.b!.c`.
+function isWrappedOptionalChain(node: t.Node): boolean {
   let current: t.Node = node;
   while (true) {
     switch (current.type) {
@@ -83,6 +89,10 @@ function templateTagNeedsParens(node: t.Node): boolean {
       case "OptionalMemberExpression":
         return true;
       case "TSInstantiationExpression":
+        // Inside `!`, it is already wrapped in its own parentheses: `(a?.b<c>)!`
+        if (current !== node) return false;
+        current = current.expression;
+        break;
       case "TSNonNullExpression":
         current = current.expression;
         break;
@@ -105,7 +115,17 @@ export function parentNeedsParens(
       break;
     case __node("TaggedTemplateExpression"):
       if (parent.tag === node) {
-        return templateTagNeedsParens(node);
+        return isWrappedOptionalChain(node);
+      }
+      break;
+    case __node("CallExpression"):
+      if (parent.callee === node) {
+        return isWrappedOptionalChain(node);
+      }
+      break;
+    case __node("MemberExpression"):
+      if (parent.object === node) {
+        return isWrappedOptionalChain(node);
       }
       break;
     case __node("Decorator"):
