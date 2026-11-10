@@ -902,6 +902,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@babel/helper-member-expression-to-functions@workspace:packages/babel-helper-member-expression-to-functions"
   dependencies:
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   languageName: unknown
