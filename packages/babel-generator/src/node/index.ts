@@ -1,6 +1,7 @@
 import * as parens from "./parentheses.ts";
 import { VISITOR_KEYS } from "@babel/types";
 import type * as t from "@babel/types";
+import * as charCodes from "charcodes";
 
 import { generatorInfosMap } from "../nodes.ts";
 
@@ -60,6 +61,8 @@ function newCalleeNeedsParens(node: t.Node): boolean {
       case "OptionalMemberExpression":
         return true;
       case "MemberExpression":
+        // `(a?.b).c` and `(a?.b!).c` already wrap the object in parentheses
+        if (parens.isOptionalChainOrTSWrapped(current.object)) return false;
         current = current.object;
         break;
       case "TaggedTemplateExpression":
@@ -75,20 +78,45 @@ function newCalleeNeedsParens(node: t.Node): boolean {
   }
 }
 
-function templateTagNeedsParens(node: t.Node): boolean {
+// Whether `child` is printed in parentheses inside `parent`.
+function printsParens(child: t.Node, parent: t.Node): boolean {
+  const parentId = generatorInfosMap.get(parent.type)![1];
+  const needsParens = generatorInfosMap.get(child.type)?.[2];
+  return (
+    parentNeedsParens(child, parent, parentId) ||
+    (needsParens != null && !!needsParens(child, parent, parentId))
+  );
+}
+
+// Whether a `<` printed right after `node` would be misparsed: after a JSX
+// element it starts another JSX element (`(<a />) < b`), and after a type
+// any operator starting with `<` starts type arguments (`(a as B) <= c`).
+function endsBeforeLessThanAmbiguously(
+  node: t.Node,
+  operator: string,
+): boolean {
   let current: t.Node = node;
   while (true) {
+    let next: t.Node | null | undefined;
     switch (current.type) {
-      case "OptionalCallExpression":
-      case "OptionalMemberExpression":
+      case "JSXElement":
+      case "JSXFragment":
+        return operator === "<";
+      case "TSAsExpression":
+      case "TSSatisfiesExpression":
         return true;
-      case "TSInstantiationExpression":
-      case "TSNonNullExpression":
-        current = current.expression;
+      case "BinaryExpression":
+      case "LogicalExpression":
+        next = current.right;
         break;
-      default:
-        return false;
+      case "UnaryExpression":
+      case "AwaitExpression":
+        next = current.argument;
+        break;
     }
+    // A parenthesized operand ends with `)`
+    if (next == null || printsParens(next, current)) return false;
+    current = next;
   }
 }
 
@@ -98,6 +126,14 @@ export function parentNeedsParens(
   parentId: number,
 ): boolean {
   switch (parentId) {
+    case __node("BinaryExpression"):
+      if (
+        parent.left === node &&
+        parent.operator.charCodeAt(0) === charCodes.lessThan
+      ) {
+        return endsBeforeLessThanAmbiguously(node, parent.operator);
+      }
+      break;
     case __node("NewExpression"):
       if (parent.callee === node) {
         return newCalleeNeedsParens(node);
@@ -105,7 +141,7 @@ export function parentNeedsParens(
       break;
     case __node("TaggedTemplateExpression"):
       if (parent.tag === node) {
-        return templateTagNeedsParens(node);
+        return parens.isOptionalChainOrTSWrapped(node);
       }
       break;
     case __node("Decorator"):

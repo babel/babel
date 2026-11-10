@@ -375,9 +375,15 @@ function tsPrintUnionOrIntersectionType(
   sep: "|" | "&",
 ) {
   let hasLeadingToken = 0;
-  if (printer.tokenMap?.startMatches(node, sep)) {
+  if (
+    // `type A = | B` is a union with a single member, print the leading `|`
+    // so that it is not parsed as `B`
+    node.types.length === 1 ||
+    printer.tokenMap?.startMatches(node, sep)
+  ) {
     hasLeadingToken = 1;
     printer.token(sep);
+    printer.space();
   }
 
   printer.printJoin(node.types, undefined, undefined, function (i) {
@@ -766,7 +772,7 @@ export function _tsPrintClassMemberModifiers(
   const isPublicField =
     node.type === "ClassAccessorProperty" || node.type === "ClassProperty";
   printModifiersList(this, node, [
-    isPublicField && node.declare && "declare",
+    (isPublicField || isPrivateField) && node.declare && "declare",
     !isPrivateField && node.accessibility,
   ]);
   if (node.static) {

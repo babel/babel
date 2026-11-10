@@ -1147,6 +1147,7 @@ export interface ClassPrivateProperty extends BaseNode {
   value?: Expression | null;
   decorators?: Decorator[] | null;
   static: boolean;
+  declare?: boolean | null;
   definite?: boolean | null;
   optional?: boolean | null;
   readonly?: boolean | null;
