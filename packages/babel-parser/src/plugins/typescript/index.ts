@@ -2516,13 +2516,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       if (!res) return;
 
+      const startPos = this.offsetToSourcePos(startLoc.index);
       const parse = () =>
         res.returnType && this.tsIsArrowReturnTypeRestrictedAt(startPos)
           ? this.tsParseWithDeferredArrowErrors(() =>
               super.parseArrowExpression(res, null, true),
             )
           : super.parseArrowExpression(res, null, true);
-      const startPos = this.offsetToSourcePos(startLoc.index);
       return this.tsIsArrowReturnTypeRestrictedAt(startPos)
         ? this.tsParseWithRestrictedArrowReturnType(
             parse,
@@ -4647,11 +4647,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // The colon may be a conditional or switch-case separator. Keep a
       // successful parse instead of parsing the return type a second time.
       const returnTypeStart = this.sourceToOffsetPos(this.state.start);
-      const result = this.tryParse(abort => {
-        const node = this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
-        node.returnType = this.tsParseTypeAnnotation();
+      const result = this.tryParse<N.TSTypeAnnotation>(abort => {
+        const returnType = this.tsParseTypeAnnotation();
         if (!this.match(tt.arrow)) abort();
-        return node;
+        return returnType;
       });
       if (result.aborted || result.thrown) return undefined;
       if (result.error) this.state = result.failState!;
@@ -4659,7 +4658,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (this.tsIsArrowReturnTypeRestrictedAt(startPos)) {
         this.tsArrowReturnTypeAt.set(startPos, returnTypeStart);
       }
-      return result.node!;
+      const node = this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
+      node.returnType = result.node!;
+      return node;
     }
 
     atPossibleAsyncArrow(base: N.Expression | N.Super | N.Import): boolean {
