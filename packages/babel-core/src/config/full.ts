@@ -116,8 +116,13 @@ export default gensync(function* loadFullConfig(
             // eslint-disable-next-line no-var
             var preset = yield* loadPresetDescriptor(descriptor, presetContext);
           } catch (e) {
-            if (e.code === "BABEL_UNKNOWN_OPTION") {
-              checkNoUnwrappedItemOptionPairs(rawPresets, i, "preset", e);
+            if ((e as NodeJS.ErrnoException).code === "BABEL_UNKNOWN_OPTION") {
+              checkNoUnwrappedItemOptionPairs(
+                rawPresets,
+                i,
+                "preset",
+                e as Error,
+              );
             }
             throw e;
           }
@@ -189,9 +194,12 @@ export default gensync(function* loadFullConfig(
             // eslint-disable-next-line no-var
             var plugin = yield* loadPluginDescriptor(descriptor, pluginContext);
           } catch (e) {
-            if (e.code === "BABEL_UNKNOWN_PLUGIN_PROPERTY") {
+            if (
+              (e as NodeJS.ErrnoException).code ===
+              "BABEL_UNKNOWN_PLUGIN_PROPERTY"
+            ) {
               // print special message for `plugins: ["@babel/foo", { foo: "option" }]`
-              checkNoUnwrappedItemOptionPairs(descs, i, "plugin", e);
+              checkNoUnwrappedItemOptionPairs(descs, i, "plugin", e as Error);
             }
             throw e;
           }
@@ -224,10 +232,11 @@ function enhanceError<T extends Function>(context: ConfigContext, fn: T): T {
     } catch (e) {
       // There are a few case where thrown errors will try to annotate themselves multiple times, so
       // to keep things simple we just bail out if re-wrapping the message.
-      if (!e.message.startsWith("[BABEL]")) {
-        e.message = `[BABEL] ${context.filename ?? "unknown file"}: ${
-          e.message
-        }`;
+      if (!(e as Error).message.startsWith("[BABEL]")) {
+        (e as Error).message =
+          `[BABEL] ${context.filename ?? "unknown file"}: ${
+            (e as Error).message
+          }`;
       }
 
       throw e;
@@ -271,7 +280,8 @@ const makeDescriptorLoader = <Context, API>(
         item = yield* factory(api, options, dirname);
       } catch (e) {
         if (alias) {
-          e.message += ` (While processing: ${JSON.stringify(alias)})`;
+          (e as Error).message +=
+            ` (While processing: ${JSON.stringify(alias)})`;
         }
         throw e;
       }

@@ -13,7 +13,7 @@ import {
 } from "@babel/types";
 import type * as t from "@babel/types";
 import type { TraversalAncestors } from "@babel/types";
-import { parse } from "@babel/parser";
+import { parse, type ParseError } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
 import type { TemplateOpts, ParserOpts } from "./options.ts";
 import type { Formatter } from "./formatters.ts";
@@ -213,10 +213,10 @@ function parseWithCodeFrame(
   try {
     return parse(code, parserOpts);
   } catch (err) {
-    const loc = err.loc;
+    const loc = (err as Partial<ParseError>).loc;
     if (loc) {
-      err.message += "\n" + codeFrameColumns(code, { start: loc });
-      err.code = "BABEL_TEMPLATE_PARSE_ERROR";
+      (err as Error).message += "\n" + codeFrameColumns(code, { start: loc });
+      (err as NodeJS.ErrnoException).code = "BABEL_TEMPLATE_PARSE_ERROR";
     }
     throw err;
   }

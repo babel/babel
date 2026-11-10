@@ -5,7 +5,7 @@ import traverse from "../index.ts";
 import NodePath from "./index.ts";
 import { getCachedPaths } from "../cache.ts";
 import { _verifyNodeList, _containerInsertAfter } from "./modification.ts";
-import { parse } from "@babel/parser";
+import { parse, type ParseError } from "@babel/parser";
 import {
   FUNCTION_TYPES,
   arrowFunctionExpression,
@@ -92,9 +92,9 @@ export function replaceWithSourceString(
     replacement = `(${replacement})`;
     ast = parse(replacement);
   } catch (err) {
-    const loc = err.loc;
+    const loc = (err as Partial<ParseError>).loc;
     if (loc) {
-      err.message +=
+      (err as Error).message +=
         " - make sure this is an expression.\n" +
         codeFrameColumns(replacement, {
           start: {
@@ -102,7 +102,7 @@ export function replaceWithSourceString(
             column: loc.column,
           },
         });
-      err.code = "BABEL_REPLACE_SOURCE_ERROR";
+      (err as NodeJS.ErrnoException).code = "BABEL_REPLACE_SOURCE_ERROR";
     }
     throw err;
   }

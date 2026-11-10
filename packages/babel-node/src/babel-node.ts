@@ -144,9 +144,9 @@ async function spawn(args: string[]) {
     kexec(process.argv[0], args);
   } catch (err) {
     if (
-      err.code !== "ERR_MODULE_NOT_FOUND" &&
-      err.code !== "MODULE_NOT_FOUND" &&
-      err.code !== "UNDECLARED_DEPENDENCY"
+      (err as NodeJS.ErrnoException).code !== "ERR_MODULE_NOT_FOUND" &&
+      (err as NodeJS.ErrnoException).code !== "MODULE_NOT_FOUND" &&
+      (err as NodeJS.ErrnoException).code !== "UNDECLARED_DEPENDENCY"
     ) {
       throw err;
     }

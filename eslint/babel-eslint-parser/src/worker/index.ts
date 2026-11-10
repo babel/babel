@@ -11,7 +11,7 @@ parentPort!.addListener(
     try {
       response = { result: await handleMessage(action, payload) };
     } catch (error) {
-      response = { error, errorData: { ...error } };
+      response = { error, errorData: { ...(error as object) } };
     }
 
     try {

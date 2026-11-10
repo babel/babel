@@ -49,9 +49,10 @@ export function* run(
   try {
     yield* transformFile(file, config.passes);
   } catch (e) {
-    e.message = `${opts.filename ?? "unknown file"}: ${e.message}`;
-    if (!e.code) {
-      e.code = "BABEL_TRANSFORM_ERROR";
+    (e as Error).message =
+      `${opts.filename ?? "unknown file"}: ${(e as Error).message}`;
+    if (!(e as NodeJS.ErrnoException).code) {
+      (e as NodeJS.ErrnoException).code = "BABEL_TRANSFORM_ERROR";
     }
     throw e;
   }
@@ -62,9 +63,10 @@ export function* run(
       ({ outputCode, outputMap } = generateCode(config.passes, file));
     }
   } catch (e) {
-    e.message = `${opts.filename ?? "unknown file"}: ${e.message}`;
-    if (!e.code) {
-      e.code = "BABEL_GENERATE_ERROR";
+    (e as Error).message =
+      `${opts.filename ?? "unknown file"}: ${(e as Error).message}`;
+    if (!(e as NodeJS.ErrnoException).code) {
+      (e as NodeJS.ErrnoException).code = "BABEL_GENERATE_ERROR";
     }
     throw e;
   }

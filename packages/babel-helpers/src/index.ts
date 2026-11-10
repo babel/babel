@@ -19,7 +19,7 @@ function deep(obj: any, path: string, value?: unknown) {
       return obj[last];
     }
   } catch (e) {
-    e.message += ` (when accessing ${path})`;
+    (e as Error).message += ` (when accessing ${path})`;
     throw e;
   }
 }

@@ -86,7 +86,7 @@ export default class Cache {
       }
       return this.cache.get(key);
     } catch (error) {
-      if (error.code !== "ENOENT") {
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
         throw error;
       }
     }

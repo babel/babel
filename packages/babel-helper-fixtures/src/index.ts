@@ -526,7 +526,7 @@ export function readFile(filename: string | undefined) {
     }
     return fs.readFileSync(filename, "utf8").trimRight();
   } catch (e) {
-    if (e.code === "ENOENT") {
+    if ((e as NodeJS.ErrnoException).code === "ENOENT") {
       return "";
     }
     throw e;

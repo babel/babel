@@ -28,7 +28,11 @@ function fileMtime(filepath: string): number | null {
   try {
     return +nodeFs.statSync(filepath).mtime;
   } catch (e) {
-    if (e.code !== "ENOENT" && e.code !== "ENOTDIR") throw e;
+    if (
+      (e as NodeJS.ErrnoException).code !== "ENOENT" &&
+      (e as NodeJS.ErrnoException).code !== "ENOTDIR"
+    )
+      throw e;
   }
 
   return null;

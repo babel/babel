@@ -218,7 +218,7 @@ function replEval(
 
     result = _eval(code, filename);
   } catch (e) {
-    err = e;
+    err = e as Error;
   }
 
   if (hasTopLevelAwait && !err) {
@@ -230,7 +230,7 @@ function replEval(
         callback(e, null);
       });
   } else {
-    callback(err, result);
+    callback(err as Error | null, result);
   }
 }
 

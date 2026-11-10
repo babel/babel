@@ -218,11 +218,16 @@ function printNodeFields(key: string, readme: string[]) {
               ": `" + stringifyValidator(validator, "") + "`"
             );
           } catch (ex) {
-            if (ex.code === "UNEXPECTED_VALIDATOR_TYPE") {
+            if (
+              (ex as NodeJS.ErrnoException).code === "UNEXPECTED_VALIDATOR_TYPE"
+            ) {
               console.log(
                 "Unrecognised validator type for " + key + "." + field
               );
-              console.dir(ex.validator, { depth: 10, colors: true });
+              console.dir((ex as { validator: unknown }).validator, {
+                depth: 10,
+                colors: true,
+              });
             }
           }
         }

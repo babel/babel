@@ -308,13 +308,13 @@ async function run(task: Test) {
       resultExec = runCodeInTestContext(execCode, execOpts, context);
     } catch (err) {
       // Pass empty location to include the whole file in the output.
-      if (typeof err === "object" && err.message) {
-        err.message =
-          `${exec.loc}: ${err.message}\n` +
+      if (typeof err === "object" && (err as Error).message) {
+        (err as Error).message =
+          `${exec.loc}: ${(err as Error).message}\n` +
           codeFrameColumns(execCode, {} as any);
       }
 
-      execErr = err;
+      execErr = err as Error;
     }
   }
 
@@ -700,7 +700,7 @@ const assertTest = function (
         }
       } catch (e) {
         if (!process.env.OVERWRITE) {
-          e.message += "\n at " + filename;
+          (e as Error).message += "\n at " + filename;
           throw e;
         }
         const expectedLoc = path.join(opts.testLoc, "out-files", filename);
@@ -902,7 +902,7 @@ export function buildProcessTests(
                   tmpLoc,
                 );
               } catch (e) {
-                err = e;
+                err = e as Error;
               } finally {
                 try {
                   deleteDir(tmpLoc);

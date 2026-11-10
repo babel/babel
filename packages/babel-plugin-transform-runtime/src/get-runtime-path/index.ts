@@ -24,7 +24,7 @@ function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
       )
       .replace(/\\/g, "/");
   } catch (err) {
-    if (err.code !== "MODULE_NOT_FOUND") throw err;
+    if ((err as NodeJS.ErrnoException).code !== "MODULE_NOT_FOUND") throw err;
 
     throw Object.assign(
       new Error(`Failed to resolve "${moduleName}" relative to "${dirname}"`),
