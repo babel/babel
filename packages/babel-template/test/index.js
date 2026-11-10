@@ -407,27 +407,46 @@ describe("@babel/template", function () {
     expect(error.stack).toMatch("=============\n    at create");
   });
 
-  it("builders do not retain their caller", async () => {
-    setFlagsFromString("--expose-gc");
-    const gc = runInNewContext("gc");
+  describe("builders do not retain their caller", () => {
+    let gc;
+    beforeAll(() => {
+      setFlagsFromString("--expose-gc");
+      try {
+        gc = runInNewContext("gc");
+      } finally {
+        // Do not expose `gc` to contexts created by later test files.
+        setFlagsFromString("--no-expose-gc");
+      }
+    });
 
-    function create() {
-      const context = createContext({ template });
-      const receiver = runInContext(
-        `({ build() { return template.statement("const result = 1;"); } })`,
-        context,
+    async function expectNotRetained(build) {
+      function create() {
+        const context = createContext({ template });
+        const receiver = runInContext(`({ build: ${build} })`, context);
+        return { ref: new WeakRef(receiver), builder: receiver.build() };
+      }
+
+      const { ref, builder } = create();
+      // WeakRef targets are kept alive until the end of the current job.
+      for (let i = 0; i < 10 && ref.deref() !== undefined; i++) {
+        await new Promise(resolve => setImmediate(resolve));
+        gc();
+      }
+      expect(ref.deref()).toBeUndefined();
+      expect(builder().type).toBe("VariableDeclaration");
+    }
+
+    it("string templates", async () => {
+      await expectNotRetained(
+        `function () { return template.statement("const result = 1;"); }`,
       );
-      return { ref: new WeakRef(receiver), builder: receiver.build() };
-    }
+    });
 
-    const { ref, builder } = create();
-    // WeakRef targets are kept alive until the end of the current job.
-    for (let i = 0; i < 10 && ref.deref() !== undefined; i++) {
-      await new Promise(resolve => setImmediate(resolve));
-      gc();
-    }
-    expect(ref.deref()).toBeUndefined();
-    expect(builder().type).toBe("VariableDeclaration");
+    it("tagged templates", async () => {
+      await expectNotRetained(
+        "function () { return template.statement`const result = 1;`; }",
+      );
+    });
   });
 
   describe("custom Error.prepareStackTrace", () => {
