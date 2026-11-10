@@ -1,9 +1,9 @@
 {
   "type": "File",
-  "start":0,"end":333,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":31,"index":333}},
+  "start":0,"end":363,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":29,"index":363}},
   "program": {
     "type": "Program",
-    "start":0,"end":333,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":10,"column":31,"index":333}},
+    "start":0,"end":363,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":29,"index":363}},
     "sourceType": "module",
     "interpreter": null,
     "body": [
@@ -445,6 +445,80 @@
             "body": {
               "type": "Identifier",
               "start":331,"end":332,"loc":{"start":{"line":10,"column":29,"index":331},"end":{"line":10,"column":30,"index":332},"identifierName":"e"},
+              "name": "e"
+            }
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":334,"end":363,"loc":{"start":{"line":11,"column":0,"index":334},"end":{"line":11,"column":29,"index":363}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":334,"end":362,"loc":{"start":{"line":11,"column":0,"index":334},"end":{"line":11,"column":28,"index":362}},
+          "test": {
+            "type": "Identifier",
+            "start":334,"end":335,"loc":{"start":{"line":11,"column":0,"index":334},"end":{"line":11,"column":1,"index":335},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start":338,"end":353,"loc":{"start":{"line":11,"column":4,"index":338},"end":{"line":11,"column":19,"index":353}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "ArrayPattern",
+                "start":339,"end":345,"loc":{"start":{"line":11,"column":5,"index":339},"end":{"line":11,"column":11,"index":345}},
+                "elements": [
+                  {
+                    "type": "Identifier",
+                    "start":340,"end":341,"loc":{"start":{"line":11,"column":6,"index":340},"end":{"line":11,"column":7,"index":341},"identifierName":"b"},
+                    "name": "b"
+                  }
+                ],
+                "typeAnnotation": {
+                  "type": "TSTypeAnnotation",
+                  "start":342,"end":345,"loc":{"start":{"line":11,"column":8,"index":342},"end":{"line":11,"column":11,"index":345}},
+                  "typeAnnotation": {
+                    "type": "TSTypeReference",
+                    "start":344,"end":345,"loc":{"start":{"line":11,"column":10,"index":344},"end":{"line":11,"column":11,"index":345}},
+                    "typeName": {
+                      "type": "Identifier",
+                      "start":344,"end":345,"loc":{"start":{"line":11,"column":10,"index":344},"end":{"line":11,"column":11,"index":345},"identifierName":"T"},
+                      "name": "T"
+                    }
+                  }
+                }
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":351,"end":352,"loc":{"start":{"line":11,"column":17,"index":351},"end":{"line":11,"column":18,"index":352},"identifierName":"c"},
+              "name": "c",
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 350
+              }
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start":356,"end":362,"loc":{"start":{"line":11,"column":22,"index":356},"end":{"line":11,"column":28,"index":362}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":356,"end":357,"loc":{"start":{"line":11,"column":22,"index":356},"end":{"line":11,"column":23,"index":357},"identifierName":"d"},
+                "name": "d"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":361,"end":362,"loc":{"start":{"line":11,"column":27,"index":361},"end":{"line":11,"column":28,"index":362},"identifierName":"e"},
               "name": "e"
             }
           }

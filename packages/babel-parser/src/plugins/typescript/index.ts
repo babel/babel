@@ -384,7 +384,8 @@ function tsHasUnambiguousArrowParams(
     case "SpreadElement":
       return true;
     case "TSTypeCastExpression":
-      // `({ a }: T)` is ambiguous, `(a: T)` and `(this: T)` are not
+      // tsc treats `({ a }: T)` as ambiguous, returns TriState.Unknown in isParenthesizedArrowFunctionExpression
+      // but treats `(a: T)` and `(this: T)` as unambiguous starting an arrow function
       return (
         first.expression.type === "Identifier" ||
         first.expression.type === "ThisExpression"

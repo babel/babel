@@ -1,0 +1,119 @@
+{
+  "type": "File",
+  "start":0,"end":159,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":23,"index":159}},
+  "errors": [
+    "SyntaxError: Did not expect a type annotation here. (3:10)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":159,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":23,"index":159}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":136,"end":159,"loc":{"start":{"line":3,"column":0,"index":136},"end":{"line":3,"column":23,"index":159}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":136,"end":158,"loc":{"start":{"line":3,"column":0,"index":136},"end":{"line":3,"column":22,"index":158}},
+          "test": {
+            "type": "Identifier",
+            "start":136,"end":137,"loc":{"start":{"line":3,"column":0,"index":136},"end":{"line":3,"column":1,"index":137},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "TSTypeCastExpression",
+            "start":141,"end":149,"loc":{"start":{"line":3,"column":5,"index":141},"end":{"line":3,"column":13,"index":149}},
+            "expression": {
+              "type": "ObjectExpression",
+              "start":141,"end":146,"loc":{"start":{"line":3,"column":5,"index":141},"end":{"line":3,"column":10,"index":146}},
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start":143,"end":144,"loc":{"start":{"line":3,"column":7,"index":143},"end":{"line":3,"column":8,"index":144}},
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start":143,"end":144,"loc":{"start":{"line":3,"column":7,"index":143},"end":{"line":3,"column":8,"index":144},"identifierName":"b"},
+                    "name": "b"
+                  },
+                  "computed": false,
+                  "shorthand": true,
+                  "value": {
+                    "type": "Identifier",
+                    "start":143,"end":144,"loc":{"start":{"line":3,"column":7,"index":143},"end":{"line":3,"column":8,"index":144},"identifierName":"b"},
+                    "name": "b"
+                  }
+                }
+              ]
+            },
+            "typeAnnotation": {
+              "type": "TSTypeAnnotation",
+              "start":146,"end":149,"loc":{"start":{"line":3,"column":10,"index":146},"end":{"line":3,"column":13,"index":149}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":148,"end":149,"loc":{"start":{"line":3,"column":12,"index":148},"end":{"line":3,"column":13,"index":149}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":148,"end":149,"loc":{"start":{"line":3,"column":12,"index":148},"end":{"line":3,"column":13,"index":149},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 140
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start":152,"end":158,"loc":{"start":{"line":3,"column":16,"index":152},"end":{"line":3,"column":22,"index":158}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":152,"end":153,"loc":{"start":{"line":3,"column":16,"index":152},"end":{"line":3,"column":17,"index":153},"identifierName":"c"},
+                "name": "c"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":157,"end":158,"loc":{"start":{"line":3,"column":21,"index":157},"end":{"line":3,"column":22,"index":158},"identifierName":"d"},
+              "name": "d"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " `({ b }: T)` might be a parenthesized expression, so it can't have a return",
+            "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":78,"index":78}}
+          },
+          {
+            "type": "CommentLine",
+            "value": " type that is not followed by `:`, like in TypeScript.",
+            "start":79,"end":135,"loc":{"start":{"line":2,"column":0,"index":79},"end":{"line":2,"column":56,"index":135}}
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " `({ b }: T)` might be a parenthesized expression, so it can't have a return",
+      "start":0,"end":78,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":78,"index":78}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " type that is not followed by `:`, like in TypeScript.",
+      "start":79,"end":135,"loc":{"start":{"line":2,"column":0,"index":79},"end":{"line":2,"column":56,"index":135}}
+    }
+  ]
+}

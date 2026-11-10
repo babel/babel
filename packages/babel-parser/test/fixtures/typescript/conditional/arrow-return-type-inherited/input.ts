@@ -8,3 +8,4 @@ a ? b => (c) : d => e;
 a ? (b) => (c) : d => e;
 a ? async (b) => (c) : d => e;
 a ? ({ b }: T) => (c) : d => e;
+a ? ([b]: T) => (c) : d => e;
