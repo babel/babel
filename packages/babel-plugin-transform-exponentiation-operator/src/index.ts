@@ -51,9 +51,7 @@ export default declare(api => {
 
         // Look through wrappers such as `!` and `as`, so that the object and key
         // of a wrapped member expression are memoised and only evaluated once.
-        const left = skipTransparentExprWrapperNodes(
-          node.left,
-        ) as typeof node.left;
+        const left = skipTransparentExprWrapperNodes(node.left) as t.Expression;
 
         if (t.isMemberExpression(left)) {
           const { property, computed } = left;
@@ -85,7 +83,7 @@ export default declare(api => {
           path.replaceWith(
             t.assignmentExpression(
               "=",
-              left,
+              left as t.Identifier,
               build(t.cloneNode(left) as t.Identifier, node.right),
             ),
           );

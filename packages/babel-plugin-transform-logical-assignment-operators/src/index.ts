@@ -19,9 +19,7 @@ export default declare(api => {
 
         // Look through wrappers such as `!` and `as`, so that the object and key
         // of a wrapped member expression are memoised and only evaluated once.
-        const left = skipTransparentExprWrapperNodes(
-          node.left,
-        ) as typeof node.left;
+        const left = skipTransparentExprWrapperNodes(node.left) as t.Expression;
 
         const lhs = t.cloneNode(left) as t.Identifier | t.MemberExpression;
         if (t.isMemberExpression(left)) {
@@ -56,7 +54,11 @@ export default declare(api => {
             // @ts-expect-error operatorTrunc has been tested by t.LOGICAL_OPERATORS
             operatorTrunc,
             lhs,
-            t.assignmentExpression("=", left, right),
+            t.assignmentExpression(
+              "=",
+              left as t.Identifier | t.MemberExpression,
+              right,
+            ),
           ),
         );
       },
