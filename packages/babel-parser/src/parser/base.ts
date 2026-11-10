@@ -32,7 +32,7 @@ export default class BaseParser {
 
   // Used by the Flow and TypeScript plugins to signify the start of an
   // expression which looks like a typed arrow function, but it isn't.
-  // Contains node (offset) positions.
+  // Contains source positions.
   // e.g. a ? (b) : c => d
   //          ^
   // This only depends on the input, so it is not in the state: it is not

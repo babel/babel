@@ -2129,7 +2129,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           this.state = state;
 
           for (let i = 0; i < invalid.length; i++) {
-            this.noArrowAt.add(invalid[i].start!);
+            this.noArrowAt.add(this.offsetToSourcePos(invalid[i].start!));
           }
 
           ({ consequent, failed } = this.tryParseConditionalConsequent());
@@ -2147,7 +2147,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
         if (failed && valid.length === 1) {
           this.state = state;
-          this.noArrowAt.add(valid[0].start!);
+          this.noArrowAt.add(this.offsetToSourcePos(valid[0].start!));
           ({ consequent } = this.tryParseConditionalConsequent());
         }
       }
@@ -3264,8 +3264,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
     parseParenAndDistinguishExpression(canStartArrow: boolean): N.Expression {
       return super.parseParenAndDistinguishExpression(
-        canStartArrow &&
-          !this.noArrowAt.has(this.sourceToOffsetPos(this.state.start)),
+        canStartArrow && !this.noArrowAt.has(this.state.start),
       );
     }
 
@@ -3292,7 +3291,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       if (
         base.type === "Identifier" &&
         base.name === "async" &&
-        this.noArrowAt.has(startLoc.index)
+        this.noArrowAt.has(this.offsetToSourcePos(startLoc.index))
       ) {
         this.next();
 

@@ -4029,8 +4029,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // is the conditional's separator: `a ? (b) : c => d`.
       // Like TypeScript's `notParenthesizedArrow`, remember in noArrowAt where
       // it isn't an arrow function, to avoid trying again when backtracking.
-      const startOffset = this.sourceToOffsetPos(startPos);
-      if (!this.noArrowAt.has(startOffset)) {
+      if (!this.noArrowAt.has(startPos)) {
         const allowsReturnType = this.tsArrowReturnTypeAllowedAt.has(startPos);
         const parse = () =>
           this.tsParseMaybeAssign(refExpressionErrors, isParenItem);
@@ -4100,7 +4099,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             return node;
           }
         }
-        this.noArrowAt.add(startOffset);
+        this.noArrowAt.add(startPos);
         this.state = state;
         // tryParse keeps the tokens of a parse with recoverable errors, but
         // they are discarded when parsing again.
@@ -4160,10 +4159,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       let typeParameters: N.TSTypeParameterDeclaration | undefined | null;
       // We need to explicitly annotate 'abort' for microsoft/TypeScript#58170
       const arrow = this.tryParse((abort: () => never) => {
-        if (this.noArrowAt.has(this.sourceToOffsetPos(this.state.start))) {
-          abort();
-        }
         const startPos = this.state.start;
+        if (this.noArrowAt.has(startPos)) abort();
         // JSX makes type parameters unambiguous, and they are not tt.lt there.
         const allowsReturnType =
           !this.match(tt.lt) || this.tsArrowReturnTypeAllowedAt.has(startPos);
@@ -4294,7 +4291,8 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: Undone<N.ArrowFunctionExpression>,
     ): Undone<N.ArrowFunctionExpression> | null | undefined {
       if (this.match(tt.colon)) {
-        if (this.noArrowAt.has(node.start!)) return;
+        const startPos = this.offsetToSourcePos(node.start!);
+        if (this.noArrowAt.has(startPos)) return;
 
         // This is different from how the TS parser does it.
         // TS uses lookahead. The Babel Parser parses it as a parenthesized expression and converts.
@@ -4314,10 +4312,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (result.error) this.state = result.failState;
           // @ts-expect-error refine typings
           node.returnType = result.node;
-          this.tsArrowReturnTypeAt.set(
-            this.offsetToSourcePos(node.start!),
-            returnTypeStart,
-          );
+          this.tsArrowReturnTypeAt.set(startPos, returnTypeStart);
         }
       }
 
@@ -4614,7 +4609,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     atPossibleAsyncArrow(base: N.Expression | N.Super | N.Import): boolean {
       // `async(b)` followed by `:` can only be an arrow function with a
       // return type, which is not allowed here.
-      if (this.noArrowAt.has(base.start!)) return false;
+      if (this.noArrowAt.has(this.offsetToSourcePos(base.start!))) {
+        return false;
+      }
       return super.atPossibleAsyncArrow(base);
     }
 
