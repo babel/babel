@@ -452,6 +452,47 @@ describe("@babel/template", function () {
       const build = template.statement("const result = 1;");
       expect(build().type).toBe("VariableDeclaration");
     });
+
+    // `expect` itself reads stacks, so restore `Error.prepareStackTrace`
+    // before asserting.
+    function catchWithThrowingPrepareStackTrace(fn) {
+      Error.prepareStackTrace = () => {
+        throw new Error("prepareStackTrace");
+      };
+      try {
+        fn();
+      } catch (e) {
+        return e;
+      } finally {
+        Error.prepareStackTrace = prepareStackTrace;
+      }
+    }
+
+    it("throwing does not hide template errors", () => {
+      const error = catchWithThrowingPrepareStackTrace(() => {
+        template.statement("const = ;")();
+      });
+      expect(error).toBeInstanceOf(SyntaxError);
+    });
+
+    it("throwing after the builder is created does not hide template errors", () => {
+      const build = template.statement("const = ;");
+      const error = catchWithThrowingPrepareStackTrace(build);
+      expect(error).toBeInstanceOf(SyntaxError);
+    });
+
+    it("returning call sites after the builder is created keeps them", () => {
+      const build = template.statement("const = ;");
+      Error.prepareStackTrace = (_, callSites) => callSites;
+      let error;
+      try {
+        build();
+      } catch (e) {
+        error = e;
+      }
+      expect(error).toBeInstanceOf(SyntaxError);
+      expect(Array.isArray(error.stack)).toBe(true);
+    });
   });
 
   describe(".syntacticPlaceholders", () => {

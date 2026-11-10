@@ -105,7 +105,7 @@ function extendedTrace<Arg, Result>(
   // original stack to append if it errors when parsing.
   // The stack is formatted right away: until then, V8 keeps the raw call
   // sites so a long-lived builder would keep its caller and the caller's realm
-  //  alive. A custom `Error.prepareStackTrace` may return a non-string or throw,
+  // alive. A custom `Error.prepareStackTrace` may return a non-string or throw,
   // in which case we skip the origin stack rather than failing.
   let rootStack: string | undefined;
   try {
@@ -120,12 +120,20 @@ function extendedTrace<Arg, Result>(
       return fn(arg);
     } catch (err) {
       if (rootStack !== undefined) {
-        // We slice off the top 3 items in the stack to remove the call to
-        // 'extendedTrace', and the anonymous builder function, with the final
-        // stripped line being the error message itself since we threw it
-        // in the first place and it doesn't matter.
-        (err as Error).stack +=
-          `\n    =============\n${rootStack.split("\n").slice(3).join("\n")}`;
+        // `Error.prepareStackTrace` may have changed since the builder was
+        // created, so the error's own stack may also be a non-string or throw.
+        try {
+          const error = err as Error;
+          if (typeof error.stack === "string") {
+            // We slice off the top 3 items in the stack to remove the call to
+            // 'extendedTrace', and the anonymous builder function, with the
+            // final stripped line being the error message itself since we
+            // threw it in the first place and it doesn't matter.
+            error.stack += `\n    =============\n${rootStack.split("\n").slice(3).join("\n")}`;
+          }
+        } catch {
+          // ignore
+        }
       }
       throw err;
     }
