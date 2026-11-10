@@ -39,6 +39,33 @@ describe("validators", function () {
     });
   });
 
+  describe("isSpecifierDefault", function () {
+    const specifier = code =>
+      parse(code, { sourceType: "module" }).program.body.at(-1).specifiers[0];
+
+    it.each([
+      `import a from "m";`,
+      `import { default as a } from "m";`,
+      `import { "default" as a } from "m";`,
+      `var a; export { a as default };`,
+      `var a; export { a as "default" };`,
+      `export { a as "default" } from "m";`,
+    ])("returns true for %s", code => {
+      expect(t.isSpecifierDefault(specifier(code))).toBe(true);
+    });
+
+    it.each([
+      `import * as a from "m";`,
+      `import { a } from "m";`,
+      `import { "a" as b } from "m";`,
+      `import { "a b" as c } from "m";`,
+      `var a; export { a as "b" };`,
+      `export { "default" as a } from "m";`,
+    ])("returns false for %s", code => {
+      expect(t.isSpecifierDefault(specifier(code))).toBe(false);
+    });
+  });
+
   describe("isCompatTag", function () {
     it("should handle lowercase tag names", function () {
       expect(t.react.isCompatTag("div")).toBe(true);
