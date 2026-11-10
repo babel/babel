@@ -149,7 +149,13 @@ type ErrorInfoCompressed = {
   DuplicateRegExpFlags: [];
   ElementAfterRest: [];
   EscapedCharNotAnIdentifier: [];
-  ExportBindingIsString: [{ localName: string; exportName: string }];
+  ExportBindingIsString: [
+    {
+      localName: string;
+      exportName: string;
+      typeModifierIn?: "declaration" | "specifier" | undefined;
+    },
+  ];
   ExportDefaultFromAsIdentifier: [];
   FilteredNamespaceDuplicateName: [{ name: string }];
   FilteredNamespaceRename: [];
