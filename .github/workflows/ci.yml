@@ -764,7 +764,7 @@ jobs:
           - mode: walltime
             runs-on: ubuntu-26.04-arm
             parallel: "1"
-            args: "--iterations=48"
+            args: "--iterations=40"
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
