@@ -81,11 +81,13 @@ export default {
   ExportBindingIsString: ({
     localName,
     exportName,
+    typeModifierIn,
   }: {
     localName: string;
     exportName: string;
+    typeModifierIn?: "declaration" | "specifier";
   }) =>
-    `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export { '${localName}' as '${exportName}' } from 'some-module'\`?`,
+    `A string literal cannot be used as an exported binding without \`from\`.\n- Did you mean \`export ${typeModifierIn === "declaration" ? "type " : ""}{ ${typeModifierIn === "specifier" ? "type " : ""}'${localName}' as '${exportName}' } from 'some-module'\`?`,
   ExportDefaultFromAsIdentifier:
     "'from' is not allowed as an identifier after 'export default'.",
 

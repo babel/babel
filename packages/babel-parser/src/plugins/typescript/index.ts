@@ -4489,7 +4489,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         if (this.isContextual(tt._as)) {
           // { type as as ...? }
           const secondAs = this.parseIdentifier();
-          if (tokenIsKeywordOrIdentifier(this.state.type)) {
+          if (
+            isImport
+              ? tokenIsKeywordOrIdentifier(this.state.type)
+              : this.tsIsStartOfModuleExportName()
+          ) {
             // { type as as something }
             hasTypeSpecifier = true;
             leftOfAs = firstAs;
@@ -4502,7 +4506,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             rightOfAs = secondAs;
             canParseAsKeyword = false;
           }
-        } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
+        } else if (
+          isImport
+            ? tokenIsKeywordOrIdentifier(this.state.type)
+            : this.tsIsStartOfModuleExportName()
+        ) {
           // { type as something }
           canParseAsKeyword = false;
           rightOfAs = isImport
@@ -4513,10 +4521,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           hasTypeSpecifier = true;
           leftOfAs = firstAs;
         }
-      } else if (tokenIsKeywordOrIdentifier(this.state.type)) {
+      } else if (this.tsIsStartOfModuleExportName()) {
         // { type something ...? }
         hasTypeSpecifier = true;
-        if (isImport) {
+        if (isImport && !this.match(tt.string)) {
           leftOfAs = this.parseIdentifier(true);
           if (!this.isContextual(tt._as)) {
             this.checkReservedWord(
@@ -4551,7 +4559,15 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           : this.parseModuleExportName();
       }
       if (!node[rightOfAsKey]) {
-        node[rightOfAsKey] = this.cloneIdentifier(node[leftOfAsKey]);
+        if (isImport && node[leftOfAsKey].type !== "Identifier") {
+          throw this.raise(Errors.ImportBindingIsString, node, {
+            importName: node[leftOfAsKey].value,
+          });
+        }
+        node[rightOfAsKey] =
+          node[leftOfAsKey].type !== "Identifier"
+            ? this.cloneStringLiteral(node[leftOfAsKey])
+            : this.cloneIdentifier(node[leftOfAsKey]);
       }
       if (isImport) {
         this.checkIdentifier(
@@ -4561,6 +4577,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             : BindingFlag.TYPE_TS_VALUE_IMPORT,
         );
       }
+    }
+
+    tsIsStartOfModuleExportName() {
+      return (
+        tokenIsKeywordOrIdentifier(this.state.type) || this.match(tt.string)
+      );
     }
 
     /**

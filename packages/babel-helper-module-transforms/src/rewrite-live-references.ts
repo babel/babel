@@ -306,12 +306,18 @@ const rewriteReferencesVisitor: Visitor<RewriteReferencesVisitorState> = {
         path.replaceWith(t.sequenceExpression([t.numericLiteral(0), ref]));
       } else if (path.isJSXIdentifier() && t.isMemberExpression(ref)) {
         const { object, property } = ref;
+        if (ref.computed || !t.isIdentifier(object)) {
+          // e.g. `_m["a b"]` or, with lazy imports, `_m().a`
+          throw path.buildCodeFrameError(
+            `Cannot transform the imported binding "${localName}" since it's used as a JSX element name, ` +
+              `and its reference can't be represented as a JSX member expression. ` +
+              `Please transform JSX using @babel/plugin-transform-react-jsx.`,
+          );
+        }
         path.replaceWith(
           t.jsxMemberExpression(
-            // @ts-expect-error todo(flow->ts): possible bug `object` might not have a name
             t.jsxIdentifier(object.name),
-            // @ts-expect-error todo(flow->ts): possible bug `property` might not have a name
-            t.jsxIdentifier(property.name),
+            t.jsxIdentifier((property as t.Identifier).name),
           ),
         );
       } else {

@@ -1,0 +1,60 @@
+{
+  "type": "File",
+  "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":34,"index":34}},
+  "errors": [
+    "SyntaxError: The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement. (1:14)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":34,"index":34}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":34,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":34,"index":34}},
+        "exportKind": "type",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":14,"end":22,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":22,"index":22}},
+            "local": {
+              "type": "StringLiteral",
+              "start":19,"end":22,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":22,"index":22}},
+              "extra": {
+                "rawValue": "a",
+                "raw": "\"a\""
+              },
+              "value": "a"
+            },
+            "exportKind": "type",
+            "exported": {
+              "type": "StringLiteral",
+              "start":19,"end":22,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":1,"column":22,"index":22}},
+              "extra": {
+                "rawValue": "a",
+                "raw": "\"a\""
+              },
+              "value": "a"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":30,"end":33,"loc":{"start":{"line":1,"column":30,"index":30},"end":{"line":1,"column":33,"index":33}},
+          "extra": {
+            "rawValue": "m",
+            "raw": "\"m\""
+          },
+          "value": "m"
+        },
+        "attributes": [],
+        "declaration": null
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
