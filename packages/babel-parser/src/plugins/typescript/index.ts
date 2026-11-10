@@ -4266,6 +4266,18 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       /*:: invariant(arrow.node != null) */
       if (
+        jsx &&
+        arrow.node &&
+        arrow.error &&
+        !(this.optionFlags & OptionFlags.ErrorRecovery)
+      ) {
+        // The arrow function kept errors deferred by tsParseWithDeferredArrowErrors.
+        // Without JSX, tsParseMaybeArrowWithRestrictedReturnType reports them once
+        // it knows whether the arrow function is kept. With JSX, the type
+        // parameters are unambiguous and it's always kept.
+        throw arrow.error;
+      }
+      if (
         arrow.error &&
         this.tsShouldKeepArrowErrorAt(arrow.error, state.start)
       ) {
