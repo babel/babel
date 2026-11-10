@@ -1,4 +1,6 @@
 import * as t from "@babel/types";
+import { setFlagsFromString } from "node:v8";
+import { createContext, runInContext, runInNewContext } from "node:vm";
 
 import generator from "../../babel-generator/lib/index.js";
 import template from "../lib/index.js";
@@ -403,6 +405,53 @@ describe("@babel/template", function () {
       error = e;
     }
     expect(error.stack).toMatch("=============\n    at create");
+  });
+
+  it("builders do not retain their caller", async () => {
+    setFlagsFromString("--expose-gc");
+    const gc = runInNewContext("gc");
+
+    function create() {
+      const context = createContext({ template });
+      const receiver = runInContext(
+        `({ build() { return template.statement("const result = 1;"); } })`,
+        context,
+      );
+      return { ref: new WeakRef(receiver), builder: receiver.build() };
+    }
+
+    const { ref, builder } = create();
+    // WeakRef targets are kept alive until the end of the current job.
+    for (let i = 0; i < 10 && ref.deref() !== undefined; i++) {
+      await new Promise(resolve => setImmediate(resolve));
+      gc();
+    }
+    expect(ref.deref()).toBeUndefined();
+    expect(builder().type).toBe("VariableDeclaration");
+  });
+
+  describe("custom Error.prepareStackTrace", () => {
+    let prepareStackTrace;
+    beforeEach(() => {
+      prepareStackTrace = Error.prepareStackTrace;
+    });
+    afterEach(() => {
+      Error.prepareStackTrace = prepareStackTrace;
+    });
+
+    it("returning call sites does not hide template errors", () => {
+      Error.prepareStackTrace = (_, callSites) => callSites;
+      const build = template.statement("const = ;");
+      expect(() => build()).toThrow(SyntaxError);
+    });
+
+    it("throwing does not break template construction", () => {
+      Error.prepareStackTrace = () => {
+        throw new Error("prepareStackTrace");
+      };
+      const build = template.statement("const result = 1;");
+      expect(build().type).toBe("VariableDeclaration");
+    });
   });
 
   describe(".syntacticPlaceholders", () => {
