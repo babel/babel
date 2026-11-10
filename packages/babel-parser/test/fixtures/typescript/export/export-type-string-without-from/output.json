@@ -1,0 +1,82 @@
+{
+  "type": "File",
+  "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":25,"index":46}},
+  "errors": [
+    "SyntaxError: A string literal cannot be used as an exported binding without `from`.\n- Did you mean `export type { 'a' as 'a' } from 'some-module'`? (1:14)",
+    "SyntaxError: A string literal cannot be used as an exported binding without `from`.\n- Did you mean `export type { 'b' as 'c' } from 'some-module'`? (2:14)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":46,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":25,"index":46}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start":0,"end":20,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":20,"index":20}},
+        "exportKind": "type",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":14,"end":17,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":17,"index":17}},
+            "local": {
+              "type": "StringLiteral",
+              "start":14,"end":17,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":17,"index":17}},
+              "extra": {
+                "rawValue": "a",
+                "raw": "\"a\""
+              },
+              "value": "a"
+            },
+            "exportKind": "value",
+            "exported": {
+              "type": "StringLiteral",
+              "start":14,"end":17,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":17,"index":17}},
+              "extra": {
+                "rawValue": "a",
+                "raw": "\"a\""
+              },
+              "value": "a"
+            }
+          }
+        ],
+        "source": null,
+        "attributes": [],
+        "declaration": null
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":21,"end":46,"loc":{"start":{"line":2,"column":0,"index":21},"end":{"line":2,"column":25,"index":46}},
+        "exportKind": "type",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":35,"end":43,"loc":{"start":{"line":2,"column":14,"index":35},"end":{"line":2,"column":22,"index":43}},
+            "local": {
+              "type": "StringLiteral",
+              "start":35,"end":38,"loc":{"start":{"line":2,"column":14,"index":35},"end":{"line":2,"column":17,"index":38}},
+              "extra": {
+                "rawValue": "b",
+                "raw": "\"b\""
+              },
+              "value": "b"
+            },
+            "exportKind": "value",
+            "exported": {
+              "type": "Identifier",
+              "start":42,"end":43,"loc":{"start":{"line":2,"column":21,"index":42},"end":{"line":2,"column":22,"index":43},"identifierName":"c"},
+              "name": "c"
+            }
+          }
+        ],
+        "source": null,
+        "attributes": [],
+        "declaration": null
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

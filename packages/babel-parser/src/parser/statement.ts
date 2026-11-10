@@ -2862,6 +2862,13 @@ export default abstract class StatementParser extends ExpressionParser {
               this.raise(Errors.ExportBindingIsString, specifier, {
                 localName: local.value,
                 exportName,
+                typeModifierIn:
+                  (node as Undone<N.ExportNamedDeclaration>).exportKind ===
+                  "type"
+                    ? "declaration"
+                    : specifier.exportKind === "type"
+                      ? "specifier"
+                      : undefined,
               });
             } else {
               // check for keywords used as local names

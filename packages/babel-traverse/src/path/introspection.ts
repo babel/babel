@@ -239,7 +239,8 @@ export function referencesImport(
 
   if (
     path.isImportSpecifier() &&
-    isIdentifier(path.node.imported, { name: importName })
+    (isIdentifier(path.node.imported, { name: importName }) ||
+      isStringLiteral(path.node.imported, { value: importName }))
   ) {
     return true;
   }

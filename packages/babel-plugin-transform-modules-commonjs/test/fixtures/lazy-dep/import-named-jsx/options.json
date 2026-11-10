@@ -1,0 +1,4 @@
+{
+  "plugins": ["syntax-jsx", ["transform-modules-commonjs", { "lazy": true }]],
+  "throws": "Cannot transform the imported binding \"Foo\" since it's used as a JSX element name"
+}
