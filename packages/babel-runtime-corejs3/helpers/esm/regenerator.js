@@ -45,7 +45,7 @@ function _regenerator() {
       return function (n, p, F) {
         if (f > 1) throw TypeError("Generator is already running");
         for (y && 1 === p && l(p, F), i = p, u = F; (e = i < 2 ? r : u) || !y;) {
-          a || (i ? i < 3 ? (i > 1 && (G.n = -1), l(i, u)) : G.n = u : G.v = u);
+          a || (i ? (i > 1 && (G.n = i < 3 ? -1 : u), l(i, u)) : G.v = u);
           try {
             if (f = 2, a) {
               if (i || (n = "next"), e = a[n]) {
