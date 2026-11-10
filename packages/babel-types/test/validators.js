@@ -40,8 +40,10 @@ describe("validators", function () {
   });
 
   describe("isSpecifierDefault", function () {
-    const specifier = code =>
-      parse(code, { sourceType: "module" }).program.body.at(-1).specifiers[0];
+    const specifier = code => {
+      const { body } = parse(code, { sourceType: "module" }).program;
+      return body[body.length - 1].specifiers[0];
+    };
 
     it.each([
       `import a from "m";`,
