@@ -270,10 +270,20 @@ export default declare(api => {
 
         if (node.superClass) {
           if (comments.length > 0) {
-            attachComment({
-              toPath: path.get("id"),
-              comments: comments,
-            });
+            if (node.id) {
+              attachComment({
+                toPath: path.get("id"),
+                comments: comments,
+              });
+            } else {
+              // Anonymous classes have no id, attach the comments to the class such
+              // that comments appear after the `class` keyword and before `extends`.
+              attachComment({
+                toPath: path,
+                where: "inner",
+                comments: comments,
+              });
+            }
             comments = [];
           }
 
