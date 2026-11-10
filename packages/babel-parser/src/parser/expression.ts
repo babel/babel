@@ -1003,28 +1003,34 @@ export default abstract class ExpressionParser extends LValParser {
         refExpressionErrors,
       );
     }
-    let finishedNode:
-      N.CallExpression | N.OptionalCallExpression | N.ArrowFunctionExpression =
-      this.finishCallExpression(node, optionalChainMember);
+    const finishedNode = this.finishCallExpression(node, optionalChainMember);
 
-    if (maybeAsyncArrow && this.shouldParseAsyncArrow(startLoc) && !optional) {
-      /*:: invariant(refExpressionErrors != null) */
-      state.stop = true;
-      this.checkDestructuringPrivate(refExpressionErrors!);
-      this.expressionScope.validateAsPattern();
-      this.expressionScope.exit();
-      finishedNode = this.parseAsyncArrowFromCallExpression(
-        this.startNodeAt<N.ArrowFunctionExpression>(startLoc),
-        finishedNode as N.CallExpression,
-      );
-    } else {
-      if (maybeAsyncArrow) {
-        this.checkExpressionErrors(refExpressionErrors, true);
+    if (maybeAsyncArrow && !optional) {
+      const errorsLength = this.state.errors.length;
+      const asyncArrowHead = this.parseAsyncArrowHead(startLoc);
+      if (asyncArrowHead) {
+        // Keep expression-scope errors ahead of return-type errors.
+        const returnTypeErrors =
+          this.state.errors.length > errorsLength
+            ? this.state.errors.splice(errorsLength)
+            : undefined;
+        /*:: invariant(refExpressionErrors != null) */
+        state.stop = true;
+        this.checkDestructuringPrivate(refExpressionErrors!);
+        this.expressionScope.validateAsPattern();
         this.expressionScope.exit();
+        if (returnTypeErrors) this.state.errors.push(...returnTypeErrors);
+        return this.parseAsyncArrowFromCallExpression(
+          asyncArrowHead,
+          finishedNode as N.CallExpression,
+        );
       }
-      this.toReferencedList(node.arguments);
     }
-
+    if (maybeAsyncArrow) {
+      this.checkExpressionErrors(refExpressionErrors, true);
+      this.expressionScope.exit();
+    }
+    this.toReferencedList(node.arguments);
     return finishedNode;
   }
 
@@ -1116,9 +1122,12 @@ export default abstract class ExpressionParser extends LValParser {
     return elts;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- `startLoc` is used in typescript plugin
-  shouldParseAsyncArrow(startLoc: Position): boolean {
-    return this.match(tt.arrow) && !this.canInsertSemicolon();
+  parseAsyncArrowHead(
+    startLoc: Position,
+  ): Undone<N.ArrowFunctionExpression> | undefined {
+    return this.match(tt.arrow) && !this.canInsertSemicolon()
+      ? this.startNodeAt<N.ArrowFunctionExpression>(startLoc)
+      : undefined;
   }
 
   parseAsyncArrowFromCallExpression(

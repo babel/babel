@@ -3023,9 +3023,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return super.parseAsyncArrowFromCallExpression(node, call);
     }
 
-    // todo description
-    shouldParseAsyncArrow(startLoc: Position): boolean {
-      return this.match(tt.colon) || super.shouldParseAsyncArrow(startLoc);
+    parseAsyncArrowHead(
+      startLoc: Position,
+    ): Undone<N.ArrowFunctionExpression> | undefined {
+      return this.match(tt.colon)
+        ? this.startNodeAt<N.ArrowFunctionExpression>(startLoc)
+        : super.parseAsyncArrowHead(startLoc);
     }
 
     // We need to support type parameter declarations for arrow functions. This
