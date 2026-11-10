@@ -1,0 +1,5 @@
+{
+  "minified": true,
+  "sourceType": "module",
+  "plugins": ["typescript"]
+}
