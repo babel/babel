@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-classes"],
+  "throws": "Missing class static block transform. Please make sure that \"@babel/plugin-transform-class-static-block\" and \"@babel/plugin-transform-class-properties\" come *before* \"@babel/plugin-transform-classes\"."
+}
