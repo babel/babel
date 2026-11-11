@@ -1,0 +1,281 @@
+{
+  "type": "File",
+  "start":0,"end":214,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":23,"index":214}},
+  "errors": [
+    "SyntaxError: Argument name clash. (2:11)",
+    "SyntaxError: Identifier 'y' has already been declared. (3:30)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":214,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":5,"column":23,"index":214}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":58,"end":84,"loc":{"start":{"line":2,"column":0,"index":58},"end":{"line":2,"column":26,"index":84}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":58,"end":83,"loc":{"start":{"line":2,"column":0,"index":58},"end":{"line":2,"column":25,"index":83}},
+          "test": {
+            "type": "Identifier",
+            "start":58,"end":59,"loc":{"start":{"line":2,"column":0,"index":58},"end":{"line":2,"column":1,"index":59},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start":62,"end":79,"loc":{"start":{"line":2,"column":4,"index":62},"end":{"line":2,"column":21,"index":79}},
+            "returnType": {
+              "type": "TSTypeAnnotation",
+              "start":71,"end":74,"loc":{"start":{"line":2,"column":13,"index":71},"end":{"line":2,"column":16,"index":74}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":73,"end":74,"loc":{"start":{"line":2,"column":15,"index":73},"end":{"line":2,"column":16,"index":74}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":73,"end":74,"loc":{"start":{"line":2,"column":15,"index":73},"end":{"line":2,"column":16,"index":74},"identifierName":"U"},
+                  "name": "U"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":66,"end":67,"loc":{"start":{"line":2,"column":8,"index":66},"end":{"line":2,"column":9,"index":67},"identifierName":"x"},
+                "name": "x"
+              },
+              {
+                "type": "Identifier",
+                "start":69,"end":70,"loc":{"start":{"line":2,"column":11,"index":69},"end":{"line":2,"column":12,"index":70},"identifierName":"x"},
+                "name": "x"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":78,"end":79,"loc":{"start":{"line":2,"column":20,"index":78},"end":{"line":2,"column":21,"index":79},"identifierName":"d"},
+              "name": "d"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterDeclaration",
+              "start":62,"end":65,"loc":{"start":{"line":2,"column":4,"index":62},"end":{"line":2,"column":7,"index":65}},
+              "params": [
+                {
+                  "type": "TSTypeParameter",
+                  "start":63,"end":64,"loc":{"start":{"line":2,"column":5,"index":63},"end":{"line":2,"column":6,"index":64}},
+                  "name": "T"
+                }
+              ]
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start":82,"end":83,"loc":{"start":{"line":2,"column":24,"index":82},"end":{"line":2,"column":25,"index":83},"identifierName":"e"},
+            "name": "e"
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Followed by `:`: keep the arrow function and its error",
+            "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":57,"index":57}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":85,"end":124,"loc":{"start":{"line":3,"column":0,"index":85},"end":{"line":3,"column":39,"index":124}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":85,"end":123,"loc":{"start":{"line":3,"column":0,"index":85},"end":{"line":3,"column":38,"index":123}},
+          "test": {
+            "type": "Identifier",
+            "start":85,"end":86,"loc":{"start":{"line":3,"column":0,"index":85},"end":{"line":3,"column":1,"index":86},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start":89,"end":119,"loc":{"start":{"line":3,"column":4,"index":89},"end":{"line":3,"column":34,"index":119}},
+            "returnType": {
+              "type": "TSTypeAnnotation",
+              "start":95,"end":98,"loc":{"start":{"line":3,"column":10,"index":95},"end":{"line":3,"column":13,"index":98}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":97,"end":98,"loc":{"start":{"line":3,"column":12,"index":97},"end":{"line":3,"column":13,"index":98}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":97,"end":98,"loc":{"start":{"line":3,"column":12,"index":97},"end":{"line":3,"column":13,"index":98},"identifierName":"U"},
+                  "name": "U"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":93,"end":94,"loc":{"start":{"line":3,"column":8,"index":93},"end":{"line":3,"column":9,"index":94},"identifierName":"x"},
+                "name": "x"
+              }
+            ],
+            "body": {
+              "type": "BlockStatement",
+              "start":102,"end":119,"loc":{"start":{"line":3,"column":17,"index":102},"end":{"line":3,"column":34,"index":119}},
+              "body": [
+                {
+                  "type": "VariableDeclaration",
+                  "start":104,"end":110,"loc":{"start":{"line":3,"column":19,"index":104},"end":{"line":3,"column":25,"index":110}},
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start":108,"end":109,"loc":{"start":{"line":3,"column":23,"index":108},"end":{"line":3,"column":24,"index":109}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":108,"end":109,"loc":{"start":{"line":3,"column":23,"index":108},"end":{"line":3,"column":24,"index":109},"identifierName":"y"},
+                        "name": "y"
+                      },
+                      "init": null
+                    }
+                  ],
+                  "kind": "let"
+                },
+                {
+                  "type": "VariableDeclaration",
+                  "start":111,"end":117,"loc":{"start":{"line":3,"column":26,"index":111},"end":{"line":3,"column":32,"index":117}},
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start":115,"end":116,"loc":{"start":{"line":3,"column":30,"index":115},"end":{"line":3,"column":31,"index":116}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":115,"end":116,"loc":{"start":{"line":3,"column":30,"index":115},"end":{"line":3,"column":31,"index":116},"identifierName":"y"},
+                        "name": "y"
+                      },
+                      "init": null
+                    }
+                  ],
+                  "kind": "let"
+                }
+              ],
+              "directives": []
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterDeclaration",
+              "start":89,"end":92,"loc":{"start":{"line":3,"column":4,"index":89},"end":{"line":3,"column":7,"index":92}},
+              "params": [
+                {
+                  "type": "TSTypeParameter",
+                  "start":90,"end":91,"loc":{"start":{"line":3,"column":5,"index":90},"end":{"line":3,"column":6,"index":91}},
+                  "name": "T"
+                }
+              ]
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start":122,"end":123,"loc":{"start":{"line":3,"column":37,"index":122},"end":{"line":3,"column":38,"index":123},"identifierName":"e"},
+            "name": "e"
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Not followed by `:`: the error is discarded when parsing again",
+            "start":125,"end":190,"loc":{"start":{"line":4,"column":0,"index":125},"end":{"line":4,"column":65,"index":190}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":191,"end":214,"loc":{"start":{"line":5,"column":0,"index":191},"end":{"line":5,"column":23,"index":214}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":191,"end":213,"loc":{"start":{"line":5,"column":0,"index":191},"end":{"line":5,"column":22,"index":213}},
+          "test": {
+            "type": "Identifier",
+            "start":191,"end":192,"loc":{"start":{"line":5,"column":0,"index":191},"end":{"line":5,"column":1,"index":192},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "TSTypeAssertion",
+            "start":195,"end":204,"loc":{"start":{"line":5,"column":4,"index":195},"end":{"line":5,"column":13,"index":204}},
+            "typeAnnotation": {
+              "type": "TSTypeReference",
+              "start":196,"end":197,"loc":{"start":{"line":5,"column":5,"index":196},"end":{"line":5,"column":6,"index":197}},
+              "typeName": {
+                "type": "Identifier",
+                "start":196,"end":197,"loc":{"start":{"line":5,"column":5,"index":196},"end":{"line":5,"column":6,"index":197},"identifierName":"T"},
+                "name": "T"
+              }
+            },
+            "expression": {
+              "type": "SequenceExpression",
+              "start":199,"end":203,"loc":{"start":{"line":5,"column":8,"index":199},"end":{"line":5,"column":12,"index":203}},
+              "expressions": [
+                {
+                  "type": "Identifier",
+                  "start":199,"end":200,"loc":{"start":{"line":5,"column":8,"index":199},"end":{"line":5,"column":9,"index":200},"identifierName":"x"},
+                  "name": "x"
+                },
+                {
+                  "type": "Identifier",
+                  "start":202,"end":203,"loc":{"start":{"line":5,"column":11,"index":202},"end":{"line":5,"column":12,"index":203},"identifierName":"x"},
+                  "name": "x"
+                }
+              ],
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 198
+              }
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start":207,"end":213,"loc":{"start":{"line":5,"column":16,"index":207},"end":{"line":5,"column":22,"index":213}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":207,"end":208,"loc":{"start":{"line":5,"column":16,"index":207},"end":{"line":5,"column":17,"index":208},"identifierName":"U"},
+                "name": "U"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":212,"end":213,"loc":{"start":{"line":5,"column":21,"index":212},"end":{"line":5,"column":22,"index":213},"identifierName":"d"},
+              "name": "d"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Not followed by `:`: the error is discarded when parsing again",
+            "start":125,"end":190,"loc":{"start":{"line":4,"column":0,"index":125},"end":{"line":4,"column":65,"index":190}}
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Followed by `:`: keep the arrow function and its error",
+      "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":57,"index":57}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " Not followed by `:`: the error is discarded when parsing again",
+      "start":125,"end":190,"loc":{"start":{"line":4,"column":0,"index":125},"end":{"line":4,"column":65,"index":190}}
+    }
+  ]
+}

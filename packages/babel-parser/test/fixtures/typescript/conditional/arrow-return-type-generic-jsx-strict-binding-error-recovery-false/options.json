@@ -1,0 +1,8 @@
+{
+  "errorRecovery": false,
+  "plugins": [
+    "jsx",
+    "typescript"
+  ],
+  "throws": "Binding 'eval' in strict mode. (1:13)"
+}

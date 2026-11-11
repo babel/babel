@@ -1,5 +1,6 @@
 import type State from "../../tokenizer/state.ts";
 import {
+  tokenIsAssignment,
   tokenIsIdentifier,
   tokenIsTSDeclarationStart,
   tokenIsTSTypeOperator,
@@ -21,7 +22,7 @@ import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util.ts";
 import { ParseStatementFlag } from "../../parser/statement.ts";
 import { ParamKind } from "../../util/production-parameter.ts";
-import { Errors, ParseErrorEnum } from "../../parse-error.ts";
+import { Errors, type ParseError, ParseErrorEnum } from "../../parse-error.ts";
 import type { Undone } from "../../parser/node.ts";
 import type { ClassWithMixin, IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
@@ -304,6 +305,63 @@ function tsIsTypeCast(
     case "TSNonNullExpression":
     case "TSTypeAssertion":
       return true;
+    default:
+      return false;
+  }
+}
+
+// Whether an error found while parsing an arrow function means that its
+// parameters can't be parameters, as in `([(a)]): b => c`. Errors after them, or
+// for parameters that are not allowed there, as in `(a, a): b => c`, still make
+// it an arrow function.
+function tsIsInvalidArrowParamsError(
+  error: ParseError<any>,
+  returnTypeStart: number,
+): boolean {
+  if (error.pos >= returnTypeStart) return false;
+  switch (error.reasonCode) {
+    case "AwaitBindingIdentifier":
+    case "AwaitExpressionFormalParameter":
+    case "IllegalLanguageModeDirective":
+    case "ParamDupe":
+    case "StrictEvalArgumentsBinding":
+    case "VarRedeclaration":
+    case "YieldInParameter":
+      return false;
+    default:
+      return true;
+  }
+}
+
+// Like TypeScript's isParenthesizedArrowFunctionExpression, check if the
+// first parameter of an arrow function shows that it's an arrow function
+// rather than a parenthesized expression or a call: `()`, `(...a)`, `(a: T)`
+// or `(a?)`. `params` can be either the arrow function's parameters, or the
+// expressions they are converted from.
+function tsHasUnambiguousArrowParams(
+  params: readonly (N.Node | null)[] | null | undefined,
+): boolean {
+  if (!params?.length) return true;
+  let first = params[0];
+  if (
+    first?.type === "AssignmentPattern" ||
+    first?.type === "AssignmentExpression"
+  ) {
+    first = first.left;
+  }
+  switch (first?.type) {
+    case "RestElement":
+    case "SpreadElement":
+      return true;
+    case "TSTypeCastExpression":
+      // tsc treats `({ a }: T)` as ambiguous, returns TriState.Unknown in isParenthesizedArrowFunctionExpression
+      // but treats `(a: T)` and `(this: T)` as unambiguous starting an arrow function
+      return (
+        first.expression.type === "Identifier" ||
+        first.expression.type === "ThisExpression"
+      );
+    case "Identifier":
+      return !!first.typeAnnotation || !!first.optional;
     default:
       return false;
   }
@@ -2463,6 +2521,14 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           // Don't use overloaded parseFunctionParams which would look for "<" again.
           super.parseFunctionParams(node);
           node.returnType = this.tsTryParseTypeOrTypePredicateAnnotation();
+          const arrowStartPos = this.offsetToSourcePos(startLoc.index);
+          if (
+            node.returnType &&
+            this.match(tt.arrow) &&
+            this.tsIsArrowReturnTypeRestrictedAt(arrowStartPos)
+          ) {
+            this.tsArrowReturnTypeAt.set(arrowStartPos, node.returnType.start);
+          }
           this.expect(tt.arrow);
           return node;
         });
@@ -2471,11 +2537,20 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
 
       if (!res) return;
 
-      return super.parseArrowExpression(
-        res,
-        /* params are already set */ null,
-        /* async */ true,
-      );
+      const startPos = this.offsetToSourcePos(startLoc.index);
+      const parse = () =>
+        res.returnType && this.tsIsArrowReturnTypeRestrictedAt(startPos)
+          ? this.tsParseWithDeferredArrowErrors(() =>
+              super.parseArrowExpression(res, null, true),
+            )
+          : super.parseArrowExpression(res, null, true);
+      return this.tsIsArrowReturnTypeRestrictedAt(startPos)
+        ? this.tsParseWithRestrictedArrowReturnType(
+            parse,
+            // Without JSX, this might also be a call with type arguments.
+            this.hasPlugin("jsx") || this.state.tsArrowReturnTypeAllowed,
+          )
+        : parse();
     }
 
     // Used when parsing type arguments from ES or JSX productions, where the first token
@@ -2723,10 +2798,11 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // handles 'f<<T>'
       if (this.match(tt.lt) || this.match(tt.bitShiftL)) {
         let missingParenErrorLoc;
-        // tsTryParseAndCatch is expensive, so avoid if not necessary.
+        let parsingAsyncArrow = true;
+        // tryParse is expensive, so avoid if not necessary.
         // There are number of things we are going to "maybe" parse, like type arguments on
         // tagged template expressions. If any of them fail, walk it back and continue.
-        const result = this.tsTryParseAndCatch(() => {
+        const parseAttempt = () => {
           if (!noCalls && this.atPossibleAsyncArrow(base)) {
             // Almost certainly this is a generic async function `async <T>() => ...
             // But it might be a call with a type argument `async<T>();`
@@ -2738,6 +2814,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             }
           }
 
+          parsingAsyncArrow = false;
           const typeArguments = this.tsParseTypeArgumentsInExpression();
           if (!typeArguments) return;
 
@@ -2809,8 +2886,24 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             node.typeParameters = typeArguments;
           }
           return this.finishNode(node, "TSInstantiationExpression");
-        });
+        };
+        // Keep abort in this small callback so it can be inlined.
+        const attempt = this.tryParse<N.Expression>(
+          abort => parseAttempt() || abort(),
+        );
 
+        if (
+          attempt.thrown &&
+          parsingAsyncArrow &&
+          this.tsShouldKeepArrowErrorAt(
+            attempt.error,
+            this.offsetToSourcePos(startLoc.index),
+          )
+        ) {
+          throw attempt.error;
+        }
+        const result = attempt.node;
+        if (result && attempt.error) this.state = attempt.failState!;
         if (missingParenErrorLoc) {
           this.unexpected(missingParenErrorLoc, tt.parenL);
         }
@@ -3422,19 +3515,74 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         }
       }
 
+      const startPos = this.offsetToSourcePos(startLoc.index);
+      const isRestricted = this.tsIsArrowReturnTypeRestrictedAt(startPos);
+      const allowsReturnType =
+        isRestricted && this.state.tsArrowReturnTypeAllowed;
+
       this.next(); // eat `?`
       const node = this.startNodeAt<N.ConditionalExpression>(startLoc);
       node.test = expr;
-      // While parsing the consequent, set a flag to prevent treating
-      // `:` as an arrow return type annotation. In `a ? async(b) : c`,
-      // the `:` is the ternary separator, not a return type annotation.
-      const oldInConditionalConsequent = this.state.inConditionalConsequent;
-      this.state.inConditionalConsequent = true;
-      node.consequent = this.parseMaybeAssignAllowIn();
-      this.state.inConditionalConsequent = oldInConditionalConsequent;
+      // In `a ? (b) : c => d`, the `:` is the conditional's separator rather
+      // than a return type annotation for `(b) => d`. Like TypeScript, only
+      // parse a return type in the consequent if the arrow function is then
+      // followed by `:`, as in `a ? (b): c => d : e`.
+      node.consequent = this.tsParseWithRestrictedArrowReturnType(() =>
+        this.parseMaybeAssignAllowIn(),
+      );
       this.expect(tt.colon);
-      node.alternate = this.parseMaybeAssign();
+      // The alternate inherits the restriction from the conditional itself:
+      //   a ? b ? c : (d) : e => f
+      node.alternate = isRestricted
+        ? this.tsParseWithRestrictedArrowReturnType(
+            () => this.parseMaybeAssign(),
+            allowsReturnType,
+          )
+        : this.parseMaybeAssign();
       return this.finishNode(node, "ConditionalExpression");
+    }
+
+    // The innermost restriction is the only one that can apply to the
+    // current expression. Scoped parser calls save and restore outer values.
+    tsIsArrowReturnTypeRestrictedAt(sourcePos: number): boolean {
+      return this.state.tsArrowReturnTypeRestrictionAt === sourcePos;
+    }
+
+    // Restrict the return type of an arrow function at the given source position.
+    // If allowsReturnType is true, it only has to have valid parameters, as in the
+    // body of `a ? () => ((b)) : c => d`: unambiguous parameters don't restrict
+    // the return type of the arrow functions in their body, but `((b))` can't be
+    // parameters. Otherwise, it also has to be followed by `:`.
+    tsRestrictArrowReturnTypeAt(
+      sourcePos: number,
+      allowsReturnType: boolean,
+      genericParams: boolean = false,
+    ) {
+      this.state.tsArrowReturnTypeRestrictionAt = sourcePos;
+      this.state.tsArrowReturnTypeAllowed = allowsReturnType;
+      this.state.tsGenericArrowParams = genericParams;
+    }
+
+    // Parse an expression starting at the current position, restricting the
+    // return type of an arrow function at its start.
+    tsParseWithRestrictedArrowReturnType<T>(
+      parse: () => T,
+      allowsReturnType: boolean = false,
+      genericParams: boolean = false,
+    ): T {
+      const oldAllowed = this.state.tsArrowReturnTypeAllowed;
+      const oldGeneric = this.state.tsGenericArrowParams;
+      const oldStart = this.state.tsArrowReturnTypeRestrictionAt;
+      this.tsRestrictArrowReturnTypeAt(
+        this.state.start,
+        allowsReturnType,
+        genericParams,
+      );
+      const result = parse();
+      this.state.tsArrowReturnTypeRestrictionAt = oldStart;
+      this.state.tsArrowReturnTypeAllowed = oldAllowed;
+      this.state.tsGenericArrowParams = oldGeneric;
+      return result;
     }
 
     // Note: These "type casts" are *not* valid TS expressions.
@@ -3757,18 +3905,156 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
-    // parse the return type of an async arrow function - let foo = (async (): number => {});
-    parseAsyncArrowFromCallExpression(
-      node: N.ArrowFunctionExpression,
-      call: N.CallExpression,
-    ): N.ArrowFunctionExpression {
-      if (this.match(tt.colon)) {
-        node.returnType = this.tsParseTypeAnnotation();
+    parseMaybeAssign(
+      refExpressionErrors?: ExpressionErrors | null,
+      afterLeftParse?: Function,
+    ): N.Expression {
+      const startPos = this.state.start;
+      if (!this.tsIsArrowReturnTypeRestrictedAt(startPos)) {
+        return this.tsParseMaybeAssign(refExpressionErrors, afterLeftParse);
       }
-      return super.parseAsyncArrowFromCallExpression(node, call);
+
+      const oldStart = this.state.tsArrowReturnTypeRestrictionAt;
+      const oldAllowed = this.state.tsArrowReturnTypeAllowed;
+      const oldGeneric = this.state.tsGenericArrowParams;
+      const node =
+        this.match(tt.parenL) ||
+        this.match(tt.lt) ||
+        this.isContextual(tt._async)
+          ? this.tsParseMaybeArrowWithRestrictedReturnType(
+              startPos,
+              refExpressionErrors,
+              afterLeftParse,
+            )
+          : this.tsParseMaybeAssign(refExpressionErrors, afterLeftParse);
+      // Restore the restriction after parsing an assignment's right-hand side.
+      this.state.tsArrowReturnTypeRestrictionAt = oldStart;
+      this.state.tsArrowReturnTypeAllowed = oldAllowed;
+      this.state.tsGenericArrowParams = oldGeneric;
+      return node;
     }
 
-    parseMaybeAssign(
+    // Finish a restricted generic arrow before deciding whether an error
+    // belongs to it or to an alternative interpretation of the expression.
+    tsParseWithDeferredArrowErrors<T>(parse: () => T): T {
+      if (this.optionFlags & OptionFlags.ErrorRecovery) return parse();
+      this.optionFlags |= OptionFlags.ErrorRecovery;
+      try {
+        return parse();
+      } finally {
+        this.optionFlags &= ~OptionFlags.ErrorRecovery;
+      }
+    }
+
+    tsShouldKeepArrowErrorAt(
+      error: ParseError<any>,
+      startPos: number,
+    ): boolean {
+      if (!this.tsIsArrowReturnTypeRestrictedAt(startPos)) return false;
+      const returnTypeStart = this.tsArrowReturnTypeAt.get(startPos);
+      return (
+        returnTypeStart !== undefined &&
+        !tsIsInvalidArrowParamsError(error, returnTypeStart)
+      );
+    }
+
+    // Source positions where an arrow function was parsed with a return type,
+    // and where that return type starts.
+    // Like noArrowAt, this is not reset when backtracking.
+    tsArrowReturnTypeAt = new Map<number, number>();
+
+    tsParseMaybeArrowWithRestrictedReturnType(
+      startPos: number,
+      refExpressionErrors?: ExpressionErrors | null,
+      afterLeftParse?: Function,
+    ): N.Expression {
+      // An arrow function that might be a parenthesized expression or an
+      // async call can only have a return type if it's followed by `:`.
+      // Otherwise, parse it again without the return type, so that the `:`
+      // is the conditional's separator: `a ? (b) : c => d`.
+      // Like TypeScript's `notParenthesizedArrow`, remember in noArrowAt where
+      // it isn't an arrow function, to avoid trying again when backtracking.
+      if (!this.noArrowAt.has(startPos)) {
+        const allowsReturnType = this.state.tsArrowReturnTypeAllowed;
+        const parse = () =>
+          this.tsParseMaybeAssign(refExpressionErrors, afterLeftParse);
+        let state = this.state.clone();
+        const { tokensLength } = state;
+        this.tsArrowReturnTypeAt.delete(startPos);
+        let result = this.tryParse(parse, state);
+        const returnTypeStart = this.tsArrowReturnTypeAt.get(startPos);
+        if (
+          result.thrown &&
+          returnTypeStart !== undefined &&
+          !tsIsInvalidArrowParamsError(result.error, returnTypeStart) &&
+          !(this.optionFlags & OptionFlags.ErrorRecovery)
+        ) {
+          // Whether the error must be reported depends on what follows the
+          // arrow function: it is in `a ? b ? (c, c): d => e : f`, while it's
+          // discarded in `a ? (c, c) : d => e`. Recover from it to find out.
+          state = this.state.clone();
+          this.optionFlags |= OptionFlags.ErrorRecovery;
+          try {
+            result = this.tryParse(parse, state);
+          } finally {
+            this.optionFlags &= ~OptionFlags.ErrorRecovery;
+          }
+        }
+        if (result.thrown) {
+          // Only parse again if the error might be caused by parsing an
+          // arrow function with a return type, as in `a ? (b, b) : c => d`.
+          // Otherwise, parsing again would just throw the same error.
+          if (!this.tsArrowReturnTypeAt.has(startPos)) throw result.error;
+        } else {
+          if (result.error) this.state = result.failState!;
+          const node = result.node!;
+          if (
+            node.type !== "ArrowFunctionExpression" ||
+            !node.returnType ||
+            node.extra?.parenthesized
+          ) {
+            return node;
+          }
+          // Like when an error is thrown, parse it again if the parameters are
+          // not valid, as in `a ? b ? ([(c)]) : d => e : f`. This checks all the
+          // errors because that one might not be the first, as in `(c, c, 1)`.
+          const { start } = node.returnType;
+          const hasInvalidParams =
+            result.error != null &&
+            this.state.errors
+              .slice(state.errors.length)
+              .some(error => tsIsInvalidArrowParamsError(error, start));
+          // Type parameters might also be a type assertion or type arguments,
+          // unless JSX makes them unambiguous: `a ? <T>(b) : c => d`.
+          const isUnambiguous = node.typeParameters
+            ? this.hasPlugin("jsx")
+            : tsHasUnambiguousArrowParams(node.params);
+          if (
+            (!hasInvalidParams && (allowsReturnType || this.match(tt.colon))) ||
+            // `async(...[(a)])` is a valid call, while `(...[(a)])` is always
+            // an invalid arrow function.
+            (isUnambiguous && !(hasInvalidParams && node.async))
+          ) {
+            if (
+              result.error &&
+              !(this.optionFlags & OptionFlags.ErrorRecovery)
+            ) {
+              throw result.error;
+            }
+            return node;
+          }
+        }
+        this.noArrowAt.add(startPos);
+        this.state = state;
+        // tryParse keeps the tokens of a parse with recoverable errors, but
+        // they are discarded when parsing again.
+        this.state.tokensLength = tokensLength;
+      }
+
+      return this.tsParseMaybeAssign(refExpressionErrors, afterLeftParse);
+    }
+
+    tsParseMaybeAssign(
       refExpressionErrors?: ExpressionErrors | null,
       afterLeftParse?: Function,
     ): N.Expression {
@@ -3818,12 +4104,35 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       let typeParameters: N.TsTypeParameterDeclaration | undefined | null;
       // We need to explicitly annotate 'abort' for microsoft/TypeScript#58170
       const arrow = this.tryParse((abort: () => never) => {
+        const startPos = this.state.start;
+        if (this.noArrowAt.has(startPos)) abort();
+        // JSX makes type parameters unambiguous, and they are not tt.lt there.
+        const allowsReturnType =
+          !this.match(tt.lt) || this.state.tsArrowReturnTypeAllowed;
+        const isRestricted = this.tsIsArrowReturnTypeRestrictedAt(startPos);
         // This is similar to TypeScript's `tryParseParenthesizedArrowFunctionExpression`.
         typeParameters = this.tsParseTypeParameters(this.tsParseConstModifier);
-        const expr = super.parseMaybeAssign(
-          refExpressionErrors,
-          afterLeftParse,
-        );
+        let expr;
+        if (isRestricted) {
+          const paramsStartPos = this.state.start;
+          this.tsArrowReturnTypeAt.delete(paramsStartPos);
+          try {
+            expr = this.tsParseWithRestrictedArrowReturnType(
+              () => super.parseMaybeAssign(refExpressionErrors, afterLeftParse),
+              allowsReturnType,
+              /* genericParams */ true,
+            );
+          } finally {
+            // The outer attempt starts at '<', while the parameters start at '('.
+            const returnTypeStart =
+              this.tsArrowReturnTypeAt.get(paramsStartPos);
+            if (returnTypeStart !== undefined) {
+              this.tsArrowReturnTypeAt.set(startPos, returnTypeStart);
+            }
+          }
+        } else {
+          expr = super.parseMaybeAssign(refExpressionErrors, afterLeftParse);
+        }
 
         if (
           expr.type !== "ArrowFunctionExpression" ||
@@ -3867,6 +4176,27 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }, state);
 
       /*:: invariant(arrow.node != null) */
+      if (
+        jsx &&
+        arrow.node &&
+        arrow.error &&
+        !(this.optionFlags & OptionFlags.ErrorRecovery)
+      ) {
+        // The arrow function kept errors deferred by tsParseWithDeferredArrowErrors.
+        // Without JSX, tsParseMaybeArrowWithRestrictedReturnType reports them once
+        // it knows whether the arrow function is kept. With JSX, the type
+        // parameters are unambiguous and it's always kept.
+        throw arrow.error;
+      }
+      if (
+        arrow.error &&
+        this.tsShouldKeepArrowErrorAt(arrow.error, state.start)
+      ) {
+        if (!arrow.node) throw arrow.error;
+        this.state = arrow.failState!;
+        if (typeParameters) this.reportReservedArrowTypeParam(typeParameters);
+        return arrow.node;
+      }
       if (!arrow.error && !arrow.aborted) {
         // This error is reported outside of the this.tryParse call so that
         // in case of <T>(x) => 2, we don't consider <T>(x) as a type assertion
@@ -3941,9 +4271,13 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: Undone<N.ArrowFunctionExpression>,
     ): Undone<N.ArrowFunctionExpression> | null | undefined {
       if (this.match(tt.colon)) {
+        const startPos = this.offsetToSourcePos(node.start);
+        if (this.noArrowAt.has(startPos)) return;
+
         // This is different from how the TS parser does it.
         // TS uses lookahead. The Babel Parser parses it as a parenthesized expression and converts.
 
+        const returnTypeStart = this.sourceToOffsetPos(this.state.start);
         const result = this.tryParse(abort => {
           const returnType = this.tsParseTypeOrTypePredicateAnnotation(
             tt.colon,
@@ -3958,6 +4292,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           if (result.error) this.state = result.failState;
           // @ts-expect-error refine typings
           node.returnType = result.node;
+          if (this.tsIsArrowReturnTypeRestrictedAt(startPos)) {
+            this.tsArrowReturnTypeAt.set(startPos, returnTypeStart);
+          }
         }
       }
 
@@ -4221,24 +4558,84 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       return super.shouldParseArrow(params);
     }
 
-    shouldParseAsyncArrow(): boolean {
-      if (this.match(tt.colon)) {
-        // When inside a ternary consequent at the top nesting level,
-        // `:` is the ternary separator, not a return type annotation.
-        if (this.state.inConditionalConsequent) return false;
-        return true;
+    parseAsyncArrowHead(
+      startLoc: Position,
+    ): Undone<N.ArrowFunctionExpression> | undefined {
+      if (!this.match(tt.colon)) return super.parseAsyncArrowHead(startLoc);
+
+      // The colon may be a conditional or switch-case separator. Keep a
+      // successful parse instead of parsing the return type a second time.
+      const returnTypeStart = this.sourceToOffsetPos(this.state.start);
+      const result = this.tryParse<N.TsTypeAnnotation>(abort => {
+        const returnType = this.tsParseTypeAnnotation();
+        if (!this.match(tt.arrow)) abort();
+        return returnType;
+      });
+      if (result.aborted || result.thrown) return undefined;
+      if (result.error) this.state = result.failState!;
+      const startPos = this.offsetToSourcePos(startLoc.index);
+      if (this.tsIsArrowReturnTypeRestrictedAt(startPos)) {
+        this.tsArrowReturnTypeAt.set(startPos, returnTypeStart);
       }
-      return super.shouldParseAsyncArrow();
+      const node = this.startNodeAt<N.ArrowFunctionExpression>(startLoc);
+      node.returnType = result.node!;
+      return node;
     }
 
-    // Reset inConditionalConsequent inside parenthesized expressions,
-    // since `:` inside parens can never be a ternary separator.
-    parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
-      const oldInConditionalConsequent = this.state.inConditionalConsequent;
-      this.state.inConditionalConsequent = false;
-      const result = super.parseParenAndDistinguishExpression(canBeArrow);
-      this.state.inConditionalConsequent = oldInConditionalConsequent;
-      return result;
+    atPossibleAsyncArrow(base: N.Expression | N.Super | N.Import): boolean {
+      // Only async-arrow candidates need the noArrowAt lookup.
+      return (
+        super.atPossibleAsyncArrow(base) &&
+        !this.noArrowAt.has(this.offsetToSourcePos(base.start))
+      );
+    }
+
+    parseMaybeConditional(refExpressionErrors: ExpressionErrors): N.Expression {
+      if (!this.tsIsArrowReturnTypeRestrictedAt(this.state.start)) {
+        return super.parseMaybeConditional(refExpressionErrors);
+      }
+      const allowsReturnType = this.state.tsArrowReturnTypeAllowed;
+      const expr = super.parseMaybeConditional(refExpressionErrors);
+      if (tokenIsAssignment(this.state.type)) {
+        // The right-hand side inherits the restriction; parseMaybeAssign
+        // restores the previous values after the assignment is parsed.
+        this.tsRestrictArrowReturnTypeAt(
+          this.nextTokenStart(),
+          allowsReturnType,
+        );
+      }
+      return expr;
+    }
+
+    parseArrowExpression(
+      node: Undone<N.ArrowFunctionExpression>,
+      params: Parameters<Parser["parseArrowExpression"]>[1],
+      isAsync: boolean,
+      trailingCommaLoc?: Position | null,
+    ): N.ArrowFunctionExpression {
+      const startPos = this.offsetToSourcePos(node.start);
+      if (this.tsIsArrowReturnTypeRestrictedAt(startPos)) {
+        // The body of an arrow function inherits the restriction:
+        //   a ? b => (c) : d => e
+        // Unambiguous parameters allow a return type in it:
+        //   a ? (b: T) => (c): d => e : f
+        const genericParams = this.state.tsGenericArrowParams;
+        const parse = () =>
+          super.parseArrowExpression(node, params, isAsync, trailingCommaLoc);
+        return this.tsParseWithRestrictedArrowReturnType(
+          genericParams && node.returnType
+            ? () => this.tsParseWithDeferredArrowErrors(parse)
+            : parse,
+          this.state.tsArrowReturnTypeAllowed ||
+            (!genericParams && tsHasUnambiguousArrowParams(params)),
+        );
+      }
+      return super.parseArrowExpression(
+        node,
+        params,
+        isAsync,
+        trailingCommaLoc,
+      );
     }
 
     canHaveLeadingDecorator() {

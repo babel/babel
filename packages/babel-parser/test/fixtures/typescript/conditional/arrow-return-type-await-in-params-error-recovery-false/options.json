@@ -1,0 +1,4 @@
+{
+  "errorRecovery": false,
+  "throws": "'await' is not allowed in async function parameters. (1:34)"
+}

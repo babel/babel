@@ -995,34 +995,36 @@ export default abstract class ExpressionParser extends LValParser {
         refExpressionErrors,
       );
     }
-    let finishedNode:
-      | N.CallExpression
-      | N.OptionalCallExpression
-      | N.ArrowFunctionExpression = this.finishCallExpression(
-      node,
-      optionalChainMember,
-    );
+    const finishedNode = this.finishCallExpression(node, optionalChainMember);
 
-    if (maybeAsyncArrow && this.shouldParseAsyncArrow() && !optional) {
-      /*:: invariant(refExpressionErrors != null) */
-      state.stop = true;
-      this.checkDestructuringPrivate(refExpressionErrors!);
-      this.expressionScope.validateAsPattern();
-      this.expressionScope.exit();
-      finishedNode = this.parseAsyncArrowFromCallExpression(
-        this.startNodeAt<N.ArrowFunctionExpression>(startLoc),
-        finishedNode as N.CallExpression,
-      );
-    } else {
-      if (maybeAsyncArrow) {
-        this.checkExpressionErrors(refExpressionErrors, true);
+    if (maybeAsyncArrow && !optional) {
+      const errorsLength = this.state.errors.length;
+      const asyncArrowHead = this.parseAsyncArrowHead(startLoc);
+      if (asyncArrowHead) {
+        // Keep expression-scope errors ahead of return-type errors.
+        const returnTypeErrors =
+          this.state.errors.length > errorsLength
+            ? this.state.errors.splice(errorsLength)
+            : undefined;
+        /*:: invariant(refExpressionErrors != null) */
+        state.stop = true;
+        this.checkDestructuringPrivate(refExpressionErrors!);
+        this.expressionScope.validateAsPattern();
         this.expressionScope.exit();
+        if (returnTypeErrors) this.state.errors.push(...returnTypeErrors);
+        this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
+        return this.parseAsyncArrowFromCallExpression(
+          asyncArrowHead,
+          finishedNode as N.CallExpression,
+        );
       }
-      this.toReferencedArguments(finishedNode);
     }
-
+    if (maybeAsyncArrow) {
+      this.checkExpressionErrors(refExpressionErrors, true);
+      this.expressionScope.exit();
+    }
+    this.toReferencedArguments(finishedNode);
     this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
-
     return finishedNode;
   }
 
@@ -1119,8 +1121,12 @@ export default abstract class ExpressionParser extends LValParser {
     return elts;
   }
 
-  shouldParseAsyncArrow(): boolean {
-    return this.match(tt.arrow) && !this.canInsertSemicolon();
+  parseAsyncArrowHead(
+    startLoc: Position,
+  ): Undone<N.ArrowFunctionExpression> | undefined {
+    return this.match(tt.arrow) && !this.canInsertSemicolon()
+      ? this.startNodeAt<N.ArrowFunctionExpression>(startLoc)
+      : undefined;
   }
 
   parseAsyncArrowFromCallExpression(
