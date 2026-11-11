@@ -3,7 +3,13 @@
 
 import type { File, NodePath } from "@babel/core";
 import { types as t, template } from "@babel/core";
-import { buildDynamicImport } from "@babel/helper-module-transforms";
+import {
+  buildDynamicImport,
+  type RewriteModuleStatementsAndPrepareHeaderOptions,
+} from "@babel/helper-module-transforms";
+
+type ImportInterop =
+  RewriteModuleStatementsAndPrepareHeaderOptions["importInterop"];
 
 const requireNoInterop = (source: t.Expression) =>
   template.expression.ast`require(${source})`;
@@ -13,16 +19,38 @@ const requireInterop = (source: t.Expression, file: File) =>
     requireNoInterop(source),
   ]);
 
+function getStaticSpecifier(specifier: t.Expression): string | undefined {
+  if (t.isStringLiteral(specifier)) return specifier.value;
+  if (t.isTemplateLiteral(specifier) && specifier.quasis.length === 1) {
+    return specifier.quasis[0].value.cooked ?? undefined;
+  }
+}
+
+function shouldSkipInteropHelper(
+  importInterop: ImportInterop,
+  specifier: t.Expression,
+  filename: string | undefined,
+) {
+  if (typeof importInterop === "function") {
+    const source = getStaticSpecifier(specifier);
+    // When the specifier is only known at runtime, we cannot ask the
+    // `importInterop` function, so we conservatively keep the interop helper.
+    if (source === undefined) return false;
+    return importInterop(source, filename) === "none";
+  }
+  return importInterop === "none";
+}
+
 export function transformDynamicImport(
   path: NodePath<t.CallExpression | t.ImportExpression>,
-  noInterop: boolean | undefined,
+  importInterop: ImportInterop,
   file: File,
 ) {
-  const buildRequire = noInterop ? requireNoInterop : requireInterop;
-
   path.replaceWith(
     buildDynamicImport(path.node, true, false, specifier =>
-      buildRequire(specifier, file),
+      shouldSkipInteropHelper(importInterop, specifier, file.opts.filename)
+        ? requireNoInterop(specifier)
+        : requireInterop(specifier, file),
     ),
   );
 }

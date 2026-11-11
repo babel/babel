@@ -33,6 +33,7 @@ export interface RewriteModuleStatementsAndPrepareHeaderOptions {
   strictMode?: boolean;
   loose?: boolean;
   importInterop?: ImportInterop;
+  /** @deprecated Use the `importInterop` instead. */
   noInterop?: boolean;
   lazy?: Lazy.Lazy;
   getWrapperPayload?: (
@@ -61,8 +62,11 @@ export function rewriteModuleStatementsAndPrepareHeader(
     strict,
     allowTopLevelThis,
     strictMode,
-    noInterop,
-    importInterop = noInterop ? "none" : "babel",
+    importInterop = (
+      arguments[1] as RewriteModuleStatementsAndPrepareHeaderOptions
+    ).noInterop
+      ? "none"
+      : "babel",
     // TODO(Babel 9): After that `lazy` implementation is moved to the CJS
     // transform, remove this parameter.
     lazy,
