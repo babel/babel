@@ -1,0 +1,13 @@
+diff --git a/build/treeProcessor.js b/build/treeProcessor.js
+index b8983fab0c7ae20dec8cce6eb61909d42acbb58e..d44cca8df21265c512806123639eaffb052ebaec 100644
+--- a/build/treeProcessor.js
++++ b/build/treeProcessor.js
+@@ -99,7 +99,7 @@ function treeProcessor(options) {
+       return node.children.some(hasEnabledTest);
+     }
+ 
+-    return !node.disabled;
++    return !node.disabled && !node.markedPending;
+   }
+ 
+   function wrapChildren(node, enabled) {
