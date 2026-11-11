@@ -17,10 +17,26 @@ for (const absolute of [false, true]) {
   }
   test(`Webpack 4 ${title}`, webpack, "webpack-4", output);
   test(`Webpack 3 ${title}`, webpack, "webpack-3", output);
-  test(`Rollup ${title}`, rollup, "rollup", output);
+  // @rollup/plugin-commonjs returns a function with a .default property when
+  // requiring a default-only ES module, rather than a namespace object.
+  test(
+    `Rollup ${title}`,
+    rollup,
+    "rollup",
+    output,
+    false,
+    "expected-bundler-rollup.txt"
+  );
 }
 
-function test(name, command, directory, output, first) {
+function test(
+  name,
+  command,
+  directory,
+  output,
+  first,
+  expectedFile = "expected-bundler.txt"
+) {
   console.log(`Building with ${name}`);
   cp.execSync(`yarn ${command}`, {
     cwd: path.join(__dirname, directory),
@@ -32,7 +48,7 @@ function test(name, command, directory, output, first) {
     encoding: "utf8",
   });
 
-  const expectedPath = path.join(__dirname, "expected-bundler.txt");
+  const expectedPath = path.join(__dirname, expectedFile);
   const expected = fs.readFileSync(expectedPath, "utf8");
 
   if (expected === out) {
@@ -43,5 +59,6 @@ function test(name, command, directory, output, first) {
   } else {
     console.error("FAILED\n");
     console.error(out);
+    process.exitCode = 1;
   }
 }

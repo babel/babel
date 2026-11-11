@@ -10,7 +10,7 @@ arr: 1,2,3
 ================= require - auto ====================
 typeof objectWithoutProperties: function
 typeof objectWithoutProperties.default: function
-obj: { b: 2, [Symbol(Symbol.toStringTag)]: 5 }
+obj: { b: 2, Symbol(Symbol.toStringTag): 5 }
 ================= require - esm =====================
 typeof toPrimitive: object
 typeof toPrimitive.default: function
