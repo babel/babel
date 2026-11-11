@@ -2805,27 +2805,23 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // handles 'f<<T>'
       if (this.match(tt.lt) || this.match(tt.bitShiftL)) {
         let missingParenErrorLoc;
-        let asyncArrowError: ParseError | undefined;
-        // tsTryParseAndCatch is expensive, so avoid if not necessary.
+        let parsingAsyncArrow = true;
+        // tryParse is expensive, so avoid if not necessary.
         // There are number of things we are going to "maybe" parse, like type arguments on
         // tagged template expressions. If any of them fail, walk it back and continue.
-        const result = this.tsTryParseAndCatch(() => {
+        const parseAttempt = () => {
           if (!noCalls && this.atPossibleAsyncArrow(base)) {
             // Almost certainly this is a generic async function `async <T>() => ...
             // But it might be a call with a type argument `async<T>();`
-            let asyncArrowFn: N.ArrowFunctionExpression | undefined;
-            try {
-              asyncArrowFn = this.tsTryParseGenericAsyncArrowFunction(startLoc);
-            } catch (error) {
-              asyncArrowError = error as ParseError;
-              throw error;
-            }
+            const asyncArrowFn =
+              this.tsTryParseGenericAsyncArrowFunction(startLoc);
             if (asyncArrowFn) {
               state.stop = true;
               return asyncArrowFn;
             }
           }
 
+          parsingAsyncArrow = false;
           const typeArguments = this.tsParseTypeArgumentsInExpression();
           if (!typeArguments) return;
 
@@ -2889,17 +2885,24 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           node.typeArguments = typeArguments;
 
           return this.finishNode(node, "TSInstantiationExpression");
-        });
+        };
+        // Keep abort in this small callback so it can be inlined.
+        const attempt = this.tryParse<N.Expression>(
+          abort => parseAttempt() || abort(),
+        );
 
         if (
-          asyncArrowError &&
+          attempt.thrown &&
+          parsingAsyncArrow &&
           this.tsShouldKeepArrowErrorAt(
-            asyncArrowError,
+            attempt.error,
             this.offsetToSourcePos(startLoc.index),
           )
         ) {
-          throw asyncArrowError;
+          throw attempt.error;
         }
+        const result = attempt.node;
+        if (result && attempt.error) this.state = attempt.failState!;
         if (missingParenErrorLoc) {
           this.unexpected(missingParenErrorLoc, tt.parenL);
         }
