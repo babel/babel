@@ -230,7 +230,28 @@ export default declare((api, options: Options) => {
               allowTopLevelThis,
               importInterop,
               wrapReference: hooks.wrapReference,
-              getWrapperPayload: hooks.getWrapperPayload,
+              getWrapperPayload: (source, metadata, importNodes) => {
+                const payload = hooks.getWrapperPayload!(
+                  source,
+                  metadata,
+                  importNodes,
+                );
+                if (payload == null) {
+                  // Deferred imports are implemented by a wrapper around the
+                  // module, provided by the import defer plugin.
+                  const deferred = importNodes.find(
+                    node =>
+                      t.isImportDeclaration(node) && node.phase === "defer",
+                  );
+                  if (deferred) {
+                    throw this.file.buildCodeFrameError(
+                      deferred,
+                      "Transforming `import defer * as ns from '...'` requires `@babel/plugin-proposal-import-defer`.",
+                    );
+                  }
+                }
+                return payload;
+              },
               esNamespaceOnly:
                 typeof state.filename === "string" &&
                 state.filename.endsWith(".mjs")

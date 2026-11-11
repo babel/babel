@@ -294,8 +294,18 @@ function getModuleMetadata(
     return data!;
   };
   let hasExports = false;
+  const deferredImports: NodePath<t.ImportDeclaration>[] = [];
   programPath.get("body").forEach(child => {
     if (child.isImportDeclaration()) {
+      // A phase modifier that no other plugin has handled can't be ignored:
+      // the import would be loaded and evaluated as a regular one.
+      if (child.node.phase === "source") {
+        throw child.buildCodeFrameError(
+          "Transforming `import source x from '...'` is not supported yet.",
+        );
+      }
+      if (child.node.phase === "defer") deferredImports.push(child);
+
       const data = getData(child.node.source, child.node);
       if (!data.loc) data.loc = child.node.loc;
 
@@ -435,6 +445,15 @@ function getModuleMetadata(
         source,
         metadata,
         importNodes.get(source)!,
+      );
+    }
+  }
+
+  for (const path of deferredImports) {
+    // Deferred imports are implemented by a wrapper around the module.
+    if (sourceData.get(path.node.source.value)!.wrap == null) {
+      throw path.buildCodeFrameError(
+        "Transforming `import defer * as ns from '...'` is not supported yet.",
       );
     }
   }

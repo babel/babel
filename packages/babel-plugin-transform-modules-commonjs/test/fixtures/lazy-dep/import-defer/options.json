@@ -1,0 +1,4 @@
+{
+  "parserOpts": { "plugins": ["deferredImportEvaluation"] },
+  "throws": "Transforming `import defer * as ns from '...'` requires `@babel/plugin-proposal-import-defer`."
+}
