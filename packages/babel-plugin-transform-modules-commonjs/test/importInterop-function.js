@@ -94,11 +94,11 @@ describe("'importInterop'", () => {
       };
 
       expect(transform(code, importInterop)).toMatchInlineSnapshot(`
-        ""use strict";
+        "\\"use strict\\";
 
-        Promise.resolve().then(() => babelHelpers.interopRequireWildcard(require("a")));
-        Promise.resolve().then(() => babelHelpers.interopRequireWildcard(require("b")));
-        Promise.resolve().then(() => require("c"));"
+        Promise.resolve().then(() => babelHelpers.interopRequireWildcard(require(\\"a\\")));
+        Promise.resolve().then(() => babelHelpers.interopRequireWildcard(require(\\"b\\")));
+        Promise.resolve().then(() => require(\\"c\\"));"
       `);
     });
 
@@ -142,7 +142,7 @@ describe("'importInterop'", () => {
       const importInterop = jest.fn(() => "none");
 
       expect(transform(code, importInterop)).toMatchInlineSnapshot(`
-        ""use strict";
+        "\\"use strict\\";
 
         (specifier => new Promise(r => r(\`\${specifier}\`)).then(s => babelHelpers.interopRequireWildcard(require(s))))(foo);"
       `);

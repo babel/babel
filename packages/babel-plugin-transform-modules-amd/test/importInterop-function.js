@@ -94,12 +94,12 @@ describe("'importInterop'", () => {
       };
 
       expect(transform(code, importInterop)).toMatchInlineSnapshot(`
-        "define(["require"], function (_require) {
-          "use strict";
+        "define([\\"require\\"], function (_require) {
+          \\"use strict\\";
 
-          new Promise((_resolve, _reject) => _require(["a"], imported => _resolve(babelHelpers.interopRequireWildcard(imported)), _reject));
-          new Promise((_resolve, _reject) => _require(["b"], imported => _resolve(babelHelpers.interopRequireWildcard(imported)), _reject));
-          new Promise((_resolve, _reject) => _require(["c"], imported => _resolve(imported), _reject));
+          new Promise((_resolve, _reject) => _require([\\"a\\"], imported => _resolve(babelHelpers.interopRequireWildcard(imported)), _reject));
+          new Promise((_resolve, _reject) => _require([\\"b\\"], imported => _resolve(babelHelpers.interopRequireWildcard(imported)), _reject));
+          new Promise((_resolve, _reject) => _require([\\"c\\"], imported => _resolve(imported), _reject));
         });"
       `);
     });
@@ -144,8 +144,8 @@ describe("'importInterop'", () => {
       const importInterop = jest.fn(() => "none");
 
       expect(transform(code, importInterop)).toMatchInlineSnapshot(`
-        "define(["require"], function (_require) {
-          "use strict";
+        "define([\\"require\\"], function (_require) {
+          \\"use strict\\";
 
           (specifier => new Promise((_resolve, _reject) => _require([\`\${specifier}\`], imported => _resolve(babelHelpers.interopRequireWildcard(imported)), _reject)))(foo);
         });"
