@@ -15,11 +15,17 @@ export function hoist(
     __proto__: null,
   };
 
-  function varDeclToExpr(
-    { node: vdec }: NodePath,
-    includeIdentifiers: boolean,
-  ) {
+  function varDeclToExpr(path: NodePath, includeIdentifiers: boolean) {
+    const vdec = path.node;
     t.assertVariableDeclaration(vdec);
+    if (vdec.kind === "using" || vdec.kind === "await using") {
+      // Hoisting the declaration as a variable would silently skip the
+      // disposal of the resource.
+      throw path.buildCodeFrameError(
+        `\`${vdec.kind}\` declarations are not supported by the regenerator transform. ` +
+          "Please add @babel/plugin-transform-explicit-resource-management to your Babel config.",
+      );
+    }
     // TODO assert.equal(vdec.kind, "var");
     const exprs: t.Expression[] = [];
 
