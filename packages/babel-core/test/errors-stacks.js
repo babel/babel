@@ -233,40 +233,256 @@ describe("@babel/core errors", function () {
   });
 
   it("internal errors have the full stack trace", function () {
-    expectError(() => {
-      const { map } = Array.prototype;
-      try {
-        Array.prototype.map = () => {
-          throw new Error("Internal error! This is a fake bug :)");
-        };
+    // Remove `Error.prepareStackTrace` because `source-map-support` used `Array.prototype.map`
+    const { prepareStackTrace } = Error;
+    try {
+      Error.prepareStackTrace = null;
+      expectError(() => {
+        const { map } = Array.prototype;
+        try {
+          Array.prototype.map = () => {
+            throw new Error("Internal error! This is a fake bug :)");
+          };
+          babel.parseSync("foo;", {
+            root: fixture("valid"),
+          });
+        } finally {
+          Array.prototype.map = map;
+        }
+      }).toMatchInlineSnapshot(`
+        "Error: Internal error! This is a fake bug :)
+            at Array.map (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
+            at loadOneConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
+            at next (<anonymous>)
+            at buildRootChain (<BABEL_CORE_LIB_SOME_FILE>:_:_)
+            at next (<anonymous>)
+            at loadPrivatePartialConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
+            at next (<anonymous>)
+            at loadFullConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
+            at next (<anonymous>)
+            at parse (<BABEL_CORE_LIB_SOME_FILE>:_:_)
+            at next (<anonymous>)
+            at rewriteStackTrace (<BABEL_CORE_LIB_SOME_FILE>:_:_)
+            at next (<anonymous>)
+            at evaluateSync (<CWD>/node_modules/gensync/index.js:_:_)
+            at sync (<CWD>/node_modules/gensync/index.js:_:_)
+            at stopHiding - secret - don't use this - v1 (<BABEL_CORE_LIB_SOME_FILE>:_:_)
+            at Module.parseSync (<BABEL_CORE_LIB_SOME_FILE>:_:_)
+            at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
+            at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
+            at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
+            at ... internal jest frames ..."
+      `);
+    } finally {
+      Error.prepareStackTrace = prepareStackTrace;
+    }
+  });
+
+  it("should reset `Error.prepareStackTrace` after a synchronous failure", function () {
+    const { prepareStackTrace } = Error;
+    try {
+      Error.prepareStackTrace = null;
+      expect(() =>
         babel.parseSync("foo;", {
-          root: fixture("valid"),
-        });
+          root: fixture("invalid-json"),
+        }),
+      ).toThrow();
+      expect(Error.prepareStackTrace).toBeNull();
+    } finally {
+      Error.prepareStackTrace = prepareStackTrace;
+    }
+  });
+
+  it.each(["callback", "promise"])(
+    "hides gensync frames after an asynchronous %s config load",
+    async function (mode) {
+      const options = { root: fixture("error-config-async") };
+      const error = await (mode === "promise"
+        ? babel.parseAsync("foo;", options).catch(err => err)
+        : new Promise(resolve => {
+            babel.parse("foo;", options, err => resolve(err));
+          }));
+      expect(error).toBeInstanceOf(Error);
+      expectError(() => {
+        throw error;
+      }).toMatchInlineSnapshot(`
+        "Error: Error inside async config!
+            at myConfig (<CWD>/packages/babel-core/test/fixtures/errors/error-config-async/babel.config.mjs?import:_:_)"
+      `);
+    },
+  );
+
+  it.each([
+    { mode: "callback", fails: false },
+    { mode: "callback", fails: true },
+    { mode: "promise", fails: true },
+  ])(
+    "restores stack settings after an asynchronous $mode call (fails: $fails)",
+    async function ({ mode, fails }) {
+      const { prepareStackTrace, stackTraceLimit } = Error;
+      const { promise: paused, resolve: resume } = Promise.withResolvers();
+      const { promise: entered, resolve: started } = Promise.withResolvers();
+      let completionSettings;
+      let pending;
+      try {
+        Error.prepareStackTrace = null;
+        Error.stackTraceLimit = 10;
+        const options = {
+          configFile: false,
+          babelrc: false,
+          plugins: [
+            () => ({
+              async pre() {
+                started();
+                await paused;
+                expect(Error.prepareStackTrace).not.toBeNull();
+                expect(Error.stackTraceLimit).toBeGreaterThanOrEqual(50);
+                if (fails) throw new Error("asynchronous plugin failure");
+              },
+            }),
+          ],
+        };
+        pending =
+          mode === "promise"
+            ? babel.transformAsync("foo;", options)
+            : new Promise((resolve, reject) => {
+                babel.transform("foo;", options, (err, result) => {
+                  completionSettings = [
+                    Error.prepareStackTrace,
+                    Error.stackTraceLimit,
+                  ];
+                  if (err) reject(err);
+                  else resolve(result);
+                });
+              });
+        await entered;
+        expect(Error.prepareStackTrace).not.toBeNull();
+        resume();
+        const outcome = await pending.then(
+          result => ({ result }),
+          error => ({ error }),
+        );
+        const expectedMessage = expect.stringContaining(
+          "asynchronous plugin failure",
+        );
+        expect(outcome.error?.message).toEqual(
+          fails ? expectedMessage : undefined,
+        );
+        expect(outcome.result?.code).toBe(fails ? undefined : "foo;");
+        expect(Error.prepareStackTrace).toBeNull();
+        expect(Error.stackTraceLimit).toBe(10);
+        expect(completionSettings).toEqual(
+          mode === "callback" ? [null, 10] : undefined,
+        );
       } finally {
-        Array.prototype.map = map;
+        resume();
+        await Promise.allSettled([pending]);
+        Error.prepareStackTrace = prepareStackTrace;
+        Error.stackTraceLimit = stackTraceLimit;
       }
-    }).toMatchInlineSnapshot(`
-      "Error: Internal error! This is a fake bug :)
-          at Array.map (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
-          at loadOneConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at next (<anonymous>)
-          at buildRootChain (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at next (<anonymous>)
-          at loadPrivatePartialConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at next (<anonymous>)
-          at loadFullConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at next (<anonymous>)
-          at parse (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at next (<anonymous>)
-          at evaluateSync (<CWD>/node_modules/gensync/index.js:_:_)
-          at sync (<CWD>/node_modules/gensync/index.js:_:_)
-          at stopHiding - secret - don't use this - v1 (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at Module.parseSync (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
-          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
-          at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
-          at ... internal jest frames ..."
-    `);
+    },
+  );
+
+  it("keeps stack rewriting active across nested calls", function () {
+    const { prepareStackTrace, stackTraceLimit } = Error;
+    try {
+      Error.prepareStackTrace = null;
+      Error.stackTraceLimit = 10;
+      babel.transformSync("foo;", {
+        configFile: false,
+        babelrc: false,
+        plugins: [
+          () => ({
+            pre() {
+              const rewriter = Error.prepareStackTrace;
+              expect(rewriter).not.toBeNull();
+              babel.parseSync("bar;", { configFile: false, babelrc: false });
+              expect(Error.prepareStackTrace).toBe(rewriter);
+              expect(Error.stackTraceLimit).toBeGreaterThanOrEqual(50);
+            },
+          }),
+        ],
+      });
+      expect(Error.prepareStackTrace).toBeNull();
+      expect(Error.stackTraceLimit).toBe(10);
+    } finally {
+      Error.prepareStackTrace = prepareStackTrace;
+      Error.stackTraceLimit = stackTraceLimit;
+    }
+  });
+
+  it("restores stack settings only after all overlapping calls finish", async function () {
+    const { prepareStackTrace, stackTraceLimit } = Error;
+    const releases = [];
+    const pending = [];
+    try {
+      Error.prepareStackTrace = null;
+      Error.stackTraceLimit = 10;
+      for (let i = 0; i < 2; i++) {
+        const { promise: entered, resolve: started } = Promise.withResolvers();
+        const { promise: paused, resolve: resume } = Promise.withResolvers();
+        releases.push(resume);
+        pending.push(
+          babel.transformAsync("foo;", {
+            configFile: false,
+            babelrc: false,
+            plugins: [
+              () => ({
+                async pre() {
+                  started();
+                  await paused;
+                },
+              }),
+            ],
+          }),
+        );
+        await entered;
+      }
+      const rewriter = Error.prepareStackTrace;
+      releases[0]();
+      await pending[0];
+      expect(Error.prepareStackTrace).toBe(rewriter);
+      expect(Error.prepareStackTrace).not.toBeNull();
+      expect(Error.stackTraceLimit).toBeGreaterThanOrEqual(50);
+      releases[1]();
+      await pending[1];
+      expect(Error.prepareStackTrace).toBeNull();
+      expect(Error.stackTraceLimit).toBe(10);
+    } finally {
+      for (const release of releases) release();
+      await Promise.allSettled(pending);
+      Error.prepareStackTrace = prepareStackTrace;
+      Error.stackTraceLimit = stackTraceLimit;
+    }
+  });
+
+  it("preserves synchronous callback timing and restores settings before a callback throws", function () {
+    const { prepareStackTrace, stackTraceLimit } = Error;
+    try {
+      Error.prepareStackTrace = null;
+      Error.stackTraceLimit = 10;
+      let returned = false;
+      const callback = jest.fn(() => {
+        expect(returned).toBe(false);
+        expect(Error.prepareStackTrace).toBeNull();
+        expect(Error.stackTraceLimit).toBe(10);
+      });
+      babel.parse("foo;", { configFile: false, babelrc: false }, callback);
+      returned = true;
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(() =>
+        babel.parse("foo;", { configFile: false, babelrc: false }, () => {
+          expect(Error.prepareStackTrace).toBeNull();
+          throw new Error("user callback failure");
+        }),
+      ).toThrow("user callback failure");
+      babel.parseSync("foo;", { configFile: false, babelrc: false });
+      expect(Error.prepareStackTrace).toBeNull();
+      expect(Error.stackTraceLimit).toBe(10);
+    } finally {
+      Error.prepareStackTrace = prepareStackTrace;
+      Error.stackTraceLimit = stackTraceLimit;
+    }
   });
 
   it("should not throw in `node --frozen-intrinsics`", function () {
