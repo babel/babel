@@ -317,7 +317,7 @@ export function injectParallelStaticImports(
   programPath: NodePath<t.Program>,
   data: { id: t.Identifier; fetch: t.Expression }[],
   needsAwait: boolean,
-): void {
+): NodePath<t.VariableDeclaration> | undefined {
   if (data.length === 0) return;
 
   const program = programPath.node;
@@ -339,8 +339,10 @@ export function injectParallelStaticImports(
   PREV_PARALLEL_IMPORTS.set(program, { node: varDecl, data, needsAwait });
 
   if (replacementIndex === -1) {
-    programPath.unshiftContainer("body", varDecl);
+    return programPath.unshiftContainer("body", varDecl)[0];
   } else {
-    programPath.get(`body.${replacementIndex}`).replaceWith(varDecl);
+    return (
+      programPath.get(`body.${replacementIndex}`) as NodePath<t.Statement>
+    ).replaceWith(varDecl)[0];
   }
 }
