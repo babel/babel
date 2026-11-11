@@ -280,12 +280,13 @@ export function transform(
   } else {
     let wrapLast: ((value: t.Expression) => t.Expression) | undefined;
     if (
-      parentPath.isCallExpression({ callee: maybeWrapped.node }) &&
+      (parentPath.isCallExpression({ callee: maybeWrapped.node }) ||
+        parentPath.isTaggedTemplateExpression({ tag: maybeWrapped.node })) &&
       // note that the first condition must implies that `path.optional` is `true`,
       // otherwise the parentPath should be an OptionalCallExpression
       path.isOptionalMemberExpression()
     ) {
-      // Ensure (a?.b)() has proper `this`
+      // Ensure (a?.b)() and (a?.b)`` have proper `this`
       wrapLast = ((replacement: t.MemberExpression) => {
         // `(a?.b)()` to `(a == null ? undefined : a.b.bind(a))()`
         // object must not be Super as super?.foo is invalid
