@@ -127,11 +127,11 @@ export default declare(api => {
             t.assignmentExpression(
               "=",
               t.cloneNode(functionLVal),
-              t.memberExpression(object, property),
+              t.memberExpression(object, property, callee.computed),
             ),
             ...argsInitializers,
             t.functionExpression(
-              t.isIdentifier(property)
+              t.isIdentifier(property) && !callee.computed
                 ? t.cloneNode(property)
                 : path.scope.generateUidIdentifierBasedOnNode(property),
               placeholdersParams,
