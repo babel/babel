@@ -11,11 +11,11 @@ export interface Options {
 }
 
 // The loop head is moved into the body, so a binding of the body must not
-// capture a name that the head declares or reads.
+// capture a name that the head declares, reads or assigns.
 function getLeftNames(path: NodePath<t.ForXStatement>) {
   const names = Object.keys(path.getBindingIdentifiers());
   path.get("left").traverse({
-    ReferencedIdentifier({ node }) {
+    "BindingIdentifier|ReferencedIdentifier"({ node }) {
       names.push(node.name);
     },
   });
