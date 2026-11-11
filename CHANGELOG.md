@@ -25,6 +25,66 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.1.2 (2026-11-11)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#18536](https://github.com/babel/babel/pull/18536) fix(parser): require `(` after `import.{source,defer,sync}` ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`
+  * [#18489](https://github.com/babel/babel/pull/18489) fix(regenerator): read the method of a member call before its arguments ([@joellemd](https://github.com/joellemd))
+
+#### :bug: Bug Fix
+* `babel-helper-module-transforms`, `babel-plugin-transform-dynamic-import`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-umd`
+  * [#18589](https://github.com/babel/babel/pull/18589) Respect `importInterop: none` for dynamic import ([@nicolo-ribaudo](https://github.com/nicolo-ribaudo))
+* `babel-parser`
+  * [#18537](https://github.com/babel/babel/pull/18537) fix(parser): allow ASI between modifier-like field and @dec ([@JLHwung](https://github.com/JLHwung))
+  * [#18268](https://github.com/babel/babel/pull/18268) fix(parser): rework ts arrow param tracking ([@JLHwung](https://github.com/JLHwung))
+  * [#18524](https://github.com/babel/babel/pull/18524) fix(parser): record token location before checking reserved words ([@JLHwung](https://github.com/JLHwung))
+  * [#18533](https://github.com/babel/babel/pull/18533) fix(parser): reject arrow functions after an arrow in an earlier operand ([@JLHwung](https://github.com/JLHwung))
+  * [#18540](https://github.com/babel/babel/pull/18540) fix(parser): handle async do await in parameters ([@JLHwung](https://github.com/JLHwung))
+  * [#18515](https://github.com/babel/babel/pull/18515) fix(parser): start decorated object members at their first decorator ([@JLHwung](https://github.com/JLHwung))
+  * [#18484](https://github.com/babel/babel/pull/18484) fix(parser): allow TS imports to define exports declared before them ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-member-expression-to-functions`, `babel-plugin-transform-classes`, `babel-plugin-transform-object-super`, `babel-plugin-transform-private-methods`
+  * [#18576](https://github.com/babel/babel/pull/18576) Keep the receiver of TS-wrapped `super` and private member calls ([@brunoborta](https://github.com/brunoborta))
+* `babel-helper-string-parser`, `babel-parser`
+  * [#18580](https://github.com/babel/babel/pull/18580) fix(parser): recover from out-of-range `\u{...}` code points ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#18570](https://github.com/babel/babel/pull/18570) fix(generator): keep parens that end an optional chain before ([@joellemd](https://github.com/joellemd))
+  * [#18506](https://github.com/babel/babel/pull/18506) fix(generator): print override modifier of TSParameterProperty ([@JLHwung](https://github.com/JLHwung))
+  * [#18507](https://github.com/babel/babel/pull/18507) fix(generator): do not apply `jsesc` number radix to non-integer literals ([@JLHwung](https://github.com/JLHwung))
+  * [#18430](https://github.com/babel/babel/pull/18430) fix(generator): escape `of` binding of a using declaration in for-of head ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-class-static-block`
+  * [#18563](https://github.com/babel/babel/pull/18563) fix(class-static-block): skip class body path with stale ancestry ([@JLHwung](https://github.com/JLHwung))
+* `babel-template`
+  * [#18572](https://github.com/babel/babel/pull/18572) fix: avoid retaining the call site ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-module-transforms`, `babel-parser`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-react-pure-annotations`, `babel-plugin-transform-typescript`, `babel-traverse`, `babel-types`
+  * [#18504](https://github.com/babel/babel/pull/18504) fix: improve string module specifiers support ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-exponentiation-operator`, `babel-plugin-transform-logical-assignment-operators`
+  * [#18527](https://github.com/babel/babel/pull/18527) fix memoise wrapped targets in logical assignment ([@joellemd](https://github.com/joellemd))
+* `babel-plugin-transform-flow-comments`
+  * [#18564](https://github.com/babel/babel/pull/18564) fix(flow-comments): support anonymous classes ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-block-scoping`, `babel-traverse`
+  * [#18562](https://github.com/babel/babel/pull/18562) fix: rename assignment targets in forXStatement ([@JLHwung](https://github.com/JLHwung))
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-regenerator`, `babel-runtime-corejs3`
+  * [#18557](https://github.com/babel/babel/pull/18557) fix(regenerator): dispatch pending jump after finally to outer finally blocks ([@hoanle0126](https://github.com/hoanle0126))
+* `babel-traverse`
+  * [#18551](https://github.com/babel/babel/pull/18551) fix(traverse): do not evaluate var s whose initializer may not have run ([@joellemd](https://github.com/joellemd))
+* `babel-plugin-transform-regenerator`
+  * [#18486](https://github.com/babel/babel/pull/18486) fix(regenerator): only remove bindings declared by the hoisted declar… ([@joellemd](https://github.com/joellemd))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#18498](https://github.com/babel/babel/pull/18498) fix: commonjs namespace re-export with a string export name ([@bohdanprog](https://github.com/bohdanprog))
+
+#### :house: Internal
+* Other
+  * [#18568](https://github.com/babel/babel/pull/18568) chore: enable `strict` in `tsconfig.base.json` ([@JLHwung](https://github.com/JLHwung))
+  * [#18556](https://github.com/babel/babel/pull/18556) chore: cleanup eslint config ([@JLHwung](https://github.com/JLHwung))
+* `babel-core`, `babel-helper-fixtures`, `babel-helper-transform-fixture-test-runner`, `babel-helpers`, `babel-node`, `babel-plugin-transform-runtime`, `babel-register`, `babel-template`, `babel-traverse`, `babel-types`
+  * [#18565](https://github.com/babel/babel/pull/18565) chore: enable `useUnknownInCatchVariables` ts compiler option ([@JLHwung](https://github.com/JLHwung))
+
+#### :running_woman: Performance
+* `babel-parser`
+  * [#18513](https://github.com/babel/babel/pull/18513) perf: Avoid allocating useless TS nodes ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+  * [#18423](https://github.com/babel/babel/pull/18423) perf(parser): general improvement ([@JLHwung](https://github.com/JLHwung))
 ## v8.1.0 (2026-11-02)
 
 #### :rocket: New Feature
