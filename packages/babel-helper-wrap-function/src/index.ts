@@ -94,7 +94,7 @@ function classOrObjectMethod(
   const { directives } = body;
   body.directives = [];
 
-  const container = functionExpression(null, params, body, true);
+  const container = functionExpression(null, params, body, true, node.async);
 
   if (shouldForwardParams) {
     // return asyncToGenerator(function*() { ... }).apply(this, arguments);
