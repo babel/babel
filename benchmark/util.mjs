@@ -15,7 +15,14 @@ import baselinePluginCommonjs from "@babel-baseline/plugin-transform-modules-com
 
 import { Bench } from "tinybench";
 import { withCodSpeed } from "@codspeed/tinybench-plugin";
-import { readFileSync, copyFileSync, mkdirSync, globSync } from "node:fs";
+import {
+  readFileSync,
+  copyFileSync,
+  mkdirSync,
+  globSync,
+  renameSync,
+  statSync,
+} from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import assert from "node:assert";
@@ -29,6 +36,44 @@ const __dirname = path.dirname(__filename);
 
 const onlyCurrent = process.argv.includes("--only-current");
 const onlyBaseline = process.argv.includes("--only-baseline");
+// --fixture=<name> (repeatable) only runs the cases of the given fixtures,
+// e.g. --fixture=jquery-3.6.js.
+const onlyFixtures = process.argv
+  .filter(arg => arg.startsWith("--fixture="))
+  .map(arg => arg.slice("--fixture=".length));
+// --list prints one "<suite> <fixture>" line per fixture that each suite
+// would run, and runs nothing. Running the suite file with
+// --fixture=<fixture> runs that part of the benchmark on its own. Lines are
+// ordered longest first by ./simulation-durations.json, the seconds each line
+// took in CodSpeed's simulation mode on CI, so that parallel runs do not end
+// with one long case running alone. Lines missing from it come first, largest
+// fixture first.
+// --list=simulation and --list=walltime only print the cases that CI runs in
+// that CodSpeed mode.
+const listArg = process.argv.find(
+  arg => arg === "--list" || arg.startsWith("--list=")
+);
+const listOnly = listArg !== undefined;
+const listMode = listArg?.slice("--list=".length) || undefined;
+if (listMode !== undefined && !["simulation", "walltime"].includes(listMode)) {
+  throw new Error(`Unknown ${listArg}, expected simulation or walltime`);
+}
+// A single measured call of these fixtures takes 4 to 25 minutes under
+// Valgrind, so CI benchmarks them in walltime mode instead of simulation.
+const walltimeFixtures = new Set(["typescript-5.6.2.js", "ts-checker.mjs"]);
+const listed = [];
+// --iterations=<n> sets the minimum number of samples per case, which
+// otherwise defaults to tinybench's 64. Each case still runs for at least 5s.
+const iterationsArg = process.argv.find(arg => arg.startsWith("--iterations="));
+const iterations = iterationsArg
+  ? Number(iterationsArg.slice("--iterations=".length))
+  : undefined;
+if (
+  iterations !== undefined &&
+  !(Number.isInteger(iterations) && iterations > 0)
+) {
+  throw new Error(`Expected a positive integer in ${iterationsArg}`);
+}
 
 if (!globalThis.gc) {
   console.warn("Recommend running with --expose-gc.");
@@ -42,7 +87,11 @@ async function copyPkg(name) {
     name.replace("/", "-") + ".js"
   );
   mkdirSync(path.dirname(dst), { recursive: true });
-  copyFileSync(src, dst);
+  // Benchmarks may run in parallel: copy then rename, so that no process
+  // imports a copy that another process has truncated but not yet written.
+  const tmp = `${dst}.${process.pid}`;
+  copyFileSync(src, tmp);
+  renameSync(tmp, dst);
   try {
     return await import(pathToFileURL(dst));
   } catch (error) {
@@ -69,14 +118,36 @@ function formatNumber(x) {
   return `${Math.round(x)}`.replace(/\d(?=(?:\d{3})+$)/g, "$&_");
 }
 
-function loadFixtures(type = "*") {
+function loadFixtures(url, type = "*", { exclude = [] } = {}) {
   const fixtures = globSync(`fixtures/*.${type}.txt`, {
     cwd: __dirname,
-  }).sort();
+  })
+    .sort()
+    .map(file => ({ file, name: path.basename(file, ".txt") }))
+    .filter(
+      ({ name }) =>
+        !exclude.includes(name) &&
+        (onlyFixtures.length === 0 || onlyFixtures.includes(name))
+    );
 
-  return fixtures.map(fixture => ({
-    name: path.basename(fixture, ".txt"),
-    content: readFileSync(path.join(__dirname, fixture), "utf-8"),
+  if (listOnly) {
+    const suite = generateCaseName(url);
+    for (const { file, name } of fixtures) {
+      if (
+        listMode !== undefined &&
+        walltimeFixtures.has(name) !== (listMode === "walltime")
+      ) {
+        continue;
+      }
+      const { size } = statSync(path.join(__dirname, file));
+      listed.push({ suite, name, size });
+    }
+    return [];
+  }
+
+  return fixtures.map(({ file, name }) => ({
+    name,
+    content: readFileSync(path.join(__dirname, file), "utf-8"),
   }));
 }
 
@@ -89,8 +160,8 @@ class Benchmark {
   constructor() {
     this.bench = withCodSpeed(
       new Bench({
-        iterations: 10,
         time: 5000,
+        iterations,
         warmup: false,
         retainSamples: true,
       })
@@ -151,6 +222,23 @@ function addBenchCase(name, baseline, current, args) {
 }
 
 setTimeout(async () => {
+  if (listOnly) {
+    const durations = JSON.parse(
+      readFileSync(path.join(__dirname, "simulation-durations.json"), "utf-8")
+    );
+    const duration = ({ suite, name }) =>
+      durations[`${suite} ${name}`] ?? Infinity;
+    listed.sort((a, b) => duration(b) - duration(a) || b.size - a.size);
+    for (const { suite, name } of listed) console.log(`${suite} ${name}`);
+    return;
+  }
+
+  if (onlyFixtures.length > 0 && currentCases.length === 0) {
+    console.error(`No benchmark case for --fixture=${onlyFixtures.join(",")}`);
+    process.exitCode = 1;
+    return;
+  }
+
   if (onlyCurrent) {
     currentCases.forEach(({ name, fn }) => {
       bench.add(name, fn, { async: false });

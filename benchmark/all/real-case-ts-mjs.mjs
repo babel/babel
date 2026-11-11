@@ -18,11 +18,11 @@ const opts = {
   },
 };
 
-const fixtures = loadFixtures("ts");
+const fixtures = loadFixtures(import.meta.url, "ts", {
+  exclude: ["ts-checker.ts"],
+});
 
 fixtures.forEach(({ name, content }) => {
-  if (name.includes("ts-checker.ts")) return;
-
   addBenchCase(
     `${generateCaseName(import.meta.url)} ${name}`,
     () => {

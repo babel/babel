@@ -7,7 +7,7 @@ import {
   generateCaseName,
 } from "../util.mjs";
 
-const fixtures = loadFixtures();
+const fixtures = loadFixtures(import.meta.url);
 
 fixtures.forEach(({ name, content }) => {
   const ast = baselineParser.parse(content, {

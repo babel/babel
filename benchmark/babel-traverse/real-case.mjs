@@ -7,11 +7,11 @@ import {
   currentTraverse,
 } from "../util.mjs";
 
-const fixtures = loadFixtures();
+const fixtures = loadFixtures(import.meta.url, "*", {
+  exclude: ["ts-checker.ts"],
+});
 
 fixtures.forEach(({ name, content }) => {
-  if (name.includes("ts-checker.ts")) return;
-
   const ast = baselineParser.parse(content, {
     sourceType: "module",
     plugins: name.endsWith(".ts") ? ["typescript"] : [],
