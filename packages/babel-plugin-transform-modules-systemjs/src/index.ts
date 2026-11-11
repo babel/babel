@@ -327,6 +327,15 @@ export default declare<PluginState, Options>((api, options: Options) => {
                 ),
               );
             } else if (path.isVariableDeclaration()) {
+              const { kind } = path.node;
+              if (kind === "using" || kind === "await using") {
+                // Hoisting the declaration as a variable would silently skip
+                // the disposal of the resource.
+                throw path.buildCodeFrameError(
+                  `Top-level \`${kind}\` declarations are not supported by the SystemJS modules transform. ` +
+                    "Please add @babel/plugin-transform-explicit-resource-management to your Babel config.",
+                );
+              }
               // Convert top-level variable declarations to "var",
               // because they must be hoisted
               path.node.kind = "var";
