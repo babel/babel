@@ -26,7 +26,23 @@ export function hoist(
     for (const dec of vdec.declarations) {
       // The declarator id can be a destructuring pattern when destructuring
       // has not been transformed yet.
-      const id = dec.id as t.Identifier | t.ArrayPattern | t.ObjectPattern;
+      const { id } = dec;
+
+      if (id.type === "VoidPattern") {
+        // `using void = init` does not bind anything, so only the
+        // initializer is kept.
+        if (dec.init) {
+          exprs.push(dec.init);
+        } else if (includeIdentifiers) {
+          // This is the head of a for-of loop. `void` is not a valid
+          // assignment target on its own, so assign to an unused variable.
+          const unused = funPath.scope.generateUidIdentifier("unused");
+          vars[unused.name] = unused;
+          exprs.push(t.cloneNode(unused));
+        }
+        continue;
+      }
+
       for (const name of Object.keys(t.getBindingIdentifiers(id))) {
         // Note: We create new identifiers here to ensure that the variable declaration IDs don't
         // have the same 'loc' value, since that can make sourcemaps and retainLines behave poorly.
