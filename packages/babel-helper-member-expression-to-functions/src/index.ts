@@ -22,6 +22,7 @@ import {
   updateExpression,
 } from "@babel/types";
 import type * as t from "@babel/types";
+import { isTransparentExprWrapper } from "@babel/helper-skip-transparent-expression-wrappers";
 import { willPathCastToBoolean } from "./util.ts";
 
 class AssignmentMemoiser {
@@ -436,26 +437,39 @@ const handle = {
       return;
     }
 
+    // Type assertions and parentheses don't change the `this` of a call, so
+    // `(MEMBER as any)(ARGS)` and `MEMBER!(ARGS)` are calls of MEMBER too.
+    let callee: NodePath = member;
+    while (isTransparentExprWrapper(callee.parent)) {
+      callee = callee.parentPath!;
+    }
+    const calleeParentPath = callee.parentPath;
+
     // MEMBER(ARGS) -> _call(MEMBER, ARGS)
-    if (parentPath.isCallExpression({ callee: node })) {
-      parentPath.replaceWith(this.call(member, parentPath.node.arguments));
+    if (calleeParentPath.isCallExpression({ callee: callee.node })) {
+      calleeParentPath.replaceWith(
+        this.call(member, calleeParentPath.node.arguments),
+      );
       return;
     }
 
     // MEMBER?.(ARGS) -> _optionalCall(MEMBER, ARGS)
-    if (parentPath.isOptionalCallExpression({ callee: node })) {
+    if (calleeParentPath.isOptionalCallExpression({ callee: callee.node })) {
       // Replace `function (a, x = a.b.#c?.()) {}` to `function (a, x = (() => a.b.#c?.())() ){}`
       // so the temporary variable can be injected in correct scope
       // This can be further optimized to avoid unnecessary IIFE
       if (scope.path.isPattern()) {
-        parentPath.replaceWith(
+        calleeParentPath.replaceWith(
           // The injected member will be queued and eventually transformed when visited
-          callExpression(arrowFunctionExpression([], parentPath.node), []),
+          callExpression(
+            arrowFunctionExpression([], calleeParentPath.node),
+            [],
+          ),
         );
         return;
       }
-      parentPath.replaceWith(
-        this.optionalCall(member, parentPath.node.arguments),
+      calleeParentPath.replaceWith(
+        this.optionalCall(member, calleeParentPath.node.arguments),
       );
       return;
     }
