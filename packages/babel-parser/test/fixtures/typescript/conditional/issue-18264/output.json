@@ -55,8 +55,8 @@
               "typeAnnotation": {
                 "type": "TSFunctionType",
                 "start":49,"end":70,"loc":{"start":{"line":2,"column":23,"index":49},"end":{"line":2,"column":44,"index":70}},
-                "params": [],
-                "returnType": {
+                "parameters": [],
+                "typeAnnotation": {
                   "type": "TSTypeAnnotation",
                   "start":52,"end":70,"loc":{"start":{"line":2,"column":26,"index":52},"end":{"line":2,"column":44,"index":70}},
                   "typeAnnotation": {
@@ -67,7 +67,7 @@
                       "start":55,"end":62,"loc":{"start":{"line":2,"column":29,"index":55},"end":{"line":2,"column":36,"index":62},"identifierName":"Promise"},
                       "name": "Promise"
                     },
-                    "typeArguments": {
+                    "typeParameters": {
                       "type": "TSTypeParameterInstantiation",
                       "start":62,"end":70,"loc":{"start":{"line":2,"column":36,"index":62},"end":{"line":2,"column":44,"index":70}},
                       "params": [
@@ -142,7 +142,7 @@
                             "start":112,"end":119,"loc":{"start":{"line":3,"column":33,"index":112},"end":{"line":3,"column":40,"index":119},"identifierName":"Promise"},
                             "name": "Promise"
                           },
-                          "typeArguments": {
+                          "typeParameters": {
                             "type": "TSTypeParameterInstantiation",
                             "start":119,"end":127,"loc":{"start":{"line":3,"column":40,"index":119},"end":{"line":3,"column":48,"index":127}},
                             "params": [

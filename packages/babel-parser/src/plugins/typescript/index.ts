@@ -22,12 +22,7 @@ import * as charCodes from "charcodes";
 import type { ExpressionErrors } from "../../parser/util.ts";
 import { ParseStatementFlag } from "../../parser/statement.ts";
 import { ParamKind } from "../../util/production-parameter.ts";
-import {
-  Errors,
-  type ParseError,
-  ParseErrorEnum,
-  type ParseErrorTemplates,
-} from "../../parse-error.ts";
+import { Errors, type ParseError, ParseErrorEnum } from "../../parse-error.ts";
 import type { Undone } from "../../parser/node.ts";
 import type { ClassWithMixin, IJSXParserMixin } from "../jsx/index.ts";
 import { ParseBindingListFlags } from "../../parser/lval.ts";
@@ -2532,7 +2527,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             this.match(tt.arrow) &&
             this.tsIsArrowReturnTypeRestrictedAt(arrowStartPos)
           ) {
-            this.tsArrowReturnTypeAt.set(arrowStartPos, node.returnType.start!);
+            this.tsArrowReturnTypeAt.set(arrowStartPos, node.returnType.start);
           }
           this.expect(tt.arrow);
           return node;
@@ -3951,7 +3946,10 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       }
     }
 
-    tsShouldKeepArrowErrorAt(error: ParseError<any>, startPos: number): boolean {
+    tsShouldKeepArrowErrorAt(
+      error: ParseError<any>,
+      startPos: number,
+    ): boolean {
       if (!this.tsIsArrowReturnTypeRestrictedAt(startPos)) return false;
       const returnTypeStart = this.tsArrowReturnTypeAt.get(startPos);
       return (
@@ -4025,7 +4023,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             result.error != null &&
             this.state.errors
               .slice(state.errors.length)
-              .some(error => tsIsInvalidArrowParamsError(error, start!));
+              .some(error => tsIsInvalidArrowParamsError(error, start));
           // Type parameters might also be a type assertion or type arguments,
           // unless JSX makes them unambiguous: `a ? <T>(b) : c => d`.
           const isUnambiguous = node.typeParameters
@@ -4273,7 +4271,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       node: Undone<N.ArrowFunctionExpression>,
     ): Undone<N.ArrowFunctionExpression> | null | undefined {
       if (this.match(tt.colon)) {
-        const startPos = this.offsetToSourcePos(node.start!);
+        const startPos = this.offsetToSourcePos(node.start);
         if (this.noArrowAt.has(startPos)) return;
 
         // This is different from how the TS parser does it.
@@ -4588,7 +4586,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       // Only async-arrow candidates need the noArrowAt lookup.
       return (
         super.atPossibleAsyncArrow(base) &&
-        !this.noArrowAt.has(this.offsetToSourcePos(base.start!))
+        !this.noArrowAt.has(this.offsetToSourcePos(base.start))
       );
     }
 
@@ -4615,7 +4613,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
       isAsync: boolean,
       trailingCommaLoc?: Position | null,
     ): N.ArrowFunctionExpression {
-      const startPos = this.offsetToSourcePos(node.start!);
+      const startPos = this.offsetToSourcePos(node.start);
       if (this.tsIsArrowReturnTypeRestrictedAt(startPos)) {
         // The body of an arrow function inherits the restriction:
         //   a ? b => (c) : d => e

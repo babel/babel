@@ -56,11 +56,7 @@
                 {
                   "type": "TSTypeParameter",
                   "start":87,"end":88,"loc":{"start":{"line":2,"column":5,"index":87},"end":{"line":2,"column":6,"index":88}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":87,"end":88,"loc":{"start":{"line":2,"column":5,"index":87},"end":{"line":2,"column":6,"index":88},"identifierName":"T"},
-                    "name": "T"
-                  }
+                  "name": "T"
                 }
               ],
               "extra": {
@@ -103,11 +99,7 @@
                 {
                   "type": "TSTypeParameter",
                   "start":118,"end":119,"loc":{"start":{"line":3,"column":11,"index":118},"end":{"line":3,"column":12,"index":119}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":118,"end":119,"loc":{"start":{"line":3,"column":11,"index":118},"end":{"line":3,"column":12,"index":119},"identifierName":"T"},
-                    "name": "T"
-                  }
+                  "name": "T"
                 }
               ],
               "extra": {
@@ -190,11 +182,7 @@
                 {
                   "type": "TSTypeParameter",
                   "start":143,"end":144,"loc":{"start":{"line":4,"column":5,"index":143},"end":{"line":4,"column":6,"index":144}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":143,"end":144,"loc":{"start":{"line":4,"column":5,"index":143},"end":{"line":4,"column":6,"index":144},"identifierName":"T"},
-                    "name": "T"
-                  }
+                  "name": "T"
                 }
               ],
               "extra": {

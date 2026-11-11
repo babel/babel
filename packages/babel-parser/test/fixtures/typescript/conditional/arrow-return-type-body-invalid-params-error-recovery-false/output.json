@@ -725,11 +725,7 @@
                   {
                     "type": "TSTypeParameter",
                     "start":489,"end":490,"loc":{"start":{"line":13,"column":15,"index":489},"end":{"line":13,"column":16,"index":490}},
-                    "name": {
-                      "type": "Identifier",
-                      "start":489,"end":490,"loc":{"start":{"line":13,"column":15,"index":489},"end":{"line":13,"column":16,"index":490},"identifierName":"U"},
-                      "name": "U"
-                    }
+                    "name": "U"
                   }
                 ]
               }

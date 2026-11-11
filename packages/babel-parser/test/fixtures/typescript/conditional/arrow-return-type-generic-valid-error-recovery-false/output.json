@@ -110,7 +110,7 @@
                 "name": "x"
               }
             ],
-            "typeArguments": {
+            "typeParameters": {
               "type": "TSTypeParameterInstantiation",
               "start":105,"end":108,"loc":{"start":{"line":3,"column":9,"index":105},"end":{"line":3,"column":12,"index":108}},
               "params": [

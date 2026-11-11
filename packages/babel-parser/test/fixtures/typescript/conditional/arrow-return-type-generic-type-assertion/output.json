@@ -179,11 +179,7 @@
                 {
                   "type": "TSTypeParameter",
                   "start":130,"end":131,"loc":{"start":{"line":4,"column":5,"index":130},"end":{"line":4,"column":6,"index":131}},
-                  "name": {
-                    "type": "Identifier",
-                    "start":130,"end":131,"loc":{"start":{"line":4,"column":5,"index":130},"end":{"line":4,"column":6,"index":131},"identifierName":"T"},
-                    "name": "T"
-                  }
+                  "name": "T"
                 }
               ]
             }
@@ -235,7 +231,7 @@
                 "name": "b"
               }
             ],
-            "typeArguments": {
+            "typeParameters": {
               "type": "TSTypeParameterInstantiation",
               "start":165,"end":168,"loc":{"start":{"line":5,"column":9,"index":165},"end":{"line":5,"column":12,"index":168}},
               "params": [
