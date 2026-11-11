@@ -193,7 +193,7 @@ export default declare((api, options: Options) => {
           scope.rename("require");
         } while ((scope = scope.parent!));
 
-        transformDynamicImport(path, importInterop === "none", this.file);
+        transformDynamicImport(path, importInterop, this.file);
       },
 
       Program: {

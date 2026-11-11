@@ -56,6 +56,28 @@ export interface Options extends PluginOptions {
   strictMode?: boolean;
 }
 
+function getStaticSpecifier(specifier: t.Expression): string | undefined {
+  if (t.isStringLiteral(specifier)) return specifier.value;
+  if (t.isTemplateLiteral(specifier) && specifier.quasis.length === 1) {
+    return specifier.quasis[0].value.cooked ?? undefined;
+  }
+}
+
+function shouldSkipInteropHelper(
+  importInterop: RewriteModuleStatementsAndPrepareHeaderOptions["importInterop"],
+  specifier: t.Expression,
+  filename: string | undefined,
+) {
+  if (typeof importInterop === "function") {
+    const source = getStaticSpecifier(specifier);
+    // When the specifier is only known at runtime, we cannot ask the
+    // `importInterop` function, so we conservatively keep the interop helper.
+    if (source === undefined) return false;
+    return importInterop(source, filename) === "none";
+  }
+  return importInterop === "none";
+}
+
 type State = {
   requireId?: t.Identifier;
   resolveId?: t.Identifier;
@@ -112,26 +134,29 @@ export default declare<State, Options>((api, options: Options) => {
           state.rejectId = rejectId;
         }
 
-        let result: t.Node | null = t.identifier("imported");
-        if (importInterop !== "none") {
-          result = wrapInterop(this.file.path, result, "namespace");
-        }
-
         path.replaceWith(
-          buildDynamicImport(
-            path.node,
-            false,
-            false,
-            specifier => template.expression.ast`
-              new Promise((${resolveId}, ${rejectId}) =>
-                ${requireId}(
+          buildDynamicImport(path.node, false, false, specifier => {
+            let result: t.Node | null = t.identifier("imported");
+            if (
+              !shouldSkipInteropHelper(
+                importInterop,
+                specifier,
+                this.file.opts.filename,
+              )
+            ) {
+              result = wrapInterop(this.file.path, result, "namespace");
+            }
+
+            return template.expression.ast`
+              new Promise((${t.cloneNode(resolveId)}, ${t.cloneNode(rejectId)}) =>
+                ${t.cloneNode(requireId)}(
                   [${specifier}],
                   imported => ${t.cloneNode(resolveId)}(${result}),
                   ${t.cloneNode(rejectId)}
                 )
               )
-            `,
-          ),
+            `;
+          }),
         );
       },
       Program: {
