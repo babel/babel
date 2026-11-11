@@ -338,9 +338,6 @@ maybeWriteFile(
     JSON.stringify(
       {
         extends: ["./tsconfig.base.json", "./tsconfig.paths.json"],
-        compilerOptions: {
-          strict: true,
-        },
         include: [
           "lib/libdom-minimal.d.ts",
           "dts/codemods/*/src/**/*.ts",
