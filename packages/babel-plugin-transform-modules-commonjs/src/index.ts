@@ -26,6 +26,7 @@ export interface Options extends PluginOptions {
   /** @deprecated Use the `constantReexports` and `enumerableModuleMeta` assumptions instead. */
   loose?: boolean;
   mjsStrictNamespace?: boolean;
+  /** @deprecated Use the `importInterop` instead. */
   noInterop?: boolean;
   strict?: boolean;
   strictMode?: boolean;
@@ -54,8 +55,7 @@ export default declare((api, options: Options) => {
     allowTopLevelThis,
     strict,
     strictMode,
-    noInterop,
-    importInterop,
+    importInterop = options.noInterop ? "none" : "babel",
     lazy = false,
     // Defaulting to 'true' for now. May change before 7.x major.
     allowCommonJSExports = true,
@@ -193,7 +193,7 @@ export default declare((api, options: Options) => {
           scope.rename("require");
         } while ((scope = scope.parent!));
 
-        transformDynamicImport(path, noInterop, this.file);
+        transformDynamicImport(path, importInterop === "none", this.file);
       },
 
       Program: {
@@ -228,7 +228,6 @@ export default declare((api, options: Options) => {
               strict,
               strictMode,
               allowTopLevelThis,
-              noInterop,
               importInterop,
               wrapReference: hooks.wrapReference,
               getWrapperPayload: hooks.getWrapperPayload,

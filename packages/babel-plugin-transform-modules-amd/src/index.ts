@@ -50,6 +50,7 @@ export interface Options extends PluginOptions {
   importInterop?: RewriteModuleStatementsAndPrepareHeaderOptions["importInterop"];
   /** @deprecated Use the `constantReexports` and `enumerableModuleMeta` assumptions instead. */
   loose?: boolean;
+  /** @deprecated Use the `importInterop` instead. */
   noInterop?: boolean;
   strict?: boolean;
   strictMode?: boolean;
@@ -71,8 +72,12 @@ export default declare<State, Options>((api, options: Options) => {
     );
   }
 
-  const { allowTopLevelThis, strict, strictMode, importInterop, noInterop } =
-    options;
+  const {
+    allowTopLevelThis,
+    strict,
+    strictMode,
+    importInterop = options.noInterop ? "none" : "babel",
+  } = options;
 
   const constantReexports =
     api.assumption("constantReexports") ?? options.loose;
@@ -108,7 +113,7 @@ export default declare<State, Options>((api, options: Options) => {
         }
 
         let result: t.Node | null = t.identifier("imported");
-        if (!noInterop) {
+        if (importInterop !== "none") {
           result = wrapInterop(this.file.path, result, "namespace");
         }
 
@@ -163,7 +168,6 @@ export default declare<State, Options>((api, options: Options) => {
               strictMode,
               allowTopLevelThis,
               importInterop,
-              noInterop,
               filename: this.file.opts.filename,
             },
           );

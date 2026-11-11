@@ -15,10 +15,10 @@ const requireInterop = (source: t.Expression, file: File) =>
 
 export function transformDynamicImport(
   path: NodePath<t.CallExpression | t.ImportExpression>,
-  noInterop: boolean | undefined,
+  skipInteropHelper: boolean | undefined,
   file: File,
 ) {
-  const buildRequire = noInterop ? requireNoInterop : requireInterop;
+  const buildRequire = skipInteropHelper ? requireNoInterop : requireInterop;
 
   path.replaceWith(
     buildDynamicImport(path.node, true, false, specifier =>
