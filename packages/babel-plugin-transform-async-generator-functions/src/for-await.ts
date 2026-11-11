@@ -40,16 +40,17 @@ export default function (
   const left = node.left;
   let declar;
 
-  if (t.isIdentifier(left) || t.isPattern(left) || t.isMemberExpression(left)) {
-    // for await (i of test), for await ({ i } of test)
-    declar = t.expressionStatement(
-      t.assignmentExpression("=", left, stepValue),
-    );
-  } else if (t.isVariableDeclaration(left)) {
+  if (t.isVariableDeclaration(left)) {
     // for await (let i of test)
     declar = t.variableDeclaration(left.kind, [
       t.variableDeclarator(left.declarations[0].id, stepValue),
     ]);
+  } else {
+    // for await (i of test), for await ({ i } of test),
+    // for await ((i as any) of test)
+    declar = t.expressionStatement(
+      t.assignmentExpression("=", left, stepValue),
+    );
   }
   let template = buildForAwait({
     ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
