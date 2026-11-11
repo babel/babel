@@ -200,6 +200,9 @@ export default declare<PluginState, Options>((api, options: Options) => {
         state: PluginState,
       ) {
         if (path.isCallExpression() && !t.isImport(path.node.callee)) return;
+        // `import.source()` and `import.defer()` can't be compiled to a
+        // regular dynamic import.
+        if (path.isImportExpression() && path.node.phase != null) return;
         if (path.isCallExpression()) {
           if (!this.file.has("@babel/plugin-proposal-dynamic-import")) {
             throw new Error(MISSING_PLUGIN_ERROR);
