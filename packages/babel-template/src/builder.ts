@@ -102,19 +102,39 @@ function extendedTrace<Arg, Result>(
   fn: (_: Arg) => Result,
 ): (_: Arg) => Result {
   // Since we lazy parse the template, we get the current stack so we have the
-  // original stack to append if it errors when parsing
-  const rootErr = new Error();
+  // original stack to append if it errors when parsing.
+  // The stack is formatted right away: until then, V8 keeps the raw call
+  // sites so a long-lived builder would keep its caller and the caller's realm
+  // alive. A custom `Error.prepareStackTrace` may return a non-string or throw,
+  // in which case we skip the origin stack rather than failing.
+  let rootStack: string | undefined;
+  try {
+    const { stack } = new Error();
+    if (typeof stack === "string") rootStack = stack;
+  } catch {
+    // ignore
+  }
 
   return (arg: Arg) => {
     try {
       return fn(arg);
     } catch (err) {
-      // We slice off the top 3 items in the stack to remove the call to
-      // 'extendedTrace', and the anonymous builder function, with the final
-      // stripped line being the error message itself since we threw it
-      // in the first place and it doesn't matter.
-      (err as Error).stack +=
-        `\n    =============\n${rootErr.stack!.split("\n").slice(3).join("\n")}`;
+      if (rootStack !== undefined) {
+        // `Error.prepareStackTrace` may have changed since the builder was
+        // created, so the error's own stack may also be a non-string or throw.
+        try {
+          const error = err as Error;
+          if (typeof error.stack === "string") {
+            // We slice off the top 3 items in the stack to remove the call to
+            // 'extendedTrace', and the anonymous builder function, with the
+            // final stripped line being the error message itself since we
+            // threw it in the first place and it doesn't matter.
+            error.stack += `\n    =============\n${rootStack.split("\n").slice(3).join("\n")}`;
+          }
+        } catch {
+          // ignore
+        }
+      }
       throw err;
     }
   };

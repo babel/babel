@@ -1,4 +1,6 @@
 import * as t from "@babel/types";
+import { setFlagsFromString } from "node:v8";
+import { createContext, runInContext, runInNewContext } from "node:vm";
 
 import generator from "../../babel-generator/lib/index.js";
 import template from "../lib/index.js";
@@ -403,6 +405,113 @@ describe("@babel/template", function () {
       error = e;
     }
     expect(error.stack).toMatch("=============\n    at create");
+  });
+
+  describe("builders do not retain their caller", () => {
+    let gc;
+    beforeAll(() => {
+      setFlagsFromString("--expose-gc");
+      try {
+        gc = runInNewContext("gc");
+      } finally {
+        // Do not expose `gc` to contexts created by later test files.
+        setFlagsFromString("--no-expose-gc");
+      }
+    });
+
+    async function expectNotRetained(build) {
+      function create() {
+        const context = createContext({ template });
+        const receiver = runInContext(`({ build: ${build} })`, context);
+        return { ref: new WeakRef(receiver), builder: receiver.build() };
+      }
+
+      const { ref, builder } = create();
+      // WeakRef targets are kept alive until the end of the current job.
+      for (let i = 0; i < 10 && ref.deref() !== undefined; i++) {
+        await new Promise(resolve => setImmediate(resolve));
+        gc();
+      }
+      expect(ref.deref()).toBeUndefined();
+      expect(builder().type).toBe("VariableDeclaration");
+    }
+
+    it("string templates", async () => {
+      await expectNotRetained(
+        `function () { return template.statement("const result = 1;"); }`,
+      );
+    });
+
+    it("tagged templates", async () => {
+      await expectNotRetained(
+        "function () { return template.statement`const result = 1;`; }",
+      );
+    });
+  });
+
+  describe("custom Error.prepareStackTrace", () => {
+    let prepareStackTrace;
+    beforeEach(() => {
+      prepareStackTrace = Error.prepareStackTrace;
+    });
+    afterEach(() => {
+      Error.prepareStackTrace = prepareStackTrace;
+    });
+
+    it("returning call sites does not hide template errors", () => {
+      Error.prepareStackTrace = (_, callSites) => callSites;
+      const build = template.statement("const = ;");
+      expect(() => build()).toThrow(SyntaxError);
+    });
+
+    it("throwing does not break template construction", () => {
+      Error.prepareStackTrace = () => {
+        throw new Error("prepareStackTrace");
+      };
+      const build = template.statement("const result = 1;");
+      expect(build().type).toBe("VariableDeclaration");
+    });
+
+    // `expect` itself reads stacks, so restore `Error.prepareStackTrace`
+    // before asserting.
+    function catchWithThrowingPrepareStackTrace(fn) {
+      Error.prepareStackTrace = () => {
+        throw new Error("prepareStackTrace");
+      };
+      try {
+        fn();
+      } catch (e) {
+        return e;
+      } finally {
+        Error.prepareStackTrace = prepareStackTrace;
+      }
+    }
+
+    it("throwing does not hide template errors", () => {
+      const error = catchWithThrowingPrepareStackTrace(() => {
+        template.statement("const = ;")();
+      });
+      expect(error).toBeInstanceOf(SyntaxError);
+    });
+
+    it("throwing after the builder is created does not hide template errors", () => {
+      const build = template.statement("const = ;");
+      const error = catchWithThrowingPrepareStackTrace(build);
+      expect(error).toBeInstanceOf(SyntaxError);
+    });
+
+    it("returning call sites after the builder is created keeps them", () => {
+      const build = template.statement("const = ;");
+      Error.prepareStackTrace = (_, callSites) => callSites;
+      let error;
+      try {
+        build();
+      } catch (e) {
+        error = e;
+      }
+      expect(error).toBeInstanceOf(SyntaxError);
+      expect(Array.isArray(error.stack)).toBe(true);
+    });
   });
 
   describe(".syntacticPlaceholders", () => {
