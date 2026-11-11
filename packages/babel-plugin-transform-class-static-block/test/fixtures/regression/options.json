@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-async-to-generator", "transform-class-static-block"],
+  "minNodeVersion": "12.0.0"
+}
