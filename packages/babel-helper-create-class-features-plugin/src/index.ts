@@ -138,6 +138,15 @@ export function createClassFeaturePlugin({
         const body = path.get("body");
 
         for (const path of body.get("body")) {
+          if (path.isClassAccessorProperty()) {
+            // It would be compiled as a field, without its getter and setter.
+            throw path.buildCodeFrameError(
+              "Class accessor properties are not compiled by this transform. " +
+                'Please make sure that "@babel/plugin-proposal-decorators" comes ' +
+                "*before* the other class features plugins.",
+            );
+          }
+
           if (
             // check path.node.computed is enough, but ts will complain
             (path.isClassProperty() || path.isClassMethod()) &&
@@ -189,7 +198,7 @@ export function createClassFeaturePlugin({
           } else {
             elements.push(path);
             if (path.isProperty() || path.isPrivate() || path.isStaticBlock()) {
-              props.push(path as PropPath);
+              props.push(path);
             }
           }
         }
