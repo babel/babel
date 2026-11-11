@@ -1,63 +1,33 @@
 import wrapRegExp from "../../helpers/wrapRegExp.js";
-import { describeNoCITGM } from "$repo-utils";
 
 describe("wrapRegExp", () => {
-  // CITGM's machines are slow.
-  describeNoCITGM("should handle maliciously crafted substitutions", () => {
-    it("$<$<...$<group", () => {
-      const pattern = "(foo)";
-      const groups = { group: 1 };
-      const myRegExp = wrapRegExp(pattern, groups);
-      const targetStr = "foofoo";
-      const replacement = "$<".repeat(1e5) + "group";
+  describe("should handle maliciously crafted substitutions", () => {
+    // The target string does not match, so the native replace never expands
+    // the substitution and only the helper's own `$<name>` rewriting is
+    // timed. V8's native expansion of an unterminated `$<` is itself
+    // quadratic, which made a matching target flaky on slow machines.
+    it.each([
+      ["$<$<...$<group", "$<".repeat(1e5) + "group"],
+      ["$<g$<g...$<group", "$<g".repeat(1e5) + "group"],
+    ])("%s", (_, replacement) => {
+      const myRegExp = wrapRegExp("(foo)", { group: 1 });
       const startTime = Date.now();
-      const result = myRegExp[Symbol.replace](targetStr, replacement);
-      // This test will fail if 2500ms is passed
+      const result = myRegExp[Symbol.replace]("bar", replacement);
+      // The quadratic regex fixed in #17173 takes ~30s here, the fixed one <1ms.
       const timeTaken = Date.now() - startTime;
       expect(timeTaken).toBeLessThan(2500);
-      expect(result).toBe(replacement + "foo");
+      expect(result).toBe("bar");
     });
 
-    it("$<$<...$<group>", () => {
-      const pattern = "(foo)";
-      const groups = { group: 1 };
-      const myRegExp = wrapRegExp(pattern, groups);
-      const targetStr = "foofoo";
-      const replacement = "$<".repeat(1e5) + "group>";
-      const startTime = Date.now();
-      const result = myRegExp[Symbol.replace](targetStr, replacement);
-      // This test will fail if 2500ms is passed
-      const timeTaken = Date.now() - startTime;
-      expect(timeTaken).toBeLessThan(2500);
-      expect(result).toBe("foo");
-    });
-
-    it("$<g$<g...$<group", () => {
-      const pattern = "(foo)";
-      const groups = { group: 1 };
-      const myRegExp = wrapRegExp(pattern, groups);
-      const targetStr = "foofoo";
-      const replacement = "$<g".repeat(1e5) + "group";
-      const startTime = Date.now();
-      const result = myRegExp[Symbol.replace](targetStr, replacement);
-      // This test will fail if 2500ms is passed
-      const timeTaken = Date.now() - startTime;
-      expect(timeTaken).toBeLessThan(2500);
-      expect(result).toBe(replacement + "foo");
-    });
-
-    it("$<g$<g...$<group>", () => {
-      const pattern = "(foo)";
-      const groups = { group: 1 };
-      const myRegExp = wrapRegExp(pattern, groups);
-      const targetStr = "foofoo";
-      const replacement = "$<g".repeat(1e5) + "group>";
-      const startTime = Date.now();
-      const result = myRegExp[Symbol.replace](targetStr, replacement);
-      // This test will fail when 2500ms is passed
-      const timeTaken = Date.now() - startTime;
-      expect(timeTaken).toBeLessThan(2500);
-      expect(result).toBe("foo");
+    it.each([
+      ["$<$<$<group", "$<$<$<groupfoo"],
+      ["$<$<$<group>", "foo"],
+      ["$<g$<g$<group", "$<g$<g$<groupfoo"],
+      ["$<g$<g$<group>", "foo"],
+    ])("%s", (replacement, expected) => {
+      const myRegExp = wrapRegExp("(foo)", { group: 1 });
+      const result = myRegExp[Symbol.replace]("foofoo", replacement);
+      expect(result).toBe(expected);
     });
 
     it("$<_$>", () => {
