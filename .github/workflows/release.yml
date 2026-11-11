@@ -245,6 +245,8 @@ jobs:
       - uses: actions/checkout@v6
         with:
           repository: babel/website
+          # The website's `main` branch documents Babel 8, Babel 7 docs live in `7.x`
+          ref: 7.x
           fetch-depth: 0 # Otherwise we cannot push
           persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
       - name: Download babel-types docs
@@ -263,20 +265,20 @@ jobs:
           else
             echo "hasChanges=true" >> $GITHUB_OUTPUT
           fi
-          git checkout -b update-types-docs
+          git checkout -b update-types-docs-7.x
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
           git commit -am "docs: update babel types"
-          git push --force "https://babel-bot:${{ secrets.BOT_TOKEN }}@github.com/babel/website.git" update-types-docs
+          git push --force "https://babel-bot:${{ secrets.BOT_TOKEN }}@github.com/babel/website.git" update-types-docs-7.x
       - name: Create Pull Request
         uses: babel/actions/create-pull-request@v2
         if: steps.prepare-website-changes.outputs.hasChanges == 'true'
         with:
           token: ${{ secrets.BOT_TOKEN }}
           repository: babel/website
-          branch: update-types-docs
-          base: main
-          title: Update Babel types docs
+          branch: update-types-docs-7.x
+          base: 7.x
+          title: "[7.x] Update Babel types docs"
           description: Updated `@babel/types` docs for [Babel ${{ needs.github-release.outputs.version }}](https://github.com/babel/babel/releases/tag/${{ needs.github-release.outputs.version }}).
           labels: |
             docs
