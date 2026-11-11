@@ -540,22 +540,6 @@ export function ConditionalExpression(
 
 export { ConditionalExpression as ArrowFunctionExpression };
 
-export function OptionalMemberExpression(
-  node: t.OptionalMemberExpression,
-  parent: any,
-  parentId: number,
-): boolean {
-  switch (parentId) {
-    case __node("CallExpression"):
-      return parent.callee === node;
-    case __node("MemberExpression"):
-      return parent.object === node;
-  }
-  return false;
-}
-
-export { OptionalMemberExpression as OptionalCallExpression };
-
 export function AssignmentExpression(
   node: t.AssignmentExpression,
   parent: any,
