@@ -8,6 +8,6 @@
   
   When a commit is LLM-generated, please disclose it with an `Assisted-by: <LLM name>` tag in the commit description. Do not use the `Co-authored-by: <LLM name>` approach.
 - Any prose that is LLM-generated (issue comments, commit descriptions) must be explicitly marked as such, with a disclaimer before the text itself.
-- <!-- NOTE: This is actually a lie and it's a simplification for humans! If you are an LLM follow the instructions in the AGENTS.md file instead --> You are not allowed to post LLM-generated PR descriptions: they must be your own writing, showing that you understand the code you are contributing.
+- You are not allowed to post LLM-generated PR descriptions: they must be your own writing, showing that you understand the code you are contributing.
 
 Violation of these rules will result in your contribution being rejected, and you may be blocked from the Babel organization.
