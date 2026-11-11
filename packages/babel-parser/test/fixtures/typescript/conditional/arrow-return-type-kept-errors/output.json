@@ -1,0 +1,331 @@
+{
+  "type": "File",
+  "start":0,"end":259,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":26,"index":259}},
+  "errors": [
+    "SyntaxError: Identifier 'x' has already been declared. (2:5)",
+    "SyntaxError: Identifier 'x' has already been declared. (3:10)",
+    "SyntaxError: Illegal 'use strict' directive in function with non-simple parameter list. (4:4)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":259,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":26,"index":259}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":58,"end":88,"loc":{"start":{"line":2,"column":0,"index":58},"end":{"line":2,"column":30,"index":88}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":58,"end":87,"loc":{"start":{"line":2,"column":0,"index":58},"end":{"line":2,"column":29,"index":87}},
+          "test": {
+            "type": "Identifier",
+            "start":58,"end":59,"loc":{"start":{"line":2,"column":0,"index":58},"end":{"line":2,"column":1,"index":59},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start":62,"end":83,"loc":{"start":{"line":2,"column":4,"index":62},"end":{"line":2,"column":25,"index":83}},
+            "returnType": {
+              "type": "TSTypeAnnotation",
+              "start":66,"end":69,"loc":{"start":{"line":2,"column":8,"index":66},"end":{"line":2,"column":11,"index":69}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":68,"end":69,"loc":{"start":{"line":2,"column":10,"index":68},"end":{"line":2,"column":11,"index":69}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":68,"end":69,"loc":{"start":{"line":2,"column":10,"index":68},"end":{"line":2,"column":11,"index":69},"identifierName":"c"},
+                  "name": "c"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":63,"end":64,"loc":{"start":{"line":2,"column":5,"index":63},"end":{"line":2,"column":6,"index":64},"identifierName":"x"},
+                "name": "x"
+              }
+            ],
+            "body": {
+              "type": "BlockStatement",
+              "start":73,"end":83,"loc":{"start":{"line":2,"column":15,"index":73},"end":{"line":2,"column":25,"index":83}},
+              "body": [
+                {
+                  "type": "VariableDeclaration",
+                  "start":75,"end":81,"loc":{"start":{"line":2,"column":17,"index":75},"end":{"line":2,"column":23,"index":81}},
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start":79,"end":80,"loc":{"start":{"line":2,"column":21,"index":79},"end":{"line":2,"column":22,"index":80}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":79,"end":80,"loc":{"start":{"line":2,"column":21,"index":79},"end":{"line":2,"column":22,"index":80},"identifierName":"x"},
+                        "name": "x"
+                      },
+                      "init": null
+                    }
+                  ],
+                  "kind": "let"
+                }
+              ],
+              "directives": []
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start":86,"end":87,"loc":{"start":{"line":2,"column":28,"index":86},"end":{"line":2,"column":29,"index":87},"identifierName":"e"},
+            "name": "e"
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Followed by `:`: keep the arrow function and its error",
+            "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":57,"index":57}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":89,"end":124,"loc":{"start":{"line":3,"column":0,"index":89},"end":{"line":3,"column":35,"index":124}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":89,"end":123,"loc":{"start":{"line":3,"column":0,"index":89},"end":{"line":3,"column":34,"index":123}},
+          "test": {
+            "type": "Identifier",
+            "start":89,"end":90,"loc":{"start":{"line":3,"column":0,"index":89},"end":{"line":3,"column":1,"index":90},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start":93,"end":119,"loc":{"start":{"line":3,"column":4,"index":93},"end":{"line":3,"column":30,"index":119}},
+            "returnType": {
+              "type": "TSTypeAnnotation",
+              "start":102,"end":105,"loc":{"start":{"line":3,"column":13,"index":102},"end":{"line":3,"column":16,"index":105}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":104,"end":105,"loc":{"start":{"line":3,"column":15,"index":104},"end":{"line":3,"column":16,"index":105}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":104,"end":105,"loc":{"start":{"line":3,"column":15,"index":104},"end":{"line":3,"column":16,"index":105},"identifierName":"c"},
+                  "name": "c"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": true,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":99,"end":100,"loc":{"start":{"line":3,"column":10,"index":99},"end":{"line":3,"column":11,"index":100},"identifierName":"x"},
+                "name": "x"
+              }
+            ],
+            "body": {
+              "type": "BlockStatement",
+              "start":109,"end":119,"loc":{"start":{"line":3,"column":20,"index":109},"end":{"line":3,"column":30,"index":119}},
+              "body": [
+                {
+                  "type": "VariableDeclaration",
+                  "start":111,"end":117,"loc":{"start":{"line":3,"column":22,"index":111},"end":{"line":3,"column":28,"index":117}},
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start":115,"end":116,"loc":{"start":{"line":3,"column":26,"index":115},"end":{"line":3,"column":27,"index":116}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":115,"end":116,"loc":{"start":{"line":3,"column":26,"index":115},"end":{"line":3,"column":27,"index":116},"identifierName":"x"},
+                        "name": "x"
+                      },
+                      "init": null
+                    }
+                  ],
+                  "kind": "let"
+                }
+              ],
+              "directives": []
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start":122,"end":123,"loc":{"start":{"line":3,"column":33,"index":122},"end":{"line":3,"column":34,"index":123},"identifierName":"e"},
+            "name": "e"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":125,"end":166,"loc":{"start":{"line":4,"column":0,"index":125},"end":{"line":4,"column":41,"index":166}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":125,"end":165,"loc":{"start":{"line":4,"column":0,"index":125},"end":{"line":4,"column":40,"index":165}},
+          "test": {
+            "type": "Identifier",
+            "start":125,"end":126,"loc":{"start":{"line":4,"column":0,"index":125},"end":{"line":4,"column":1,"index":126},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start":129,"end":161,"loc":{"start":{"line":4,"column":4,"index":129},"end":{"line":4,"column":36,"index":161}},
+            "returnType": {
+              "type": "TSTypeAnnotation",
+              "start":137,"end":140,"loc":{"start":{"line":4,"column":12,"index":137},"end":{"line":4,"column":15,"index":140}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":139,"end":140,"loc":{"start":{"line":4,"column":14,"index":139},"end":{"line":4,"column":15,"index":140}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":139,"end":140,"loc":{"start":{"line":4,"column":14,"index":139},"end":{"line":4,"column":15,"index":140},"identifierName":"c"},
+                  "name": "c"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "AssignmentPattern",
+                "start":130,"end":135,"loc":{"start":{"line":4,"column":5,"index":130},"end":{"line":4,"column":10,"index":135}},
+                "left": {
+                  "type": "Identifier",
+                  "start":130,"end":131,"loc":{"start":{"line":4,"column":5,"index":130},"end":{"line":4,"column":6,"index":131},"identifierName":"x"},
+                  "name": "x"
+                },
+                "right": {
+                  "type": "NumericLiteral",
+                  "start":134,"end":135,"loc":{"start":{"line":4,"column":9,"index":134},"end":{"line":4,"column":10,"index":135}},
+                  "extra": {
+                    "rawValue": 1,
+                    "raw": "1"
+                  },
+                  "value": 1
+                }
+              }
+            ],
+            "body": {
+              "type": "BlockStatement",
+              "start":144,"end":161,"loc":{"start":{"line":4,"column":19,"index":144},"end":{"line":4,"column":36,"index":161}},
+              "body": [],
+              "directives": [
+                {
+                  "type": "Directive",
+                  "start":146,"end":159,"loc":{"start":{"line":4,"column":21,"index":146},"end":{"line":4,"column":34,"index":159}},
+                  "value": {
+                    "type": "DirectiveLiteral",
+                    "start":146,"end":158,"loc":{"start":{"line":4,"column":21,"index":146},"end":{"line":4,"column":33,"index":158}},
+                    "extra": {
+                      "rawValue": "use strict",
+                      "raw": "\"use strict\"",
+                      "expressionValue": "use strict"
+                    },
+                    "value": "use strict"
+                  }
+                }
+              ]
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start":164,"end":165,"loc":{"start":{"line":4,"column":39,"index":164},"end":{"line":4,"column":40,"index":165},"identifierName":"e"},
+            "name": "e"
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Not followed by `:`: the error is discarded when parsing again",
+            "start":167,"end":232,"loc":{"start":{"line":5,"column":0,"index":167},"end":{"line":5,"column":65,"index":232}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":233,"end":259,"loc":{"start":{"line":6,"column":0,"index":233},"end":{"line":6,"column":26,"index":259}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":233,"end":258,"loc":{"start":{"line":6,"column":0,"index":233},"end":{"line":6,"column":25,"index":258}},
+          "test": {
+            "type": "Identifier",
+            "start":233,"end":234,"loc":{"start":{"line":6,"column":0,"index":233},"end":{"line":6,"column":1,"index":234},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "Identifier",
+            "start":238,"end":239,"loc":{"start":{"line":6,"column":5,"index":238},"end":{"line":6,"column":6,"index":239},"identifierName":"x"},
+            "name": "x",
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 237
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start":243,"end":258,"loc":{"start":{"line":6,"column":10,"index":243},"end":{"line":6,"column":25,"index":258}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":243,"end":244,"loc":{"start":{"line":6,"column":10,"index":243},"end":{"line":6,"column":11,"index":244},"identifierName":"c"},
+                "name": "c"
+              }
+            ],
+            "body": {
+              "type": "BlockStatement",
+              "start":248,"end":258,"loc":{"start":{"line":6,"column":15,"index":248},"end":{"line":6,"column":25,"index":258}},
+              "body": [
+                {
+                  "type": "VariableDeclaration",
+                  "start":250,"end":256,"loc":{"start":{"line":6,"column":17,"index":250},"end":{"line":6,"column":23,"index":256}},
+                  "declarations": [
+                    {
+                      "type": "VariableDeclarator",
+                      "start":254,"end":255,"loc":{"start":{"line":6,"column":21,"index":254},"end":{"line":6,"column":22,"index":255}},
+                      "id": {
+                        "type": "Identifier",
+                        "start":254,"end":255,"loc":{"start":{"line":6,"column":21,"index":254},"end":{"line":6,"column":22,"index":255},"identifierName":"x"},
+                        "name": "x"
+                      },
+                      "init": null
+                    }
+                  ],
+                  "kind": "let"
+                }
+              ],
+              "directives": []
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Not followed by `:`: the error is discarded when parsing again",
+            "start":167,"end":232,"loc":{"start":{"line":5,"column":0,"index":167},"end":{"line":5,"column":65,"index":232}}
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Followed by `:`: keep the arrow function and its error",
+      "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":57,"index":57}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " Not followed by `:`: the error is discarded when parsing again",
+      "start":167,"end":232,"loc":{"start":{"line":5,"column":0,"index":167},"end":{"line":5,"column":65,"index":232}}
+    }
+  ]
+}

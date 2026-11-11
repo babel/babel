@@ -1,0 +1,4 @@
+{
+  "plugins": ["jsx", "typescript"],
+  "throws": "Unexpected token, expected \":\" (2:26)"
+}

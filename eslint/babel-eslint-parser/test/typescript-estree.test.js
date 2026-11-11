@@ -386,6 +386,8 @@ function deeplyMakePlainObject(obj) {
               const options = test.options;
               if (
                 options.throws ||
+                // typescript-estree does not support a custom start index
+                options.startIndex !== undefined ||
                 // Ignore test with unsupported plugins
                 (options.plugins || []).some(
                   plugin => !tsEslintSupportedParserPlugins.includes(plugin),

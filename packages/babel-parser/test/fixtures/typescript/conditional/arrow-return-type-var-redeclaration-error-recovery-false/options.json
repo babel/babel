@@ -1,0 +1,4 @@
+{
+  "errorRecovery": false,
+  "throws": "Identifier 'x' has already been declared. (1:9)"
+}

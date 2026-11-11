@@ -1,0 +1,8 @@
+{
+  "errorRecovery": false,
+  "plugins": [
+    "jsx",
+    "typescript"
+  ],
+  "throws": "Argument name clash. (1:12)"
+}
