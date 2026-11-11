@@ -25,6 +25,38 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.14 (2026-11-11)
+
+#### :eyeglasses: Spec Compliance
+* `babel-parser`
+  * [#18543](https://github.com/babel/babel/pull/18543) fix(parser): require `(` after `import.{source,defer,sync}` ([@babel-bot](https://github.com/babel-bot))
+
+#### :bug: Bug Fix
+* `babel-helper-module-transforms`, `babel-plugin-transform-dynamic-import`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-umd`
+  * [#18597](https://github.com/babel/babel/pull/18597) Respect `importInterop: none` for dynamic import ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-member-expression-to-functions`, `babel-plugin-transform-classes`, `babel-plugin-transform-object-super`, `babel-plugin-transform-private-methods`
+  * [#18595](https://github.com/babel/babel/pull/18595) Keep the receiver of TS-wrapped `super` and private member calls ([@babel-bot](https://github.com/babel-bot))
+* `babel-parser`
+  * [#18596](https://github.com/babel/babel/pull/18596) fix(parser): allow ASI between modifier-like field and @dec ([@babel-bot](https://github.com/babel-bot))
+  * [#18588](https://github.com/babel/babel/pull/18588) fix(parser): rework ts arrow param tracking ([@babel-bot](https://github.com/babel-bot))
+  * [#18542](https://github.com/babel/babel/pull/18542) fix(parser): handle async do await in parameters ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-string-parser`, `babel-parser`
+  * [#18591](https://github.com/babel/babel/pull/18591) fix(parser): recover from out-of-range `\u{...}` code points ([@babel-bot](https://github.com/babel-bot))
+* `babel-generator`
+  * [#18585](https://github.com/babel/babel/pull/18585) fix(generator): keep parens that end an optional chain before ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-class-static-block`
+  * [#18579](https://github.com/babel/babel/pull/18579) fix(class-static-block): skip class body path with stale ancestry ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-module-transforms`, `babel-parser`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-react-pure-annotations`, `babel-plugin-transform-typescript`, `babel-traverse`, `babel-types`
+  * [#18574](https://github.com/babel/babel/pull/18574) fix: improve string module specifiers support ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-flow-comments`
+  * [#18573](https://github.com/babel/babel/pull/18573) fix(flow-comments): support anonymous classes ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-block-scoping`, `babel-traverse`
+  * [#18571](https://github.com/babel/babel/pull/18571) fix: rename assignment targets in forXStatement ([@babel-bot](https://github.com/babel-bot))
+* `babel-helpers`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-regenerator`, `babel-preset-env`, `babel-runtime-corejs3`
+  * [#18569](https://github.com/babel/babel/pull/18569) fix(regenerator): dispatch pending jump after finally to outer finally blocks ([@babel-bot](https://github.com/babel-bot))
+
+#### :house: Internal
+* [#18575](https://github.com/babel/babel/pull/18575) ci: do not run hooks of skipped describe blocks on Jest 24 ([@JLHwung](https://github.com/JLHwung))
 ## v7.29.13 (2026-11-04)
 
 #### :bug: Bug Fix
