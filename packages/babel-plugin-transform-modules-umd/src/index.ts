@@ -46,6 +46,7 @@ export interface Options extends PluginOptions {
   globals?: Record<string, string>;
   importInterop?: RewriteModuleStatementsAndPrepareHeaderOptions["importInterop"];
   loose?: boolean;
+  /** @deprecated Use the `importInterop` option instead. */
   noInterop?: boolean;
   strict?: boolean;
   strictMode?: boolean;
@@ -60,8 +61,7 @@ export default declare((api, options: Options) => {
     allowTopLevelThis,
     strict,
     strictMode,
-    noInterop,
-    importInterop,
+    importInterop = options.noInterop ? "none" : "babel",
   } = options;
 
   const constantReexports =
@@ -179,7 +179,6 @@ export default declare((api, options: Options) => {
               strict,
               strictMode,
               allowTopLevelThis,
-              noInterop,
               importInterop,
               filename: this.file.opts.filename,
             },

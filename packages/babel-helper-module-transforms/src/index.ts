@@ -40,6 +40,7 @@ export interface RewriteModuleStatementsAndPrepareHeaderOptions {
   strictMode: boolean;
   loose?: boolean;
   importInterop?: ImportInterop;
+  /** @deprecated Use the `importInterop` instead. */
   noInterop?: boolean;
   lazy?: Lazy.Lazy;
   getWrapperPayload?: (
