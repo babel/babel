@@ -2,6 +2,7 @@ try {} catch({ ...a34 }) {}
 try {} catch({a1, ...b1}) {}
 try {} catch({a2, b2, ...c2}) {}
 try {} catch({a2, b2, c2: { c3, ...c4 }}) {}
+try {} catch([...{ 0: a5, ...b5 }]) {}
 
 // Unchanged
 try {} catch(a) {}
@@ -24,6 +25,9 @@ try { throw { a2: 1, b2: 2, w: 3 }; } catch({a2, b2, ...c2}) {
 try { throw { a2: 1, b2: 2, c2: { c3: 3, v: 4 } }; } catch({a2, b2, c2: { c3, ...c4 }}) {
   results.push([a2, b2, c3, c4]);
 }
+try { throw [9, 8]; } catch([...{ 0: a5, ...b5 }]) {
+  results.push([a5, b5]);
+}
 
 // Unchanged
 try { throw "a"; } catch(a) {
@@ -38,6 +42,7 @@ expect(results).toEqual([
   [1, { z: 2 }],
   [1, 2, { w: 3 }],
   [1, 2, 3, { v: 4 }],
+  [9, { 1: 8 }],
   "a",
   "b",
 ]);
