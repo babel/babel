@@ -438,9 +438,10 @@ export function readCodePoint(
     if (code !== null && code > 0x10ffff) {
       if (throwOnInvalid) {
         errors.invalidCodePoint(pos, lineStart, curLine);
-      } else {
-        return { code: null, pos };
       }
+      // In errorRecovery mode `invalidCodePoint` only records the error, so
+      // never hand an out-of-range code point back to `String.fromCodePoint`.
+      return { code: null, pos };
     }
   } else {
     ({ code, pos } = readHexChar(
