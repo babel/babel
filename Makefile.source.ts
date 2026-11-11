@@ -597,7 +597,7 @@ target["bootstrap-flow"] = function () {
 
 target["new-version-checklist"] = function () {
   // eslint-disable-next-line no-constant-condition
-  if (1) {
+  if (0) {
     console.log(
       `
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
