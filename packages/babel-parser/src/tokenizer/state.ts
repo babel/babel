@@ -56,19 +56,15 @@ export default class State {
 
   errors: ParseError[] = [];
 
-  // Used to signify the start of an expression which looks like a
-  // typed arrow function, but it isn't
-  // e.g. a ? (b) : c => d
-  //          ^
-  noArrowAt: number[] = [];
-
-  // Used to signify the start of an expression whose params, if it looks like
-  // an arrow function, shouldn't be converted to assignable nodes.
-  // This is used to defer the validation of typed arrow functions inside
-  // conditional expressions.
-  // e.g. a ? (b) : c => d
-  //          ^
+  // Flow source positions where an expression that looks like an arrow
+  // function should not have its parameters converted to assignable nodes.
+  // This defers validation of typed arrows inside conditional expressions.
+  // See also Parser#noArrowAt.
   noArrowParamsConversionAt: number[] = [];
+
+  // Source position of the innermost TypeScript arrow-return-type restriction.
+  // Scoped parser calls save and restore outer positions.
+  tsArrowReturnTypeRestrictionAt: number = -1;
 
   // The end of the last token after which `/` or `/=` starts a regular
   // expression although the parser has already parsed an expression before
@@ -92,7 +88,6 @@ export default class State {
   @bit accessor isAmbientContext = false;
   @bit accessor inAbstractClass = false;
   @bit accessor inDisallowConditionalTypesContext = false;
-  @bit accessor inConditionalConsequent = false;
 
   // For the Hack-style pipelines plugin
   @bit accessor inHackPipelineBody = false;
@@ -147,6 +142,10 @@ export default class State {
 
   @bit accessor hasTopLevelAwait = false;
 
+  // These flags describe the current TypeScript restriction only.
+  @bit accessor tsArrowReturnTypeAllowed = false;
+  @bit accessor tsGenericArrowParams = false;
+
   // This property is used to track the following errors
   // - StrictNumericEscape
   // - StrictOctalLiteral
@@ -182,8 +181,8 @@ export default class State {
     state.startLoc = this.startLoc;
     state.endLoc = this.endLoc;
     state.errors = this.errors.slice();
-    state.noArrowAt = this.noArrowAt.slice();
     state.noArrowParamsConversionAt = this.noArrowParamsConversionAt.slice();
+    state.tsArrowReturnTypeRestrictionAt = this.tsArrowReturnTypeRestrictionAt;
     state.regExpAllowedAt = this.regExpAllowedAt;
     state.labels = this.labels.slice();
     state.commentsLen = this.commentsLen;

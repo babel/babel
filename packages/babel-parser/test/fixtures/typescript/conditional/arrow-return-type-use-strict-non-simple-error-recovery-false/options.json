@@ -1,0 +1,4 @@
+{
+  "errorRecovery": false,
+  "throws": "Illegal 'use strict' directive in function with non-simple parameter list. (1:8)"
+}

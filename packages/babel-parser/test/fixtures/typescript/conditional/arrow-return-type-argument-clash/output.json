@@ -1,0 +1,159 @@
+{
+  "type": "File",
+  "start":0,"end":168,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":20,"index":168}},
+  "errors": [
+    "SyntaxError: Argument name clash. (2:8)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":168,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":20,"index":168}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":58,"end":81,"loc":{"start":{"line":2,"column":0,"index":58},"end":{"line":2,"column":23,"index":81}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":58,"end":80,"loc":{"start":{"line":2,"column":0,"index":58},"end":{"line":2,"column":22,"index":80}},
+          "test": {
+            "type": "Identifier",
+            "start":58,"end":59,"loc":{"start":{"line":2,"column":0,"index":58},"end":{"line":2,"column":1,"index":59},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start":62,"end":76,"loc":{"start":{"line":2,"column":4,"index":62},"end":{"line":2,"column":18,"index":76}},
+            "returnType": {
+              "type": "TSTypeAnnotation",
+              "start":68,"end":71,"loc":{"start":{"line":2,"column":10,"index":68},"end":{"line":2,"column":13,"index":71}},
+              "typeAnnotation": {
+                "type": "TSTypeReference",
+                "start":70,"end":71,"loc":{"start":{"line":2,"column":12,"index":70},"end":{"line":2,"column":13,"index":71}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":70,"end":71,"loc":{"start":{"line":2,"column":12,"index":70},"end":{"line":2,"column":13,"index":71},"identifierName":"c"},
+                  "name": "c"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":63,"end":64,"loc":{"start":{"line":2,"column":5,"index":63},"end":{"line":2,"column":6,"index":64},"identifierName":"b"},
+                "name": "b"
+              },
+              {
+                "type": "Identifier",
+                "start":66,"end":67,"loc":{"start":{"line":2,"column":8,"index":66},"end":{"line":2,"column":9,"index":67},"identifierName":"b"},
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":75,"end":76,"loc":{"start":{"line":2,"column":17,"index":75},"end":{"line":2,"column":18,"index":76},"identifierName":"d"},
+              "name": "d"
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start":79,"end":80,"loc":{"start":{"line":2,"column":21,"index":79},"end":{"line":2,"column":22,"index":80},"identifierName":"e"},
+            "name": "e"
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Not followed by `:`: the error is discarded when parsing again",
+            "start":82,"end":147,"loc":{"start":{"line":3,"column":0,"index":82},"end":{"line":3,"column":65,"index":147}}
+          }
+        ],
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Followed by `:`: keep the arrow function and its error",
+            "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":57,"index":57}}
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":148,"end":168,"loc":{"start":{"line":4,"column":0,"index":148},"end":{"line":4,"column":20,"index":168}},
+        "expression": {
+          "type": "ConditionalExpression",
+          "start":148,"end":167,"loc":{"start":{"line":4,"column":0,"index":148},"end":{"line":4,"column":19,"index":167}},
+          "test": {
+            "type": "Identifier",
+            "start":148,"end":149,"loc":{"start":{"line":4,"column":0,"index":148},"end":{"line":4,"column":1,"index":149},"identifierName":"a"},
+            "name": "a"
+          },
+          "consequent": {
+            "type": "SequenceExpression",
+            "start":153,"end":157,"loc":{"start":{"line":4,"column":5,"index":153},"end":{"line":4,"column":9,"index":157}},
+            "expressions": [
+              {
+                "type": "Identifier",
+                "start":153,"end":154,"loc":{"start":{"line":4,"column":5,"index":153},"end":{"line":4,"column":6,"index":154},"identifierName":"b"},
+                "name": "b"
+              },
+              {
+                "type": "Identifier",
+                "start":156,"end":157,"loc":{"start":{"line":4,"column":8,"index":156},"end":{"line":4,"column":9,"index":157},"identifierName":"b"},
+                "name": "b"
+              }
+            ],
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 152
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start":161,"end":167,"loc":{"start":{"line":4,"column":13,"index":161},"end":{"line":4,"column":19,"index":167}},
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start":161,"end":162,"loc":{"start":{"line":4,"column":13,"index":161},"end":{"line":4,"column":14,"index":162},"identifierName":"c"},
+                "name": "c"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start":166,"end":167,"loc":{"start":{"line":4,"column":18,"index":166},"end":{"line":4,"column":19,"index":167},"identifierName":"d"},
+              "name": "d"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Not followed by `:`: the error is discarded when parsing again",
+            "start":82,"end":147,"loc":{"start":{"line":3,"column":0,"index":82},"end":{"line":3,"column":65,"index":147}}
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Followed by `:`: keep the arrow function and its error",
+      "start":0,"end":57,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":57,"index":57}}
+    },
+    {
+      "type": "CommentLine",
+      "value": " Not followed by `:`: the error is discarded when parsing again",
+      "start":82,"end":147,"loc":{"start":{"line":3,"column":0,"index":82},"end":{"line":3,"column":65,"index":147}}
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "errorRecovery": false,
+  "sourceType": "script",
+  "throws": "Can not use 'await' as identifier inside an async function. (1:14)"
+}
