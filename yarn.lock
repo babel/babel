@@ -2297,6 +2297,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
+    "@babel/plugin-transform-async-to-generator": "workspace:^"
     "@babel/plugin-transform-class-properties": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
