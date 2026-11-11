@@ -439,14 +439,15 @@ export default declare<PluginState, Options>((api, options: Options) => {
                         "Transforming `export defer ... from '...'` is not supported yet.",
                       );
                     }
-                    const [firstSpecifier] = specifiers;
-                    if (
-                      t.isExportNamespaceSpecifier(firstSpecifier) &&
-                      firstSpecifier.exportsFilter
-                    ) {
-                      throw path.buildCodeFrameError(
-                        "Transforming `export { x, y } as ns from '...'` is not supported yet.",
-                      );
+                    for (const specifier of specifiers) {
+                      if (
+                        t.isExportNamespaceSpecifier(specifier) &&
+                        specifier.exportsFilter
+                      ) {
+                        throw path.buildCodeFrameError(
+                          "Transforming `export { x, y } as ns from '...'` is not supported yet.",
+                        );
+                      }
                     }
                     pushModule(path.node.source.value, "exports", specifiers);
                     path.remove();
@@ -548,8 +549,21 @@ export default declare<PluginState, Options>((api, options: Options) => {
                       t.isStringLiteral(node.local),
                     ),
                   );
+                } else if (t.isExportNamespaceSpecifier(node)) {
+                  // export * as ns from "mod"
+                  exportNames.push(
+                    getExportSpecifierName(node.exported, stringSpecifiers),
+                  );
+                  exportValues.push(t.identifier(target));
                 } else {
-                  // todo
+                  // export v from "mod"
+                  exportNames.push(node.exported.name);
+                  exportValues.push(
+                    t.memberExpression(
+                      t.identifier(target),
+                      t.identifier("default"),
+                    ),
+                  );
                 }
               }
 
