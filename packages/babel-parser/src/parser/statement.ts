@@ -1626,7 +1626,13 @@ export default abstract class StatementParser extends ExpressionParser {
   }
 
   isClassProperty(): boolean {
-    return this.match(tt.eq) || this.match(tt.semi) || this.match(tt.braceR);
+    return (
+      this.match(tt.eq) ||
+      this.match(tt.semi) ||
+      this.match(tt.braceR) ||
+      // decorators must start a new class member
+      (this.match(tt.at) && this.hasPrecedingLineBreak())
+    );
   }
 
   isClassMethod(): boolean {
