@@ -1,0 +1,13 @@
+(1: any += 1);
+(f(): any &&= 1);
+[f(): any &&= 1];
+foo(f(): any &&= 1);
+(eval: any += 1);
+(x: any = 1);
+(x: any = 1, y);
+async (x: any = 1);
+new Foo(x: any = 1);
+foo?.(x: any = 1);
+(x: any = 1) + 1;
+((x: any = 1));
+a ? (x: any = 1) : b;

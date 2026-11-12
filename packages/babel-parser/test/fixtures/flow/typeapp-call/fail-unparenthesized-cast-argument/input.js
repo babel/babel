@@ -1,0 +1,10 @@
+f<T>(x: any);
+f<T>(x: any = 1);
+f<T>(a, x: any);
+o.m<T>(x: any);
+a?.b<T>(x: any);
+a?.b<T>(x: any = 1);
+async<T>(x: any);
+async<T>(x: any = 1);
+f<T>(x: any)(y: any);
+a ? f<T>(x: any) : b;
