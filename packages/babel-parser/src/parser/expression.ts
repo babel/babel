@@ -1356,10 +1356,7 @@ export default abstract class ExpressionParser extends LValParser {
 
       default:
         if (tokenIsIdentifier(type)) {
-          if (
-            this.isContextual(tt._module) &&
-            this.lookaheadInLineCharCode() === charCodes.leftCurlyBrace
-          ) {
+          if (this.isModuleExpression()) {
             return this.parseModuleExpression();
           }
           const { canStartArrow, containsEsc } = this.state;
@@ -3189,16 +3186,14 @@ export default abstract class ExpressionParser extends LValParser {
     return ret;
   }
 
-  // https://github.com/tc39/proposal-js-module-blocks
-  parseModuleExpression(this: Parser): N.ModuleExpression {
-    this.expectPlugin("moduleBlocks");
-    const node = this.startNode<N.ModuleExpression>();
-    this.next(); // eat "module"
+  parseModuleBody(this: Parser, node: Undone<N.ModuleExpression>) {
     if (!this.match(tt.braceL)) {
       this.unexpected(null, tt.braceL);
     }
     // start program node immediately after `{`
     const program = this.startNodeAt<N.Program>(this.state.endLoc);
+    const oldStrict = this.state.strict;
+    this.state.strict = true;
     this.next(); // eat `{`
 
     const revertScopes = this.initializeScopes(/** inModule */ true);
@@ -3207,8 +3202,17 @@ export default abstract class ExpressionParser extends LValParser {
     try {
       node.body = this.parseProgram(program, tt.braceR, "module");
     } finally {
+      this.state.strict = oldStrict;
       revertScopes();
     }
+  }
+
+  // https://github.com/tc39/proposal-module-expressions
+  parseModuleExpression(this: Parser): N.ModuleExpression {
+    this.expectPlugin("moduleBlocks");
+    const node = this.startNode<N.ModuleExpression>();
+    this.next(); // eat "module"
+    this.parseModuleBody(node);
     return this.finishNode<N.ModuleExpression>(node, "ModuleExpression");
   }
 
@@ -3270,4 +3274,11 @@ export default abstract class ExpressionParser extends LValParser {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     prop: Undone<N.ObjectOrClassMember | N.ClassMember>,
   ): void {}
+
+  isModuleExpression(): boolean {
+    return (
+      this.isContextual(tt._module) &&
+      this.lookaheadInLineCharCode() === charCodes.leftCurlyBrace
+    );
+  }
 }
