@@ -302,7 +302,6 @@ target["bundle-babel-parser-dts"] = function () {
 
 target["prepublish-prepare-dts-no-clean"] = function () {
   yarn(["gulp", "bundle-dts"]);
-  target["build-typescript-legacy-typings"]();
   yarn(["tsc", "-p", "tsconfig.dts-bundles.json"]);
 };
 
@@ -348,17 +347,6 @@ target["generate-tsconfig"] = function () {
 
 target["generate-type-helpers"] = function () {
   yarn(["gulp", "generate-type-helpers"]);
-};
-
-target["build-typescript-legacy-typings"] = function () {
-  writeFileSync(
-    "packages/babel-types/lib/index-legacy.d.ts",
-    node(
-      ["packages/babel-types/scripts/generators/typescript-legacy.ts"],
-      undefined,
-      false
-    )
-  );
 };
 
 target["clone-license"] = function () {
