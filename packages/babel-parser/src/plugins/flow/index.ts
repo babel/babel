@@ -3302,11 +3302,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
         node.callee = base;
         node.arguments = super.parseCallExpressionArguments();
         base = this.finishNode(node, "CallExpression");
-      } else if (
-        base.type === "Identifier" &&
-        base.name === "async" &&
-        this.match(tt.lt)
-      ) {
+      } else if (this.match(tt.lt) && this.atPossibleAsyncArrow(base)) {
         const state = this.state.clone();
         const arrow = this.tryParse(
           abort => this.parseAsyncArrowWithTypeParameters(startLoc) || abort(),
