@@ -1,4 +1,4 @@
-define("loose/module-name/input", [], function () {
+define("assumption-constantReexports-enumerableModuleMeta/module-name/input", [], function () {
   "use strict";
 
   foobar();
