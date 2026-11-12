@@ -6,6 +6,7 @@ import { mkdtemp, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join as joinPath } from "node:path";
 import pLimit from "p-limit";
+import { getTrustCommand } from "./utils/npm-trust.ts";
 
 const packages = execSync("yarn workspaces list --no-private --json", {
   encoding: "utf-8",
@@ -108,10 +109,7 @@ for (const failure of failures) {
   });
 
   console.log(`Setting up OIDC publishing for ${failure.name}...`);
-  execSync(
-    `npm trust github ${failure.name} --file release.yml --repository babel/babel --environment npm --allow-publish --yes`,
-    { stdio: "inherit" }
-  );
+  execSync(getTrustCommand(failure.name), { stdio: "inherit" });
 
   // Avoid hitting the npm rate limits
   await new Promise(resolve => setTimeout(resolve, 2000));

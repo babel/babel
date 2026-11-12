@@ -124,6 +124,11 @@ jobs:
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
 
+      # Fail before building and publishing anything if some packages cannot be
+      # published, since a release that is published only partially cannot be resumed.
+      - name: Check npm trusted publishing
+        run: node ./scripts/check-trusted-publishing.ts
+
       - name: Build and Test
         run: make prepublish
         env:
@@ -155,6 +160,12 @@ jobs:
     needs:
       - git-version
       - ensure-npm-packages-exist
+    # The default condition is success(), but this is false when one of the previous jobs is skipped
+    # (git-version is always skipped when the release is triggered by pushing a tag).
+    if: |
+      always() &&
+      (needs.git-version.result == 'success' || needs.git-version.result == 'skipped') &&
+      needs.ensure-npm-packages-exist.result == 'success'
     outputs:
       is-main: ${{ steps.is-main.outputs.result == 1 }}
       changelog: ${{ steps.changelog.outputs.changelog }}
@@ -170,9 +181,8 @@ jobs:
         with:
           name: main
 
-      - name: Checkout the temporary branch
-        if: needs.git-version.result == 'success'
-        run: git checkout ${{ needs.git-version.outputs.branch }}
+      - name: Checkout the release commit
+        run: git checkout ${{ needs.git-version.outputs.branch || github.sha }}
 
       - name: Get tag info
         id: tags
@@ -211,7 +221,7 @@ jobs:
       always() &&
       needs.npm-release.result == 'success' &&
       needs.github-release.result == 'success' &&
-      needs.github-release.outputs.is-main
+      needs.github-release.outputs.is-main == 'true'
     steps:
       - uses: actions/checkout@v7
         with:
