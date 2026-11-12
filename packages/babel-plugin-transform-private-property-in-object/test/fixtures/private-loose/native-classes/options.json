@@ -1,4 +1,5 @@
 {
+  "assumptions": {},
   "plugins": [
     "transform-private-property-in-object",
     "transform-class-properties",

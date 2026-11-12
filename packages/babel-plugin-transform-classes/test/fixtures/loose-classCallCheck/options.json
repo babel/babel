@@ -1,10 +1,13 @@
 {
+  "assumptions": {
+    "setClassMethods": true,
+    "constantSuper": true,
+    "superIsCallableConstructor": true,
+    "noClassCalls": true,
+    "noClassPrototypeAssign": true,
+    "noConstructorPrimitiveReturn": true
+  },
   "plugins": [
-    [
-      "transform-classes",
-      {
-        "loose": true
-      }
-    ]
+    "transform-classes"
   ]
 }

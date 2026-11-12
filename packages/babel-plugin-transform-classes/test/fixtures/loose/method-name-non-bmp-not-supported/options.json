@@ -1,4 +1,5 @@
 {
+  "assumptions": {},
   "targets": "chrome 43",
   "plugins": ["transform-classes"]
 }

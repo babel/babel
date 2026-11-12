@@ -1,6 +1,9 @@
 {
+  "assumptions": {
+    "skipForOfIteratorClosing": true
+  },
   "plugins": [
-    ["transform-for-of", { "loose": true }],
+    "transform-for-of",
     ["transform-block-scoping", { "loose": true }]
   ]
 }

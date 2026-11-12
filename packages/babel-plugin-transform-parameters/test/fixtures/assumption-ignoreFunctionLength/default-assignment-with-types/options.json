@@ -1,6 +1,9 @@
 {
+  "assumptions": {
+    "ignoreFunctionLength": true
+  },
   "plugins": [
     "transform-flow-strip-types",
-    ["transform-parameters", { "loose": true }]
+    "transform-parameters"
   ]
 }

@@ -1,7 +1,11 @@
 {
+  "assumptions": {
+    "constantReexports": true,
+    "enumerableModuleMeta": true
+  },
   "externalHelpers": false,
   "plugins": [
-    ["transform-modules-commonjs", { "loose": true }],
+    "transform-modules-commonjs",
     ["transform-runtime", { "version": "7.100.0" }],
     "./plugin"
   ]

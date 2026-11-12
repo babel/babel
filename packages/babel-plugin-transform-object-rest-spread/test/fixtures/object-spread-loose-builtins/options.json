@@ -1,5 +1,11 @@
 {
+  "assumptions": {
+    "ignoreFunctionLength": true,
+    "objectRestNoSymbols": true,
+    "pureGetters": true,
+    "setSpreadProperties": true
+  },
   "plugins": [
-    ["transform-object-rest-spread", { "loose": true, "useBuiltIns": true }]
+    ["transform-object-rest-spread", { "useBuiltIns": true }]
   ]
 }

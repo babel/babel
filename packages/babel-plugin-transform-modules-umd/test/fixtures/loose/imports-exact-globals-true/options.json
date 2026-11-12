@@ -1,10 +1,13 @@
 {
+  "assumptions": {
+    "constantReexports": true,
+    "enumerableModuleMeta": true
+  },
   "plugins": [
     [
       "transform-modules-umd",
       {
-        "exactGlobals": true,
-        "loose": true
+        "exactGlobals": true
       }
     ]
   ]

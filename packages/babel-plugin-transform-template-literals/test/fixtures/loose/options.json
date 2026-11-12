@@ -1,3 +1,7 @@
 {
-  "plugins": [["transform-template-literals", { "loose": true }]]
+  "assumptions": {
+    "ignoreToPrimitiveHint": true,
+    "mutableTemplateObject": true
+  },
+  "plugins": ["transform-template-literals"]
 }

@@ -1,5 +1,8 @@
 {
+  "assumptions": {
+    "ignoreFunctionLength": true
+  },
   "plugins": [
-    ["transform-parameters", { "loose": true }]
+    "transform-parameters"
   ]
 }

@@ -1,4 +1,8 @@
 {
+  "assumptions": {
+    "constantReexports": true,
+    "enumerableModuleMeta": true
+  },
   "plugins": [
     [
       "transform-modules-umd",
@@ -7,8 +11,7 @@
           "umd/module-name-with-overridden-global/expected": "baz"
         },
         "exactGlobals": true,
-        "moduleIds": true,
-        "loose": true
+        "moduleIds": true
       }
     ]
   ]

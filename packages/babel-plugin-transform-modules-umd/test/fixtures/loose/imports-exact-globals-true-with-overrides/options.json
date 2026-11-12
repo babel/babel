@@ -1,4 +1,8 @@
 {
+  "assumptions": {
+    "constantReexports": true,
+    "enumerableModuleMeta": true
+  },
   "plugins": [
     [
       "transform-modules-umd",
@@ -8,8 +12,7 @@
           "./mylib/foo-bar": "mylib.fooBar",
           "fizzbuzz": "fizz.buzz"
         },
-        "exactGlobals": true,
-        "loose": true
+        "exactGlobals": true
       }
     ]
   ]

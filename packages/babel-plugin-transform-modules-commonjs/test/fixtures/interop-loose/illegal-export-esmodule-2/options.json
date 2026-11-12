@@ -1,4 +1,8 @@
 {
+  "assumptions": {
+    "constantReexports": true,
+    "enumerableModuleMeta": true
+  },
   "throws": "Illegal export \"__esModule\"",
-  "plugins": [["transform-modules-commonjs", { "loose": true }]]
+  "plugins": ["transform-modules-commonjs"]
 }

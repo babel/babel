@@ -1,5 +1,9 @@
 {
-  "plugins": [["transform-optional-chaining", { "loose": true }]],
+  "assumptions": {
+    "noDocumentAll": true,
+    "pureGetters": true
+  },
+  "plugins": ["transform-optional-chaining"],
   "parserOpts": {
     "createParenthesizedExpressions": true
   }

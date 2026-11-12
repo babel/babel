@@ -1,6 +1,10 @@
 {
+  "assumptions": {
+    "iterableIsArray": true,
+    "objectRestNoSymbols": true
+  },
   "plugins": [
-    ["transform-destructuring", { "loose": true }],
+    "transform-destructuring",
     "transform-object-rest-spread"
   ]
 }

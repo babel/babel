@@ -1,8 +1,13 @@
 {
+  "assumptions": {
+    "privateFieldsAsProperties": true,
+    "setPublicClassFields": true,
+    "constantSuper": true
+  },
   "minNodeVersion": "8.0.0",
   "plugins": [
-    ["transform-private-methods", { "loose": true }],
-    ["transform-class-properties", { "loose": true }]
+    "transform-private-methods",
+    "transform-class-properties"
   ],
   "parserOpts": {
     "allowReturnOutsideFunction": true

@@ -1,3 +1,6 @@
 {
-  "plugins": [["transform-for-of", { "loose": true, "allowArrayLike": true }]]
+  "assumptions": {
+    "skipForOfIteratorClosing": true
+  },
+  "plugins": [["transform-for-of", { "allowArrayLike": true }]]
 }

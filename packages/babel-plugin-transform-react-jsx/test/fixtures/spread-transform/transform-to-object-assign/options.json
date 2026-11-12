@@ -1,6 +1,11 @@
 {
+  "assumptions": {
+    "ignoreFunctionLength": true,
+    "objectRestNoSymbols": true,
+    "pureGetters": true,
+    "setSpreadProperties": true
+  },
   "plugins": ["transform-react-jsx", ["transform-object-rest-spread", {
-    "loose": true,
     "useBuiltIns": true
   }]]
 }

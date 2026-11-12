@@ -1,3 +1,6 @@
 {
-  "plugins": [["transform-nullish-coalescing-operator", { "loose": true }]]
+  "assumptions": {
+    "noDocumentAll": true
+  },
+  "plugins": ["transform-nullish-coalescing-operator"]
 }

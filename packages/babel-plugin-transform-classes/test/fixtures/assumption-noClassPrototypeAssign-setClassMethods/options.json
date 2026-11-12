@@ -2,11 +2,12 @@
   "plugins": [
     "transform-function-name",
     "transform-classes",
-    ["transform-spread", { "loose": true }],
+    "transform-spread",
     "transform-block-scoping"
   ],
   "assumptions": {
     "noClassPrototypeAssign": true,
-    "setClassMethods": true
+    "setClassMethods": true,
+    "iterableIsArray": true
   }
 }

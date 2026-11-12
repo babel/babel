@@ -1,4 +1,5 @@
 {
+  "assumptions": {},
   "minNodeVersion": "8.0.0",
   "plugins": [
     "transform-private-methods",

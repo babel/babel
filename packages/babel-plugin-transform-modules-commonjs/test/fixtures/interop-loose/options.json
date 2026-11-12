@@ -1,5 +1,9 @@
 {
+  "assumptions": {
+    "constantReexports": true,
+    "enumerableModuleMeta": true
+  },
   "externalHelpers": true,
   "sourceType": "module",
-  "plugins": [["transform-modules-commonjs", { "loose": true }]]
+  "plugins": ["transform-modules-commonjs"]
 }
