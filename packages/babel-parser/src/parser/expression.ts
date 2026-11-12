@@ -2176,7 +2176,6 @@ export default abstract class ExpressionParser extends LValParser {
     );
     let isAsync = false;
     let isAccessor = false;
-    let startLoc;
 
     if (decorators.length) {
       prop.decorators = decorators;
@@ -2186,9 +2185,7 @@ export default abstract class ExpressionParser extends LValParser {
     // Consider move to the ESTree plugin
     prop.method = false;
 
-    if (refExpressionErrors) {
-      startLoc = this.state.startLoc;
-    }
+    const startLoc = this.state.startLoc;
 
     let isGenerator = this.eat(tt.star);
     this.parsePropertyNamePrefixOperator(prop);
