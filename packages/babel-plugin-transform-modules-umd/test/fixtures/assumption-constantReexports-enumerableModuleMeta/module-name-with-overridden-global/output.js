@@ -1,6 +1,6 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define("loose/module-name-with-overridden-global/input", ["exports"], factory);
+    define("assumption-constantReexports-enumerableModuleMeta/module-name-with-overridden-global/input", ["exports"], factory);
   } else if (typeof exports !== "undefined") {
     factory(exports);
   } else {
@@ -8,7 +8,7 @@
       exports: {}
     };
     factory(mod.exports);
-    global.looseModuleNameWithOverriddenGlobalInput = mod.exports;
+    global.assumptionConstantReexportsEnumerableModuleMetaModuleNameWithOverriddenGlobalInput = mod.exports;
   }
 })(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function (_exports) {
   "use strict";
