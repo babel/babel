@@ -1,8 +1,0 @@
-{
-  "assumptions": {
-    "ignoreFunctionLength": true
-  },
-  "plugins": [
-    "transform-parameters"
-  ]
-}

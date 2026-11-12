@@ -1,7 +1,0 @@
-{
-  "assumptions": {
-    "noDocumentAll": true,
-    "pureGetters": true
-  },
-  "plugins": ["transform-optional-chaining", "transform-nullish-coalescing-operator"]
-}

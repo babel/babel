@@ -1,6 +1,0 @@
-{
-  "assumptions": {
-    "skipForOfIteratorClosing": true
-  },
-  "plugins": ["transform-for-of"]
-}
