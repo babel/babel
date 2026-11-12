@@ -335,7 +335,7 @@ describe("@babel/core errors", function () {
               async pre() {
                 started();
                 await paused;
-                expect(Error.prepareStackTrace).not.toBeNull();
+                expect(Error.prepareStackTrace).toBeNull();
                 expect(Error.stackTraceLimit).toBeGreaterThanOrEqual(50);
                 if (fails) throw new Error("asynchronous plugin failure");
               },
@@ -356,7 +356,7 @@ describe("@babel/core errors", function () {
                 });
               });
         await entered;
-        expect(Error.prepareStackTrace).not.toBeNull();
+        expect(Error.prepareStackTrace).toBeNull();
         resume();
         const outcome = await pending.then(
           result => ({ result }),
@@ -395,7 +395,7 @@ describe("@babel/core errors", function () {
           () => ({
             pre() {
               const rewriter = Error.prepareStackTrace;
-              expect(rewriter).not.toBeNull();
+              expect(rewriter).toBeNull();
               babel.parseSync("bar;", { configFile: false, babelrc: false });
               expect(Error.prepareStackTrace).toBe(rewriter);
               expect(Error.stackTraceLimit).toBeGreaterThanOrEqual(50);
@@ -442,7 +442,7 @@ describe("@babel/core errors", function () {
       releases[0]();
       await pending[0];
       expect(Error.prepareStackTrace).toBe(rewriter);
-      expect(Error.prepareStackTrace).not.toBeNull();
+      expect(Error.prepareStackTrace).toBeNull();
       expect(Error.stackTraceLimit).toBeGreaterThanOrEqual(50);
       releases[1]();
       await pending[1];
@@ -479,6 +479,40 @@ describe("@babel/core errors", function () {
       babel.parseSync("foo;", { configFile: false, babelrc: false });
       expect(Error.prepareStackTrace).toBeNull();
       expect(Error.stackTraceLimit).toBe(10);
+    } finally {
+      Error.prepareStackTrace = prepareStackTrace;
+      Error.stackTraceLimit = stackTraceLimit;
+    }
+  });
+
+  it("keeps hooks installed by other code during a call, and keeps hiding frames", function () {
+    const { prepareStackTrace, stackTraceLimit } = Error;
+    const foreign = (err, trace) => `${err}\n    at ${trace.join("\n    at ")}`;
+    try {
+      Error.prepareStackTrace = null;
+      Error.stackTraceLimit = 10;
+      babel.transformSync("foo;", {
+        configFile: false,
+        babelrc: false,
+        plugins: [
+          () => ({
+            pre() {
+              Error.prepareStackTrace = foreign;
+              Error.stackTraceLimit = 33;
+            },
+          }),
+        ],
+      });
+      expect(Error.prepareStackTrace).toBe(foreign);
+      expect(Error.stackTraceLimit).toBe(33);
+      Error.stackTraceLimit = 10;
+      // Frames are still hidden, and formatted by the current hook.
+      expectError(() => {
+        babel.parseSync("foo;", { root: fixture("invalid-json") });
+      }).toMatch(
+        /\n\s+at .*\/invalid-json\/babel\.config\.json\n\s+at Module\.parseSync /,
+      );
+      expect(Error.prepareStackTrace).toBe(foreign);
     } finally {
       Error.prepareStackTrace = prepareStackTrace;
       Error.stackTraceLimit = stackTraceLimit;

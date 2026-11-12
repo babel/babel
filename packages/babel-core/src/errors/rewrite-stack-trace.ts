@@ -104,31 +104,29 @@ export function beginHiddenCallStack<A extends unknown[], R>(
   );
 }
 
-// Keep the lifecycle inside the generator so all gensync entry points release
-// the hook on completion, before invoking a callback or settling a promise.
-// The STOP_HIDING boundary stays outside gensync to hide its internal frames.
+// Only Error.stackTraceLimit has to stay raised for the whole call, so that
+// errors capture enough frames. Error.prepareStackTrace is swapped in just for
+// the synchronous `.stack` read at the API boundary: V8 formats stacks lazily
+// on first access. The formatter is restored before returning from that read.
 export function withStackTraceRewriting<A extends unknown[], R>(
   fn: (...args: A) => Handler<R>,
 ): (...args: A) => Handler<R> {
   if (!SUPPORTED) return fn;
 
   return function* rewriteStackTrace(...args: A): Handler<R> {
-    setupPrepareStackTrace();
+    raiseStackTraceLimit();
     try {
       return yield* fn(...args);
     } catch (err) {
-      // Format the stack while the rewriter is still installed.
       if (
         err !== null &&
-        (typeof err === "object" || typeof err === "function") &&
-        "stack" in err
+        (typeof err === "object" || typeof err === "function")
       ) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        err.stack;
+        formatStack(err as Error);
       }
       throw err;
     } finally {
-      resetPrepareStackTrace();
+      restoreStackTraceLimit();
     }
   };
 }
@@ -147,12 +145,53 @@ export function endHiddenCallStack<A extends unknown[], R>(
   );
 }
 
-let originalPrepareStackTrace: (err: Error, trace: CallSite[]) => string;
-let originalMaxStackTraceLimit: number;
-let stackTraceRewriterRefCount = 0;
+let activeCalls = 0;
+let originalStackTraceLimit: number;
+let raisedStackTraceLimit: number;
 
-function stackTraceRewriter(err: Error, trace: CallSite[]) {
-  let newTrace = [];
+function raiseStackTraceLimit() {
+  if (activeCalls++ > 0) return;
+  originalStackTraceLimit = Error.stackTraceLimit;
+  // We add some extra frames to Error.stackTraceLimit, so that we can
+  // always show some useful frames even after deleting ours.
+  // However, we only do it if the user did not explicitly set it to 0.
+  const MIN_STACK_TRACE_LIMIT = 50;
+  Error.stackTraceLimit &&= Math.max(
+    Error.stackTraceLimit,
+    MIN_STACK_TRACE_LIMIT,
+  );
+  raisedStackTraceLimit = Error.stackTraceLimit;
+}
+
+function restoreStackTraceLimit() {
+  if (--activeCalls > 0) return;
+  // Leave it alone if someone else changed it in the meantime.
+  if (Error.stackTraceLimit === raisedStackTraceLimit) {
+    Error.stackTraceLimit = originalStackTraceLimit;
+  }
+}
+
+function formatStack(err: Error) {
+  const prepareStackTrace = Error.prepareStackTrace;
+  Error.prepareStackTrace = function stackTraceRewriter(err, trace) {
+    return (prepareStackTrace || defaultPrepareStackTrace)(
+      err,
+      rewriteTrace(err, trace),
+    );
+  };
+  try {
+    // Formats the stack if nothing has read it yet; no-op otherwise.
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    err.stack;
+  } catch {
+    // e.g. a throwing `stack` getter: not our business
+  } finally {
+    Error.prepareStackTrace = prepareStackTrace;
+  }
+}
+
+function rewriteTrace(err: Error, trace: CallSite[]) {
+  const newTrace = [];
 
   const isExpected = expectedErrors.has(err);
   let status: "showing" | "hiding" | "unknown" = isExpected
@@ -170,50 +209,13 @@ function stackTraceRewriter(err: Error, trace: CallSite[]) {
         }
       } else if (status === "unknown") {
         // Unexpected internal error, show the full stack trace
-        newTrace = trace;
-        break;
+        return trace;
       }
     } else if (status !== "hiding") {
       newTrace.push(trace[i]);
     }
   }
-
-  return (originalPrepareStackTrace || defaultPrepareStackTrace)(err, newTrace);
-}
-
-function setupPrepareStackTrace() {
-  if (stackTraceRewriterRefCount < 0 || stackTraceRewriterRefCount++ > 0) {
-    return;
-  }
-  originalPrepareStackTrace = Error.prepareStackTrace;
-  originalMaxStackTraceLimit = Error.stackTraceLimit;
-
-  // We add some extra frames to Error.stackTraceLimit, so that we can
-  // always show some useful frames even after deleting ours.
-  // STACK_TRACE_LIMIT_DELTA should be around the maximum expected number
-  // of internal frames, and not too big because capturing the stack trace
-  // is slow (this is why Error.stackTraceLimit does not default to Infinity!).
-  // Increase it if needed.
-  // However, we only do it if the user did not explicitly set it to 0.
-  const MIN_STACK_TRACE_LIMIT = 50;
-  Error.stackTraceLimit &&= Math.max(
-    Error.stackTraceLimit,
-    MIN_STACK_TRACE_LIMIT,
-  );
-
-  Error.prepareStackTrace = stackTraceRewriter;
-}
-
-function resetPrepareStackTrace() {
-  if (stackTraceRewriterRefCount < 0 || --stackTraceRewriterRefCount > 0) {
-    return;
-  }
-  Error.stackTraceLimit = originalMaxStackTraceLimit;
-  if (Error.prepareStackTrace !== stackTraceRewriter) {
-    stackTraceRewriterRefCount = -1;
-    return;
-  }
-  Error.prepareStackTrace = originalPrepareStackTrace;
+  return newTrace;
 }
 
 function defaultPrepareStackTrace(err: Error, trace: CallSite[]) {
