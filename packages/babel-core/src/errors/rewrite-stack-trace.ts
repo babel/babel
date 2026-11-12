@@ -118,8 +118,14 @@ export function withStackTraceRewriting<A extends unknown[], R>(
       return yield* fn(...args);
     } catch (err) {
       // Format the stack while the rewriter is still installed.
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      (err as Error).stack;
+      if (
+        err !== null &&
+        (typeof err === "object" || typeof err === "function") &&
+        "stack" in err
+      ) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        err.stack;
+      }
       throw err;
     } finally {
       resetPrepareStackTrace();
@@ -176,7 +182,9 @@ function stackTraceRewriter(err: Error, trace: CallSite[]) {
 }
 
 function setupPrepareStackTrace() {
-  if (stackTraceRewriterRefCount++ > 0) return;
+  if (stackTraceRewriterRefCount < 0 || stackTraceRewriterRefCount++ > 0) {
+    return;
+  }
   originalPrepareStackTrace = Error.prepareStackTrace;
   originalMaxStackTraceLimit = Error.stackTraceLimit;
 
@@ -197,9 +205,15 @@ function setupPrepareStackTrace() {
 }
 
 function resetPrepareStackTrace() {
-  if (--stackTraceRewriterRefCount > 0) return;
-  Error.prepareStackTrace = originalPrepareStackTrace;
+  if (stackTraceRewriterRefCount < 0 || --stackTraceRewriterRefCount > 0) {
+    return;
+  }
   Error.stackTraceLimit = originalMaxStackTraceLimit;
+  if (Error.prepareStackTrace !== stackTraceRewriter) {
+    stackTraceRewriterRefCount = -1;
+    return;
+  }
+  Error.prepareStackTrace = originalPrepareStackTrace;
 }
 
 function defaultPrepareStackTrace(err: Error, trace: CallSite[]) {
