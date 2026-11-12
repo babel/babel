@@ -134,20 +134,19 @@ jobs:
       - name: Publish to npm
         run: yarn release-tool publish --yes --provenance
 
-      # Uncomment when Babel 8 becomes stable and the website migrated to Babel 8
-      # - name: Generate babel-types docs
-      #   continue-on-error: true
-      #   run: |
-      #     mkdir build
-      #     node ./packages/babel-types/scripts/generators/docs.ts > ./build/types.md
-      #
-      # - name: Upload babel-types docs
-      #   continue-on-error: true
-      #   uses: actions/upload-artifact@v7
-      #   with:
-      #     name: babel-types-docs
-      #     path: build/types.md
-      #     retention-days: 3
+      - name: Generate babel-types docs
+        continue-on-error: true
+        run: |
+          mkdir build
+          node ./packages/babel-types/scripts/generators/docs.ts > ./build/types.md
+
+      - name: Upload babel-types docs
+        continue-on-error: true
+        uses: actions/upload-artifact@v7
+        with:
+          name: babel-types-docs
+          path: build/types.md
+          retention-days: 3
 
   github-release:
     name: Create GitHub release draft
@@ -240,55 +239,54 @@ jobs:
         if: needs.git-version.result == 'success'
         run: git push "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" :${{ needs.git-version.outputs.branch }}
 
-  # Uncomment when Babel 8 becomes stable
-  # types-docs-updates:
-  #   name: Update Babel types docs
-  #   runs-on: ubuntu-latest
-  #   needs:
-  #     - github-release
-  #     - github-push
-  #   if: |
-  #     always() &&
-  #     needs.github-push.result == 'success' &&
-  #     needs.github-release.result == 'success' &&
-  #     needs.github-release.outputs.is-main
-  #   steps:
-  #     - uses: actions/checkout@v7
-  #       with:
-  #         repository: babel/website
-  #         fetch-depth: 0 # Otherwise we cannot push
-  #         persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
-  #     - name: Download babel-types docs
-  #       uses: actions/download-artifact@v8
-  #       with:
-  #         name: babel-types-docs
-  #         # Downloaded as ./docs/types.md
-  #         path: docs
-  #     - name: Commit Babel website changes
-  #       id: prepare-website-changes
-  #       run: |
-  #         if [[ -z "$(git status --porcelain=v1 2>/dev/null)" ]]
-  #         then
-  #           echo "No babel-types docs changes."
-  #           exit 0
-  #         else
-  #           echo "hasChanges=true" >> $GITHUB_OUTPUT
-  #         fi
-  #         git checkout -b update-types-docs
-  #         git config user.name "Babel Bot"
-  #         git config user.email "babel-bot@users.noreply.github.com"
-  #         git commit -am "docs: update babel types"
-  #         git push --force "https://babel-bot:${{ secrets.BOT_TOKEN }}@github.com/babel/website.git" update-types-docs
-  #     - name: Create Pull Request
-  #       uses: babel/actions/create-pull-request@v2
-  #       if: steps.prepare-website-changes.outputs.hasChanges == 'true'
-  #       with:
-  #         token: ${{ secrets.BOT_TOKEN }}
-  #         repository: babel/website
-  #         branch: update-types-docs
-  #         base: main
-  #         title: Update Babel types docs
-  #         description: Updated `@babel/types` docs for [Babel ${{ needs.github-release.outputs.version }}](https://github.com/babel/babel/releases/tag/${{ needs.github-release.outputs.version }}).
-  #         labels: |
-  #           docs
-  #           repo automation :robot:
+  types-docs-updates:
+    name: Update Babel types docs
+    runs-on: ubuntu-latest
+    needs:
+      - github-release
+      - github-push
+    if: |
+      always() &&
+      needs.github-push.result == 'success' &&
+      needs.github-release.result == 'success' &&
+      needs.github-release.outputs.is-main
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          repository: babel/website
+          fetch-depth: 0 # Otherwise we cannot push
+          persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
+      - name: Download babel-types docs
+        uses: actions/download-artifact@v8
+        with:
+          name: babel-types-docs
+          # Downloaded as ./docs/types.md
+          path: docs
+      - name: Commit Babel website changes
+        id: prepare-website-changes
+        run: |
+          if [[ -z "$(git status --porcelain=v1 2>/dev/null)" ]]
+          then
+            echo "No babel-types docs changes."
+            exit 0
+          else
+            echo "hasChanges=true" >> $GITHUB_OUTPUT
+          fi
+          git checkout -b update-types-docs
+          git config user.name "Babel Bot"
+          git config user.email "babel-bot@users.noreply.github.com"
+          git commit -am "docs: update babel types"
+          git push --force "https://babel-bot:${{ secrets.BOT_TOKEN }}@github.com/babel/website.git" update-types-docs
+      - name: Create Pull Request
+        uses: babel/actions/create-pull-request@v2
+        if: steps.prepare-website-changes.outputs.hasChanges == 'true'
+        with:
+          token: ${{ secrets.BOT_TOKEN }}
+          repository: babel/website
+          branch: update-types-docs
+          base: main
+          title: Update Babel types docs
+          description: Updated `@babel/types` docs for [Babel ${{ needs.github-release.outputs.version }}](https://github.com/babel/babel/releases/tag/${{ needs.github-release.outputs.version }}).
+          labels: |
+            docs
+            repo automation :robot:
