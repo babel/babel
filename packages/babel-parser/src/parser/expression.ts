@@ -2037,10 +2037,13 @@ export default abstract class ExpressionParser extends LValParser {
     this.parseNewCallee(node);
 
     if (this.eat(tt.parenL)) {
-      const args = this.parseExprList(tt.parenR);
+      // On invalid input `new f(,)` in errorRecovery mode,
+      // do not leave a hole in the arguments list
+      const args = this.parseExprList(tt.parenR).filter(
+        arg => arg !== null,
+      ) as N.Expression[];
       this.toReferencedList(args);
-      // (parseExprList should be all non-null in this case)
-      node.arguments = args as N.Expression[];
+      node.arguments = args;
     } else {
       node.arguments = [];
     }
@@ -2819,14 +2822,7 @@ export default abstract class ExpressionParser extends LValParser {
         }
       }
 
-      const elt = this.parseExprListItem(
-        close,
-        allowEmpty,
-        refExpressionErrors,
-      );
-      // On invalid input `new f(,)` in errorRecovery mode,
-      // do not leave a hole in the arguments list
-      if (elt !== null || allowEmpty) elts.push(elt);
+      elts.push(this.parseExprListItem(close, allowEmpty, refExpressionErrors));
     }
     return elts;
   }
