@@ -1,3 +1,0 @@
-for (i of arr) {
-
-}
