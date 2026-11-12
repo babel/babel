@@ -1237,6 +1237,157 @@ describe("programmatic generation", function () {
     `);
   });
 
+  describe("parenthesized string expression statements", function () {
+    it("does not throw when the statement is the root node", function () {
+      const statement = t.expressionStatement(t.stringLiteral("x"));
+
+      expect(generate(statement).code).toBe(`"x";`);
+    });
+
+    it("does not throw when a parsed statement is the root node", function () {
+      const { body } = parse(`("x");`).program;
+
+      expect(generate(body[0]).code).toBe(`"x";`);
+    });
+
+    it("does not throw when the expression is the root node", function () {
+      const expression = parseExpression(`("x")`);
+
+      expect(generate(expression).code).toBe(`"x"`);
+    });
+
+    it("does not parenthesize a string after a statement and a hole", function () {
+      const ast = parse(`foo; ("x");`);
+      ast.program.body.unshift(null);
+
+      expect(generate(ast).code).toBe(`foo;\n"x";`);
+    });
+
+    it("keeps the parentheses after a leading hole", function () {
+      const ast = parse(`("use strict"); foo;`);
+      ast.program.body.unshift(null);
+      const { code } = generate(ast);
+
+      expect(code).toBe(`("use strict");\nfoo;`);
+      expect(parse(code).program.directives).toHaveLength(0);
+    });
+
+    it("keeps the parentheses when a hole replaces the first statement", function () {
+      const ast = parse(`foo; ("use strict");`);
+      ast.program.body[0] = null;
+      const { code } = generate(ast);
+
+      expect(code).toBe(`("use strict");`);
+      expect(parse(code).program.directives).toHaveLength(0);
+    });
+
+    it("keeps the parentheses after a synthetic string statement", function () {
+      const ast = parse(`("use strict"); foo;`);
+      ast.program.body.unshift(
+        t.expressionStatement(t.stringLiteral("use client")),
+      );
+      const { code } = generate(ast);
+
+      expect(code).toBe(`"use client";\n("use strict");\nfoo;`);
+      expect(parse(code).program.directives.map(d => d.value.value)).toEqual([
+        "use client",
+      ]);
+    });
+
+    describe("does not parenthesize a reused string node", function () {
+      function reuse(createStatement) {
+        const ast = parse(`("a"); foo;`, { sourceType: "module" });
+        ast.program.body[1] = createStatement(ast.program.body[0].expression);
+        return generate(ast).code;
+      }
+
+      it("as an import source", function () {
+        const code = reuse(string =>
+          t.importDeclaration(
+            [t.importDefaultSpecifier(t.identifier("y"))],
+            string,
+          ),
+        );
+
+        expect(code).toBe(`("a");\nimport y from "a";`);
+      });
+
+      it("as an object key", function () {
+        const code = reuse(string =>
+          t.expressionStatement(
+            t.objectExpression([t.objectProperty(string, t.numericLiteral(1))]),
+          ),
+        );
+
+        expect(code).toBe(`("a");\n({\n  "a": 1\n});`);
+      });
+
+      it("as a call argument", function () {
+        const code = reuse(string =>
+          t.expressionStatement(t.callExpression(t.identifier("f"), [string])),
+        );
+
+        expect(code).toBe(`("a");\nf("a");`);
+      });
+    });
+
+    describe("does not throw on incomplete ASTs", function () {
+      it.each([
+        ["BlockStatement", { type: "BlockStatement" }, "{}"],
+        ["TSModuleBlock", { type: "TSModuleBlock" }, "{}"],
+        ["Program", { type: "Program", directives: [] }, ""],
+      ])("%s without a body", function (_, node, expected) {
+        expect(generate(node).code).toBe(expected);
+      });
+
+      it("ExpressionStatement without an expression", function () {
+        const program = t.program([
+          { type: "ExpressionStatement", expression: null },
+          t.expressionStatement(t.identifier("x")),
+        ]);
+
+        expect(generate(program).code).toBe(`;\nx;`);
+      });
+    });
+
+    it("only parenthesizes the first of several parenthesized strings", function () {
+      const ast = parse(`("a"); ("b"); foo;`);
+      ast.program.body.unshift(t.expressionStatement(t.stringLiteral("x")));
+
+      expect(generate(ast).code).toBe(`"x";\n("a");\n"b";\nfoo;`);
+    });
+
+    it("keeps synthetic string statements bare, so they are directives", function () {
+      const code = generate(
+        t.program([
+          t.expressionStatement(t.stringLiteral("use client")),
+          t.expressionStatement(t.identifier("foo")),
+        ]),
+      ).code;
+
+      expect(code).toBe(`"use client";\nfoo;`);
+      expect(parse(code).program.directives).toHaveLength(1);
+    });
+
+    it("keeps the parentheses when a statement becomes the first one", function () {
+      const ast = parse(`foo; ("use strict");`);
+      ast.program.body.shift();
+      const { code } = generate(ast);
+
+      expect(code).toBe(`("use strict");`);
+      expect(parse(code).program.directives).toHaveLength(0);
+    });
+
+    it("keeps the parentheses in minified output", function () {
+      const { code } = generate(parse(`("use strict"); foo;`), {
+        minified: true,
+      });
+
+      expect(code).toBe(`("use strict");foo;`);
+      expect(parse(code).program.directives).toHaveLength(0);
+    });
+  });
+
   describe("directives", function () {
     it("preserves escapes", function () {
       const directive = t.directive(
