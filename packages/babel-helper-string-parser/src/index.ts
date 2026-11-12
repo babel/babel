@@ -413,12 +413,21 @@ export function readCodePoint(
 
   if (ch === charCodes.leftCurlyBrace) {
     ++pos;
+    const rightCurlyBracePos = input.indexOf("}", pos);
+    if (rightCurlyBracePos === -1) {
+      // `\u{` without a closing `}`: there is no `}` to skip, so stop here
+      // instead of advancing `pos` past the end of the input
+      if (throwOnInvalid) {
+        errors.invalidEscapeSequence(pos, lineStart, curLine);
+      }
+      return { code: null, pos };
+    }
     ({ code, pos } = readHexChar(
       input,
       pos,
       lineStart,
       curLine,
-      input.indexOf("}", pos) - pos,
+      rightCurlyBracePos - pos,
       true,
       throwOnInvalid,
       errors,
