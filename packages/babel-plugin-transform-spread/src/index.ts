@@ -36,6 +36,7 @@ export default declare((api, options: Options) => {
     if (t.isSpreadElement(prop)) {
       const { argument } = prop;
       return (
+        Boolean(iterableIsArray && scope.isPure(argument)) ||
         isConstantArray(argument, scope) ||
         (t.isArrayExpression(argument) && scope.isPure(argument))
       );
@@ -52,6 +53,12 @@ export default declare((api, options: Options) => {
       iterableIsArray &&
       !t.isIdentifier(spread.argument, { name: "arguments" })
     ) {
+      if (hasLaterSideEffects && !t.isArrayExpression(spread.argument)) {
+        return t.callExpression(
+          t.memberExpression(spread.argument, t.identifier("slice")),
+          [],
+        );
+      }
       return spread.argument;
     } else {
       const node = spread.argument;
@@ -105,12 +112,10 @@ export default declare((api, options: Options) => {
     let _props: ListElement[] = [];
     let lastImpureIndex = -1;
 
-    if (!iterableIsArray) {
-      for (let i = props.length - 1; i >= 0; i--) {
-        if (!isPureElement(props[i], scope)) {
-          lastImpureIndex = i;
-          break;
-        }
+    for (let i = props.length - 1; i >= 0; i--) {
+      if (!isPureElement(props[i], scope)) {
+        lastImpureIndex = i;
+        break;
       }
     }
 
