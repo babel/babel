@@ -23,19 +23,39 @@ export function hoist(
     // TODO assert.equal(vdec.kind, "var");
     const exprs: t.Expression[] = [];
 
-    (
-      vdec.declarations as (t.VariableDeclarator & { id: t.Identifier })[]
-    ).forEach(function (dec) {
-      // Note: We duplicate 'dec.id' here to ensure that the variable declaration IDs don't
-      // have the same 'loc' value, since that can make sourcemaps and retainLines behave poorly.
-      vars[dec.id.name] = t.identifier(dec.id.name);
+    for (const dec of vdec.declarations) {
+      // The declarator id can be a destructuring pattern when destructuring
+      // has not been transformed yet.
+      const { id } = dec;
+
+      if (id.type === "VoidPattern") {
+        // `using void = init` does not bind anything, so only the
+        // initializer is kept.
+        if (dec.init) {
+          exprs.push(dec.init);
+        } else if (includeIdentifiers) {
+          // This is the head of a for-of loop. `void` is not a valid
+          // assignment target on its own, so assign to an unused variable.
+          const unused = funPath.scope.generateUidIdentifier("unused");
+          vars[unused.name] = unused;
+          exprs.push(t.cloneNode(unused));
+        }
+        continue;
+      }
+
+      for (const name of Object.keys(t.getBindingIdentifiers(id))) {
+        // Note: We create new identifiers here to ensure that the variable declaration IDs don't
+        // have the same 'loc' value, since that can make sourcemaps and retainLines behave poorly.
+        vars[name] = t.identifier(name);
+      }
 
       if (dec.init) {
-        exprs.push(t.assignmentExpression("=", dec.id, dec.init));
+        exprs.push(t.assignmentExpression("=", id, dec.init));
       } else if (includeIdentifiers) {
-        exprs.push(dec.id);
+        // This is the head of a for-in/for-of loop, where a pattern is valid.
+        exprs.push(id as t.Identifier);
       }
-    });
+    }
 
     if (exprs.length === 0) return null;
 
