@@ -217,7 +217,7 @@ export default declare((api, options: Options) => {
           t.isIdentifier(arg, { name: "arguments" }) || scope.isPure(arg);
         if (
           args.every(arg =>
-            t.isSpreadElement(arg) ? isPureArg(arg.argument) : isPureArg(arg!),
+            t.isSpreadElement(arg) ? isPureArg(arg.argument) : isPureArg(arg),
           ) ||
           !this.availableHelper("callSpread")
         ) {
