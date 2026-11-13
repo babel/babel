@@ -1,5 +1,5 @@
 class Foo {
   bar() {
-    super.bar.apply(this, [arg1, arg2].concat(babelHelpers.toConsumableArray(args)));
+    babelHelpers.callSpread(super.bar, this, [arg1, arg2].concat(babelHelpers.toConsumableArray(args)));
   }
 }
