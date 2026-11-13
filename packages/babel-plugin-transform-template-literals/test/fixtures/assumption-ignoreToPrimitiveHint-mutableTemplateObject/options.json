@@ -1,0 +1,7 @@
+{
+  "assumptions": {
+    "ignoreToPrimitiveHint": true,
+    "mutableTemplateObject": true
+  },
+  "plugins": ["transform-template-literals"]
+}

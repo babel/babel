@@ -1,0 +1,18 @@
+{
+  "assumptions": {
+    "constantReexports": true,
+    "enumerableModuleMeta": true
+  },
+  "plugins": [
+    [
+      "transform-modules-umd",
+      {
+        "globals": {
+          "my custom module name": "foo.bar"
+        },
+        "exactGlobals": true,
+        "moduleId": "my custom module name"
+      }
+    ]
+  ]
+}

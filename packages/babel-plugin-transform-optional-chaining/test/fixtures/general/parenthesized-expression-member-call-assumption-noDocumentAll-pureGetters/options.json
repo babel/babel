@@ -1,0 +1,10 @@
+{
+  "assumptions": {
+    "noDocumentAll": true,
+    "pureGetters": true
+  },
+  "plugins": ["transform-optional-chaining"],
+  "parserOpts": {
+    "createParenthesizedExpressions": true
+  }
+}

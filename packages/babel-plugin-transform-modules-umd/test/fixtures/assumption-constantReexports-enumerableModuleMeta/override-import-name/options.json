@@ -1,0 +1,16 @@
+{
+  "assumptions": {
+    "constantReexports": true,
+    "enumerableModuleMeta": true
+  },
+  "plugins": [
+    [
+      "transform-modules-umd",
+      {
+        "globals": {
+          "es6-promise": "Promise"
+        }
+      }
+    ]
+  ]
+}
