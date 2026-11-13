@@ -2039,9 +2039,7 @@ export default abstract class ExpressionParser extends LValParser {
     if (this.eat(tt.parenL)) {
       // On invalid input `new f(,)` in errorRecovery mode,
       // do not leave a hole in the arguments list
-      const args = this.parseExprList(tt.parenR).filter(
-        arg => arg !== null,
-      ) as N.Expression[];
+      const args = this.parseExprList(tt.parenR).filter(arg => arg !== null);
       this.toReferencedList(args);
       node.arguments = args;
     } else {
