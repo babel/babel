@@ -24,9 +24,7 @@
           "extra": {
             "trailingComma": 4
           },
-          "arguments": [
-            null
-          ]
+          "arguments": []
         }
       }
     ],
