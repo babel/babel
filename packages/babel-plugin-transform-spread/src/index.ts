@@ -25,9 +25,28 @@ export default declare((api, options: Options) => {
   const arrayLikeIsIterable =
     options.allowArrayLike ?? api.assumption("arrayLikeIsIterable");
 
+  function isConstantArray(node: t.Expression, scope: Scope): boolean {
+    if (!t.isIdentifier(node)) return false;
+    const binding = scope.getBinding(node.name);
+    return Boolean(binding?.constant && binding.path.isGenericType("Array"));
+  }
+
+  function isPureElement(prop: ListElement, scope: Scope): boolean {
+    if (prop === null) return true;
+    if (t.isSpreadElement(prop)) {
+      const { argument } = prop;
+      return (
+        isConstantArray(argument, scope) ||
+        (t.isArrayExpression(argument) && scope.isPure(argument))
+      );
+    }
+    return scope.isPure(prop);
+  }
+
   function getSpreadLiteral(
     spread: t.SpreadElement,
     scope: Scope,
+    hasLaterSideEffects: boolean,
   ): t.Expression {
     if (
       iterableIsArray &&
@@ -37,11 +56,11 @@ export default declare((api, options: Options) => {
     } else {
       const node = spread.argument;
 
-      if (t.isIdentifier(node)) {
-        const binding = scope.getBinding(node.name);
-        if (binding?.constant && binding.path.isGenericType("Array")) {
-          return node;
-        }
+      if (isConstantArray(node, scope)) {
+        if (!hasLaterSideEffects) return node;
+        return t.callExpression(scope.path.hub.addHelper("toConsumableArray"), [
+          node,
+        ]);
       }
 
       if (t.isArrayExpression(node)) {
@@ -84,11 +103,26 @@ export default declare((api, options: Options) => {
   function build(props: ListElement[], scope: Scope): t.Expression[] {
     const nodes: t.Expression[] = [];
     let _props: ListElement[] = [];
+    let lastImpureIndex = -1;
 
-    for (const prop of props) {
+    if (!iterableIsArray) {
+      for (let i = props.length - 1; i >= 0; i--) {
+        if (!isPureElement(props[i], scope)) {
+          lastImpureIndex = i;
+          break;
+        }
+      }
+    }
+
+    for (let i = 0; i < props.length; i++) {
+      const prop = props[i];
       if (t.isSpreadElement(prop)) {
         _props = push(_props, nodes);
-        const spreadLiteral = getSpreadLiteral(prop, scope);
+        const spreadLiteral = getSpreadLiteral(
+          prop,
+          scope,
+          i < lastImpureIndex,
+        );
 
         if (t.isArrayExpression(spreadLiteral)) {
           spreadLiteral.elements = spreadLiteral.elements.map(
