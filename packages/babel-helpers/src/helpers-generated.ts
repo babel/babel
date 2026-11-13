@@ -225,6 +225,19 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
+  // size: 48, gzip size: 66
+  callSpread: helper(
+    "7.29.15",
+    "function _callSpread(a,e,l){return a.apply(e,l)}",
+    {
+      globals: [],
+      locals: { _callSpread: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_callSpread",
+      dependencies: {},
+      internal: false,
+    },
+  ),
   // size: 180, gzip size: 144
   callSuper: helper(
     "7.23.8",
