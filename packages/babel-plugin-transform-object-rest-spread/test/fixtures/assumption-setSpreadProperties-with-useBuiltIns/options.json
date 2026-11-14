@@ -1,5 +1,13 @@
 {
-  "plugins": [["transform-object-rest-spread", { "useBuiltIns": true }]],
+  "plugins": [
+    [
+      "transform-object-rest-spread",
+      {
+        "useBuiltIns": true
+      }
+    ],
+    "../../helpers/checkScopeInfo.js"
+  ],
   "assumptions": {
     "setSpreadProperties": true
   },

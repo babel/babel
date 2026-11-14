@@ -1,5 +1,5 @@
-const _excluded = ["y"];
 var _C;
+const _excluded = ["y"];
 let result;
 class C {}
 _C = C;
@@ -13,11 +13,11 @@ var _x = {
   var {
       x
     } = _C,
-    _x$_ = _x._,
+    _C$x = _x._,
     {
       y
-    } = _x$_,
-    z = babelHelpers.objectWithoutProperties(_x$_, _excluded);
+    } = _C$x,
+    z = babelHelpers.objectWithoutProperties(_C$x, _excluded);
   result = {
     x,
     y,

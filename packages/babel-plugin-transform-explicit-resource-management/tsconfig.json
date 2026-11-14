@@ -12,10 +12,13 @@
   ],
   "references": [
     {
-      "path": "../../packages/babel-helper-plugin-utils"
+      "path": "../../packages/babel-helper-create-destructuring-plugin"
     },
     {
-      "path": "../../packages/babel-plugin-transform-destructuring"
+      "path": "../../packages/babel-helper-named-evaluation"
+    },
+    {
+      "path": "../../packages/babel-helper-plugin-utils"
     },
     {
       "path": "../../packages/babel-core"

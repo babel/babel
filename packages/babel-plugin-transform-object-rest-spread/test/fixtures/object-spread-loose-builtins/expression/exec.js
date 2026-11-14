@@ -5,5 +5,7 @@ var a = {
   get bar() { log.push(2); }
 };
 
-// Loose mode uses regular Get, not GetOwnProperty.
+// Spread sources are read, while literal accessors are defined on the target.
+expect(log).toEqual([1]);
+a.bar;
 expect(log).toEqual([1, 2]);

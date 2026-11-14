@@ -1,5 +1,5 @@
 function f(_ref) {
-  var _ref2 = babelHelpers.slicedToArray(_ref, 0);
+  babelHelpers.slicedToArray(_ref, 0);
   return /*#__PURE__*/babelHelpers.regenerator().m(function _callee() {
     return babelHelpers.regenerator().w(function (_context) {
       while (1) switch (_context.n) {

@@ -1,6 +1,2 @@
-if (true) {
-  var _ref = [b, a];
-  a = _ref[0];
-  b = _ref[1];
-  _ref;
-}
+var _ref;
+if (true) a = (_ref = [b, a])[0], b = _ref[1], _ref;

@@ -70,6 +70,9 @@
       "path": "./packages/babel-helper-create-class-features-plugin"
     },
     {
+      "path": "./packages/babel-helper-create-destructuring-plugin"
+    },
+    {
       "path": "./packages/babel-helper-create-regexp-features-plugin"
     },
     {
@@ -86,6 +89,9 @@
     },
     {
       "path": "./packages/babel-helper-module-transforms"
+    },
+    {
+      "path": "./packages/babel-helper-named-evaluation"
     },
     {
       "path": "./packages/babel-helper-optimise-call-expression"
