@@ -1,10 +1,46 @@
-import type { NodePath } from "@babel/core";
+import type { NodePath, Scope } from "@babel/core";
 import { types as t } from "@babel/core";
 
 // The hoist function takes a FunctionExpression or FunctionDeclaration
 // and replaces any Declaration nodes in its body with assignments, then
 // returns a VariableDeclaration containing just the names of the removed
 // declarations.
+function removeHoistedVarBindings(
+  path: NodePath<t.VariableDeclaration>,
+  funScope: Scope,
+) {
+  // `var` declarations are hoisted to `funScope`, even when nested inside a
+  // `catch (x)` clause whose scope holds its own catch parameter binding.
+  const ownerScope = t.isVar(path.node)
+    ? funScope
+    : path.scope.getBlockParent();
+  const isCatchScope = ownerScope.path.isCatchClause();
+
+  for (const name of Object.keys(path.getBindingIdentifiers())) {
+    const binding = ownerScope.getOwnBinding(name);
+    if (!binding || binding.kind === "param") continue;
+    if (isCatchScope && !binding.path.isVariableDeclarator()) continue;
+    ownerScope.removeOwnBinding(name);
+  }
+}
+
+function removeWithoutScopeBindingRemoval(path: NodePath) {
+  // NodePath#remove invokes scope.removeBinding(), which climbs out of nested
+  // scopes and removes enclosing catch parameter bindings when `var x` shadows `catch (x)`.
+  const opts = path.opts as { noScope?: boolean } | undefined;
+  if (!opts) {
+    path.remove();
+    return;
+  }
+  const prevNoScope = opts.noScope;
+  opts.noScope = true;
+  try {
+    path.remove();
+  } finally {
+    opts.noScope = prevNoScope;
+  }
+}
+
 export function hoist(
   funPath: NodePath<t.FunctionExpression | t.FunctionDeclaration>,
 ) {
@@ -48,15 +84,10 @@ export function hoist(
     VariableDeclaration: {
       exit: function (path) {
         const expr = varDeclToExpr(path, false);
+        removeHoistedVarBindings(path, funPath.scope);
         if (expr === null) {
-          path.remove();
+          removeWithoutScopeBindingRemoval(path);
         } else {
-          for (const name of Object.keys(path.getBindingIdentifiers())) {
-            // Remove the binding, to avoid "duplicate declaration" errors when it will
-            // be injected again.
-            path.scope.removeBinding(name);
-          }
-
           // We don't need to traverse this expression any further because
           // there can't be any new declarations inside an expression.
           path.replaceWith(t.expressionStatement(expr));
@@ -73,9 +104,13 @@ export function hoist(
       if (init.isVariableDeclaration()) {
         const expr = varDeclToExpr(init, false);
         if (expr) {
+          if (t.isVar(init.node)) {
+            removeHoistedVarBindings(init, funPath.scope);
+          }
           init.replaceWith(expr);
         } else {
-          init.remove();
+          removeHoistedVarBindings(init, funPath.scope);
+          removeWithoutScopeBindingRemoval(init);
         }
       }
     },
@@ -83,6 +118,9 @@ export function hoist(
     ForXStatement: function (path) {
       const left = path.get("left");
       if (left.isVariableDeclaration()) {
+        if (t.isVar(left.node)) {
+          removeHoistedVarBindings(left, funPath.scope);
+        }
         left.replaceWith(varDeclToExpr(left, true)!);
       }
     },
