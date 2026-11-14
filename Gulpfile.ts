@@ -1,5 +1,6 @@
 import path from "node:path";
 import fs from "node:fs";
+import { spawn, spawnSync, type ChildProcess } from "node:child_process";
 import { cpus } from "node:os";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
@@ -219,6 +220,86 @@ function applyBabelToGlob(glob: any, options: any) {
 
 const kebabToCamel = (str: string) =>
   str.replace(/-[a-z]/g, c => c[1].toUpperCase());
+
+const runningChildProcesses = new Set<ChildProcess>();
+
+function killChildProcessTree(child: ChildProcess) {
+  if (process.platform === "win32") {
+    // There are no process groups on Windows
+    spawnSync("taskkill", ["/pid", String(child.pid), "/t", "/f"], {
+      stdio: "ignore",
+    });
+  } else {
+    try {
+      // The child is the leader of its own process group (`detached`)
+      process.kill(-child.pid!, "SIGTERM");
+    } catch {
+      // It already exited
+    }
+  }
+}
+
+let killChildProcessesOnExit = false;
+function setupKillChildProcessesOnExit() {
+  if (killChildProcessesOnExit) return;
+  killChildProcessesOnExit = true;
+
+  // When a task fails, gulp exits without waiting for the other running tasks.
+  // Stop the scripts that are still running, and their own child processes
+  // (e.g. the tsc workers).
+  const killAll = () => {
+    for (const child of runningChildProcesses) killChildProcessTree(child);
+    runningChildProcesses.clear();
+  };
+  process.on("exit", killAll);
+  // On Unix the children are in their own process group, so they don't receive
+  // the signals sent to the terminal's foreground group (e.g. Ctrl+C). Kill
+  // them, and then let the signal terminate this process as it would by default.
+  for (const signal of ["SIGINT", "SIGTERM"] as const) {
+    process.once(signal, () => {
+      killAll();
+      process.kill(process.pid, signal);
+    });
+  }
+}
+
+/**
+ * Run a Node.js script in a child process, so that it can run in parallel with
+ * the other tasks
+ */
+function runNodeScript(args: string[], cwd?: string) {
+  setupKillChildProcessesOnExit();
+  return new Promise<void>((resolve, reject) => {
+    const child = spawn(process.execPath, args, {
+      cwd,
+      stdio: "inherit",
+      // Make the child the leader of a new process group, so that we can kill
+      // it with the processes it spawns. On Windows this would open a new
+      // console, and taskkill kills the process tree anyway.
+      detached: process.platform !== "win32",
+    });
+    runningChildProcesses.add(child);
+    child.on("error", err => {
+      runningChildProcesses.delete(child);
+      reject(err);
+    });
+    child.on("close", (code, signal) => {
+      runningChildProcesses.delete(child);
+      if (code === 0) {
+        resolve();
+      } else {
+        const command = `node ${args.join(" ")}`;
+        reject(
+          new Error(
+            signal
+              ? `${command} was killed by ${signal}`
+              : `${command} exited with code ${code}`
+          )
+        );
+      }
+    });
+  });
+}
 
 async function generateStandalone() {
   log("Generating @babel/standalone files");
@@ -1202,6 +1283,50 @@ gulp.task(
     )
   )
 );
+
+gulp.task("tscheck-babel-parser", () =>
+  runNodeScript(["scripts/parallel-tsc/tsc.ts", "./packages/babel-parser"])
+);
+gulp.task("build-plugin-transform-runtime-dist", () =>
+  runNodeScript(
+    ["scripts/build-dist.ts"],
+    "packages/babel-plugin-transform-runtime"
+  )
+);
+
+/**
+ * The complete development build: it runs the same steps as `build-dev`, the
+ * `bundle-babel-parser-dts` Makefile target and `build-plugin-transform-runtime-dist`
+ * (and optionally `rollup-babel-standalone`), but it runs the independent steps
+ * in parallel.
+ */
+function buildDevAll(standalone: boolean) {
+  return gulp.series(
+    "build-no-bundle",
+    // The @babel/types generated sources are part of the parser type check.
+    "generate-type-helpers",
+    gulp.parallel(
+      // tsc doesn't read lib, nor the sources written by the other generators.
+      gulp.series("tscheck-babel-parser", "bundle-babel-parser-dts"),
+      gulp.series(
+        gulp.parallel(
+          "generate-standalone",
+          "generate-runtime-helpers",
+          "generate-helper-globals-data"
+        ),
+        gulp.parallel(
+          // rebuild @babel/types and @babel/helpers since
+          // type-helpers and generated helpers may be changed
+          gulp.series("build-no-bundle", "build-plugin-transform-runtime-dist"),
+          ...(standalone ? ["rollup-babel-standalone"] : [])
+        )
+      )
+    )
+  );
+}
+
+gulp.task("build-dev-all", buildDevAll(false));
+gulp.task("build-dev-all-standalone", buildDevAll(true));
 
 function watch() {
   gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle-watch"));
