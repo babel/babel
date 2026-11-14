@@ -11,7 +11,7 @@ type PropertyInfo = {
   scope: Scope;
   objId: t.Identifier;
   body: t.Statement[];
-  computedProps: t.ObjectMember[];
+  computedProps: (t.ObjectMember | t.SpreadElement)[];
   initPropExpression: t.ObjectExpression;
   state: PluginPass;
 };
@@ -74,6 +74,19 @@ export default declare((api, options: Options) => {
     }
   }
 
+  // A spread element after a computed property can't stay in the initial
+  // object literal, because it must be applied after the properties preceding it.
+  function buildSpread(
+    state: PluginPass,
+    obj: t.Expression,
+    prop: t.SpreadElement,
+  ) {
+    return t.callExpression(state.addHelper("objectSpread2"), [
+      obj,
+      prop.argument,
+    ]);
+  }
+
   function pushAssign(
     objId: t.Identifier,
     prop: t.ObjectMember,
@@ -98,7 +111,11 @@ export default declare((api, options: Options) => {
     const { computedProps, state, initPropExpression, objId, body } = info;
 
     for (const prop of computedProps) {
-      if (
+      if (t.isSpreadElement(prop)) {
+        body.push(
+          t.expressionStatement(buildSpread(state, t.cloneNode(objId), prop)),
+        );
+      } else if (
         t.isObjectMethod(prop) &&
         (prop.kind === "get" || prop.kind === "set")
       ) {
@@ -123,8 +140,8 @@ export default declare((api, options: Options) => {
     // To prevent too deep AST structures in case of large objects
     const CHUNK_LENGTH_CAP = 10;
 
-    let currentChunk: t.ObjectMember[] | null = null;
-    const computedPropsChunks: t.ObjectMember[][] = [];
+    let currentChunk: PropertyInfo["computedProps"] | null = null;
+    const computedPropsChunks: PropertyInfo["computedProps"][] = [];
     for (const prop of computedProps) {
       if (!currentChunk || currentChunk.length === CHUNK_LENGTH_CAP) {
         currentChunk = [];
@@ -139,7 +156,9 @@ export default declare((api, options: Options) => {
         ? info.initPropExpression
         : t.cloneNode(objId);
       for (const prop of chunk) {
-        if (
+        if (t.isSpreadElement(prop)) {
+          node = buildSpread(state, node, prop);
+        } else if (
           t.isObjectMethod(prop) &&
           (prop.kind === "get" || prop.kind === "set")
         ) {
@@ -166,35 +185,16 @@ export default declare((api, options: Options) => {
       ObjectExpression: {
         exit(path, state) {
           const { node, parent, scope } = path;
-          let hasComputed = false;
-          for (const prop of node.properties) {
-            // @ts-expect-error SpreadElement must not have computed property
-            hasComputed = prop.computed === true;
-            if (hasComputed) break;
-          }
-          if (!hasComputed) return;
+          // put all properties and spread elements up to the first computed
+          // property into the first object expression
 
-          // put all getters/setters into the first object expression as well as all initialisers up
-          // to the first computed property
+          const firstComputed = node.properties.findIndex(
+            prop => !t.isSpreadElement(prop) && prop.computed,
+          );
+          if (firstComputed === -1) return;
 
-          const initProps: t.ObjectMember[] = [];
-          const computedProps: t.ObjectMember[] = [];
-          let foundComputed = false;
-
-          for (const prop of node.properties) {
-            if (t.isSpreadElement(prop)) {
-              continue;
-            }
-            if (prop.computed) {
-              foundComputed = true;
-            }
-
-            if (foundComputed) {
-              computedProps.push(prop);
-            } else {
-              initProps.push(prop);
-            }
-          }
+          const initProps = node.properties.slice(0, firstComputed);
+          const computedProps = node.properties.slice(firstComputed);
 
           const objId = scope.generateUidIdentifierBasedOnNode(parent);
           const initPropExpression = t.objectExpression(initProps);
