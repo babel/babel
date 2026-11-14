@@ -42,6 +42,8 @@
  * were directly thrown in the config file.
  */
 
+import type { Handler } from "gensync";
+
 const ErrorToString = Function.call.bind(Error.prototype.toString);
 
 const SUPPORTED =
@@ -95,12 +97,38 @@ export function beginHiddenCallStack<A extends unknown[], R>(
 
   return Object.defineProperty(
     function (...args: A) {
-      setupPrepareStackTrace();
       return fn(...args);
     },
     "name",
     { value: STOP_HIDING },
   );
+}
+
+// Only Error.stackTraceLimit has to stay raised for the whole call, so that
+// errors capture enough frames. Error.prepareStackTrace is swapped in just for
+// the synchronous `.stack` read at the API boundary: V8 formats stacks lazily
+// on first access. The formatter is restored before returning from that read.
+export function withStackTraceRewriting<A extends unknown[], R>(
+  fn: (...args: A) => Handler<R>,
+): (...args: A) => Handler<R> {
+  if (!SUPPORTED) return fn;
+
+  return function* rewriteStackTrace(...args: A): Handler<R> {
+    raiseStackTraceLimit();
+    try {
+      return yield* fn(...args);
+    } catch (err) {
+      if (
+        err !== null &&
+        (typeof err === "object" || typeof err === "function")
+      ) {
+        formatStack(err as Error);
+      }
+      throw err;
+    } finally {
+      restoreStackTraceLimit();
+    }
+  };
 }
 
 export function endHiddenCallStack<A extends unknown[], R>(
@@ -117,54 +145,77 @@ export function endHiddenCallStack<A extends unknown[], R>(
   );
 }
 
-function setupPrepareStackTrace() {
-  // @ts-expect-error This function is a singleton
-  setupPrepareStackTrace = () => {};
+let activeCalls = 0;
+let originalStackTraceLimit: number;
+let raisedStackTraceLimit: number;
 
-  const { prepareStackTrace = defaultPrepareStackTrace } = Error;
-
+function raiseStackTraceLimit() {
+  if (activeCalls++ > 0) return;
+  originalStackTraceLimit = Error.stackTraceLimit;
   // We add some extra frames to Error.stackTraceLimit, so that we can
   // always show some useful frames even after deleting ours.
-  // STACK_TRACE_LIMIT_DELTA should be around the maximum expected number
-  // of internal frames, and not too big because capturing the stack trace
-  // is slow (this is why Error.stackTraceLimit does not default to Infinity!).
-  // Increase it if needed.
   // However, we only do it if the user did not explicitly set it to 0.
   const MIN_STACK_TRACE_LIMIT = 50;
   Error.stackTraceLimit &&= Math.max(
     Error.stackTraceLimit,
     MIN_STACK_TRACE_LIMIT,
   );
+  raisedStackTraceLimit = Error.stackTraceLimit;
+}
 
+function restoreStackTraceLimit() {
+  if (--activeCalls > 0) return;
+  // Leave it alone if someone else changed it in the meantime.
+  if (Error.stackTraceLimit === raisedStackTraceLimit) {
+    Error.stackTraceLimit = originalStackTraceLimit;
+  }
+}
+
+function formatStack(err: Error) {
+  const prepareStackTrace = Error.prepareStackTrace;
   Error.prepareStackTrace = function stackTraceRewriter(err, trace) {
-    let newTrace = [];
-
-    const isExpected = expectedErrors.has(err);
-    let status: "showing" | "hiding" | "unknown" = isExpected
-      ? "hiding"
-      : "unknown";
-    for (let i = 0; i < trace.length; i++) {
-      const name = trace[i].getFunctionName();
-      if (name === START_HIDING) {
-        status = "hiding";
-      } else if (name === STOP_HIDING) {
-        if (status === "hiding") {
-          status = "showing";
-          if (virtualFrames.has(err)) {
-            newTrace.unshift(...virtualFrames.get(err)!);
-          }
-        } else if (status === "unknown") {
-          // Unexpected internal error, show the full stack trace
-          newTrace = trace;
-          break;
-        }
-      } else if (status !== "hiding") {
-        newTrace.push(trace[i]);
-      }
-    }
-
-    return prepareStackTrace(err, newTrace);
+    return (prepareStackTrace || defaultPrepareStackTrace)(
+      err,
+      rewriteTrace(err, trace),
+    );
   };
+  try {
+    // Formats the stack if nothing has read it yet; no-op otherwise.
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    err.stack;
+  } catch {
+    // e.g. a throwing `stack` getter: not our business
+  } finally {
+    Error.prepareStackTrace = prepareStackTrace;
+  }
+}
+
+function rewriteTrace(err: Error, trace: CallSite[]) {
+  const newTrace = [];
+
+  const isExpected = expectedErrors.has(err);
+  let status: "showing" | "hiding" | "unknown" = isExpected
+    ? "hiding"
+    : "unknown";
+  for (let i = 0; i < trace.length; i++) {
+    const name = trace[i].getFunctionName();
+    if (name === START_HIDING) {
+      status = "hiding";
+    } else if (name === STOP_HIDING) {
+      if (status === "hiding") {
+        status = "showing";
+        if (virtualFrames.has(err)) {
+          newTrace.unshift(...virtualFrames.get(err)!);
+        }
+      } else if (status === "unknown") {
+        // Unexpected internal error, show the full stack trace
+        return trace;
+      }
+    } else if (status !== "hiding") {
+      newTrace.push(trace[i]);
+    }
+  }
+  return newTrace;
 }
 
 function defaultPrepareStackTrace(err: Error, trace: CallSite[]) {
