@@ -164,11 +164,20 @@ target["bootstrap"] = function () {
 };
 
 target["build"] = function () {
-  target["build-no-bundle"]();
-
-  if (process.env.BABEL_COVERAGE !== "true") {
-    target["build-standalone"]();
+  if (process.env.BABEL_COVERAGE === "true") {
+    target["build-no-bundle"]();
+    return;
   }
+
+  target["clean"]();
+  target["clean-lib"]();
+
+  env(
+    () => {
+      yarn(["gulp", "build-dev-all-standalone"]);
+    },
+    { BABEL_ENV: "development" }
+  );
 };
 
 target["build-standalone"] = function () {
@@ -188,16 +197,13 @@ target["build-bundle"] = function () {
 target["build-no-bundle"] = function () {
   target["clean"]();
   target["clean-lib"]();
-  target["bundle-babel-parser-dts"]();
 
   env(
     () => {
-      yarn(["gulp", "build-dev"]);
+      yarn(["gulp", "build-dev-all"]);
     },
     { BABEL_ENV: "development" }
   );
-
-  target["build-dist"]();
 };
 
 target["build-flow-typings"] = function () {
