@@ -1,5 +1,6 @@
 import {
   GenMapping,
+  addSegment,
   maybeAddMapping,
   setSourceContent,
   allMappings,
@@ -13,11 +14,7 @@ import type {
   Mapping,
 } from "@jridgewell/gen-mapping";
 
-import type {
-  InvalidOriginalMapping,
-  OriginalMapping,
-  SourceMapInput,
-} from "@jridgewell/trace-mapping";
+import type { SourceMapInput } from "@jridgewell/trace-mapping";
 import { originalPositionFor, TraceMap } from "@jridgewell/trace-mapping";
 
 /**
@@ -28,6 +25,23 @@ export default class SourceMap {
   private _map: GenMapping;
   private _rawMappings: Mapping[] | undefined;
   private _sourceFileName: string | undefined;
+
+  // Data about the last segment added to the map, used to skip redundant
+  // segments without going through @jridgewell/gen-mapping. A segment is
+  // redundant when it is identical to the previous one on the same generated
+  // line (or, for a sourceless segment, when it starts a generated line or
+  // follows another sourceless segment). Only used when range mappings are
+  // disabled.
+  // Any real line is > 0, so init to 0 is fine.
+  private _lastGenLine = 0;
+  private _lastSourceLine = 0;
+  private _lastSourceColumn = 0;
+  // null means that the last segment was sourceless.
+  private _lastSource: string | null = null;
+  private _lastName: string | null = null;
+
+  private _lastFilename: string | null = null;
+  private _lastNormalizedFilename: string | null = null;
 
   public _inputMap: TraceMap | null = null;
 
@@ -139,14 +153,14 @@ export default class SourceMap {
     identifierNamePos?: { line: number; column: number },
     filename?: string | null,
   ) {
-    this._rawMappings = undefined;
-
-    let originalMapping: OriginalMapping | InvalidOriginalMapping | undefined;
+    let source: string | null | undefined = null;
+    let originalLine = 0;
+    let originalColumn = 0;
 
     if (line != null) {
       if (this._inputMap) {
         // This is the lookup for this mark
-        originalMapping = originalPositionFor(this._inputMap, {
+        const originalMapping = originalPositionFor(this._inputMap, {
           line,
           column: column!,
         });
@@ -175,25 +189,98 @@ export default class SourceMap {
             identifierName = originalIdentifierMapping.name;
           }
         }
+
+        source = originalMapping.source;
+        originalLine = originalMapping.line!;
+        originalColumn = originalMapping.column!;
       } else {
-        originalMapping = {
-          name: null,
-          source: filename?.replace(/\\/g, "/") || this._sourceFileName!,
-          line: line,
-          column: column!,
-        };
+        source = filename
+          ? this._normalizeFilename(filename)
+          : this._sourceFileName;
+        originalLine = line;
+        originalColumn = column!;
       }
     }
 
-    if (identifierName != null && identifierName === generatedIdentifierName) {
-      identifierName = null;
+    if (this.#allowRangeMappings) {
+      this._rawMappings = undefined;
+      this.#markWithRanges(
+        generated,
+        identifierName != null && identifierName !== generatedIdentifierName
+          ? identifierName
+          : null,
+        source,
+        // Range mappings are disabled when there is an input source map.
+        line != null ? { line: originalLine, column: originalColumn } : null,
+      );
+      return;
     }
 
+    const genLine = generated.line;
+    const sameLine = genLine === this._lastGenLine;
+
+    if (!source) {
+      if (!sameLine || this._lastSource === null) return;
+      this._lastSource = null;
+      this._rawMappings = undefined;
+      addSegment(
+        this._map,
+        genLine - 1,
+        generated.column,
+        null,
+        null,
+        null,
+        null,
+        null,
+      );
+      return;
+    }
+
+    const name =
+      identifierName != null && identifierName !== generatedIdentifierName
+        ? identifierName || null
+        : null;
+
+    if (
+      sameLine &&
+      source === this._lastSource &&
+      originalLine === this._lastSourceLine &&
+      originalColumn === this._lastSourceColumn &&
+      name === this._lastName
+    ) {
+      return;
+    }
+
+    this._lastGenLine = genLine;
+    this._lastSource = source;
+    this._lastSourceLine = originalLine;
+    this._lastSourceColumn = originalColumn;
+    this._lastName = name;
+    this._rawMappings = undefined;
+
+    addSegment(
+      this._map,
+      genLine - 1,
+      generated.column,
+      source,
+      originalLine - 1,
+      originalColumn,
+      name,
+      undefined,
+    );
+  }
+
+  #markWithRanges(
+    generated: { line: number; column: number },
+    name: string | null,
+    source: string | null | undefined,
+    original: { line: number; column: number } | null,
+  ) {
     const newMapping = {
-      name: identifierName ?? null,
+      name,
       generated: { line: generated.line, column: generated.column },
-      source: originalMapping?.source,
-      original: originalMapping,
+      source,
+      original,
       isRange: false,
     } as Parameters<typeof maybeAddMapping>[1];
 
@@ -330,5 +417,13 @@ export default class SourceMap {
       generatedLineDelta === originalLineDelta &&
       generatedColumnDelta === originalColumnDelta
     );
+  }
+
+  _normalizeFilename(filename: string): string {
+    if (filename !== this._lastFilename) {
+      this._lastFilename = filename;
+      this._lastNormalizedFilename = filename.replace(/\\/g, "/");
+    }
+    return this._lastNormalizedFilename!;
   }
 }
