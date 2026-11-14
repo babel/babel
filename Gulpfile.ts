@@ -275,9 +275,31 @@ function createWorker(useWorker: boolean): any {
   return worker;
 }
 
+/**
+ * Check if the source file needs to be compiled based on its modification time
+ * compared to the destination file.
+ * If the destination file does not exist, it will return true to indicate that
+ * compilation is needed.
+ */
+function needCompile(src: string, dest: string): boolean {
+  let destStat;
+  try {
+    destStat = fs.statSync(dest);
+  } catch (err: any) {
+    if (err.code === "ENOENT") {
+      return true;
+    } else {
+      throw err;
+    }
+  }
+  const srcStat = fs.statSync(src);
+  return srcStat.mtimeMs >= destStat.mtimeMs;
+}
+
 async function buildBabel(useWorker: boolean, ignore: PackageInfo[] = []) {
-  const worker = await createWorker(useWorker);
-  const promises = [];
+  // Check the modification times here rather than in the workers, so that an
+  // incremental build doesn't need a worker round trip for every source file.
+  const files = [];
   for (const file of globDefaultSources()) {
     if (ignore.some(pkg => file.startsWith(`${pkg.src}/`))) {
       continue;
@@ -285,6 +307,15 @@ async function buildBabel(useWorker: boolean, ignore: PackageInfo[] = []) {
 
     // @example ./packages/babel-parser/src/index.js
     const dest = "./" + mapSrcToLib(file);
+    if (needCompile(file, dest)) {
+      files.push({ file, dest });
+    }
+  }
+  if (files.length === 0) return;
+
+  const worker = await createWorker(useWorker);
+  const promises = [];
+  for (const { file, dest } of files) {
     promises.push(
       worker.transform(file, dest, {
         sourceMaps: !file.endsWith(".d.ts"),
