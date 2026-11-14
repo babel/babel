@@ -121,6 +121,16 @@ function needsParenBeforeExpressionBrace(tokenContext: number) {
   );
 }
 
+export function ModuleExpression(
+  node: t.ModuleExpression,
+  parent: t.Node,
+  parentId: number,
+  tokenContext: number,
+): boolean {
+  // `class A extends module {} {}` has an identifier as its superclass
+  return (tokenContext & TokenContext.classHeritage) > 0;
+}
+
 export function ObjectExpression(
   node: t.ObjectExpression,
   parent: any,

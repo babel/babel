@@ -90,8 +90,10 @@ export function NewExpression(
     this.format.minified && node.arguments.length === 0 && !node.typeArguments;
   const wrapInParens = omitArguments && hasPostfixPart(node, parent);
   if (wrapInParens) this.token("(");
+  const { tokenContext } = this;
   this.word("new");
   this.space();
+  this.tokenContext |= tokenContext & TokenContext.classHeritage;
   this.print(node.callee);
   if (omitArguments) {
     if (wrapInParens) this.token(")");
