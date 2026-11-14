@@ -10,6 +10,15 @@ function getName(
   return key.value.toString();
 }
 
+function isProtoSetter(prop: t.ObjectMethod | t.ObjectProperty) {
+  return (
+    t.isObjectProperty(prop) &&
+    !prop.computed &&
+    !prop.shorthand &&
+    getName(prop.key as t.Identifier | t.StringLiteral) === "__proto__"
+  );
+}
+
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
@@ -36,6 +45,11 @@ export default declare(api => {
         const alreadySeenSetters = Object.create(null);
 
         for (const prop of plainProps) {
+          // `__proto__: value` sets the prototype instead of defining a
+          // property, so it is never a duplicate of the properties named
+          // "__proto__". Making it computed would define a property.
+          if (isProtoSetter(prop)) continue;
+
           const name = getName(
             // prop must be non-computed
             prop.key as
