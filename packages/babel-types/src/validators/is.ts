@@ -4,16 +4,22 @@ import isPlaceholderType from "./isPlaceholderType.ts";
 import { FLIPPED_ALIAS_KEYS } from "../definitions/index.ts";
 import type * as t from "../index.ts";
 
+// `infer` avoids checking the generic `Extract<t.Node, { type: T }>` (a union of
+// conditional types) against `t.Node` in the type predicates below, which is slow.
+type NodeOfType<T extends t.Node["type"]> =
+  Extract<t.Node, { type: T }> extends infer N extends t.Node ? N : never;
+
 export default function is<T extends t.Node["type"]>(
   type: T,
   node: t.Node | null | undefined,
   opts?: undefined,
-): node is Extract<t.Node, { type: T }>;
+): node is NodeOfType<T>;
 
-export default function is<
-  T extends t.Node["type"],
-  P extends Extract<t.Node, { type: T }>,
->(type: T, n: t.Node | null | undefined, required: Partial<P>): n is P;
+export default function is<T extends t.Node["type"], P extends NodeOfType<T>>(
+  type: T,
+  n: t.Node | null | undefined,
+  required: Partial<P>,
+): n is P;
 
 export default function is<P extends t.Node>(
   type: string,
