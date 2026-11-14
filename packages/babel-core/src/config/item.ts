@@ -20,14 +20,13 @@ export function createItemFromDescriptor<API>(
  */
 export function* createConfigItem<API>(
   value: PluginItem | PresetItem,
-  {
-    dirname = ".",
-    type,
-  }: {
+  // Not destructured, so the emitted .d.ts has labeled tuples (TS < 5.2 needs it)
+  options: {
     dirname?: string;
     type?: "preset" | "plugin";
   } = {},
 ): Handler<ConfigItem<API>> {
+  const { dirname = ".", type } = options;
   const descriptor = yield* createDescriptor(value, path.resolve(dirname), {
     type,
     alias: "programmatic item",
