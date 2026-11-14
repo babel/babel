@@ -152,7 +152,16 @@ import placeholders from "./plugins/placeholders.ts";
 import v8intrinsic from "./plugins/v8intrinsic.ts";
 
 // NOTE: order is important. estree must come first; placeholders must come last.
-export const mixinPlugins = {
+// The explicit type keeps the declaration output small: otherwise the classes
+// returned by the plugins are inlined into it.
+export const mixinPlugins: {
+  estree: typeof estree;
+  jsx: typeof jsx;
+  flow: typeof flow;
+  typescript: typeof typescript;
+  v8intrinsic: typeof v8intrinsic;
+  placeholders: typeof placeholders;
+} = {
   estree,
   jsx,
   flow,

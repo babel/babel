@@ -19,7 +19,9 @@ export function clearScope() {
   scope = new WeakMap();
 }
 
-export function getCachedPaths(path: NodePath<Node | null>) {
+export function getCachedPaths(
+  path: NodePath<Node | null>,
+): Map<Node, NodePath> | null | undefined {
   const { parent, parentPath } = path;
   return parentPath ? parentPath._store : pathsCache.get(parent);
 }
