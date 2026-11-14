@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-export-namespace-from"],
+  "parserOpts": { "plugins": ["exportDefaultFrom"] }
+}
