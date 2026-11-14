@@ -16,7 +16,7 @@ function getLeftNames(path: NodePath<t.ForXStatement>) {
   const names = Object.keys(path.getBindingIdentifiers());
   path.get("left").traverse({
     "BindingIdentifier|ReferencedIdentifier"({ node }) {
-      names.push(node.name);
+      names.push((node as t.Identifier).name);
     },
   });
   return names;
