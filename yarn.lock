@@ -1611,6 +1611,7 @@ __metadata:
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-wrap-function": "workspace:^"
+    "@babel/plugin-syntax-decorators": "workspace:^"
   peerDependencies:
     "@babel/core": ^8.0.0
   languageName: unknown
