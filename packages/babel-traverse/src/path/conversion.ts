@@ -135,10 +135,10 @@ export function unwrapFunctionEnvironment(
   hoistFunctionEnvironment(this);
 }
 
-function setType<N extends t.Node, T extends N["type"]>(
-  path: NodePath<N>,
+function setType<P extends NodePath, T extends P["type"]>(
+  path: P,
   type: T,
-): asserts path is NodePath<Extract<N, { type: T }>> {
+): asserts path is Extract<P, { type: T }> {
   path.node.type = type;
 }
 
