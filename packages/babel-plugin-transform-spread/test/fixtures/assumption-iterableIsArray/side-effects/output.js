@@ -1,0 +1,14 @@
+var a = [1, 2];
+[].concat(a.slice(), [a.push(3)]);
+var b = [1, 2];
+[].concat(b.slice(), [b.pop()]);
+var c = [1, 2];
+fn.apply(void 0, c.slice().concat([c.push(3)]));
+var d = [1, 2];
+babelHelpers.construct(Foo, d.slice().concat([d.push(3)]));
+var f = [1, 2];
+var g = [10, 20];
+[].concat(f.slice(), [f.push(3)], g);
+var h = [1, 2];
+[h.push(0)].concat(h);
+[1, 2].concat([a.push(3)]);
