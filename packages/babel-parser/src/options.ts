@@ -1,4 +1,4 @@
-import type { Plugin } from "./plugin-utils.ts";
+import type { PluginConfig as Plugin } from "./typings.d.ts";
 
 // A second optional argument can be given to further configure
 // the parser process. These options are recognized:
