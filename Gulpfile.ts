@@ -3,8 +3,6 @@ import fs from "node:fs";
 import { cpus } from "node:os";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
-import { Transform as TransformStream } from "node:stream";
-import { callbackify } from "node:util";
 import { styleText } from "node:util";
 // @ts-expect-error no types
 import gulp from "gulp";
@@ -99,6 +97,28 @@ function getIndexFromPackage(name: string): string {
   }
 }
 
+/**
+ * Write a generated source file, but only if its content changed: unchanged
+ * files keep their mtime so they are not compiled again, and tasks running in
+ * parallel never read a partially written file.
+ */
+function writeGeneratedFile(filename: string, content: string) {
+  try {
+    if (fs.readFileSync(filename, "utf8") === content) return;
+  } catch (err: any) {
+    if (err.code !== "ENOENT") throw err;
+  }
+  fs.mkdirSync(path.dirname(filename), { recursive: true });
+  const tmpFilename = `${filename}.${process.pid}.tmp`;
+  try {
+    fs.writeFileSync(tmpFilename, content, { mode: 0o644 });
+    fs.renameSync(tmpFilename, filename);
+  } finally {
+    // Don't leave the temporary file in the sources if the write failed
+    fs.rmSync(tmpFilename, { force: true });
+  }
+}
+
 async function generateHelpers(
   generator: string,
   dest: string,
@@ -110,7 +130,7 @@ async function generateHelpers(
     await generateCode(filename),
     path.join(dest, filename)
   );
-  fs.writeFileSync(path.join(dest, filename), result, { mode: 0o644 });
+  writeGeneratedFile(path.join(dest, filename), result);
   log(`${styleText("green", "✔")} Generated ${message}`);
 }
 
@@ -200,41 +220,34 @@ function applyBabelToGlob(glob: any, options: any) {
 const kebabToCamel = (str: string) =>
   str.replace(/-[a-z]/g, c => c[1].toUpperCase());
 
-function generateStandalone() {
-  const dest = "./packages/babel-standalone/src/generated/";
-  return gulp
-    .src(babelStandalonePluginConfigGlob, { base: monorepoRoot })
-    .pipe(
-      new TransformStream({
-        objectMode: true,
-        // @ts-expect-error FIXME
-        transform: callbackify(async file => {
-          log("Generating @babel/standalone files");
-          const pluginConfig = JSON.parse(file.contents);
-          let imports = ``;
-          let exportDecls = "";
-          let exportsList = "";
-          let allList = "";
+async function generateStandalone() {
+  log("Generating @babel/standalone files");
+  const pluginConfig = JSON.parse(
+    fs.readFileSync(babelStandalonePluginConfigGlob, "utf8")
+  );
+  let imports = ``;
+  let exportDecls = "";
+  let exportsList = "";
+  let allList = "";
 
-          for (const plugin of pluginConfig.noopPlugins) {
-            const camelPlugin = kebabToCamel(plugin);
-            exportDecls += `${camelPlugin} = makeNoopPlugin(),`;
-            allList += `"${plugin}": ${camelPlugin},`;
-          }
+  for (const plugin of pluginConfig.noopPlugins) {
+    const camelPlugin = kebabToCamel(plugin);
+    exportDecls += `${camelPlugin} = makeNoopPlugin(),`;
+    allList += `"${plugin}": ${camelPlugin},`;
+  }
 
-          for (const plugin of pluginConfig.externalPlugins) {
-            const camelPlugin = kebabToCamel(plugin);
-            imports += `import ${camelPlugin} from "@babel/plugin-${plugin}";`;
-            exportsList += `${camelPlugin},`;
-            allList += `"${plugin}": ${camelPlugin},`;
-          }
+  for (const plugin of pluginConfig.externalPlugins) {
+    const camelPlugin = kebabToCamel(plugin);
+    imports += `import ${camelPlugin} from "@babel/plugin-${plugin}";`;
+    exportsList += `${camelPlugin},`;
+    allList += `"${plugin}": ${camelPlugin},`;
+  }
 
-          if (exportDecls) {
-            imports =
-              `import makeNoopPlugin from "../make-noop-plugin.ts";` + imports;
-            exportDecls = `export const ${exportDecls.slice(0, -1)}`;
-          }
-          const fileContents = `/*
+  if (exportDecls) {
+    imports = `import makeNoopPlugin from "../make-noop-plugin.ts";` + imports;
+    exportDecls = `export const ${exportDecls.slice(0, -1)}`;
+  }
+  const fileContents = `/*
    * This file is auto-generated! Do not modify it directly.
    * To re-generate run 'yarn gulp generate-standalone'
    */
@@ -242,16 +255,8 @@ function generateStandalone() {
   ${exportDecls};
   export {${exportsList}};
   export const all: Record<string, any> = {${allList}};`;
-          file.path = "plugins.ts";
-          file.contents = Buffer.from(
-            await formatCode(fileContents, dest + file.path)
-          );
-
-          return file;
-        }),
-      })
-    )
-    .pipe(gulp.dest(dest));
+  const dest = "./packages/babel-standalone/src/generated/plugins.ts";
+  writeGeneratedFile(dest, await formatCode(fileContents, dest));
 }
 
 function createWorker(useWorker: boolean): any {
