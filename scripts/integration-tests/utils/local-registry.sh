@@ -6,12 +6,20 @@ custom_registry_url=http://localhost:4873
 default_verdaccio_package=verdaccio@~6.1.2
 
 function startLocalRegistry {
+  bootLocalRegistry "$1"
+  waitForLocalRegistry
+}
+
+function bootLocalRegistry {
   # Start local registry
   tmp_registry_log=`mktemp`
   echo "Registry output file: $tmp_registry_log"
   (cd && nohup npx $default_verdaccio_package -c $1 &>$tmp_registry_log &)
+}
+
+function waitForLocalRegistry {
   # Wait for Verdaccio to boot
-  grep -q "http address" <(tail -f $tmp_registry_log)
+  grep -q "http address" <(tail -n +1 -f $tmp_registry_log)
 
   # Set registry to local registry
   export NPM_CONFIG_REGISTRY="$custom_registry_url"
