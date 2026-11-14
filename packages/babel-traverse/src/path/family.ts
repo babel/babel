@@ -54,9 +54,8 @@ function addCompletionRecords(
   records: Completion[],
   context: CompletionContext,
 ): Completion[] {
-  if (path) {
-    // @ts-expect-error FIXME: path may be NodePath<null>
-    records.push(..._getCompletionRecords(path, context));
+  if (path?.hasNode()) {
+    records.push(..._getCompletionRecords(path as NodePath, context));
   }
   return records;
 }

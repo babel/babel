@@ -235,6 +235,17 @@ describe("path/family", function () {
       });
       expect(records).toHaveLength(0);
     });
+
+    it("should not return null NodePath for IfStatement without alternate", function () {
+      const ast = parse("function fn() { if (foo) { return 1; } }");
+      let records = [];
+      traverse(ast, {
+        FunctionDeclaration(path) {
+          records = path.getCompletionRecords();
+        },
+      });
+      expect(records.every(r => r.hasNode())).toBe(true);
+    });
   });
 });
 
