@@ -1,8 +1,46 @@
 diff --git a/dist/cjs/index.js b/dist/cjs/index.js
-index 082f85b39c190322df9d231618e798554dadbc30..98c33e6003646468e89adf7cbfcf6fd25a69362d 100644
+index 082f85b39c190322df9d231618e798554dadbc30..35eb301ef947602f2a6e15860062b8b81bf5d722 100644
 --- a/dist/cjs/index.js
 +++ b/dist/cjs/index.js
-@@ -383,7 +383,7 @@ export function getAugmentedNamespace(n) {
+@@ -7,6 +7,7 @@ var pluginutils = require('@rollup/pluginutils');
+ var fs = require('fs');
+ var getCommonDir = require('commondir');
+ var fdir = require('fdir');
++var picomatch = require('picomatch');
+ var estreeWalker = require('estree-walker');
+ var MagicString = require('magic-string');
+ var isReference = require('is-reference');
+@@ -169,6 +170,21 @@ function isDirectory(path) {
+   return false;
+ }
+ 
++const normalizeGlobPath = (path) =>
++  path.replace(/\\/g, '/').replace(/^\.\//, '').replace(/\/$/, '');
++
++// Skip the directories which cannot contain any path matching the glob, instead
++// of crawling the whole dynamicRequireRoot (i.e. the cwd, including node_modules).
++function getExcludeOutsideGlobBase(pattern) {
++  // `unescape` removes the glob escapes, which are not part of the paths
++  const base = normalizeGlobPath(picomatch.scan(pattern, { unescape: true }).base);
++  if (!base) return () => false;
++  return (_dirName, dirPath) => {
++    const dir = normalizeGlobPath(dirPath);
++    return !(!dir || dir === base || dir.startsWith(`${base}/`) || base.startsWith(`${dir}/`));
++  };
++}
++
+ function getDynamicRequireModules(patterns, dynamicRequireRoot) {
+   const dynamicRequireModules = new Map();
+   const dirNames = new Set();
+@@ -183,6 +199,7 @@ function getDynamicRequireModules(patterns, dynamicRequireRoot) {
+       .withBasePath()
+       .withDirs()
+       .glob(isNegated ? pattern.substr(1) : pattern)
++      .exclude(getExcludeOutsideGlobBase(isNegated ? pattern.substr(1) : pattern))
+       .crawl(path.relative('.', dynamicRequireRoot))
+       .sync()
+       .sort((a, b) => a.localeCompare(b, 'en'))) {
+@@ -383,7 +400,7 @@ export function getAugmentedNamespace(n) {
  			var isInstance = false;
        try {
          isInstance = this instanceof a;
@@ -12,10 +50,48 @@ index 082f85b39c190322df9d231618e798554dadbc30..98c33e6003646468e89adf7cbfcf6fd2
          return Reflect.construct(f, arguments, this.constructor);
  			}
 diff --git a/dist/es/index.js b/dist/es/index.js
-index 3137453ce7adf2e3dac6197ff1655d5c5bd038e9..28456f4933736859719a547750c04cfaaea63557 100644
+index 3137453ce7adf2e3dac6197ff1655d5c5bd038e9..fb8f4385927ae71912b6b2f2e494dee7b8ca6098 100644
 --- a/dist/es/index.js
 +++ b/dist/es/index.js
-@@ -379,7 +379,7 @@ export function getAugmentedNamespace(n) {
+@@ -3,6 +3,7 @@ import { makeLegalIdentifier, createFilter, attachScopes, extractAssignedNames }
+ import { existsSync, readFileSync, statSync } from 'fs';
+ import getCommonDir from 'commondir';
+ import { fdir } from 'fdir';
++import picomatch from 'picomatch';
+ import { walk } from 'estree-walker';
+ import MagicString from 'magic-string';
+ import isReference from 'is-reference';
+@@ -165,6 +166,21 @@ function isDirectory(path) {
+   return false;
+ }
+ 
++const normalizeGlobPath = (path) =>
++  path.replace(/\\/g, '/').replace(/^\.\//, '').replace(/\/$/, '');
++
++// Skip the directories which cannot contain any path matching the glob, instead
++// of crawling the whole dynamicRequireRoot (i.e. the cwd, including node_modules).
++function getExcludeOutsideGlobBase(pattern) {
++  // `unescape` removes the glob escapes, which are not part of the paths
++  const base = normalizeGlobPath(picomatch.scan(pattern, { unescape: true }).base);
++  if (!base) return () => false;
++  return (_dirName, dirPath) => {
++    const dir = normalizeGlobPath(dirPath);
++    return !(!dir || dir === base || dir.startsWith(`${base}/`) || base.startsWith(`${dir}/`));
++  };
++}
++
+ function getDynamicRequireModules(patterns, dynamicRequireRoot) {
+   const dynamicRequireModules = new Map();
+   const dirNames = new Set();
+@@ -179,6 +195,7 @@ function getDynamicRequireModules(patterns, dynamicRequireRoot) {
+       .withBasePath()
+       .withDirs()
+       .glob(isNegated ? pattern.substr(1) : pattern)
++      .exclude(getExcludeOutsideGlobBase(isNegated ? pattern.substr(1) : pattern))
+       .crawl(relative('.', dynamicRequireRoot))
+       .sync()
+       .sort((a, b) => a.localeCompare(b, 'en'))) {
+@@ -379,7 +396,7 @@ export function getAugmentedNamespace(n) {
  			var isInstance = false;
        try {
          isInstance = this instanceof a;
