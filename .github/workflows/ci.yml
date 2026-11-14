@@ -182,6 +182,9 @@ jobs:
       - name: Ensure cwd does not contain uncommitted changes
         run: |
           node ./scripts/assert-dir-git-clean.ts "lint-ci check-compat-data"
+      # Uses the .d.ts files bundled by lint-ci
+      - name: Check type declarations with engines.typescript in package.json
+        run: node ./scripts/check-dts-min-typescript.ts
       - name: Compile agentic workflows
         env:
           GH_TOKEN: ${{ github.token }}
