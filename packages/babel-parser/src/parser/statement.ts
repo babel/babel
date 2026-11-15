@@ -1173,6 +1173,9 @@ export default abstract class StatementParser extends ExpressionParser {
         this.raise(Errors.LabelRedeclaration, expr, {
           labelName: maybeName,
         });
+        // stop checking other labels to avoid quadratic behaviour
+        // in nested labels: l: l: ...
+        break;
       }
     }
 

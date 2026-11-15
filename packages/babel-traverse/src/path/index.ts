@@ -42,10 +42,15 @@ declare const bit: import("../../../../scripts/babel-plugin-bit-decorator/types.
   NodePath_Final<t.Node>
 >;
 
+// `[NodePath_Final<U>]` rather than `[NodePath_Final<T>]`: when `T` is the type
+// parameter of a call such as `[path] = path.insertBefore(node)`, TypeScript
+// also infers `T` from the contextual return type, and inferring through
+// `NodePath_Final<T>` is very expensive. Nothing is inferred to `U`, and `T` is
+// inferred from the arguments anyway.
 export type NodePaths<T extends t.Node | t.Node[]> = T extends t.Node[]
   ? { [K in keyof T]: NodePath_Final<Extract<T[K], t.Node>> }
-  : T extends t.Node
-    ? [NodePath_Final<T>]
+  : T extends infer U extends t.Node
+    ? [NodePath_Final<U>]
     : never;
 
 export type NodeListType<N, K extends keyof N> = N[K] extends (infer P extends

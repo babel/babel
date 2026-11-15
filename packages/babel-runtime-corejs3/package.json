@@ -77,6 +77,11 @@
       "import": "./helpers/esm/awaitAsyncGenerator.js",
       "default": "./helpers/awaitAsyncGenerator.js"
     },
+    "./helpers/callSpread": {
+      "node": "./helpers/callSpread.js",
+      "import": "./helpers/esm/callSpread.js",
+      "default": "./helpers/callSpread.js"
+    },
     "./helpers/callSuper": {
       "node": "./helpers/callSuper.js",
       "import": "./helpers/esm/callSuper.js",

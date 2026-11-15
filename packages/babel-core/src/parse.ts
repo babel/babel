@@ -4,7 +4,10 @@ import loadConfig, { type InputOptions } from "./config/index.ts";
 import parser, { type ParseResult } from "./parser/index.ts";
 import normalizeOptions from "./transformation/normalize-opts.ts";
 
-import { beginHiddenCallStack } from "./errors/rewrite-stack-trace.ts";
+import {
+  beginHiddenCallStack,
+  withStackTraceRewriting,
+} from "./errors/rewrite-stack-trace.ts";
 
 type FileParseCallback = {
   (err: Error, ast: null): void;
@@ -20,18 +23,20 @@ type Parse = {
   ): void;
 };
 
-const parseRunner = gensync(function* parse(
-  code: string,
-  opts: InputOptions | undefined | null,
-): Handler<ParseResult | null> {
-  const config = yield* loadConfig(opts);
+const parseRunner = gensync(
+  withStackTraceRewriting(function* parse(
+    code: string,
+    opts: InputOptions | undefined | null,
+  ): Handler<ParseResult | null> {
+    const config = yield* loadConfig(opts);
 
-  if (config === null) {
-    return null;
-  }
+    if (config === null) {
+      return null;
+    }
 
-  return yield* parser(config.passes, normalizeOptions(config), code);
-});
+    return yield* parser(config.passes, normalizeOptions(config), code);
+  }),
+);
 
 export const parse: Parse = function parse(
   code,

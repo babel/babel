@@ -39,9 +39,14 @@ import { createConfigItem as createConfigItemImpl } from "./item.ts";
 import type { ConfigItem } from "./item.ts";
 export type { ConfigItem };
 
-import { beginHiddenCallStack } from "../errors/rewrite-stack-trace.ts";
+import {
+  beginHiddenCallStack,
+  withStackTraceRewriting,
+} from "../errors/rewrite-stack-trace.ts";
 
-const loadPartialConfigRunner = gensync(loadPartialConfigImpl);
+const loadPartialConfigRunner = gensync(
+  withStackTraceRewriting(loadPartialConfigImpl),
+);
 export function loadPartialConfigAsync(
   ...args: Parameters<typeof loadPartialConfigRunner.async>
 ) {
@@ -77,7 +82,7 @@ function* loadOptionsImpl(
   // NOTE: We want to return "null" explicitly, while ?. alone returns undefined
   return config?.options ?? null;
 }
-const loadOptionsRunner = gensync(loadOptionsImpl);
+const loadOptionsRunner = gensync(withStackTraceRewriting(loadOptionsImpl));
 export function loadOptionsAsync(
   ...args: Parameters<typeof loadOptionsRunner.async>
 ) {
@@ -106,7 +111,9 @@ export function loadOptions(
   }
 }
 
-const createConfigItemRunner = gensync(createConfigItemImpl);
+const createConfigItemRunner = gensync(
+  withStackTraceRewriting(createConfigItemImpl),
+);
 export function createConfigItemAsync(
   ...args: Parameters<typeof createConfigItemRunner.async>
 ) {
