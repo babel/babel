@@ -22,7 +22,7 @@ function getType(val: any) {
   }
 }
 
-type NodeTypesWithoutComment = t.Node["type"] | keyof t.Aliases;
+export type NodeTypesWithoutComment = t.Node["type"] | keyof t.Aliases;
 
 type NodeTypes = NodeTypesWithoutComment | t.Comment["type"];
 

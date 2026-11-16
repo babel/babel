@@ -206,9 +206,23 @@ export interface ${deprecatedAlias[type]} extends BaseNode {
   registerParentMaps("Node", ["Placeholder"]);
 
   const parentMapsKeys = [...parentMaps.keys()].sort();
+  // Many node types can have exactly the same parents (for example, all the
+  // expressions that are not also patterns). To keep the declaration file
+  // small, the union is printed only for the first of them, and the others
+  // refer to it.
+  const firstTypeWithParents = new Map<string, string>();
   for (const type of parentMapsKeys) {
-    const deduplicated = [...parentMaps.get(type)!].sort();
-    code += `  ${type}: ${deduplicated.join(" | ")};\n`;
+    const parents = [...parentMaps.get(type)!].sort().join(" | ");
+    const reference = `ParentMaps["${firstTypeWithParents.get(parents)}"]`;
+    if (
+      firstTypeWithParents.has(parents) &&
+      reference.length < parents.length
+    ) {
+      code += `  ${type}: ${reference};\n`;
+    } else {
+      firstTypeWithParents.set(parents, type);
+      code += `  ${type}: ${parents};\n`;
+    }
   }
   code += "}\n\n";
 
