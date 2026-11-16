@@ -10,6 +10,9 @@ const run = (async function* () {
 
   assert.equal(yield, "The watcher is ready.");
 
+  // On macOS, the watcher may miss changes made right after it is ready.
+  await new Promise(resolve => setTimeout(resolve, 500));
+
   // update ./module1/src/index.js
   fs.writeFileSync(
     "./module1/src/index.js",
@@ -33,7 +36,9 @@ rl.on("line", async function listener(str) {
   }
 });
 
+// This only prevents the test from hanging: slow CI runners can need more than
+// a few seconds to start the watcher and compile the files twice.
 setTimeout(() => {
   console.error("EXECUTOR TIMEOUT");
   process.exit(1);
-}, 5000);
+}, 30000);
