@@ -2500,6 +2500,7 @@ __metadata:
     "@babel/core": "workspace:^"
     "@babel/helper-plugin-test-runner": "workspace:^"
     "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/plugin-transform-object-rest-spread": "workspace:^"
     "@babel/template": "workspace:^"
   peerDependencies:
     "@babel/core": ^7.0.0-0

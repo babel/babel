@@ -193,34 +193,32 @@ export default declare((api, options: Options) => {
       ObjectExpression: {
         exit(path, state) {
           const { node, parent, scope } = path;
-          let hasComputed = false;
-          for (const prop of node.properties) {
-            // @ts-expect-error SpreadElement must not have computed property
-            hasComputed = prop.computed === true;
-            if (hasComputed) break;
-          }
-          if (!hasComputed) return;
+          const { properties } = node;
+          const firstComputed = properties.findIndex(
+            prop => !t.isSpreadElement(prop) && prop.computed,
+          );
+          if (firstComputed === -1) return;
 
-          // put all getters/setters into the first object expression as well as all initialisers up
-          // to the first computed property
-
-          const initProps: t.ObjectMember[] = [];
+          // put all properties and spread elements up to the first computed
+          // property into the first object expression
+          const initProps = properties.slice(0, firstComputed);
           const computedProps: t.ObjectMember[] = [];
-          let foundComputed = false;
 
-          for (const prop of node.properties) {
+          for (let i = firstComputed; i < properties.length; i++) {
+            const prop = properties[i];
             if (t.isSpreadElement(prop)) {
-              continue;
+              // A spread element after a computed key cannot stay in the
+              // initial object literal, since it must override the properties
+              // preceding it. When object rest/spread is enabled, it has
+              // already been compiled on enter.
+              throw path
+                .get("properties")
+                [i].buildCodeFrameError(
+                  "Object spread elements after a computed key are not supported by this transform. " +
+                    "Please add @babel/plugin-transform-object-rest-spread to your Babel config.",
+                );
             }
-            if (prop.computed) {
-              foundComputed = true;
-            }
-
-            if (foundComputed) {
-              computedProps.push(prop);
-            } else {
-              initProps.push(prop);
-            }
+            computedProps.push(prop);
           }
 
           const objId = scope.generateUidIdentifierBasedOnNode(parent);
