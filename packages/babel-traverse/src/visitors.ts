@@ -274,7 +274,7 @@ export function merge(
 
     noScope =
       // @ts-expect-error no type for `noScope`
-      noScope == null ? visitor.noScope : noScope && visitor.noScope;
+      !!(noScope == null ? visitor.noScope : noScope && visitor.noScope);
 
     let topVisitor: ExplVisitNode<unknown, Node> = visitor;
     if (state || wrapper) {

@@ -94,12 +94,18 @@ describe("visitors", () => {
       expect(visitor.noScope).toBe(true);
     });
 
-    it("should respect `noScope` 2", () => {
+    it("should respect `noScope` partially", () => {
       const visitor = visitors.merge([
         { enter() {}, noScope: true },
         { enter() {} },
       ]);
       expect(visitor.noScope).toBe(undefined);
+
+      const visitor2 = visitors.merge([
+        { enter() {} },
+        { enter() {}, noScope: true },
+      ]);
+      expect(visitor2.noScope).toBe(undefined);
     });
   });
 
