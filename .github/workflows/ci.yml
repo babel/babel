@@ -86,6 +86,8 @@ jobs:
           BABEL_ENV: test-legacy
           BABEL_9_BREAKING: false
           STRIP_BABEL_VERSION_FLAG: true
+          # Type checking is done by the "Lint" jobs
+          TSCHECK_EMIT_ONLY: true
       - name: Build Makefile.js
         run: |
           node ./scripts/pack-script.ts
@@ -137,6 +139,8 @@ jobs:
           BABEL_ENV: test-legacy
           BABEL_9_BREAKING: false
           STRIP_BABEL_VERSION_FLAG: true
+          # Type checking is done by the "Lint" jobs
+          TSCHECK_EMIT_ONLY: true
       - name: Ensure cwd does not contain uncommitted changes
         run: |
           node ./scripts/assert-dir-git-clean.ts build
@@ -328,6 +332,8 @@ jobs:
           BABEL_ENV: test-legacy
           BABEL_9_BREAKING: true
           STRIP_BABEL_VERSION_FLAG: true
+          # Type checking is done by the "Lint" jobs
+          TSCHECK_EMIT_ONLY: true
       - uses: actions/upload-artifact@v7
         with:
           name: babel9-artifact
@@ -722,8 +728,8 @@ jobs:
           node-version: 26
           cache: "yarn"
       - name: Build
-        # Linting is done by the "Lint" job
-        run: make prepublish-no-lint
+        # Linting is done by the "Lint" job, and the tests by "Prepublish on Windows"
+        run: make prepublish-no-test
       - name: Publint
         run: node ./scripts/publint.ts
 
