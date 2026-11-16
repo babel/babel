@@ -1,0 +1,65 @@
+name: Test262 cache
+
+# Caches are scoped to the branch that saves them: a run can only restore
+# caches from its own ref and from the default branch. Merge queue runs of 7.x
+# use `refs/heads/gh-readonly-queue/7.x/...` refs, so they never see the
+# test262 result caches saved by 7.x push runs. This workflow runs on the
+# default branch after CI completes on 7.x, and re-saves the caches uploaded by
+# that run in the default branch scope.
+#
+# `workflow_run` only gets read access to the default branch caches unless the
+# job declares `cache-mode: write`. The artifacts saved here come from push runs
+# of 7.x, i.e. from code that has been merged into babel/babel, so they are as
+# trusted as the caches saved by push runs of main.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [7.x]
+
+permissions:
+  contents: read
+
+jobs:
+  save-7x-cache:
+    name: Save 7.x test262 cache (${{ matrix.chunk }})
+    runs-on: ubuntu-slim
+    if: |
+      github.repository == 'babel/babel' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == '7.x' &&
+      github.event.workflow_run.conclusion == 'success'
+    cache-mode: write
+    permissions:
+      actions: read # to download artifacts from the CI run
+    strategy:
+      matrix:
+        # Must match the test262 chunks of the CI workflow on 7.x.
+        chunk: [0, 1]
+    steps:
+      - name: Download test262 result cache
+        uses: actions/download-artifact@v8
+        with:
+          name: test262-cache-${{ matrix.chunk }}
+          # Must match the path used by the CI job, as it is part of the
+          # cache version.
+          path: babel-test262-runner
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Read cache key
+        id: key
+        env:
+          CHUNK: ${{ matrix.chunk }}
+        run: |
+          key=$(cat babel-test262-runner/cache-key.txt)
+          if [[ ! "$key" =~ ^test262-7\.x-${CHUNK}-[0-9a-f]{64}-[0-9a-f]{40}$ ]]; then
+            echo "::error::Unexpected cache key: $key"
+            exit 1
+          fi
+          echo "key=$key" >> "$GITHUB_OUTPUT"
+      - name: Save test262 result cache
+        uses: actions/cache/save@v6
+        with:
+          path: babel-test262-runner/cache.lmdb*
+          key: ${{ steps.key.outputs.key }}
