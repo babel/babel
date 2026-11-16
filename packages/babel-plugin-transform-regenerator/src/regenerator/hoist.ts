@@ -25,6 +25,15 @@ export function hoist(
         `\`${vdec.kind}\` declarations are not supported by the regenerator transform. ` +
           "Please add @babel/plugin-transform-explicit-resource-management to your Babel config.",
       );
+    } else if (
+      vdec.kind !== "var" &&
+      vdec.kind !== "let" &&
+      vdec.kind !== "const"
+    ) {
+      /* node:coverage ignore next */
+      throw path.buildCodeFrameError(
+        `\`${vdec.kind}\` declarations are not supported by the regenerator transform. `,
+      );
     }
     // TODO assert.equal(vdec.kind, "var");
     const exprs: t.Expression[] = [];
