@@ -55,11 +55,12 @@ export default declare(api => {
       const { id } = left.declarations[0];
       const tmpId = path.scope.generateUidIdentifierBasedOnNode(id);
       left.declarations[0].id = tmpId;
+      const { kind } = left;
       left.kind = "const";
 
       path.ensureBlock();
       unshiftForXStatementBody(path, [
-        t.variableDeclaration("using", [
+        t.variableDeclaration(kind, [
           t.variableDeclarator(id, t.cloneNode(tmpId)),
         ]),
       ]);
