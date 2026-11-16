@@ -211,12 +211,11 @@ export default declare((api, options: Options) => {
               // initial object literal, since it must override the properties
               // preceding it. When object rest/spread is enabled, it has
               // already been compiled on enter.
-              throw path
-                .get("properties")
-                [i].buildCodeFrameError(
-                  "Object spread elements after a computed key are not supported by this transform. " +
-                    "Please add @babel/plugin-transform-object-rest-spread to your Babel config.",
-                );
+              const propPath = path.get("properties")[i];
+              throw propPath.buildCodeFrameError(
+                "Object spread elements after a computed key are not supported by this transform. " +
+                  "Please add @babel/plugin-transform-object-rest-spread to your Babel config.",
+              );
             }
             computedProps.push(prop);
           }
