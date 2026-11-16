@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-computed-properties", "transform-object-rest-spread"]
+}
