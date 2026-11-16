@@ -90,7 +90,9 @@ export type VisitorProp<S, K extends string> = K extends OptionKeys
   ? TraverseOptions[K]
   : K extends VisitNodeObjectKeys
     ? VisitNodeObject<S, t.Node>[K]
-    : VisitNode<S, ToNode<K>>;
+    : ToNode<K> extends infer N extends t.Node
+      ? VisitNode<S, N>
+      : never;
 
 export type TraverseOptions = {
   scope?: Scope;

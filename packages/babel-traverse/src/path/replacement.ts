@@ -84,7 +84,7 @@ export function replaceWithMultiple<Nodes extends NodeOrNodeList<t.Node>>(
 export function replaceWithSourceString(
   this: NodePath<t.Node | null>,
   replacement: string,
-) {
+): [NodePath<t.Expression>] {
   resync.call(this);
   let ast: t.File;
 
@@ -244,7 +244,10 @@ export function _replaceWith(
 export function replaceExpressionWithStatements(
   this: NodePath<t.Node | null>,
   nodes: t.Statement[],
-) {
+):
+  | NodePath<null>
+  | NodePath<t.Expression | t.TSType>[]
+  | NodePath<t.Statement>[] {
   resync.call(this);
 
   const declars: t.Identifier[] = [];
@@ -408,7 +411,7 @@ function gatherSequenceExpressions(
 export function replaceInline(
   this: NodePath<t.Node | null>,
   nodes: t.Node | t.Node[],
-) {
+): NodePath[] {
   resync.call(this);
 
   if (Array.isArray(nodes)) {
