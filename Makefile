@@ -40,10 +40,6 @@ bundle-babel-parser-dts:
 build-flow-typings:
 	$(MAKEJS) build-flow-typings
 
-# For TypeScript older than 3.7
-build-typescript-legacy-typings:
-	$(MAKEJS) build-typescript-legacy-typings
-
 build-standalone:
 	$(MAKEJS) build-standalone
 
