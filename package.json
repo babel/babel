@@ -110,6 +110,7 @@
     "@codspeed/core@npm:^6.1.1": "patch:@codspeed/core@npm%3A6.1.1#~/.yarn/patches/@codspeed-core-npm-6.1.1-b785452183.patch"
   },
   "engines": {
+    "typescript": ">=5.0",
     "yarn": ">=1.4.0"
   },
   "lint-staged": {
