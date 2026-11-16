@@ -32,7 +32,7 @@ export function hoist(
     ) {
       /* node:coverage ignore next */
       throw path.buildCodeFrameError(
-        `\`${vdec.kind}\` declarations are not supported by the regenerator transform. `,
+        `\`${vdec.kind}\` declarations are not supported by the regenerator transform.`,
       );
     }
     // TODO assert.equal(vdec.kind, "var");
