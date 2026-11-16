@@ -1,20 +1,28 @@
 name: REPL
 
-on: [pull_request_target]
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [requested]
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref }}
+  group: ${{ github.workflow }}-${{ github.event.workflow_run.head_repository.full_name }}-${{ github.event.workflow_run.head_branch }}
   cancel-in-progress: true
 
 jobs:
   repl-comment:
     name: Create or update REPL comment
     runs-on: ubuntu-latest
+    if: |
+      github.repository == 'babel/babel' &&
+      github.event.workflow_run.event == 'pull_request'
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.BOT_TOKEN }}
