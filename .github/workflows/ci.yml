@@ -539,12 +539,23 @@ jobs:
           THREADS: 4
           CHUNKS_FILE: ../test262-chunks.json
           CHUNK: ${{ matrix.chunk }}
-      - name: Save test262 result cache
+      # Caches saved here would only be visible to 7.x push runs, not to merge
+      # queue runs. Upload it instead, and let the "Test262 cache" workflow on
+      # main save it in the default branch scope, which every run can read.
+      - name: Prepare test262 result cache artifact
         if: github.ref == 'refs/heads/7.x'
-        uses: actions/cache/save@v6
+        run: echo "$KEY" > babel-test262-runner/cache-key.txt
+        env:
+          KEY: test262-7.x-${{ matrix.chunk }}-${{ hashFiles('babel-test262-runner/package-lock.json', 'babel-test262-runner/lib/run-tests/**') }}-${{ github.sha }}
+      - name: Upload test262 result cache
+        if: github.ref == 'refs/heads/7.x'
+        uses: actions/upload-artifact@v7
         with:
-          path: babel-test262-runner/cache.lmdb*
-          key: test262-7.x-${{ matrix.chunk }}-${{ hashFiles('babel-test262-runner/package-lock.json', 'babel-test262-runner/lib/run-tests/**') }}-${{ github.sha }}
+          name: test262-cache-${{ matrix.chunk }}
+          path: |
+            babel-test262-runner/cache.lmdb*
+            babel-test262-runner/cache-key.txt
+          retention-days: 7
       - name: Create artifact with report results
         uses: actions/upload-artifact@v7
         with:
