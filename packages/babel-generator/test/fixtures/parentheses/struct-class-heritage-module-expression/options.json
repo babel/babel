@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "moduleBlocks",
-    "structs"
-  ]
-}
