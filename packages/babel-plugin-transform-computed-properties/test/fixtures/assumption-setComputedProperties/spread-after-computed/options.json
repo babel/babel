@@ -1,0 +1,3 @@
+{
+  "throws": "Object spread elements after a computed key are not supported by this transform. Please add @babel/plugin-transform-object-rest-spread to your Babel config."
+}
