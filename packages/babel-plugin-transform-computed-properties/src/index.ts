@@ -11,7 +11,7 @@ type PropertyInfo = {
   scope: Scope;
   objId: t.Identifier;
   body: t.Statement[];
-  computedProps: (t.ObjectMember | t.SpreadElement)[];
+  computedProps: t.ObjectMember[];
   initPropExpression: t.ObjectExpression;
   state: PluginPass;
 };
@@ -74,19 +74,6 @@ export default declare((api, options: Options) => {
     }
   }
 
-  // A spread element after a computed property can't stay in the initial
-  // object literal, because it must be applied after the properties preceding it.
-  function buildSpread(
-    state: PluginPass,
-    obj: t.Expression,
-    prop: t.SpreadElement,
-  ) {
-    return t.callExpression(state.addHelper("objectSpread2"), [
-      obj,
-      prop.argument,
-    ]);
-  }
-
   function pushAssign(
     objId: t.Identifier,
     prop: t.ObjectMember,
@@ -111,11 +98,7 @@ export default declare((api, options: Options) => {
     const { computedProps, state, initPropExpression, objId, body } = info;
 
     for (const prop of computedProps) {
-      if (t.isSpreadElement(prop)) {
-        body.push(
-          t.expressionStatement(buildSpread(state, t.cloneNode(objId), prop)),
-        );
-      } else if (
+      if (
         t.isObjectMethod(prop) &&
         (prop.kind === "get" || prop.kind === "set")
       ) {
@@ -140,8 +123,8 @@ export default declare((api, options: Options) => {
     // To prevent too deep AST structures in case of large objects
     const CHUNK_LENGTH_CAP = 10;
 
-    let currentChunk: PropertyInfo["computedProps"] | null = null;
-    const computedPropsChunks: PropertyInfo["computedProps"][] = [];
+    let currentChunk: t.ObjectMember[] | null = null;
+    const computedPropsChunks: t.ObjectMember[][] = [];
     for (const prop of computedProps) {
       if (!currentChunk || currentChunk.length === CHUNK_LENGTH_CAP) {
         currentChunk = [];
@@ -156,9 +139,7 @@ export default declare((api, options: Options) => {
         ? info.initPropExpression
         : t.cloneNode(objId);
       for (const prop of chunk) {
-        if (t.isSpreadElement(prop)) {
-          node = buildSpread(state, node, prop);
-        } else if (
+        if (
           t.isObjectMethod(prop) &&
           (prop.kind === "get" || prop.kind === "set")
         ) {
@@ -185,16 +166,33 @@ export default declare((api, options: Options) => {
       ObjectExpression: {
         exit(path, state) {
           const { node, parent, scope } = path;
-          // put all properties and spread elements up to the first computed
-          // property into the first object expression
-
-          const firstComputed = node.properties.findIndex(
+          const { properties } = node;
+          const firstComputed = properties.findIndex(
             prop => !t.isSpreadElement(prop) && prop.computed,
           );
           if (firstComputed === -1) return;
 
-          const initProps = node.properties.slice(0, firstComputed);
-          const computedProps = node.properties.slice(firstComputed);
+          // put all properties and spread elements up to the first computed
+          // property into the first object expression
+          const initProps = properties.slice(0, firstComputed);
+          const computedProps: t.ObjectMember[] = [];
+
+          for (let i = firstComputed; i < properties.length; i++) {
+            const prop = properties[i];
+            if (t.isSpreadElement(prop)) {
+              // A spread element after a computed key cannot stay in the
+              // initial object literal, since it must override the properties
+              // preceding it. When object rest/spread is enabled, it has
+              // already been compiled on enter.
+              throw path
+                .get("properties")
+                [i].buildCodeFrameError(
+                  "Object spread elements after a computed key are not supported by this transform. " +
+                    "Please add @babel/plugin-transform-object-rest-spread to your Babel config.",
+                );
+            }
+            computedProps.push(prop);
+          }
 
           const objId = scope.generateUidIdentifierBasedOnNode(parent);
           const initPropExpression = t.objectExpression(initProps);
