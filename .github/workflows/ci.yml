@@ -552,7 +552,7 @@ jobs:
         run: |
           cd babel-test262-runner
           npm ci
-          node lib/prepare-chunks 8 > ~/test262-chunks.json
+          node lib/prepare-chunks 2 > ~/test262-chunks.json
         env:
           TEST262_PATH: ../build/test262
       - name: Upload chunks artifact
@@ -566,7 +566,7 @@ jobs:
     name: test262
     strategy:
       matrix:
-        chunk: [0, 1, 2, 3, 4, 5, 6, 7]
+        chunk: [0, 1]
     runs-on: ubuntu-latest
     needs: [build, test262-prepare]
     steps:
@@ -640,23 +640,9 @@ jobs:
         with: { name: test262-result-0 }
       - uses: actions/download-artifact@v8
         with: { name: test262-result-1 }
-      - uses: actions/download-artifact@v8
-        with: { name: test262-result-2 }
-      - uses: actions/download-artifact@v8
-        with: { name: test262-result-3 }
-      - uses: actions/download-artifact@v8
-        with: { name: test262-result-4 }
-      - uses: actions/download-artifact@v8
-        with: { name: test262-result-5 }
-      - uses: actions/download-artifact@v8
-        with: { name: test262-result-6 }
-      - uses: actions/download-artifact@v8
-        with: { name: test262-result-7 }
       - name: Merge chunk results
         run: |
-          cat test262-0.tap test262-1.tap test262-2.tap test262-3.tap \
-              test262-4.tap test262-5.tap test262-6.tap test262-7.tap \
-            | npx tap-merge > test262.tap
+          cat test262-0.tap test262-1.tap | npx tap-merge > test262.tap
       - name: Create artifact with report results
         uses: actions/upload-artifact@v7
         with:
