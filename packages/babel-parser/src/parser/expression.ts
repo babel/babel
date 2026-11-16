@@ -1378,6 +1378,7 @@ export default abstract class ExpressionParser extends LValParser {
         if (tokenIsIdentifier(type)) {
           if (
             this.isContextual(tt._module) &&
+            this.state.start !== this.classHeritageStart &&
             this.lookaheadInLineCharCode() === charCodes.leftCurlyBrace
           ) {
             return this.parseModuleExpression();
@@ -2003,7 +2004,9 @@ export default abstract class ExpressionParser extends LValParser {
 
   parseNewOrNewTarget(this: Parser): N.NewExpression | N.MetaProperty {
     const node = this.startNode<N.NewExpression | N.MetaProperty>();
+    const isClassHeritageStart = this.state.start === this.classHeritageStart;
     this.next();
+    if (isClassHeritageStart) this.classHeritageStart = this.state.start;
     if (this.match(tt.dot)) {
       // https://tc39.es/ecma262/#prod-NewTarget
       const meta = this.createIdentifier(
