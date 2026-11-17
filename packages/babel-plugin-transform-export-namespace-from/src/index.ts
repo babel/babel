@@ -30,7 +30,12 @@ export default declare(api => {
 
         if (index === 1) {
           nodes.push(
-            t.exportNamedDeclaration(null, [specifiers.shift()!], node.source),
+            t.exportNamedDeclaration(
+              null,
+              [specifiers.shift()!],
+              t.cloneNode(node.source!),
+              node.attributes,
+            ),
           );
         }
 
@@ -45,6 +50,7 @@ export default declare(api => {
           t.importDeclaration(
             [t.importNamespaceSpecifier(uid)],
             t.cloneNode(node.source!),
+            node.attributes?.map(attr => t.cloneNode(attr)),
           ),
           t.exportNamedDeclaration(null, [
             t.exportSpecifier(t.cloneNode(uid), exported),
@@ -56,7 +62,7 @@ export default declare(api => {
         }
 
         const [importDeclaration] = path.replaceWithMultiple(nodes);
-        path.scope.registerDeclaration(importDeclaration);
+        scope.registerDeclaration(importDeclaration);
       },
     },
   };
