@@ -28,6 +28,7 @@ export default declare(api => {
             null,
             [t.exportSpecifier(t.identifier("default"), exported)],
             t.cloneNode(source),
+            node.attributes?.map(attr => t.cloneNode(attr)),
           ),
         );
       },
