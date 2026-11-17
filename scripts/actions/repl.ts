@@ -6,21 +6,43 @@ const COMMENT_PREFIX =
 
 /**
  * Updates the REPL comment on a pull request with the latest build link.
- * This function retrieves the CircleCI job ID for the current pull request,
- * constructs the REPL URL, and either updates an existing comment or creates a new one.
+ * It runs on the `workflow_run` event of the CI workflow: it finds the pull
+ * request that the CI run was triggered by, retrieves its CircleCI job ID,
+ * constructs the REPL URL, and either updates an existing comment or creates a
+ * new one.
  */
 export default async function (
   github: ReturnType<typeof getOctokit>,
   context: typeof _context
 ) {
   const { owner, repo } = context.repo;
-  const pull_number = context.issue.number;
+  const run = context.payload.workflow_run;
+  const headOwner: string = run.head_repository.owner.login;
+  const headBranch: string = run.head_branch;
+  const headSha: string = run.head_sha;
+  const isFork = run.head_repository.full_name !== `${owner}/${repo}`;
+
+  // `run.pull_requests` is always empty for PRs from forks, so look the PR up
+  // by its head branch. If the PR has been updated in the meantime, the CI run
+  // for the new commit will trigger this workflow again.
+  const prs = await github.paginate(github.rest.pulls.list, {
+    owner,
+    repo,
+    state: "open",
+    head: `${headOwner}:${headBranch}`,
+  });
+  const pr = prs.find(pr => pr.head.sha === headSha);
+  if (!pr) {
+    console.log(
+      `Skipping: no open PR from ${headOwner}:${headBranch} has head ${headSha}.`
+    );
+    return;
+  }
+  const pull_number = pr.number;
 
   const circleciId = await getCircleciJobId(
-    context.payload.pull_request!.head.repo.fork
-      ? "pull/" + pull_number
-      : process.env.GITHUB_HEAD_REF!,
-    context.payload.pull_request!.head.sha
+    isFork ? "pull/" + pull_number : headBranch,
+    headSha
   );
 
   await createOrUpdateComment(github, {
