@@ -10,6 +10,15 @@ function getName(
   return key.value.toString();
 }
 
+function isProtoSetter(prop: t.ObjectMethod | t.ObjectProperty) {
+  return (
+    t.isObjectProperty(prop) &&
+    !prop.computed &&
+    !prop.shorthand &&
+    getName(prop.key as t.Identifier | t.StringLiteral) === "__proto__"
+  );
+}
+
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
@@ -35,7 +44,16 @@ export default declare(api => {
         const alreadySeenGetters = Object.create(null);
         const alreadySeenSetters = Object.create(null);
 
+        // `__proto__: value` sets the prototype instead of defining a
+        // property, so it must stay non-computed. ES5 engines still count it
+        // as a data property named "__proto__" (`{ get __proto__() {},
+        // __proto__: p }` is a SyntaxError there), so every other property
+        // named "__proto__" is made computed instead, whatever the order.
+        const hasProtoSetter = plainProps.some(isProtoSetter);
+
         for (const prop of plainProps) {
+          if (isProtoSetter(prop)) continue;
+
           const name = getName(
             // prop must be non-computed
             prop.key as
@@ -44,6 +62,13 @@ export default declare(api => {
               | t.NumericLiteral
               | t.BigIntLiteral,
           );
+
+          if (hasProtoSetter && name === "__proto__") {
+            prop.computed = true;
+            prop.key = t.stringLiteral(name);
+            continue;
+          }
+
           let isDuplicate = false;
           // @ts-expect-error prop.kind is not defined in ObjectProperty
           switch (prop.kind) {
