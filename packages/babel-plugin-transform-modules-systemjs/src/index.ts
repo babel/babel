@@ -335,6 +335,10 @@ export default declare<PluginState, Options>((api, options: Options) => {
                   `Top-level \`${kind}\` declarations are not supported by the SystemJS modules transform. ` +
                     "Please add @babel/plugin-transform-explicit-resource-management to your Babel config.",
                 );
+              } else if (kind !== "var" && kind !== "let" && kind !== "const") {
+                throw path.buildCodeFrameError(
+                  `Top-level \`${kind}\` declarations are not supported by the SystemJS modules transform.`,
+                );
               }
               // Convert top-level variable declarations to "var",
               // because they must be hoisted
