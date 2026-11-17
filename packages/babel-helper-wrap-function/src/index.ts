@@ -186,15 +186,11 @@ function plainFunction(
 
   if (isDeclaration) {
     const container = buildDeclarationWrapper(wrapperArgs);
-    // when exported, insertAfter inserts after the export declaration,
-    // and the comments are attached to it
     const statementPath = path.parentPath.isExportDeclaration()
       ? path.parentPath
       : path;
     path.replaceWith(container[0]);
     const [refPath] = path.insertAfter(container[1]);
-    // move the trailing comments to the inserted declaration, so comments belonging
-    // to the next statement stay attached
     inheritTrailingComments(refPath.node, statementPath.node);
     statementPath.node.trailingComments = null;
   } else {
