@@ -7,3 +7,9 @@ namespace NotDirective {
   ("use strict");
   var y = 1;
 }
+
+namespace AfterBareString {
+  "a";
+  ("use strict");
+  var z = 1;
+}
