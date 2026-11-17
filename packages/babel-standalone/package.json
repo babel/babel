@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "@babel/plugin-external-helpers": "workspace:^",
+    "@babel/plugin-proposal-bytes-modules": "workspace:^",
     "@babel/plugin-proposal-decorators": "workspace:^",
     "@babel/plugin-proposal-destructuring-private": "workspace:^",
     "@babel/plugin-proposal-do-expressions": "workspace:^",
@@ -28,6 +29,7 @@
     "@babel/plugin-proposal-import-defer": "workspace:^",
     "@babel/plugin-proposal-optional-chaining-assign": "workspace:^",
     "@babel/plugin-proposal-pipeline-operator": "workspace:^",
+    "@babel/plugin-proposal-text-modules": "workspace:^",
     "@babel/plugin-proposal-throw-expressions": "workspace:^",
     "@babel/plugin-syntax-decorators": "workspace:^",
     "@babel/plugin-syntax-destructuring-private": "workspace:^",

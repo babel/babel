@@ -1513,7 +1513,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@babel/plugin-proposal-bytes-modules@workspace:packages/babel-plugin-proposal-bytes-modules":
+"@babel/plugin-proposal-bytes-modules@workspace:^, @babel/plugin-proposal-bytes-modules@workspace:packages/babel-plugin-proposal-bytes-modules":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-bytes-modules@workspace:packages/babel-plugin-proposal-bytes-modules"
   dependencies:
@@ -1722,7 +1722,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-text-modules@workspace:packages/babel-plugin-proposal-text-modules":
+"@babel/plugin-proposal-text-modules@workspace:^, @babel/plugin-proposal-text-modules@workspace:packages/babel-plugin-proposal-text-modules":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-text-modules@workspace:packages/babel-plugin-proposal-text-modules"
   dependencies:
@@ -3969,6 +3969,7 @@ __metadata:
     "@babel/generator": "workspace:^"
     "@babel/parser": "workspace:^"
     "@babel/plugin-external-helpers": "workspace:^"
+    "@babel/plugin-proposal-bytes-modules": "workspace:^"
     "@babel/plugin-proposal-decorators": "workspace:^"
     "@babel/plugin-proposal-destructuring-private": "workspace:^"
     "@babel/plugin-proposal-do-expressions": "workspace:^"
@@ -3979,6 +3980,7 @@ __metadata:
     "@babel/plugin-proposal-import-defer": "workspace:^"
     "@babel/plugin-proposal-optional-chaining-assign": "workspace:^"
     "@babel/plugin-proposal-pipeline-operator": "workspace:^"
+    "@babel/plugin-proposal-text-modules": "workspace:^"
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/plugin-syntax-destructuring-private": "workspace:^"

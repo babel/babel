@@ -90,6 +90,8 @@
     "transform-unicode-regex",
     "transform-explicit-resource-management",
     "proposal-import-defer",
-    "proposal-filtered-namespaces"
+    "proposal-filtered-namespaces",
+    "proposal-bytes-modules",
+    "proposal-text-modules"
   ]
 }
