@@ -6,6 +6,11 @@ namespace Bare {
   "use strict";
   foo;
 }
+namespace AfterBareString {
+  "a";
+  ("use strict");
+  foo;
+}
 namespace NotFirst {
   foo;
   "not a prologue";
