@@ -1,0 +1,7 @@
+{
+  "name": "any-fixture",
+  "private": true,
+  "engines": {
+    "node": "*"
+  }
+}

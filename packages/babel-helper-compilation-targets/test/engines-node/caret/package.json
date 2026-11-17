@@ -1,0 +1,7 @@
+{
+  "name": "caret-fixture",
+  "private": true,
+  "engines": {
+    "node": "^18.17.0"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "engines-node-fixture",
+  "private": true,
+  "engines": {
+    "node": ">=6"
+  }
+}

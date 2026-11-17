@@ -371,7 +371,7 @@ describe("getTargets", () => {
     it("should return the current node version with option 'current'", () => {
       expect(
         getTargets({
-          node: true,
+          node: "current",
         }),
       ).toEqual({
         node: nodeVersion,
