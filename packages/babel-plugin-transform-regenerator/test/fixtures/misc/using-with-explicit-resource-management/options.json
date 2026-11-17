@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "transform-regenerator",
+    "transform-explicit-resource-management",
+    "transform-block-scoping"
+  ]
+}
