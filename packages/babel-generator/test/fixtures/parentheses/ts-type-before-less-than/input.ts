@@ -1,0 +1,10 @@
+(x as B) < y;
+(x satisfies B) < y;
+(x as B) <= y;
+(x as B) << y;
+(x as typeof B) < y;
+(x as () => B) < y;
+(a + (x as B)) < y;
+(x as B) > y;
+(x as B) >= y;
+(x as B) + y;

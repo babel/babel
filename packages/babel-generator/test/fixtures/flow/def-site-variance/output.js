@@ -43,3 +43,9 @@ class C2 {
 class C3 {
   -p: T = e;
 }
+class C4 {
+  +[p]: T = e;
+}
+class C5 {
+  static -[p]: T;
+}
