@@ -122,6 +122,15 @@
       "./helpers/awaitAsyncGenerator.js"
     ],
     "./helpers/esm/awaitAsyncGenerator": "./helpers/esm/awaitAsyncGenerator.js",
+    "./helpers/callSpread": [
+      {
+        "node": "./helpers/callSpread.js",
+        "import": "./helpers/esm/callSpread.js",
+        "default": "./helpers/callSpread.js"
+      },
+      "./helpers/callSpread.js"
+    ],
+    "./helpers/esm/callSpread": "./helpers/esm/callSpread.js",
     "./helpers/callSuper": [
       {
         "node": "./helpers/callSuper.js",

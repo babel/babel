@@ -1,2 +1,2 @@
 var _obj;
-(_obj = obj)[method].apply(_obj, [foo, bar].concat(babelHelpers.toConsumableArray(args)));
+babelHelpers.callSpread((_obj = obj)[method], _obj, [foo, bar].concat(babelHelpers.toConsumableArray(args)));

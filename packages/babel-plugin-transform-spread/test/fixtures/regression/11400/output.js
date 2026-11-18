@@ -1,2 +1,2 @@
 var _dog;
-(_dog = dog).bark.apply(_dog, babelHelpers.toConsumableArray(args));
+babelHelpers.callSpread((_dog = dog).bark, _dog, babelHelpers.toConsumableArray(args));
