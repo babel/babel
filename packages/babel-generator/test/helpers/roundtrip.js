@@ -26,6 +26,10 @@ const GENERATOR_FAILURES = [
   // `(a.b<c>)\`\`` is printed as `a.b<c>\`\``, which has the same runtime
   // semantics but is parsed as a tagged template with type arguments
   "parentheses/ts-tagged-template-expression/input.ts",
+
+  // `new (f<T>)()` is printed as `new f<T>()`, which has the same runtime
+  // semantics but is parsed as a `new` with type arguments
+  "typescript/instantiation-expression-new-callee-minified/input.js",
 ];
 
 // Parser fixtures whose AST is expected to change shape, relative to
