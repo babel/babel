@@ -191,7 +191,7 @@ function expectedResultOf(root, task, astChanges, reparseErrors = []) {
 }
 
 function hasPlugin(plugins, name) {
-  return plugins?.some(p => (Array.isArray(p) ? p[0] : p) === name);
+  return !!plugins && plugins.some(p => (Array.isArray(p) ? p[0] : p) === name);
 }
 
 /**
@@ -232,9 +232,10 @@ export default function runRoundtripTests(generatorOpts = {}) {
   });
 
   describe("parser fixtures", () => {
-    for (const [name, testSuites] of Object.entries(
-      multipleFixtures(PARSER_FIXTURES),
-    )) {
+    const parserFixtures = multipleFixtures(PARSER_FIXTURES);
+    // `Object.entries` is not available on Node.js 6
+    for (const name of Object.keys(parserFixtures)) {
+      const testSuites = parserFixtures[name];
       describe(`${name}`, () => {
         testSuites.forEach(testSuite => {
           describe(`${testSuite.title}`, () => {
@@ -246,14 +247,19 @@ export default function runRoundtripTests(generatorOpts = {}) {
               // Skip inputs with recoverable errors
               if (JSON.parse(task.expect.code || "{}").errors) return;
 
-              const pipeline = parserOpts.plugins?.find(
-                p => Array.isArray(p) && p[0] === "pipelineOperator",
-              );
+              const pipeline =
+                parserOpts.plugins &&
+                parserOpts.plugins.find(
+                  p => Array.isArray(p) && p[0] === "pipelineOperator",
+                );
 
               roundtrip(
                 task,
                 parserOpts,
-                { ...generatorOpts, topicToken: pipeline?.[1].topicToken },
+                {
+                  ...generatorOpts,
+                  topicToken: pipeline ? pipeline[1].topicToken : undefined,
+                },
                 expectedResultOf(
                   PARSER_FIXTURES,
                   task,
