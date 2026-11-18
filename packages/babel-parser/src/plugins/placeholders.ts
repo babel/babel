@@ -398,7 +398,9 @@ export default (superClass: typeof Parser) =>
       if (!this.isContextual(tt._from) && !this.match(tt.comma)) {
         // import %%STRING%%;
         node.source = this.finishPlaceholder(placeholder, "StringLiteral");
+        this.maybeParseImportAttributes(node);
         this.semicolon();
+        this.sawUnambiguousESM = true;
         return this.finishNode(node, "ImportDeclaration");
       }
 
@@ -419,9 +421,7 @@ export default (superClass: typeof Parser) =>
       }
 
       this.expectContextual(tt._from);
-      node.source = this.parseImportSource();
-      this.semicolon();
-      return this.finishNode(node, "ImportDeclaration");
+      return super.parseImportSourceAndAttributes(node);
     }
 
     parseImportSource(): MaybePlaceholder<"StringLiteral"> {

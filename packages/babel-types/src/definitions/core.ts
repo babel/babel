@@ -2598,6 +2598,10 @@ defineType("ClassPrivateProperty", {
       validate: assertValueType("boolean"),
       optional: true,
     },
+    declare: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
     optional: {
       validate: assertValueType("boolean"),
       optional: true,
