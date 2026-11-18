@@ -26,6 +26,9 @@ const GENERATOR_FAILURES = [
   // `(a.b<c>)\`\`` is printed as `a.b<c>\`\``, which has the same runtime
   // semantics but is parsed as a tagged template with type arguments
   "parentheses/ts-tagged-template-expression/input.ts",
+
+  // The extra ParenthesizedExpression is printed
+  "decorators/decorator-parenthesized-expression-createParenthesizedExpression/input.js",
 ];
 
 // Parser fixtures whose AST is expected to change shape, relative to
@@ -38,6 +41,15 @@ const PARSER_FAILURES = [
   // directive
   "es2019/json-strings/string-line-separator/input.js",
   "es2019/json-strings/string-paragraph-separator/input.js",
+
+  // Babel 7 specific behaviors
+  "experimental/decorators/parenthesized-createParenthesizedExpressions/input.js",
+  "experimental/pipeline-operator-smart-babel-7/smart-proposal-nested-pipelines-with-function-call/input.js",
+  "experimental/pipeline-operator-smart-babel-7/smart-proposal-nested-pipelines-with-tacit-function-call/input.js",
+  "flow/typecasts/works-in-array-pattern/input.js",
+  "typescript/regression/nested-extends-in-arrow-type-param-babel-7/input.ts",
+  "typescript/regression/nested-extends-in-arrow-type-return-babel-7/input.ts",
+  "typescript/type-arguments/call-optional-chain-babel-7/input.ts",
 ];
 
 // Parser fixtures whose generated code is expected to be rejected by the
@@ -65,6 +77,21 @@ const PARSER_REPARSE_ERRORS = [
   // `a ? () => async((b)) : c => d`, `a ? (b ? async(x, x) : c => d) : e`
   "typescript/conditional/arrow-return-type-async-invalid-params/input.ts",
   "typescript/conditional/arrow-return-type-body-invalid-params/input.ts",
+
+  // Babel 7 specific behaviors
+  "experimental/pipeline-operator-smart-babel-7/smart-proposal-arrow-function-parenthesized/input.js",
+  "experimental/pipeline-operator-smart-babel-7/smart-proposal-generator-yield-parenthesized/input.js",
+  "experimental/pipeline-operator-smart-babel-7/smart-proposal-nested-pipelines-with-arrow-function-and-function-call/input.js",
+  "experimental/pipeline-operator-smart-babel-7/smart-proposal-nested-pipelines-with-arrow-function-and-tacit-function-call-with-outer-topic/input.js",
+  "experimental/pipeline-operator-smart-babel-7/smart-proposal-nested-pipelines-with-arrow-function-with-required-topics/input.js",
+  "experimental/record-and-tuple-babel-7/as-jsx-attribute-value-bar/input.js",
+  "experimental/record-and-tuple-babel-7/bar/input.js",
+  "experimental/record-and-tuple-babel-7/bar-yield-without-argument/input.js",
+  "flow/declare-export/export-star-as/input.js",
+  "tokens/record-and-tuple-babel-7/brace-bar/input.js",
+  "tokens/record-and-tuple-babel-7/bracket-bar/input.js",
+  "typescript/cast/parenthesized-type-assertion-and-assign-in-param-initializer/input.ts",
+  "typescript/cast/type-assertion-and-assign/input.ts",
   "typescript/conditional/arrow-return-type-body-invalid-params-error-recovery-false/input.ts",
   "typescript/conditional/arrow-return-type-valid-error-recovery-false/input.ts",
 ];
@@ -87,6 +114,7 @@ const IGNORED_KEYS = new Set([
 const IGNORED_EXTRA_KEYS = new Set([
   "parenthesized",
   "parenStart",
+  "deprecatedAssertSyntax",
   "raw",
   "trailingComma",
   "trailingCommaLoc",
@@ -100,6 +128,14 @@ function normalize(value, ignoredKeys = IGNORED_KEYS) {
   const result = {};
   for (const key of Object.keys(value)) {
     if (ignoredKeys.has(key)) continue;
+    // Babel 7 uses `assertions` for the legacy `assert` keyword
+    if (
+      (key === "assertions" || key === "attributes") &&
+      Array.isArray(value[key]) &&
+      value[key].length === 0
+    ) {
+      continue;
+    }
     const normalized =
       key === "extra"
         ? normalize(value[key], IGNORED_EXTRA_KEYS)
@@ -111,7 +147,7 @@ function normalize(value, ignoredKeys = IGNORED_KEYS) {
     ) {
       continue;
     }
-    result[key] = normalized;
+    result[key === "assertions" ? "attributes" : key] = normalized;
   }
   return result;
 }
@@ -126,7 +162,7 @@ function roundtrip(task, parserOpts, generatorOpts, expectedResult) {
   testFn(task.title, () => {
     const input = task.actual.code;
     const ast = parse(input, parserOpts);
-    const { code } = generate(ast, generatorOpts, input);
+    const { code } = (generate.default || generate)(ast, generatorOpts, input);
 
     let actual;
     try {
@@ -167,7 +203,7 @@ function hasPlugin(plugins, name) {
  */
 export default function runRoundtripTests(generatorOpts = {}) {
   describe("generator fixtures", () => {
-    fixtures(GENERATOR_FIXTURES).forEach(testSuite => {
+    (fixtures.default || fixtures)(GENERATOR_FIXTURES).forEach(testSuite => {
       describe(`${testSuite.title}`, () => {
         testSuite.tests.forEach(task => {
           if (task.options.throws || task.options.expectedReParseError) return;

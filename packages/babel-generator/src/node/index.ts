@@ -1,6 +1,8 @@
 import * as parens from "./parentheses.ts";
 import { VISITOR_KEYS } from "@babel/types";
 import type * as t from "@babel/types";
+// We inline this package
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 
 import { generatorInfosMap } from "../nodes.ts";
