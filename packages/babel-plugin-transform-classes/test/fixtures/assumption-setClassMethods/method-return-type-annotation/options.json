@@ -1,7 +1,15 @@
 {
+  "assumptions": {
+    "setClassMethods": true,
+    "constantSuper": true,
+    "superIsCallableConstructor": true,
+    "noClassCalls": true,
+    "noClassPrototypeAssign": true,
+    "noConstructorPrimitiveReturn": true
+  },
   "plugins": [
     "transform-function-name",
-    ["transform-classes", { "loose": true }],
+    "transform-classes",
     "transform-spread",
     "transform-block-scoping",
     "syntax-flow"

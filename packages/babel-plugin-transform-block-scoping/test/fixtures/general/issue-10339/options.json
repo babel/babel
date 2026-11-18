@@ -1,7 +1,13 @@
 {
+  "assumptions": {
+    "ignoreFunctionLength": true,
+    "objectRestNoSymbols": true,
+    "pureGetters": true,
+    "setSpreadProperties": true
+  },
   "plugins": [
     "transform-block-scoping",
-    ["transform-object-rest-spread", { "loose": true }]
+    "transform-object-rest-spread"
   ],
   "parserOpts": { "allowReturnOutsideFunction": true }
 }

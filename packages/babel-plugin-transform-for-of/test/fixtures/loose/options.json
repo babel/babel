@@ -1,3 +1,0 @@
-{
-  "plugins": [["transform-for-of", { "loose": true }]]
-}

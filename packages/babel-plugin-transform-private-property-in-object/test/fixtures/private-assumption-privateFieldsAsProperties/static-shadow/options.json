@@ -1,0 +1,4 @@
+{
+  "assumptions": {},
+  "plugins": ["transform-class-properties"]
+}

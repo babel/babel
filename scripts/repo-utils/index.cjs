@@ -55,6 +55,58 @@ if (typeof jest !== "undefined") {
     bool(process.env.CITGM) || __dirname.includes("citgm_tmp")
       ? describe.skip
       : describe;
+
+  /**
+   * Checks that the deprecated `loose: true` option of `plugin` enables
+   * exactly `assumptions`: the `loose` output must equal the output with
+   * those assumptions, and `code` must exercise each of them, so that dropping
+   * any one changes the output.
+   *
+   * `companions` are plugins that get the same options as `plugin`, for
+   * plugins whose `loose` has to match theirs.
+   */
+  exports.testLooseAssumptions = function (
+    plugin,
+    assumptions,
+    code,
+    { companions = [], sourceType = "module" } = {}
+  ) {
+    const enabled = Object.fromEntries(assumptions.map(name => [name, true]));
+
+    function transform(pluginOptions, assumptions) {
+      // $repo-utils resolves @babel/core to the published one, not the
+      // workspace one, so load it by path.
+      const { transformSync } = require(
+        path.join(exports.repoRoot, "packages/babel-core")
+      );
+      const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+      try {
+        return transformSync(code, {
+          configFile: false,
+          babelrc: false,
+          sourceType,
+          assumptions,
+          plugins: [plugin].concat(companions).map(p => [p, pluginOptions]),
+        }).code;
+      } finally {
+        warn.mockRestore();
+      }
+    }
+
+    describe("loose", () => {
+      it(`is equivalent to ${assumptions.join(", ")}`, () => {
+        expect(transform({ loose: true }, {})).toBe(transform({}, enabled));
+      });
+
+      it.each(assumptions)("input exercises %s", name => {
+        const output = transform(
+          {},
+          Object.assign({}, enabled, { [name]: false })
+        );
+        expect(output).not.toBe(transform({}, enabled));
+      });
+    });
+  };
 }
 
 exports.commonJS = function (metaUrl) {

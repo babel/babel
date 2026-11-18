@@ -2,10 +2,11 @@
   "plugins": [
     "transform-function-name",
     "transform-classes",
-    ["transform-spread", { "loose": true }],
+    "transform-spread",
     "transform-block-scoping"
   ],
   "assumptions": {
-    "superIsCallableConstructor": true
+    "superIsCallableConstructor": true,
+    "iterableIsArray": true
   }
 }

@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    ["transform-for-of", { "loose": true }],
-    ["transform-block-scoping", { "loose": true }]
-  ]
-}

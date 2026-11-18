@@ -1,0 +1,12 @@
+{
+  "assumptions": {
+    "noDocumentAll": true,
+    "pureGetters": true
+  },
+  "plugins": [
+    [
+      "syntax-typescript"
+    ],
+    "transform-optional-chaining"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "assumptions": {
+    "constantReexports": true,
+    "enumerableModuleMeta": true
+  },
+  "sourceType": "module",
+  "plugins": [
+    [
+      "transform-modules-umd",
+      {
+        "moduleIds": true,
+        "moduleId": "my custom module name"
+      }
+    ]
+  ]
+}

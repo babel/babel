@@ -1,4 +1,7 @@
 {
+  "assumptions": {
+    "setClassMethods": true
+  },
   "targets": "chrome 43",
   "plugins": ["transform-classes"]
 }

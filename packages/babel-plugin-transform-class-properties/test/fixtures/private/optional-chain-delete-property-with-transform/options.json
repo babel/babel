@@ -1,6 +1,10 @@
 {
+  "assumptions": {
+    "noDocumentAll": true,
+    "pureGetters": true
+  },
   "plugins": [
-    ["transform-optional-chaining", { "loose": true }],
+    "transform-optional-chaining",
     ["transform-class-properties", { "loose": true }]
   ]
 }

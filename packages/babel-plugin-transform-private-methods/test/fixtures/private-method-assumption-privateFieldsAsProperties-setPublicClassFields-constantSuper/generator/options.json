@@ -1,0 +1,11 @@
+{
+  "assumptions": {
+    "privateFieldsAsProperties": true,
+    "setPublicClassFields": true,
+    "constantSuper": true
+  },
+  "plugins": [
+    "transform-private-methods",
+    "transform-class-properties"
+  ]
+}

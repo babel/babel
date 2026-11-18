@@ -1,6 +1,7 @@
 {
   "assumptions": {
     "noConstructorPrimitiveReturn": true,
-    "noUninitializedThis": true
+    "noUninitializedThis": true,
+    "iterableIsArray": true
   }
 }

@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "transform-flow-strip-types",
-    ["transform-classes", { "loose": true }]
-  ]
-}

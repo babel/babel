@@ -1,0 +1,20 @@
+{
+  "assumptions": {
+    "noDocumentAll": true,
+    "pureGetters": true,
+    "setClassMethods": true,
+    "constantSuper": true,
+    "superIsCallableConstructor": true,
+    "noClassCalls": true,
+    "noClassPrototypeAssign": true,
+    "noConstructorPrimitiveReturn": true,
+    "iterableIsArray": true
+  },
+  "plugins": [
+    "transform-optional-chaining",
+    "transform-function-name",
+    "transform-classes",
+    "transform-spread",
+    "transform-block-scoping"
+  ]
+}
