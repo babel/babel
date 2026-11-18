@@ -94,6 +94,10 @@ describe("visitors", () => {
       expect(visitor.noScope).toBe(true);
     });
 
+    it("should omit `noScope` when merging no visitors", () => {
+      expect(visitors.merge([])).not.toHaveProperty("noScope");
+    });
+
     it("should respect `noScope` partially", () => {
       const visitor = visitors.merge([
         { enter() {}, noScope: true },

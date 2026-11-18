@@ -252,31 +252,25 @@ function validateVisitorMethods(
 }
 
 export function merge<State>(
-  visitors: Visitor<State>[],
-): ExplodedVisitor<State>;
-export function merge<State>(
-  visitors: Visitor<State>[],
-  states?: State[],
+  visitors: (Visitor<State> & {
+    noScope?: boolean;
+  })[],
+  states: State[] = [],
   wrapper?: VisitWrapper<State> | null,
-): ExplodedVisitor<State>;
-export function merge(
-  visitors: any[],
-  states: any[] = [],
-  wrapper?: VisitWrapper | null,
-): ExplodedVisitor {
-  const mergedVisitor: ExplodedVisitor = { _verified: true, _exploded: true };
-
-  let noScope;
+) {
+  const mergedVisitor: ExplodedVisitor<State> = {
+    _verified: true,
+    _exploded: true,
+  };
+  let noScope = visitors.length > 0;
 
   for (let i = 0; i < visitors.length; i++) {
-    const visitor = explode$1(visitors[i]);
+    const visitor = explode$1<State>(visitors[i]);
     const state = states[i];
 
-    noScope =
-      // @ts-expect-error no type for `noScope`
-      !!(noScope == null ? visitor.noScope : noScope && visitor.noScope);
+    noScope &&= !!visitor.noScope;
 
-    let topVisitor: ExplVisitNode<unknown, Node> = visitor;
+    let topVisitor: ExplVisitNode<State, Node> = visitor;
     if (state || wrapper) {
       topVisitor = wrapWithStateOrWrapper(topVisitor, state, wrapper);
     }
@@ -290,7 +284,7 @@ export function merge(
       // if we have state or wrapper then overload the callbacks to take it
       if (state || wrapper) {
         typeVisitor = wrapWithStateOrWrapper(
-          typeVisitor as ExplVisitNode<unknown, Node>,
+          typeVisitor as ExplVisitNode<State, Node>,
           state,
           wrapper,
         );
@@ -302,7 +296,6 @@ export function merge(
   }
 
   if (noScope) {
-    // @ts-expect-error no type for `noScope`
     mergedVisitor.noScope = true;
   }
 
