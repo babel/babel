@@ -15,3 +15,5 @@ declare class I { +[k:K]: V }
 declare class I { -[k:K]: V }
 class C2 { +p: T = e }
 class C3 { -p: T = e }
+class C4 { +[p]: T = e }
+class C5 { static -[p]: T }

@@ -1,0 +1,150 @@
+{
+  "type": "File",
+  "start":0,"end":145,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":55,"index":145}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":145,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":55,"index":145}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start":0,"end":38,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":38,"index":38}},
+        "specifiers": [],
+        "source": {
+          "type": "Placeholder",
+          "start":7,"end":15,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":15,"index":15}},
+          "name": {
+            "type": "Identifier",
+            "start":9,"end":13,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":13,"index":13},"identifierName":"FILE"},
+            "name": "FILE"
+          },
+          "expectedNode": "StringLiteral"
+        },
+        "attributes": [
+          {
+            "type": "ImportAttribute",
+            "start":23,"end":35,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":35,"index":35}},
+            "key": {
+              "type": "Identifier",
+              "start":23,"end":27,"loc":{"start":{"line":1,"column":23,"index":23},"end":{"line":1,"column":27,"index":27},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":29,"end":35,"loc":{"start":{"line":1,"column":29,"index":29},"end":{"line":1,"column":35,"index":35}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          }
+        ]
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":39,"end":89,"loc":{"start":{"line":2,"column":0,"index":39},"end":{"line":2,"column":50,"index":89}},
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":46,"end":57,"loc":{"start":{"line":2,"column":7,"index":46},"end":{"line":2,"column":18,"index":57}},
+            "local": {
+              "type": "Placeholder",
+              "start":46,"end":57,"loc":{"start":{"line":2,"column":7,"index":46},"end":{"line":2,"column":18,"index":57}},
+              "name": {
+                "type": "Identifier",
+                "start":48,"end":55,"loc":{"start":{"line":2,"column":9,"index":48},"end":{"line":2,"column":16,"index":55},"identifierName":"DEFAULT"},
+                "name": "DEFAULT"
+              },
+              "expectedNode": "Identifier"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start":63,"end":66,"loc":{"start":{"line":2,"column":24,"index":63},"end":{"line":2,"column":27,"index":66}},
+          "extra": {
+            "rawValue": "x",
+            "raw": "\"x\""
+          },
+          "value": "x"
+        },
+        "attributes": [
+          {
+            "type": "ImportAttribute",
+            "start":74,"end":86,"loc":{"start":{"line":2,"column":35,"index":74},"end":{"line":2,"column":47,"index":86}},
+            "key": {
+              "type": "Identifier",
+              "start":74,"end":78,"loc":{"start":{"line":2,"column":35,"index":74},"end":{"line":2,"column":39,"index":78},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":80,"end":86,"loc":{"start":{"line":2,"column":41,"index":80},"end":{"line":2,"column":47,"index":86}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          }
+        ]
+      },
+      {
+        "type": "ImportDeclaration",
+        "start":90,"end":145,"loc":{"start":{"line":3,"column":0,"index":90},"end":{"line":3,"column":55,"index":145}},
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start":97,"end":108,"loc":{"start":{"line":3,"column":7,"index":97},"end":{"line":3,"column":18,"index":108}},
+            "local": {
+              "type": "Placeholder",
+              "start":97,"end":108,"loc":{"start":{"line":3,"column":7,"index":97},"end":{"line":3,"column":18,"index":108}},
+              "name": {
+                "type": "Identifier",
+                "start":99,"end":106,"loc":{"start":{"line":3,"column":9,"index":99},"end":{"line":3,"column":16,"index":106},"identifierName":"DEFAULT"},
+                "name": "DEFAULT"
+              },
+              "expectedNode": "Identifier"
+            }
+          }
+        ],
+        "source": {
+          "type": "Placeholder",
+          "start":114,"end":122,"loc":{"start":{"line":3,"column":24,"index":114},"end":{"line":3,"column":32,"index":122}},
+          "name": {
+            "type": "Identifier",
+            "start":116,"end":120,"loc":{"start":{"line":3,"column":26,"index":116},"end":{"line":3,"column":30,"index":120},"identifierName":"FILE"},
+            "name": "FILE"
+          },
+          "expectedNode": "StringLiteral"
+        },
+        "attributes": [
+          {
+            "type": "ImportAttribute",
+            "start":130,"end":142,"loc":{"start":{"line":3,"column":40,"index":130},"end":{"line":3,"column":52,"index":142}},
+            "key": {
+              "type": "Identifier",
+              "start":130,"end":134,"loc":{"start":{"line":3,"column":40,"index":130},"end":{"line":3,"column":44,"index":134},"identifierName":"type"},
+              "name": "type"
+            },
+            "value": {
+              "type": "StringLiteral",
+              "start":136,"end":142,"loc":{"start":{"line":3,"column":46,"index":136},"end":{"line":3,"column":52,"index":142}},
+              "extra": {
+                "rawValue": "json",
+                "raw": "\"json\""
+              },
+              "value": "json"
+            }
+          }
+        ]
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
