@@ -14,3 +14,9 @@ export const itDummy: jest.It;
 export function describeGte(version: string): jest.Describe;
 export function describeSatisfies(version: string): jest.Describe;
 export function describeNoCITGM(version: string): jest.Describe;
+export function testLooseAssumptions(
+  plugin: object,
+  assumptions: string[],
+  code: string,
+  options?: { companions?: object[]; sourceType?: "module" | "script" }
+): void;
