@@ -116,23 +116,54 @@ function printsParens(child: t.Node, parent: t.Node): boolean {
   );
 }
 
-// Whether a `<` printed right after `node` would be misparsed: after a JSX
-// element it starts another JSX element (`(<a />) < b`), and after a type
-// any operator starting with `<` starts type arguments (`(a as B) <= c`).
-function endsBeforeLessThanAmbiguously(
+// Whether `operator` printed right after an expression ending with type
+// arguments would be misparsed: `f<T> > x` and `f<T> >> x` are not valid
+// instantiation expressions, `+`, `-` and `%` can start an expression so
+// `f<T> + x` is parsed as `(f < T) > +x`, and with JSX any operator starting
+// with `<` after `>` starts a JSX element.
+function isAmbiguousAfterTypeArguments(operator: string): boolean {
+  switch (operator) {
+    case "<":
+    case "<=":
+    case "<<":
+    case ">":
+    case ">>":
+    case ">>>":
+    case "+":
+    case "-":
+    case "%":
+      return true;
+  }
+  return false;
+}
+
+// Whether `operator` printed right after `node` would be misparsed: after a JSX
+// element `<` starts another JSX element (`(<a />) < b`), after a type any
+// operator starting with `<` starts type arguments (`(a as B) <= c`), and after
+// an instantiation expression see isAmbiguousAfterTypeArguments.
+function endsBeforeOperatorAmbiguously(
   node: t.Node,
   operator: string,
 ): boolean {
+  // All the ambiguous operators are ambiguous after type arguments
+  if (!isAmbiguousAfterTypeArguments(operator)) return false;
+  let parent: t.Node | null = null;
   let current: t.Node = node;
   while (true) {
-    let next: t.Node | null | undefined;
+    let next: t.Node | undefined;
+    let result = false;
     switch (current.type) {
       case "JSXElement":
       case "JSXFragment":
-        return operator === "<";
+        result = operator === "<";
+        break;
       case "TSAsExpression":
       case "TSSatisfiesExpression":
-        return true;
+        result = operator.charCodeAt(0) === charCodes.lessThan;
+        break;
+      case "TSInstantiationExpression":
+        result = true;
+        break;
       case "BinaryExpression":
       case "LogicalExpression":
         next = current.right;
@@ -141,9 +172,16 @@ function endsBeforeLessThanAmbiguously(
       case "AwaitExpression":
         next = current.argument;
         break;
+      case "TSTypeAssertion":
+        next = current.expression;
+        break;
+      default:
+        return false;
     }
     // A parenthesized operand ends with `)`
-    if (next == null || printsParens(next, current)) return false;
+    if (parent !== null && printsParens(current, parent)) return false;
+    if (next === undefined) return result;
+    parent = current;
     current = next;
   }
 }
@@ -155,11 +193,8 @@ export function parentNeedsParens(
 ): boolean {
   switch (parentId) {
     case __node("BinaryExpression"):
-      if (
-        parent.left === node &&
-        parent.operator.charCodeAt(0) === charCodes.lessThan
-      ) {
-        return endsBeforeLessThanAmbiguously(node, parent.operator);
+      if (parent.left === node) {
+        return endsBeforeOperatorAmbiguously(node, parent.operator);
       }
       break;
     case __node("NewExpression"):
