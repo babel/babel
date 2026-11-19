@@ -99,7 +99,7 @@ function isEvaluatedAfterLoopHead(refPath: NodePath, bindingPath: NodePath) {
     if (loop.test) afterHead.push(loop.test);
     if (loop.update) afterHead.push(loop.update);
   }
-  return !!refPath.findParent(p => afterHead.includes(p.node));
+  return !!refPath.find(p => afterHead.includes(p.node));
 }
 
 function getTDZStatus(refPath: NodePath, bindingPath: NodePath) {
