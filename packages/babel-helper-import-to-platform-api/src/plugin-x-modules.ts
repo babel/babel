@@ -59,6 +59,7 @@ export function createImportTypeAsDefaultPlugin({
         const helper = getHelper(this.file);
 
         const data = [];
+        const namespaces = [];
         for (const decl of path.get("body")) {
           if (!decl.isImportDeclaration()) continue;
           const attributes = decl.node.attributes ?? [];
@@ -77,8 +78,8 @@ export function createImportTypeAsDefaultPlugin({
             );
           }
 
-          let id: t.Identifier;
-          let needsNS = false;
+          let defaultId: t.Identifier | undefined;
+          let namespaceId: t.Identifier | undefined;
           for (const specifier of decl.get("specifiers")) {
             if (specifier.isImportSpecifier()) {
               throw specifier.buildCodeFrameError(
@@ -94,14 +95,25 @@ export function createImportTypeAsDefaultPlugin({
               );
             }
 
-            id = specifier.node.local;
-            needsNS = specifier.isImportNamespaceSpecifier();
+            if (specifier.isImportNamespaceSpecifier()) {
+              namespaceId = specifier.node.local;
+            } else {
+              defaultId = specifier.node.local;
+            }
           }
-          id ??= path.scope.generateUidIdentifier("_");
+          const id =
+            defaultId ?? namespaceId ?? path.scope.generateUidIdentifier("_");
 
           let fetch = helper.buildFetch(decl.node.source, this.file);
 
-          if (needsNS) {
+          if (defaultId && namespaceId) {
+            // import value, * as ns from "..."
+            namespaces.push(
+              template.statement.ast`
+                const ${namespaceId} = { default: ${t.cloneNode(defaultId)} };
+              `,
+            );
+          } else if (namespaceId) {
             if (helper.needsAwait) {
               fetch = template.expression.ast`
                 ${fetch}.then(j => ({ default: j }))
@@ -116,7 +128,9 @@ export function createImportTypeAsDefaultPlugin({
         }
         if (data.length === 0) return;
 
-        injectParallelStaticImports(path, data, helper.needsAwait);
+        injectParallelStaticImports(path, data, helper.needsAwait)!.insertAfter(
+          namespaces,
+        );
       },
     },
   };
