@@ -653,7 +653,18 @@ jobs:
     if: github.event_name != 'merge_group'
     steps:
       - *checkout
-      - *setup-node
+      - name: Install Yarn
+        run: |
+          npm install --global --prefix "$RUNNER_TEMP/yarn" yarn@1.22.22
+          echo "$RUNNER_TEMP/yarn/bin" >> "$GITHUB_PATH"
+      - name: Locate Yarn cache
+        id: yarn-cache
+        run: echo "path=$(yarn config get cacheFolder)" >> "$GITHUB_OUTPUT"
+      - name: Cache Yarn packages
+        uses: actions/cache@v6
+        with:
+          path: ${{ steps.yarn-cache.outputs.path }}
+          key: yarn-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('yarn.lock') }}
       - name: Install
         run: yarn install
       - name: Build
