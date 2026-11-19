@@ -54,6 +54,24 @@ describe("stage-1 preset", () => {
     expect(output).toContain(`"arrayBuffer"`);
   });
 
+  it.each([
+    ["stage-3", "amd"],
+    ["stage-3", "systemjs"],
+    ["stage-2", "amd"],
+    ["stage-2", "systemjs"],
+  ])(
+    "%s should compile modules without text or bytes imports to %s",
+    (preset, modules) => {
+      expect(() =>
+        Babel.transform(`export const x = 1;`, {
+          sourceType: "module",
+          presets: [[preset, { decoratorsVersion: "2023-11" }]],
+          plugins: [`transform-modules-${modules}`],
+        }),
+      ).not.toThrow();
+    },
+  );
+
   it("should support private destructuring", () => {
     const output = Babel.transform("class C { #x; m({ #x: x}) {} }", {
       plugins: [["external-helpers", { helperVersion: "7.100.0" }]],
