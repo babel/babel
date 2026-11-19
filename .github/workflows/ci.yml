@@ -745,12 +745,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
+      - name: Install Yarn
+        run: |
+          npm install --global --prefix "$RUNNER_TEMP/yarn" yarn@1.22.22
+          echo "$RUNNER_TEMP/yarn/bin" >> "$GITHUB_PATH"
+      - name: Locate Yarn cache
+        id: yarn-cache
+        run: echo "path=$(yarn config get cacheFolder)" >> "$GITHUB_OUTPUT"
+      - name: Cache Yarn packages
+        uses: actions/cache@v6
         with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+          path: ${{ steps.yarn-cache.outputs.path }}
+          key: yarn-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('yarn.lock') }}
       - name: Install
         run: yarn install
       - name: Build
