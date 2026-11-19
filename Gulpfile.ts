@@ -324,8 +324,11 @@ function resolveChain(baseUrl: string, ...packages: string[]) {
 // If this build is part of a pull request, include the pull request number in
 // the version number.
 let versionSuffix = "";
-if (process.env.CIRCLE_PR_NUMBER) {
-  versionSuffix = "+pr." + process.env.CIRCLE_PR_NUMBER;
+const prNumber =
+  process.env.CIRCLE_PR_NUMBER ||
+  process.env.CIRCLE_PULL_REQUEST?.match(/\/pull\/(\d+)\/?$/)?.[1];
+if (prNumber && /^\d+$/.test(prNumber)) {
+  versionSuffix = `+pr.${prNumber}`;
 }
 
 const babelVersion =
