@@ -53,21 +53,87 @@ export default declare(api => {
     SwitchStatement(path) {
       const { node } = path;
 
+      const fnPaths = new Set<NodePath>(
+        path
+          .get("cases")
+          .flatMap(c => c.get("consequent"))
+          .filter(p => p.isFunctionDeclaration()),
+      );
+
       const fns: t.FunctionDeclaration[] = [];
+      const hoistedIds: t.Identifier[] = [];
+      const inHoistedFn = (p: NodePath) => !!p.findParent(q => fnPaths.has(q));
+      const usedNames = new Set<string>();
+
+      for (const [name, binding] of Object.entries(path.scope.bindings)) {
+        if (binding.kind !== "let" && binding.kind !== "const") continue;
+        if (
+          binding.referencePaths.some(inHoistedFn) ||
+          binding.constantViolations.some(inHoistedFn)
+        ) {
+          usedNames.add(name);
+        }
+      }
+
       for (const caseNode of node.cases) {
         const { consequent } = caseNode;
         for (let i = consequent.length - 1; i >= 0; i--) {
-          if (t.isFunctionDeclaration(consequent[i])) {
-            fns.push(consequent[i] as t.FunctionDeclaration);
+          const stmt = consequent[i];
+          if (t.isFunctionDeclaration(stmt)) {
+            fns.push(stmt);
             consequent.splice(i, 1);
+          } else if (
+            t.isVariableDeclaration(stmt) &&
+            stmt.kind !== "var" &&
+            Object.keys(t.getBindingIdentifiers(stmt)).some(n =>
+              usedNames.has(n),
+            )
+          ) {
+            const replacement = stmt.declarations.flatMap(
+              (d): t.Statement[] => {
+                const names = Object.keys(t.getBindingIdentifiers(d.id));
+                if (!names.some(n => usedNames.has(n))) {
+                  return [t.variableDeclaration(stmt.kind, [d])];
+                }
+                for (const n of names) hoistedIds.push(t.identifier(n));
+                return d.init
+                  ? [
+                      t.expressionStatement(
+                        t.assignmentExpression("=", d.id as t.LVal, d.init),
+                      ),
+                    ]
+                  : [];
+              },
+            );
+            consequent.splice(i, 1, ...replacement);
+          } else if (
+            t.isClassDeclaration(stmt) &&
+            usedNames.has(stmt.id!.name)
+          ) {
+            hoistedIds.push(t.identifier(stmt.id!.name));
+            consequent[i] = t.expressionStatement(
+              t.assignmentExpression(
+                "=",
+                t.identifier(stmt.id!.name),
+                t.toExpression(stmt),
+              ),
+            );
           }
         }
       }
 
       if (!fns.length) return;
 
-      path.replaceWith(
+      const [newPath] = path.replaceWith(
         t.blockStatement([
+          ...(hoistedIds.length
+            ? [
+                t.variableDeclaration(
+                  "let",
+                  hoistedIds.map(id => t.variableDeclarator(id)),
+                ),
+              ]
+            : []),
           t.variableDeclaration(
             "let",
             fns.map(fn =>
@@ -77,6 +143,8 @@ export default declare(api => {
           node,
         ]),
       );
+
+      newPath.scope.crawl();
     },
   };
 
