@@ -16,9 +16,20 @@ const collectLoopBodyBindingsVisitor: Visitor<LoopBodyBindingsState> = {
     const init = path.get("init");
     if (!init.isVariableDeclaration() || init.node.kind === "var") return;
 
+    // explicit-resource-management lowers `for (using x = a; ...) body` to
+    // `{ using x = a; for (; ...) body }` when it reaches the inner loop,
+    // after this enclosing loop has been analyzed. `x` then becomes a
+    // binding of the enclosing loop body, so collect it now.
+    const isUsing =
+      init.node.kind === "using" || init.node.kind === "await using";
+
     for (const name of Object.keys(init.getBindingIdentifiers())) {
       const binding = path.scope.getOwnBinding(name);
       if (!binding) continue;
+      if (isUsing) {
+        state.blockScoped.push(binding);
+        continue;
+      }
       const capturedInHeadClosure = [
         ...binding.referencePaths,
         ...binding.constantViolations,
