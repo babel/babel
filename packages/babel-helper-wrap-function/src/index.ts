@@ -5,6 +5,7 @@ import {
   callExpression,
   functionExpression,
   isAssignmentPattern,
+  inheritTrailingComments,
   isFunctionDeclaration,
   isRestElement,
   returnStatement,
@@ -185,8 +186,13 @@ function plainFunction(
 
   if (isDeclaration) {
     const container = buildDeclarationWrapper(wrapperArgs);
+    const statementPath = path.parentPath.isExportDeclaration()
+      ? path.parentPath
+      : path;
     path.replaceWith(container[0]);
-    path.insertAfter(container[1]);
+    const [refPath] = path.insertAfter(container[1]);
+    inheritTrailingComments(refPath.node, statementPath.node);
+    statementPath.node.trailingComments = null;
   } else {
     let container;
 
