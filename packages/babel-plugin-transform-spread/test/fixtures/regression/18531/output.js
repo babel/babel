@@ -3,7 +3,7 @@ var a = [1, 2];
 var b = [1, 2];
 [].concat(babelHelpers.toConsumableArray(b), [b.pop()]);
 var c = [1, 2];
-fn.apply(void 0, babelHelpers.toConsumableArray(c).concat([c.push(3)]));
+babelHelpers.callSpread(fn, void 0, babelHelpers.toConsumableArray(c).concat([c.push(3)]));
 var d = [1, 2];
 babelHelpers.construct(Foo, babelHelpers.toConsumableArray(d).concat([d.push(3)]));
 var e = [1, 2];
