@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-modules-systemjs"],
+  "parserOpts": { "plugins": ["exportDefaultFrom"] }
+}
