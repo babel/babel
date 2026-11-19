@@ -1011,6 +1011,13 @@ export function buildProcessTests(
 
               child.stdout.pipe(executor.stdin);
               child.stderr.pipe(executor.stdin);
+              // The executor can exit while the child is still writing to it,
+              // for example on timeout or when an assertion fails. On Windows,
+              // this can be reported as EOF instead of EPIPE.
+              executor.stdin.on("error", err => {
+                const { code } = err as NodeJS.ErrnoException;
+                if (code !== "EPIPE" && code !== "EOF") throw err;
+              });
 
               executor.on("close", function () {
                 if (nodeGte8) {
