@@ -64,6 +64,26 @@ export default declare(api => {
           ]),
         ]);
       },
+      ForStatement(path: NodePath<t.ForStatement>) {
+        const { init } = path.node;
+        if (!init || !isUsingDeclaration(init)) return;
+
+        // `using` declarations are constant, so they don't need
+        // per-iteration bindings and are disposed once the loop completes:
+        //   for (using x = a; test; update) body
+        // is equivalent to
+        //   { using x = a; for (; test; update) body }
+        path.node.init = null;
+
+        // Keep any labels attached to the loop, so that `continue label`
+        // still targets an iteration statement.
+        let target: NodePath<t.Statement> = path;
+        while (target.parentPath.isLabeledStatement()) {
+          target = target.parentPath;
+        }
+
+        target.replaceWith(t.blockStatement([init, target.node]));
+      },
       "BlockStatement|StaticBlock"(
         path: NodePath<t.BlockStatement | t.StaticBlock>,
         state,
