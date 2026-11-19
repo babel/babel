@@ -187,9 +187,14 @@ export default declare((api, options: Options) => {
       ) {
         if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
         if (path.isCallExpression() && !t.isImport(path.node.callee)) return;
-        // `import.source()` and `import.defer()` can't be compiled to a
-        // regular dynamic import.
-        if (path.isImportExpression() && path.node.phase != null) return;
+        // `import.source()`, `import.defer()` and `import.sync()` can't be
+        // compiled to a regular dynamic import.
+        if (
+          path.isImportExpression() &&
+          (path.node.phase != null || path.node.sync)
+        ) {
+          return;
+        }
 
         let { scope } = path;
         do {
