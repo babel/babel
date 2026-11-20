@@ -157,6 +157,10 @@ class Printer {
     if (format.auxiliaryCommentBefore || format.auxiliaryCommentAfter) {
       this._flags |= PRINTER_FLAGS.AUX_COMMENTS;
     }
+    // Only Hack pipes have a topic token
+    if (format.topicToken != null) {
+      this._pipelineContext = TokenContext.hackPipeline;
+    }
   }
   declare _inputMap: TraceMap | null;
 
@@ -171,6 +175,9 @@ class Printer {
   }
 
   tokenContext: number = TokenContext.normal;
+
+  // The token context flags that are the same for the whole program
+  _pipelineContext: number = TokenContext.normal;
 
   _tokens: Token[] | null = null;
   _originalCode: string | null = null;
@@ -777,13 +784,13 @@ class Printer {
         flags & PRINTER_FLAGS.RETAIN_FUNCTION_PARENS &&
         nodeId === __node("FunctionExpression")) ||
       (parent &&
-        (parentNeedsParens(node, parent, parentId!) ||
+        (parentNeedsParens(node, parent, parentId!, this._pipelineContext) ||
           (needsParens != null &&
             needsParens(
               node,
               parent,
               parentId!,
-              this.tokenContext,
+              this.tokenContext | this._pipelineContext,
               flags & PRINTER_FLAGS.PRESERVE_FORMAT
                 ? this._boundGetRawIdentifier!
                 : undefined,

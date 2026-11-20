@@ -1320,6 +1320,23 @@ describe("programmatic generation", function () {
     });
   });
 
+  describe("Hack pipelines", () => {
+    it("wraps nested pipes ending with a type before `<`", () => {
+      // The nested pipe is printed without parentheses, so the left operand
+      // of `<` ends with `% as U`, and `U < b` would start type arguments
+      const parserOpts = {
+        plugins: [
+          ["pipelineOperator", { proposal: "hack", topicToken: "%" }],
+          "typescript",
+        ],
+      };
+      const ast = parse("(<T>(a |> (% |> (% as U)))) < b;", parserOpts);
+      const output = generate(ast, { topicToken: "%" }).code;
+      const { expression } = parse(output, parserOpts).program.body[0];
+      expect(expression.operator).toBe("<");
+    });
+  });
+
   describe("object expressions", () => {
     it("not wrapped in parentheses when standalone", () => {
       const objectExpression = t.objectExpression([]);
