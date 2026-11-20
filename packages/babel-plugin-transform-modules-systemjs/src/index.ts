@@ -344,6 +344,12 @@ export default declare<PluginState, Options>((api, options: Options) => {
               // because they must be hoisted
               path.node.kind = "var";
             } else if (path.isImportDeclaration()) {
+              if (path.node.phase != null) {
+                // The import would be loaded and evaluated as a regular one.
+                throw path.buildCodeFrameError(
+                  `Transforming \`import ${path.node.phase} ... from '...'\` is not supported yet.`,
+                );
+              }
               for (const specifier of path.node.specifiers) {
                 if (
                   t.isImportNamespaceSpecifier(specifier) &&

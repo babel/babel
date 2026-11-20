@@ -1,0 +1,5 @@
+{
+  "plugins": ["transform-modules-amd"],
+  "parserOpts": { "plugins": ["deferredImportEvaluation"] },
+  "throws": "Transforming `import defer * as ns from '...'` is not supported yet."
+}

@@ -1,0 +1,5 @@
+{
+  "plugins": ["transform-modules-amd"],
+  "parserOpts": { "plugins": ["sourcePhaseImports"] },
+  "throws": "Transforming `import source x from '...'` is not supported yet."
+}

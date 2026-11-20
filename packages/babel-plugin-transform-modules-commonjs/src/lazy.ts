@@ -7,8 +7,17 @@ type Lazy = boolean | string[] | ((source: string) => boolean);
 export const lazyImportsHook = (lazy: Lazy): CommonJSHook => ({
   name: `${PACKAGE_JSON.name}/lazy`,
   version: PACKAGE_JSON.version,
-  getWrapperPayload(source, metadata) {
+  getWrapperPayload(source, metadata, importNodes) {
     if (isSideEffectImport(metadata) || metadata.reexportAll) {
+      return null;
+    }
+    // Lazy loading has different semantics from `import defer`, so it must
+    // not be used as a fallback for it.
+    if (
+      importNodes.some(
+        node => t.isImportDeclaration(node) && node.phase === "defer",
+      )
+    ) {
       return null;
     }
     if (lazy === true) {

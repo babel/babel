@@ -10,9 +10,16 @@ import {
 export type Lazy = boolean | string[] | ((source: string) => boolean);
 
 export function toGetWrapperPayload(lazy: Lazy) {
-  return (source: string, metadata: SourceModuleMetadata): null | "lazy" => {
+  return (
+    source: string,
+    metadata: SourceModuleMetadata,
+    importNodes: t.Node[] = [],
+  ): null | "lazy" => {
     if (lazy === false) return null;
     if (isSideEffectImport(metadata) || metadata.reexportAll) return null;
+    // Lazy loading has different semantics from `import defer`, so it must
+    // not be used as a fallback for it.
+    if (hasDeferredImport(importNodes)) return null;
     if (lazy === true) {
       // 'true' means that local relative files are eagerly loaded and
       // dependency modules are loaded lazily.
@@ -26,6 +33,12 @@ export function toGetWrapperPayload(lazy: Lazy) {
     }
     throw new Error(`.lazy must be a boolean, string array, or function`);
   };
+}
+
+function hasDeferredImport(importNodes: t.Node[]) {
+  return importNodes.some(
+    node => t.isImportDeclaration(node) && node.phase === "defer",
+  );
 }
 
 export function wrapReference(
