@@ -609,8 +609,21 @@ export default declare<PluginState>((api, options: Options) => {
                       t.isStringLiteral(node.local),
                     ),
                   );
+                } else if (t.isExportNamespaceSpecifier(node)) {
+                  // export * as ns from "mod"
+                  exportNames.push(
+                    getExportSpecifierName(node.exported, stringSpecifiers),
+                  );
+                  exportValues.push(t.identifier(target));
                 } else {
-                  // todo
+                  // export v from "mod"
+                  exportNames.push(node.exported.name);
+                  exportValues.push(
+                    t.memberExpression(
+                      t.identifier(target),
+                      t.identifier("default"),
+                    ),
+                  );
                 }
               }
 
