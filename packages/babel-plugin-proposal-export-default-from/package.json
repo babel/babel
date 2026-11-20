@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-export-default-from",
-  "version": "8.0.1",
+  "version": "8.1.3",
   "description": "Compile export default to ES2015",
   "repository": {
     "type": "git",
