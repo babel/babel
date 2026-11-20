@@ -36,7 +36,10 @@ export function jsxAttributeString(
   const [quote, other] = quotes === "single" ? ["'", '"'] : ['"', "'"];
   if (value.includes(quote)) {
     if (!value.includes(other)) return other + value + other;
-    value = value.replaceAll(quote, quote === '"' ? "&quot;" : "&apos;");
+    value = value.replace(
+      quote === '"' ? /"/g : /'/g,
+      quote === '"' ? "&quot;" : "&apos;",
+    );
   }
   return quote + value + quote;
 }
