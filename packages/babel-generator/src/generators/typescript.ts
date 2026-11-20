@@ -580,7 +580,7 @@ export function TSSatisfiesExpression(
 
 export function TSTypeAssertion(this: Printer, node: t.TSTypeAssertion) {
   const { typeAnnotation, expression } = node;
-  this.token("<");
+  this.token("<", false, 0, true);
   this.print(typeAnnotation);
   this.token(">");
   this.space();

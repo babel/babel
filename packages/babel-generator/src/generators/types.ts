@@ -5,6 +5,7 @@ import jsesc from "jsesc";
 import * as charCodes from "charcodes";
 import { _methodHead } from "./methods.ts";
 import { TokenContext } from "../node/index.ts";
+import { isJSXAttributeRaw, jsxAttributeString } from "./util.ts";
 
 let lastRawIdentResult: string = "";
 export function _getRawIdentifier(this: Printer, node: t.Identifier) {
@@ -162,7 +163,23 @@ export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
   const value = node.value;
-  const str = value + "";
+  // `value + ""` (and jsesc) spell an overflowing value as `Infinity`, which
+  // is an identifier that can be shadowed, not a numeric literal. Use a short
+  // literal that still evaluates to Infinity so the output re-parses to the
+  // same node.
+  if (Number.isNaN(value)) {
+    // There is no NaN numeric literal and `NaN` is an identifier that can be
+    // shadowed: print what `t.valueToNode(NaN)` builds
+    this.token("(");
+    this.number("0", 0);
+    this.space();
+    this.token("/");
+    this.space();
+    this.number("0", 0);
+    this.token(")");
+    return;
+  }
+  const str = value === Infinity ? "1e999" : value + "";
   // Only integers can use a non-decimal radix:
   // Workaround for https://github.com/mathiasbynens/jsesc/issues/79
   if (
@@ -180,8 +197,30 @@ export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
   }
 }
 
-export function StringLiteral(this: Printer, node: t.StringLiteral) {
+export function StringLiteral(
+  this: Printer,
+  node: t.StringLiteral,
+  parent: t.Node,
+) {
   const raw = this.getPossibleRaw(node);
+
+  if (parent?.type === "JSXAttribute") {
+    // JSX attribute strings have no escape sequences: a backslash is a
+    // literal backslash and a quote can only be written as an HTML entity,
+    // so the jsesc output would change the value (or not parse at all).
+    // The raw text is reused only if it is JSX: a string parsed as JS and
+    // moved into an attribute has a raw with JS escapes.
+    if (raw !== undefined && isJSXAttributeRaw(raw, node.value)) {
+      this.token(raw, /* maybeNewline */ true);
+    } else {
+      this.token(
+        jsxAttributeString(node.value, this.format.jsescOption.quotes),
+        /* maybeNewline */ true,
+      );
+    }
+    return;
+  }
+
   if (!this.format.minified && raw !== undefined) {
     this.token(raw);
     return;
@@ -213,7 +252,13 @@ export function TopicReference(this: Printer) {
   const { topicToken } = this.format;
 
   if (validTopicTokenSet.has(topicToken)) {
-    this.token(topicToken!);
+    this.token(topicToken!, false, 0, true);
+    this.setLastChar(
+      topicToken === "#"
+        ? // `# in y` must not become the private name `#in`
+          -3 /* LAST_CHAR_KINDS.WORD */
+        : topicToken!.charCodeAt(topicToken!.length - 1),
+    );
   } else {
     const givenTopicTokenJSON = JSON.stringify(topicToken);
     const validTopics = Array.from(validTopicTokenSet, v => JSON.stringify(v));

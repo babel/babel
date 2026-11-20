@@ -1483,6 +1483,100 @@ describe("programmatic generation", function () {
     });
   });
 
+  describe("numeric literal with an infinite value", () => {
+    // `Infinity` is an identifier (it can be shadowed), not a numeric
+    // literal, so it must never be printed as the spelling of the node.
+    // @babel/types rejects t.numericLiteral(Infinity), but such a node can
+    // still come from the parser (`1e1000`) and lose its `extra.raw`.
+    const infinity = { type: "NumericLiteral", value: Infinity };
+
+    it("without raw", () => {
+      const output = generate(infinity).code;
+      expect(output).toBe("1e999");
+      expect(parseExpression(output)).toMatchObject({
+        type: "NumericLiteral",
+        value: Infinity,
+      });
+    });
+
+    it("jsescOption.numbers", () => {
+      const output = generate(infinity, {
+        jsescOption: { numbers: "hexadecimal" },
+      }).code;
+      expect(output).toBe("1e999");
+    });
+  });
+
+  it("numeric literal with a NaN value", () => {
+    // There is no NaN numeric literal, and `NaN` is an identifier that can be
+    // shadowed
+    const nan = { type: "NumericLiteral", value: NaN };
+    expect(generate(nan).code).toBe("(0 / 0)");
+    expect(
+      generate(t.memberExpression(nan, t.identifier("x")), { minified: true })
+        .code,
+    ).toBe("(0/0).x");
+  });
+
+  describe("JSX attribute strings", () => {
+    function generateAttribute(value, opts) {
+      const ast = parse(`<a b="x" />;`, { plugins: ["jsx"] });
+      ast.program.body[0].expression.openingElement.attributes[0].value = value;
+      return generate(ast, opts).code;
+    }
+
+    function parseAttribute(code) {
+      return parse(code, { plugins: ["jsx"] }).program.body[0].expression
+        .openingElement.attributes[0].value.value;
+    }
+
+    it.each([
+      [String.raw`"a\"b"`, `<a b='a"b' />;`],
+      [String.raw`"a\nb"`, `<a b="a\nb" />;`],
+      [String.raw`"\x5c"`, String.raw`<a b="\" />;`],
+      [`"&amp;"`, `<a b="&amp;amp;" />;`],
+    ])("does not reuse the raw of the JS string %s", (input, expected) => {
+      const value = parseExpression(input);
+      const code = generateAttribute(value);
+      expect(code).toBe(expected);
+      expect(parseAttribute(code)).toBe(value.value);
+      const minified = generateAttribute(value, { minified: true });
+      expect(parseAttribute(minified)).toBe(value.value);
+    });
+
+    it("keeps the raw of JSX strings", () => {
+      const input = `<a b='\\w' c="&quot;" d="&nbsp;&#65;" e="a & b" />;`;
+      const ast = parse(input, { plugins: ["jsx"] });
+      expect(generate(ast).code).toBe(input);
+    });
+
+    it("jsescOption.quotes", () => {
+      const quoted = (value, quotes) =>
+        generateAttribute(t.stringLiteral(value), { jsescOption: { quotes } });
+      expect(quoted("x", "single")).toBe(`<a b='x' />;`);
+      expect(quoted("x", "double")).toBe(`<a b="x" />;`);
+      expect(quoted("it's", "single")).toBe(`<a b="it's" />;`);
+      expect(quoted(`'"`, "single")).toBe(`<a b='&apos;"' />;`);
+      expect(quoted(`'"`, "double")).toBe(`<a b="'&quot;" />;`);
+    });
+
+    it("encodes only an `&` that starts an entity", () => {
+      for (const value of ["a&b", "a&amp;b", "&#65;"]) {
+        const code = generateAttribute(t.stringLiteral(value));
+        expect(parseAttribute(code)).toBe(value);
+      }
+      expect(generateAttribute(t.stringLiteral("a&b"))).toBe(`<a b="a&b" />;`);
+    });
+
+    it("counts the lines of a multiline value with retainLines", () => {
+      const ast = parse(`<a b="x\ny" />;\nfoo();`, { plugins: ["jsx"] });
+      for (const minified of [false, true]) {
+        const { code } = generate(ast, { retainLines: true, minified });
+        expect(code.split("\n")[2]).toBe("foo();");
+      }
+    });
+  });
+
   describe("jsescOption.minimal", () => {
     const string = t.stringLiteral("\u8868\u683C_\u526F\u672C");
 
