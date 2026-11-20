@@ -23,7 +23,10 @@ import {
   isLoose,
   shouldTransform,
 } from "./features.ts";
-import { assertFieldTransformed } from "./typescript.ts";
+import {
+  assertAccessorTransformed,
+  assertFieldTransformed,
+} from "./typescript.ts";
 
 export {
   FEATURES,
@@ -139,6 +142,7 @@ export function createClassFeaturePlugin({
 
         for (const path of body.get("body")) {
           if (path.isClassAccessorProperty()) {
+            assertAccessorTransformed(path);
             // It would be compiled as a field, without its getter and setter.
             throw path.buildCodeFrameError(
               "Class accessor properties are not compiled by this transform. " +
