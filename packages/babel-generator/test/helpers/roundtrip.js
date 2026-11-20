@@ -38,12 +38,6 @@ const PARSER_FAILURES = [
   // directive
   "es2019/json-strings/string-line-separator/input.js",
   "es2019/json-strings/string-paragraph-separator/input.js",
-
-  // In a conditional consequent, the flow plugin reads `(x: T) : U => v` as
-  // an arrow function with a return type unless parentheses rule out the
-  // arrow parameters, and the generator drops those parentheses:
-  // `(a ? ((x: T)) : U => v : W)`
-  "flow/arrows-in-ternaries/parenthesized-param-is-not-arrow/input.js",
 ];
 
 // Parser fixtures whose generated code is expected to be rejected by the

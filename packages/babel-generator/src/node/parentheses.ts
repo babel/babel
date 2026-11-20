@@ -577,7 +577,87 @@ export function ConditionalExpression(
   return UnaryLike(node, parent, parentId);
 }
 
-export { ConditionalExpression as ArrowFunctionExpression };
+// Whether `node` may be printed ending with a parenthesized group that, when
+// followed by `: T =>`, the flow and typescript plugins read as the head of an
+// arrow function with a return type, such as `(x: T)` or `(x, y)`.
+// It follows the positions where an arrow function can start: arrow bodies,
+// assignment right-hand sides, yield arguments and conditional alternates.
+// A ParenthesizedExpression is printed with the same parentheses as the
+// source, so it is left alone. `async(x)` is left alone too: the flow plugin
+// rejects `async(x) : T` whatever follows, so parentheses around the arrow
+// would not help.
+function mayEndWithArrowHead(node: t.Node): boolean {
+  while (true) {
+    if (
+      node.extra?.parenthesized &&
+      node.leadingComments?.[0]?.type === "CommentBlock"
+    ) {
+      // Printed in parentheses to keep the comment inside: `(/* c */ x)`
+      return true;
+    }
+    switch (node.type) {
+      case "TypeCastExpression":
+      case "SequenceExpression":
+        return true;
+      case "TSTypeAssertion":
+        // `<T>(x, y)`, unless the parentheses are a ParenthesizedExpression
+        return node.expression.type !== "ParenthesizedExpression";
+      case "ArrowFunctionExpression": {
+        const { body } = node;
+        if (
+          body.type === "ObjectExpression" ||
+          (body.type === "AssignmentExpression" &&
+            body.left.type === "ObjectPattern")
+        ) {
+          // Printed in parentheses: `() => ({ x })`
+          return true;
+        }
+        if (body.type === "BlockStatement") return false;
+        node = body;
+        break;
+      }
+      case "AssignmentExpression":
+        node = node.right;
+        break;
+      case "YieldExpression":
+        if (!node.argument) return false;
+        // A comment with a newline, or `retainLines` with the argument on a
+        // later line, puts the argument in parentheses
+        if (
+          node.argument.leadingComments?.length ||
+          (node.loc &&
+            node.argument.loc &&
+            node.argument.loc.start.line > node.loc.start.line)
+        ) {
+          return true;
+        }
+        node = node.argument;
+        break;
+      case "ConditionalExpression":
+        node = node.alternate;
+        break;
+      default:
+        return false;
+    }
+  }
+}
+
+export function ArrowFunctionExpression(
+  node: t.ArrowFunctionExpression,
+  parent: any,
+  parentId: number,
+): boolean {
+  // When a `:` follows the conditional, as in `(a ? (x: T) : U => v : W)` or
+  // in a `case` test, `(x: T) : U => v` is read as an arrow function.
+  if (
+    parentId === __node("ConditionalExpression") &&
+    parent.alternate === node &&
+    mayEndWithArrowHead(parent.consequent)
+  ) {
+    return true;
+  }
+  return ConditionalExpression(node, parent, parentId);
+}
 
 export function AssignmentExpression(
   node: t.AssignmentExpression,
