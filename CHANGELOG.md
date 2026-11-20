@@ -25,6 +25,67 @@ This file contains the changelog starting from v8.0.0-alpha.0.
 
 <!-- DO NOT CHANGE THESE COMMENTS -->
 <!-- insert-new-changelog-here -->
+## v8.1.3 (2026-11-20)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helpers`, `babel-plugin-transform-optional-chaining`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-spread`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#18490](https://github.com/babel/babel/pull/18490) fix(transform-spread): evaluate arguments before checking callee ([@joellemd](https://github.com/joellemd))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-block-scoping`, `babel-plugin-transform-explicit-resource-management`
+  * [#18665](https://github.com/babel/babel/pull/18665) fix: support using in for lexcial declaration ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`
+  * [#18547](https://github.com/babel/babel/pull/18547) fix(generator): ensure `minified` generator roundtrip ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-module-transforms`, `babel-plugin-proposal-import-defer`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-modules-umd`
+  * [#18660](https://github.com/babel/babel/pull/18660) fix(modules): throw on import phase modifiers that are not handled ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-regenerator`
+  * [#18652](https://github.com/babel/babel/pull/18652) fix(modules-systemjs): throw on top level using declaration ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-modules-systemjs`
+  * [#18651](https://github.com/babel/babel/pull/18651) fix(modules-systemjs): support `export * as ns from` and `export v from` ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-block-scoping`
+  * [#18382](https://github.com/babel/babel/pull/18382) fix: wrong TDZ checks when a loop body closure is wrapped with `tdz: … ([@joellemd](https://github.com/joellemd))
+* `babel-helper-import-to-platform-api`, `babel-plugin-proposal-bytes-modules`, `babel-plugin-proposal-text-modules`, `babel-plugin-transform-json-modules`
+  * [#18648](https://github.com/babel/babel/pull/18648) fix(json, text, bytes modules): keep both default and namespace imports ([@JLHwung](https://github.com/JLHwung))
+* `babel-helper-wrap-function`, `babel-plugin-transform-async-to-generator`
+  * [#18644](https://github.com/babel/babel/pull/18644) fix: preserve comments following async function wrappers ([@lilyqin7](https://github.com/lilyqin7))
+* `babel-plugin-transform-spread`
+  * [#18613](https://github.com/babel/babel/pull/18613) fix(transform-spread): copy constant array when later elements have side effects ([@hoanle0126](https://github.com/hoanle0126))
+* `babel-parser`
+  * [#18534](https://github.com/babel/babel/pull/18534) fix(parser): check async arrow conditions for Flow generic async arrows ([@JLHwung](https://github.com/JLHwung))
+  * [#18606](https://github.com/babel/babel/pull/18606) fix: report a redeclared label once in error recovery mode ([@JLHwung](https://github.com/JLHwung))
+  * [#18604](https://github.com/babel/babel/pull/18604) fix: do not keep elided call arguments in error recovery ([@JLHwung](https://github.com/JLHwung))
+  * [#18603](https://github.com/babel/babel/pull/18603) fix: start recovered AssignmentPattern at the property key ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#18546](https://github.com/babel/babel/pull/18546) fix(generator): add roundtrip test and fix reported bugs ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-regenerator`
+  * [#18624](https://github.com/babel/babel/pull/18624) fix(regenerator): throw on `using` declarations ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-duplicate-keys`
+  * [#18602](https://github.com/babel/babel/pull/18602) fix: do not make `__proto__` setters computed ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-proposal-export-default-from`, `babel-plugin-transform-export-namespace-from`
+  * [#18586](https://github.com/babel/babel/pull/18586) Keep import attributes whe transforming export namespace ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-computed-properties`
+  * [#18581](https://github.com/babel/babel/pull/18581) fix(computed-properties): keep object spread elements ([@JLHwung](https://github.com/JLHwung))
+* `babel-generator`, `babel-parser`
+  * [#18541](https://github.com/babel/babel/pull/18541) fix(parser): handle `module` as an identifier after class extends ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-explicit-resource-management`
+  * [#18628](https://github.com/babel/babel/pull/18628) fix(explicit-resource-management): keep await using in for-of heads ([@joellemd](https://github.com/joellemd))
+* `babel-core`
+  * [#16187](https://github.com/babel/babel/pull/16187) Reset `Error.prepareStackTrace` finally ([@liuxingbaoyu](https://github.com/liuxingbaoyu))
+* `babel-plugin-transform-for-of`
+  * [#18261](https://github.com/babel/babel/pull/18261) fix(for-of): also check the names the head reads ([@Kjubikstronk](https://github.com/Kjubikstronk))
+* `babel-helper-string-parser`, `babel-parser`
+  * [#18607](https://github.com/babel/babel/pull/18607) fix: don't advance past EOF on an unterminated Unicode code point escape ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-typescript`
+  * [#18501](https://github.com/babel/babel/pull/18501) Remove exported TS types named like JavaScript globals ([@TemRevil](https://github.com/TemRevil))
+
+#### :house: Internal
+* `babel-core`
+  * [#18622](https://github.com/babel/babel/pull/18622) Add dts integration test with minimum typescript version ([@JLHwung](https://github.com/JLHwung))
+* `babel-parser`, `babel-traverse`, `babel-types`
+  * [#18623](https://github.com/babel/babel/pull/18623) improve type checking speed ([@JLHwung](https://github.com/JLHwung))
+* `babel-types`
+  * [#18618](https://github.com/babel/babel/pull/18618) refactor: reduce babel types typing declarations size ([@JLHwung](https://github.com/JLHwung))
+  * [#18615](https://github.com/babel/babel/pull/18615) Remove `index-legacy.d.ts` ([@JLHwung](https://github.com/JLHwung))
 ## v8.1.2 (2026-11-11)
 
 #### :eyeglasses: Spec Compliance
