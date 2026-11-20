@@ -1457,24 +1457,24 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 60, gzip size: 73
+  // size: 73, gzip size: 91
   toConsumableArray: helper(
     "7.0.0-beta.0",
-    "function _toConsumableArray(a){return r(a)||o(a)||t(a)||e()}",
+    "function _toConsumableArray(t){var m=o(t);return m===t?r(t):m||a(t)||e()}",
     {
       globals: [],
       locals: { _toConsumableArray: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_toConsumableArray",
       dependencies: {
-        arrayWithoutHoles: [
-          "body.0.body.body.0.argument.left.left.left.callee",
-        ],
-        iterableToArray: ["body.0.body.body.0.argument.left.left.right.callee"],
+        arrayLikeToArray: ["body.0.body.body.1.argument.consequent.callee"],
+        iterableToArray: ["body.0.body.body.0.declarations.0.init.callee"],
         unsupportedIterableToArray: [
-          "body.0.body.body.0.argument.left.right.callee",
+          "body.0.body.body.1.argument.alternate.left.right.callee",
         ],
-        nonIterableSpread: ["body.0.body.body.0.argument.right.callee"],
+        nonIterableSpread: [
+          "body.0.body.body.1.argument.alternate.right.callee",
+        ],
       },
       internal: false,
     },
