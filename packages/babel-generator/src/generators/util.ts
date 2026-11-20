@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as charCodes from "charcodes";
 
 const jsxEntityRE = /&(?:#x[\da-f]+|#\d+|[a-z\d]+);/iy;
@@ -6,7 +7,7 @@ const jsxEntityRE = /&(?:#x[\da-f]+|#\d+|[a-z\d]+);/iy;
 // equals `value` after decoding HTML entities
 export function isJSXAttributeRaw(raw: string, value: string) {
   let j = 0;
-  for (let i = 1; i < raw.length - 1;) {
+  for (let i = 1; i < raw.length - 1; ) {
     if (raw.charCodeAt(i) === charCodes.ampersand) {
       jsxEntityRE.lastIndex = i;
       if (jsxEntityRE.test(raw)) {
