@@ -80,7 +80,7 @@ function spaceSeparator(this: Printer) {
 }
 
 export function JSXOpeningElement(this: Printer, node: t.JSXOpeningElement) {
-  this.token("<");
+  this.token("<", false, 0, true);
   this.print(node.name);
   if (process.env.BABEL_8_BREAKING) {
     //@ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
@@ -129,7 +129,7 @@ export function JSXFragment(this: Printer, node: t.JSXFragment) {
 }
 
 export function JSXOpeningFragment(this: Printer) {
-  this.token("<");
+  this.token("<", false, 0, true);
   this.token(">");
 }
 
