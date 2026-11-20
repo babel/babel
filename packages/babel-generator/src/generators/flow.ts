@@ -108,6 +108,7 @@ export function DeclareModuleExports(
   this.token(".");
   this.word("exports");
   this.print(node.typeAnnotation);
+  this.semicolon();
 }
 
 export function DeclareTypeAlias(this: Printer, node: t.DeclareTypeAlias) {

@@ -1,0 +1,4 @@
+new A<T>();
+new A<T>;
+new B<T>(1);
+new C();

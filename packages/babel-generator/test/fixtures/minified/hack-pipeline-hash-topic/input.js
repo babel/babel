@@ -1,0 +1,3 @@
+x |> # in y;
+x |> # instanceof y;
+x |> #.y;
