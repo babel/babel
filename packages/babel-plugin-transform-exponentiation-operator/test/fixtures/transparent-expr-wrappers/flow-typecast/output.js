@@ -1,4 +1,3 @@
-var _a, _obj, _key, _ref;
-(_a = a).b = Math.pow(_a.b, 2);
-(_obj = obj)[_key = ++key] = Math.pow(_obj[_key], 2);
+var _ref, _ref2, _key;
 (_ref = getObject()).x = Math.pow(_ref.x, 2);
+(_ref2 = getObject())[_key = ++key] = Math.pow(_ref2[_key], 2);
