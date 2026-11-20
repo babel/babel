@@ -1,5 +1,6 @@
 import { types as t } from "@babel/core";
 import type { Scope, NodePath, PluginPass } from "@babel/core";
+import { isVarInLoopHead } from "./loop.ts";
 
 export function validateUsage(
   path: NodePath<t.VariableDeclaration>,
@@ -83,7 +84,27 @@ function disallowConstantViolations(
   }
 }
 
+// The bindings declared in a loop head are initialized before the parts of
+// the loop that follow the head are evaluated, so references there are never
+// in the TDZ, even when they are executed conditionally:
+//   for (const x of y) if (cond) x;
+function isEvaluatedAfterLoopHead(refPath: NodePath, bindingPath: NodePath) {
+  if (!bindingPath.isVariableDeclarator()) return false;
+  const declPath = bindingPath.parentPath;
+  if (!isVarInLoopHead(declPath)) return false;
+
+  const loop = declPath.parent as t.ForStatement | t.ForXStatement;
+  const afterHead: t.Node[] = [loop.body];
+  if (t.isForStatement(loop)) {
+    if (loop.test) afterHead.push(loop.test);
+    if (loop.update) afterHead.push(loop.update);
+  }
+  return !!refPath.find(p => afterHead.includes(p.node));
+}
+
 function getTDZStatus(refPath: NodePath, bindingPath: NodePath) {
+  if (isEvaluatedAfterLoopHead(refPath, bindingPath)) return "outside";
+
   const executionStatus = bindingPath._guessExecutionStatusRelativeTo(refPath);
 
   if (executionStatus === "before") {
