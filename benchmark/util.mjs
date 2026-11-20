@@ -181,7 +181,12 @@ class Benchmark {
     );
   }
   add(name, fn, options) {
-    this.bench.add(name, fn, options);
+    this.bench.add(name, fn, {
+      afterEach() {
+        globalThis.gc?.();
+      },
+      ...options,
+    });
   }
   async run() {
     this.bench.addEventListener("cycle", function (event) {
@@ -196,8 +201,6 @@ class Benchmark {
         Math.round(latency.rme * 100) / 100
       }% ${latency.samplesCount} runs (${time})`;
       console.log(msg);
-
-      globalThis.gc?.();
     });
     this.bench.addEventListener("error", function (event) {
       console.error(event.task.result.error);
