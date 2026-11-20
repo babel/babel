@@ -1190,11 +1190,13 @@ export class Emitter {
           hasLeapingChildren,
         );
 
+        // `left` is a temporary variable, which can also be `result`, or a
+        // literal, so it must be cloned.
         if (path.node.operator === "&&") {
-          self.jumpIfNot(left, after);
+          self.jumpIfNot(t.cloneNode(left), after);
         } else {
           assert.strictEqual(path.node.operator, "||");
-          self.jumpIf(left, after);
+          self.jumpIf(t.cloneNode(left), after);
         }
 
         self.explodeViaTempVar(
