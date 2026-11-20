@@ -45,12 +45,18 @@ export function transformDynamicImport(
   path: NodePath<t.CallExpression | t.ImportExpression>,
   importInterop: ImportInterop,
   file: File,
+  wrapNamespace?: ((ns: t.Expression) => t.Expression) | null,
 ) {
   path.replaceWith(
-    buildDynamicImport(path.node, true, false, specifier =>
-      shouldSkipInteropHelper(importInterop, specifier, file.opts.filename)
+    buildDynamicImport(path.node, true, false, specifier => {
+      const ns = shouldSkipInteropHelper(
+        importInterop,
+        specifier,
+        file.opts.filename,
+      )
         ? requireNoInterop(specifier)
-        : requireInterop(specifier, file),
-    ),
+        : requireInterop(specifier, file);
+      return wrapNamespace ? wrapNamespace(ns) : ns;
+    }),
   );
 }
