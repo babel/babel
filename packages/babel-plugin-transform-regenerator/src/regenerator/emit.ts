@@ -1178,6 +1178,13 @@ export class Emitter {
         return result!;
 
       case "LogicalExpression":
+        if (path.node.operator === "??") {
+          throw path.buildCodeFrameError(
+            "`??` containing `yield` or `await` is not supported by the regenerator transform. " +
+              "Please add @babel/plugin-transform-nullish-coalescing-operator to your Babel config.",
+          );
+        }
+
         after = this.loc();
 
         if (!ignoreResult) {
@@ -1277,6 +1284,19 @@ export class Emitter {
               self.explodeExpression(path.get("left")),
               self.explodeExpression(path.get("right")),
             ),
+          );
+        }
+
+        if (
+          path.node.operator === "||=" ||
+          path.node.operator === "&&=" ||
+          path.node.operator === "??="
+        ) {
+          // Compiling it like `+=` would always evaluate the right-hand side
+          // and assign the left-hand side.
+          throw path.buildCodeFrameError(
+            `\`${path.node.operator}\` containing \`yield\` or \`await\` is not supported by the regenerator transform. ` +
+              "Please add @babel/plugin-transform-logical-assignment-operators to your Babel config.",
           );
         }
 
