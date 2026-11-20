@@ -166,10 +166,13 @@ export default function transformClass(
       }
 
       if (path.isClassAccessorProperty()) {
+        // @babel/plugin-proposal-decorators alone is not enough: it turns
+        // accessor properties into private fields so we also need class-properties.
         throw path.buildCodeFrameError(
           "Class accessor properties are not compiled by this transform. " +
-            'Please make sure that "@babel/plugin-proposal-decorators" comes ' +
-            '*before* "@babel/plugin-transform-classes".',
+            'Please make sure that "@babel/plugin-proposal-decorators" and ' +
+            '"@babel/plugin-transform-class-properties" come *before* ' +
+            '"@babel/plugin-transform-classes".',
         );
       }
 

@@ -1,5 +1,5 @@
 {
   "plugins": ["transform-classes"],
   "parserOpts": { "plugins": ["decoratorAutoAccessors"] },
-  "throws": "Class accessor properties are not compiled by this transform. Please make sure that \"@babel/plugin-proposal-decorators\" comes *before* \"@babel/plugin-transform-classes\"."
+  "throws": "Class accessor properties are not compiled by this transform. Please make sure that \"@babel/plugin-proposal-decorators\" and \"@babel/plugin-transform-class-properties\" come *before* \"@babel/plugin-transform-classes\"."
 }
