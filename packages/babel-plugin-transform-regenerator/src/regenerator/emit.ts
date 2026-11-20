@@ -601,7 +601,12 @@ export class Emitter {
         );
 
         self.emitAssign(
-          path.node.left as t.AssignmentExpression["left"],
+          // The assignment target is evaluated again in every iteration, so
+          // it must be exploded here: it can contain a leap, such as
+          // `for (obj[yield] in keys)`.
+          self.explodeExpression(
+            path.get("left") as NodePath<t.Expression>,
+          ) as t.AssignmentExpression["left"],
           t.memberExpression(
             t.cloneNode(keyInfoTmpVar),
             t.identifier("value"),
