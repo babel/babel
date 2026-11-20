@@ -19,7 +19,9 @@ export function clearScope() {
   scope = new WeakMap();
 }
 
-export function getCachedPaths(path: NodePath) {
+export function getCachedPaths(
+  path: NodePath,
+): Map<Node, NodePath> | null | undefined {
   const { parent, parentPath } = path;
   return process.env.BABEL_8_BREAKING && parentPath
     ? parentPath._store

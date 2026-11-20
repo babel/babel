@@ -3,30 +3,10 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports, @typescript-eslint/no-redundant-type-constituents */
 import { File, Expression } from '@babel/types';
 
-declare class Position {
-    line: number;
-    column: number;
-    index: number;
-    constructor(line: number, col: number, index: number);
-}
-
-type SyntaxPlugin = "flow" | "typescript" | "jsx" | "functionBind" | "pipelineOperator" | "placeholders";
-type ParseErrorCode = "BABEL_PARSER_SYNTAX_ERROR" | "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED";
-interface ParseErrorSpecification<ErrorDetails> {
-    code: ParseErrorCode;
-    reasonCode: string;
-    syntaxPlugin?: SyntaxPlugin;
-    missingPlugin?: string | string[];
-    loc: Position;
-    details: ErrorDetails;
-    pos: number;
-}
-type ParseError$1<ErrorDetails> = SyntaxError & ParseErrorSpecification<ErrorDetails>;
-
 type BABEL_8_BREAKING = false;
 type IF_BABEL_7<V> = false extends BABEL_8_BREAKING ? V : never;
 
-type Plugin$1 =
+type Plugin =
   | "asyncDoExpressions"
   | IF_BABEL_7<"asyncGenerators">
   | IF_BABEL_7<"bigInt">
@@ -84,7 +64,7 @@ type ParserPluginWithOptions =
   | ["flow", FlowPluginOptions]
   | ["typescript", TypeScriptPluginOptions];
 
-type PluginConfig = Plugin$1 | ParserPluginWithOptions;
+type PluginConfig = Plugin | ParserPluginWithOptions;
 
 interface DecoratorsPluginOptions {
   decoratorsBeforeExport?: boolean;
@@ -115,8 +95,6 @@ interface TypeScriptPluginOptions {
   dts?: boolean;
   disallowAmbiguousJSXLike?: boolean;
 }
-
-type Plugin = PluginConfig;
 
 type SourceType = "script" | "commonjs" | "module" | "unambiguous";
 interface Options {
@@ -212,7 +190,7 @@ interface Options {
     /**
      * Array containing the plugins that you want to enable.
      */
-    plugins?: Plugin[];
+    plugins?: PluginConfig[];
     /**
      * Should the parser work in strict mode.
      * Defaults to true if sourceType === 'module'. Otherwise, false.
@@ -240,6 +218,26 @@ interface Options {
      */
     createImportExpressions?: boolean;
 }
+
+declare class Position {
+    line: number;
+    column: number;
+    index: number;
+    constructor(line: number, col: number, index: number);
+}
+
+type SyntaxPlugin = "flow" | "typescript" | "jsx" | "functionBind" | "pipelineOperator" | "placeholders";
+type ParseErrorCode = "BABEL_PARSER_SYNTAX_ERROR" | "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED";
+interface ParseErrorSpecification<ErrorDetails> {
+    code: ParseErrorCode;
+    reasonCode: string;
+    syntaxPlugin?: SyntaxPlugin;
+    missingPlugin?: string | string[];
+    loc: Position;
+    details: ErrorDetails;
+    pos: number;
+}
+type ParseError$1<ErrorDetails> = SyntaxError & ParseErrorSpecification<ErrorDetails>;
 
 type ParserOptions = Partial<Options>;
 type ParseError = ParseError$1<object>;
