@@ -162,6 +162,7 @@ class Benchmark {
       new Bench({
         time: 5000,
         iterations: iterations ?? 16,
+        warmupTime: 2000,
         warmupIterations: 4,
         retainSamples: true,
       })
@@ -189,7 +190,18 @@ class Benchmark {
     this.bench.addEventListener("error", function (event) {
       console.error(event.task.result.error);
     });
-    this.bench.runSync();
+    // tinybench warms up all tasks before measuring any of them by default.
+    // Run each task immediately after its warmup unless CodSpeed handles it.
+    if (process.env.CODSPEED_ENV !== undefined) {
+      this.bench.runSync();
+    } else {
+      for (const task of this.bench.tasks) {
+        if (this.bench.warmup) {
+          task.warmupSync();
+        }
+        task.runSync();
+      }
+    }
   }
 }
 
