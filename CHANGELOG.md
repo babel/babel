@@ -25,6 +25,56 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.15 (2026-11-20)
+
+#### :eyeglasses: Spec Compliance
+* `babel-helpers`, `babel-plugin-transform-optional-chaining`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-spread`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#18614](https://github.com/babel/babel/pull/18614) fix(transform-spread): evaluate arguments before checking callee ([@babel-bot](https://github.com/babel-bot))
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#18675](https://github.com/babel/babel/pull/18675) fix(generator): ensure `minified` generator roundtrip ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-block-scoping`, `babel-plugin-transform-explicit-resource-management`
+  * [#18674](https://github.com/babel/babel/pull/18674) fix: support using in for lexcial declaration ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-regenerator`
+  * [#18672](https://github.com/babel/babel/pull/18672) fix(modules-systemjs): throw on top level using declaration ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-modules-systemjs`
+  * [#18671](https://github.com/babel/babel/pull/18671) fix(modules-systemjs): support `export * as ns from` and `export v from` ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-import-to-platform-api`, `babel-plugin-transform-json-modules`
+  * [#18668](https://github.com/babel/babel/pull/18668) fix(json, text, bytes modules): keep both default and namespace imports ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-duplicate-keys`
+  * [#18646](https://github.com/babel/babel/pull/18646) fix: do not make `__proto__` setters computed ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-spread`
+  * [#18664](https://github.com/babel/babel/pull/18664) fix(transform-spread): copy constant array when later elements have side effects ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-wrap-function`, `babel-plugin-transform-async-to-generator`
+  * [#18667](https://github.com/babel/babel/pull/18667) fix: preserve comments following async function wrappers ([@babel-bot](https://github.com/babel-bot))
+* `babel-generator`, `babel-parser`, `babel-types`
+  * [#18657](https://github.com/babel/babel/pull/18657) fix(generator): add roundtrip test and fix reported bugs ([@babel-bot](https://github.com/babel-bot))
+* `babel-parser`
+  * [#18656](https://github.com/babel/babel/pull/18656) fix(parser): check async arrow conditions for Flow generic async arrows ([@babel-bot](https://github.com/babel-bot))
+  * [#18637](https://github.com/babel/babel/pull/18637) fix: report a redeclared label once in error recovery mode (#18606) ([@JLHwung](https://github.com/JLHwung))
+  * [#18611](https://github.com/babel/babel/pull/18611) fix: do not keep elided call arguments in error recovery ([@babel-bot](https://github.com/babel-bot))
+  * [#18609](https://github.com/babel/babel/pull/18609) fix: start recovered AssignmentPattern at the property key ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-regenerator`
+  * [#18650](https://github.com/babel/babel/pull/18650) fix(regenerator): throw on `using` declarations ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-proposal-export-default-from`, `babel-plugin-transform-export-namespace-from`
+  * [#18645](https://github.com/babel/babel/pull/18645) Keep import attributes whe transforming export namespace ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-computed-properties`
+  * [#18642](https://github.com/babel/babel/pull/18642) fix(computed-properties): keep object spread elements ([@babel-bot](https://github.com/babel-bot))
+* `babel-generator`, `babel-parser`
+  * [#18635](https://github.com/babel/babel/pull/18635) fix(parser): handle `module` as an identifier after class extends ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-string-parser`, `babel-parser`
+  * [#18636](https://github.com/babel/babel/pull/18636) fix: don't advance past EOF on an unterminated Unicode code point escape ([@JLHwung](https://github.com/JLHwung))
+* `babel-plugin-transform-explicit-resource-management`
+  * [#18631](https://github.com/babel/babel/pull/18631) fix(explicit-resource-management): keep await using in for-of heads ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-for-of`
+  * [#18616](https://github.com/babel/babel/pull/18616) fix(for-of): also check the names the head reads ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-typescript`
+  * [#18601](https://github.com/babel/babel/pull/18601) Remove exported TS types named like JavaScript globals ([@babel-bot](https://github.com/babel-bot))
+
+#### :house: Internal
+* `babel-parser`, `babel-traverse`, `babel-types`
+  * [#18670](https://github.com/babel/babel/pull/18670) improve type checking speed ([@babel-bot](https://github.com/babel-bot))
 ## v7.29.14 (2026-11-11)
 
 #### :eyeglasses: Spec Compliance
