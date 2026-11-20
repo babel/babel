@@ -1,0 +1,3 @@
+{
+  "throws": "Top-level `using` declarations are not supported by the SystemJS modules transform. Please add @babel/plugin-transform-explicit-resource-management to your Babel config."
+}

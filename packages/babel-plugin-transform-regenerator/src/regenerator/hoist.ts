@@ -30,7 +30,6 @@ export function hoist(
       vdec.kind !== "let" &&
       vdec.kind !== "const"
     ) {
-      /* node:coverage ignore next */
       throw path.buildCodeFrameError(
         `\`${vdec.kind}\` declarations are not supported by the regenerator transform.`,
       );
