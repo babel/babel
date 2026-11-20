@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "transform-regenerator",
+    "transform-logical-assignment-operators",
+    "transform-nullish-coalescing-operator"
+  ]
+}
