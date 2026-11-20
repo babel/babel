@@ -37,6 +37,20 @@ export default declare(api => {
     }
   }
 
+  function referencesName(path: NodePath, name: string) {
+    if (path.isIdentifier({ name })) return true;
+    let found = false;
+    path.traverse({
+      ReferencedIdentifier(p) {
+        if (p.node.name === name) {
+          found = true;
+          p.stop();
+        }
+      },
+    });
+    return found;
+  }
+
   const visitor: Visitor = {
     BlockStatement(path) {
       const { node, parent } = path;
@@ -64,6 +78,7 @@ export default declare(api => {
       const hoistedIds: t.Identifier[] = [];
       const inHoistedFn = (p: NodePath) => !!p.findParent(q => fnPaths.has(q));
       const usedNames = new Set<string>();
+      const discriminent = path.get("discriminant");
 
       for (const [name, binding] of Object.entries(path.scope.bindings)) {
         if (binding.kind !== "let" && binding.kind !== "const") continue;
@@ -72,6 +87,15 @@ export default declare(api => {
           binding.constantViolations.some(inHoistedFn)
         ) {
           usedNames.add(name);
+        }
+      }
+
+      for (const name of [...usedNames]) {
+        if (referencesName(discriminent, name)) {
+          const newName = path.scope.generateUid(name);
+          path.scope.rename(name, newName);
+          usedNames.delete(name);
+          usedNames.add(newName);
         }
       }
 
@@ -124,7 +148,7 @@ export default declare(api => {
 
       if (!fns.length) return;
 
-      const [newPath] = path.replaceWith(
+      path.replaceWith(
         t.blockStatement([
           ...(hoistedIds.length
             ? [
@@ -143,8 +167,6 @@ export default declare(api => {
           node,
         ]),
       );
-
-      newPath.scope.crawl();
     },
   };
 
