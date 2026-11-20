@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-modules-systemjs",
+    "transform-explicit-resource-management"
+  ]
+}
