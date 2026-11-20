@@ -22,7 +22,13 @@ export function remove(this: NodePath<t.Node | null>) {
     if (this.node && !this.opts?.noScope) {
       // Remove scope information relative to this node
       const bindings = t.getBindingIdentifiers(this.node, false, false, true);
-      Object.keys(bindings).forEach(name => this.scope.removeBinding(name));
+      const scope =
+        t.isVar(this.node) ||
+        (t.isVariableDeclarator(this.node) && t.isVar(this.parent)) ||
+        (t.isForXStatement(this.node) && t.isVar(this.node.left))
+          ? (this.scope.getFunctionParent() ?? this.scope.getProgramParent())
+          : this.scope;
+      Object.keys(bindings).forEach(name => scope.removeBinding(name));
     }
 
     this.shareCommentsWithSiblings();
