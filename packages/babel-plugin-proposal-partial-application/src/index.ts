@@ -1,187 +1,37 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxPartialApplication from "@babel/plugin-syntax-partial-application";
-import { types as t, type Scope } from "@babel/core";
+import type { Options as SyntaxOptions } from "@babel/plugin-syntax-partial-application";
+import { createVisitor as createVisitor2018_07 } from "./transform-2018-07.ts";
+import { createVisitor as createVisitor2021_10 } from "./transform-2021-10.ts";
 
-export default declare(api => {
+export type Options = SyntaxOptions;
+
+export default declare((api, options: Options) => {
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
-  /**
-   * a function to figure out if a call expression has
-   * ArgumentPlaceholder as one of its arguments
-   * @param node a callExpression node
-   * @returns boolean
-   */
-  function hasArgumentPlaceholder(node: t.CallExpression) {
-    return node.arguments.some(arg => t.isArgumentPlaceholder(arg));
-  }
-
-  function unwrapArguments(
-    { arguments: args }: t.CallExpression,
-    scope: Scope,
-  ) {
-    const init: t.AssignmentExpression[] = [];
-    for (let i = 0; i < args.length; i++) {
-      const node = args[i];
-      if (!t.isArgumentPlaceholder(node) && !t.isImmutable(node)) {
-        const id = scope.generateUidIdentifierBasedOnNode(node, "param");
-        scope.push({ id });
-        if (t.isSpreadElement(node)) {
-          init.push(
-            t.assignmentExpression(
-              "=",
-              t.cloneNode(id),
-              t.arrayExpression([t.spreadElement(node.argument)]),
-            ),
-          );
-          node.argument = t.cloneNode(id);
-        } else {
-          init.push(t.assignmentExpression("=", t.cloneNode(id), node));
-          args[i] = t.cloneNode(id);
-        }
-      }
-    }
-    return init;
-  }
-
-  type CallArgsWithoutPlaceholder = Exclude<
-    t.CallExpression["arguments"][number],
-    t.ArgumentPlaceholder
-  >[];
-
-  function replacePlaceholders(
-    node: t.CallExpression,
-    scope: Scope,
-  ): [t.Identifier[], CallArgsWithoutPlaceholder] {
-    const placeholders: t.Identifier[] = [];
-    const newArgs: CallArgsWithoutPlaceholder = [];
-
-    node.arguments.forEach(arg => {
-      if (t.isArgumentPlaceholder(arg)) {
-        const id = scope.generateUid("_argPlaceholder");
-        placeholders.push(t.identifier(id));
-        newArgs.push(t.identifier(id));
-      } else {
-        newArgs.push(arg);
-      }
+  if (options?.version === "2021-10") {
+    const visitor = createVisitor2021_10({
+      noDocumentAll: api.assumption("noDocumentAll") ?? false,
+      pureGetters: api.assumption("pureGetters") ?? false,
     });
-    return [placeholders, newArgs];
+    return {
+      name: "proposal-partial-application",
+      inherits: syntaxPartialApplication,
+
+      visitor: {
+        // Run before other plugins, so that optional chains containing
+        // partial applications are lowered before they are visited.
+        Program(path) {
+          path.traverse(visitor);
+        },
+      },
+    };
   }
 
   return {
     name: "proposal-partial-application",
     inherits: syntaxPartialApplication,
 
-    visitor: {
-      // Todo: support partial application in NewExpression/OptionalCallExpression.
-      CallExpression(path) {
-        if (!hasArgumentPlaceholder(path.node)) {
-          return;
-        }
-        const { node, scope } = path;
-        const functionLVal = path.scope.generateUidIdentifierBasedOnNode(
-          node.callee,
-        );
-        const sequenceParts = [];
-        const argsInitializers = unwrapArguments(node, scope);
-        const [placeholdersParams, args] = replacePlaceholders(node, scope);
-
-        scope.push({ id: functionLVal });
-        const callee = node.callee;
-
-        if (t.isMemberExpression(callee)) {
-          const { property, object: calleeObject } = callee;
-          let object = calleeObject,
-            receiverLVal;
-          if (t.isSuper(calleeObject)) {
-            receiverLVal = t.thisExpression();
-          } else if (scope.isStatic(calleeObject)) {
-            receiverLVal = t.cloneNode(calleeObject);
-          } else {
-            receiverLVal =
-              path.scope.generateUidIdentifierBasedOnNode(calleeObject);
-            scope.push({ id: t.cloneNode(receiverLVal) });
-            sequenceParts.push(
-              t.assignmentExpression(
-                "=",
-                t.cloneNode(receiverLVal),
-                t.cloneNode(calleeObject),
-              ),
-            );
-            object = t.cloneNode(receiverLVal);
-          }
-          if (t.isThisExpression(receiverLVal)) {
-            // Memoize `this` as the function wrapper may overwrite the `this` binding.
-            const thisExpressionId =
-              path.scope.generateUidIdentifierBasedOnNode(receiverLVal);
-            scope.push({ id: t.cloneNode(thisExpressionId) });
-            sequenceParts.push(
-              t.assignmentExpression(
-                "=",
-                t.cloneNode(thisExpressionId),
-                receiverLVal,
-              ),
-            );
-            receiverLVal = thisExpressionId;
-          }
-          sequenceParts.push(
-            t.assignmentExpression(
-              "=",
-              t.cloneNode(functionLVal),
-              t.memberExpression(object, property),
-            ),
-            ...argsInitializers,
-            t.functionExpression(
-              t.isIdentifier(property)
-                ? t.cloneNode(property)
-                : path.scope.generateUidIdentifierBasedOnNode(property),
-              placeholdersParams,
-              t.blockStatement(
-                [
-                  t.returnStatement(
-                    t.callExpression(
-                      t.memberExpression(
-                        t.cloneNode(functionLVal),
-                        t.identifier("call"),
-                      ),
-                      [receiverLVal, ...args],
-                    ),
-                  ),
-                ],
-                [],
-              ),
-              false,
-              false,
-            ),
-          );
-        } else {
-          sequenceParts.push(
-            t.assignmentExpression(
-              "=",
-              t.cloneNode(functionLVal),
-              // @ts-expect-error V8 intrinsics will not support partial application
-              node.callee,
-            ),
-            ...argsInitializers,
-            t.functionExpression(
-              t.isIdentifier(node.callee)
-                ? t.cloneNode(node.callee)
-                : path.scope.generateUidIdentifierBasedOnNode(node.callee),
-              placeholdersParams,
-              t.blockStatement(
-                [
-                  t.returnStatement(
-                    t.callExpression(t.cloneNode(functionLVal), args),
-                  ),
-                ],
-                [],
-              ),
-              false,
-              false,
-            ),
-          );
-        }
-        path.replaceWith(t.sequenceExpression(sequenceParts));
-      },
-    },
+    visitor: createVisitor2018_07(),
   };
 });
