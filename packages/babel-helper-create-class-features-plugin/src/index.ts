@@ -23,7 +23,10 @@ import {
   isLoose,
   shouldTransform,
 } from "./features.ts";
-import { assertFieldTransformed } from "./typescript.ts";
+import {
+  assertAccessorTransformed,
+  assertFieldTransformed,
+} from "./typescript.ts";
 
 export {
   FEATURES,
@@ -137,6 +140,23 @@ export function createClassFeaturePlugin({
         const privateNames = new Set<string>();
         const body = path.get("body");
 
+        let accessorPath: NodePath<t.ClassAccessorProperty> | undefined;
+        for (const path of body.get("body")) {
+          if (!path.isClassAccessorProperty()) continue;
+          // Check all of them before suggesting the decorators plugin, which
+          // would compile TypeScript abstract accessors to real ones.
+          assertAccessorTransformed(path);
+          accessorPath ??= path;
+        }
+        if (accessorPath) {
+          // It would be compiled as a field, without its getter and setter.
+          throw accessorPath.buildCodeFrameError(
+            "Class accessor properties are not compiled by this transform. " +
+              'Please make sure that "@babel/plugin-proposal-decorators" comes ' +
+              "*before* the other class features plugins.",
+          );
+        }
+
         for (const path of body.get("body")) {
           if (
             // check path.node.computed is enough, but ts will complain
@@ -189,6 +209,7 @@ export function createClassFeaturePlugin({
           } else {
             elements.push(path);
             if (path.isProperty() || path.isPrivate() || path.isStaticBlock()) {
+              // Accessor properties have been rejected above
               props.push(path as PropPath);
             }
           }
