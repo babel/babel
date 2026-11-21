@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": { "chrome": "49" },
+        "ignoreBrowserslistConfig": true
+      }
+    ]
+  ],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
+}
