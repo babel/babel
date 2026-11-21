@@ -161,6 +161,7 @@ const keys: KeysMap = {
 
   ClassDeclaration: ["id"],
   ClassExpression: ["id"],
+  StructDeclaration: ["id"],
 
   RestElement: ["argument"],
   UpdateExpression: ["argument"],

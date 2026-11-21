@@ -1,6 +1,7 @@
 import {
   isClassDeclaration,
   isFunctionDeclaration,
+  isStructDeclaration,
 } from "./generated/index.ts";
 import isLet from "./isLet.ts";
 import type * as t from "../index.ts";
@@ -11,5 +12,10 @@ import type * as t from "../index.ts";
 export default function isBlockScoped(
   node: t.Node | null | undefined,
 ): boolean {
-  return isFunctionDeclaration(node) || isClassDeclaration(node) || isLet(node);
+  return (
+    isFunctionDeclaration(node) ||
+    isClassDeclaration(node) ||
+    isStructDeclaration(node) ||
+    isLet(node)
+  );
 }

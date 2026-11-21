@@ -3,7 +3,10 @@ import type * as t from "@babel/types";
 export interface VirtualTypeAliases {
   BindingIdentifier: t.Identifier;
   BlockScoped:
-    t.FunctionDeclaration | t.ClassDeclaration | t.VariableDeclaration;
+    | t.FunctionDeclaration
+    | t.ClassDeclaration
+    | t.StructDeclaration
+    | t.VariableDeclaration;
   ExistentialTypeParam: t.ExistsTypeAnnotation;
   Expression: t.Expression;
   Flow: t.Flow | t.ImportDeclaration | t.ExportDeclaration | t.ImportSpecifier;
@@ -46,6 +49,7 @@ export const Referenced: VirtualTypeMapping = null;
 export const BlockScoped: VirtualTypeMapping = [
   "FunctionDeclaration",
   "ClassDeclaration",
+  "StructDeclaration",
   "VariableDeclaration",
 ] as const;
 

@@ -75,6 +75,7 @@ export default function isReferenced(
     // yes: class Foo extends NODE {}
     case "ClassDeclaration":
     case "ClassExpression":
+    case "StructDeclaration":
       return parent.superClass === node;
 
     // yes: left = NODE;
