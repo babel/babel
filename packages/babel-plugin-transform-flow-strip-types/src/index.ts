@@ -13,7 +13,37 @@ export default declare((api, opts: Options) => {
 
   let skipStrip = false;
 
+  // TODO(Babel 9): Remove this check. StructDeclaration was introduced in
+  // @babel/core 8.1.0, and older versions throw on visitors for unknown node
+  // types.
+  const supportsStructs = process.env.BABEL_9_BREAKING || !!t.structDeclaration;
+
   const { requireDirective = false } = opts;
+
+  function stripClassTypes(path: NodePath<t.Class | t.StructDeclaration>) {
+    if (skipStrip) return;
+    path.node.implements = null;
+
+    // We do this here instead of in a `ClassProperty` visitor because the class transform
+    // would transform the class before we reached the class property.
+    path.get("body.body").forEach(child => {
+      if (child.isClassProperty()) {
+        const { node } = child;
+
+        if (node.declare) {
+          if (supportsStructs && path.isStructDeclaration() && !node.static) {
+            throw child.buildCodeFrameError(
+              "Fields with the 'declare' modifier are not supported in structs, since all the struct fields exist at runtime.",
+            );
+          }
+          child.remove();
+        } else {
+          node.variance = null;
+          node.typeAnnotation = null;
+        }
+      }
+    });
+  }
 
   return {
     name: "transform-flow-strip-types",
@@ -89,25 +119,8 @@ export default declare((api, opts: Options) => {
         path.node.typeAnnotation = null;
       },
 
-      Class(path) {
-        if (skipStrip) return;
-        path.node.implements = null;
-
-        // We do this here instead of in a `ClassProperty` visitor because the class transform
-        // would transform the class before we reached the class property.
-        path.get("body.body").forEach(child => {
-          if (child.isClassProperty()) {
-            const { node } = child;
-
-            if (node.declare) {
-              child.remove();
-            } else {
-              node.variance = null;
-              node.typeAnnotation = null;
-            }
-          }
-        });
-      },
+      Class: stripClassTypes,
+      ...(supportsStructs ? { StructDeclaration: stripClassTypes } : {}),
 
       AssignmentPattern({ node }) {
         if (skipStrip) return;
