@@ -1,0 +1,204 @@
+diff --git a/dist/es/shared/node-entry.js b/dist/es/shared/node-entry.js
+index 73491c3cbc902ba9dacb117e97afc50566409318..5c7e1aca32cbee026694541a9ba7c2a3e7d1ee9b 100644
+--- a/dist/es/shared/node-entry.js
++++ b/dist/es/shared/node-entry.js
+@@ -2844,8 +2844,9 @@ class Variable extends ExpressionEntity {
+     markReassigned() {
+         this.isReassigned = true;
+     }
+-    markTargetOfAssignment() {
++    markTargetOfAssignment(value) {
+         this.isTargetOfAssignment = true;
++        this.assignedValues.push(value);
+     }
+     constructor(name) {
+         super();
+@@ -2862,6 +2863,10 @@ class Variable extends ExpressionEntity {
+         // Unlike isReassigned, set eagerly during binding for every assignment,
+         // including ones that are never included
+         this.isTargetOfAssignment = false;
++        // The values of all assignments to this variable, collected during binding.
++        // UNKNOWN_EXPRESSION is used if the assigned value cannot be determined,
++        // e.g. for compound assignments.
++        this.assignedValues = [];
+         this.onlyFunctionCallUsed = true;
+     }
+     /**
+@@ -6073,10 +6078,34 @@ class Identifier extends IdentifierBase {
+             this.variable.addReference(this);
+             this.isVariableReference = true;
+             if (this.assignmentInteraction) {
+-                this.variable.markTargetOfAssignment();
++                this.variable.markTargetOfAssignment(this.getValueAssignedToVariable());
+             }
+         }
+     }
++    /**
++     * The value the variable holds after the assignment, if it can be derived
++     * from the assigned value. Patterns, update expressions and for-in/of loops
++     * already pass UNKNOWN_EXPRESSION.
++     */
++    getValueAssignedToVariable() {
++        const { parent } = this;
++        if (parent.type === 'AssignmentExpression' && parent.left === this) {
++            // Logical assignments either keep the previous value, which is already
++            // covered, or assign the right side
++            switch (parent.operator) {
++                case '=':
++                case '&&=':
++                case '||=':
++                case '??=': {
++                    break;
++                }
++                default: {
++                    return UNKNOWN_EXPRESSION;
++                }
++            }
++        }
++        return this.assignmentInteraction.args[1];
++    }
+     declare(kind, destructuredInitPath, init) {
+         let variable;
+         const { treeshake } = this.scope.context.options;
+@@ -6968,6 +6997,15 @@ class ThisVariable extends ParameterVariable {
+  * queries resolve to unknown, and call arguments are deoptimized directly
+  * instead of being forwarded to the initializer alone.
+  */
++function mergeLiteralValues(a, b) {
++    if (a === b)
++        return a;
++    const aIsTruthy = a === UnknownTruthyValue || (a !== UnknownFalsyValue && !!a);
++    const bIsTruthy = b === UnknownTruthyValue || (b !== UnknownFalsyValue && !!b);
++    if (aIsTruthy !== bIsTruthy)
++        return UnknownValue;
++    return aIsTruthy ? UnknownTruthyValue : UnknownFalsyValue;
++}
+ class ReturnedIdentifier extends ExpressionEntity {
+     constructor(returnedIdentifier) {
+         super();
+@@ -6981,6 +7019,23 @@ class ReturnedIdentifier extends ExpressionEntity {
+     deoptimizePath(path) {
+         this.returnedIdentifier.deoptimizePath(path);
+     }
++    getLiteralValueAtPath(path, recursionTracker, origin) {
++        if (path.length > 0)
++            return UnknownValue;
++        // The returned value is either the value before any assignment or one of
++        // the assigned values, no matter when the assignments happen. Callers
++        // track this entity to prevent infinite recursion.
++        let value = this.returnedIdentifier.getLiteralValueAtPath(path, recursionTracker, origin);
++        for (const assignedValue of this.returnedIdentifier.variable.assignedValues) {
++            if (value === UnknownValue)
++                return UnknownValue;
++            const assignedLiteralValue = assignedValue.getLiteralValueAtPath(path, recursionTracker, origin);
++            if (assignedLiteralValue === UnknownValue)
++                return UnknownValue;
++            value = mergeLiteralValues(value, assignedLiteralValue);
++        }
++        return value;
++    }
+     includeCallArgumentsWhenCalledAtPath(path, interaction, context) {
+         this.returnedIdentifier.includeCallArgumentsWhenCalledAtPath(path, interaction, context);
+     }
+diff --git a/dist/shared/rollup.js b/dist/shared/rollup.js
+index f68625b66e2d49ac62606d23a20c910b0c2c8f52..bdbeb220021fe3cc4c32386f33ab24cc29c879c1 100644
+--- a/dist/shared/rollup.js
++++ b/dist/shared/rollup.js
+@@ -7006,8 +7006,9 @@ class Variable extends ExpressionEntity {
+     markReassigned() {
+         this.isReassigned = true;
+     }
+-    markTargetOfAssignment() {
++    markTargetOfAssignment(value) {
+         this.isTargetOfAssignment = true;
++        this.assignedValues.push(value);
+     }
+     constructor(name) {
+         super();
+@@ -7024,6 +7025,10 @@ class Variable extends ExpressionEntity {
+         // Unlike isReassigned, set eagerly during binding for every assignment,
+         // including ones that are never included
+         this.isTargetOfAssignment = false;
++        // The values of all assignments to this variable, collected during binding.
++        // UNKNOWN_EXPRESSION is used if the assigned value cannot be determined,
++        // e.g. for compound assignments.
++        this.assignedValues = [];
+         this.onlyFunctionCallUsed = true;
+     }
+     /**
+@@ -10233,10 +10238,34 @@ class Identifier extends IdentifierBase {
+             this.variable.addReference(this);
+             this.isVariableReference = true;
+             if (this.assignmentInteraction) {
+-                this.variable.markTargetOfAssignment();
++                this.variable.markTargetOfAssignment(this.getValueAssignedToVariable());
+             }
+         }
+     }
++    /**
++     * The value the variable holds after the assignment, if it can be derived
++     * from the assigned value. Patterns, update expressions and for-in/of loops
++     * already pass UNKNOWN_EXPRESSION.
++     */
++    getValueAssignedToVariable() {
++        const { parent } = this;
++        if (parent.type === 'AssignmentExpression' && parent.left === this) {
++            // Logical assignments either keep the previous value, which is already
++            // covered, or assign the right side
++            switch (parent.operator) {
++                case '=':
++                case '&&=':
++                case '||=':
++                case '??=': {
++                    break;
++                }
++                default: {
++                    return UNKNOWN_EXPRESSION;
++                }
++            }
++        }
++        return this.assignmentInteraction.args[1];
++    }
+     declare(kind, destructuredInitPath, init) {
+         let variable;
+         const { treeshake } = this.scope.context.options;
+@@ -11128,6 +11157,15 @@ class ThisVariable extends ParameterVariable {
+  * queries resolve to unknown, and call arguments are deoptimized directly
+  * instead of being forwarded to the initializer alone.
+  */
++function mergeLiteralValues(a, b) {
++    if (a === b)
++        return a;
++    const aIsTruthy = a === UnknownTruthyValue || (a !== UnknownFalsyValue && !!a);
++    const bIsTruthy = b === UnknownTruthyValue || (b !== UnknownFalsyValue && !!b);
++    if (aIsTruthy !== bIsTruthy)
++        return UnknownValue;
++    return aIsTruthy ? UnknownTruthyValue : UnknownFalsyValue;
++}
+ class ReturnedIdentifier extends ExpressionEntity {
+     constructor(returnedIdentifier) {
+         super();
+@@ -11141,6 +11179,23 @@ class ReturnedIdentifier extends ExpressionEntity {
+     deoptimizePath(path) {
+         this.returnedIdentifier.deoptimizePath(path);
+     }
++    getLiteralValueAtPath(path, recursionTracker, origin) {
++        if (path.length > 0)
++            return UnknownValue;
++        // The returned value is either the value before any assignment or one of
++        // the assigned values, no matter when the assignments happen. Callers
++        // track this entity to prevent infinite recursion.
++        let value = this.returnedIdentifier.getLiteralValueAtPath(path, recursionTracker, origin);
++        for (const assignedValue of this.returnedIdentifier.variable.assignedValues) {
++            if (value === UnknownValue)
++                return UnknownValue;
++            const assignedLiteralValue = assignedValue.getLiteralValueAtPath(path, recursionTracker, origin);
++            if (assignedLiteralValue === UnknownValue)
++                return UnknownValue;
++            value = mergeLiteralValues(value, assignedLiteralValue);
++        }
++        return value;
++    }
+     includeCallArgumentsWhenCalledAtPath(path, interaction, context) {
+         this.returnedIdentifier.includeCallArgumentsWhenCalledAtPath(path, interaction, context);
+     }
