@@ -818,7 +818,9 @@ export function splitExportDeclaration(
 
   if (this.isExportDefaultDeclaration()) {
     const standaloneDeclaration =
-      declaration.isFunctionDeclaration() || declaration.isClassDeclaration();
+      declaration.isFunctionDeclaration() ||
+      declaration.isClassDeclaration() ||
+      declaration.isStructDeclaration();
     const exportExpr =
       declaration.isFunctionExpression() || declaration.isClassExpression();
 
