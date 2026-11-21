@@ -6,7 +6,8 @@
     "setSpreadProperties": true
   },
   "plugins": [
-    "transform-object-rest-spread"
+    "transform-object-rest-spread",
+    "../../helpers/checkScopeInfo.js"
   ],
   "targets": {
     "browsers": "ie 6"

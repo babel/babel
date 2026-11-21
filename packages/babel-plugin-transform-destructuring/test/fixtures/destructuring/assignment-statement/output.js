@@ -1,5 +1,3 @@
-var _f = f();
-var _f2 = babelHelpers.slicedToArray(_f, 2);
-a = _f2[0];
-b = _f2[1];
-;
+var _f;
+a = (_f = babelHelpers.slicedToArray(f(), 2))[0], b = _f[1];
+0; // Avoid completion record special case

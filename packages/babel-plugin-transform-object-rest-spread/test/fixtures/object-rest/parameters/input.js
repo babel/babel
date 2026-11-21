@@ -8,6 +8,12 @@ function a7({a1 = 1, ...b1} = {}) {}
 function a8([{...a1}]) {}
 function a9([{a1, ...a2}]) {}
 function a10([a1, {...a2}]) {}
+function a11([...{ 0: a1, ...a2 }]) {}
+(function ([...{ 0: a1, ...a2 }]) {});
+((a1 = 0, [...{ 0: a2, ...a3 }] = []) => {});
+({ a12([...{ 0: a1, ...a2 }]) {} });
+class A13 { a13([...{ 0: a1, ...a2 }]) {} }
+function a14(...[{ ...a1 }]) {}
 // Unchanged
 function b(a) {}
 function b2(a, ...b) {}

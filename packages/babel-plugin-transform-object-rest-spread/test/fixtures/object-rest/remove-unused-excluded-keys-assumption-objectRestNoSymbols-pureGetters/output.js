@@ -1,12 +1,10 @@
 const _excluded = ["excluded", "excluded2", "used", "used2"],
   _excluded2 = ["unused"];
+var _c;
 // should not remove when destructuring into existing bindings
-var _c = c2;
 ({
   a2
-} = _c);
-b2 = babelHelpers.objectWithoutPropertiesLoose(_c, ["a2"]);
-_c;
+} = _c = c2), b2 = babelHelpers.objectWithoutPropertiesLoose(_c, ["a2"]), _c;
 class Comp extends React.Component {
   render() {
     const _this$props = this.props,
@@ -20,6 +18,7 @@ class Comp extends React.Component {
   }
 }
 function smth(_ref) {
-  let rest = babelHelpers.objectWithoutPropertiesLoose(_ref, _excluded2);
+  let {} = _ref,
+    rest = babelHelpers.objectWithoutPropertiesLoose(_ref, _excluded2);
   call(rest);
 }

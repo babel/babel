@@ -1,11 +1,7 @@
 class C {
   #x;
-  m(a = 1, _p, _p2, ..._p3) {
-    var x = _p.#x,
-      b = _p2,
-      c = _p3;
-    return function (b) {
-      var b = 1;
-    }(b);
+  m(a = 1, _ref, b, ...c) {
+    let x = _ref.#x;
+    var b = 1;
   }
 }

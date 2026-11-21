@@ -1,0 +1,9 @@
+function fn(arg) {
+  var _arg;
+  x = (_arg = babelHelpers.slicedToArray(arg, 2))[0], y = _arg[1];
+  const f = () => {
+    z = arg.z;
+    return arg;
+  };
+  return g((w = babelHelpers.slicedToArray(arg, 1)[0], arg));
+}

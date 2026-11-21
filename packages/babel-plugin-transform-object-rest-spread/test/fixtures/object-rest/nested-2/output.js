@@ -11,15 +11,8 @@ const test = {
     }
   }
 };
-const {
-    foo: {
-      bar: {
-        baz: {
-          a: {
-            x
-          }
-        }
-      }
-    }
-  } = test,
-  other = babelHelpers.objectWithoutProperties(test.foo.bar.baz.a, ["x"]);
+const _test$foo$bar$baz$a = test.foo.bar.baz.a,
+  {
+    x
+  } = _test$foo$bar$baz$a,
+  other = babelHelpers.objectWithoutProperties(_test$foo$bar$baz$a, ["x"]);
