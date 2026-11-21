@@ -1073,6 +1073,24 @@ describe("api", function () {
       });
     });
 
+    it("only transform plugin available", async function () {
+      const err = await new Promise((resolve, reject) => {
+        transformFile(
+          cwd + "/fixtures/api/parsing-errors/only-transform/file.js",
+          options,
+          (err, result) => (err ? resolve(err) : reject(result)),
+        );
+      });
+
+      expect(err.message).toMatch(
+        "Support for the experimental syntax 'structs' isn't currently enabled (1:1):",
+      );
+      expect(err.message).toMatch(
+        "Add @babel/plugin-proposal-structs (https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-structs) to the " +
+          "'plugins' section of your Babel config to enable transformation.",
+      );
+    });
+
     it("both syntax and transform plugin available", async function () {
       const promise = new Promise((resolve, reject) => {
         transformFile(
