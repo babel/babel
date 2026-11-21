@@ -1,10 +1,9 @@
 import path from "node:path";
 import fs from "node:fs";
+import { spawn, spawnSync, type ChildProcess } from "node:child_process";
 import { cpus } from "node:os";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
-import { Transform as TransformStream } from "node:stream";
-import { callbackify } from "node:util";
 import { styleText } from "node:util";
 // @ts-expect-error no types
 import gulp from "gulp";
@@ -99,6 +98,28 @@ function getIndexFromPackage(name: string): string {
   }
 }
 
+/**
+ * Write a generated source file, but only if its content changed: unchanged
+ * files keep their mtime so they are not compiled again, and tasks running in
+ * parallel never read a partially written file.
+ */
+function writeGeneratedFile(filename: string, content: string) {
+  try {
+    if (fs.readFileSync(filename, "utf8") === content) return;
+  } catch (err: any) {
+    if (err.code !== "ENOENT") throw err;
+  }
+  fs.mkdirSync(path.dirname(filename), { recursive: true });
+  const tmpFilename = `${filename}.${process.pid}.tmp`;
+  try {
+    fs.writeFileSync(tmpFilename, content, { mode: 0o644 });
+    fs.renameSync(tmpFilename, filename);
+  } finally {
+    // Don't leave the temporary file in the sources if the write failed
+    fs.rmSync(tmpFilename, { force: true });
+  }
+}
+
 async function generateHelpers(
   generator: string,
   dest: string,
@@ -110,7 +131,7 @@ async function generateHelpers(
     await generateCode(filename),
     path.join(dest, filename)
   );
-  fs.writeFileSync(path.join(dest, filename), result, { mode: 0o644 });
+  writeGeneratedFile(path.join(dest, filename), result);
   log(`${styleText("green", "✔")} Generated ${message}`);
 }
 
@@ -200,41 +221,114 @@ function applyBabelToGlob(glob: any, options: any) {
 const kebabToCamel = (str: string) =>
   str.replace(/-[a-z]/g, c => c[1].toUpperCase());
 
-function generateStandalone() {
-  const dest = "./packages/babel-standalone/src/generated/";
-  return gulp
-    .src(babelStandalonePluginConfigGlob, { base: monorepoRoot })
-    .pipe(
-      new TransformStream({
-        objectMode: true,
-        // @ts-expect-error FIXME
-        transform: callbackify(async file => {
-          log("Generating @babel/standalone files");
-          const pluginConfig = JSON.parse(file.contents);
-          let imports = ``;
-          let exportDecls = "";
-          let exportsList = "";
-          let allList = "";
+const runningChildProcesses = new Set<ChildProcess>();
 
-          for (const plugin of pluginConfig.noopPlugins) {
-            const camelPlugin = kebabToCamel(plugin);
-            exportDecls += `${camelPlugin} = makeNoopPlugin(),`;
-            allList += `"${plugin}": ${camelPlugin},`;
-          }
+function killChildProcessTree(child: ChildProcess) {
+  if (process.platform === "win32") {
+    // There are no process groups on Windows
+    spawnSync("taskkill", ["/pid", String(child.pid), "/t", "/f"], {
+      stdio: "ignore",
+    });
+  } else {
+    try {
+      // The child is the leader of its own process group (`detached`)
+      process.kill(-child.pid!, "SIGTERM");
+    } catch {
+      // It already exited
+    }
+  }
+}
 
-          for (const plugin of pluginConfig.externalPlugins) {
-            const camelPlugin = kebabToCamel(plugin);
-            imports += `import ${camelPlugin} from "@babel/plugin-${plugin}";`;
-            exportsList += `${camelPlugin},`;
-            allList += `"${plugin}": ${camelPlugin},`;
-          }
+let killChildProcessesOnExit = false;
+function setupKillChildProcessesOnExit() {
+  if (killChildProcessesOnExit) return;
+  killChildProcessesOnExit = true;
 
-          if (exportDecls) {
-            imports =
-              `import makeNoopPlugin from "../make-noop-plugin.ts";` + imports;
-            exportDecls = `export const ${exportDecls.slice(0, -1)}`;
-          }
-          const fileContents = `/*
+  // When a task fails, gulp exits without waiting for the other running tasks.
+  // Stop the scripts that are still running, and their own child processes
+  // (e.g. the tsc workers).
+  const killAll = () => {
+    for (const child of runningChildProcesses) killChildProcessTree(child);
+    runningChildProcesses.clear();
+  };
+  process.on("exit", killAll);
+  // On Unix the children are in their own process group, so they don't receive
+  // the signals sent to the terminal's foreground group (e.g. Ctrl+C). Kill
+  // them, and then let the signal terminate this process as it would by default.
+  for (const signal of ["SIGINT", "SIGTERM"] as const) {
+    process.once(signal, () => {
+      killAll();
+      process.kill(process.pid, signal);
+    });
+  }
+}
+
+/**
+ * Run a Node.js script in a child process, so that it can run in parallel with
+ * the other tasks
+ */
+function runNodeScript(args: string[], cwd?: string) {
+  setupKillChildProcessesOnExit();
+  return new Promise<void>((resolve, reject) => {
+    const child = spawn(process.execPath, args, {
+      cwd,
+      stdio: "inherit",
+      // Make the child the leader of a new process group, so that we can kill
+      // it with the processes it spawns. On Windows this would open a new
+      // console, and taskkill kills the process tree anyway.
+      detached: process.platform !== "win32",
+    });
+    runningChildProcesses.add(child);
+    child.on("error", err => {
+      runningChildProcesses.delete(child);
+      reject(err);
+    });
+    child.on("close", (code, signal) => {
+      runningChildProcesses.delete(child);
+      if (code === 0) {
+        resolve();
+      } else {
+        const command = `node ${args.join(" ")}`;
+        reject(
+          new Error(
+            signal
+              ? `${command} was killed by ${signal}`
+              : `${command} exited with code ${code}`
+          )
+        );
+      }
+    });
+  });
+}
+
+async function generateStandalone() {
+  log("Generating @babel/standalone files");
+  const pluginConfig = JSON.parse(
+    fs.readFileSync(babelStandalonePluginConfigGlob, "utf8")
+  );
+  let imports = ``;
+  let exportDecls = "";
+  let exportsList = "";
+  let allList = "";
+
+  for (const plugin of pluginConfig.noopPlugins) {
+    const camelPlugin = kebabToCamel(plugin);
+    exportDecls += `${camelPlugin} = makeNoopPlugin(),`;
+    allList += `"${plugin}": ${camelPlugin},`;
+  }
+
+  for (const plugin of pluginConfig.externalPlugins) {
+    const camelPlugin = kebabToCamel(plugin);
+    imports += `import ${camelPlugin} from "@babel/plugin-${plugin}";`;
+    exportsList += `${camelPlugin},`;
+    allList += `"${plugin}": ${camelPlugin},`;
+  }
+
+  if (exportDecls) {
+    imports = `import makeNoopPlugin from "../make-noop-plugin.ts";` + imports;
+    exportDecls = `export const ${exportDecls.slice(0, -1)}`;
+  }
+  const fileContents = `/*
    * This file is auto-generated! Do not modify it directly.
    * To re-generate run 'yarn gulp generate-standalone'
    */
@@ -242,16 +336,8 @@ function generateStandalone() {
   ${exportDecls};
   export {${exportsList}};
   export const all: Record<string, any> = {${allList}};`;
-          file.path = "plugins.ts";
-          file.contents = Buffer.from(
-            await formatCode(fileContents, dest + file.path)
-          );
-
-          return file;
-        }),
-      })
-    )
-    .pipe(gulp.dest(dest));
+  const dest = "./packages/babel-standalone/src/generated/plugins.ts";
+  writeGeneratedFile(dest, await formatCode(fileContents, dest));
 }
 
 function createWorker(useWorker: boolean): any {
@@ -275,9 +361,31 @@ function createWorker(useWorker: boolean): any {
   return worker;
 }
 
+/**
+ * Check if the source file needs to be compiled based on its modification time
+ * compared to the destination file.
+ * If the destination file does not exist, it will return true to indicate that
+ * compilation is needed.
+ */
+function needCompile(src: string, dest: string): boolean {
+  let destStat;
+  try {
+    destStat = fs.statSync(dest);
+  } catch (err: any) {
+    if (err.code === "ENOENT") {
+      return true;
+    } else {
+      throw err;
+    }
+  }
+  const srcStat = fs.statSync(src);
+  return srcStat.mtimeMs >= destStat.mtimeMs;
+}
+
 async function buildBabel(useWorker: boolean, ignore: PackageInfo[] = []) {
-  const worker = await createWorker(useWorker);
-  const promises = [];
+  // Check the modification times here rather than in the workers, so that an
+  // incremental build doesn't need a worker round trip for every source file.
+  const files = [];
   for (const file of globDefaultSources()) {
     if (ignore.some(pkg => file.startsWith(`${pkg.src}/`))) {
       continue;
@@ -285,6 +393,15 @@ async function buildBabel(useWorker: boolean, ignore: PackageInfo[] = []) {
 
     // @example ./packages/babel-parser/src/index.js
     const dest = "./" + mapSrcToLib(file);
+    if (needCompile(file, dest)) {
+      files.push({ file, dest });
+    }
+  }
+  if (files.length === 0) return;
+
+  const worker = await createWorker(useWorker);
+  const promises = [];
+  for (const { file, dest } of files) {
     promises.push(
       worker.transform(file, dest, {
         sourceMaps: !file.endsWith(".d.ts"),
@@ -1169,6 +1286,50 @@ gulp.task(
     )
   )
 );
+
+gulp.task("tscheck-babel-parser", () =>
+  runNodeScript(["scripts/parallel-tsc/tsc.ts", "./packages/babel-parser"])
+);
+gulp.task("build-plugin-transform-runtime-dist", () =>
+  runNodeScript(
+    ["scripts/build-dist.ts"],
+    "packages/babel-plugin-transform-runtime"
+  )
+);
+
+/**
+ * The complete development build: it runs the same steps as `build-dev`, the
+ * `bundle-babel-parser-dts` Makefile target and `build-plugin-transform-runtime-dist`
+ * (and optionally `rollup-babel-standalone`), but it runs the independent steps
+ * in parallel.
+ */
+function buildDevAll(standalone: boolean) {
+  return gulp.series(
+    "build-no-bundle",
+    // The @babel/types generated sources are part of the parser type check.
+    "generate-type-helpers",
+    gulp.parallel(
+      // tsc doesn't read lib, nor the sources written by the other generators.
+      gulp.series("tscheck-babel-parser", "bundle-babel-parser-dts"),
+      gulp.series(
+        gulp.parallel(
+          "generate-standalone",
+          "generate-runtime-helpers",
+          "generate-helper-globals-data"
+        ),
+        gulp.parallel(
+          // rebuild @babel/types and @babel/helpers since
+          // type-helpers and generated helpers may be changed
+          gulp.series("build-no-bundle", "build-plugin-transform-runtime-dist"),
+          ...(standalone ? ["rollup-babel-standalone"] : [])
+        )
+      )
+    )
+  );
+}
+
+gulp.task("build-dev-all", buildDevAll(false));
+gulp.task("build-dev-all-standalone", buildDevAll(true));
 
 function watch() {
   gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle-watch"));
