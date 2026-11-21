@@ -116,7 +116,7 @@ export const getVisitor = (): Visitor<PluginPass> =>
           getArgsId: () => t.cloneNode(argsId),
         };
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        path.traverse(argumentsThisVisitor, context);
+        path.get("body").traverse(argumentsThisVisitor, context);
 
         if (context.usesArguments) {
           vars.push(
@@ -341,15 +341,11 @@ function getMarkedFunctionId(
   return t.cloneNode(markedId);
 }
 
-const argumentsThisVisitor: Visitor<{
+const argumentsThisVisitor = traverse.visitors.environmentVisitor<{
   usesThis: boolean;
   usesArguments: boolean;
   getArgsId: () => t.Identifier;
-}> = {
-  "FunctionExpression|FunctionDeclaration|Method": function (path) {
-    path.skip();
-  },
-
+}>({
   Identifier: function (path, state) {
     if (path.node.name === "arguments" && util.isReference(path)) {
       path.replaceWith(state.getArgsId());
@@ -360,7 +356,7 @@ const argumentsThisVisitor: Visitor<{
   ThisExpression: function (path, state) {
     state.usesThis = true;
   },
-};
+});
 
 const functionSentVisitor: Visitor<{
   context: t.Identifier;

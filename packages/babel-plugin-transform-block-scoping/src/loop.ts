@@ -322,7 +322,7 @@ export function wrapLoopBody(
   };
   loopPath.traverse(
     {
-      Function(path) {
+      FunctionParent(path) {
         path.skip();
       },
       LabeledStatement: {
