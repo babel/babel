@@ -1,22 +1,9 @@
-import type { ModulesOption, UseBuiltInsOption } from "./options.ts";
-import type { NormalizedCorejsOption } from "./normalize-options.ts";
-import type { Targets, InputTargets } from "@babel/helper-compilation-targets";
+import type { ModulesOption } from "./options.ts";
+import type { InputTargets } from "@babel/helper-compilation-targets";
 
 // Options
 // Use explicit modules to prevent typo errors.
 export type ModuleOption = (typeof ModulesOption)[keyof typeof ModulesOption];
-export type BuiltInsOption =
-  (typeof UseBuiltInsOption)[keyof typeof UseBuiltInsOption];
-
-type CorejsVersion = 2 | 3 | string;
-
-export type CorejsOption =
-  | false
-  | CorejsVersion
-  | {
-      version: CorejsVersion;
-      proposals: boolean;
-    };
 
 export type PluginListItem = string | RegExp;
 export type PluginListOption = PluginListItem[];
@@ -38,14 +25,3 @@ export type Options = {
 
 // Babel
 export type Plugin = [any, any];
-
-export type InternalPluginOptions = {
-  corejs: NormalizedCorejsOption;
-  include: Set<string>;
-  exclude: Set<string>;
-  polyfillTargets: Targets;
-  debug: boolean;
-  proposals: boolean;
-  shippedProposals: boolean;
-  regenerator: boolean;
-};

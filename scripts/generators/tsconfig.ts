@@ -13,12 +13,12 @@ function maybeWriteFile(url: URL, contents: string) {
 }
 
 const thirdPartyBabelPlugins = [
-  "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class",
-  "@babel/preset-modules/lib/plugins/transform-edge-default-parameters",
-  "@babel/preset-modules/lib/plugins/transform-edge-function-name",
-  "@babel/preset-modules/lib/plugins/transform-tagged-template-caching",
-  "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing",
-  "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing",
+  "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class/index.js",
+  "@babel/preset-modules/lib/plugins/transform-edge-default-parameters/index.js",
+  "@babel/preset-modules/lib/plugins/transform-edge-function-name/index.js",
+  "@babel/preset-modules/lib/plugins/transform-tagged-template-caching/index.js",
+  "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing/index.js",
+  "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing/index.js",
   "babel-plugin-polyfill-corejs2",
   "babel-plugin-polyfill-corejs3",
   "babel-plugin-polyfill-regenerator",

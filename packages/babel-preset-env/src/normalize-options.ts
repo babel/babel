@@ -1,24 +1,12 @@
-import { coerce, parse, type SemVer } from "verkit";
-import corejs3Polyfills from "core-js-compat/data.json" with { type: "json" };
 import {
   plugins as pluginsList,
   pluginsBugfixes as bugfixPluginsList,
 } from "./plugins-compat-data.ts";
 import moduleTransformations from "./module-transformations.ts";
-import {
-  TopLevelOptions,
-  ModulesOption,
-  UseBuiltInsOption,
-} from "./options.ts";
+import { TopLevelOptions, ModulesOption } from "./options.ts";
 import { OptionValidator } from "@babel/helper-validator-option";
 
-import type {
-  BuiltInsOption,
-  CorejsOption,
-  ModuleOption,
-  Options,
-  PluginListOption,
-} from "./types.d.ts";
+import type { ModuleOption, Options, PluginListOption } from "./types.d.ts";
 
 const v = new OptionValidator(PACKAGE_JSON.name);
 
@@ -35,15 +23,9 @@ const modulePlugins = [
   ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
 ];
 
-const getValidIncludesAndExcludes = (
-  type: "include" | "exclude",
-  corejs: number | false,
-) => {
+const getValidIncludesAndExcludes = (type: "include" | "exclude") => {
   const set = new Set(allPluginsList);
   if (type === "exclude") modulePlugins.map(set.add, set);
-  if (corejs) {
-    Object.keys(corejs3Polyfills).map(set.add, set);
-  }
 
   return Array.from(set);
 };
@@ -58,11 +40,10 @@ export const normalizePluginName = (plugin: string) =>
 const expandIncludesAndExcludes = (
   filterList: PluginListOption = [],
   type: "include" | "exclude",
-  corejs: number | false,
 ) => {
   if (filterList.length === 0) return [];
 
-  const filterableItems = getValidIncludesAndExcludes(type, corejs);
+  const filterableItems = getValidIncludesAndExcludes(type);
 
   const invalidFilters: PluginListOption = [];
   const selectedPlugins = filterList.flatMap(filter => {
@@ -144,71 +125,6 @@ export const validateModulesOption = (
   return modulesOpt;
 };
 
-const validateUseBuiltInsOption = (builtInsOpt: BuiltInsOption = false) => {
-  v.invariant(
-    // @ts-expect-error we have provided fallback for undefined keys
-    UseBuiltInsOption[builtInsOpt.toString()] ||
-      builtInsOpt === UseBuiltInsOption.false,
-    `The 'useBuiltIns' option must be either
-    'false' (default) to indicate no polyfill,
-    '"entry"' to indicate replacing the entry polyfill, or
-    '"usage"' to import only used polyfills per file`,
-  );
-
-  return builtInsOpt;
-};
-
-export type NormalizedCorejsOption = {
-  proposals: boolean;
-  version: SemVer | null | false;
-};
-
-function normalizeCoreJSOption(
-  corejs: CorejsOption | undefined | null,
-  useBuiltIns: BuiltInsOption,
-): NormalizedCorejsOption {
-  let proposals = false;
-  let rawVersion: false | string | number | undefined | null;
-
-  if (useBuiltIns && corejs === undefined) {
-    throw new Error(
-      "When using the `useBuiltIns` option you must specify" +
-        ' the code-js version you are using, such as `"corejs": "3.32.0"`.',
-    );
-  } else if (typeof corejs === "object" && corejs !== null) {
-    rawVersion = corejs.version;
-    proposals = Boolean(corejs.proposals);
-  } else {
-    rawVersion = corejs;
-  }
-
-  const coercedVersion = rawVersion ? coerce(String(rawVersion)) : null;
-  const version = coercedVersion ? parse(coercedVersion) : false;
-
-  if (version) {
-    if (useBuiltIns) {
-      if (version.major !== 3) {
-        throw new RangeError(
-          "Invalid Option: The version passed to `corejs` is invalid. Currently, " +
-            "only core-js@3 is supported.",
-        );
-      }
-
-      if (typeof rawVersion !== "string" || !String(rawVersion).includes(".")) {
-        throw new Error(
-          'Invalid Option: The version passed to `corejs` is invalid. Please use string and specify the minor version, such as `"3.33"`.',
-        );
-      }
-    } else {
-      console.warn(
-        "\nWARNING (@babel/preset-env): The `corejs` option only has an effect when the `useBuiltIns` option is not `false`\n",
-      );
-    }
-  }
-
-  return { version, proposals };
-}
-
 export default function normalizeOptions(opts: Partial<Options>) {
   v.invariant(
     !Object.hasOwn(opts, "bugfixes"),
@@ -224,20 +140,14 @@ export default function normalizeOptions(opts: Partial<Options>) {
     );
   }
 
-  // TODO: Remove
-  const useBuiltIns = validateUseBuiltInsOption(false);
-  const corejs = normalizeCoreJSOption(null, useBuiltIns);
-
   const include = expandIncludesAndExcludes(
     opts.include,
     TopLevelOptions.include,
-    !!corejs.version && corejs.version.major,
   );
 
   const exclude = expandIncludesAndExcludes(
     opts.exclude,
     TopLevelOptions.exclude,
-    !!corejs.version && corejs.version.major,
   );
 
   checkDuplicateIncludeExcludes(include, exclude);
@@ -248,7 +158,6 @@ export default function normalizeOptions(opts: Partial<Options>) {
       opts.configPath,
       process.cwd(),
     ),
-    corejs,
     debug: v.validateBooleanOption(TopLevelOptions.debug, opts.debug, false),
     include,
     exclude,
@@ -269,7 +178,6 @@ export default function normalizeOptions(opts: Partial<Options>) {
       false,
     ),
     targets: normalizeTargets(opts.targets),
-    useBuiltIns: useBuiltIns,
     browserslistEnv: v.validateStringOption(
       TopLevelOptions.browserslistEnv,
       opts.browserslistEnv,

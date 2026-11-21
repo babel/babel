@@ -18,4 +18,4 @@ Using plugins:
   transform-export-namespace-from { }
   bugfix/transform-safari-id-destructuring-collision-in-function-expression { safari < 16.3 }
 
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
+Using polyfills: No polyfills were added. @babel/preset-env does not inject polyfills, please use babel-plugin-polyfill-corejs3 instead.
