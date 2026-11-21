@@ -2,6 +2,7 @@ import { types as t } from "@babel/core";
 import type { PluginAPI, PluginObject, NodePath } from "@babel/core";
 
 import { isLessThan } from "verkit";
+import { isRequired } from "@babel/helper-compilation-targets";
 
 import {
   buildPrivateNamesNodes,
@@ -24,6 +25,7 @@ import {
   shouldTransform,
 } from "./features.ts";
 import { assertFieldTransformed } from "./typescript.ts";
+import compatData from "../data/compat.json" with { type: "json" };
 
 export {
   FEATURES,
@@ -64,6 +66,7 @@ export function createClassFeaturePlugin({
     api.assumption("noUninitializedPrivateFieldAccess") ?? false;
   const constantSuper = api.assumption("constantSuper");
   const noDocumentAll = api.assumption("noDocumentAll") ?? false;
+  const targets = api.targets();
 
   if (privateFieldsAsProperties && privateFieldsAsSymbols) {
     throw new Error(
@@ -195,6 +198,19 @@ export function createClassFeaturePlugin({
         }
 
         if (!props.length) return;
+
+        const isPublicClassFieldsTransformRequired = isRequired(
+          "public_class_fields",
+          targets,
+          { compatData },
+        );
+        if (
+          !isPublicClassFieldsTransformRequired &&
+          !props.some(prop => prop.isPrivate()) &&
+          !file.get("@babel/plugin-class-features/hasLegacyDecoratedField")
+        ) {
+          return;
+        }
 
         const innerBinding = path.node.id;
         let ref: t.Identifier | null;
