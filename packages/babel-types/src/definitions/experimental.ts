@@ -178,6 +178,11 @@ defineType("StructDeclaration", {
       optional: true,
       validate: assertNodeType("Expression"),
     },
+    // TypeScript's `declare struct`
+    declare: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
   },
 });
 

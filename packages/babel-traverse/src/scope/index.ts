@@ -734,6 +734,8 @@ class Scope {
       if (path.node.declare) return;
       this.registerBinding("let", path);
     } else if (path.isStructDeclaration()) {
+      // TypeScript's `declare struct`
+      if (path.node.declare) return;
       this.registerBinding("let", path);
     } else if (path.isImportDeclaration()) {
       const isTypeDeclaration =

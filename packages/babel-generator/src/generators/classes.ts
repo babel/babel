@@ -299,6 +299,11 @@ export function StaticBlock(this: Printer, node: t.StaticBlock) {
 }
 
 export function StructDeclaration(this: Printer, node: t.StructDeclaration) {
+  if (node.declare) {
+    // TS
+    this.word("declare", true);
+    this.space();
+  }
   this.word("struct", true);
 
   if (node.id) {

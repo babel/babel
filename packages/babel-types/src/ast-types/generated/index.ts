@@ -1781,6 +1781,7 @@ export interface StructDeclaration extends BaseNode {
   id?: Identifier | null;
   superClass?: Expression | null;
   body: StructBody;
+  declare?: boolean | null;
 }
 
 export interface StructBody extends BaseNode {

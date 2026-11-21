@@ -683,6 +683,17 @@ describe("scope", () => {
       expect(path.scope.hasGlobal("B")).toBe(true);
     });
 
+    it("declare struct declarations are not registered as bindings", function () {
+      const path = getPath(
+        `declare struct a {}
+         export declare struct b {}`,
+        { sourceType: "module", plugins: ["typescript", "structs"] },
+      );
+
+      expect(path.scope.hasOwnBinding("a")).toBe(false);
+      expect(path.scope.hasOwnBinding("b")).toBe(false);
+    });
+
     it("references after re-crawling", function () {
       const path = getPath("function Foo() { var _jsx; }");
 

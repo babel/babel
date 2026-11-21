@@ -2355,6 +2355,19 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             );
           case tt._enum:
             return this.tsParseEnumDeclaration(node, { declare: true });
+          case tt._struct:
+            if (
+              !this.state.containsEsc &&
+              this.nextTokenIsIdentifierOnSameLine()
+            ) {
+              this.expectPlugin("structs");
+              node.declare = true;
+              return this.parseStructDeclaration(
+                node as Undone<N.StructDeclaration>,
+                /* optionalId */ false,
+              );
+            }
+            break;
           case tt._global:
             return this.tsParseAmbientExternalModuleDeclaration(node);
           case tt._let:
