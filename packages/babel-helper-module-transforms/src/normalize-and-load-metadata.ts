@@ -1,7 +1,13 @@
 import { basename, extname } from "node:path";
-import type { types as t, NodePath } from "@babel/core";
+import { types as t, type NodePath } from "@babel/core";
 
 import { isIdentifierName } from "@babel/helper-validator-identifier";
+
+// TODO(Babel 9): Remove this check. StructDeclaration was introduced in
+// @babel/core 8.1.0, and older versions throw on visitors for unknown node
+// types.
+export const supportsStructs =
+  process.env.BABEL_9_BREAKING || !!t.structDeclaration;
 
 export interface ModuleMetadata {
   exportName: string;
@@ -502,7 +508,10 @@ function getLocalExportMetadata(
 
       if (child.isFunctionDeclaration()) {
         kind = "hoisted";
-      } else if (child.isClassDeclaration()) {
+      } else if (
+        child.isClassDeclaration() ||
+        (supportsStructs && child.isStructDeclaration())
+      ) {
         kind = "block";
       } else if (child.isVariableDeclaration({ kind: "var" })) {
         kind = "var";
@@ -579,7 +588,8 @@ function getLocalExportMetadata(
       const declaration = child.get("declaration");
       if (
         declaration.isFunctionDeclaration() ||
-        declaration.isClassDeclaration()
+        declaration.isClassDeclaration() ||
+        (supportsStructs && declaration.isStructDeclaration())
       ) {
         getLocalMetadata(
           declaration.get("id") as NodePath<t.Identifier>,
@@ -624,7 +634,8 @@ function removeImportExportDeclarations(programPath: NodePath<t.Program>) {
       const declaration = child.get("declaration");
       if (
         declaration.isFunctionDeclaration() ||
-        declaration.isClassDeclaration()
+        declaration.isClassDeclaration() ||
+        (supportsStructs && declaration.isStructDeclaration())
       ) {
         // @ts-expect-error todo(flow->ts): avoid mutations
         declaration._blockHoist = child.node._blockHoist;
