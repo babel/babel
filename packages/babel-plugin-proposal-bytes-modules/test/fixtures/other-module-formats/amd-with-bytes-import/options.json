@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "plugins": ["proposal-bytes-modules", "transform-modules-amd"],
+  "throws": "@babel/plugin-proposal-bytes-modules can only be used when not compiling modules, or when compiling them to CommonJS."
+}

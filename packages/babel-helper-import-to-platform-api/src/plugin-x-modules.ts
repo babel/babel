@@ -56,7 +56,10 @@ export function createImportTypeAsDefaultPlugin({
       Program(path) {
         if (path.node.sourceType !== "module") return;
 
-        const helper = getHelper(this.file);
+        // Only resolve the helper once a matching import is found, so that
+        // modules without any such import can still be compiled to formats
+        // other than CommonJS.
+        let helper: Builders | undefined;
 
         const data = [];
         const namespaces = [];
@@ -104,6 +107,7 @@ export function createImportTypeAsDefaultPlugin({
           const id =
             defaultId ?? namespaceId ?? path.scope.generateUidIdentifier("_");
 
+          helper ??= getHelper(this.file);
           let fetch = helper.buildFetch(decl.node.source, this.file);
 
           if (defaultId && namespaceId) {
@@ -128,9 +132,11 @@ export function createImportTypeAsDefaultPlugin({
         }
         if (data.length === 0) return;
 
-        injectParallelStaticImports(path, data, helper.needsAwait)!.insertAfter(
-          namespaces,
-        );
+        injectParallelStaticImports(
+          path,
+          data,
+          helper!.needsAwait,
+        )!.insertAfter(namespaces);
       },
     },
   };
