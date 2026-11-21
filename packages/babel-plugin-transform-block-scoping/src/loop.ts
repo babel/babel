@@ -1,5 +1,5 @@
 import { template, types as t } from "@babel/core";
-import type { NodePath, Visitor, Scope } from "@babel/core";
+import type { NodePath, PluginPass, Visitor, Scope } from "@babel/core";
 
 interface LoopBodyBindingsState {
   blockScoped: Scope.Binding[];
@@ -303,12 +303,14 @@ interface CompletionsAndVarsState {
 
   vars: NodePath<t.VariableDeclaration>[];
   loopNode: t.Loop;
+  hasTryFinally: boolean;
 }
 
 export function wrapLoopBody(
   loopPath: NodePath<t.Loop>,
   captured: string[],
   updatedBindingsUsages: Map<string, NodePath<t.Identifier>[]>,
+  pluginPass: PluginPass,
 ) {
   const loopNode = loopPath.node;
   const state: CompletionsAndVarsState = {
@@ -319,10 +321,11 @@ export function wrapLoopBody(
     labellessContinueTargets: 0,
     vars: [],
     loopNode,
+    hasTryFinally: false,
   };
   loopPath.traverse(
     {
-      Function(path) {
+      FunctionParent(path) {
         path.skip();
       },
       LabeledStatement: {
@@ -375,6 +378,11 @@ export function wrapLoopBody(
       ReturnStatement(path, state) {
         state.returns.push(path);
       },
+      TryStatement(path, state) {
+        if (path.node.finalizer) {
+          state.hasTryFinally = true;
+        }
+      },
       VariableDeclaration(path, state) {
         if (path.parent === state.loopNode && isVarInLoopHead(path)) return;
         if (path.node.kind === "var") state.vars.push(path);
@@ -404,17 +412,40 @@ export function wrapLoopBody(
 
   const id = loopPath.scope.generateUid("loop");
   const fn = t.functionExpression(null, closureParams, t.blockStatement([]));
+  let init: t.Expression = fn;
   let call: t.Expression = t.callExpression(t.identifier(id), callArgs);
 
   const fnParent = loopPath.findParent(p => p.isFunctionParent());
+  let wrappedAsyncGenerators: WeakSet<t.Node> | undefined;
+  let isWrappedAsyncGenerator = false;
   if (fnParent) {
-    // @ts-expect-error: async and generator are not on t.FunctionParent, here we provide default values for static blocks.
-    const { async = false, generator = false } =
-      fnParent.node as t.FunctionParent;
-    fn.async = async;
-    fn.generator = generator;
-    if (generator) call = t.yieldExpression(call, true);
-    else if (async) call = t.awaitExpression(call);
+    wrappedAsyncGenerators = pluginPass.file.get(
+      "@babel/plugin-transform-async-generator-functions/wrapped_async_generators",
+    );
+    if (
+      state.hasTryFinally &&
+      fnParent.isFunction() &&
+      fnParent.node.generator &&
+      wrappedAsyncGenerators?.has(fnParent.node.body)
+    ) {
+      isWrappedAsyncGenerator = true;
+      fn.generator = true;
+      init = t.callExpression(pluginPass.addHelper("wrapAsyncGenerator"), [fn]);
+      call = t.yieldExpression(
+        t.callExpression(pluginPass.addHelper("asyncGeneratorDelegate"), [
+          call,
+        ]),
+        true,
+      );
+    } else {
+      // @ts-expect-error: async and generator are not on t.FunctionParent, here we provide default values for static blocks.
+      const { async = false, generator = false } =
+        fnParent.node as t.FunctionParent;
+      fn.async = async;
+      fn.generator = generator;
+      if (generator) call = t.yieldExpression(call, true);
+      else if (async) call = t.awaitExpression(call);
+    }
   }
 
   const updaterNode =
@@ -431,7 +462,9 @@ export function wrapLoopBody(
   // must not assume that loopPath still represents the loop.
   // TODO: Consider using a function declaration
   const [varPath] = loopPath.insertBefore(
-    t.variableDeclaration("var", [t.variableDeclarator(t.identifier(id), fn)]),
+    t.variableDeclaration("var", [
+      t.variableDeclarator(t.identifier(id), init),
+    ]),
   );
 
   const bodyStmts: t.Statement[] = [];
@@ -575,6 +608,9 @@ export function wrapLoopBody(
   const loopBlockBody = t.toBlock(loopNode.body);
   loopNode.body = t.blockStatement(bodyStmts);
   fn.body = loopBlockBody;
+  if (isWrappedAsyncGenerator) {
+    wrappedAsyncGenerators!.add(loopBlockBody);
+  }
   if (updaterNode) loopBlockBody.body.push(updaterNode);
 
   return varPath;
