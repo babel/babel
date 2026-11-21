@@ -127,8 +127,15 @@ export function ModuleExpression(
   parentId: number,
   tokenContext: number,
 ): boolean {
+  // `module {` cannot start an expression statement, and
   // `class A extends module {} {}` has an identifier as its superclass
-  return (tokenContext & TokenContext.classHeritage) > 0;
+  return (
+    (tokenContext &
+      (TokenContext.expressionStatement |
+        TokenContext.exportDefault |
+        TokenContext.classHeritage)) >
+    0
+  );
 }
 
 export function ObjectExpression(

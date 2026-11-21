@@ -1,3 +1,0 @@
-module {
-  /* leading */ x /* trailing */
-}

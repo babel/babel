@@ -1,0 +1,5 @@
+const m = module
+{}
+
+module
+{}

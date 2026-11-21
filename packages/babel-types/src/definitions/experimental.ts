@@ -139,7 +139,7 @@ defineType("ExportDefaultSpecifier", {
   },
 });
 
-// https://github.com/tc39/proposal-js-module-blocks
+// https://github.com/tc39/proposal-module-expressions
 defineType("ModuleExpression", {
   visitor: ["body"],
   fields: {
