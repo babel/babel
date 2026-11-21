@@ -251,9 +251,12 @@ export default declarePreset((api, opts: Options) => {
   removeUnsupportedItems(pluginNames, api.version);
   removeUnnecessaryItems(pluginNames, overlappingPlugins);
 
-  const plugins = Array.from(pluginNames, (pluginName): PluginItem =>
+  // Plugins such as transform-object-rest-spread default `useBuiltIns` from
+  // api.targets(), which ignores the preset's own `targets` option.
+  const plugins = Array.from(pluginNames, (pluginName): PluginItem => [
     getPlugin(pluginName),
-  );
+    { useBuiltIns: false },
+  ]);
 
   if (debug) {
     console.log("@babel/preset-env: `DEBUG` option");
