@@ -55,8 +55,7 @@ node -e "
   fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
 "
 
-# Update deps, build and test
-rm yarn.lock
+# build and test
 YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j test-ci
 
 cleanup
