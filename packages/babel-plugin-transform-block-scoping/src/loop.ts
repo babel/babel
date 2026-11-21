@@ -303,6 +303,7 @@ interface CompletionsAndVarsState {
 
   vars: NodePath<t.VariableDeclaration>[];
   loopNode: t.Loop;
+  hasTryFinally: boolean;
 }
 
 export function wrapLoopBody(
@@ -320,6 +321,7 @@ export function wrapLoopBody(
     labellessContinueTargets: 0,
     vars: [],
     loopNode,
+    hasTryFinally: false,
   };
   loopPath.traverse(
     {
@@ -376,6 +378,16 @@ export function wrapLoopBody(
       ReturnStatement(path, state) {
         state.returns.push(path);
       },
+      TryStatement(path, state) {
+        if (
+          path.node.finalizer &&
+          !path
+            .findParent(p => p === loopPath || p.isStaticBlock())
+            ?.isStaticBlock()
+        ) {
+          state.hasTryFinally = true;
+        }
+      },
       VariableDeclaration(path, state) {
         if (path.parent === state.loopNode && isVarInLoopHead(path)) return;
         if (path.node.kind === "var") state.vars.push(path);
@@ -416,6 +428,7 @@ export function wrapLoopBody(
       "@babel/plugin-transform-async-generator-functions/wrapped_async_generators",
     );
     if (
+      state.hasTryFinally &&
       fnParent.isFunction() &&
       fnParent.node.generator &&
       wrappedAsyncGenerators &&
