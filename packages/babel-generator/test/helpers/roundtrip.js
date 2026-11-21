@@ -211,6 +211,8 @@ function hasPlugin(plugins, name) {
  *   expected to change shape
  * @param {string[]} [options.parserReparseErrors] Parser fixtures whose
  *   generated code is expected to be rejected by the parser
+ * @param {string[]} [options.parserPasses] Parser fixtures of the shared
+ *   lists that are expected to roundtrip with these generator options
  */
 export default function runRoundtripTests(
   generatorOpts = {},
@@ -219,14 +221,17 @@ export default function runRoundtripTests(
     generatorReparseErrors = [],
     parserFailures = [],
     parserReparseErrors = [],
+    parserPasses = [],
   } = {},
 ) {
   const generatorAstChanges = [...GENERATOR_FAILURES, ...generatorFailures];
-  const parserAstChanges = [...PARSER_FAILURES, ...parserFailures];
+  const parserAstChanges = [...PARSER_FAILURES, ...parserFailures].filter(
+    name => !parserPasses.includes(name),
+  );
   const parserReparseErrorList = [
     ...PARSER_REPARSE_ERRORS,
     ...parserReparseErrors,
-  ];
+  ].filter(name => !parserPasses.includes(name));
 
   describe("generator fixtures", () => {
     (fixtures.default || fixtures)(GENERATOR_FIXTURES).forEach(testSuite => {
