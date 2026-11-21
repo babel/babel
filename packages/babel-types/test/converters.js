@@ -87,6 +87,9 @@ describe("converters", function () {
         t.arrayExpression([t.numericLiteral(1), t.stringLiteral("a")]),
       );
     });
+    it("array hole", function () {
+      expect(t.valueToNode(new Array(1))).toEqual(t.arrayExpression([null]));
+    });
     it("object", function () {
       expect(
         t.valueToNode({
