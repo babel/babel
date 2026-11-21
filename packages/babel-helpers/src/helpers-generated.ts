@@ -479,6 +479,21 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
+  // size: 852, gzip size: 427
+  constructStruct: helper(
+    "8.2.0",
+    'function _constructStruct(e,r,o){var f=t(),c=f.g();if(!c||c.d||c.k!==r){var n=f.s.get(e);if(r!==e||!n)throw new TypeError("Struct constructors cannot be used with a different new.target");var a,h=n.c,l=[],p=[];for(a=0;a<h.length;a++){var s=Object.getPrototypeOf(h[a].k);s!==h[a].h&&(l.push(h[a]),p.push(s))}var g=Object.create(e.prototype),u=[],i=[];for(a=0;a<h.length;a++)-1===u.indexOf(h[a].r)&&(u.push(h[a].r),i.push(h[a].r.g()));var y={i:g,k:e};for(a=0;a<u.length;a++)u[a].x(y);try{for(a=0;a<l.length;a++)Object.setPrototypeOf(l[a].k,l[a].h);Reflect.construct(e,[],e)}finally{for(a=0;a<u.length;a++)u[a].x(i[a]);for(a=0;a<l.length;a++)try{Object.setPrototypeOf(l[a].k,p[a])}catch(t){}}for(a=0;a<h.length;a++)h[a].b.add(g);for(Object.seal(g),a=0;a<h.length;a++)h[a].f&&Reflect.apply(h[a].f(g),g,h[a].fk||[]);return n.i&&Reflect.apply(n.i(g),g,o),g}}',
+    {
+      globals: ["TypeError", "Object", "Reflect"],
+      locals: { _constructStruct: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_constructStruct",
+      dependencies: {
+        structRegistry: ["body.0.body.body.0.declarations.0.init.callee"],
+      },
+      internal: false,
+    },
+  ),
   // size: 336, gzip size: 217
   createClass: helper(
     "7.0.0-beta.0",
@@ -612,6 +627,24 @@ const helpers: Record<string, Helper> = {
       dependencies: {
         toPropertyKey: [
           "body.0.body.body.0.argument.expressions.0.test.left.right.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+  // size: 488, gzip size: 327
+  defineStruct: helper(
+    "8.2.0",
+    "function _defineStruct(e,o,c,a,p,f){var i=t(),n=Object.getPrototypeOf(e),s=i.l(n),y=new WeakSet,u={k:e,h:n,p:s,b:y,f:c,fk:f,i:a,c:[],r:i};u.c=s?s.c.concat([u]):[u];for(var l=0;l<u.c.length;l++)u.c[l].r.s.set(e,u);if(p){var v=new Map;for(l=0;l<p.length;l++){var O=p[l];Array.isArray(O)?v.set(O[0],!1):v.set(O,!0)}v.forEach(function(t,o){if(t){var c=Object.getOwnPropertyDescriptor(e.prototype,o);c.value=r(c.value,y,o),Object.defineProperty(e.prototype,o,c)}})}o&&Object.seal(e.prototype)}",
+    {
+      globals: ["Object", "WeakSet", "Map", "Array"],
+      locals: { _defineStruct: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_defineStruct",
+      dependencies: {
+        structRegistry: ["body.0.body.body.0.declarations.0.init.callee"],
+        wrapStructMethod: [
+          "body.0.body.body.3.consequent.body.2.expression.arguments.0.body.body.0.consequent.body.1.expression.expressions.0.right.callee",
         ],
       },
       internal: false,
@@ -1233,6 +1266,19 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
+  // size: 49, gzip size: 67
+  sealStruct: helper(
+    "8.2.0",
+    "function _sealStruct(t){Object.seal(t.prototype)}",
+    {
+      globals: ["Object"],
+      locals: { _sealStruct: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_sealStruct",
+      dependencies: {},
+      internal: false,
+    },
+  ),
   // size: 469, gzip size: 270
   set: helper(
     "7.0.0-beta.0",
@@ -1321,6 +1367,84 @@ const helpers: Record<string, Helper> = {
           "body.0.body.body.0.argument.left.right.callee",
         ],
         nonIterableRest: ["body.0.body.body.0.argument.right.callee"],
+      },
+      internal: false,
+    },
+  ),
+  // size: 185, gzip size: 154
+  structHeritage: helper(
+    "8.2.0",
+    'function _structHeritage(t){var e=r();if(0===arguments.length)return e.o;if(null===t)return e.n;if(!e.l(t))throw new TypeError("Structs can only extend other structs or null");return t}',
+    {
+      globals: ["TypeError"],
+      locals: { _structHeritage: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_structHeritage",
+      dependencies: {
+        structRegistry: ["body.0.body.body.0.declarations.0.init.callee"],
+      },
+      internal: false,
+    },
+  ),
+  // size: 109, gzip size: 113
+  structPrivateMethod: helper(
+    "8.2.0",
+    "function _structPrivateMethod(e,o,u){var i=t(),s=i.w.get(o);return s||(s=r(o,i.s.get(e).b,u),i.w.set(o,s)),s}",
+    {
+      globals: [],
+      locals: { _structPrivateMethod: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_structPrivateMethod",
+      dependencies: {
+        structRegistry: ["body.0.body.body.0.declarations.0.init.callee"],
+        wrapStructMethod: [
+          "body.0.body.body.1.argument.expressions.0.right.expressions.0.right.callee",
+        ],
+      },
+      internal: false,
+    },
+  ),
+  // size: 1234, gzip size: 582
+  structRegistry: helper(
+    "8.2.0",
+    'function _structRegistry(){if({}.hasOwnProperty.call(_structRegistry,"r"))return _structRegistry.r;var t=Symbol.for("babel.structs@1"),e="object"==typeof globalThis?globalThis:"object"==typeof self?self:"object"==typeof global?global:void 0,r=e&&e[t];if(!r){var o,base=function(){var t=o;if(!t||t.d)throw new TypeError("Illegal constructor");return t.d=!0,o=void 0,t.i},baseNull=function(){return base()};base.prototype=Object.prototype,baseNull.prototype=null;var n=new WeakMap;r={s:n,g:function(){return o},x:function(t){o=t},o:base,n:baseNull,l:function(e){var o,c=n.get(e);if(c)return c;for(var a=e;"function"==typeof a&&!/^\\s*function\\b[^{]*\\{\\s*\\[native code\\]\\s*\\}\\s*$/.test(function(){}.toString.call(a));a=Object.getPrototypeOf(a)){var i=Object.getOwnPropertyDescriptor(a,t);i&&"value"in i&&!i.writable&&!i.configurable&&(o=i.value)}if(o!==r)try{return WeakMap.prototype.get.call(Object.getOwnPropertyDescriptor(o,"s").value,e)}catch(t){}},w:new WeakMap},Object.defineProperty(base,t,{value:r}),Object.defineProperty(baseNull,t,{value:r}),Object.freeze(base),Object.freeze(baseNull);try{Object.defineProperty(e,t,{value:r})}catch(t){}}var getRegistry=function(){return r};return getRegistry.r=r,_structRegistry=getRegistry,r}',
+    {
+      globals: [
+        "Symbol",
+        "globalThis",
+        "self",
+        "global",
+        "TypeError",
+        "Object",
+        "WeakMap",
+      ],
+      locals: {
+        _structRegistry: [
+          "body.0.id",
+          "body.0.body.body.0.test.arguments.0",
+          "body.0.body.body.0.consequent.argument.object",
+          "body.0.body.body.4.argument.expressions.1.left",
+        ],
+      },
+      exportBindingAssignments: ["body.0.body.body.4.argument.expressions.1"],
+      exportName: "_structRegistry",
+      dependencies: {},
+      internal: true,
+    },
+  ),
+  // size: 194, gzip size: 164
+  structSuper: helper(
+    "8.2.0",
+    'function _structSuper(t,o){var e=r().s.get(t),u=e&&e.p;return function(){if(!u)throw new TypeError("Super constructor is not a constructor");return u.i?Reflect.apply(u.i(o),o,arguments):void 0}}',
+    {
+      globals: ["TypeError", "Reflect"],
+      locals: { _structSuper: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_structSuper",
+      dependencies: {
+        structRegistry: [
+          "body.0.body.body.0.declarations.0.init.callee.object.object.callee",
+        ],
       },
       internal: false,
     },
@@ -1671,6 +1795,21 @@ const helpers: Record<string, Helper> = {
         inherits: ["body.0.body.body.4.argument.expressions.0.callee"],
       },
       internal: false,
+    },
+  ),
+  // size: 315, gzip size: 237
+  wrapStructMethod: helper(
+    "8.2.0",
+    'function _wrapStructMethod(e,r,o){var c=Object.getOwnPropertyDescriptor({get m(){if(!r.has(this))throw new TypeError("Struct method called on an incompatible receiver");return Reflect.apply(e,this,arguments)}},"m").get;try{delete c.length}catch(t){}return t(c,o),Object.setPrototypeOf(c,Object.getPrototypeOf(e)),c}',
+    {
+      globals: ["Object", "TypeError", "Reflect"],
+      locals: { _wrapStructMethod: ["body.0.id"] },
+      exportBindingAssignments: [],
+      exportName: "_wrapStructMethod",
+      dependencies: {
+        setFunctionName: ["body.0.body.body.2.argument.expressions.0.callee"],
+      },
+      internal: true,
     },
   ),
   // size: 73, gzip size: 86
