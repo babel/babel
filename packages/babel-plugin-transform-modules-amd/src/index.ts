@@ -121,6 +121,14 @@ export default declare<State, Options>((api, options: Options) => {
       ) {
         if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
         if (path.isCallExpression() && !path.get("callee").isImport()) return;
+        // `import.source()`, `import.defer()` and `import.sync()` can't be
+        // compiled to a regular dynamic import.
+        if (
+          path.isImportExpression() &&
+          (path.node.phase != null || path.node.sync)
+        ) {
+          return;
+        }
 
         let { requireId, resolveId, rejectId } = state;
         if (!requireId) {

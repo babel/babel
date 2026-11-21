@@ -185,15 +185,31 @@ export default declare((api, options: Options) => {
         this: PluginPass,
         path: NodePath<t.CallExpression | t.ImportExpression>,
       ) {
-        if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
-        if (path.isCallExpression() && !t.isImport(path.node.callee)) return;
+        let wrapNamespace: ((ns: t.Expression) => t.Expression) | null = null;
+        if (
+          path.isImportExpression() &&
+          (path.node.phase != null || path.node.sync)
+        ) {
+          // `import.source()`, `import.defer()` and `import.sync()` can't be
+          // compiled to a regular dynamic import, unless a hook (such as the
+          // one defined by @babel/plugin-proposal-import-defer) handles them.
+          // In that case they are compiled regardless of whether regular
+          // dynamic imports are.
+          wrapNamespace = makeInvokers(this.file).getDynamicImportWrapper!(
+            path.node,
+          );
+          if (!wrapNamespace) return;
+        } else {
+          if (!this.file.has("@babel/plugin-proposal-dynamic-import")) return;
+          if (path.isCallExpression() && !t.isImport(path.node.callee)) return;
+        }
 
         let { scope } = path;
         do {
           scope.rename("require");
         } while ((scope = scope.parent!));
 
-        transformDynamicImport(path, importInterop, this.file);
+        transformDynamicImport(path, importInterop, this.file, wrapNamespace);
       },
 
       Program: {
