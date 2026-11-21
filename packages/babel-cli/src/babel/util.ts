@@ -121,11 +121,6 @@ export function deleteDir(path: string): void {
   fs.rmSync(path, { force: true, recursive: true });
 }
 
-process.on("uncaughtException", function (err) {
-  console.error(err);
-  process.exitCode = 1;
-});
-
 export function withExtension(filename: string, ext: string = ".js") {
   const newBasename = path.basename(filename, path.extname(filename)) + ext;
   return path.join(path.dirname(filename), newBasename);
