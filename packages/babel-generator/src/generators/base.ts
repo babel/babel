@@ -1,5 +1,29 @@
 import type Printer from "../printer.ts";
+import { isFunction } from "@babel/types";
 import type * as t from "@babel/types";
+
+// Finds the string statement that has to keep its parentheses, because it would
+// otherwise be parsed as a directive: `('use strict'); 010` is not a directive,
+// but `'use strict'; 010` is. The prologue continues past bare strings and ends
+// at the first parenthesized one, so at most one string in a body needs them.
+export function _findParenthesizedPrologueString(
+  body: t.Statement[] | null | undefined,
+): t.StringLiteral | null {
+  if (!body) return null;
+  for (let i = 0; i < body.length; i++) {
+    const statement = body[i];
+    // printJoin skips holes, so they do not end the prologue
+    if (!statement) continue;
+    if (
+      statement.type !== "ExpressionStatement" ||
+      statement.expression?.type !== "StringLiteral"
+    ) {
+      return null;
+    }
+    if (statement.expression.extra?.parenthesized) return statement.expression;
+  }
+  return null;
+}
 
 export function File(this: Printer, node: t.File) {
   if (node.program) {
@@ -25,10 +49,17 @@ export function Program(this: Printer, node: t.Program) {
     }
   }
 
+  this._parenthesizedPrologueString = _findParenthesizedPrologueString(
+    node.body,
+  );
   this.printSequence(node.body);
 }
 
-export function BlockStatement(this: Printer, node: t.BlockStatement) {
+export function BlockStatement(
+  this: Printer,
+  node: t.BlockStatement,
+  parent: t.Node,
+) {
   this.token("{");
   const oldNoLineTerminatorAfterNode = this.enterDelimited();
 
@@ -41,6 +72,11 @@ export function BlockStatement(this: Printer, node: t.BlockStatement) {
     }
   }
 
+  const prologueString = _findParenthesizedPrologueString(node.body);
+  // Only a function body has a directive prologue; a plain block does not.
+  if (prologueString !== null && isFunction(parent)) {
+    this._parenthesizedPrologueString = prologueString;
+  }
   this.printSequence(node.body, true, true);
 
   this._noLineTerminatorAfterNode = oldNoLineTerminatorAfterNode;
