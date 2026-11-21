@@ -58,4 +58,14 @@ node -e "
 # build and test
 YARN_ENABLE_IMMUTABLE_INSTALLS=false make -j test-ci
 
+# babel.config.ts runs preset-env with `modules: false`, so neither the build
+# nor the tests load @babel/helper-module-transforms. Also compile the sources
+# to CommonJS, to check the module transforms with @babel/core 8.0.0.
+cjs_out_dir=$(mktemp -d)
+BABEL_ENV=production yarn babel packages/*/src \
+  --extensions .ts,.js,.cjs,.mjs \
+  --plugins @babel/plugin-transform-export-namespace-from,@babel/plugin-transform-modules-commonjs \
+  --out-dir "$cjs_out_dir"
+rm -rf "$cjs_out_dir"
+
 cleanup
