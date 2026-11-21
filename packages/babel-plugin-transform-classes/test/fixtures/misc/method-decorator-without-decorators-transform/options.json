@@ -1,0 +1,5 @@
+{
+  "plugins": ["transform-classes"],
+  "parserOpts": { "plugins": ["decorators"] },
+  "throws": "Method has decorators, put the decorator plugin before the classes one."
+}
