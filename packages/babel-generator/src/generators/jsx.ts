@@ -91,7 +91,10 @@ export function JSXOpeningElement(this: Printer, node: t.JSXOpeningElement) {
   }
   if (node.selfClosing) {
     this.space();
+    this.sourceWithOffset("end", node.loc, -2);
     this.token("/");
+  } else {
+    this.sourceWithOffset("end", node.loc, -1);
   }
   this.token(">");
 }
@@ -100,6 +103,7 @@ export function JSXClosingElement(this: Printer, node: t.JSXClosingElement) {
   this.token("<");
   this.token("/");
   this.print(node.name);
+  this.sourceWithOffset("end", node.loc, -1);
   this.token(">");
 }
 
@@ -120,12 +124,14 @@ export function JSXFragment(this: Printer, node: t.JSXFragment) {
   this.print(node.closingFragment);
 }
 
-export function JSXOpeningFragment(this: Printer) {
+export function JSXOpeningFragment(this: Printer, node: t.JSXOpeningFragment) {
   this.token("<", false, 0, true);
+  this.sourceWithOffset("end", node.loc, -1);
   this.token(">");
 }
 
-export function JSXClosingFragment(this: Printer) {
+export function JSXClosingFragment(this: Printer, node: t.JSXClosingFragment) {
   this.token("</");
+  this.sourceWithOffset("end", node.loc, -1);
   this.token(">");
 }
