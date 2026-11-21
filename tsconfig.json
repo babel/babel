@@ -196,6 +196,9 @@
       "path": "./packages/babel-plugin-proposal-pipeline-operator"
     },
     {
+      "path": "./packages/babel-plugin-proposal-structs"
+    },
+    {
       "path": "./packages/babel-plugin-proposal-text-modules"
     },
     {

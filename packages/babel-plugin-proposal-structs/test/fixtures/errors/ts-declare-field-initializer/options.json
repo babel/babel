@@ -1,0 +1,1 @@
+{ "plugins": ["proposal-structs", "../../../scripts/check-transform-scope-integrity.cjs"], "parserOpts": {"plugins": ["typescript"]}, "throws": "Initializers are not allowed in ambient contexts." }
