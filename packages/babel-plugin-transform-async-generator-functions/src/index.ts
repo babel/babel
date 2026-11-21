@@ -81,26 +81,6 @@ export default declare(api => {
         true,
       );
 
-      const originalNode = path.node;
-      const isMethod = path.isMethod();
-
-      // We don't need to pass the noNewArrows assumption, since
-      // async generators are never arrow functions.
-      remapAsyncToGenerator(path, {
-        wrapAsync: state.addHelper("wrapAsyncGenerator"),
-        wrapAwait: state.addHelper("awaitAsyncGenerator"),
-      });
-
-      let generatorNode: t.Function = originalNode;
-      if (isMethod) {
-        const retArg = (path.node.body.body.at(-1) as t.ReturnStatement)
-          .argument as t.CallExpression;
-        const wrapCall = t.isMemberExpression(retArg.callee)
-          ? (retArg.callee.object as t.CallExpression)
-          : (retArg.callee as t.CallExpression);
-        generatorNode = wrapCall.arguments[0] as t.Function;
-      }
-
       let wrappedGenerators: WeakSet<t.Node> | undefined = state.file.get(
         "@babel/plugin-transform-async-generator-functions/wrapped_async_generators",
       );
@@ -111,8 +91,14 @@ export default declare(api => {
           wrappedGenerators,
         );
       }
-      wrappedGenerators.add(generatorNode);
-      wrappedGenerators.add(generatorNode.body);
+      wrappedGenerators.add(path.node.body);
+
+      // We don't need to pass the noNewArrows assumption, since
+      // async generators are never arrow functions.
+      remapAsyncToGenerator(path, {
+        wrapAsync: state.addHelper("wrapAsyncGenerator"),
+        wrapAwait: state.addHelper("awaitAsyncGenerator"),
+      });
     },
   };
 

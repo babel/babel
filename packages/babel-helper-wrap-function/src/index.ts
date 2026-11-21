@@ -91,16 +91,11 @@ function classOrObjectMethod(
     }
   }
 
-  const container = functionExpression(
-    null,
-    params,
-    blockStatement(body.body),
-    true,
-  );
+  const container = functionExpression(null, params, body, true);
 
   if (shouldForwardParams) {
     // return asyncToGenerator(function*() { ... }).apply(this, arguments);
-    body.body = [
+    node.body = blockStatement([
       returnStatement(
         callExpression(
           memberExpression(
@@ -110,7 +105,7 @@ function classOrObjectMethod(
           [thisExpression(), identifier("arguments")],
         ),
       ),
-    ];
+    ]);
 
     (
       path.get(
@@ -119,9 +114,9 @@ function classOrObjectMethod(
     ).unwrapFunctionEnvironment();
   } else {
     // return asyncToGenerator(function*() { ... })();
-    body.body = [
+    node.body = blockStatement([
       returnStatement(callExpression(callExpression(callId, [container]), [])),
-    ];
+    ]);
 
     // Unwrap the wrapper IIFE's environment so super and this and such still work.
     (

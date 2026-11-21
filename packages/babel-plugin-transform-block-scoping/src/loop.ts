@@ -325,7 +325,7 @@ export function wrapLoopBody(
   };
   loopPath.traverse(
     {
-      Function(path) {
+      FunctionParent(path) {
         path.skip();
       },
       LabeledStatement: {
@@ -379,12 +379,7 @@ export function wrapLoopBody(
         state.returns.push(path);
       },
       TryStatement(path, state) {
-        if (
-          path.node.finalizer &&
-          !path
-            .findParent(p => p === loopPath || p.isStaticBlock())
-            ?.isStaticBlock()
-        ) {
+        if (path.node.finalizer) {
           state.hasTryFinally = true;
         }
       },
@@ -431,9 +426,7 @@ export function wrapLoopBody(
       state.hasTryFinally &&
       fnParent.isFunction() &&
       fnParent.node.generator &&
-      wrappedAsyncGenerators &&
-      (wrappedAsyncGenerators.has(fnParent.node) ||
-        wrappedAsyncGenerators.has(fnParent.node.body))
+      wrappedAsyncGenerators?.has(fnParent.node.body)
     ) {
       isWrappedAsyncGenerator = true;
       fn.generator = true;
@@ -616,7 +609,6 @@ export function wrapLoopBody(
   loopNode.body = t.blockStatement(bodyStmts);
   fn.body = loopBlockBody;
   if (isWrappedAsyncGenerator) {
-    wrappedAsyncGenerators!.add(fn);
     wrappedAsyncGenerators!.add(loopBlockBody);
   }
   if (updaterNode) loopBlockBody.body.push(updaterNode);
