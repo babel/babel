@@ -27,7 +27,7 @@ function benchCases(name, implementation, options = {}) {
     name,
     () => {
       implementation(input, {
-        plugins: ["@babel/preset-env", "@babel/preset-typescript"],
+        presets: ["@babel/preset-env", "@babel/preset-typescript"],
         targets: "node 6",
         configFile: false,
         babelrc: false,

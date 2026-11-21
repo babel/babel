@@ -6,7 +6,7 @@ import { run } from "./transformation/index.ts";
 import type * as t from "@babel/types";
 
 import {
-  beginHiddenCallStack,
+  beginHiddenCallStackForGensync,
   withStackTraceRewriting,
 } from "./errors/rewrite-stack-trace.ts";
 
@@ -23,19 +23,21 @@ type TransformFromAst = {
   ): void;
 };
 
-const transformFromAstRunner = gensync(
-  withStackTraceRewriting(function* (
-    ast: AstRoot,
-    code: string,
-    opts: InputOptions | undefined | null,
-  ): Handler<FileResult | null> {
-    const config: ResolvedConfig | null = yield* loadConfig(opts);
-    if (config === null) return null;
+const transformFromAstRunner = beginHiddenCallStackForGensync(
+  gensync(
+    withStackTraceRewriting(function* (
+      ast: AstRoot,
+      code: string,
+      opts: InputOptions | undefined | null,
+    ): Handler<FileResult | null> {
+      const config: ResolvedConfig | null = yield* loadConfig(opts);
+      if (config === null) return null;
 
-    if (!ast) throw new Error("No AST given");
+      if (!ast) throw new Error("No AST given");
 
-    return yield* run(config, code, ast);
-  }),
+      return yield* run(config, code, ast);
+    }),
+  ),
 );
 
 export const transformFromAst: TransformFromAst = function transformFromAst(
@@ -60,23 +62,18 @@ export const transformFromAst: TransformFromAst = function transformFromAst(
     );
   }
 
-  beginHiddenCallStack(transformFromAstRunner.errback)(
-    ast,
-    code,
-    opts,
-    callback,
-  );
+  transformFromAstRunner.errback(ast, code, opts, callback);
   return null;
 };
 
 export function transformFromAstSync(
   ...args: Parameters<typeof transformFromAstRunner.sync>
 ) {
-  return beginHiddenCallStack(transformFromAstRunner.sync)(...args);
+  return transformFromAstRunner.sync(...args);
 }
 
 export function transformFromAstAsync(
   ...args: Parameters<typeof transformFromAstRunner.async>
 ) {
-  return beginHiddenCallStack(transformFromAstRunner.async)(...args);
+  return transformFromAstRunner.async(...args);
 }
