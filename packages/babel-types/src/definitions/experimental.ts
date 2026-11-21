@@ -162,7 +162,15 @@ defineType("VoidPattern", {
 
 // https://github.com/tc39/proposal-structs
 defineType("StructDeclaration", {
-  visitor: ["id", "superClass", "body"],
+  builder: ["id", "superClass", "body"],
+  visitor: [
+    "id",
+    "typeParameters",
+    "superClass",
+    "superTypeArguments",
+    "implements",
+    "body",
+  ],
   aliases: ["Scopable", "Statement", "Declaration"],
   fields: {
     id: {
@@ -177,6 +185,25 @@ defineType("StructDeclaration", {
     superClass: {
       optional: true,
       validate: assertNodeType("Expression"),
+    },
+    // TypeScript and Flow annotations, as for classes
+    typeParameters: {
+      validate: assertNodeType(
+        "TypeParameterDeclaration",
+        "TSTypeParameterDeclaration",
+      ),
+      optional: true,
+    },
+    superTypeArguments: {
+      validate: assertNodeType(
+        "TypeParameterInstantiation",
+        "TSTypeParameterInstantiation",
+      ),
+      optional: true,
+    },
+    implements: {
+      validate: arrayOfType("TSClassImplements", "ClassImplements"),
+      optional: true,
     },
     // TypeScript's `declare struct`
     declare: {
@@ -196,6 +223,8 @@ defineType("StructBody", {
       "ClassPrivateProperty",
       "StaticBlock",
       "ClassAccessorProperty",
+      "TSDeclareMethod",
+      "TSIndexSignature",
     ),
   },
 });

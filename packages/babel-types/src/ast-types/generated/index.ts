@@ -1782,6 +1782,10 @@ export interface StructDeclaration extends BaseNode {
   superClass?: Expression | null;
   body: StructBody;
   declare?: boolean | null;
+  implements?: (TSClassImplements | ClassImplements)[] | null;
+  superTypeArguments?:
+    TypeParameterInstantiation | TSTypeParameterInstantiation | null;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | null;
 }
 
 export interface StructBody extends BaseNode {
@@ -1793,6 +1797,8 @@ export interface StructBody extends BaseNode {
     | ClassPrivateProperty
     | StaticBlock
     | ClassAccessorProperty
+    | TSDeclareMethod
+    | TSIndexSignature
   )[];
 }
 
@@ -3291,7 +3297,8 @@ export interface ParentMaps {
     | ClassDeclaration
     | ClassExpression
     | DeclareClass
-    | DeclareExportDeclaration;
+    | DeclareExportDeclaration
+    | StructDeclaration;
   ClassMethod: ClassBody | StructBody;
   ClassPrivateMethod: ClassBody | StructBody;
   ClassPrivateProperty: ClassBody | StructBody;
@@ -4141,6 +4148,7 @@ export interface ParentMaps {
   TSClassImplements:
     | ClassDeclaration
     | ClassExpression
+    | StructDeclaration
     | TSArrayType
     | TSAsExpression
     | TSConditionalType
@@ -4166,7 +4174,7 @@ export interface ParentMaps {
   TSConstructSignatureDeclaration: TSInterfaceBody | TSTypeLiteral;
   TSConstructorType: ParentMaps["TSAnyKeyword"];
   TSDeclareFunction: ParentMaps["ClassDeclaration"];
-  TSDeclareMethod: ClassBody;
+  TSDeclareMethod: ClassBody | StructBody;
   TSEnumBody: TSEnumDeclaration;
   TSEnumDeclaration:
     | BlockStatement
@@ -4211,7 +4219,7 @@ export interface ParentMaps {
     | TSTypeQuery
     | TSUnionType
     | TemplateLiteral;
-  TSIndexSignature: ClassBody | TSInterfaceBody | TSTypeLiteral;
+  TSIndexSignature: ClassBody | StructBody | TSInterfaceBody | TSTypeLiteral;
   TSIndexedAccessType: ParentMaps["TSAnyKeyword"];
   TSInferType: ParentMaps["TSAnyKeyword"];
   TSInstantiationExpression: ParentMaps["ArrayExpression"];
@@ -4334,6 +4342,7 @@ export interface ParentMaps {
     | FunctionDeclaration
     | FunctionExpression
     | ObjectMethod
+    | StructDeclaration
     | TSCallSignatureDeclaration
     | TSConstructSignatureDeclaration
     | TSConstructorType
@@ -4350,6 +4359,7 @@ export interface ParentMaps {
     | JSXOpeningElement
     | NewExpression
     | OptionalCallExpression
+    | StructDeclaration
     | TSClassImplements
     | TSImportType
     | TSInstantiationExpression
@@ -4546,6 +4556,7 @@ export interface ParentMaps {
     | InterfaceDeclaration
     | ObjectMethod
     | OpaqueType
+    | StructDeclaration
     | TypeAlias;
   TypeParameterInstantiation:
     | CallExpression
@@ -4558,6 +4569,7 @@ export interface ParentMaps {
     | JSXOpeningElement
     | NewExpression
     | OptionalCallExpression
+    | StructDeclaration
     | TaggedTemplateExpression;
   TypeofTypeAnnotation: ParentMaps["AnyTypeAnnotation"];
   UnaryExpression: ParentMaps["BigIntLiteral"];

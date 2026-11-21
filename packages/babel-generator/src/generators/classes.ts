@@ -311,12 +311,22 @@ export function StructDeclaration(this: Printer, node: t.StructDeclaration) {
     this.print(node.id);
   }
 
+  this.print(node.typeParameters);
+
   if (node.superClass) {
     this.space();
     this.word("extends");
     this.space();
     this.tokenContext |= TokenContext.classHeritage;
     this.print(node.superClass);
+    this.print(node.superTypeArguments);
+  }
+
+  if (node.implements) {
+    this.space();
+    this.word("implements");
+    this.space();
+    this.printList(node.implements);
   }
 
   this.space();
