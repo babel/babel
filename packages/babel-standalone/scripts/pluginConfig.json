@@ -36,6 +36,7 @@
     "transform-optional-chaining",
     "proposal-optional-chaining-assign",
     "proposal-pipeline-operator",
+    "proposal-structs",
     "transform-private-methods",
     "transform-private-property-in-object",
     "transform-regexp-modifiers",

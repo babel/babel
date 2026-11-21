@@ -28,6 +28,7 @@
     "@babel/plugin-proposal-import-defer": "workspace:^",
     "@babel/plugin-proposal-optional-chaining-assign": "workspace:^",
     "@babel/plugin-proposal-pipeline-operator": "workspace:^",
+    "@babel/plugin-proposal-structs": "workspace:^",
     "@babel/plugin-proposal-throw-expressions": "workspace:^",
     "@babel/plugin-syntax-decorators": "workspace:^",
     "@babel/plugin-syntax-destructuring-private": "workspace:^",
