@@ -109,6 +109,11 @@ export default declare((api, opts: Options) => {
 
   api.assertVersion(REQUIRED_VERSION("^7.0.0-0 || ^8.0.0"));
 
+  // TODO(Babel 9): Remove this check. StructDeclaration was introduced in
+  // @babel/core 8.1.0, and older versions throw on visitors for unknown node
+  // types.
+  const supportsStructs = process.env.BABEL_9_BREAKING || !!t.structDeclaration;
+
   const JSX_PRAGMA_REGEX = /\*?\s*@jsx((?:Frag)?)\s+(\S+)/;
 
   const {
@@ -207,6 +212,65 @@ export default declare((api, opts: Options) => {
       injectInitialization(classPath, path, assigns);
     },
   };
+
+  function stripClassTypes(path: NodePath<t.Class | t.StructDeclaration>) {
+    const { node }: { node: typeof path.node & ExtraNodeProps } = path;
+
+    if (node.typeParameters) node.typeParameters = null;
+
+    if (node.superTypeArguments) node.superTypeArguments = null;
+
+    if (node.implements) node.implements = null;
+    if (node.abstract) node.abstract = null;
+
+    // Similar to the logic in `transform-flow-strip-types`, we need to
+    // handle `TSParameterProperty` and `ClassProperty` here because the
+    // class transform would transform the class, causing more specific
+    // visitors to not run.
+    path.get("body.body").forEach(child => {
+      if (
+        supportsStructs &&
+        path.isStructDeclaration() &&
+        child.isClassProperty() &&
+        child.node.declare &&
+        !child.node.static
+      ) {
+        throw child.buildCodeFrameError(
+          "Fields with the 'declare' modifier are not supported in structs, since all the struct fields exist at runtime.",
+        );
+      }
+      if (child.isClassMethod() || child.isClassPrivateMethod()) {
+        if (child.node.kind === "constructor") {
+          if (supportsStructs && path.isStructDeclaration()) {
+            // Struct fields must be declared in the struct body
+            for (const param of child.get("params")) {
+              if (param.isTSParameterProperty()) {
+                throw param.buildCodeFrameError(
+                  "TypeScript parameter properties are not supported in struct constructors, " +
+                    "since all the struct fields must be declared in the struct body.",
+                );
+              }
+            }
+            classMemberVisitors.method(child);
+          } else {
+            classMemberVisitors.constructor(
+              // @ts-expect-error A constructor must not be a private method
+              child,
+              path,
+            );
+          }
+        } else {
+          classMemberVisitors.method(child);
+        }
+      } else if (
+        child.isClassProperty() ||
+        child.isClassPrivateProperty() ||
+        child.isClassAccessorProperty()
+      ) {
+        classMemberVisitors.field(child);
+      }
+    });
+  }
 
   return {
     name: "transform-typescript",
@@ -368,6 +432,8 @@ export default declare((api, opts: Options) => {
               (stmt.isTSDeclareFunction() && stmt.get("id").isIdentifier()) ||
               stmt.isTSInterfaceDeclaration() ||
               stmt.isClassDeclaration({ declare: true }) ||
+              (supportsStructs &&
+                stmt.isStructDeclaration({ declare: true })) ||
               stmt.isTSEnumDeclaration({ declare: true }) ||
               (stmt.isTSModuleDeclaration({ declare: true }) &&
                 stmt.get("id").isIdentifier())
@@ -531,40 +597,20 @@ export default declare((api, opts: Options) => {
         }
       },
 
-      Class(path) {
-        const { node }: { node: typeof path.node & ExtraNodeProps } = path;
+      Class: stripClassTypes,
 
-        if (node.typeParameters) node.typeParameters = null;
-
-        if (node.superTypeArguments) node.superTypeArguments = null;
-
-        if (node.implements) node.implements = null;
-        if (node.abstract) node.abstract = null;
-
-        // Similar to the logic in `transform-flow-strip-types`, we need to
-        // handle `TSParameterProperty` and `ClassProperty` here because the
-        // class transform would transform the class, causing more specific
-        // visitors to not run.
-        path.get("body.body").forEach(child => {
-          if (child.isClassMethod() || child.isClassPrivateMethod()) {
-            if (child.node.kind === "constructor") {
-              classMemberVisitors.constructor(
-                // @ts-expect-error A constructor must not be a private method
-                child,
-                path,
-              );
-            } else {
-              classMemberVisitors.method(child);
-            }
-          } else if (
-            child.isClassProperty() ||
-            child.isClassPrivateProperty() ||
-            child.isClassAccessorProperty()
-          ) {
-            classMemberVisitors.field(child);
+      ...(supportsStructs
+        ? {
+            StructDeclaration(path: NodePath<t.StructDeclaration>) {
+              if (path.node.declare) {
+                safeRemove(path);
+              } else {
+                stripClassTypes(path);
+              }
+            },
           }
-        });
-      },
+        : {}),
+
       Function(path) {
         const { node } = path;
         if (node.typeParameters) node.typeParameters = null;
