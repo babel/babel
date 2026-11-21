@@ -87,7 +87,12 @@ export function NewExpression(
   parent: t.Node,
 ) {
   const omitArguments =
-    this.format.minified && node.arguments.length === 0 && !node.typeArguments;
+    this.format.minified &&
+    node.arguments.length === 0 &&
+    !node.typeArguments &&
+    // `new f<T>` would end with type arguments, which are ambiguous before
+    // some operators: `new f<T>-x` is `(new f < T) > -x`
+    node.callee.type !== "TSInstantiationExpression";
   const wrapInParens = omitArguments && hasPostfixPart(node, parent);
   if (wrapInParens) this.token("(");
   const { tokenContext } = this;
