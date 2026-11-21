@@ -1,0 +1,71 @@
+{
+  "type": "File",
+  "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":36}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":36}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":0,"end":36,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":36}},
+        "declaration": {
+          "type": "StructDeclaration",
+          "start":15,"end":36,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":3,"column":1,"index":36}},
+          "id": null,
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start":21,"end":24,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":24,"index":24}},
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start":22,"end":23,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":23,"index":23}},
+                "name": "T",
+                "variance": null
+              }
+            ]
+          },
+          "superClass": null,
+          "body": {
+            "type": "StructBody",
+            "start":25,"end":36,"loc":{"start":{"line":1,"column":25,"index":25},"end":{"line":3,"column":1,"index":36}},
+            "body": [
+              {
+                "type": "ClassProperty",
+                "start":29,"end":34,"loc":{"start":{"line":2,"column":2,"index":29},"end":{"line":2,"column":7,"index":34}},
+                "static": false,
+                "variance": null,
+                "key": {
+                  "type": "Identifier",
+                  "start":29,"end":30,"loc":{"start":{"line":2,"column":2,"index":29},"end":{"line":2,"column":3,"index":30},"identifierName":"x"},
+                  "name": "x"
+                },
+                "computed": false,
+                "typeAnnotation": {
+                  "type": "TypeAnnotation",
+                  "start":30,"end":33,"loc":{"start":{"line":2,"column":3,"index":30},"end":{"line":2,"column":6,"index":33}},
+                  "typeAnnotation": {
+                    "type": "GenericTypeAnnotation",
+                    "start":32,"end":33,"loc":{"start":{"line":2,"column":5,"index":32},"end":{"line":2,"column":6,"index":33}},
+                    "typeParameters": null,
+                    "id": {
+                      "type": "Identifier",
+                      "start":32,"end":33,"loc":{"start":{"line":2,"column":5,"index":32},"end":{"line":2,"column":6,"index":33},"identifierName":"T"},
+                      "name": "T"
+                    }
+                  }
+                },
+                "value": null
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
