@@ -35,9 +35,16 @@ node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 node -e "
   var pkg = require('./package.json');
   pkg.devDependencies['@babel/core'] = '8.0.0';
-  // Not used by the build, installed for the Flow check below. Without it the
-  // root resolves the workspace package, which loads the workspace @babel/core.
-  pkg.devDependencies['@babel/plugin-transform-flow-strip-types'] = 'latest';
+  // Install every published plugin and preset under an alias, for the checks
+  // after the build. Under their own names they would replace the workspace
+  // packages, which the tests and the fixtures load.
+  for (var dir of fs.readdirSync('packages')) {
+    var file = './packages/' + dir + '/package.json';
+    if (!/^babel-(plugin|preset)-/.test(dir) || !fs.existsSync(file)) continue;
+    var { name, private: isPrivate } = require(file);
+    if (isPrivate) continue;
+    pkg.devDependencies['e2e-' + name.replace('@babel/', 'babel-')] = 'npm:' + name + '@latest';
+  }
   // The @babel/* dependencies of each package in @babel/core@8.0.0's tree
   var deps = {
     'core': ['code-frame', 'generator', 'helper-compilation-targets', 'helpers', 'parser', 'template', 'traverse', 'types'],
@@ -71,6 +78,10 @@ BABEL_ENV=production yarn babel packages/*/src \
   --out-dir "$cjs_out_dir"
 rm -rf "$cjs_out_dir"
 
+# Load every published plugin and preset with @babel/core 8.0.0, including the
+# ones that neither the build nor the tests use.
+node "$PWD"/scripts/integration-tests/utils/load-published-plugins.js
+
 # The sources don't use Flow. Check that @babel/plugin-transform-flow-strip-types
 # works with @babel/core 8.0.0 too.
 node --input-type=module -e '
@@ -81,7 +92,7 @@ node --input-type=module -e '
     {
       configFile: false,
       babelrc: false,
-      plugins: ["@babel/plugin-transform-flow-strip-types"],
+      plugins: ["module:e2e-babel-plugin-transform-flow-strip-types"],
     },
   );
   assert.equal(code, "class A {\n  y = 1;\n  m(a) {}\n}");
