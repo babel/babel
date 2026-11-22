@@ -50,6 +50,9 @@ const onlyFixtures = process.argv
 // fixture first.
 // --list=simulation and --list=walltime only print the cases that CI runs in
 // that CodSpeed mode.
+// --shard=<k>/<n> with --list only prints the k-th of n shards. Cases are
+// dealt longest first to the shard with the least total duration so far, so
+// that the CI jobs running the shards take about as long as each other.
 const listArg = process.argv.find(
   arg => arg === "--list" || arg.startsWith("--list=")
 );
@@ -57,6 +60,15 @@ const listOnly = listArg !== undefined;
 const listMode = listArg?.slice("--list=".length) || undefined;
 if (listMode !== undefined && !["simulation", "walltime"].includes(listMode)) {
   throw new Error(`Unknown ${listArg}, expected simulation or walltime`);
+}
+const shardArg = process.argv.find(arg => arg.startsWith("--shard="));
+const shardMatch = shardArg
+  ? /^--shard=(\d+)\/(\d+)$/.exec(shardArg)
+  : ["", "1", "1"];
+const shardIndex = Number(shardMatch?.[1]);
+const shardCount = Number(shardMatch?.[2]);
+if (!shardMatch || shardIndex < 1 || shardIndex > shardCount) {
+  throw new Error(`Invalid ${shardArg}, expected <k>/<n> with 1 <= k <= n`);
 }
 // A single measured call of these fixtures takes 4 to 25 minutes under
 // Valgrind, so CI benchmarks them in walltime mode instead of simulation.
@@ -229,7 +241,14 @@ setTimeout(async () => {
     const duration = ({ suite, name }) =>
       durations[`${suite} ${name}`] ?? Infinity;
     listed.sort((a, b) => duration(b) - duration(a) || b.size - a.size);
-    for (const { suite, name } of listed) console.log(`${suite} ${name}`);
+    // Cases missing from the durations file count as the longest known one.
+    const longest = Math.max(0, ...Object.values(durations));
+    const loads = new Array(shardCount).fill(0);
+    for (const { suite, name } of listed) {
+      const shard = loads.indexOf(Math.min(...loads));
+      loads[shard] += Math.min(duration({ suite, name }), longest);
+      if (shard === shardIndex - 1) console.log(`${suite} ${name}`);
+    }
     return;
   }
 
