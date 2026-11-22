@@ -21,7 +21,10 @@ export function enable() {
     },
   };
   watcher = new FSWatcher(options);
-
+  watcher.on("error", err => {
+    console.error(err);
+    process.exitCode = 1;
+  });
   watcher.on("unlink", unwatchFile);
 }
 
