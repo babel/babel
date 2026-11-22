@@ -35,6 +35,9 @@ node "$PWD"/scripts/integration-tests/utils/bump-babel-dependencies.js
 node -e "
   var pkg = require('./package.json');
   pkg.devDependencies['@babel/core'] = '8.0.0';
+  // Not used by the build, installed for the Flow check below. Without it the
+  // root resolves the workspace package, which loads the workspace @babel/core.
+  pkg.devDependencies['@babel/plugin-transform-flow-strip-types'] = 'latest';
   // The @babel/* dependencies of each package in @babel/core@8.0.0's tree
   var deps = {
     'core': ['code-frame', 'generator', 'helper-compilation-targets', 'helpers', 'parser', 'template', 'traverse', 'types'],
@@ -67,5 +70,21 @@ BABEL_ENV=production yarn babel packages/*/src \
   --plugins @babel/plugin-transform-export-namespace-from,@babel/plugin-transform-modules-commonjs \
   --out-dir "$cjs_out_dir"
 rm -rf "$cjs_out_dir"
+
+# The sources don't use Flow. Check that @babel/plugin-transform-flow-strip-types
+# works with @babel/core 8.0.0 too.
+node --input-type=module -e '
+  import assert from "node:assert";
+  import { transformSync } from "@babel/core";
+  const { code } = transformSync(
+    "class A<T> implements B { declare x: T; y: number = 1; m(a: T): void {} }",
+    {
+      configFile: false,
+      babelrc: false,
+      plugins: ["@babel/plugin-transform-flow-strip-types"],
+    },
+  );
+  assert.equal(code, "class A {\n  y = 1;\n  m(a) {}\n}");
+'
 
 cleanup
