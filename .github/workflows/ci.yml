@@ -734,8 +734,8 @@ jobs:
         run: node ./scripts/publint.ts
 
   codspeed:
-    name: Codspeed (${{ matrix.mode }})
-    runs-on: ${{ matrix.runs-on }}
+    name: Codspeed (${{ matrix.mode }}${{ matrix.shard && format(' {0}', matrix.shard) || '' }})
+    runs-on: ubuntu-26.04-arm
     permissions:
       contents: read # required for actions/checkout
       id-token: write # required for OIDC authentication with CodSpeed
@@ -748,16 +748,19 @@ jobs:
         include:
           # Valgrind runs all threads of a process on one core, so run one
           # process per suite and fixture, as many at a time as there are
-          # cores.
+          # cores, split across two jobs.
           - mode: simulation
-            runs-on: ubuntu-26.04-arm-8c
+            shard: 1/2
+            parallel: "$(nproc)"
+            args: ""
+          - mode: simulation
+            shard: 2/2
             parallel: "$(nproc)"
             args: ""
           # Cases too slow for simulation mode. Walltime measures elapsed
-          # time, so the cases run one at a time. 48 samples per case make
-          # this job take about as long as the simulation one.
+          # time, so the cases run one at a time. 40 samples per case make
+          # this job take about as long as the simulation ones.
           - mode: walltime
-            runs-on: ubuntu-26.04-arm
             parallel: "1"
             args: "--iterations=40"
     steps:
@@ -782,7 +785,7 @@ jobs:
       # Valgrind in simulation mode.
       - name: List benchmark cases
         run: |
-          node ./benchmark/index.mjs --list=${{ matrix.mode }} > benchmark-cases.txt
+          node ./benchmark/index.mjs --list=${{ matrix.mode }} ${{ matrix.shard && format('--shard={0}', matrix.shard) || '' }} > benchmark-cases.txt
           cat benchmark-cases.txt
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v5
