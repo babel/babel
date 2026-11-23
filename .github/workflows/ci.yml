@@ -126,6 +126,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+      # The pnpm linker hardlinks files from Yarn's global folder, which fails
+      # across drives: keep it on the same drive as the checkout.
+      - name: Move Yarn's global folder to the checkout drive
+        shell: bash
+        run: echo "YARN_GLOBAL_FOLDER=$RUNNER_TEMP/yarn-berry" >> "$GITHUB_ENV"
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
@@ -153,6 +158,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+      # The pnpm linker hardlinks files from Yarn's global folder, which fails
+      # across drives: keep it on the same drive as the checkout.
+      - name: Move Yarn's global folder to the checkout drive
+        shell: bash
+        run: echo "YARN_GLOBAL_FOLDER=$RUNNER_TEMP/yarn-berry" >> "$GITHUB_ENV"
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
@@ -296,6 +306,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+      # The pnpm linker hardlinks files from Yarn's global folder, which fails
+      # across drives: keep it on the same drive as the checkout.
+      - name: Move Yarn's global folder to the checkout drive
+        if: runner.os == 'Windows'
+        shell: bash
+        run: echo "YARN_GLOBAL_FOLDER=$RUNNER_TEMP/yarn-berry" >> "$GITHUB_ENV"
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
@@ -418,6 +434,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+      # The pnpm linker hardlinks files from Yarn's global folder, which fails
+      # across drives: keep it on the same drive as the checkout.
+      - name: Move Yarn's global folder to the checkout drive
+        if: runner.os == 'Windows'
+        shell: bash
+        run: echo "YARN_GLOBAL_FOLDER=$RUNNER_TEMP/yarn-berry" >> "$GITHUB_ENV"
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
@@ -795,13 +817,16 @@ jobs:
         uses: CodSpeedHQ/action@v5
         with:
           mode: ${{ matrix.mode }}
+          # --import resolves the plugin from the cwd, and only the benchmark
+          # workspace depends on it
+          working-directory: benchmark
           # CodSpeed's node wrapper first runs each process only to read the
           # V8 flags the plugin needs. --import loads the plugin first, so that
           # run ends before the Babel packages are loaded.
           run: >-
             xargs -P "${{ matrix.parallel }}" -L 1 sh -c
-            'exec node --import @codspeed/tinybench-plugin --expose-gc --no-allocation-site-pretenuring "./benchmark/$0" --only-current --fixture="$1" ${{ matrix.args }}'
-            < benchmark-cases.txt
+            'exec node --import @codspeed/tinybench-plugin --expose-gc --no-allocation-site-pretenuring "./$0" --only-current --fixture="$1" ${{ matrix.args }}'
+            < ../benchmark-cases.txt
 
   required-checks:
     name: Required Checks
