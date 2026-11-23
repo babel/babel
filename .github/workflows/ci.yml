@@ -126,8 +126,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
-      # The pnpm linker hardlinks files from Yarn's global folder, which fails
-      # across drives: keep it on the same drive as the checkout.
+      # The pnpm linker hardlinks files from Yarn's global folder. Hardlinks
+      # cannot cross drives (Yarn would copy every file instead), so keep it
+      # on the same drive as the checkout.
       - name: Move Yarn's global folder to the checkout drive
         shell: bash
         run: echo "YARN_GLOBAL_FOLDER=$RUNNER_TEMP/yarn-berry" >> "$GITHUB_ENV"
@@ -158,8 +159,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
-      # The pnpm linker hardlinks files from Yarn's global folder, which fails
-      # across drives: keep it on the same drive as the checkout.
+      # The pnpm linker hardlinks files from Yarn's global folder. Hardlinks
+      # cannot cross drives (Yarn would copy every file instead), so keep it
+      # on the same drive as the checkout.
       - name: Move Yarn's global folder to the checkout drive
         shell: bash
         run: echo "YARN_GLOBAL_FOLDER=$RUNNER_TEMP/yarn-berry" >> "$GITHUB_ENV"
@@ -306,8 +308,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
-      # The pnpm linker hardlinks files from Yarn's global folder, which fails
-      # across drives: keep it on the same drive as the checkout.
+      # The pnpm linker hardlinks files from Yarn's global folder. Hardlinks
+      # cannot cross drives (Yarn would copy every file instead), so keep it
+      # on the same drive as the checkout.
       - name: Move Yarn's global folder to the checkout drive
         if: runner.os == 'Windows'
         shell: bash
@@ -434,8 +437,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
-      # The pnpm linker hardlinks files from Yarn's global folder, which fails
-      # across drives: keep it on the same drive as the checkout.
+      # The pnpm linker hardlinks files from Yarn's global folder. Hardlinks
+      # cannot cross drives (Yarn would copy every file instead), so keep it
+      # on the same drive as the checkout.
       - name: Move Yarn's global folder to the checkout drive
         if: runner.os == 'Windows'
         shell: bash
