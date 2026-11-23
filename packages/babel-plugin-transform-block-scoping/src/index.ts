@@ -143,7 +143,12 @@ export default declare((api, opts: Options) => {
         }
 
         if (needsBodyWrap) {
-          const varPath = wrapLoopBody(path, captured, updatedBindingsUsages);
+          const varPath = wrapLoopBody(
+            path,
+            captured,
+            updatedBindingsUsages,
+            state,
+          );
 
           if (headPath?.isVariableDeclaration()) {
             // If we wrap the loop body, we transform the var
@@ -185,9 +190,11 @@ export default declare((api, opts: Options) => {
             );
           }
 
-          (
-            varPath.get("declarations.0.init") as NodePath<t.FunctionExpression>
-          ).unwrapFunctionEnvironment();
+          const initPath = varPath.get("declarations.0.init");
+          const fnPath = initPath.isCallExpression()
+            ? (initPath.get("arguments.0") as NodePath<t.FunctionExpression>)
+            : (initPath as NodePath<t.FunctionExpression>);
+          fnPath.unwrapFunctionEnvironment();
         }
       },
 

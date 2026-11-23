@@ -81,6 +81,18 @@ export default declare(api => {
         true,
       );
 
+      let wrappedGenerators: WeakSet<t.Node> | undefined = state.file.get(
+        "@babel/plugin-transform-async-generator-functions/wrapped_async_generators",
+      );
+      if (!wrappedGenerators) {
+        wrappedGenerators = new WeakSet();
+        state.file.set(
+          "@babel/plugin-transform-async-generator-functions/wrapped_async_generators",
+          wrappedGenerators,
+        );
+      }
+      wrappedGenerators.add(path.node.body);
+
       // We don't need to pass the noNewArrows assumption, since
       // async generators are never arrow functions.
       remapAsyncToGenerator(path, {
