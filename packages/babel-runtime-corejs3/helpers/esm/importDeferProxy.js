@@ -9,7 +9,7 @@ function _importDeferProxy(e) {
   }
   function n(r) {
     return function (n, o, f) {
-      return r(t || (t = e()), o, f);
+      return r("then" === o || o && "string" != typeof o ? n : t || (t = e()), o, f);
     };
   }
   return new Proxy({
