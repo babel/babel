@@ -1,0 +1,5 @@
+{
+  "plugins": ["transform-private-methods"],
+  "parserOpts": { "plugins": ["decoratorAutoAccessors"] },
+  "throws": "Class accessor properties are not compiled by this transform. Please make sure that \"@babel/plugin-proposal-decorators\" comes *before* the other class features plugins."
+}
