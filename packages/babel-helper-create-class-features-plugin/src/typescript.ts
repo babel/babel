@@ -19,7 +19,7 @@ export function assertFieldTransformed(
   }
 }
 
-export function assertAccessorTransformed(
+export function assertTypeScriptAccessorTransformed(
   path: NodePath<t.ClassAccessorProperty>,
 ) {
   // The TypeScript plugin removes them: they have no runtime semantics.
