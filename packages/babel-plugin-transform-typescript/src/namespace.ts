@@ -220,7 +220,8 @@ function handleNested(
         continue;
       }
       default:
-        isEmpty &&= t.isTypeScript(subNode);
+        // t.isTypeScript is not available in @babel/core < 7.16
+        isEmpty &&= !!t.isTypeScript?.(subNode);
         // Neither named declaration nor export, continue to next item.
         continue;
       case "ExportNamedDeclaration":

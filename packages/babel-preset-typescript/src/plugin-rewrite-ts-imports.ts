@@ -76,9 +76,16 @@ export default declare(function ({ types: t, template }) {
           );
         }
       },
-      ImportExpression(path, state) {
-        maybeReplace(path.node.source, path.get("source"), state);
-      },
+      // @babel/core < 7.23 throws on visitors for unknown node types, and it
+      // never creates ImportExpression nodes.
+      ...((process.env.BABEL_8_BREAKING || t.importExpression) && {
+        ImportExpression(
+          path: NodePath<t.ImportExpression>,
+          state: PluginPass,
+        ) {
+          maybeReplace(path.node.source, path.get("source"), state);
+        },
+      }),
     },
   };
 });

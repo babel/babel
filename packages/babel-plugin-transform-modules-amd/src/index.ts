@@ -116,7 +116,8 @@ export default declare<State>((api, options: Options) => {
         if (path.isCallExpression() && !path.get("callee").isImport()) return;
         // `import.source()` and `import.defer()` can't be
         // compiled to a regular dynamic import.
-        if (path.isImportExpression() && path.node.phase != null) {
+        // isImportExpression is not available in @babel/core < 7.23
+        if (path.isImportExpression?.() && path.node.phase != null) {
           return;
         }
 

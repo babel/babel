@@ -207,7 +207,8 @@ export default function transformClass(
         throw path.buildCodeFrameError("Missing class properties transform.");
       }
 
-      if (path.isStaticBlock()) {
+      // These methods are not available in older @babel/core versions
+      if (path.isStaticBlock?.()) {
         // @babel/plugin-transform-class-static-block alone is not enough: it
         // turns static blocks into static fields so we also need class-properties.
         throw path.buildCodeFrameError(
@@ -218,13 +219,13 @@ export default function transformClass(
         );
       }
 
-      if (path.isClassPrivateMethod()) {
+      if (path.isClassPrivateMethod?.()) {
         throw path.buildCodeFrameError(
           "Missing class private methods transform.",
         );
       }
 
-      if (path.isClassAccessorProperty()) {
+      if (path.isClassAccessorProperty?.()) {
         // @babel/plugin-proposal-decorators alone is not enough: it turns
         // accessor properties into private fields so we also need class-properties.
         throw path.buildCodeFrameError(

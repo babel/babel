@@ -219,8 +219,11 @@ export function privateNameVisitorFactory<S, V>(
       const visiblePrivateNames = new Map(privateNamesMap);
       const redeclared = [];
       for (const prop of body) {
-        if (!prop.isPrivate()) continue;
-        const { name } = prop.node.key.id;
+        // `accessor #x` also declares a private name
+        if (!prop.isPrivate() && !prop.isClassAccessorProperty?.()) continue;
+        const { key } = prop.node;
+        if (!t.isPrivateName(key)) continue;
+        const { name } = key.id;
         visiblePrivateNames.delete(name);
         redeclared.push(name);
       }
@@ -404,7 +407,7 @@ function writeOnlyError(file: File, name: string) {
     console.warn(
       `@babel/helpers is outdated, update it to silence this warning.`,
     );
-    return t.buildUndefinedNode();
+    return t.unaryExpression("void", t.numericLiteral(0));
   }
   return t.callExpression(file.addHelper("writeOnlyError"), [
     t.stringLiteral(`#${name}`),
@@ -530,7 +533,7 @@ const privateNameHandlerSpec: Handler<PrivateNameState & Receiver> & Receiver =
         }
 
         if (setId) {
-          const err = t.buildUndefinedNode(); // TODO: writeOnlyError(file, name)
+          const err = t.unaryExpression("void", t.numericLiteral(0)); // TODO: writeOnlyError(file, name)
           if (skipCheck) return err;
           return t.sequenceExpression([
             t.callExpression(file.addHelper("assertClassBrand"), [
@@ -1030,7 +1033,7 @@ function buildPrivateStaticFieldInitSpec(
   const value = noUninitializedPrivateFieldAccess
     ? prop.node.value
     : template.expression.ast`{
-        _: ${prop.node.value || t.buildUndefinedNode()}
+        _: ${prop.node.value || t.unaryExpression("void", t.numericLiteral(0))}
       }`;
 
   return inheritPropComments(
