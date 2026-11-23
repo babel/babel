@@ -269,7 +269,7 @@ export default declarePreset((api, opts: Options) => {
     });
 
     console.log(
-      "\nUsing polyfills: No polyfills were added. @babel/preset-env does not inject polyfills, please use babel-plugin-polyfill-corejs3 instead.",
+      "\nNo polyfills were added. @babel/preset-env does not inject polyfills anymore, please use babel-plugin-polyfill-corejs3 instead.",
     );
   }
 
