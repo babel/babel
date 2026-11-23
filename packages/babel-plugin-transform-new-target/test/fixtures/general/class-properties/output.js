@@ -1,18 +1,17 @@
 class Foo {
   constructor() {
-    var _newtarget = this.constructor,
-      _Class;
+    var _Class;
     babelHelpers.defineProperty(this, "test", function _target() {
       this instanceof _target ? this.constructor : void 0;
     });
     babelHelpers.defineProperty(this, "test2", function () {
-      _newtarget;
+      void 0;
     });
     this.Bar = (_Class = class {
       constructor() {
         // should not replace
-        babelHelpers.defineProperty(this, "q", this.constructor);
-      } // should not replace
+        babelHelpers.defineProperty(this, "q", void 0);
+      } // should replace
     }, babelHelpers.defineProperty(_Class, "p", void 0), babelHelpers.defineProperty(_Class, "p1", class {
       constructor() {
         this.constructor;
