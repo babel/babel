@@ -146,9 +146,15 @@ describe("sync loading of ESM plugins", () => {
           "transform-sync-esm-plugin-tla.mjs",
           "--experimental-require-module",
         ),
-      ).rejects.toThrow(
-        "You appear to be using a plugin that contains top-level await, " +
-          "which is only supported when running Babel asynchronously.",
+      ).rejects.toEqual(
+        expect.objectContaining({
+          killed: false,
+          code: 1,
+          message: expect.stringContaining(
+            "You appear to be using a plugin that contains top-level await, " +
+              "which is only supported when running Babel asynchronously.",
+          ),
+        }),
       );
     });
   });
