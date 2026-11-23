@@ -26,7 +26,7 @@ export function buildDynamicImport(
 
   if (
     t.isStringLiteral(specifier) ||
-    (t.isTemplateLiteral(specifier) && specifier.quasis.length === 0)
+    (t.isTemplateLiteral(specifier) && specifier.expressions.length === 0)
   ) {
     if (deferToThen) {
       return template.expression.ast`
