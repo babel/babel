@@ -11,7 +11,7 @@ function _importDeferProxy(e) {
     },
     proxy = function proxy(r) {
       return function (n, o, f) {
-        return null === t && (t = e()), r(t, o, f);
+        return "then" === o || o && "string" != typeof o ? r(n, o, f) : (null === t && (t = e()), r(t, o, f));
       };
     };
   return new Proxy({}, {
