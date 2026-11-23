@@ -279,7 +279,7 @@ jobs:
       - name: Test on node.js ${{ matrix.node-version }}
         # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
-          node ./node_modules/.bin/jest --ci
+          node ./node_modules/jest/bin/jest.js --ci
         env:
           BABEL_ENV: test
           TEST_FUZZ: true
@@ -534,7 +534,7 @@ jobs:
       - name: Downgrade ESLint to ${{ matrix.eslint-version }}
         run: yarn up eslint@catalog:babel-eslint--${{ matrix.eslint-version }} eslint-plugin-import@catalog:babel-eslint--${{ matrix.eslint-version }} @eslint/js@catalog:babel-eslint--${{ matrix.eslint-version }}
       - name: Run babel/eslint tests
-        run: node ./node_modules/.bin/jest eslint
+        run: node ./node_modules/jest/bin/jest.js eslint
 
   test262-prepare:
     name: test262 - Prepare for running in parallel

@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import type { types as t, NodePath, PluginPass } from "@babel/core";
-// eslint-disable-next-line @babel/development-internal/no-extraneous-dependencies -- only types are used
+// @babel/traverse is not a dependency: only types are used
 import type { ExplodedVisitor } from "@babel/traverse";
 
 export default declare(function ({ types: t, traverse }) {

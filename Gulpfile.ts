@@ -8,7 +8,7 @@ import { callbackify } from "node:util";
 import { styleText } from "node:util";
 // @ts-expect-error no types
 import gulp from "gulp";
-import { rollup, type InputPluginOption } from "rollup";
+import { rollup, type InputPluginOption, type Plugin } from "rollup";
 import {
   babel as rollupBabel,
   getBabelOutputPlugin,
@@ -321,6 +321,52 @@ function resolveChain(baseUrl: string, ...packages: string[]) {
   );
 }
 
+const regenerateUnicodePropertiesDir = resolveChain(
+  import.meta.url,
+  "./packages/babel-helper-create-regexp-features-plugin",
+  "regexpu-core",
+  "regenerate-unicode-properties"
+);
+
+/**
+ * regexpu-core loads its Unicode data with
+ * require(`regenerate-unicode-properties/${path}.js`). At runtime,
+ * @rollup/plugin-commonjs resolves such a dynamic require by walking up the
+ * importer's real path, while dynamicRequireTargets are registered under their
+ * real paths. With the pnpm linker the two packages live in separate
+ * node_modules/.store entries, so that walk never finds the data. Make the
+ * require relative to the real location of regenerate-unicode-properties.
+ */
+function rollupRegexpuCoreDynamicRequire(): Plugin {
+  const regexpuCoreDir = resolveChain(
+    import.meta.url,
+    "./packages/babel-helper-create-regexp-features-plugin",
+    "regexpu-core"
+  );
+  const rewritePattern = path.join(regexpuCoreDir, "rewrite-pattern.js");
+  let relativeDir = path
+    .relative(regexpuCoreDir, regenerateUnicodePropertiesDir)
+    .replace(/\\/g, "/");
+  if (!relativeDir.startsWith(".")) relativeDir = "./" + relativeDir;
+
+  return {
+    name: "babel-regexpu-core-dynamic-require",
+    transform(code, id) {
+      if (id !== rewritePattern) return;
+      const specifier = "require(`regenerate-unicode-properties/";
+      if (!code.includes(specifier)) {
+        throw new Error(
+          `${id} no longer contains ${specifier}, update rollupRegexpuCoreDynamicRequire()`
+        );
+      }
+      return {
+        code: code.replaceAll(specifier, `require(\`${relativeDir}/`),
+        map: null,
+      };
+    },
+  };
+}
+
 // If this build is part of a pull request, include the pull request number in
 // the version number.
 let versionSuffix = "";
@@ -381,8 +427,6 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
             : (id: string) => {
                 return external.some(v => id === v || id.startsWith(v + "/"));
               },
-          // all node modules are resolved as if they were placed in the n_m folder of package root
-          preserveSymlinks: true,
           onwarn(warning, warn) {
             switch (warning.code) {
               case "CIRCULAR_DEPENDENCY":
@@ -434,6 +478,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
           },
           plugins: [
             buildStandalone && rollupStandaloneInternals(),
+            buildStandalone && rollupRegexpuCoreDynamicRequire(),
             rollupBabelSource(),
             process.env.STRIP_BABEL_VERSION_FLAG &&
               rollupDependencyCondition(bool(process.env.BABEL_9_BREAKING)),
@@ -454,7 +499,9 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
             rollupCommonJs({
               include: [
                 // Bundle node_modules only when building standalone
-                buildStandalone ? /node_modules/ : "./node_modules/*/*.js",
+                buildStandalone
+                  ? /node_modules/
+                  : "./node_modules/.store/*/package/*.js",
                 "packages/babel-runtime/regenerator/**",
                 "packages/babel-runtime/helpers/*.js",
                 "packages/babel-preset-env/data/*.js",
@@ -468,15 +515,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                 ? [
                     // https://github.com/mathiasbynens/regexpu-core/blob/ffd8fff2e31f4597f6fdfee75d5ac1c5c8111ec3/rewrite-pattern.js#L48
                     path
-                      .relative(
-                        monorepoRoot,
-                        resolveChain(
-                          import.meta.url,
-                          "./packages/babel-helper-create-regexp-features-plugin",
-                          "regexpu-core",
-                          "regenerate-unicode-properties"
-                        )
-                      )
+                      .relative(monorepoRoot, regenerateUnicodePropertiesDir)
                       .replace(/\\/g, "/") + "/**/*.js", // Must be posix path in rollup 3
                   ]
                 : undefined,

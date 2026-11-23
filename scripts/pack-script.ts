@@ -13,7 +13,13 @@ const { __dirname, require } = commonJS(import.meta.url);
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 pack("../Makefile.source.ts", "../Makefile.js", [
-  "node_modules/shelljs/src/*.js",
+  // Resolve the real path, since the pnpm linker places packages in node_modules/.store
+  path
+    .relative(
+      process.cwd(),
+      path.join(path.dirname(require.resolve("shelljs/package.json")), "src")
+    )
+    .replaceAll("\\", "/") + "/*.js",
 ]);
 
 async function pack(

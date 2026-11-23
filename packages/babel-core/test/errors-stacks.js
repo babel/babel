@@ -20,6 +20,11 @@ function expectError(run) {
     // Remove absolute URLs
     stack = replaceAll(stack, process.cwd().replace(/\\/g, "/"), "<CWD>");
     stack = stack.replace(/file:\/\/\/?<CWD>/g, "<CWD>");
+    // Remove the version and hash that the pnpm linker adds to package paths
+    stack = stack.replace(
+      /node_modules\/\.store\/(.+?)-(?:npm|virtual)-[^/]+\/package\//g,
+      "node_modules/$1/",
+    );
     // Remove jest-related stack frames.
     // The `at async Promise.all` frame comes from inside jest-light-runner and is only
     // visible when using --run-in-band, comes from inside jest but doesn't have an

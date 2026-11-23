@@ -42,6 +42,7 @@
     "@babel/helper-fixtures": "workspace:^",
     "@babel/helper-string-parser": "workspace:^",
     "@babel/helper-validator-identifier": "workspace:^",
+    "@types/charcodes": "catalog:dev",
     "charcodes": "catalog:dev",
     "typescript": "catalog:dev"
   },

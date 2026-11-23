@@ -21,6 +21,7 @@
     "js-tokens": "^10.0.0"
   },
   "devDependencies": {
+    "@types/charcodes": "catalog:dev",
     "charcodes": "catalog:dev"
   },
   "engines": {

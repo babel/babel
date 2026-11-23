@@ -37,6 +37,7 @@
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "devDependencies": {
+    "@types/estree": "catalog:dev",
     "eslint": "catalog:babel-eslint"
   }
 }

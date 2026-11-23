@@ -33,7 +33,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
     "@babel/preset-env": "workspace:^",
-    "@types/charcodes": "^0.2.0",
+    "@types/charcodes": "catalog:dev",
     "charcodes": "catalog:dev"
   },
   "engines": {

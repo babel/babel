@@ -36,7 +36,8 @@
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
-    "@babel/helper-transform-fixture-test-runner": "workspace:^"
+    "@babel/helper-transform-fixture-test-runner": "workspace:^",
+    "@types/convert-source-map": "catalog:"
   },
   "bin": {
     "babel": "./bin/babel.js"

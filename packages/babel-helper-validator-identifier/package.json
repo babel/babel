@@ -31,6 +31,7 @@
     }
   },
   "devDependencies": {
+    "@types/charcodes": "catalog:dev",
     "@types/regenerate": "^1.4.0",
     "@unicode/unicode-16.0.0": "^2.0.7",
     "@unicode/unicode-18.0.0": "^2.0.7",

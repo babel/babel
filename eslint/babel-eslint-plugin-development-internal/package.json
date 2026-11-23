@@ -20,6 +20,7 @@
     "eslint-plugin-import": "^2.31.0"
   },
   "devDependencies": {
+    "@types/estree": "catalog:dev",
     "eslint": "catalog:babel-eslint",
     "eslint-plugin-import": "catalog:babel-eslint"
   },
