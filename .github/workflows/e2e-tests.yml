@@ -50,6 +50,7 @@ jobs:
       matrix:
         project:
           - babel
+          - babel-old-version
           - create-react-app
           # - vue-cli
           # - react-native
