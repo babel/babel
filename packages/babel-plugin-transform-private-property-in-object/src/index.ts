@@ -140,7 +140,7 @@ export default declare((api, opt: Options) => {
             .get("body.body")
             .find(
               ({ node }) =>
-                (t.isPrivate(node) || t.isClassAccessorProperty(node)) &&
+                (t.isPrivate(node) || t.isClassAccessorProperty?.(node)) &&
                 t.isPrivateName(node.key) &&
                 node.key.id.name === name,
             ) as typeof privateElement;
@@ -148,7 +148,7 @@ export default declare((api, opt: Options) => {
           return !!privateElement;
         }) as NodePath<t.Class>;
 
-        if (privateElement!.isClassAccessorProperty()) {
+        if (privateElement.node.type === "ClassAccessorProperty") {
           throw privateElement.buildCodeFrameError(
             "Class accessor properties are not compiled by this transform. " +
               'Please add "@babel/plugin-proposal-decorators" to your configuration.',

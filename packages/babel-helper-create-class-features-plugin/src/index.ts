@@ -182,7 +182,8 @@ export function createClassFeaturePlugin({
           ) {
             break;
           }
-          if (!path.isClassAccessorProperty()) continue;
+          // isClassAccessorProperty is not available in @babel/core < 7.17
+          if (!path.isClassAccessorProperty?.()) continue;
           // Check all of them before suggesting the decorators plugin, which
           // would compile TypeScript abstract accessors to real ones.
           assertTypeScriptAccessorTransformed(path);
