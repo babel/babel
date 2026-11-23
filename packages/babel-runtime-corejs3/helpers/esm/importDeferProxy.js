@@ -1,3 +1,4 @@
+import _typeof from "./typeof.js";
 import _Reflect$get from "core-js-pure/features/reflect/get.js";
 import _Reflect$getOwnPropertyDescriptor from "core-js-pure/features/reflect/get-own-property-descriptor.js";
 import _Reflect$has from "core-js-pure/features/reflect/has.js";
@@ -9,7 +10,7 @@ function _importDeferProxy(e) {
   }
   function n(r) {
     return function (n, o, f) {
-      return r("then" === o ? n : t || (t = e()), o, f);
+      return r("then" === o || "symbol" == _typeof(o) ? n : t || (t = e()), o, f);
     };
   }
   return new Proxy({

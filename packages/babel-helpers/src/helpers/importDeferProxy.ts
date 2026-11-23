@@ -12,9 +12,10 @@ export default function _importDeferProxy<T extends object>(
 
   function proxy(run: Function) {
     return function (target: T, p?: string | symbol, receiver?: any) {
-      // "then" does not trigger evaluation of a deferred namespace, so that it
-      // is not evaluated (or used as a thenable) when a promise resolves to it.
-      if (p === "then") return run(target, p, receiver);
+      // Symbols and "then" do not trigger evaluation of a deferred namespace.
+      if (p === "then" || typeof p === "symbol") {
+        return run(target, p, receiver);
+      }
       return run(ns || (ns = init()), p, receiver);
     };
   }
