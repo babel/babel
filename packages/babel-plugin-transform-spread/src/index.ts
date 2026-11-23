@@ -123,7 +123,7 @@ export default declare((api, options: Options) => {
 
         if (t.isArrayExpression(spreadLiteral)) {
           spreadLiteral.elements = spreadLiteral.elements.map(
-            el => el ?? t.buildUndefinedNode(),
+            el => el ?? t.unaryExpression("void", t.numericLiteral(0)),
           );
         }
 

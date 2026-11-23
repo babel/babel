@@ -524,7 +524,7 @@ export default declare(api => {
                 t.binaryExpression(
                   "===",
                   t.cloneNode(uid),
-                  t.buildUndefinedNode(),
+                  t.unaryExpression("void", t.numericLiteral(0)),
                 ),
                 t.blockStatement([
                   ...flattenExpression(right),
@@ -636,7 +636,11 @@ export default declare(api => {
       return t.logicalExpression(
         "&&",
         t.binaryExpression("!==", t.cloneNode(node), t.nullLiteral()),
-        t.binaryExpression("!==", t.cloneNode(node), t.buildUndefinedNode()),
+        t.binaryExpression(
+          "!==",
+          t.cloneNode(node),
+          t.unaryExpression("void", t.numericLiteral(0)),
+        ),
       );
     }
   }

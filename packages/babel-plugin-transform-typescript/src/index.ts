@@ -600,7 +600,8 @@ export default declare((api, opts: Options) => {
           } else if (
             child.isClassProperty() ||
             child.isClassPrivateProperty() ||
-            child.isClassAccessorProperty()
+            // Not available in @babel/core < 7.17
+            child.isClassAccessorProperty?.()
           ) {
             classMemberVisitors.field(child);
           }
