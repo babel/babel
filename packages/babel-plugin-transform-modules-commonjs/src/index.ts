@@ -195,7 +195,7 @@ export default declare((api, options: Options) => {
           // one defined by @babel/plugin-proposal-import-defer) handles them.
           // In that case they are compiled regardless of whether regular
           // dynamic imports are.
-          wrapNamespace = makeInvokers(this.file).getDynamicImportWrapper!(
+          wrapNamespace = makeInvokers(this.file).getDynamicImportWrapper(
             path.node,
           );
           if (!wrapNamespace) return;
@@ -247,7 +247,7 @@ export default declare((api, options: Options) => {
               importInterop,
               wrapReference: hooks.wrapReference,
               getWrapperPayload: (source, metadata, importNodes) => {
-                const payload = hooks.getWrapperPayload!(
+                const payload = hooks.getWrapperPayload(
                   source,
                   metadata,
                   importNodes,
@@ -295,7 +295,7 @@ export default declare((api, options: Options) => {
                 wrapInterop(path, loadExpr, metadata.interop) || loadExpr;
 
               if (metadata.wrap) {
-                const res = hooks.buildRequireWrapper!(
+                const res = hooks.buildRequireWrapper(
                   metadata.name,
                   init,
                   metadata.wrap,

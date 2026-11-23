@@ -52,12 +52,14 @@ function findMap<T, U>(
 
 export function makeInvokers(
   file: File,
-): Pick<
-  CommonJSHook,
-  | "wrapReference"
-  | "getWrapperPayload"
-  | "buildRequireWrapper"
-  | "getDynamicImportWrapper"
+): Required<
+  Pick<
+    CommonJSHook,
+    | "wrapReference"
+    | "getWrapperPayload"
+    | "buildRequireWrapper"
+    | "getDynamicImportWrapper"
+  >
 > {
   const hooks: CommonJSHook[] | null = file.get(commonJSHooksKey);
 
