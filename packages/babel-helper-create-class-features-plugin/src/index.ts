@@ -24,8 +24,8 @@ import {
   shouldTransform,
 } from "./features.ts";
 import {
-  assertAccessorTransformed,
   assertFieldTransformed,
+  assertTypeScriptAccessorTransformed,
 } from "./typescript.ts";
 
 export {
@@ -145,7 +145,7 @@ export function createClassFeaturePlugin({
           if (!path.isClassAccessorProperty()) continue;
           // Check all of them before suggesting the decorators plugin, which
           // would compile TypeScript abstract accessors to real ones.
-          assertAccessorTransformed(path);
+          assertTypeScriptAccessorTransformed(path);
           accessorPath ??= path;
         }
         if (accessorPath) {
