@@ -12,4 +12,4 @@ Using plugins:
   transform-duplicate-named-capturing-groups-regex { safari < 17.4 }
   transform-regexp-modifiers { safari }
 
-Using polyfills: No polyfills were added. @babel/preset-env does not inject polyfills, please use babel-plugin-polyfill-corejs3 instead.
+No polyfills were added. @babel/preset-env does not inject polyfills anymore, please use babel-plugin-polyfill-corejs3 instead.

@@ -18,4 +18,4 @@ Using plugins:
   transform-export-namespace-from { }
   bugfix/transform-v8-spread-parameters-in-optional-chaining { chrome < 91 }
 
-Using polyfills: No polyfills were added. @babel/preset-env does not inject polyfills, please use babel-plugin-polyfill-corejs3 instead.
+No polyfills were added. @babel/preset-env does not inject polyfills anymore, please use babel-plugin-polyfill-corejs3 instead.
