@@ -364,8 +364,13 @@ export default class ReplaceSupers {
           return cloneNode(opts.getSuperRef());
         }
       },
-      // we dont need boundGet here, but memberExpressionToFunctions handler needs it.
-      boundGet: handler.get,
+      // super.tag`` -> _get(...).bind(this)``
+      boundGet(superMember: SuperMember) {
+        return callExpression(
+          memberExpression(this.get(superMember), identifier("bind")),
+          [thisExpression()],
+        );
+      },
       ...handler,
     });
   }
