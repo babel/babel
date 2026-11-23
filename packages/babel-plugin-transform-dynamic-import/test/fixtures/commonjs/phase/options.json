@@ -2,6 +2,6 @@
   "plugins": ["transform-dynamic-import", "transform-modules-commonjs"],
   "parserOpts": {
     "createImportExpressions": true,
-    "plugins": ["sourcePhaseImports", "deferredImportEvaluation", "importSync"]
+    "plugins": ["sourcePhaseImports", "deferredImportEvaluation"]
   }
 }

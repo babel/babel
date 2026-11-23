@@ -183,9 +183,9 @@ export default declare((api, options: Options) => {
         let wrapNamespace: ((ns: t.Expression) => t.Expression) | null = null;
         if (
           path.isImportExpression() &&
-          (path.node.phase != null || path.node.sync)
+          path.node.phase != null
         ) {
-          // `import.source()`, `import.defer()` and `import.sync()` can't be
+          // `import.source()` and `import.defer()` can't be
           // compiled to a regular dynamic import, unless a hook (such as the
           // one defined by @babel/plugin-proposal-import-defer) handles them.
           // In that case they are compiled regardless of whether regular

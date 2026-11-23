@@ -3,6 +3,5 @@ define(["require"], function (_require) {
 
   import.source("a");
   import.defer("b");
-  import.sync("d");
   new Promise((_resolve, _reject) => _require(["c"], imported => _resolve(babelHelpers.interopRequireWildcard(imported)), _reject));
 });

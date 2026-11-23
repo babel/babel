@@ -281,11 +281,11 @@ export default declare<PluginState>((api, options: Options) => {
         state: PluginState,
       ) {
         if (path.isCallExpression() && !t.isImport(path.node.callee)) return;
-        // `import.source()`, `import.defer()` and `import.sync()` can't be
+        // `import.source()` and `import.defer()` can't be
         // compiled to a regular dynamic import.
         if (
           path.isImportExpression() &&
-          (path.node.phase != null || path.node.sync)
+          path.node.phase != null
         ) {
           return;
         }
