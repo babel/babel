@@ -1,4 +1,4 @@
-function f(a = (_x => (_x = x) == null ? void 0 : _x.y)()) {}
+function f(a = x == null ? void 0 : x.y) {}
 function g({
   a,
   b = a == null ? void 0 : a.c
