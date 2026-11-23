@@ -24,7 +24,7 @@ async function run(name, ...flags) {
       [...flags, require.resolve(`./fixtures/esm-cjs-integration/${name}`)],
       { env: process.env, timeout: TIMEOUT },
       (error, stdout, stderr) => {
-        if (error?.killed) {
+        if (error && error.killed) {
           error.message =
             `${name} did not exit within ${TIMEOUT}ms and was killed.\n` +
             `stdout: ${stdout}\nstderr: ${stderr}`;
