@@ -1,4 +1,4 @@
-import { types as t, template, type NodePath } from "@babel/core";
+import { types as t, template, type NodePath, type Scope } from "@babel/core";
 
 const buildForAwait = template(`
   async function wrapper() {
@@ -28,6 +28,24 @@ const buildForAwait = template(`
     }
   }
 `);
+
+// scope.generateUid only checks labels of the given scope, but labels of all
+// enclosing scopes are also visible, so a nested label must not reuse them.
+function generateUidLabel(scope: Scope, name: string) {
+  let uid: string;
+  let hasLabel: boolean;
+  do {
+    uid = scope.generateUid(name);
+    hasLabel = false;
+    for (let s: Scope | undefined = scope; s; s = s.parent) {
+      if (s.hasLabel(uid)) {
+        hasLabel = true;
+        break;
+      }
+    }
+  } while (hasLabel);
+  return t.identifier(uid);
+}
 
 export default function (
   path: NodePath<t.ForOfStatement>,
@@ -65,17 +83,19 @@ export default function (
       t.getBindingIdentifiers(left.declarations[0].id),
     );
     const rightPath = path.get("right");
+    const isInRight = (p: NodePath) =>
+      p.node === rightPath.node || p.isDescendant(rightPath);
     const needsTDZ = boundNames.some(name => {
       const binding = scope.getBinding(name);
-      return binding?.referencePaths.some(
-        refPath =>
-          refPath.node === rightPath.node || refPath.isDescendant(rightPath),
+      return (
+        binding?.referencePaths.some(isInRight) ||
+        binding?.constantViolations.some(isInRight)
       );
     });
 
     if (needsTDZ) {
       const objectUid = scope.generateUidIdentifier("object");
-      const initLabel = t.identifier("init");
+      const initLabel = generateUidLabel(scope, "init");
       tdzNodes = [
         // var _object;
         t.variableDeclaration("var", [t.variableDeclarator(objectUid)]),
