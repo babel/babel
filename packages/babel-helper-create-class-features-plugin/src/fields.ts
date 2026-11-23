@@ -219,8 +219,11 @@ export function privateNameVisitorFactory<S, V>(
       const visiblePrivateNames = new Map(privateNamesMap);
       const redeclared = [];
       for (const prop of body) {
-        if (!prop.isPrivate()) continue;
-        const { name } = prop.node.key.id;
+        // `accessor #x` also declares a private name
+        if (!prop.isPrivate() && !prop.isClassAccessorProperty()) continue;
+        const { key } = prop.node;
+        if (!t.isPrivateName(key)) continue;
+        const { name } = key.id;
         visiblePrivateNames.delete(name);
         redeclared.push(name);
       }

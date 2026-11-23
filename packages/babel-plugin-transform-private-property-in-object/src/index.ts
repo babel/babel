@@ -129,19 +129,31 @@ export default declare((api, opt: Options) => {
         const { name } = node.left.id;
 
         let privateElement: NodePath<
-          t.ClassPrivateMethod | t.ClassPrivateProperty
+          | t.ClassPrivateMethod
+          | t.ClassPrivateProperty
+          | t.ClassAccessorProperty
         >;
         const outerClass = path.findParent(path => {
           if (!path.isClass()) return false;
 
-          privateElement = path.get("body.body").find(
-            ({ node }) =>
-              // fixme: Support class accessor property
-              t.isPrivate(node) && node.key.id.name === name,
-          ) as NodePath<t.ClassPrivateMethod | t.ClassPrivateProperty>;
+          privateElement = path
+            .get("body.body")
+            .find(
+              ({ node }) =>
+                (t.isPrivate(node) || t.isClassAccessorProperty(node)) &&
+                t.isPrivateName(node.key) &&
+                node.key.id.name === name,
+            ) as typeof privateElement;
 
           return !!privateElement;
         }) as NodePath<t.Class>;
+
+        if (privateElement!.isClassAccessorProperty()) {
+          throw privateElement.buildCodeFrameError(
+            "Class accessor properties are not compiled by this transform. " +
+              'Please add "@babel/plugin-proposal-decorators" to your configuration.',
+          );
+        }
 
         if (outerClass.parentPath.scope.path.isPattern()) {
           outerClass.replaceWith(

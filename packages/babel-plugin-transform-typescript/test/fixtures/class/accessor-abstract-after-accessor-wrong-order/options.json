@@ -1,0 +1,7 @@
+{
+  "plugins": ["transform-class-properties", "transform-typescript"],
+  "parserOpts": {
+    "plugins": ["decoratorAutoAccessors"]
+  },
+  "throws": "TypeScript 'abstract' accessors must first be removed by @babel/plugin-transform-typescript.\nIf you have already enabled that plugin (or '@babel/preset-typescript'), make sure that it runs before any plugin related to additional class features:\n - @babel/plugin-transform-class-properties\n - @babel/plugin-transform-private-methods\n - @babel/plugin-proposal-decorators"
+}
