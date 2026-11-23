@@ -283,10 +283,7 @@ export default declare<PluginState>((api, options: Options) => {
         if (path.isCallExpression() && !t.isImport(path.node.callee)) return;
         // `import.source()` and `import.defer()` can't be
         // compiled to a regular dynamic import.
-        if (
-          path.isImportExpression() &&
-          path.node.phase != null
-        ) {
+        if (path.isImportExpression() && path.node.phase != null) {
           return;
         }
         if (path.isCallExpression()) {
