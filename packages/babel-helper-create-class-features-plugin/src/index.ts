@@ -174,6 +174,14 @@ export function createClassFeaturePlugin({
 
         let accessorPath: NodePath<t.ClassAccessorProperty> | undefined;
         for (const path of body.get("body")) {
+          // The 2018-09 decorators transform reports its own error
+          if (
+            !process.env.BABEL_8_BREAKING &&
+            isDecorated &&
+            decoratorVersion === "2018-09"
+          ) {
+            break;
+          }
           if (!path.isClassAccessorProperty()) continue;
           // Check all of them before suggesting the decorators plugin, which
           // would compile TypeScript abstract accessors to real ones.
