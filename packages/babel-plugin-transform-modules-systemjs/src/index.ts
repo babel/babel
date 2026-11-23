@@ -283,7 +283,8 @@ export default declare<PluginState>((api, options: Options) => {
         if (path.isCallExpression() && !t.isImport(path.node.callee)) return;
         // `import.source()` and `import.defer()` can't be
         // compiled to a regular dynamic import.
-        if (path.isImportExpression() && path.node.phase != null) {
+        // isImportExpression is not available in @babel/core < 7.23
+        if (path.isImportExpression?.() && path.node.phase != null) {
           return;
         }
         if (path.isCallExpression()) {
@@ -683,7 +684,9 @@ export default declare<PluginState>((api, options: Options) => {
             if (!hasInit && id.name in exportMap) {
               for (const exported of exportMap[id.name]) {
                 exportNames.push(exported);
-                exportValues.push(t.buildUndefinedNode());
+                exportValues.push(
+                  t.unaryExpression("void", t.numericLiteral(0)),
+                );
               }
             }
           });

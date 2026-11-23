@@ -181,7 +181,8 @@ export default declare((api, options: Options) => {
         path: NodePath<t.CallExpression | t.ImportExpression>,
       ) {
         let wrapNamespace: ((ns: t.Expression) => t.Expression) | null = null;
-        if (path.isImportExpression() && path.node.phase != null) {
+        // isImportExpression is not available in @babel/core < 7.23
+        if (path.isImportExpression?.() && path.node.phase != null) {
           // `import.source()` and `import.defer()` can't be
           // compiled to a regular dynamic import, unless a hook (such as the
           // one defined by @babel/plugin-proposal-import-defer) handles them.
