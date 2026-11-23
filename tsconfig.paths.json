@@ -554,22 +554,22 @@
       "@babel/plugin-syntax-import-reflection": [
         "./lib/archived-libs.d.ts"
       ],
-      "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class": [
+      "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class/index.js": [
         "./lib/third-party-libs.d.ts"
       ],
-      "@babel/preset-modules/lib/plugins/transform-edge-default-parameters": [
+      "@babel/preset-modules/lib/plugins/transform-edge-default-parameters/index.js": [
         "./lib/third-party-libs.d.ts"
       ],
-      "@babel/preset-modules/lib/plugins/transform-edge-function-name": [
+      "@babel/preset-modules/lib/plugins/transform-edge-function-name/index.js": [
         "./lib/third-party-libs.d.ts"
       ],
-      "@babel/preset-modules/lib/plugins/transform-tagged-template-caching": [
+      "@babel/preset-modules/lib/plugins/transform-tagged-template-caching/index.js": [
         "./lib/third-party-libs.d.ts"
       ],
-      "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing": [
+      "@babel/preset-modules/lib/plugins/transform-safari-block-shadowing/index.js": [
         "./lib/third-party-libs.d.ts"
       ],
-      "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing": [
+      "@babel/preset-modules/lib/plugins/transform-safari-for-shadowing/index.js": [
         "./lib/third-party-libs.d.ts"
       ],
       "babel-plugin-polyfill-corejs2": [

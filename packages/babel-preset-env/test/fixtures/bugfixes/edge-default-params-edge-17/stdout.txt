@@ -31,4 +31,4 @@ Using plugins:
   bugfix/transform-edge-default-parameters { edge < 18 }
   bugfix/transform-edge-function-name { edge < 79 }
 
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
+No polyfills were added. @babel/preset-env does not inject polyfills anymore, please use babel-plugin-polyfill-corejs3 instead.

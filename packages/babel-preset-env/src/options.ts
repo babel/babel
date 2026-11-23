@@ -22,9 +22,3 @@ export const ModulesOption = {
   systemjs: "systemjs",
   umd: "umd",
 } as const;
-
-export const UseBuiltInsOption = {
-  false: false,
-  entry: "entry",
-  usage: "usage",
-} as const;

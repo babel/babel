@@ -1,0 +1,16 @@
+{
+  "assumptions": {
+    "setSpreadProperties": true
+  },
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "ie": 11
+        },
+        "modules": false
+      }
+    ]
+  ]
+}
