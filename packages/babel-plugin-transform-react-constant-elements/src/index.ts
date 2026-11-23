@@ -119,7 +119,14 @@ export default declare((api, options: Options) => {
       // Ignore constant bindings.
       if (path.isIdentifier()) {
         const binding = path.scope.getBinding(path.node.name);
-        if (binding?.constant) return;
+        if (
+          binding?.constant ||
+          // Most of the non-local variables captured by JSX are imports (e.g.
+          // all the component names!) and they tend to not be reassigned.
+          binding?.kind === "module"
+        ) {
+          return;
+        }
       }
 
       // If we allow mutable props, tags with function expressions can be

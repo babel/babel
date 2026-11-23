@@ -1,4 +1,5 @@
+var _Icon;
 import { Icon, label } from "./ui";
 export function Button() {
-  return <Icon name={label} />;
+  return _Icon || (_Icon = <Icon name={label} />);
 }
