@@ -3,14 +3,24 @@ import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
 
+// jest-light-runner does not enforce a test timeout, so a child process that
+// never exits would hang the whole test run. This happens occasionally on
+// Windows CI; kill the child instead and report which fixture got stuck.
+const TIMEOUT = 30_000;
+
 async function run(name, ...flags) {
   return new Promise((res, rej) => {
     execFile(
       process.execPath,
       [...flags, require.resolve(`./fixtures/esm-cjs-integration/${name}`)],
-      { env: process.env },
+      { env: process.env, timeout: TIMEOUT },
       (error, stdout, stderr) => {
-        if (error) rej(error);
+        if (error?.killed) {
+          error.message =
+            `${name} did not exit within ${TIMEOUT}ms and was killed.\n` +
+            `stdout: ${stdout}\nstderr: ${stderr}`;
+        }
+        if (error) return rej(error);
         res({ stdout: stdout.toString(), stderr: stderr.toString() });
       },
     );
