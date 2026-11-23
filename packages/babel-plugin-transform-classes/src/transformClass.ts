@@ -148,6 +148,34 @@ export default function transformClass(
         throw path.buildCodeFrameError("Missing class properties transform.");
       }
 
+      if (path.isStaticBlock()) {
+        // @babel/plugin-transform-class-static-block alone is not enough: it
+        // turns static blocks into static fields so we also need class-properties.
+        throw path.buildCodeFrameError(
+          "Missing class static block transform. " +
+            'Please make sure that "@babel/plugin-transform-class-static-block" ' +
+            'and "@babel/plugin-transform-class-properties" come *before* ' +
+            '"@babel/plugin-transform-classes".',
+        );
+      }
+
+      if (path.isClassPrivateMethod()) {
+        throw path.buildCodeFrameError(
+          "Missing class private methods transform.",
+        );
+      }
+
+      if (path.isClassAccessorProperty()) {
+        // @babel/plugin-proposal-decorators alone is not enough: it turns
+        // accessor properties into private fields so we also need class-properties.
+        throw path.buildCodeFrameError(
+          "Class accessor properties are not compiled by this transform. " +
+            'Please make sure that "@babel/plugin-proposal-decorators" and ' +
+            '"@babel/plugin-transform-class-properties" come *before* ' +
+            '"@babel/plugin-transform-classes".',
+        );
+      }
+
       if (node.decorators) {
         throw path.buildCodeFrameError(
           "Method has decorators, put the decorator plugin before the classes one.",
@@ -728,6 +756,12 @@ export default function transformClass(
 
   function classTransformer(path: NodePath<t.Class>) {
     const node = path.node;
+
+    if (node.decorators?.length) {
+      throw path.buildCodeFrameError(
+        "Class has decorators, put the decorator plugin before the classes one.",
+      );
+    }
 
     classState.superName = node.superClass;
     // this is the name of the binding that will **always** reference the class we've constructed
