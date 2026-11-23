@@ -34,7 +34,7 @@
     "@babel/plugin-transform-parameters": "workspace:^",
     "@babel/plugin-transform-runtime": "workspace:^",
     "babel-plugin-polyfill-regenerator": "^1.0.0",
-    "jest": "^30.4.2",
+    "jest": "catalog:dev",
     "recast": "^0.23.3",
     "regenerator-runtime": "catalog:dev",
     "uglify-js": "^3.14.0"
