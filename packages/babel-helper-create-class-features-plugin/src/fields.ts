@@ -1421,6 +1421,15 @@ type ReplaceThisState = {
 
 type ReplaceInnerBindingReferenceState = ReplaceThisState;
 
+// `new.target` is `undefined` in field initializers and static blocks, which
+// are moved out of the class body or into the constructor.
+function replaceNewTarget(path: NodePath<t.MetaProperty>) {
+  const { node } = path;
+  if (node.meta.name === "new" && node.property.name === "target") {
+    path.replaceWith(path.scope.buildUndefinedNode());
+  }
+}
+
 const thisContextVisitor = visitors.environmentVisitor<ReplaceThisState>({
   Identifier(path, state) {
     if (state.argumentsPath && path.node.name === "arguments") {
@@ -1441,14 +1450,11 @@ const thisContextVisitor = visitors.environmentVisitor<ReplaceThisState>({
     state.needsClassRef = true;
     path.replaceWith(t.cloneNode(state.thisRef));
   },
-  MetaProperty(path) {
-    const { node, scope } = path;
-    // if there are `new.target` in static field
-    // we should replace it with `undefined`
-    if (node.meta.name === "new" && node.property.name === "target") {
-      path.replaceWith(scope.buildUndefinedNode());
-    }
-  },
+  MetaProperty: replaceNewTarget,
+});
+
+const newTargetVisitor = visitors.environmentVisitor({
+  MetaProperty: replaceNewTarget,
 });
 
 const innerReferencesVisitor: Visitor<ReplaceInnerBindingReferenceState> = {
@@ -1632,6 +1638,8 @@ export function buildFieldsInitNodes(
         classRefFlags |= ClassRefFlag.ForInnerBinding;
       }
     }
+
+    if (isInstance && isField) prop.traverse(newTargetVisitor);
 
     lastInstanceNodeReturnsThis = false;
 
