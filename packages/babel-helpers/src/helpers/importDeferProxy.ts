@@ -12,7 +12,14 @@ export default function _importDeferProxy<T extends object>(
   };
 
   var proxy = function (run: Function) {
-    return function (_target: T, p?: string | symbol, receiver?: any) {
+    return function (target: T, p?: string | symbol, receiver?: any) {
+      // Symbols and "then" do not trigger evaluation of a deferred namespace.
+      // Symbols are detected without comparing `typeof p` to "symbol", so
+      // that @babel/plugin-transform-typeof-symbol does not add `_typeof`.
+      // `p` is undefined for `ownKeys`, which triggers evaluation.
+      if (p === "then" || (p && typeof p !== "string")) {
+        return run(target, p, receiver);
+      }
       if (ns === null) ns = init();
       return run(ns, p, receiver);
     };
