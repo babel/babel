@@ -1,18 +1,17 @@
 class Foo {
   constructor() {
-    var _newtarget = this.constructor,
-      _Class;
+    var _Class;
     this.test = function _target() {
       this instanceof _target ? this.constructor : void 0;
     };
     this.test2 = function () {
-      _newtarget;
+      void 0;
     };
     this.Bar = (_Class = class {
       constructor() {
         // should not replace
-        this.q = this.constructor;
-      } // should not replace
+        this.q = void 0;
+      } // should replace
     }, _Class.p = void 0, _Class.p1 = class {
       constructor() {
         this.constructor;
