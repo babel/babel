@@ -40,11 +40,27 @@ export function find(
 }
 
 /**
- * Get the parent function of the current path.
+ * Get the parent function of the current path. If we're inside a decorator or
+ * a computed key, skip the corresponding method and keep looking for a parent.
  */
 
-export function getFunctionParent(this: NodePath): NodePath<t.Function> | null {
-  return this.findParent(p => p.isFunction()) as NodePath<t.Function> | null;
+export function getFunctionParent(
+  this: NodePath,
+): NodePath<t.Function> | null {
+  for (
+    let path = this, parentPath;
+    ({ parentPath } = path) && parentPath;
+    path = parentPath
+  ) {
+    if (
+      parentPath.isFunction() &&
+      path.key !== "key" &&
+      path.listKey !== "decorators"
+    ) {
+      return parentPath;
+    }
+  }
+  return null;
 }
 
 /**
