@@ -8,7 +8,7 @@ for (const a of [1, 2]) {
 for (const b in { k: 1 }) {
   try {
     throw 0;
-  } catch {
+  } catch (_) {
     out.push(b);
   }
 }
