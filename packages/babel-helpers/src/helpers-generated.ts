@@ -1261,10 +1261,10 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 178, gzip size: 166
+  // size: 187, gzip size: 173
   setFunctionName: helper(
     "7.23.6",
-    'function setFunctionName(e,t,n){"symbol"==typeof t&&(t=(t=t.description)?"["+t+"]":"");try{Object.defineProperty(e,"name",{configurable:!0,value:n?n+" "+t:t})}catch(e){}return e}',
+    'function setFunctionName(e,t,n){"symbol"==typeof t&&(t=void 0!==(t=t.description)?"["+t+"]":"");try{Object.defineProperty(e,"name",{configurable:!0,value:n?n+" "+t:t})}catch(e){}return e}',
     {
       globals: ["Object"],
       locals: { setFunctionName: ["body.0.id"] },
