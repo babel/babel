@@ -44,7 +44,7 @@ build-standalone:
 	$(MAKEJS) build-standalone
 
 build-standalone-ci: bootstrap-only
-	$(YARN) gulp build-dev-all-standalone
+	$(YARN) gulp build-dev-standalone
 	$(MAKE) build-flow-typings
 
 prepublish-build-standalone:
@@ -132,7 +132,7 @@ clean-all:
 
 
 build-no-bundle-ci: bootstrap-only
-	$(YARN) gulp build-dev-all
+	$(YARN) gulp build-dev
 	$(MAKE) build-flow-typings
 
 # Does not work on Windows; use "$(YARN) jest" instead

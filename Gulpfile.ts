@@ -100,8 +100,7 @@ function getIndexFromPackage(name: string): string {
 
 /**
  * Write a generated source file, but only if its content changed: unchanged
- * files keep their mtime so they are not compiled again, and tasks running in
- * parallel never read a partially written file.
+ * files keep their mtime so they are not compiled again.
  */
 function writeGeneratedFile(filename: string, content: string) {
   try {
@@ -110,14 +109,7 @@ function writeGeneratedFile(filename: string, content: string) {
     if (err.code !== "ENOENT") throw err;
   }
   fs.mkdirSync(path.dirname(filename), { recursive: true });
-  const tmpFilename = `${filename}.${process.pid}.tmp`;
-  try {
-    fs.writeFileSync(tmpFilename, content, { mode: 0o644 });
-    fs.renameSync(tmpFilename, filename);
-  } finally {
-    // Don't leave the temporary file in the sources if the write failed
-    fs.rmSync(tmpFilename, { force: true });
-  }
+  fs.writeFileSync(filename, content, { mode: 0o644 });
 }
 
 async function generateHelpers(
@@ -1208,24 +1200,6 @@ gulp.task("build-no-bundle", () => buildBabel(true));
 // Incremental builds take place in main process
 gulp.task("build-no-bundle-watch", () => buildBabel(false));
 
-gulp.task(
-  "build-dev",
-  gulp.series(
-    "build-no-bundle",
-    gulp.parallel(
-      "generate-standalone",
-      "generate-runtime-helpers",
-      "generate-helper-globals-data",
-      gulp.series(
-        "generate-type-helpers",
-        // rebuild @babel/types since type-helpers may be changed
-        "build-no-bundle"
-      ),
-      "bundle-babel-parser-dts"
-    )
-  )
-);
-
 gulp.task("tscheck-babel-parser", () =>
   runNodeScript(["scripts/parallel-tsc/tsc.ts", "./packages/babel-parser"])
 );
@@ -1237,12 +1211,12 @@ gulp.task("build-plugin-transform-runtime-dist", () =>
 );
 
 /**
- * The complete development build: it runs the same steps as `build-dev`, the
- * `bundle-babel-parser-dts` Makefile target and `build-plugin-transform-runtime-dist`
- * (and optionally `rollup-babel-standalone`), but it runs the independent steps
- * in parallel.
+ * The complete development build, including the parser typings and the
+ * @babel/plugin-transform-runtime dist (and optionally `rollup-babel-standalone`).
+ * The independent steps run in parallel, but a generated source is never read
+ * while it is being written.
  */
-function buildDevAll(standalone: boolean) {
+function buildDev(standalone: boolean) {
   return gulp.series(
     "build-no-bundle",
     // The @babel/types generated sources are part of the parser type check.
@@ -1267,8 +1241,8 @@ function buildDevAll(standalone: boolean) {
   );
 }
 
-gulp.task("build-dev-all", buildDevAll(false));
-gulp.task("build-dev-all-standalone", buildDevAll(true));
+gulp.task("build-dev", buildDev(false));
+gulp.task("build-dev-standalone", buildDev(true));
 
 function watch() {
   gulp.watch(defaultSourcesGlob, gulp.task("build-no-bundle-watch"));

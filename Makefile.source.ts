@@ -174,7 +174,7 @@ target["build"] = function () {
 
   env(
     () => {
-      yarn(["gulp", "build-dev-all-standalone"]);
+      yarn(["gulp", "build-dev-standalone"]);
     },
     { BABEL_ENV: "development" }
   );
@@ -200,7 +200,7 @@ target["build-no-bundle"] = function () {
 
   env(
     () => {
-      yarn(["gulp", "build-dev-all"]);
+      yarn(["gulp", "build-dev"]);
     },
     { BABEL_ENV: "development" }
   );
