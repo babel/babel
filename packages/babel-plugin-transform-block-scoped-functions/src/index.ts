@@ -73,12 +73,13 @@ export default declare(api => {
           .flatMap(c => c.get("consequent"))
           .filter(p => p.isFunctionDeclaration()),
       );
+      if (!fnPaths.size) return;
 
       const fns: t.FunctionDeclaration[] = [];
       const hoistedIds: t.Identifier[] = [];
       const inHoistedFn = (p: NodePath) => !!p.findParent(q => fnPaths.has(q));
       const usedNames = new Set<string>();
-      const discriminent = path.get("discriminant");
+      const discriminant = path.get("discriminant");
 
       for (const [name, binding] of Object.entries(path.scope.bindings)) {
         if (binding.kind !== "let" && binding.kind !== "const") continue;
@@ -91,7 +92,7 @@ export default declare(api => {
       }
 
       for (const name of [...usedNames]) {
-        if (referencesName(discriminent, name)) {
+        if (referencesName(discriminant, name)) {
           const newName = path.scope.generateUid(name);
           path.scope.rename(name, newName);
           usedNames.delete(name);
