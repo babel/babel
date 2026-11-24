@@ -25,10 +25,17 @@ const shouldSkip = semver.lt(process.version, "18.0.0");
   "@babel/core config tsx integration",
   () => {
     let unregister;
-    beforeAll(async () => {
-      // tsx/cjs/api is a defined sub-export
-      // eslint-disable-next-line import/extensions
-      const tsx = require("tsx/cjs/api");
+    beforeAll(() => {
+      let tsx;
+      try {
+        // A persistent esbuild service can keep other tests' output pipes open on Windows.
+        process.env.ESBUILD_WORKER_THREADS = "0";
+        // tsx/cjs/api is a defined sub-export
+        // eslint-disable-next-line import/extensions
+        tsx = require("tsx/cjs/api");
+      } finally {
+        delete process.env.ESBUILD_WORKER_THREADS;
+      }
       // Provide a dummy tsconfig.json to avoid tsx resolving @babel/* from the `src` directory, where
       // undeclared globals such as the PACKAGE_JSON macro will break
       process.env.TSX_TSCONFIG_PATH = path.join(
