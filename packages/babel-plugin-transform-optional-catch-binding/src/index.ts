@@ -10,8 +10,8 @@ export default declare(api => {
       CatchClause(path) {
         if (!path.node.param) {
           const uid = path.scope.generateUidIdentifier("unused");
-          const paramPath = path.get("param");
-          paramPath.replaceWith(uid);
+          const [paramPath] = path.get("param").replaceWith(uid);
+          path.scope.registerBinding("let", paramPath, path);
         }
       },
     },
