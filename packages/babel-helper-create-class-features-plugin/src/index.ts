@@ -16,7 +16,11 @@ import createDecoratorTransform, {
 } from "./decorators.ts";
 import type { DecoratorVersionKind } from "./decorators.ts";
 
-import { injectInitialization, extractComputedKeys } from "./misc.ts";
+import {
+  injectInitialization,
+  extractComputedKeys,
+  getLoopBodyScope,
+} from "./misc.ts";
 import {
   enableFeature,
   FEATURES,
@@ -231,11 +235,15 @@ export function createClassFeaturePlugin({
           privateFieldsAsSymbolsOrProperties ?? loose,
           props,
         );
+        const loopBody = getLoopBodyScope(path);
+        const loopScope = loopBody?.scope;
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
           privateFieldsAsProperties ?? loose,
           privateFieldsAsSymbols ?? false,
           file,
+          loopScope,
+          loopBody?.reevaluated,
         );
 
         transformPrivateNamesUsage(
@@ -272,6 +280,7 @@ export function createClassFeaturePlugin({
           noUninitializedPrivateFieldAccess,
           constantSuper ?? loose,
           innerBinding,
+          loopScope,
         );
 
         if (instanceNodes.length > 0) {

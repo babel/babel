@@ -8,7 +8,5 @@ for (let i = 0; i < 2; i++) {
   }
 }
 
-// Every evaluation of the class declaration shares the storage of #x, so after
-// the first one it already holds a value before the next class initializes it.
-// This output is wrong: natively, it is [false, true, false, true].
-expect(results).toEqual([false, true, true, true]);
+// Every evaluation of the class declaration has its own storage for #x
+expect(results).toEqual([false, true, false, true]);
