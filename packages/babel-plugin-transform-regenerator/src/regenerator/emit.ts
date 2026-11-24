@@ -2,10 +2,9 @@
 import assert from "node:assert";
 import * as leap from "./leap.ts";
 import * as meta from "./meta.ts";
-import * as util from "./util.ts";
 
-import type { NodePath, PluginPass, Visitor, Scope } from "@babel/core";
-import { types as t } from "@babel/core";
+import type { NodePath, PluginPass, Scope } from "@babel/core";
+import { types as t, traverse } from "@babel/core";
 
 // From packages/babel-helpers/src/helpers/regenerator.ts
 const enum OperatorType {
@@ -42,24 +41,25 @@ function getDeclError(node: t.Node) {
   );
 }
 
-const catchParamVisitor: Visitor<{
-  getSafeParam: () => t.Identifier;
-  catchParamName: string;
-}> = {
-  Identifier: function (path, state) {
-    if (path.node.name === state.catchParamName && util.isReference(path)) {
-      path.replaceWith(state.getSafeParam());
-    }
+// Finds a `yield` or `await` of the function being compiled, so it does not
+// look into nested functions, except the computed keys of methods.
+const yieldOrAwaitVisitor = traverse.visitors.environmentVisitor<{
+  found: boolean;
+}>({
+  ArrowFunctionExpression(path) {
+    path.skip();
   },
+  "YieldExpression|AwaitExpression"(path, state) {
+    state.found = true;
+    path.stop();
+  },
+});
 
-  Scope: function (path, state) {
-    if (path.scope.hasOwnBinding(state.catchParamName)) {
-      // Don't descend into nested scopes that shadow the catch
-      // parameter with their own declarations.
-      path.skip();
-    }
-  },
-};
+function containsYieldOrAwait(path: NodePath) {
+  const state = { found: false };
+  path.traverse(yieldOrAwaitVisitor, state);
+  return state.found;
+}
 
 export class Emitter {
   nextTempId: number;
@@ -773,16 +773,28 @@ export class Emitter {
             const bodyPath = path.get(
               "handler.body",
             ) as NodePath<t.BlockStatement>;
-            const safeParam = self.makeTempVar();
+            const param = handler!.param;
 
-            this.emitAssign(safeParam, self.contextProperty("v"));
-
-            bodyPath.traverse(catchParamVisitor, {
-              getSafeParam: () => t.cloneNode(safeParam),
-              catchParamName:
-                // @ts-expect-error Assuming `handler.param` is `t.Identifier`
-                handler.param.name,
-            });
+            if (param) {
+              const paramPath = path.get("handler.param") as NodePath<
+                t.Identifier | t.ArrayPattern | t.ObjectPattern
+              >;
+              if (containsYieldOrAwait(paramPath)) {
+                throw paramPath.buildCodeFrameError(
+                  "`yield` or `await` in a `catch` parameter is not supported by the regenerator transform. " +
+                    "Please add @babel/plugin-transform-destructuring to your Babel config.",
+                );
+              }
+              // The catch clause becomes part of the function body, so its
+              // bindings become function-level temporaries.
+              const handlerScope = path.get("handler").scope;
+              for (const name of Object.keys(
+                paramPath.getBindingIdentifiers(),
+              )) {
+                handlerScope.rename(name, self.makeTempVar().name);
+              }
+              self.emitAssign(param, self.contextProperty("v"));
+            }
 
             self.leapManager.withEntry(catchEntry!, function () {
               self.explodeStatement(bodyPath);
