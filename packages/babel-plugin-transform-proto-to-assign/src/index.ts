@@ -4,12 +4,17 @@ import { types as t, type File } from "@babel/core";
 export default declare(api => {
   api.assertVersion(REQUIRED_VERSION(7));
 
-  function isProtoKey(node: t.ObjectExpression["properties"][number]) {
+  // Only `__proto__: value` sets the prototype. The shorthand, computed and
+  // method forms define a property named "__proto__".
+  function isProtoSetter(
+    node: t.ObjectExpression["properties"][number],
+  ): node is t.ObjectProperty & { value: t.Expression } {
     return (
-      !t.isSpreadElement(node) &&
-      t.isStringLiteral(t.toComputedKey(node, node.key), {
-        value: "__proto__",
-      })
+      t.isObjectProperty(node) &&
+      !node.computed &&
+      !node.shorthand &&
+      (t.isIdentifier(node.key, { name: "__proto__" }) ||
+        t.isStringLiteral(node.key, { value: "__proto__" }))
     );
   }
 
@@ -44,6 +49,9 @@ export default declare(api => {
 
     visitor: {
       AssignmentExpression(path, { file }) {
+        // `a.__proto__ += b` and `a.__proto__ ??= b` do not only set the
+        // prototype.
+        if (path.node.operator !== "=") return;
         if (!isProtoAssignmentExpression(path.node.left)) return;
 
         const nodes = [];
@@ -93,8 +101,7 @@ export default declare(api => {
 
         for (let i = 0; i < properties.length; i++) {
           const prop = properties[i];
-          if (isProtoKey(prop)) {
-            // @ts-expect-error Fixme: we should also handle ObjectMethod with __proto__ key
+          if (isProtoSetter(prop)) {
             proto = prop.value;
             properties.splice(i, 1);
             break;
