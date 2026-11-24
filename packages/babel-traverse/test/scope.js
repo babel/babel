@@ -93,6 +93,26 @@ describe("scope", () => {
       });
     });
 
+    describe("catch parameter expression", function () {
+      it("should not have visibility of declarations inside catch body", () => {
+        expect(
+          getPath(`var a = "outside"; try {} catch ([b = a]) { let a; }`)
+            .get("body.1.handler.param.elements.0")
+            .scope.getBinding("a").path.node.init.value,
+        ).toBe("outside");
+      });
+      it("should have visibility on parameter bindings", () => {
+        const handler = getPath(
+          `var a = "outside"; try {} catch ([a, b = a]) {}`,
+        ).get("body.1.handler");
+        const binding = handler.get("param.elements.1").scope.getBinding("a");
+        expect(binding.path).toBe(handler);
+        expect(binding.referencePaths.map(p => p.node)).toEqual([
+          handler.node.param.elements[1].right,
+        ]);
+      });
+    });
+
     describe("import declaration", () => {
       it.each([
         [
