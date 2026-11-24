@@ -44,9 +44,7 @@ export function find(
  * a computed key, skip the corresponding method and keep looking for a parent.
  */
 
-export function getFunctionParent(
-  this: NodePath,
-): NodePath<t.Function> | null {
+export function getFunctionParent(this: NodePath): NodePath<t.Function> | null {
   for (
     let path = this, parentPath;
     ({ parentPath } = path) && parentPath;
