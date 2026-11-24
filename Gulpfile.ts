@@ -366,20 +366,14 @@ function createWorker(useWorker: boolean): any {
  * compared to the destination file.
  * If the destination file does not exist, it will return true to indicate that
  * compilation is needed.
+ * If the source file does not exist (it was removed or renamed after the glob
+ * was expanded, e.g. in watch mode), it will return false.
  */
 function needCompile(src: string, dest: string): boolean {
-  let destStat;
-  try {
-    destStat = fs.statSync(dest);
-  } catch (err: any) {
-    if (err.code === "ENOENT") {
-      return true;
-    } else {
-      throw err;
-    }
-  }
-  const srcStat = fs.statSync(src);
-  return srcStat.mtimeMs >= destStat.mtimeMs;
+  const srcStat = fs.statSync(src, { throwIfNoEntry: false });
+  if (!srcStat) return false;
+  const destStat = fs.statSync(dest, { throwIfNoEntry: false });
+  return !destStat || srcStat.mtimeMs >= destStat.mtimeMs;
 }
 
 async function buildBabel(useWorker: boolean, ignore: PackageInfo[] = []) {
