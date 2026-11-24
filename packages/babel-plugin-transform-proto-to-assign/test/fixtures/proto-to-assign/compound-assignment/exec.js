@@ -19,4 +19,4 @@ expect(c.fromBar).toBeUndefined();
 const d = {};
 d.__proto__ += "";
 expect(Object.getPrototypeOf(d)).toBe(Object.prototype);
-expect(Object.hasOwn(d, "__proto__")).toBe(false);
+expect(Object.prototype.hasOwnProperty.call(d, "__proto__")).toBe(false);

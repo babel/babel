@@ -2,5 +2,6 @@
   "plugins": [
     "transform-proto-to-assign",
     "transform-logical-assignment-operators"
-  ]
+  ],
+  "minNodeVersion": "14.0.0"
 }

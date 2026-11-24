@@ -7,7 +7,7 @@ const method = {
   a: 1,
 };
 expect(Object.getPrototypeOf(method)).toBe(Object.prototype);
-expect(Object.hasOwn(method, "__proto__")).toBe(true);
+expect(Object.prototype.hasOwnProperty.call(method, "__proto__")).toBe(true);
 expect(method.__proto__()).toBe("method");
 expect(method.a).toBe(1);
 
@@ -43,5 +43,5 @@ expect(Object.getOwnPropertyDescriptor(computed, "__proto__").value).toBe(bar);
 const string = {
   "__proto__": bar,
 };
-expect(Object.hasOwn(string, "__proto__")).toBe(false);
+expect(Object.prototype.hasOwnProperty.call(string, "__proto__")).toBe(false);
 expect(string.fromBar).toBe(1);
