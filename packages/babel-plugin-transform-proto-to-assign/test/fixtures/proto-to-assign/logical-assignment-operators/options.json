@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-proto-to-assign",
+    "transform-logical-assignment-operators"
+  ]
+}
