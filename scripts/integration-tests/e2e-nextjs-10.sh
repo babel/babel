@@ -15,7 +15,14 @@ source utils/cleanup.sh
 set -x
 
 # Create example app
-npx create-next-app@^10 --example with-custom-babel-config /tmp/nextjs-10
+# Don't use `create-next-app --example with-custom-babel-config`: it queries the
+# GitHub API, which fails with "Could not locate an example" when rate limited.
+# Instead, sparse-clone the example from the latest Next.js 10 tag.
+rm -rf /tmp/nextjs-10 /tmp/nextjs-10-repo
+git clone --depth 1 --branch v10.2.3 --filter=blob:none --sparse https://github.com/vercel/next.js.git /tmp/nextjs-10-repo
+git -C /tmp/nextjs-10-repo sparse-checkout set --no-cone /examples/with-custom-babel-config/
+cp -r /tmp/nextjs-10-repo/examples/with-custom-babel-config /tmp/nextjs-10
+rm -rf /tmp/nextjs-10-repo
 cp -r fixtures/nextjs-10/. /tmp/nextjs-10
 cd /tmp/nextjs-10
 
