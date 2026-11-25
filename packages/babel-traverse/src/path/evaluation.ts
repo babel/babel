@@ -17,7 +17,125 @@ const VALID_IDENTIFIER_CALLEES = [
   "atob",
 ] as const;
 
-const INVALID_METHODS = ["random"] as const;
+// Allowlists of the methods that the evaluator is allowed to call. Babel calls
+// the real method on values that come from the code being compiled, so a method
+// can only be listed here if:
+// - it is deterministic and does not depend on the environment running Babel;
+// - it runs in time linear in the size of its arguments and of its result
+//   (so nothing that has to do with RegExps)
+// - it doesn't allow very big values from small inputs.
+
+const VALID_STATIC_METHODS: Record<
+  (typeof VALID_OBJECT_CALLEES)[number],
+  ReadonlySet<string>
+> = {
+  Math: new Set([
+    "abs",
+    "acos",
+    "acosh",
+    "asin",
+    "asinh",
+    "atan",
+    "atan2",
+    "atanh",
+    "cbrt",
+    "ceil",
+    "clz32",
+    "cos",
+    "cosh",
+    "exp",
+    "expm1",
+    "f16round",
+    "floor",
+    "fround",
+    "hypot",
+    "imul",
+    "log",
+    "log10",
+    "log1p",
+    "log2",
+    "max",
+    "min",
+    "pow",
+    // "random", // Not deterministic
+    "round",
+    "sign",
+    "sin",
+    "sinh",
+    "sqrt",
+    "sumPrecise",
+    "tan",
+    "tanh",
+    "trunc",
+  ]),
+  Number: new Set([
+    "isFinite",
+    "isInteger",
+    "isNaN",
+    "isSafeInteger",
+    "parseFloat",
+    "parseInt",
+  ]),
+  String: new Set([
+    "fromCharCode",
+    "fromCodePoint",
+    // "raw", // Allows creating very big strings: String.raw({ raw: { length: 5e7 } })
+  ]),
+};
+
+const VALID_STRING_METHODS: ReadonlySet<string> = new Set([
+  "at",
+  "charAt",
+  "charCodeAt",
+  "codePointAt",
+  "concat",
+  // "constructor",
+  "endsWith",
+  "includes",
+  "indexOf",
+  "isWellFormed",
+  "lastIndexOf",
+  // "localeCompare", // Locale-dependent
+  // "match",    // RegExp
+  // "matchAll", // RegExp
+  "normalize",
+  //"padEnd",      // Allows creating very big strings: "x".padEnd(5e8)
+  //"padStart",    // Allows creating very big strings: "x".padStart(5e8)
+  // "repeat",     // Allows creating very big strings: "x".repeat(5e8)
+  // "replace",    // RegExp
+  // "replaceAll", // RegExp
+  // "search",     // RegExp
+  "slice",
+  // "split",      // Allocates potentially huge arrays
+  "startsWith",
+  "substring",
+  // "toLocaleLowerCase", // Locale-dependent
+  // "toLocaleUpperCase", // Locale-dependent
+  "toLowerCase",
+  "toString",
+  "toUpperCase",
+  "toWellFormed",
+  "trim",
+  "trimEnd",
+  "trimLeft",
+  "trimRight",
+  "trimStart",
+  "valueOf",
+  // Annex B, so implementation-dependent
+  // "substr",
+  // "anchor", "big", "blink", "bold", "fixed", "fontcolor", "fontsize",
+  // "italics", "link", "small", "strike", "sub", "sup",
+]);
+
+const VALID_NUMBER_METHODS: ReadonlySet<string> = new Set([
+  // "constructor",
+  "toExponential",
+  "toFixed",
+  // "toLocaleString", // Locale-dependent
+  "toPrecision",
+  "toString",
+  "valueOf",
+]);
 
 function isValidObjectCallee(
   val: string,
@@ -32,13 +150,6 @@ function isValidIdentifierCallee(
   val: string,
 ): val is NonNullable<(typeof VALID_IDENTIFIER_CALLEES)[number]> {
   return VALID_IDENTIFIER_CALLEES.includes(
-    // @ts-expect-error val is a string
-    val,
-  );
-}
-
-function isInvalidMethod(val: string): val is (typeof INVALID_METHODS)[number] {
-  return INVALID_METHODS.includes(
     // @ts-expect-error val is a string
     val,
   );
@@ -518,36 +629,44 @@ function _evaluate(path: NodePath, state: State): any {
       (isValidObjectCallee(callee.node.name) ||
         isValidIdentifierCallee(callee.node.name))
     ) {
-      func = global[callee.node.name];
+      func = globalThis[callee.node.name];
     }
 
-    if (callee.isMemberExpression()) {
+    if (callee.isMemberExpression() && !callee.node.computed) {
       const object = callee.get("object");
       const property = callee.get("property");
 
-      // Math.min(1, 2)
-      if (
-        object.isIdentifier() &&
-        property.isIdentifier() &&
-        isValidObjectCallee(object.node.name) &&
-        !isInvalidMethod(property.node.name) &&
-        !path.scope.getBinding(object.node.name)
-      ) {
-        context = global[object.node.name];
+      if (property.isIdentifier()) {
         const key = property.node.name;
-        if (Object.hasOwn(context, key)) {
-          func = context[key as keyof typeof context];
-        }
-      }
 
-      // "abc".charCodeAt(4)
-      if (object.isLiteral() && property.isIdentifier()) {
-        // @ts-expect-error todo(flow->ts): consider checking ast node type instead of value type (StringLiteral and NumberLiteral)
-        const type = typeof object.node.value;
-        if (type === "string" || type === "number") {
-          // @ts-expect-error todo(flow->ts): consider checking ast node type instead of value type
-          context = object.node.value;
-          func = context[property.node.name];
+        if (
+          object.isIdentifier() &&
+          isValidObjectCallee(object.node.name) &&
+          !path.scope.getBinding(object.node.name)
+        ) {
+          if (VALID_STATIC_METHODS[object.node.name].has(key)) {
+            context = globalThis[object.node.name];
+            if (Object.hasOwn(context, key)) {
+              func = context[key as keyof typeof context];
+            }
+          }
+        } else if (
+          VALID_STRING_METHODS.has(key) ||
+          VALID_NUMBER_METHODS.has(key)
+        ) {
+          const value = evaluateCached(object, state);
+          if (!state.confident) return;
+
+          if (typeof value === "string" && VALID_STRING_METHODS.has(key)) {
+            context = value;
+            func = String.prototype[key as keyof string];
+          } else if (
+            typeof value === "number" &&
+            VALID_NUMBER_METHODS.has(key)
+          ) {
+            context = value;
+            func = Number.prototype[key as keyof number];
+          }
         }
       }
     }
@@ -556,7 +675,7 @@ function _evaluate(path: NodePath, state: State): any {
       const args = path.get("arguments").map(arg => evaluateCached(arg, state));
       if (!state.confident) return;
 
-      return func.apply(context, args);
+      return (func as (...args: unknown[]) => unknown).apply(context, args);
     }
   }
 
