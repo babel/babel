@@ -198,15 +198,13 @@ class Pool {
     });
     const output = showOutput ? null : readOutput(taskProcess);
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    taskProcess.once("exit", async (code, signal) => {
-      const startTime = this.#running.get(taskProcess)!;
-      const duration = performance.now() - startTime;
-      await this.#onTaskDone(
-        tasks,
-        { code, signal, output: await output },
-        duration
-      );
+    // The "exit" event may or may not fire after an "error" event
+    let finished = false;
+    const finish = async (report: () => void | Promise<void>) => {
+      if (finished) return;
+      finished = true;
+
+      await report();
       this.#running.delete(taskProcess);
 
       // Spin the event loop so that #run can pick up the next task
@@ -217,12 +215,25 @@ class Pool {
       if (this.#running.size === 0 && this.#pending.length === 0) {
         this.#emptyListeners.forEach(f => f());
       }
+    };
+
+    taskProcess.once("exit", (code, signal) => {
+      const startTime = this.#running.get(taskProcess)!;
+      const duration = performance.now() - startTime;
+      void finish(async () => {
+        await this.#onTaskDone(
+          tasks,
+          { code, signal, output: await output },
+          duration
+        );
+      });
     });
 
     taskProcess.once("error", err => {
-      console.error("Error in task process:", err);
-      this.#onTaskError(tasks);
-      this.#running.delete(taskProcess);
+      void finish(() => {
+        console.error("Error in task process:", err);
+        this.#onTaskError(tasks);
+      });
     });
 
     this.#onTaskStart(tasks, weight);
