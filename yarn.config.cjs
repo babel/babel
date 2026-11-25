@@ -102,12 +102,14 @@ function enforceType({ Yarn }) {
 /**
  * Enforces that dependencies used by multiple packages use a catalog range,
  * instead of a plain semver range.
+ * This includes the root package: the pnpm linker doesn't hoist dependencies,
+ * so it declares its own copies of the dependencies that root scripts and the
+ * generated `dts/` folder use, which must match the versions of the workspaces.
  * @param {Context} context
  */
 function enforceDependenciesCatalog({ Yarn }) {
   const packageDependencies = Yarn.dependencies().filter(
     dependency =>
-      dependency.workspace.cwd !== "." &&
       // Ignore peerDependencies, since changing them is a breaking change
       dependency.type !== "peerDependencies" &&
       // Allow link/workspace dependencies to be used as-is, without the catalog

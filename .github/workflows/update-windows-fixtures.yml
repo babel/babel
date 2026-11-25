@@ -47,6 +47,13 @@ jobs:
           fetch-depth: 0 # Otherwise we cannot push
           persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
 
+      # The pnpm linker hardlinks files from Yarn's global folder. Hardlinks
+      # cannot cross drives (Yarn would copy every file instead), so keep it
+      # on the same drive as the checkout.
+      - name: Move Yarn's global folder to the checkout drive
+        shell: bash
+        run: echo "YARN_GLOBAL_FOLDER=$RUNNER_TEMP/yarn-berry" >> "$GITHUB_ENV"
+
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:

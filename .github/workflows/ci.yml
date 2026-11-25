@@ -126,6 +126,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+      # The pnpm linker hardlinks files from Yarn's global folder. Hardlinks
+      # cannot cross drives (Yarn would copy every file instead), so keep it
+      # on the same drive as the checkout.
+      - name: Move Yarn's global folder to the checkout drive
+        shell: bash
+        run: echo "YARN_GLOBAL_FOLDER=$RUNNER_TEMP/yarn-berry" >> "$GITHUB_ENV"
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
@@ -153,6 +159,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+      # The pnpm linker hardlinks files from Yarn's global folder. Hardlinks
+      # cannot cross drives (Yarn would copy every file instead), so keep it
+      # on the same drive as the checkout.
+      - name: Move Yarn's global folder to the checkout drive
+        shell: bash
+        run: echo "YARN_GLOBAL_FOLDER=$RUNNER_TEMP/yarn-berry" >> "$GITHUB_ENV"
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
@@ -279,7 +291,7 @@ jobs:
       - name: Test on node.js ${{ matrix.node-version }}
         # Todo(Babel 8): Jest execution path is hardcoded because Yarn 2 does not support node 6
         run: |
-          node ./node_modules/.bin/jest --ci
+          node ./node_modules/jest/bin/jest.js --ci
         env:
           BABEL_ENV: test
           TEST_FUZZ: true
@@ -296,6 +308,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+      # The pnpm linker hardlinks files from Yarn's global folder. Hardlinks
+      # cannot cross drives (Yarn would copy every file instead), so keep it
+      # on the same drive as the checkout.
+      - name: Move Yarn's global folder to the checkout drive
+        if: runner.os == 'Windows'
+        shell: bash
+        run: echo "YARN_GLOBAL_FOLDER=$RUNNER_TEMP/yarn-berry" >> "$GITHUB_ENV"
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
@@ -418,6 +437,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
+      # The pnpm linker hardlinks files from Yarn's global folder. Hardlinks
+      # cannot cross drives (Yarn would copy every file instead), so keep it
+      # on the same drive as the checkout.
+      - name: Move Yarn's global folder to the checkout drive
+        if: runner.os == 'Windows'
+        shell: bash
+        run: echo "YARN_GLOBAL_FOLDER=$RUNNER_TEMP/yarn-berry" >> "$GITHUB_ENV"
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
@@ -534,7 +560,7 @@ jobs:
       - name: Downgrade ESLint to ${{ matrix.eslint-version }}
         run: yarn up eslint@catalog:babel-eslint--${{ matrix.eslint-version }} eslint-plugin-import@catalog:babel-eslint--${{ matrix.eslint-version }} @eslint/js@catalog:babel-eslint--${{ matrix.eslint-version }}
       - name: Run babel/eslint tests
-        run: node ./node_modules/.bin/jest eslint
+        run: node ./node_modules/jest/bin/jest.js eslint
 
   test262-prepare:
     name: test262 - Prepare for running in parallel
@@ -795,13 +821,16 @@ jobs:
         uses: CodSpeedHQ/action@v5
         with:
           mode: ${{ matrix.mode }}
+          # --import resolves the plugin from the cwd, and only the benchmark
+          # workspace depends on it
+          working-directory: benchmark
           # CodSpeed's node wrapper first runs each process only to read the
           # V8 flags the plugin needs. --import loads the plugin first, so that
           # run ends before the Babel packages are loaded.
           run: >-
             xargs -P "${{ matrix.parallel }}" -L 1 sh -c
-            'exec node --import @codspeed/tinybench-plugin --expose-gc --no-allocation-site-pretenuring "./benchmark/$0" --only-current --fixture="$1" ${{ matrix.args }}'
-            < benchmark-cases.txt
+            'exec node --import @codspeed/tinybench-plugin --expose-gc --no-allocation-site-pretenuring "./$0" --only-current --fixture="$1" ${{ matrix.args }}'
+            < ../benchmark-cases.txt
 
   required-checks:
     name: Required Checks

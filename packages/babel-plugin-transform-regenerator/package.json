@@ -24,6 +24,7 @@
     "@babel/core": "workspace:^",
     "@babel/helper-check-duplicate-nodes": "workspace:^",
     "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/parser": "workspace:^",
     "@babel/plugin-proposal-function-sent": "workspace:^",
     "@babel/plugin-transform-arrow-functions": "workspace:^",
     "@babel/plugin-transform-block-scoping": "workspace:^",
@@ -33,8 +34,9 @@
     "@babel/plugin-transform-parameters": "workspace:^",
     "@babel/plugin-transform-runtime": "workspace:^",
     "babel-plugin-polyfill-regenerator": "^1.0.0",
-    "jest": "^30.4.2",
+    "jest": "catalog:dev",
     "recast": "^0.23.3",
+    "regenerator-runtime": "catalog:dev",
     "uglify-js": "^3.14.0"
   },
   "engines": {

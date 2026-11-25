@@ -14,6 +14,7 @@
   },
   "main": "./lib/index.js",
   "devDependencies": {
+    "@types/charcodes": "catalog:dev",
     "charcodes": "catalog:dev"
   },
   "engines": {

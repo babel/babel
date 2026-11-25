@@ -28,6 +28,8 @@ cd ngx
 node "$dir"/utils/bump-babel-dependencies.js resolutions
 # Disable yarn minimal age gate because npx will fetch the latest version of Angular CLI
 echo "npmMinimalAgeGate: 0" >> .yarnrc.yml
+# The project is inside the Babel repository, so it would inherit its pnpm linker
+echo "nodeLinker: node-modules" >> .yarnrc.yml
 touch yarn.lock
 yarn set version stable
 export YARN_ENABLE_IMMUTABLE_INSTALLS=false

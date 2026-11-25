@@ -33,16 +33,16 @@
     "eslint": "^9.0.0 || ^10.0.0"
   },
   "dependencies": {
-    "eslint-scope": "^9.1.0",
+    "eslint-scope": "catalog:",
     "eslint-visitor-keys": "^5.0.0",
     "verkit": "catalog:"
   },
   "devDependencies": {
     "@babel/core": "workspace:^",
     "@babel/helper-fixtures": "workspace:^",
-    "@types/estree": "^1.0.5",
+    "@types/estree": "catalog:dev",
     "dedent": "catalog:dev",
     "eslint": "catalog:babel-eslint",
-    "typescript-eslint": "8.70.0"
+    "typescript-eslint": "catalog:dev"
   }
 }
