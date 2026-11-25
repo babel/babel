@@ -6,6 +6,15 @@ import * as charcodes from "charcodes";
 export type Loc = SourceLocation;
 export type Pos = SourceLocation["start"];
 
+export const enum LAST_CHAR_KINDS {
+  EMPTY = 0,
+  NORMAL = -1,
+  INTEGER = -2,
+  WORD = -3,
+  // The `>` closing the type arguments of an instantiation expression
+  TS_INSTANTIATION_TYPE_ARGUMENTS = -4,
+}
+
 type SourcePosition = {
   line: number | undefined;
   column: number | undefined;
@@ -187,7 +196,7 @@ export default class Buffer {
     const position = this._position;
     const sourcePos = this._sourcePosition;
 
-    this._last = -1; /* LAST_CHAR_KINDS.NORMAL */
+    this._last = LAST_CHAR_KINDS.NORMAL;
 
     if (++this._appendCount > 4096) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
