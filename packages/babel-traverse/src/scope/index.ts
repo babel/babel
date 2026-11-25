@@ -463,6 +463,21 @@ function collectBindings(path: NodePath, state: CollectVisitorState) {
   traverseForScope(path, scopeVisitor as Visitor, state);
 }
 
+/**
+ * The binding of `id` in a parent scope of `scope`, when the declaration of
+ * `id` was moved into `scope`.
+ */
+function getMovedBinding(
+  scope: Scope,
+  name: string,
+  id: t.Identifier,
+): Binding | undefined {
+  for (let s = scope.parent; s; s = s.parent) {
+    const binding = s.getOwnBinding(name);
+    if (binding) return binding.identifier === id ? binding : undefined;
+  }
+}
+
 class Scope {
   uid;
 
@@ -812,7 +827,18 @@ class Scope {
       parent.referencesSet.add(name);
 
       for (const id of ids[name]) {
-        const local = this.getOwnBinding(name);
+        let local = this.getOwnBinding(name);
+
+        if (
+          !local &&
+          (kind === "let" || kind === "const") &&
+          collectingBindings === 0 &&
+          (local = getMovedBinding(this, name, id))
+        ) {
+          // A lexical declaration moved into a nested scope keeps its
+          // binding, with the references and constant violations recorded
+          local.scope.moveBindingTo(name, this);
+        }
 
         if (!local) {
           this.bindings[name] = new Binding({

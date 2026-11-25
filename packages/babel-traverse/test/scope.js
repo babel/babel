@@ -1108,6 +1108,26 @@ describe("scope", () => {
       expect(binding.path).toBe(newPath.get("declarations.0"));
       expect(binding.referencePaths).toHaveLength(1);
     });
+    it("moves the binding of a lexical declaration moved into a nested scope", () => {
+      const program = getPath("for (const { a } of b) { a; }");
+      const loop = program.get("body.0");
+      const binding = loop.scope.getBinding("a");
+      const id = loop.node.left.declarations[0].id.properties[0].value;
+      const [newPath] = loop
+        .get("body")
+        .unshiftContainer(
+          "body",
+          t.variableDeclaration("const", [
+            t.variableDeclarator(id, t.identifier("ref")),
+          ]),
+        );
+      loop.get("body").scope.registerDeclaration(newPath);
+      expect(loop.scope.hasOwnBinding("a")).toBe(false);
+      expect(loop.get("body").scope.getOwnBinding("a")).toBe(binding);
+      expect(binding.scope).toBe(loop.get("body").scope);
+      expect(binding.path).toBe(newPath.get("declarations.0"));
+      expect(binding.referencePaths).toHaveLength(1);
+    });
     it("replaces the old declaration of a var in a loop as constant violation", () => {
       const program = getPath("while (1) { var { a, ...b } = c; }");
       const binding = program.scope.getBinding("b");
