@@ -826,19 +826,13 @@ export function splitExportDeclaration(
 
     // @ts-expect-error id is not defined in expressions other than function/class
     let id = declaration.node.id;
-    let needBindingRegistration = false;
-
     if (!id) {
-      needBindingRegistration = true;
-
       id = scope.generateUidIdentifier("default");
 
       if (standaloneDeclaration || exportExpr) {
         declaration.node.id = cloneNode(id);
       }
     } else if (exportExpr && scope.hasBinding(id.name)) {
-      needBindingRegistration = true;
-
       id = scope.generateUidIdentifier(id.name);
     }
 
@@ -859,9 +853,7 @@ export function splitExportDeclaration(
     this.insertAfter(updatedExportDeclaration);
     this.replaceWith(updatedDeclaration);
 
-    if (needBindingRegistration) {
-      scope.registerDeclaration(this);
-    }
+    scope.registerDeclaration(this);
 
     return this;
   } else if (this.get("specifiers").length > 0) {

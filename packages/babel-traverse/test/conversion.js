@@ -134,4 +134,48 @@ describe("conversion", function () {
       expect(generateCode(rootPath)).toBe("for (;;) {\n  false;\n}");
     });
   });
+
+  describe("splitExportDeclaration", function () {
+    function getProgramPath(code) {
+      let path;
+      traverse(parse(code, { sourceType: "module" }), {
+        Program(_path) {
+          path = _path;
+          _path.stop();
+        },
+      });
+      return path;
+    }
+
+    it.each(["class Foo {}", "function Foo() {}"])(
+      "updates the binding of `export default %s`",
+      function (declaration) {
+        const program = getProgramPath(`export default ${declaration} Foo;`);
+        const binding = program.scope.getBinding("Foo");
+        const path = program.get("body.0").splitExportDeclaration();
+
+        expect(generate(program.node).code).toBe(
+          `${declaration}\nexport { Foo as default };\nFoo;`,
+        );
+        expect(path).toBe(program.get("body.0"));
+        expect(program.scope.getBinding("Foo")).toBe(binding);
+        expect(binding.path).toBe(path);
+        expect(binding.referencePaths).toHaveLength(2);
+        expect(binding.constantViolations).toHaveLength(0);
+      },
+    );
+
+    it("registers the variable of a named class expression", function () {
+      const program = getProgramPath("export default (class Foo {});");
+      expect(program.scope.hasBinding("Foo")).toBe(false);
+      const path = program.get("body.0").splitExportDeclaration();
+
+      expect(generate(program.node).code).toBe(
+        "var Foo = class Foo {};\nexport { Foo as default };",
+      );
+      const binding = program.scope.getBinding("Foo");
+      expect(binding.kind).toBe("var");
+      expect(binding.path).toBe(path.get("declarations.0"));
+    });
+  });
 });
