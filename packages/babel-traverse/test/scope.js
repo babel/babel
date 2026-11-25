@@ -346,6 +346,23 @@ describe("scope", () => {
       ).toBe("DeclareFunction");
     });
 
+    it("TypeScript declare function", function () {
+      expect(
+        getPath("declare function foo(): void;", {
+          plugins: ["typescript"],
+        }).scope.getBinding("foo").path.type,
+      ).toBe("TSDeclareFunction");
+    });
+
+    it("exported TypeScript declare function", function () {
+      expect(
+        getPath("export declare function foo(): void;", {
+          plugins: ["typescript"],
+          sourceType: "module",
+        }).scope.getBinding("foo").path.type,
+      ).toBe("TSDeclareFunction");
+    });
+
     it("declare module", function () {
       expect(
         getPath("declare module foo {};", {

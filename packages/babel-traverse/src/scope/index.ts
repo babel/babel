@@ -35,6 +35,7 @@ import {
   isRestElement,
   isSuper,
   isTaggedTemplateExpression,
+  isTSDeclareFunction,
   isTemplateLiteral,
   isThisExpression,
   isUnaryExpression,
@@ -337,7 +338,11 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
       // ExportAllDeclaration does not have `declaration`
       if (isExportAllDeclaration(node)) return;
       const declar = node.declaration;
-      if (isClassDeclaration(declar) || isFunctionDeclaration(declar)) {
+      if (
+        isClassDeclaration(declar) ||
+        isFunctionDeclaration(declar) ||
+        isTSDeclareFunction(declar)
+      ) {
         const id = declar.id;
         if (!id) return;
 
@@ -712,6 +717,12 @@ class Scope {
         path.get("id") as NodePath<t.Identifier>,
         path,
       );
+    } else if (path.isTSDeclareFunction()) {
+      this.registerBinding(
+        "hoisted",
+        path.get("id") as NodePath<t.Identifier>,
+        path,
+      );
     } else if (path.isVariableDeclaration()) {
       const declarations = path.get("declarations");
       const { kind } = path.node;
@@ -743,6 +754,7 @@ class Scope {
       if (
         declar.isClassDeclaration() ||
         declar.isFunctionDeclaration() ||
+        declar.isTSDeclareFunction() ||
         declar.isVariableDeclaration()
       ) {
         this.registerDeclaration(declar);
