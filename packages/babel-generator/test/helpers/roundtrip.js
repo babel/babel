@@ -23,12 +23,15 @@ const GENERATOR_FAILURES = [
   "parentheses/ts-union-type/input.ts",
   "types/LogicalExpression/input.js",
 
-  // `(a.b<c>)\`\`` is printed as `a.b<c>\`\``, which has the same runtime
-  // semantics but is parsed as a tagged template with type arguments
+  // `(a.b<c>)\`\``, `(f<T>)()` and `new (f<T>)()` are printed as
+  // `a.b<c>\`\``, `f<T>()` and `new f<T>()`, which have the same runtime
+  // semantics but are parsed with type arguments on the tagged template or call
   "parentheses/ts-tagged-template-expression/input.ts",
 
   // The extra ParenthesizedExpression is printed
   "decorators/decorator-parenthesized-expression-createParenthesizedExpression/input.js",
+  "typescript/instantiation-expression-callee-tag-parentheses/input.js",
+  "typescript/instantiation-expression-new-callee-minified/input.js",
 ];
 
 // Parser fixtures whose AST is expected to change shape, relative to

@@ -1,0 +1,514 @@
+{
+  "type": "File",
+  "start":0,"end":146,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":14,"index":146}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":146,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":11,"column":14,"index":146}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start":0,"end":11,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":11,"index":11}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":0,"end":10,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":10,"index":10}},
+          "left": {
+            "type": "TSInstantiationExpression",
+            "start":1,"end":5,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":5,"index":5}},
+            "expression": {
+              "type": "Identifier",
+              "start":1,"end":2,"loc":{"start":{"line":1,"column":1,"index":1},"end":{"line":1,"column":2,"index":2},"identifierName":"f"},
+              "name": "f"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":2,"end":5,"loc":{"start":{"line":1,"column":2,"index":2},"end":{"line":1,"column":5,"index":5}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":3,"end":4,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":4,"index":4}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":3,"end":4,"loc":{"start":{"line":1,"column":3,"index":3},"end":{"line":1,"column":4,"index":4},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ]
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 0
+            }
+          },
+          "operator": ">",
+          "right": {
+            "type": "Identifier",
+            "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"x"},
+            "name": "x"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":12,"end":24,"loc":{"start":{"line":2,"column":0,"index":12},"end":{"line":2,"column":12,"index":24}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":12,"end":23,"loc":{"start":{"line":2,"column":0,"index":12},"end":{"line":2,"column":11,"index":23}},
+          "left": {
+            "type": "TSInstantiationExpression",
+            "start":13,"end":17,"loc":{"start":{"line":2,"column":1,"index":13},"end":{"line":2,"column":5,"index":17}},
+            "expression": {
+              "type": "Identifier",
+              "start":13,"end":14,"loc":{"start":{"line":2,"column":1,"index":13},"end":{"line":2,"column":2,"index":14},"identifierName":"f"},
+              "name": "f"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":14,"end":17,"loc":{"start":{"line":2,"column":2,"index":14},"end":{"line":2,"column":5,"index":17}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":15,"end":16,"loc":{"start":{"line":2,"column":3,"index":15},"end":{"line":2,"column":4,"index":16}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":15,"end":16,"loc":{"start":{"line":2,"column":3,"index":15},"end":{"line":2,"column":4,"index":16},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ]
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 12
+            }
+          },
+          "operator": ">>",
+          "right": {
+            "type": "Identifier",
+            "start":22,"end":23,"loc":{"start":{"line":2,"column":10,"index":22},"end":{"line":2,"column":11,"index":23},"identifierName":"x"},
+            "name": "x"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":25,"end":38,"loc":{"start":{"line":3,"column":0,"index":25},"end":{"line":3,"column":13,"index":38}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":25,"end":37,"loc":{"start":{"line":3,"column":0,"index":25},"end":{"line":3,"column":12,"index":37}},
+          "left": {
+            "type": "TSInstantiationExpression",
+            "start":26,"end":30,"loc":{"start":{"line":3,"column":1,"index":26},"end":{"line":3,"column":5,"index":30}},
+            "expression": {
+              "type": "Identifier",
+              "start":26,"end":27,"loc":{"start":{"line":3,"column":1,"index":26},"end":{"line":3,"column":2,"index":27},"identifierName":"f"},
+              "name": "f"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":27,"end":30,"loc":{"start":{"line":3,"column":2,"index":27},"end":{"line":3,"column":5,"index":30}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":28,"end":29,"loc":{"start":{"line":3,"column":3,"index":28},"end":{"line":3,"column":4,"index":29}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":28,"end":29,"loc":{"start":{"line":3,"column":3,"index":28},"end":{"line":3,"column":4,"index":29},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ]
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 25
+            }
+          },
+          "operator": ">>>",
+          "right": {
+            "type": "Identifier",
+            "start":36,"end":37,"loc":{"start":{"line":3,"column":11,"index":36},"end":{"line":3,"column":12,"index":37},"identifierName":"x"},
+            "name": "x"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":39,"end":50,"loc":{"start":{"line":4,"column":0,"index":39},"end":{"line":4,"column":11,"index":50}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":39,"end":49,"loc":{"start":{"line":4,"column":0,"index":39},"end":{"line":4,"column":10,"index":49}},
+          "left": {
+            "type": "TSInstantiationExpression",
+            "start":40,"end":44,"loc":{"start":{"line":4,"column":1,"index":40},"end":{"line":4,"column":5,"index":44}},
+            "expression": {
+              "type": "Identifier",
+              "start":40,"end":41,"loc":{"start":{"line":4,"column":1,"index":40},"end":{"line":4,"column":2,"index":41},"identifierName":"f"},
+              "name": "f"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":41,"end":44,"loc":{"start":{"line":4,"column":2,"index":41},"end":{"line":4,"column":5,"index":44}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":42,"end":43,"loc":{"start":{"line":4,"column":3,"index":42},"end":{"line":4,"column":4,"index":43}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":42,"end":43,"loc":{"start":{"line":4,"column":3,"index":42},"end":{"line":4,"column":4,"index":43},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ]
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 39
+            }
+          },
+          "operator": "+",
+          "right": {
+            "type": "Identifier",
+            "start":48,"end":49,"loc":{"start":{"line":4,"column":9,"index":48},"end":{"line":4,"column":10,"index":49},"identifierName":"x"},
+            "name": "x"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":51,"end":62,"loc":{"start":{"line":5,"column":0,"index":51},"end":{"line":5,"column":11,"index":62}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":51,"end":61,"loc":{"start":{"line":5,"column":0,"index":51},"end":{"line":5,"column":10,"index":61}},
+          "left": {
+            "type": "TSInstantiationExpression",
+            "start":52,"end":56,"loc":{"start":{"line":5,"column":1,"index":52},"end":{"line":5,"column":5,"index":56}},
+            "expression": {
+              "type": "Identifier",
+              "start":52,"end":53,"loc":{"start":{"line":5,"column":1,"index":52},"end":{"line":5,"column":2,"index":53},"identifierName":"f"},
+              "name": "f"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":53,"end":56,"loc":{"start":{"line":5,"column":2,"index":53},"end":{"line":5,"column":5,"index":56}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":54,"end":55,"loc":{"start":{"line":5,"column":3,"index":54},"end":{"line":5,"column":4,"index":55}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":54,"end":55,"loc":{"start":{"line":5,"column":3,"index":54},"end":{"line":5,"column":4,"index":55},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ]
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 51
+            }
+          },
+          "operator": "-",
+          "right": {
+            "type": "Identifier",
+            "start":60,"end":61,"loc":{"start":{"line":5,"column":9,"index":60},"end":{"line":5,"column":10,"index":61},"identifierName":"x"},
+            "name": "x"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":63,"end":74,"loc":{"start":{"line":6,"column":0,"index":63},"end":{"line":6,"column":11,"index":74}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":63,"end":73,"loc":{"start":{"line":6,"column":0,"index":63},"end":{"line":6,"column":10,"index":73}},
+          "left": {
+            "type": "TSInstantiationExpression",
+            "start":64,"end":68,"loc":{"start":{"line":6,"column":1,"index":64},"end":{"line":6,"column":5,"index":68}},
+            "expression": {
+              "type": "Identifier",
+              "start":64,"end":65,"loc":{"start":{"line":6,"column":1,"index":64},"end":{"line":6,"column":2,"index":65},"identifierName":"f"},
+              "name": "f"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":65,"end":68,"loc":{"start":{"line":6,"column":2,"index":65},"end":{"line":6,"column":5,"index":68}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":66,"end":67,"loc":{"start":{"line":6,"column":3,"index":66},"end":{"line":6,"column":4,"index":67}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":66,"end":67,"loc":{"start":{"line":6,"column":3,"index":66},"end":{"line":6,"column":4,"index":67},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ]
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 63
+            }
+          },
+          "operator": "%",
+          "right": {
+            "type": "Identifier",
+            "start":72,"end":73,"loc":{"start":{"line":6,"column":9,"index":72},"end":{"line":6,"column":10,"index":73},"identifierName":"x"},
+            "name": "x"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":75,"end":87,"loc":{"start":{"line":7,"column":0,"index":75},"end":{"line":7,"column":12,"index":87}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":75,"end":86,"loc":{"start":{"line":7,"column":0,"index":75},"end":{"line":7,"column":11,"index":86}},
+          "left": {
+            "type": "TSInstantiationExpression",
+            "start":76,"end":80,"loc":{"start":{"line":7,"column":1,"index":76},"end":{"line":7,"column":5,"index":80}},
+            "expression": {
+              "type": "Identifier",
+              "start":76,"end":77,"loc":{"start":{"line":7,"column":1,"index":76},"end":{"line":7,"column":2,"index":77},"identifierName":"f"},
+              "name": "f"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":77,"end":80,"loc":{"start":{"line":7,"column":2,"index":77},"end":{"line":7,"column":5,"index":80}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":78,"end":79,"loc":{"start":{"line":7,"column":3,"index":78},"end":{"line":7,"column":4,"index":79}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":78,"end":79,"loc":{"start":{"line":7,"column":3,"index":78},"end":{"line":7,"column":4,"index":79},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ]
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 75
+            }
+          },
+          "operator": ">=",
+          "right": {
+            "type": "Identifier",
+            "start":85,"end":86,"loc":{"start":{"line":7,"column":10,"index":85},"end":{"line":7,"column":11,"index":86},"identifierName":"x"},
+            "name": "x"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":88,"end":100,"loc":{"start":{"line":8,"column":0,"index":88},"end":{"line":8,"column":12,"index":100}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":88,"end":99,"loc":{"start":{"line":8,"column":0,"index":88},"end":{"line":8,"column":11,"index":99}},
+          "left": {
+            "type": "TSInstantiationExpression",
+            "start":89,"end":93,"loc":{"start":{"line":8,"column":1,"index":89},"end":{"line":8,"column":5,"index":93}},
+            "expression": {
+              "type": "Identifier",
+              "start":89,"end":90,"loc":{"start":{"line":8,"column":1,"index":89},"end":{"line":8,"column":2,"index":90},"identifierName":"f"},
+              "name": "f"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start":90,"end":93,"loc":{"start":{"line":8,"column":2,"index":90},"end":{"line":8,"column":5,"index":93}},
+              "params": [
+                {
+                  "type": "TSTypeReference",
+                  "start":91,"end":92,"loc":{"start":{"line":8,"column":3,"index":91},"end":{"line":8,"column":4,"index":92}},
+                  "typeName": {
+                    "type": "Identifier",
+                    "start":91,"end":92,"loc":{"start":{"line":8,"column":3,"index":91},"end":{"line":8,"column":4,"index":92},"identifierName":"T"},
+                    "name": "T"
+                  }
+                }
+              ]
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 88
+            }
+          },
+          "operator": "==",
+          "right": {
+            "type": "Identifier",
+            "start":98,"end":99,"loc":{"start":{"line":8,"column":10,"index":98},"end":{"line":8,"column":11,"index":99},"identifierName":"x"},
+            "name": "x"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":101,"end":116,"loc":{"start":{"line":9,"column":0,"index":101},"end":{"line":9,"column":15,"index":116}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":101,"end":115,"loc":{"start":{"line":9,"column":0,"index":101},"end":{"line":9,"column":14,"index":115}},
+          "left": {
+            "type": "BinaryExpression",
+            "start":102,"end":110,"loc":{"start":{"line":9,"column":1,"index":102},"end":{"line":9,"column":9,"index":110}},
+            "left": {
+              "type": "Identifier",
+              "start":102,"end":103,"loc":{"start":{"line":9,"column":1,"index":102},"end":{"line":9,"column":2,"index":103},"identifierName":"a"},
+              "name": "a"
+            },
+            "operator": "+",
+            "right": {
+              "type": "TSInstantiationExpression",
+              "start":106,"end":110,"loc":{"start":{"line":9,"column":5,"index":106},"end":{"line":9,"column":9,"index":110}},
+              "expression": {
+                "type": "Identifier",
+                "start":106,"end":107,"loc":{"start":{"line":9,"column":5,"index":106},"end":{"line":9,"column":6,"index":107},"identifierName":"f"},
+                "name": "f"
+              },
+              "typeParameters": {
+                "type": "TSTypeParameterInstantiation",
+                "start":107,"end":110,"loc":{"start":{"line":9,"column":6,"index":107},"end":{"line":9,"column":9,"index":110}},
+                "params": [
+                  {
+                    "type": "TSTypeReference",
+                    "start":108,"end":109,"loc":{"start":{"line":9,"column":7,"index":108},"end":{"line":9,"column":8,"index":109}},
+                    "typeName": {
+                      "type": "Identifier",
+                      "start":108,"end":109,"loc":{"start":{"line":9,"column":7,"index":108},"end":{"line":9,"column":8,"index":109},"identifierName":"T"},
+                      "name": "T"
+                    }
+                  }
+                ]
+              }
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 101
+            }
+          },
+          "operator": ">",
+          "right": {
+            "type": "Identifier",
+            "start":114,"end":115,"loc":{"start":{"line":9,"column":13,"index":114},"end":{"line":9,"column":14,"index":115},"identifierName":"x"},
+            "name": "x"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":117,"end":131,"loc":{"start":{"line":10,"column":0,"index":117},"end":{"line":10,"column":14,"index":131}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":117,"end":130,"loc":{"start":{"line":10,"column":0,"index":117},"end":{"line":10,"column":13,"index":130}},
+          "left": {
+            "type": "TSTypeAssertion",
+            "start":118,"end":125,"loc":{"start":{"line":10,"column":1,"index":118},"end":{"line":10,"column":8,"index":125}},
+            "typeAnnotation": {
+              "type": "TSTypeReference",
+              "start":119,"end":120,"loc":{"start":{"line":10,"column":2,"index":119},"end":{"line":10,"column":3,"index":120}},
+              "typeName": {
+                "type": "Identifier",
+                "start":119,"end":120,"loc":{"start":{"line":10,"column":2,"index":119},"end":{"line":10,"column":3,"index":120},"identifierName":"X"},
+                "name": "X"
+              }
+            },
+            "expression": {
+              "type": "TSInstantiationExpression",
+              "start":121,"end":125,"loc":{"start":{"line":10,"column":4,"index":121},"end":{"line":10,"column":8,"index":125}},
+              "expression": {
+                "type": "Identifier",
+                "start":121,"end":122,"loc":{"start":{"line":10,"column":4,"index":121},"end":{"line":10,"column":5,"index":122},"identifierName":"f"},
+                "name": "f"
+              },
+              "typeParameters": {
+                "type": "TSTypeParameterInstantiation",
+                "start":122,"end":125,"loc":{"start":{"line":10,"column":5,"index":122},"end":{"line":10,"column":8,"index":125}},
+                "params": [
+                  {
+                    "type": "TSTypeReference",
+                    "start":123,"end":124,"loc":{"start":{"line":10,"column":6,"index":123},"end":{"line":10,"column":7,"index":124}},
+                    "typeName": {
+                      "type": "Identifier",
+                      "start":123,"end":124,"loc":{"start":{"line":10,"column":6,"index":123},"end":{"line":10,"column":7,"index":124},"identifierName":"T"},
+                      "name": "T"
+                    }
+                  }
+                ]
+              }
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 117
+            }
+          },
+          "operator": "-",
+          "right": {
+            "type": "Identifier",
+            "start":129,"end":130,"loc":{"start":{"line":10,"column":12,"index":129},"end":{"line":10,"column":13,"index":130},"identifierName":"x"},
+            "name": "x"
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start":132,"end":146,"loc":{"start":{"line":11,"column":0,"index":132},"end":{"line":11,"column":14,"index":146}},
+        "expression": {
+          "type": "BinaryExpression",
+          "start":132,"end":145,"loc":{"start":{"line":11,"column":0,"index":132},"end":{"line":11,"column":13,"index":145}},
+          "left": {
+            "type": "TSTypeAssertion",
+            "start":133,"end":140,"loc":{"start":{"line":11,"column":1,"index":133},"end":{"line":11,"column":8,"index":140}},
+            "typeAnnotation": {
+              "type": "TSTypeReference",
+              "start":134,"end":135,"loc":{"start":{"line":11,"column":2,"index":134},"end":{"line":11,"column":3,"index":135}},
+              "typeName": {
+                "type": "Identifier",
+                "start":134,"end":135,"loc":{"start":{"line":11,"column":2,"index":134},"end":{"line":11,"column":3,"index":135},"identifierName":"X"},
+                "name": "X"
+              }
+            },
+            "expression": {
+              "type": "TSInstantiationExpression",
+              "start":136,"end":140,"loc":{"start":{"line":11,"column":4,"index":136},"end":{"line":11,"column":8,"index":140}},
+              "expression": {
+                "type": "Identifier",
+                "start":136,"end":137,"loc":{"start":{"line":11,"column":4,"index":136},"end":{"line":11,"column":5,"index":137},"identifierName":"f"},
+                "name": "f"
+              },
+              "typeParameters": {
+                "type": "TSTypeParameterInstantiation",
+                "start":137,"end":140,"loc":{"start":{"line":11,"column":5,"index":137},"end":{"line":11,"column":8,"index":140}},
+                "params": [
+                  {
+                    "type": "TSTypeReference",
+                    "start":138,"end":139,"loc":{"start":{"line":11,"column":6,"index":138},"end":{"line":11,"column":7,"index":139}},
+                    "typeName": {
+                      "type": "Identifier",
+                      "start":138,"end":139,"loc":{"start":{"line":11,"column":6,"index":138},"end":{"line":11,"column":7,"index":139},"identifierName":"T"},
+                      "name": "T"
+                    }
+                  }
+                ]
+              }
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 132
+            }
+          },
+          "operator": ">",
+          "right": {
+            "type": "Identifier",
+            "start":144,"end":145,"loc":{"start":{"line":11,"column":12,"index":144},"end":{"line":11,"column":13,"index":145},"identifierName":"x"},
+            "name": "x"
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

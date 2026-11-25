@@ -472,6 +472,11 @@ class Printer {
         // would be tokenized as `a << div />`.
         (strFirst === charCodes.lessThan &&
           this.getLastChar() === charCodes.lessThan) ||
+        // Needs spaces to avoid changing `f<T> == x` to `f<T>==x`, which would
+        // be tokenized as `f < T >= =x`.
+        ((strFirst === charCodes.equalsTo ||
+          strFirst === charCodes.greaterThan) &&
+          this.getLastChar() === charCodes.greaterThan) ||
         // Needs spaces to avoid changing '34' to '34.', which would still be a valid number.
         (strFirst === charCodes.dot &&
           this.getLastChar() === LAST_CHAR_KINDS.INTEGER)
