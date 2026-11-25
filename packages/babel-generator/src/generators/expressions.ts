@@ -94,7 +94,10 @@ export function NewExpression(
     !node.typeArguments &&
     (process.env.BABEL_8_BREAKING ||
       // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
-      (!node.typeParameters && !node.optional));
+      (!node.typeParameters && !node.optional)) &&
+    // `new f<T>` would end with type arguments, which are ambiguous before
+    // some operators: `new f<T>-x` is `(new f < T) > -x`
+    node.callee.type !== "TSInstantiationExpression";
   const wrapInParens = omitArguments && hasPostfixPart(node, parent);
   if (wrapInParens) this.token("(");
   const { tokenContext } = this;

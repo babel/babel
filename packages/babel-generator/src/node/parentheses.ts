@@ -362,7 +362,13 @@ export function TSInstantiationExpression(
     case __node("CallExpression"):
     case __node("OptionalCallExpression"):
     case __node("NewExpression"):
+      if (parent.callee !== node) return false;
+    // falls through
+    case __node("TaggedTemplateExpression"):
     case __node("TSInstantiationExpression"):
+      // `f<T><U>()` is not parsed as `(f<T>)<U>()`. Without type arguments
+      // on the parent, `(f<T>)()` is printed as `f<T>()`, which has the same
+      // runtime semantics.
       return (
         (process.env.BABEL_8_BREAKING
           ? // @ts-ignore(Babel 7 vs Babel 8) Babel 8 AST
