@@ -17,124 +17,145 @@ const VALID_IDENTIFIER_CALLEES = [
   "atob",
 ] as const;
 
+const MAX_STRING_LENGTH = 8_000_000;
+
+type MethodFilter = ((receiver: any, args: any[]) => boolean) | null;
+
 // Allowlists of the methods that the evaluator is allowed to call. Babel calls
 // the real method on values that come from the code being compiled, so a method
 // can only be listed here if:
 // - it is deterministic and does not depend on the environment running Babel;
 // - it runs in time linear in the size of its arguments and of its result
 //   (so nothing that has to do with RegExps)
-// - it doesn't allow very big values from small inputs.
+// - it doesn't allow very big values from small inputs, unless its filter can
+//   guess from the arguments how big its result is going to be.
 
 const VALID_STATIC_METHODS: Record<
   (typeof VALID_OBJECT_CALLEES)[number],
-  ReadonlySet<string>
+  ReadonlyMap<string, MethodFilter>
 > = {
-  Math: new Set([
-    "abs",
-    "acos",
-    "acosh",
-    "asin",
-    "asinh",
-    "atan",
-    "atan2",
-    "atanh",
-    "cbrt",
-    "ceil",
-    "clz32",
-    "cos",
-    "cosh",
-    "exp",
-    "expm1",
-    "f16round",
-    "floor",
-    "fround",
-    "hypot",
-    "imul",
-    "log",
-    "log10",
-    "log1p",
-    "log2",
-    "max",
-    "min",
-    "pow",
+  Math: new Map([
+    ["abs", null],
+    ["acos", null],
+    ["acosh", null],
+    ["asin", null],
+    ["asinh", null],
+    ["atan", null],
+    ["atan2", null],
+    ["atanh", null],
+    ["cbrt", null],
+    ["ceil", null],
+    ["clz32", null],
+    ["cos", null],
+    ["cosh", null],
+    ["exp", null],
+    ["expm1", null],
+    ["f16round", null],
+    ["floor", null],
+    ["fround", null],
+    ["hypot", null],
+    ["imul", null],
+    ["log", null],
+    ["log10", null],
+    ["log1p", null],
+    ["log2", null],
+    ["max", null],
+    ["min", null],
+    ["pow", null],
     // "random", // Not deterministic
-    "round",
-    "sign",
-    "sin",
-    "sinh",
-    "sqrt",
-    "sumPrecise",
-    "tan",
-    "tanh",
-    "trunc",
+    ["round", null],
+    ["sign", null],
+    ["sin", null],
+    ["sinh", null],
+    ["sqrt", null],
+    ["sumPrecise", null],
+    ["tan", null],
+    ["tanh", null],
+    ["trunc", null],
   ]),
-  Number: new Set([
-    "isFinite",
-    "isInteger",
-    "isNaN",
-    "isSafeInteger",
-    "parseFloat",
-    "parseInt",
+  Number: new Map([
+    ["isFinite", null],
+    ["isInteger", null],
+    ["isNaN", null],
+    ["isSafeInteger", null],
+    ["parseFloat", null],
+    ["parseInt", null],
   ]),
-  String: new Set([
-    "fromCharCode",
-    "fromCodePoint",
-    // "raw", // Allows creating very big strings: String.raw({ raw: { length: 5e7 } })
+  String: new Map([
+    ["fromCharCode", null],
+    ["fromCodePoint", null],
+    // "raw", // Meant to be called as a template tag: String.raw`...`
   ]),
 };
 
-const VALID_STRING_METHODS: ReadonlySet<string> = new Set([
-  "at",
-  "charAt",
-  "charCodeAt",
-  "codePointAt",
-  "concat",
+const VALID_STRING_METHODS: ReadonlyMap<string, MethodFilter> = new Map<
+  string,
+  MethodFilter
+>([
+  ["at", null],
+  ["charAt", null],
+  ["charCodeAt", null],
+  ["codePointAt", null],
+  ["concat", null],
   // "constructor",
-  "endsWith",
-  "includes",
-  "indexOf",
-  "isWellFormed",
-  "lastIndexOf",
+  ["endsWith", null],
+  ["includes", null],
+  ["indexOf", null],
+  ["isWellFormed", null],
+  ["lastIndexOf", null],
   // "localeCompare", // Locale-dependent
   // "match",    // RegExp
   // "matchAll", // RegExp
-  "normalize",
-  //"padEnd",      // Allows creating very big strings: "x".padEnd(5e8)
-  //"padStart",    // Allows creating very big strings: "x".padStart(5e8)
-  // "repeat",     // Allows creating very big strings: "x".repeat(5e8)
+  // Normalization can expand a character to up to 18 characters (e.g. U+FDFA)
+  ["normalize", (str: string) => str.length * 18 <= MAX_STRING_LENGTH],
+  [
+    "padEnd",
+    (_, [maxLength]) =>
+      typeof maxLength === "number" && maxLength <= MAX_STRING_LENGTH,
+  ],
+  [
+    "padStart",
+    (_, [maxLength]) =>
+      typeof maxLength === "number" && maxLength <= MAX_STRING_LENGTH,
+  ],
+  [
+    "repeat",
+    (str: string, [count]) =>
+      typeof count === "number" && str.length * count <= MAX_STRING_LENGTH,
+  ],
   // "replace",    // RegExp
   // "replaceAll", // RegExp
   // "search",     // RegExp
-  "slice",
+  ["slice", null],
   // "split",      // Allocates potentially huge arrays
-  "startsWith",
-  "substring",
+  ["startsWith", null],
+  ["substring", null],
   // "toLocaleLowerCase", // Locale-dependent
   // "toLocaleUpperCase", // Locale-dependent
-  "toLowerCase",
-  "toString",
-  "toUpperCase",
-  "toWellFormed",
-  "trim",
-  "trimEnd",
-  "trimLeft",
-  "trimRight",
-  "trimStart",
-  "valueOf",
+  ["toLowerCase", null],
+  ["toString", null],
+  ["toUpperCase", null],
+  ["toWellFormed", null],
+  ["trim", null],
+  ["trimEnd", null],
+  ["trimLeft", null],
+  ["trimRight", null],
+  ["trimStart", null],
+  ["valueOf", null],
   // Annex B, so implementation-dependent
   // "substr",
   // "anchor", "big", "blink", "bold", "fixed", "fontcolor", "fontsize",
   // "italics", "link", "small", "strike", "sub", "sup",
 ]);
 
-const VALID_NUMBER_METHODS: ReadonlySet<string> = new Set([
+const VALID_NUMBER_METHODS: ReadonlyMap<string, MethodFilter> = new Map([
   // "constructor",
-  "toExponential",
-  "toFixed",
+  ["toExponential", null],
+  ["toFixed", null],
   // "toLocaleString", // Locale-dependent
-  "toPrecision",
-  "toString",
-  "valueOf",
+  ["toPrecision", null],
+  ["toString", null],
+  ["valueOf", null],
 ]);
 
 function isValidObjectCallee(
@@ -285,6 +306,14 @@ function evaluateCached(path: NodePath, state: State): any {
     seen.set(node, item);
 
     const val = _evaluate(path, state);
+    // By this point we'll have already build the too-long string (e.g. by
+    // concatenating two strings), but its length is still of the same order of
+    // magnitude as the limit (because thinkgs like .repeat are handled before
+    // calling the method itself).
+    if (typeof val === "string" && val.length > MAX_STRING_LENGTH) {
+      deopt(path, state);
+      return;
+    }
     if (state.confident) {
       item.resolved = true;
       item.value = val;
@@ -621,6 +650,7 @@ function _evaluate(path: NodePath, state: State): any {
     const callee = path.get("callee");
     let context;
     let func;
+    let filter: MethodFilter | undefined;
 
     // Number(1);
     if (
@@ -644,10 +674,12 @@ function _evaluate(path: NodePath, state: State): any {
           isValidObjectCallee(object.node.name) &&
           !path.scope.getBinding(object.node.name)
         ) {
-          if (VALID_STATIC_METHODS[object.node.name].has(key)) {
+          const methods = VALID_STATIC_METHODS[object.node.name];
+          if (methods.has(key)) {
             context = globalThis[object.node.name];
             if (Object.hasOwn(context, key)) {
               func = context[key as keyof typeof context];
+              filter = methods.get(key);
             }
           }
         } else if (
@@ -660,12 +692,14 @@ function _evaluate(path: NodePath, state: State): any {
           if (typeof value === "string" && VALID_STRING_METHODS.has(key)) {
             context = value;
             func = String.prototype[key as keyof string];
+            filter = VALID_STRING_METHODS.get(key);
           } else if (
             typeof value === "number" &&
             VALID_NUMBER_METHODS.has(key)
           ) {
             context = value;
             func = Number.prototype[key as keyof number];
+            filter = VALID_NUMBER_METHODS.get(key);
           }
         }
       }
@@ -674,6 +708,11 @@ function _evaluate(path: NodePath, state: State): any {
     if (func) {
       const args = path.get("arguments").map(arg => evaluateCached(arg, state));
       if (!state.confident) return;
+
+      if (filter && !filter(context, args)) {
+        deopt(path, state);
+        return;
+      }
 
       return (func as (...args: unknown[]) => unknown).apply(context, args);
     }

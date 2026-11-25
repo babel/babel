@@ -201,6 +201,10 @@ describe("evaluation", function () {
       ["Math.max(1, 2)", 2],
       ["Number.isInteger(1)", true],
       ["String.fromCharCode(97, 98)", "ab"],
+      ["'ab'.repeat(2)", "abab"],
+      ["'a'.padStart(3)", "  a"],
+      ["'a'.padEnd(3, '-')", "a--"],
+      ["'e\\u0301'.normalize()", "é"],
     ])("should evaluate allowed method %s", function (code, value) {
       const evalResult = evaluate(code);
       expect(evalResult.confident).toBe(true);
@@ -216,11 +220,9 @@ describe("evaluation", function () {
       "'aaaa!'.search('(a+)+$')",
       "'a-b-c'.replace('-', '+')",
       "'a-b-c'.replaceAll('-', '+')",
-      // Allow creating very big strings from small inputs
-      "String.raw({ raw: { length: 3 } })",
-      "'ab'.repeat(2)",
-      "'a'.padStart(3)",
-      "'a'.padEnd(3)",
+      // Meant to be called as a template tag
+      "String.raw({ raw: ['a', 'b'] }, 1)",
+      "String.raw({ raw: { length: 5e7 } })",
       // Not deterministic
       "Math.random()",
       // Depend on the locale
@@ -267,6 +269,38 @@ describe("evaluation", function () {
       "let s = 'abc'; s = 'def'; s.toUpperCase()",
     ])("should not evaluate methods on receiver %s", function (code) {
       expect(evaluate(code).confident).toBe(false);
+    });
+
+    describe("string length limit", function () {
+      // 8_000_000 characters
+      const MAX = "const a = 'x'.repeat(4_000_000);";
+
+      it.each([
+        ["'x'.repeat(8_000_000)", "repeat"],
+        ["'x'.padStart(8_000_000)", "padStart"],
+        ["'x'.padEnd(8_000_000)", "padEnd"],
+        [`${MAX} a + a`, "+"],
+        [`${MAX} \`\${a}\${a}\``, "template literal"],
+        [`${MAX} String.raw\`\${a}\${a}\``, "String.raw"],
+      ])("should evaluate strings up to the limit: %s", function (code) {
+        const evalResult = evaluate(code);
+        expect(evalResult.confident).toBe(true);
+        expect(evalResult.value).toHaveLength(8_000_000);
+      });
+
+      it.each([
+        "'x'.repeat(8_000_001)",
+        "'x'.repeat(1e9)",
+        "'x'.repeat('2')",
+        "'x'.padStart(8_000_001)",
+        "'x'.padEnd(1e9)",
+        "'x'.repeat(444_445).normalize()",
+        `${MAX} a + a + 'x'`,
+        `${MAX} \`\${a}\${a}x\``,
+        `${MAX} String.raw\`\${a}\${a}x\``,
+      ])("should not evaluate strings over the limit: %s", function (code) {
+        expect(evaluate(code).confident).toBe(false);
+      });
     });
 
     it("should not evaluate methods on bigint literals", function () {
