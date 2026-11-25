@@ -1,0 +1,1 @@
+(f<T>)<x;(f<T>)<=x;(f<T>)<<x;(f<T>)>x;f<T> >=x;(f<T>)>>x;(f<T>)>>>x;(f<T>)+x;(f<T>)-x;(f<T>)%x;f<T> ==x;f<T> ===x;f<T>*x;f<T>&&x;(a+f<T>)<x;(-f<T>)>x;x<f<T>;(<X>f<T>)-x;(<X>f<T>)>x;

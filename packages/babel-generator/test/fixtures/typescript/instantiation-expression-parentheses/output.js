@@ -19,3 +19,8 @@ async function a() {
 function* b() {
   (yield f)<string>;
 }
+(f<string>)<number>('ok');
+new (f<string>)<number>();
+(f<string>)<number>`ok`;
+g<U>(f<T>);
+new g<U>(f<T>);
