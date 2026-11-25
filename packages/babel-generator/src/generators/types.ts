@@ -5,6 +5,7 @@ import jsesc from "jsesc";
 import * as charCodes from "charcodes";
 import { _methodHead } from "./methods.ts";
 import { TokenContext } from "../node/index.ts";
+import { LAST_CHAR_KINDS } from "../buffer.ts";
 import { isJSXAttributeRaw, jsxAttributeString } from "./util.ts";
 
 let lastRawIdentResult: string = "";
@@ -256,7 +257,7 @@ export function TopicReference(this: Printer) {
     this.setLastChar(
       topicToken === "#"
         ? // `# in y` must not become the private name `#in`
-          -3 /* LAST_CHAR_KINDS.WORD */
+          LAST_CHAR_KINDS.WORD
         : topicToken!.charCodeAt(topicToken!.length - 1),
     );
   } else {

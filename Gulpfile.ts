@@ -594,8 +594,16 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                           for (const { key, value } of node.init
                             .properties as types.ObjectProperty[]) {
                             if (!t.isIdentifier(key)) return;
-                            if (!t.isNumericLiteral(value)) return;
-                            vals.set(key.name, value.value);
+                            if (
+                              !t.isNumericLiteral(value) &&
+                              !(
+                                t.isUnaryExpression(value, { operator: "-" }) &&
+                                t.isNumericLiteral(value.argument)
+                              )
+                            ) {
+                              return;
+                            }
+                            vals.set(key.name, value);
                           }
 
                           let all = true;
@@ -616,7 +624,7 @@ function buildRollup(packages: PackageInfo[], buildStandalone?: boolean) {
                               const { node } = parentPath;
                               parentPath.replaceWith(
                                 // @ts-expect-error checked above
-                                t.numericLiteral(vals.get(node.property.name))
+                                t.cloneNode(vals.get(node.property.name))
                               );
                             });
                             path.remove();
