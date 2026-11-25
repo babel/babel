@@ -1147,9 +1147,16 @@ class Scope {
     const declarator = variableDeclarator(id, init);
     const { declarations } = declarPath.node;
     const len = declarations.push(declarator);
+    // Like `crawl`, register a `var` in the function scope rather than in
+    // the scope of the block declaring it.
+    const { scope } = path;
+    const registerScope =
+      kind === "var"
+        ? scope.getFunctionParent() || scope.getProgramParent()
+        : scope;
     // Only create the path of the new declarator, like `get("declarations")`
     // does for all of them.
-    path.scope.registerBinding(
+    registerScope.registerBinding(
       kind,
       NodePathClass.get({
         listKey: "declarations",

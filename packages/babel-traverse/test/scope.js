@@ -1181,6 +1181,21 @@ describe("scope", () => {
   });
 
   describe(".push", () => {
+    it("registers a var in the function scope", () => {
+      const program = getPath("function f() { { x; } }");
+      const block = program.get("body.0.body.body.0");
+      block.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "function f() {
+          {
+            var ref;
+            x;
+          }
+        }"
+      `);
+      expect(block.scope.hasOwnBinding("ref")).toBe(false);
+      expect(program.get("body.0").scope.hasOwnBinding("ref")).toBe(true);
+    });
     it("registers the new binding in the correct scope", () => {
       const program = getPath("class A {}");
       const classDeclaration = program.get("body.0");
