@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
 
-import Buffer from "./buffer.ts";
+import Buffer, { LAST_CHAR_KINDS } from "./buffer.ts";
 import type { Loc, Pos } from "./buffer.ts";
 import { isLastChild, parentNeedsParens } from "./node/index.ts";
 import { generatorInfosMap } from "./nodes.ts";
@@ -65,13 +65,6 @@ const enum PRINTER_FLAGS {
   RETAIN_LINES = 1 << 3,
   RETAIN_FUNCTION_PARENS = 1 << 4,
   AUX_COMMENTS = 1 << 5,
-}
-
-const enum LAST_CHAR_KINDS {
-  EMPTY = 0,
-  NORMAL = -1,
-  INTEGER = -2,
-  WORD = -3,
 }
 
 const enum INNER_COMMENTS_STATE {
@@ -473,10 +466,12 @@ class Printer {
         (strFirst === charCodes.lessThan &&
           this.getLastChar() === charCodes.lessThan) ||
         // Needs spaces to avoid changing `f<T> == x` to `f<T>==x`, which would
-        // be tokenized as `f < T >= =x`.
+        // be tokenized as `f < T >= =x`. Any other `>` is a token on its own:
+        // `x as A<B>==c` and `<a />==c` are tokenized as written.
         ((strFirst === charCodes.equalsTo ||
           strFirst === charCodes.greaterThan) &&
-          this.getLastChar() === charCodes.greaterThan) ||
+          this.getLastChar() ===
+            LAST_CHAR_KINDS.TS_INSTANTIATION_TYPE_ARGUMENTS) ||
         // Needs spaces to avoid changing '34' to '34.', which would still be a valid number.
         (strFirst === charCodes.dot &&
           this.getLastChar() === LAST_CHAR_KINDS.INTEGER)

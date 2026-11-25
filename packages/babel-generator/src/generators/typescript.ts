@@ -5,6 +5,7 @@ import * as charCodes from "charcodes";
 import { _functionHead, _param, _parameters } from "./methods.ts";
 import { _classMethodHead } from "./classes.ts";
 import { _printTemplate } from "./template-literals.ts";
+import { LAST_CHAR_KINDS } from "../buffer.ts";
 
 export function TSTypeAnnotation(
   this: Printer,
@@ -637,6 +638,9 @@ export function TSInstantiationExpression(
     // @ts-ignore(Babel 7 vs Babel 8) Removed in Babel 8
     this.print(node.typeParameters);
   }
+  // Unlike after other type arguments, a `>` or `=` printed right after these
+  // would be tokenized together with the closing `>`: see Printer#token.
+  this.setLastChar(LAST_CHAR_KINDS.TS_INSTANTIATION_TYPE_ARGUMENTS);
 }
 
 export function TSEnumDeclaration(this: Printer, node: t.TSEnumDeclaration) {
