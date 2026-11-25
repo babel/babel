@@ -44,6 +44,7 @@ import { environmentVisitor, explode } from "../visitors.ts";
 import type NodePath from "./index.ts";
 import type { Visitor } from "../types.ts";
 import { setup } from "./context.ts";
+import { getOrCreateCachedPaths } from "../cache.ts";
 import type Scope from "../scope/index.ts";
 
 export function ensureBlock(
@@ -70,38 +71,35 @@ export function ensureBlock(
     return bodyNode;
   }
 
-  const statements: t.Statement[] = [];
-
-  let stringPath = "body";
-  let key;
-  let listKey;
+  // The path of the block is created while the block is empty: the body is
+  // then moved into it with its path, and the paths of its descendants, so
+  // that crawling the scope of the block does not register their scope
+  // information again through new paths.
+  const block = blockStatement([]);
+  this.node.body = block;
+  let parentPath = this.get("body") as NodePath;
+  const { scope } = parentPath;
+  let container: t.Node | t.Node[] = block.body;
+  let listKey: string | null = "body";
+  let key: string | number = 0;
   if (body.isStatement()) {
-    listKey = "body";
-    key = 0;
-    statements.push(body.node);
+    block.body.push(body.node);
   } else {
-    stringPath += ".body.0";
-    if (this.isFunction()) {
-      key = "argument";
-      statements.push(returnStatement(body.node));
-    } else {
-      key = "expression";
-      statements.push(expressionStatement(body.node));
-    }
+    const isFunction = this.isFunction();
+    container = isFunction
+      ? returnStatement(body.node)
+      : expressionStatement(body.node);
+    block.body.push(container);
+    parentPath = parentPath.get("body.0") as NodePath;
+    listKey = null;
+    key = isFunction ? "argument" : "expression";
   }
-
-  this.node.body = blockStatement(statements);
-  const parentPath = this.get(stringPath) as NodePath;
-  setup.call(
-    body,
-    parentPath,
-    listKey
-      ? // @ts-expect-error listKey must present in parent path
-        parentPath.node[listKey]
-      : parentPath.node,
-    listKey,
-    key,
-  );
+  getOrCreateCachedPaths(parentPath.node, parentPath).set(bodyNode, body);
+  (body as NodePath).parent = parentPath.node;
+  setup.call(body, parentPath, container, listKey, key);
+  // The block of a function body has no scope of its own: the body keeps the
+  // scope of the function
+  if (scope?.block === block) scope.crawl();
 
   // @ts-expect-error TS throws because ensureBlock returns the body node path
   // however, we don't use the return value and treat it as a transform and

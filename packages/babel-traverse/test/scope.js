@@ -1196,6 +1196,23 @@ describe("scope", () => {
       expect(block.scope.hasOwnBinding("ref")).toBe(false);
       expect(program.get("body.0").scope.hasOwnBinding("ref")).toBe(true);
     });
+    it("does not register the body of a loop again when wrapping it in a block", () => {
+      const program = getPath("function f(x) { for (;;) x; }");
+      const loop = program.get("body.0.body.body.0");
+      loop.scope.push({ id: t.identifier("ref"), kind: "let" });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "function f(x) {
+          for (;;) {
+            let ref;
+            x;
+          }
+        }"
+      `);
+      expect(loop.get("body").scope.hasOwnBinding("ref")).toBe(true);
+      expect(
+        program.get("body.0").scope.getBinding("x").referencePaths,
+      ).toHaveLength(1);
+    });
     it("registers the new binding in the correct scope", () => {
       const program = getPath("class A {}");
       const classDeclaration = program.get("body.0");
