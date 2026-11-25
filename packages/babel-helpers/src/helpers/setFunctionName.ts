@@ -9,7 +9,7 @@ export default function setFunctionName<T extends Function>(
   if (typeof name === "symbol") {
     // Here `undefined` is possible, we check for it in the next line.
     name = name.description!;
-    name = name ? "[" + name + "]" : "";
+    name = name !== undefined ? "[" + name + "]" : "";
   }
   // In some older browsers .name was non-configurable, here we catch any
   // errors thrown by defineProperty.
