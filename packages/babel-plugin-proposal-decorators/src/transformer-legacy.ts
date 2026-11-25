@@ -286,9 +286,17 @@ function decoratedClassToExpression({ node, scope }: NodePath<t.Class>) {
     return;
   }
 
-  const ref = node.id
-    ? t.cloneNode(node.id)
-    : scope.generateUidIdentifier("class");
+  let ref: t.Identifier;
+  if (!node.id) {
+    ref = scope.generateUidIdentifier("class");
+  } else if (process.env.BABEL_9_BREAKING) {
+    // The declaration takes the identifier of the class, so that registering
+    // it updates the binding of the class.
+    ref = node.id;
+    node.id = t.cloneNode(ref);
+  } else {
+    ref = t.cloneNode(node.id);
+  }
 
   return t.variableDeclaration("let", [
     t.variableDeclarator(ref, t.toExpression(node)),
@@ -313,7 +321,7 @@ const visitor: Visitor<PluginPass> = {
         ]),
       ]);
 
-      if (!decl.node.id) {
+      if (process.env.BABEL_9_BREAKING || !decl.node.id) {
         path.scope.registerDeclaration(varDeclPath);
       }
     }
@@ -323,13 +331,18 @@ const visitor: Visitor<PluginPass> = {
     if (replacement) {
       const [newPath] = path.replaceWith(replacement);
 
-      const decl = newPath.get("declarations.0");
-      const id = decl.node.id as t.Identifier;
+      if (process.env.BABEL_9_BREAKING) {
+        path.scope.registerDeclaration(newPath);
+      } else {
+        // Older versions of @babel/traverse 8 do not update the binding of an
+        // identifier whose declaration is registered again.
+        const decl = newPath.get("declarations.0");
+        const id = decl.node.id as t.Identifier;
 
-      // TODO: Maybe add this logic to @babel/traverse
-      const binding = path.scope.getOwnBinding(id.name)!;
-      binding.identifier = id;
-      binding.path = decl;
+        const binding = path.scope.getOwnBinding(id.name)!;
+        binding.identifier = id;
+        binding.path = decl;
+      }
     }
   },
   ClassExpression(path, state) {
