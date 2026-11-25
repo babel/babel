@@ -1188,18 +1188,47 @@ export class Emitter {
         return finish(
           t.objectExpression(
             path.get("properties").map(function (propPath) {
+              if (propPath.isSpreadElement()) {
+                return t.spreadElement(
+                  self.explodeViaTempVar(
+                    null,
+                    propPath.get("argument"),
+                    hasLeapingChildren,
+                  ),
+                );
+              }
+
+              let { key, computed } = propPath.node;
+              if (computed) {
+                key = self.explodeViaTempVar(
+                  null,
+                  propPath.get("key") as NodePath<t.Expression>,
+                  hasLeapingChildren,
+                );
+              }
+
               if (propPath.isObjectProperty()) {
+                if (
+                  propPath.node.shorthand &&
+                  t.isIdentifier(key, { name: "__proto__" })
+                ) {
+                  // `{ __proto__ }` defines a property, but
+                  // `{ __proto__: value }` sets the prototype.
+                  key = t.stringLiteral("__proto__");
+                  computed = true;
+                }
                 return t.objectProperty(
-                  propPath.node.key,
+                  key,
                   self.explodeViaTempVar(
                     null,
                     // @ts-expect-error `ArrayPattern` cannot cast to `ArrayExpression`
                     propPath.get("value"),
                     hasLeapingChildren,
                   ),
-                  propPath.node.computed,
+                  computed,
                 );
               } else {
+                propPath.node.key = key as t.Expression;
                 return propPath.node;
               }
             }),
