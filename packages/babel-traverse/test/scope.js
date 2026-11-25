@@ -645,6 +645,17 @@ describe("scope", () => {
       expect(fnScope.getBinding("a").references).toBe(1);
     });
 
+    it("crawls again after a crawl threw", function () {
+      const path = getPath("let a;");
+      path.node.body.push(
+        t.variableDeclaration("let", [t.variableDeclarator(t.identifier("a"))]),
+      );
+      expect(() => path.scope.crawl()).toThrow('Duplicate declaration "a"');
+      path.node.body.pop();
+      path.scope.crawl();
+      expect(path.scope.hasOwnBinding("a")).toBe(true);
+    });
+
     test("generateUid collision check after re-crawling", function () {
       const path = getPath("function Foo() { var _jsx; }");
 
