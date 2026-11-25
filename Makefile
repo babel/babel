@@ -43,8 +43,9 @@ build-flow-typings:
 build-standalone:
 	$(MAKEJS) build-standalone
 
-build-standalone-ci: build-no-bundle-ci
-	$(MAKEJS) build-standalone
+build-standalone-ci: bootstrap-only
+	$(YARN) gulp build-dev-standalone
+	$(MAKE) build-flow-typings
 
 prepublish-build-standalone:
 	$(MAKEJS) prepublish-build-standalone
@@ -131,10 +132,8 @@ clean-all:
 
 
 build-no-bundle-ci: bootstrap-only
-	$(MAKE) bundle-babel-parser-dts
 	$(YARN) gulp build-dev
 	$(MAKE) build-flow-typings
-	$(MAKE) build-dist
 
 # Does not work on Windows; use "$(YARN) jest" instead
 test-only:

@@ -5707,7 +5707,7 @@ __metadata:
 
 "@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@npm%3A29.0.2#~/.yarn/patches/@rollup-plugin-commonjs-npm-29.0.2-18c3a497d8.patch":
   version: 29.0.2
-  resolution: "@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@npm%3A29.0.2#~/.yarn/patches/@rollup-plugin-commonjs-npm-29.0.2-18c3a497d8.patch::version=29.0.2&hash=481ead"
+  resolution: "@rollup/plugin-commonjs@patch:@rollup/plugin-commonjs@npm%3A29.0.2#~/.yarn/patches/@rollup-plugin-commonjs-npm-29.0.2-18c3a497d8.patch::version=29.0.2&hash=117aed"
   dependencies:
     "@rollup/pluginutils": "npm:^5.0.1"
     commondir: "npm:^1.0.1"
@@ -5721,7 +5721,7 @@ __metadata:
   peerDependenciesMeta:
     rollup:
       optional: true
-  checksum: 10/e5e62fab06e3a660caec3821a899662fede92edef0b4950ac547a1fec6a02233d58616f292477d7e0ae07f1b17c9bc43b469eefbba8aea7879cc741496ce4edb
+  checksum: 10/90b6413185a6b39c282a3ef1d90b253b0bd9300dea82b30b7e082335f4f41fea07f4869b23911ac0c0102b50f37e2cb5c269d2554f7512aee60158f6293c9c6f
   languageName: node
   linkType: hard
 
