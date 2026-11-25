@@ -2,7 +2,7 @@ import Renamer from "./lib/renamer.ts";
 import type NodePath from "../path/index.ts";
 import traverse, { NodePath as NodePathClass } from "../index.ts";
 import traverseForScope from "./traverseForScope.ts";
-import Binding from "./binding.ts";
+import Binding, { redeclareBinding } from "./binding.ts";
 import type { BindingKind } from "./binding.ts";
 import globalsBuiltinLower from "@babel/helper-globals/data/builtin-lower.json" with { type: "json" };
 import globalsBuiltinUpper from "@babel/helper-globals/data/builtin-upper.json" with { type: "json" };
@@ -433,6 +433,13 @@ export type { Binding };
 
 export { Scope as default };
 
+/**
+ * The number of crawls collecting bindings. The bindings they register again
+ * keep their declarations: e.g. a parameter turned into a `var` declarator in
+ * the body, whose new scope is crawled, is still a parameter.
+ */
+let collectingBindings = 0;
+
 function collectBindings(path: NodePath, state: CollectVisitorState) {
   scopeVisitor ||= traverse.visitors.merge([
     {
@@ -807,24 +814,20 @@ class Scope {
       for (const id of ids[name]) {
         const local = this.getOwnBinding(name);
 
-        if (local) {
-          // same identifier so continue safely as we're likely trying to register it
-          // multiple times
-          if (local.identifier === id) continue;
-
-          this.checkBlockScopedCollisions(local, kind, name, id);
-        }
-
-        // A redeclaration of an existing variable is a modification
-        if (local) {
-          local.reassign(bindingPath);
-        } else {
+        if (!local) {
           this.bindings[name] = new Binding({
             identifier: id,
             scope: this,
             path: bindingPath,
             kind: kind,
           });
+        } else if (local.identifier !== id) {
+          this.checkBlockScopedCollisions(local, kind, name, id);
+          // A redeclaration of an existing variable is a modification
+          local.reassign(bindingPath);
+        } else if (collectingBindings === 0 && local.path !== bindingPath) {
+          // The same identifier, registered again by a new declaration
+          redeclareBinding(local, kind, bindingPath);
         }
       }
     }
@@ -1011,9 +1014,11 @@ class Scope {
     };
 
     this.crawling = true;
+    collectingBindings++;
     try {
       collectBindings(path, state);
     } finally {
+      collectingBindings--;
       this.crawling = false;
     }
 
