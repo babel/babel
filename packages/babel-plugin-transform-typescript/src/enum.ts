@@ -193,8 +193,9 @@ const enumSelfReferenceVisitor = {
 };
 
 export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
-  const bindingIdentifier = path.scope.getBindingIdentifier(path.node.id.name)!;
-  const seen: PreviousEnumMembers = ENUMS.get(bindingIdentifier) ?? new Map();
+  const mergedBinding = path.scope.getOwnBinding(path.node.id.name);
+  const seen: PreviousEnumMembers =
+    (mergedBinding && ENUMS.get(mergedBinding.identifier)) ?? new Map();
 
   // Start at -1 so the first enum member is its increment, 0.
   let constValue: number | string | undefined = -1;
@@ -214,7 +215,7 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
       const initializer = member.initializer;
       let value: t.Expression;
       if (initializer) {
-        constValue = computeConstantValue(initializerPath, seen);
+        constValue = computeConstantValue(initializerPath, path, seen);
         if (constValue !== undefined) {
           seen.set(name, constValue);
           assert(
@@ -284,6 +285,7 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
 // Based on the TypeScript repository's `computeConstantValue` in `checker.ts`.
 function computeConstantValue(
   path: NodePath,
+  enumPath: NodePath<t.TSEnumDeclaration>,
   prevMembers?: PreviousEnumMembers,
   seen = new Set<t.Identifier>(),
 ): number | string | undefined {
@@ -349,8 +351,10 @@ function computeConstantValue(
       ) {
         return;
       }
-      const bindingIdentifier = path.scope.getBindingIdentifier(obj.name);
-      const data = ENUMS.get(bindingIdentifier!);
+      const data =
+        obj.name === enumPath.node.id.name && enumPath.isAncestor(path)
+          ? prevMembers
+          : ENUMS.get(path.scope.getBindingIdentifier(obj.name)!);
       if (!data) return;
       // @ts-expect-error checked above
       return data.get(prop.computed ? prop.value : prop.name);
@@ -373,7 +377,7 @@ function computeConstantValue(
       if (seen.has(path.node)) return;
       seen.add(path.node);
 
-      value = computeConstantValue(path.resolve(), prevMembers, seen);
+      value = computeConstantValue(path.resolve(), enumPath, prevMembers, seen);
       return value;
     }
   }
