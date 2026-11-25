@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
 declare module "@babel/preset-modules/lib/plugins/transform-async-arrows-in-class/index.js" {
   import type { declare } from "@babel/helper-plugin-utils";
   let plugin: ReturnType<typeof declare>;
