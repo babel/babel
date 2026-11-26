@@ -40,6 +40,10 @@ jobs:
   ensure-npm-packages-exist:
     name: Ensure npm packages exist
     runs-on: ubuntu-latest
+    # Only needed before publishing, and a workflow_dispatch run does not
+    # publish. If a package is missing, the tag-triggered run fails here before
+    # publishing anything, and can be re-run once the package has been created.
+    if: github.event_name == 'push'
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -58,8 +62,6 @@ jobs:
   git-version:
     name: Create git tag and commit
     runs-on: ubuntu-latest
-    needs:
-      - ensure-npm-packages-exist
     if: github.event_name == 'workflow_dispatch'
     # Holds the credentials of the release GitHub App
     environment: release
