@@ -33,9 +33,9 @@
     "@babel/plugin-transform-parameters": "workspace:^",
     "@babel/plugin-transform-runtime": "workspace:^",
     "babel-plugin-polyfill-regenerator": "^1.0.0",
-    "jest": "^30.4.2",
     "recast": "^0.23.3",
-    "uglify-js": "^3.14.0"
+    "regenerator-runtime": "catalog:dev",
+    "terser": "catalog:dev"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0"

@@ -1241,7 +1241,7 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
-    regenerator-runtime: "npm:^0.14.0"
+    regenerator-runtime: "catalog:dev"
     terser: "catalog:dev"
   languageName: unknown
   linkType: soft
@@ -3331,9 +3331,9 @@ __metadata:
     "@babel/plugin-transform-parameters": "workspace:^"
     "@babel/plugin-transform-runtime": "workspace:^"
     babel-plugin-polyfill-regenerator: "npm:^1.0.0"
-    jest: "npm:^30.4.2"
     recast: "npm:^0.23.3"
-    uglify-js: "npm:^3.14.0"
+    regenerator-runtime: "catalog:dev"
+    terser: "catalog:dev"
   peerDependencies:
     "@babel/core": ^8.0.0
   languageName: unknown
@@ -17302,15 +17302,6 @@ __metadata:
   bin:
     uglifyjs: bin/uglifyjs
   checksum: 10/c576fab4a93f7dee2744f14614b2114c3254f817cd10ac95b244b9836029003dabdff35b92c95b64d69826602ae9b6d9d346bf7cb643a3655df571ec4c66cd85
-  languageName: node
-  linkType: hard
-
-"uglify-js@npm:^3.14.0":
-  version: 3.19.3
-  resolution: "uglify-js@npm:3.19.3"
-  bin:
-    uglifyjs: bin/uglifyjs
-  checksum: 10/6b9639c1985d24580b01bb0ab68e78de310d38eeba7db45bec7850ab4093d8ee464d80ccfaceda9c68d1c366efbee28573b52f95e69ac792354c145acd380b11
   languageName: node
   linkType: hard
 
