@@ -40,7 +40,7 @@ export default function transpileEnum(
       // If the enum merges with an enum or namespace that comes before it,
       // the variable for this binding has already been declared by that
       // declaration's transform: assign to it instead of re-declaring it.
-      const existingBinding = path.scope.getOwnBinding(name);
+      const existingBinding = getMergedBinding(path);
       const isSeen =
         existingBinding != null && existingBinding.identifier !== node.id;
 
@@ -73,6 +73,19 @@ export default function transpileEnum(
 
     default:
       throw new Error(`Unexpected enum parent '${path.parent.type}`);
+  }
+}
+
+function getMergedBinding(path: NodePath<t.TSEnumDeclaration>) {
+  const binding = path.scope.getBinding(path.node.id.name);
+  if (!binding) return;
+  if (
+    binding.scope === path.scope ||
+    // Block-scoping may have already turned the let from a previous enum in
+    // this block into a var and moved it up to the function scope.
+    binding.path.parentPath?.parent === path.parent
+  ) {
+    return binding;
   }
 }
 
@@ -193,7 +206,7 @@ const enumSelfReferenceVisitor = {
 };
 
 export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
-  const mergedBinding = path.scope.getOwnBinding(path.node.id.name);
+  const mergedBinding = getMergedBinding(path);
   const seen: PreviousEnumMembers =
     (mergedBinding && ENUMS.get(mergedBinding.identifier)) ?? new Map();
 
@@ -255,7 +268,7 @@ export function translateEnumValues(path: NodePath<t.TSEnumDeclaration>, t: t) {
         }
       } else if (typeof constValue === "number") {
         constValue += 1;
-        value = t.numericLiteral(constValue);
+        value = t.valueToNode(constValue);
         seen.set(name, constValue);
       } else if (typeof constValue === "string") {
         throw path.buildCodeFrameError("Enum member must have initializer.");
