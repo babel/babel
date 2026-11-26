@@ -12,7 +12,7 @@ import type {
   RootPath,
 } from "./option-assertions.ts";
 import type { parse, ParserOptions } from "@babel/parser";
-import type { ExplodedVisitor, VisitorBase } from "@babel/traverse";
+import type { ExplodedVisitor, Visitor, VisitorBase } from "@babel/traverse";
 import type { ResolvedOptions } from "./options.ts";
 import type { File, PluginAPI, PluginPass } from "../../index.ts";
 import type { GeneratorOptions, GeneratorResult } from "@babel/generator";
