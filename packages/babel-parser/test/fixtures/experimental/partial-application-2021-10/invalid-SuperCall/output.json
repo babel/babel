@@ -79,13 +79,14 @@
                         },
                         {
                           "type": "ArgumentPlaceholder",
-                          "start":59,"end":60,"loc":{"start":{"line":3,"column":17,"index":59},"end":{"line":3,"column":18,"index":60}}
+                          "start":59,"end":60,"loc":{"start":{"line":3,"column":17,"index":59},"end":{"line":3,"column":18,"index":60}},
+                          "ordinal": null
                         },
                         {
                           "type": "ArgumentPlaceholder",
                           "start":62,"end":64,"loc":{"start":{"line":3,"column":20,"index":62},"end":{"line":3,"column":22,"index":64}},
                           "ordinal": {
-                            "type": "NumericLiteral",
+                            "type": "PlaceholderOrdinal",
                             "start":63,"end":64,"loc":{"start":{"line":3,"column":21,"index":63},"end":{"line":3,"column":22,"index":64}},
                             "extra": {
                               "rawValue": 1,

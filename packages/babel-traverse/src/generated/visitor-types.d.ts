@@ -153,6 +153,7 @@ export interface ExplVisitorBase<S> {
   PartialCallExpression?: ExplVisitNode<S, t.PartialCallExpression>;
   PartialNewExpression?: ExplVisitNode<S, t.PartialNewExpression>;
   Placeholder?: ExplVisitNode<S, t.Placeholder>;
+  PlaceholderOrdinal?: ExplVisitNode<S, t.PlaceholderOrdinal>;
   PrivateName?: ExplVisitNode<S, t.PrivateName>;
   Program?: ExplVisitNode<S, t.Program>;
   QualifiedTypeIdentifier?: ExplVisitNode<S, t.QualifiedTypeIdentifier>;
@@ -423,6 +424,7 @@ export interface VisitorBaseNodes<S> {
   PartialCallExpression?: VisitNode<S, t.PartialCallExpression>;
   PartialNewExpression?: VisitNode<S, t.PartialNewExpression>;
   Placeholder?: VisitNode<S, t.Placeholder>;
+  PlaceholderOrdinal?: VisitNode<S, t.PlaceholderOrdinal>;
   PrivateName?: VisitNode<S, t.PrivateName>;
   Program?: VisitNode<S, t.Program>;
   QualifiedTypeIdentifier?: VisitNode<S, t.QualifiedTypeIdentifier>;

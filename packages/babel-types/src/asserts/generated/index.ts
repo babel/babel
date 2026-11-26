@@ -1047,6 +1047,12 @@ export function assertArgumentPlaceholder(
 ): asserts node is t.ArgumentPlaceholder {
   assert("ArgumentPlaceholder", node, opts);
 }
+export function assertPlaceholderOrdinal(
+  node: object | null | undefined,
+  opts?: object | null,
+): asserts node is t.PlaceholderOrdinal {
+  assert("PlaceholderOrdinal", node, opts);
+}
 export function assertRestPlaceholder(
   node: object | null | undefined,
   opts?: object | null,

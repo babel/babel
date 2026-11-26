@@ -1191,6 +1191,13 @@ interface BaseNodePathValidators {
     this: NodePath<t.Node | null>,
     opts: Opts,
   ): this is NodePath<t.Placeholder & Opts>;
+  isPlaceholderOrdinal(
+    this: NodePath<t.Node | null>,
+  ): this is NodePath<t.PlaceholderOrdinal>;
+  isPlaceholderOrdinal<Opts extends Options<t.PlaceholderOrdinal>>(
+    this: NodePath<t.Node | null>,
+    opts: Opts,
+  ): this is NodePath<t.PlaceholderOrdinal & Opts>;
   isPrivate(this: NodePath<t.Node | null>): this is NodePath<t.Private>;
   isPrivate<Opts extends Options<t.Private>>(
     this: NodePath<t.Node | null>,

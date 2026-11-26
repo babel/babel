@@ -2385,6 +2385,20 @@ export function isArgumentPlaceholder<
 >(node: t.Node | null | undefined, opts?: Opts | null): boolean {
   return isType<t.ArgumentPlaceholder>("ArgumentPlaceholder", node, opts);
 }
+export function isPlaceholderOrdinal(
+  node: t.Node | null | undefined,
+): node is t.PlaceholderOrdinal;
+export function isPlaceholderOrdinal<
+  Opts extends Options<t.PlaceholderOrdinal>,
+>(
+  node: t.Node | null | undefined,
+  opts?: Opts | null,
+): node is t.PlaceholderOrdinal & Opts;
+export function isPlaceholderOrdinal<
+  Opts extends Options<t.PlaceholderOrdinal>,
+>(node: t.Node | null | undefined, opts?: Opts | null): boolean {
+  return isType<t.PlaceholderOrdinal>("PlaceholderOrdinal", node, opts);
+}
 export function isRestPlaceholder(
   node: t.Node | null | undefined,
 ): node is t.RestPlaceholder;

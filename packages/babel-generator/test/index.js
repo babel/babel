@@ -1600,7 +1600,7 @@ describe("programmatic generation", function () {
   describe("partial application", () => {
     it("prints large placeholder ordinals as decimal integers", () => {
       const node = t.partialCallExpression(t.identifier("f"), [
-        t.argumentPlaceholder(t.numericLiteral(1e21)),
+        t.argumentPlaceholder(t.placeholderOrdinal(1e21)),
       ]);
       expect(generate(node).code).toBe("f~(?1000000000000000000000)");
       expect(generate(node, { minified: true }).code).toBe(

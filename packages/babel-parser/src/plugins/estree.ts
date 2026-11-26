@@ -236,9 +236,16 @@ export default (superClass: typeof Parser) =>
     parseLiteral<T extends N.Literal>(value: any, type: T["type"]): T {
       const node = super.parseLiteral<T>(value, type);
       // @ts-expect-error mutating AST types
-      node.raw = super.getLiteralRaw(node);
+      node.raw = node.extra.raw;
       delete node.extra;
 
+      return node;
+    }
+
+    parsePlaceholderOrdinal(): N.PlaceholderOrdinal {
+      const node = super.parsePlaceholderOrdinal();
+      // ESTree's PlaceholderOrdinal has only a `value`
+      delete node.extra;
       return node;
     }
 
@@ -690,12 +697,5 @@ export default (superClass: typeof Parser) =>
     ): void {
       super.resetEndLocation(node, endLoc);
       toESTreeLocation(node);
-    }
-
-    /* ============================================================ *
-     * parser/util.ts                                               *
-     * ============================================================ */
-    getLiteralRaw(node: N.NumericLiteral): string {
-      return (node as unknown as N.EstreeLiteral).raw;
     }
   };

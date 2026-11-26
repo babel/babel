@@ -35,7 +35,7 @@
               "type": "ArgumentPlaceholder",
               "start":82,"end":85,"loc":{"start":{"line":3,"column":2,"index":82},"end":{"line":3,"column":5,"index":85}},
               "ordinal": {
-                "type": "NumericLiteral",
+                "type": "PlaceholderOrdinal",
                 "start":83,"end":85,"loc":{"start":{"line":3,"column":3,"index":83},"end":{"line":3,"column":5,"index":85}},
                 "extra": {
                   "rawValue": 0,
@@ -55,7 +55,7 @@
               "type": "ArgumentPlaceholder",
               "start":89,"end":93,"loc":{"start":{"line":4,"column":2,"index":89},"end":{"line":4,"column":6,"index":93}},
               "ordinal": {
-                "type": "NumericLiteral",
+                "type": "PlaceholderOrdinal",
                 "start":90,"end":93,"loc":{"start":{"line":4,"column":3,"index":90},"end":{"line":4,"column":6,"index":93}},
                 "extra": {
                   "rawValue": 1,
@@ -68,7 +68,7 @@
               "type": "ArgumentPlaceholder",
               "start":97,"end":101,"loc":{"start":{"line":5,"column":2,"index":97},"end":{"line":5,"column":6,"index":101}},
               "ordinal": {
-                "type": "NumericLiteral",
+                "type": "PlaceholderOrdinal",
                 "start":98,"end":101,"loc":{"start":{"line":5,"column":3,"index":98},"end":{"line":5,"column":6,"index":101}},
                 "extra": {
                   "rawValue": 2,
@@ -81,7 +81,7 @@
               "type": "ArgumentPlaceholder",
               "start":105,"end":109,"loc":{"start":{"line":6,"column":2,"index":105},"end":{"line":6,"column":6,"index":109}},
               "ordinal": {
-                "type": "NumericLiteral",
+                "type": "PlaceholderOrdinal",
                 "start":106,"end":109,"loc":{"start":{"line":6,"column":3,"index":106},"end":{"line":6,"column":6,"index":109}},
                 "extra": {
                   "rawValue": 3,
@@ -94,7 +94,7 @@
               "type": "ArgumentPlaceholder",
               "start":113,"end":117,"loc":{"start":{"line":7,"column":2,"index":113},"end":{"line":7,"column":6,"index":117}},
               "ordinal": {
-                "type": "NumericLiteral",
+                "type": "PlaceholderOrdinal",
                 "start":114,"end":117,"loc":{"start":{"line":7,"column":3,"index":114},"end":{"line":7,"column":6,"index":117}},
                 "extra": {
                   "rawValue": 0.4,
@@ -107,7 +107,7 @@
               "type": "ArgumentPlaceholder",
               "start":121,"end":125,"loc":{"start":{"line":8,"column":2,"index":121},"end":{"line":8,"column":6,"index":125}},
               "ordinal": {
-                "type": "NumericLiteral",
+                "type": "PlaceholderOrdinal",
                 "start":122,"end":125,"loc":{"start":{"line":8,"column":3,"index":122},"end":{"line":8,"column":6,"index":125}},
                 "extra": {
                   "rawValue": 0,
@@ -120,7 +120,7 @@
               "type": "ArgumentPlaceholder",
               "start":129,"end":133,"loc":{"start":{"line":9,"column":2,"index":129},"end":{"line":9,"column":6,"index":133}},
               "ordinal": {
-                "type": "NumericLiteral",
+                "type": "PlaceholderOrdinal",
                 "start":130,"end":133,"loc":{"start":{"line":9,"column":3,"index":130},"end":{"line":9,"column":6,"index":133}},
                 "extra": {
                   "rawValue": 1.6,
@@ -133,7 +133,7 @@
               "type": "ArgumentPlaceholder",
               "start":137,"end":140,"loc":{"start":{"line":10,"column":2,"index":137},"end":{"line":10,"column":5,"index":140}},
               "ordinal": {
-                "type": "NumericLiteral",
+                "type": "PlaceholderOrdinal",
                 "start":138,"end":140,"loc":{"start":{"line":10,"column":3,"index":138},"end":{"line":10,"column":5,"index":140}},
                 "extra": {
                   "rawValue": 7,
@@ -146,7 +146,7 @@
               "type": "ArgumentPlaceholder",
               "start":144,"end":147,"loc":{"start":{"line":11,"column":2,"index":144},"end":{"line":11,"column":5,"index":147}},
               "ordinal": {
-                "type": "NumericLiteral",
+                "type": "PlaceholderOrdinal",
                 "start":145,"end":147,"loc":{"start":{"line":11,"column":3,"index":145},"end":{"line":11,"column":5,"index":147}},
                 "extra": {
                   "rawValue": 8,
@@ -159,7 +159,7 @@
               "type": "ArgumentPlaceholder",
               "start":151,"end":154,"loc":{"start":{"line":12,"column":2,"index":151},"end":{"line":12,"column":5,"index":154}},
               "ordinal": {
-                "type": "NumericLiteral",
+                "type": "PlaceholderOrdinal",
                 "start":152,"end":154,"loc":{"start":{"line":12,"column":3,"index":152},"end":{"line":12,"column":5,"index":154}},
                 "extra": {
                   "rawValue": 9,

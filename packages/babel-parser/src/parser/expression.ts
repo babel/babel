@@ -3433,17 +3433,33 @@ export default abstract class ExpressionParser extends LValParser {
           { expected: "2021-10", actual: "2018-07" },
         );
       }
-      const ordinal = this.parseNumericLiteral(this.state.value);
-      if (!this.isDecimalIntegerLiteral(ordinal)) {
-        this.raise(
-          Errors.ArgumentPlaceholderOrdinalMustBeDecimalInteger,
-          ordinal,
-          this.getLiteralRaw(ordinal),
-        );
-      }
-      node.ordinal = ordinal;
+      node.ordinal = this.parsePlaceholderOrdinal();
+    } else if (
+      // Version 2018-07 has no ordinals, so its AST has no `ordinal` property
+      this.getPluginOption("partialApplication", "version") === "2021-10"
+    ) {
+      node.ordinal = null;
     }
     return this.finishNode(node, "ArgumentPlaceholder");
+  }
+
+  parsePlaceholderOrdinal(): N.PlaceholderOrdinal {
+    // Not `parseLiteral`: the ordinal isn't a literal, so the estree plugin
+    // must not turn it into a `Literal`
+    const ordinal = this.parseLiteralAtNode<N.PlaceholderOrdinal>(
+      this.state.value,
+      "PlaceholderOrdinal",
+      this.startNode(),
+    );
+    const raw = ordinal.extra!.raw as string;
+    if (!isDecimalIntegerLiteral(raw)) {
+      this.raise(
+        Errors.ArgumentPlaceholderOrdinalMustBeDecimalInteger,
+        ordinal,
+        raw,
+      );
+    }
+    return ordinal;
   }
 
   parseRestPlaceholder(): N.RestPlaceholder {
@@ -3457,4 +3473,11 @@ export default abstract class ExpressionParser extends LValParser {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     prop: Undone<N.ObjectOrClassMember | N.ClassMember>,
   ): void {}
+}
+
+// https://tc39.es/ecma262/#prod-DecimalIntegerLiteral
+// Unlike the spec, this also rejects NonOctalDecimalIntegerLiteral, such as `08`
+// (https://github.com/tc39/proposal-partial-application/issues/58)
+function isDecimalIntegerLiteral(raw: string): boolean {
+  return raw.length === 1 || /^[1-9][\d_]+$/.test(raw);
 }

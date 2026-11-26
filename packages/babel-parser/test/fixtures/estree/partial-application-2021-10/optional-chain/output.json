@@ -74,11 +74,13 @@
                 "arguments": [
                   {
                     "type": "ArgumentPlaceholder",
-                    "start":24,"end":25,"loc":{"start":{"line":5,"column":5},"end":{"line":5,"column":6}}
+                    "start":24,"end":25,"loc":{"start":{"line":5,"column":5},"end":{"line":5,"column":6}},
+                    "ordinal": null
                   },
                   {
                     "type": "ArgumentPlaceholder",
-                    "start":27,"end":28,"loc":{"start":{"line":5,"column":8},"end":{"line":5,"column":9}}
+                    "start":27,"end":28,"loc":{"start":{"line":5,"column":8},"end":{"line":5,"column":9}},
+                    "ordinal": null
                   }
                 ]
               },
@@ -86,7 +88,8 @@
               "arguments": [
                 {
                   "type": "ArgumentPlaceholder",
-                  "start":31,"end":32,"loc":{"start":{"line":5,"column":12},"end":{"line":5,"column":13}}
+                  "start":31,"end":32,"loc":{"start":{"line":5,"column":12},"end":{"line":5,"column":13}},
+                  "ordinal": null
                 }
               ]
             },
@@ -96,10 +99,9 @@
                 "type": "ArgumentPlaceholder",
                 "start":37,"end":39,"loc":{"start":{"line":5,"column":18},"end":{"line":5,"column":20}},
                 "ordinal": {
-                  "type": "Literal",
+                  "type": "PlaceholderOrdinal",
                   "start":38,"end":39,"loc":{"start":{"line":5,"column":19},"end":{"line":5,"column":20}},
-                  "value": 1,
-                  "raw": "1"
+                  "value": 1
                 }
               },
               {
@@ -136,10 +138,9 @@
                     "type": "ArgumentPlaceholder",
                     "start":52,"end":54,"loc":{"start":{"line":7,"column":5},"end":{"line":7,"column":7}},
                     "ordinal": {
-                      "type": "Literal",
+                      "type": "PlaceholderOrdinal",
                       "start":53,"end":54,"loc":{"start":{"line":7,"column":6},"end":{"line":7,"column":7}},
-                      "value": 1,
-                      "raw": "1"
+                      "value": 1
                     }
                   },
                   {
@@ -151,10 +152,9 @@
                     "type": "ArgumentPlaceholder",
                     "start":59,"end":61,"loc":{"start":{"line":7,"column":12},"end":{"line":7,"column":14}},
                     "ordinal": {
-                      "type": "Literal",
+                      "type": "PlaceholderOrdinal",
                       "start":60,"end":61,"loc":{"start":{"line":7,"column":13},"end":{"line":7,"column":14}},
-                      "value": 0,
-                      "raw": "0"
+                      "value": 0
                     }
                   }
                 ]

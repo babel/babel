@@ -32,7 +32,8 @@
               "arguments": [
                 {
                   "type": "ArgumentPlaceholder",
-                  "start":27,"end":28,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":28,"index":28}}
+                  "start":27,"end":28,"loc":{"start":{"line":1,"column":27,"index":27},"end":{"line":1,"column":28,"index":28}},
+                  "ordinal": null
                 },
                 {
                   "type": "ObjectExpression",

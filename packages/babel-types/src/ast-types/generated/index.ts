@@ -188,6 +188,7 @@ export type Node =
   | PartialCallExpression
   | PartialNewExpression
   | Placeholder
+  | PlaceholderOrdinal
   | PrivateName
   | Program
   | QualifiedTypeIdentifier
@@ -1705,7 +1706,12 @@ export interface V8IntrinsicIdentifier extends BaseNode {
 
 export interface ArgumentPlaceholder extends BaseNode {
   type: "ArgumentPlaceholder";
-  ordinal?: NumericLiteral | null;
+  ordinal?: PlaceholderOrdinal | null;
+}
+
+export interface PlaceholderOrdinal extends BaseNode {
+  type: "PlaceholderOrdinal";
+  value: number;
 }
 
 export interface RestPlaceholder extends BaseNode {
@@ -3796,7 +3802,6 @@ export interface ParentMaps {
   NumberLiteralTypeAnnotation: ParentMaps["AnyTypeAnnotation"];
   NumberTypeAnnotation: ParentMaps["AnyTypeAnnotation"];
   NumericLiteral:
-    | ArgumentPlaceholder
     | ArrayExpression
     | ArrowFunctionExpression
     | AssignmentExpression
@@ -3979,6 +3984,7 @@ export interface ParentMaps {
   PartialCallExpression: ParentMaps["ArrayExpression"];
   PartialNewExpression: ParentMaps["ArrayExpression"];
   Placeholder: Node;
+  PlaceholderOrdinal: ArgumentPlaceholder;
   PrivateName:
     | BinaryExpression
     | ClassAccessorProperty

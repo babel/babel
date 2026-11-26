@@ -578,6 +578,9 @@ export interface NodePathAssertions {
   assertPlaceholder<Opts extends Options<t.Placeholder>>(
     opts?: Opts,
   ): asserts this is NodePath<t.Placeholder & Opts>;
+  assertPlaceholderOrdinal<Opts extends Options<t.PlaceholderOrdinal>>(
+    opts?: Opts,
+  ): asserts this is NodePath<t.PlaceholderOrdinal & Opts>;
   assertPrivate<Opts extends Options<t.Private>>(
     opts?: Opts,
   ): asserts this is NodePath<t.Private & Opts>;

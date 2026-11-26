@@ -29,13 +29,14 @@
               "elements": [
                 {
                   "type": "ArgumentPlaceholder",
-                  "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5}}
+                  "start":4,"end":5,"loc":{"start":{"line":1,"column":4,"index":4},"end":{"line":1,"column":5,"index":5}},
+                  "ordinal": null
                 },
                 {
                   "type": "ArgumentPlaceholder",
                   "start":7,"end":9,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":9,"index":9}},
                   "ordinal": {
-                    "type": "NumericLiteral",
+                    "type": "PlaceholderOrdinal",
                     "start":8,"end":9,"loc":{"start":{"line":1,"column":8,"index":8},"end":{"line":1,"column":9,"index":9}},
                     "extra": {
                       "rawValue": 1,

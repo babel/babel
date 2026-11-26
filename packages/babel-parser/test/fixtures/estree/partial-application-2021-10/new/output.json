@@ -27,16 +27,16 @@
             },
             {
               "type": "ArgumentPlaceholder",
-              "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11}}
+              "start":10,"end":11,"loc":{"start":{"line":1,"column":10},"end":{"line":1,"column":11}},
+              "ordinal": null
             },
             {
               "type": "ArgumentPlaceholder",
               "start":13,"end":15,"loc":{"start":{"line":1,"column":13},"end":{"line":1,"column":15}},
               "ordinal": {
-                "type": "Literal",
+                "type": "PlaceholderOrdinal",
                 "start":14,"end":15,"loc":{"start":{"line":1,"column":14},"end":{"line":1,"column":15}},
-                "value": 1,
-                "raw": "1"
+                "value": 1
               }
             },
             {

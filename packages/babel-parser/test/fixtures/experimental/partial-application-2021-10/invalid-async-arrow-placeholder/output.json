@@ -29,7 +29,8 @@
           "params": [
             {
               "type": "ArgumentPlaceholder",
-              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7}}
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7}},
+              "ordinal": null
             }
           ],
           "body": {
@@ -77,7 +78,7 @@
               "type": "ArgumentPlaceholder",
               "start":42,"end":44,"loc":{"start":{"line":5,"column":6,"index":42},"end":{"line":5,"column":8,"index":44}},
               "ordinal": {
-                "type": "NumericLiteral",
+                "type": "PlaceholderOrdinal",
                 "start":43,"end":44,"loc":{"start":{"line":5,"column":7,"index":43},"end":{"line":5,"column":8,"index":44}},
                 "extra": {
                   "rawValue": 1,

@@ -100,13 +100,14 @@
             },
             {
               "type": "ArgumentPlaceholder",
-              "start":51,"end":52,"loc":{"start":{"line":7,"column":9,"index":51},"end":{"line":7,"column":10,"index":52}}
+              "start":51,"end":52,"loc":{"start":{"line":7,"column":9,"index":51},"end":{"line":7,"column":10,"index":52}},
+              "ordinal": null
             },
             {
               "type": "ArgumentPlaceholder",
               "start":54,"end":56,"loc":{"start":{"line":7,"column":12,"index":54},"end":{"line":7,"column":14,"index":56}},
               "ordinal": {
-                "type": "NumericLiteral",
+                "type": "PlaceholderOrdinal",
                 "start":55,"end":56,"loc":{"start":{"line":7,"column":13,"index":55},"end":{"line":7,"column":14,"index":56}},
                 "extra": {
                   "rawValue": 0,

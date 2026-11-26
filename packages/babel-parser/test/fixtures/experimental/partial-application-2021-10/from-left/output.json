@@ -26,7 +26,8 @@
             },
             {
               "type": "ArgumentPlaceholder",
-              "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8}}
+              "start":7,"end":8,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":8,"index":8}},
+              "ordinal": null
             }
           ]
         }
@@ -60,7 +61,8 @@
             },
             {
               "type": "ArgumentPlaceholder",
-              "start":22,"end":23,"loc":{"start":{"line":3,"column":11,"index":22},"end":{"line":3,"column":12,"index":23}}
+              "start":22,"end":23,"loc":{"start":{"line":3,"column":11,"index":22},"end":{"line":3,"column":12,"index":23}},
+              "ordinal": null
             }
           ]
         }

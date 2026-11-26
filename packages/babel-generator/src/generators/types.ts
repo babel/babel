@@ -1,9 +1,5 @@
 import type Printer from "../printer.ts";
-import {
-  isArgumentPlaceholder,
-  isAssignmentPattern,
-  isIdentifier,
-} from "@babel/types";
+import { isAssignmentPattern, isIdentifier } from "@babel/types";
 import type * as t from "@babel/types";
 import jsesc from "jsesc";
 import * as charCodes from "charcodes";
@@ -45,6 +41,17 @@ export function ArgumentPlaceholder(
 ) {
   this.token("?");
   this.print(node.ordinal);
+}
+
+export function PlaceholderOrdinal(this: Printer, node: t.PlaceholderOrdinal) {
+  const { value } = node;
+  // Placeholder ordinals are decimal integer literals, so neither
+  // `jsescOption.numbers` nor the exponent form of large numbers applies
+  this.number(
+    this.getPossibleRaw(node) ??
+      (Number.isInteger(value) ? BigInt(value).toString() : value + ""),
+    value,
+  );
 }
 
 export function RestPlaceholder(this: Printer) {
@@ -172,11 +179,7 @@ export function NullLiteral(this: Printer) {
   this.word("null");
 }
 
-export function NumericLiteral(
-  this: Printer,
-  node: t.NumericLiteral,
-  parent: t.Node | null,
-) {
+export function NumericLiteral(this: Printer, node: t.NumericLiteral) {
   const raw = this.getPossibleRaw(node);
   const opts = this.format.jsescOption;
   const value = node.value;
@@ -197,16 +200,9 @@ export function NumericLiteral(
     return;
   }
   const str = value === Infinity ? "1e999" : value + "";
-  if (isArgumentPlaceholder(parent)) {
-    // Placeholder ordinals must be decimal integer literals, so neither
-    // `jsescOption.numbers` nor the exponent form of large numbers applies
-    this.number(
-      raw ?? (Number.isInteger(value) ? BigInt(value).toString() : str),
-      value,
-    );
-  } else if (
-    // Only integers can use a non-decimal radix:
-    // Workaround for https://github.com/mathiasbynens/jsesc/issues/79
+  // Only integers can use a non-decimal radix:
+  // Workaround for https://github.com/mathiasbynens/jsesc/issues/79
+  if (
     opts.numbers &&
     Number.isFinite(value) &&
     (opts.numbers === "decimal" || Number.isInteger(value))

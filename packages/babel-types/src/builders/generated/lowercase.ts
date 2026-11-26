@@ -2681,7 +2681,7 @@ export function v8IntrinsicIdentifier(name: string): t.V8IntrinsicIdentifier {
   return node;
 }
 export function argumentPlaceholder(
-  ordinal: t.NumericLiteral | null = null,
+  ordinal: t.PlaceholderOrdinal | null = null,
 ): t.ArgumentPlaceholder {
   const node: t.ArgumentPlaceholder = {
     type: "ArgumentPlaceholder",
@@ -2689,6 +2689,15 @@ export function argumentPlaceholder(
   };
   const defs = NODE_FIELDS.ArgumentPlaceholder;
   validate(defs.ordinal, node, "ordinal", ordinal, 1);
+  return node;
+}
+export function placeholderOrdinal(value: number): t.PlaceholderOrdinal {
+  const node: t.PlaceholderOrdinal = {
+    type: "PlaceholderOrdinal",
+    value,
+  };
+  const defs = NODE_FIELDS.PlaceholderOrdinal;
+  validate(defs.value, node, "value", value);
   return node;
 }
 export function restPlaceholder(): t.RestPlaceholder {

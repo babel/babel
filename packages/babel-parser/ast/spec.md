@@ -75,6 +75,7 @@ These are the core @babel/parser (babylon) AST node types.
       - [LogicalOperator](#logicaloperator)
     - [SpreadElement](#spreadelement)
     - [ArgumentPlaceholder](#argumentplaceholder)
+    - [PlaceholderOrdinal](#placeholderordinal)
     - [RestPlaceholder](#restplaceholder)
     - [MemberExpression](#memberexpression)
     - [OptionalMemberExpression](#optionalmemberexpression)
@@ -906,7 +907,18 @@ interface SpreadElement <: Node {
 ```js
 interface ArgumentPlaceholder <: Node {
   type: "ArgumentPlaceholder";
-  ordinal?: NumericLiteral;
+  ordinal: PlaceholderOrdinal | null;
+}
+```
+
+The `ordinal` of `?1` in `f~(?1)`. It is absent in the `2018-07` version of the proposal, which has no ordinals.
+
+### PlaceholderOrdinal
+
+```js
+interface PlaceholderOrdinal <: Node {
+  type: "PlaceholderOrdinal";
+  value: number;
 }
 ```
 

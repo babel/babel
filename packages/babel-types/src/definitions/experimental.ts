@@ -10,6 +10,7 @@ import defineType, {
   assertOptionalChainStart,
   assertValueType,
   chain,
+  combine,
   validateArrayOfType,
 } from "./utils.ts";
 
@@ -18,8 +19,29 @@ defineType("ArgumentPlaceholder", {
   visitor: ["ordinal"],
   fields: {
     ordinal: {
-      validate: assertNodeType("NumericLiteral"),
+      validate: assertNodeType("PlaceholderOrdinal"),
       optional: true,
+    },
+  },
+});
+
+defineType("PlaceholderOrdinal", {
+  builder: ["value"],
+  fields: {
+    value: {
+      validate: chain(
+        assertValueType("number"),
+        combine(
+          function (node, key, val) {
+            if (!Number.isInteger(val) || val < 0) {
+              throw new TypeError(
+                `PlaceholderOrdinal values must be non-negative integers, but got ${val}.`,
+              );
+            }
+          },
+          { type: "number" },
+        ),
+      ),
     },
   },
 });

@@ -43,13 +43,6 @@ export interface BaseNode {
   extra?: Record<string, unknown>;
 }
 
-export interface NumericLiteral extends N.NumericLiteral {
-  extra: {
-    rawValue: number;
-    raw: string;
-  };
-}
-
 // ================
 // JSX
 // ================
