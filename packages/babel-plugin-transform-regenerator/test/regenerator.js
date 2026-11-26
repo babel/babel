@@ -5,15 +5,10 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {
-  readFile,
-  writeFileSync,
-  copyFileSync,
-  mkdirSync,
-  readFileSync,
-} from "node:fs";
-import { join } from "node:path";
-import { spawn } from "node:child_process";
+import { readFileSync } from "node:fs";
+import { createRequire, isBuiltin } from "node:module";
+import { dirname, join } from "node:path";
+import vm from "node:vm";
 import { transformSync } from "@babel/core";
 import checkDuplicatedNodes from "@babel/helper-check-duplicate-nodes";
 
@@ -27,9 +22,10 @@ import pluginTransformBlockScoping from "@babel/plugin-transform-block-scoping";
 import pluginTransformArrowFunctions from "@babel/plugin-transform-arrow-functions";
 import pluginTransformParameters from "@babel/plugin-transform-parameters";
 import pluginProposalFunctionSent from "@babel/plugin-proposal-function-sent";
-import * as jest from "jest";
 
-const { __dirname } = commonJS(import.meta.url);
+const { __dirname, require } = commonJS(import.meta.url);
+
+const fixturesDir = join(__dirname, "regenerator-fixtures");
 
 // https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/packages/preset/index.js#L9
 const regeneratorPreset = [
@@ -41,340 +37,209 @@ const regeneratorPreset = [
   pluginTransformRegenerator,
 ];
 
-function convert(es6File, es5File, callback) {
-  const transformOptions = {
-    plugins: regeneratorPreset,
-    parserOpts: {
-      strictMode: false,
-    },
-    ast: true,
-    configFile: false,
-  };
+const looseParserOpts = {
+  sourceType: "module",
+  allowImportExportEverywhere: true,
+  allowReturnOutsideFunction: true,
+  allowSuperOutsideMethod: true,
+  strictMode: false,
+  plugins: ["*", "jsx", "flow"],
+};
 
-  readFile(join(__dirname, es6File), "utf-8", function (err, es6) {
-    if (err) {
-      return callback(err);
-    }
-
-    const { code: es5, ast } = transformSync(es6, transformOptions);
-    writeFileSync(join(__dirname, es5File), es5);
-    try {
-      checkDuplicatedNodes(ast);
-    } catch (err) {
-      err.message =
-        "Occurred while transforming: " + es6File + "\n" + err.message;
-      throw err;
-    }
-    callback();
-  });
-}
-
-function convertOldHelper(es6File, es5File, callback) {
-  const transformOptions = {
-    plugins: regeneratorPreset,
-    parserOpts: {
-      strictMode: false,
-    },
-    ast: true,
-    configFile: false,
-  };
-
-  readFile(join(__dirname, es6File), "utf-8", function (err, es6) {
-    if (err) {
-      return callback(err);
-    }
-
-    let es5, ast;
-    process.env.FORCE_OLD_REGENERATOR = true;
-    try {
-      ({ code: es5, ast } = transformSync(es6, transformOptions));
-    } finally {
-      delete process.env.FORCE_OLD_REGENERATOR;
-    }
-    writeFileSync(join(__dirname, es5File), es5);
-    try {
-      checkDuplicatedNodes(ast);
-    } catch (err) {
-      err.message =
-        "Occurred while transforming: " + es6File + "\n" + err.message;
-      throw err;
-    }
-    callback();
-  });
-}
-
-function enqueue(cmd, args = []) {
-  describe("regenerator", () => {
-    if (typeof cmd === "function") {
-      it(`${cmd.name} (${args.join(", ")})`, () =>
-        new Promise((resolve, reject) =>
-          cmd(...args, err => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve();
-            }
-          }),
-        ));
-    } else if (cmd === "jest") {
-      // Matches https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/.github/workflows/node.js.yml#L19
-      describe("jest", () => {
-        const testFiles = args.map(file => join(__dirname, file));
-        it(`${args.join(" ")}`, async () => {
-          const options = {
-            projects: [join(__dirname, "regenerator-fixtures")],
-            config: join(__dirname, "regenerator-fixtures", "jest.config.js"),
-            testMatch: testFiles,
-            testPathPattern: testFiles,
-          };
-          try {
-            // Each test file is run in a separate process to avoid interference between tests (e.g. shared.js exports writable Symbol).
-            const { results } = await jest.runCLI(options, options.projects);
-            if (!results.success) {
-              throw new Error("Jest tests failed");
-            }
-          } catch (err) {
-            throw new Error("Jest tests failed", { cause: err });
-          }
-        });
-      });
-    } else {
-      it(`${cmd} ${args.join(" ")}`, () =>
-        new Promise((resolve, reject) => {
-          const cp = spawn(cmd, args, { cwd: __dirname });
-          let stderr = "";
-          cp.stderr.on("data", chunk => {
-            stderr += chunk;
-          });
-          cp.on("exit", async err => {
-            if (err) {
-              reject(new Error("Exited with " + err + "\n" + stderr));
-            } else {
-              resolve();
-            }
-          });
-        }));
-    }
-  });
-}
-
-try {
-  mkdirSync(join(__dirname, "regenerator-fixtures/tmp"));
-} catch {}
-// TODO: Remove fallback after dropping Node.js 6
-// "minNodeVersion": "8.0.0" <-- For Ctrl+F when dropping node 6
-(copyFileSync || ((from, to) => writeFileSync(to, readFileSync(from))))(
-  join(__dirname, "./regenerator-fixtures/shared.js"),
-  join(__dirname, "./regenerator-fixtures/tmp/shared.js"),
-);
-
-enqueue(convert, [
-  "./regenerator-fixtures/tests.es6.js",
-  "./regenerator-fixtures/tmp/tests.es5.js",
-]);
-
-enqueue(convertOldHelper, [
-  "./regenerator-fixtures/tests.es6.js",
-  "./regenerator-fixtures/tmp/tests.es5-old.js",
-]);
-
-enqueue(convert, [
-  "./regenerator-fixtures/tests-node4.es6.js",
-  "./regenerator-fixtures/tmp/tests-node4.es5.js",
-]);
-
-enqueue(convert, [
-  "./regenerator-fixtures/non-native.js",
-  "./regenerator-fixtures/tmp/non-native.es5.js",
-]);
-
-enqueue(convert, [
-  "./regenerator-fixtures/async.js",
-  "./regenerator-fixtures/tmp/async.es5.js",
-]);
-
-enqueue(convertOldHelper, [
-  "./regenerator-fixtures/async.js",
-  "./regenerator-fixtures/tmp/async.es5-old.js",
-]);
-
-enqueue(convert, [
-  "./regenerator-fixtures/class.js",
-  "./regenerator-fixtures/tmp/class.es5.js",
-]);
-
-enqueue(convertWithRegeneratorPluginOnly, [
-  "./regenerator-fixtures/class.js",
-  "./regenerator-fixtures/tmp/class.regenerator.js",
-]);
-
-enqueue(convertWithRegeneratorPluginOnly, [
-  "./regenerator-fixtures/tests.no-symbol.js",
-  "./regenerator-fixtures/tmp/no-symbol.es5.js",
-]);
-
-Error.stackTraceLimit = 1000;
+const presetOptions = {
+  plugins: regeneratorPreset,
+  parserOpts: { strictMode: false },
+};
 
 /**
- * Convert without using the preset (which also transforms things like classes and arrows)
+ * Transform without using the preset (which also transforms things like classes and arrows)
  */
-function convertWithRegeneratorPluginOnly(inputFile, outputFile, callback) {
-  const transformOptions = {
-    plugins: [pluginTransformRegenerator],
-    parserOpts: {
-      sourceType: "module",
-      allowImportExportEverywhere: true,
-      allowReturnOutsideFunction: true,
-      allowSuperOutsideMethod: true,
-      strictMode: false,
-      plugins: ["*", "jsx", "flow"],
-    },
-    ast: true,
-    configFile: false,
-  };
+const regeneratorOnlyOptions = {
+  plugins: [pluginTransformRegenerator],
+  parserOpts: looseParserOpts,
+};
 
-  readFile(join(__dirname, inputFile), "utf-8", function (err, input) {
-    if (err) {
-      return callback(err);
-    }
+const paramsTransformOptions = {
+  plugins: [pluginTransformParameters, ...regeneratorPreset],
+  parserOpts: looseParserOpts,
+};
 
-    const { code: output, ast } = transformSync(input, transformOptions);
-    writeFileSync(join(__dirname, outputFile), output);
-    try {
-      checkDuplicatedNodes(ast);
-    } catch (err) {
-      err.message =
-        "Occurred while transforming: " + inputFile + "\n" + err.message;
-      throw err;
-    }
-    callback();
-  });
-}
+function customPromiseReplacer(babel) {
+  return {
+    visitor: {
+      FunctionExpression: {
+        exit(path) {
+          const stmt = path.get("body.body").find(function (stmt) {
+            return (
+              stmt.isLabeledStatement() &&
+              stmt.get("label").isIdentifier({ name: "babelInjectPromise" })
+            );
+          });
+          if (!stmt) return;
 
-function convertWithParamsTransform(es6File, es5File, callback) {
-  const transformOptions = {
-    plugins: [pluginTransformParameters, ...regeneratorPreset],
-    parserOpts: {
-      sourceType: "module",
-      allowImportExportEverywhere: true,
-      allowReturnOutsideFunction: true,
-      allowSuperOutsideMethod: true,
-      strictMode: false,
-      plugins: ["*", "jsx", "flow"],
-    },
-    ast: true,
-    configFile: false,
-  };
-
-  readFile(join(__dirname, es6File), "utf-8", function (err, es6) {
-    if (err) {
-      return callback(err);
-    }
-
-    const { code: es5, ast } = transformSync(es6, transformOptions);
-    writeFileSync(join(__dirname, es5File), es5);
-    try {
-      checkDuplicatedNodes(ast);
-    } catch (err) {
-      err.message =
-        "Occurred while transforming: " + es6File + "\n" + err.message;
-      throw err;
-    }
-    callback();
-  });
-}
-
-enqueue(convertWithParamsTransform, [
-  "./regenerator-fixtures/regression.js",
-  "./regenerator-fixtures/tmp/regression.es5.js",
-]);
-
-function convertWithCustomPromiseReplacer(es6File, es5File, callback) {
-  const transformOptions = {
-    plugins: [
-      function (babel) {
-        return {
-          visitor: {
-            FunctionExpression: {
-              exit(path) {
-                const stmt = path.get("body.body").find(function (stmt) {
-                  return (
-                    stmt.isLabeledStatement() &&
-                    stmt
-                      .get("label")
-                      .isIdentifier({ name: "babelInjectPromise" })
-                  );
-                });
-                if (!stmt) return;
-
-                path.traverse({
-                  ReferencedIdentifier(path) {
-                    if (path.node.name === "Promise") {
-                      path.replaceWith(
-                        babel.types.cloneNode(stmt.node.body.expression),
-                      );
-                    }
-                  },
-                });
-              },
+          path.traverse({
+            ReferencedIdentifier(path) {
+              if (path.node.name === "Promise") {
+                path.replaceWith(
+                  babel.types.cloneNode(stmt.node.body.expression),
+                );
+              }
             },
-          },
-        };
+          });
+        },
       },
-      ...regeneratorPreset,
-    ],
-    parserOpts: {
-      strictMode: false,
     },
-    ast: true,
-    configFile: false,
   };
+}
 
-  readFile(join(__dirname, es6File), "utf-8", function (err, es6) {
-    if (err) {
-      return callback(err);
-    }
+const customPromiseOptions = {
+  plugins: [customPromiseReplacer, ...regeneratorPreset],
+  parserOpts: { strictMode: false },
+};
 
-    const { code: es5, ast } = transformSync(es6, transformOptions);
-    writeFileSync(join(__dirname, es5File), es5);
-    try {
-      checkDuplicatedNodes(ast);
-    } catch (err) {
-      err.message =
-        "Occurred while transforming: " + es6File + "\n" + err.message;
-      callback(err);
-    }
-    callback();
+function compile(inputFile, options, { oldHelper = false } = {}) {
+  const input = readFileSync(join(fixturesDir, inputFile), "utf8");
+
+  let output, ast;
+  if (oldHelper) process.env.FORCE_OLD_REGENERATOR = true;
+  try {
+    ({ code: output, ast } = transformSync(input, {
+      ...options,
+      ast: true,
+      configFile: false,
+    }));
+  } finally {
+    if (oldHelper) delete process.env.FORCE_OLD_REGENERATOR;
+  }
+
+  try {
+    checkDuplicatedNodes(ast);
+  } catch (err) {
+    err.message =
+      "Occurred while transforming: " + inputFile + "\n" + err.message;
+    throw err;
+  }
+  return output;
+}
+
+/**
+ * Evaluate `code` as a CommonJS module in a fresh realm. Some fixtures mutate
+ * intrinsics (e.g. `Symbol = undefined`, freezing `Object.prototype`), so each
+ * of them gets its own global object instead of the shared Jest worker one.
+ * Relative modules and `regenerator-runtime` are evaluated in the same realm,
+ * while Node.js builtins such as `assert` come from the host.
+ */
+function runInFreshRealm(code, filename) {
+  const context = vm.createContext({
+    describe,
+    it,
+    test,
+    xit,
+    console,
+    process,
+    setTimeout,
+    clearTimeout,
+    setImmediate,
+    clearImmediate,
+  });
+  const moduleCache = new Map();
+
+  function evaluate(code, filename) {
+    const module = { exports: {} };
+    moduleCache.set(filename, module);
+    const fn = vm.compileFunction(
+      code,
+      ["exports", "require", "module", "__filename", "__dirname"],
+      { filename, parsingContext: context },
+    );
+    fn.call(
+      module.exports,
+      module.exports,
+      createRequireInRealm(filename),
+      module,
+      filename,
+      dirname(filename),
+    );
+    return module.exports;
+  }
+
+  function createRequireInRealm(parentFilename) {
+    const resolve = createRequire(parentFilename).resolve;
+    return function require(id) {
+      if (isBuiltin(id)) return createRequire(parentFilename)(id);
+      const filename = resolve(id);
+      return (
+        moduleCache.get(filename)?.exports ??
+        evaluate(readFileSync(filename, "utf8"), filename)
+      );
+    };
+  }
+
+  evaluate(code, filename);
+}
+
+/**
+ * @param {string} name A name for the compiled output. It is resolved in the fixtures
+ *                      directory so that `require("./shared.js")` works.
+ * @param {() => string} getCode
+ */
+function runFixture(name, getCode) {
+  describe(`${name}`, () => {
+    runInFreshRealm(getCode(), join(fixturesDir, name));
   });
 }
 
-enqueue(convertWithCustomPromiseReplacer, [
-  "./regenerator-fixtures/async-custom-promise.js",
-  "./regenerator-fixtures/tmp/async-custom-promise.es5.js",
-]);
+function compileOnly(name, getCode) {
+  it(`compiles ${name}`, () => {
+    getCode();
+  });
+}
 
-enqueue(convert, [
-  "./regenerator-fixtures/replaceWith-falsy.js",
-  "./regenerator-fixtures/tmp/replaceWith-falsy.es5.js",
-]);
+describe("regenerator", () => {
+  // Matches https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/.github/workflows/node.js.yml#L19
+  runFixture("tests.es5.js", () => compile("tests.es6.js", presetOptions));
+  runFixture("tests.es5-old.js", () =>
+    compile("tests.es6.js", presetOptions, { oldHelper: true }),
+  );
+  runFixture("tests-node4.es5.js", () =>
+    compile("tests-node4.es6.js", presetOptions),
+  );
+  runFixture("non-native.es5.js", () =>
+    compile("non-native.js", presetOptions),
+  );
+  runFixture("async.es5.js", () => compile("async.js", presetOptions));
+  runFixture("async.es5-old.js", () =>
+    compile("async.js", presetOptions, { oldHelper: true }),
+  );
+  runFixture("async-custom-promise.es5.js", () =>
+    compile("async-custom-promise.js", customPromiseOptions),
+  );
+  runFixture("regression.es5.js", () =>
+    compile("regression.js", paramsTransformOptions),
+  );
+  runFixture("class.regenerator.js", () =>
+    compile("class.js", regeneratorOnlyOptions),
+  );
+  runFixture("no-symbol.es5.js", () =>
+    compile("tests.no-symbol.js", regeneratorOnlyOptions),
+  );
 
-enqueue("jest", ["./regenerator-fixtures/tmp/tests.es5.js"]);
-enqueue("jest", ["./regenerator-fixtures/tmp/tests.es5-old.js"]);
-enqueue("jest", ["./regenerator-fixtures/tmp/tests-node4.es5.js"]);
-enqueue("jest", ["./regenerator-fixtures/tmp/non-native.es5.js"]);
-enqueue("jest", ["./regenerator-fixtures/tmp/async.es5.js"]);
-enqueue("jest", ["./regenerator-fixtures/tmp/async.es5-old.js"]);
-enqueue("jest", ["./regenerator-fixtures/tmp/async-custom-promise.es5.js"]);
-enqueue("jest", ["./regenerator-fixtures/tmp/regression.es5.js"]);
-enqueue("jest", ["./regenerator-fixtures/tests.transform.js"]);
-enqueue("jest", ["./regenerator-fixtures/tmp/class.regenerator.js"]);
+  compileOnly("class.es5.js", () => compile("class.js", presetOptions));
+  compileOnly("replaceWith-falsy.es5.js", () =>
+    compile("replaceWith-falsy.js", presetOptions),
+  );
 
-enqueue("jest", ["./regenerator-fixtures/tests-node4.es6.js"]);
+  // Untransformed fixtures, run against native generators and async functions.
+  for (const file of [
+    "tests-node4.es6.js",
+    "non-writable-tostringtag-property.js",
+    "frozen-intrinsics.js",
+  ]) {
+    runFixture(file, () => readFileSync(join(fixturesDir, file), "utf8"));
+  }
 
-enqueue("jest", [
-  "./regenerator-fixtures/non-writable-tostringtag-property.js",
-]);
-
-enqueue("jest", ["./regenerator-fixtures/frozen-intrinsics.js"]);
-
-enqueue("jest", ["./regenerator-fixtures/tmp/no-symbol.es5.js"]);
+  // These tests compile code with Babel, so they run in the host realm.
+  describe("tests.transform.js", () => {
+    require("./regenerator-fixtures/tests.transform.js");
+  });
+});
