@@ -108,9 +108,7 @@ describe("@babel/core errors", function () {
           at require (... internal node frames ...)
           at Module.parseSync (<BABEL_CORE_LIB_SOME_FILE>:_:_)
           at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
-          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
-          at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
-          at ... internal jest frames ..."
+          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)"
     `);
   });
 
@@ -125,11 +123,7 @@ describe("@babel/core errors", function () {
           at g (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
           at Object.<anonymous> (<CWD>/packages/babel-core/test/fixtures/errors/error-config-file-more-frames/babel.config.js:_:_)
           at require (... internal node frames ...)
-          at Module.parseSync (<BABEL_CORE_LIB_SOME_FILE>:_:_)
-          at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
-          at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
-          at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
-          at ... internal jest frames ..."
+          at Module.parseSync (<BABEL_CORE_LIB_SOME_FILE>:_:_)"
     `);
   });
 
@@ -258,7 +252,7 @@ describe("@babel/core errors", function () {
             at next (<anonymous>)
             at loadPrivatePartialConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
             at next (<anonymous>)
-            at loadFullConfig (<BABEL_CORE_LIB_SOME_FILE>:_:_)
+            at loadFullConfigImpl (<BABEL_CORE_LIB_SOME_FILE>:_:_)
             at next (<anonymous>)
             at parse (<BABEL_CORE_LIB_SOME_FILE>:_:_)
             at next (<anonymous>)
@@ -266,7 +260,7 @@ describe("@babel/core errors", function () {
             at next (<anonymous>)
             at evaluateSync (<CWD>/node_modules/gensync/index.js:_:_)
             at sync (<CWD>/node_modules/gensync/index.js:_:_)
-            at stopHiding - secret - don't use this - v1 (<BABEL_CORE_LIB_SOME_FILE>:_:_)
+            at stopHiding - secret - don't use this - v1 [as sync] (<BABEL_CORE_LIB_SOME_FILE>:_:_)
             at Module.parseSync (<BABEL_CORE_LIB_SOME_FILE>:_:_)
             at <CWD>/packages/babel-core/test/errors-stacks.js:_:_
             at expectError (<CWD>/packages/babel-core/test/errors-stacks.js:_:_)
