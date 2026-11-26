@@ -1,5 +1,6 @@
 "use strict";
 
 var _someModule = require("./some-module");
-const Foo = _someModule.NestedObjects.Foo,
-  Bar = _someModule.NestedObjects.Bar;
+const _NestedObjects = _someModule.NestedObjects,
+  Foo = _NestedObjects.Foo,
+  Bar = _NestedObjects.Bar;

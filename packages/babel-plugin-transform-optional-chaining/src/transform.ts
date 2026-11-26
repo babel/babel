@@ -1,4 +1,4 @@
-import { types as t, template, type NodePath } from "@babel/core";
+import { types as t, template, type NodePath, type Scope } from "@babel/core";
 import {
   skipTransparentExprWrapperNodes,
   skipTransparentExprWrappers,
@@ -25,12 +25,35 @@ function isSimpleMemberExpression(
 }
 
 /**
+ * Like `scope.isStatic`, but also accepts all the bindings. Reassigned
+ * bindings and imports (which the exporting module might reassign) can change
+ * value, but no code can run between the nullish check of an optional chain
+ * and the following access, so it's safe to read them twice there.
+ * Reading an undeclared global might trigger a getter on `globalThis`, so we
+ * only read it twice with the `pureGetters` assumption.
+ *
+ * Do not use this for the `this` context of calls: `a.b?.()` evaluates the `b`
+ * getter between the two reads of `a`.
+ */
+function isStaticForNullishCheck(
+  scope: Scope,
+  node: t.Node,
+  pureGetters: boolean,
+) {
+  if (t.isIdentifier(node)) {
+    return pureGetters || scope.hasBinding(node.name);
+  }
+  return scope.isStatic(node);
+}
+
+/**
  * Test if a given optional chain `path` needs to be memoized
  * @param {NodePath} path
  * @returns {boolean}
  */
 function needsMemoize(
   path: NodePath<t.OptionalCallExpression | t.OptionalMemberExpression>,
+  pureGetters: boolean,
 ) {
   let optionalPath: NodePath = path;
   const { scope } = path;
@@ -45,7 +68,7 @@ function needsMemoize(
         : optionalPath.get("callee"),
     );
     if (node.optional) {
-      return !scope.isStatic(childPath.node);
+      return !isStaticForNullishCheck(scope, childPath.node, pureGetters);
     }
 
     optionalPath = childPath;
@@ -77,7 +100,7 @@ export function transformOptionalChain(
 
   // Replace `function (a, x = a.b?.c) {}` to `function (a, x = (() => a.b?.c)() ){}`
   // so the temporary variable can be injected in correct scope
-  if (scope.path.isPattern() && needsMemoize(path)) {
+  if (scope.path.isPattern() && needsMemoize(path, pureGetters)) {
     replacementPath.replaceWith(
       template.expression.ast`(() => ${replacementPath.node})()`,
     );
@@ -143,7 +166,7 @@ export function transformOptionalChain(
       // we can avoid a needless memoize. We only do this if the callee is a simple member
       // expression, to avoid multiple calls to nested call expressions.
       check = ref = node.callee;
-    } else if (scope.isStatic(chain)) {
+    } else if (isStaticForNullishCheck(scope, chain, pureGetters)) {
       check = ref = chainWithTypes;
     } else {
       // We cannot reuse the tmpVar for calls, because we need to
