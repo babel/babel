@@ -24,7 +24,7 @@
     "@babel/helper-transform-fixture-test-runner": "workspace:^",
     "@babel/parser": "workspace:^",
     "@babel/traverse": "workspace:^",
-    "regenerator-runtime": "^0.14.0",
+    "regenerator-runtime": "catalog:dev",
     "terser": "catalog:dev"
   },
   "engines": {

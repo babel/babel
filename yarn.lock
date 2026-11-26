@@ -1241,7 +1241,7 @@ __metadata:
     "@babel/template": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
-    regenerator-runtime: "npm:^0.14.0"
+    regenerator-runtime: "catalog:dev"
     terser: "catalog:dev"
   languageName: unknown
   linkType: soft
@@ -3332,6 +3332,7 @@ __metadata:
     "@babel/plugin-transform-runtime": "workspace:^"
     babel-plugin-polyfill-regenerator: "npm:^1.0.0"
     recast: "npm:^0.23.3"
+    regenerator-runtime: "catalog:dev"
     uglify-js: "npm:^3.14.0"
   peerDependencies:
     "@babel/core": ^8.0.0
