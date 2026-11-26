@@ -2,7 +2,11 @@
 
 import Buffer, { LAST_CHAR_KINDS } from "./buffer.ts";
 import type { Loc, Pos } from "./buffer.ts";
-import { isLastChild, parentNeedsParens } from "./node/index.ts";
+import {
+  canBeParenthesized,
+  isLastChild,
+  parentNeedsParens,
+} from "./node/index.ts";
 import { generatorInfosMap } from "./nodes.ts";
 import type * as t from "@babel/types";
 import {
@@ -661,6 +665,11 @@ class Printer {
 
     // catch up to this nodes newline if we're behind
     const count = line - this._buf.getCurrentLine();
+    if (count > 0 && this._noLineTerminator) {
+      // The previous token cannot be followed by a line terminator, such as
+      // `async` when a comment in `async *a(\n// c\n) {}` is printed after it
+      return;
+    }
 
     for (let i = 0; i < count; i++) {
       this._newline();
@@ -834,6 +843,7 @@ class Printer {
     }
 
     let indentParenthesized = false;
+    let printLeadingCommentsAfterNode = false;
     if (
       !shouldPrintParens &&
       this._noLineTerminator &&
@@ -842,8 +852,14 @@ class Printer {
           loc &&
           loc.start.line > this._buf.getCurrentLine()))
     ) {
-      shouldPrintParens = true;
-      indentParenthesized = true;
+      if (canBeParenthesized(node)) {
+        shouldPrintParens = true;
+        indentParenthesized = true;
+      } else {
+        // The class body in Flow's `class A implements B<T> {}` can neither
+        // follow a line terminator nor be wrapped in parentheses
+        printLeadingCommentsAfterNode = true;
+      }
     }
 
     let oldNoLineTerminatorAfterNode;
@@ -876,12 +892,20 @@ class Printer {
       this._noLineTerminatorAfterNode = null;
     }
 
-    this._printLeadingComments(node, parent);
+    if (!printLeadingCommentsAfterNode) {
+      this._printLeadingComments(node, parent);
+    }
 
     this.exactSource(
       nodeId === __node("Program") || nodeId === __node("File") ? null : loc,
       printMethod.bind(this, node, parent),
     );
+
+    if (printLeadingCommentsAfterNode && node.leadingComments) {
+      // Flow's `(x): boolean %checks => x`: no line terminator before `=>`
+      if (noLineTerminatorAfter) this._noLineTerminator = true;
+      this._printComments(COMMENT_TYPE.TRAILING, node.leadingComments, node);
+    }
 
     if (shouldPrintParens) {
       this._printTrailingComments(node, parent);

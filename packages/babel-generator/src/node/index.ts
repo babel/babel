@@ -1,5 +1,5 @@
 import * as parens from "./parentheses.ts";
-import { VISITOR_KEYS } from "@babel/types";
+import { VISITOR_KEYS, isExpression, isFlowType, isTSType } from "@babel/types";
 import type * as t from "@babel/types";
 // We inline this package
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -230,6 +230,13 @@ export function parentNeedsParens(
       );
   }
   return false;
+}
+
+// Whether wrapping `node` in parentheses keeps the code valid, which is not
+// the case for nodes that are neither expressions nor types, such as a class
+// body or a Flow predicate
+export function canBeParenthesized(node: t.Node): boolean {
+  return isExpression(node) || isTSType(node) || isFlowType(node);
 }
 
 function isDecoratorMemberExpression(node: t.Node): boolean {
