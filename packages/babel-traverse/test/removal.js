@@ -165,4 +165,46 @@ describe("removal", function () {
 
     expect(ast.elements.length).toBe(0);
   });
+
+  it("should remove var binding from function scope without removing catch param binding", function () {
+    const rootPath = getPath("function f() { try {} catch (x) { var x; } }");
+    const fnPath = rootPath.get("body.0");
+    const catchPath = fnPath.get("body.body.0.handler");
+    expect(fnPath.scope.hasOwnBinding("x")).toBe(true);
+    expect(catchPath.scope.hasOwnBinding("x")).toBe(true);
+
+    catchPath.get("body.body.0").remove();
+
+    expect(fnPath.scope.hasOwnBinding("x")).toBe(false);
+    expect(catchPath.scope.hasOwnBinding("x")).toBe(true);
+  });
+
+  it("should remove var declarator binding from program scope without removing catch param binding", function () {
+    const rootPath = getPath("try {} catch (x) { var x, y; }");
+    const catchPath = rootPath.get("body.0.handler");
+    expect(rootPath.scope.hasOwnBinding("x")).toBe(true);
+    expect(rootPath.scope.hasOwnBinding("y")).toBe(true);
+    expect(catchPath.scope.hasOwnBinding("x")).toBe(true);
+
+    catchPath.get("body.body.0.declarations.0").remove();
+
+    expect(rootPath.scope.hasOwnBinding("x")).toBe(false);
+    expect(rootPath.scope.hasOwnBinding("y")).toBe(true);
+    expect(catchPath.scope.hasOwnBinding("x")).toBe(true);
+  });
+
+  it("should remove var binding from for-of without removing catch param binding", function () {
+    const rootPath = getPath(
+      "function f() { try {} catch (x) { for (var x of arr) {} } }",
+    );
+    const fnPath = rootPath.get("body.0");
+    const catchPath = fnPath.get("body.body.0.handler");
+    expect(fnPath.scope.hasOwnBinding("x")).toBe(true);
+    expect(catchPath.scope.hasOwnBinding("x")).toBe(true);
+
+    catchPath.get("body.body.0").remove();
+
+    expect(fnPath.scope.hasOwnBinding("x")).toBe(false);
+    expect(catchPath.scope.hasOwnBinding("x")).toBe(true);
+  });
 });
