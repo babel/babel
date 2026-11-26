@@ -189,12 +189,6 @@ function runFixture(name, getCode) {
   });
 }
 
-function compileOnly(name, getCode) {
-  it(`compiles ${name}`, () => {
-    getCode();
-  });
-}
-
 describe("regenerator", () => {
   // Matches https://github.com/facebook/regenerator/blob/cb755fd82c648cbc5307a5a2d61cdd598e698fc4/.github/workflows/node.js.yml#L19
   runFixture("tests.es5.js", () => compile("tests.es6.js", presetOptions));
@@ -224,8 +218,8 @@ describe("regenerator", () => {
     compile("tests.no-symbol.js", regeneratorOnlyOptions),
   );
 
-  compileOnly("class.es5.js", () => compile("class.js", presetOptions));
-  compileOnly("replaceWith-falsy.es5.js", () =>
+  runFixture("class.es5.js", () => compile("class.js", presetOptions));
+  runFixture("replaceWith-falsy.es5.js", () =>
     compile("replaceWith-falsy.js", presetOptions),
   );
 
