@@ -1458,24 +1458,24 @@ const helpers: Record<string, Helper> = {
       internal: false,
     },
   ),
-  // size: 131, gzip size: 114
+  // size: 143, gzip size: 123
   toConsumableArray: helper(
     "7.0.0-beta.0",
-    "function _toConsumableArray(r){return arrayWithoutHoles(r)||iterableToArray(r)||unsupportedIterableToArray(r)||nonIterableSpread()}",
+    "function _toConsumableArray(r){var a=iterableToArray(r);return a===r?arrayLikeToArray(r):a||unsupportedIterableToArray(r)||nonIterableSpread()}",
     {
       globals: [],
       locals: { _toConsumableArray: ["body.0.id"] },
       exportBindingAssignments: [],
       exportName: "_toConsumableArray",
       dependencies: {
-        arrayWithoutHoles: [
-          "body.0.body.body.0.argument.left.left.left.callee",
-        ],
-        iterableToArray: ["body.0.body.body.0.argument.left.left.right.callee"],
+        arrayLikeToArray: ["body.0.body.body.1.argument.consequent.callee"],
+        iterableToArray: ["body.0.body.body.0.declarations.0.init.callee"],
         unsupportedIterableToArray: [
-          "body.0.body.body.0.argument.left.right.callee",
+          "body.0.body.body.1.argument.alternate.left.right.callee",
         ],
-        nonIterableSpread: ["body.0.body.body.0.argument.right.callee"],
+        nonIterableSpread: [
+          "body.0.body.body.1.argument.alternate.right.callee",
+        ],
       },
       internal: false,
     },
