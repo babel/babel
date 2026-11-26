@@ -24,6 +24,10 @@ jobs:
   log-updates:
     name: Log packages to publish
     runs-on: ubuntu-latest
+    # Only the release GitHub App and admins can create `v*` tags. A tag pushed
+    # by the app comes from a workflow_dispatch run, which already handles that
+    # release, so the run it triggers through `on: push: tags` must do nothing.
+    if: github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot'
     steps:
       - name: Checkout the new tag
         uses: actions/checkout@v7
@@ -40,6 +44,9 @@ jobs:
   ensure-npm-packages-exist:
     name: Ensure npm packages exist
     runs-on: ubuntu-latest
+    # See log-updates. All the release jobs depend on this one, so skipping it
+    # skips them too.
+    if: github.event_name == 'workflow_dispatch' || github.event.sender.type != 'Bot'
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -56,8 +63,6 @@ jobs:
           node ./scripts/ensure-packages-exist.ts --check-only
 
   git-version:
-    permissions:
-      contents: write # for Git to push the tag
     name: Create git tag and commit
     runs-on: ubuntu-latest
     needs:
@@ -91,8 +96,9 @@ jobs:
           echo "$tag"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
-      # The release GitHub App is exempt from the merge queue ruleset, so it can
-      # push the release commit directly to the branch.
+      # The release GitHub App is exempt from the merge queue ruleset and from
+      # the `v*` tag ruleset, so it can push the release commit directly to the
+      # branch and create the tag.
       - name: Generate release GitHub App token
         id: app-token
         uses: actions/create-github-app-token@v3
@@ -104,17 +110,16 @@ jobs:
       # Push the release commit before building and publishing, so that if the
       # branch has moved since this workflow started, the push is rejected as
       # non-fast-forward and the release fails before anything reaches npm.
-      # The tag is pushed only after the branch has been updated, and with
-      # GITHUB_TOKEN: a tag pushed with the app token would trigger this
-      # workflow again through `on: push: tags`.
+      # The push is atomic, so the tag is never created without the branch
+      # update. The run that the tag triggers through `on: push: tags` is
+      # skipped, see log-updates.
       - name: Push to GitHub
         env:
           APP_TOKEN: ${{ steps.app-token.outputs.token }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG: ${{ steps.tag-name.outputs.tag }}
         run: |
-          git push "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:"${GITHUB_REF}"
-          git push "https://babel-bot:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "refs/tags/${TAG}"
+          git push --atomic "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            HEAD:"${GITHUB_REF}" "refs/tags/${TAG}"
 
   npm-release:
     name: Build, Test and Publish
