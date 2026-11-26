@@ -3777,6 +3777,7 @@ __metadata:
     "@babel/helper-plugin-utils": "workspace:^"
     "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
     "@babel/plugin-syntax-typescript": "workspace:^"
+    "@babel/plugin-transform-block-scoping": "workspace:^"
     "@babel/traverse": "workspace:^"
     "@babel/types": "workspace:^"
   peerDependencies:
