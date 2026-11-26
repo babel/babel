@@ -1,4 +1,5 @@
 "use strict";
 
 var _file = babelHelpers.interopRequireDefault(require("./file"));
-console.log(_file.default.method.bind(_file.default));
+var _context;
+console.log((_context = _file.default).method.bind(_context));

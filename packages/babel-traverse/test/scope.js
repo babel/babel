@@ -440,6 +440,24 @@ describe("scope", () => {
       ).toBe(false);
     });
 
+    it("import bindings constantness", function () {
+      const isConstant = code =>
+        getPath(code, {
+          sourceType: "module",
+          plugins: ["sourcePhaseImports", "deferredImportEvaluation"],
+        }).scope.getBinding("a").constant;
+
+      // Live bindings, that the exporting module might reassign
+      expect(isConstant(`import a from "x";`)).toBe(false);
+      expect(isConstant(`import { a } from "x";`)).toBe(false);
+      expect(isConstant(`import { b as a } from "x";`)).toBe(false);
+
+      // They always refer to the same object
+      expect(isConstant(`import * as a from "x";`)).toBe(true);
+      expect(isConstant(`import defer * as a from "x";`)).toBe(true);
+      expect(isConstant(`import source a from "x";`)).toBe(true);
+    });
+
     it("variable constantness in loops", () => {
       let scopePath = null;
       const isAConstant = code => {
