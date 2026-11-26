@@ -231,15 +231,12 @@ jobs:
     name: Test on Node.js ${{matrix.node-version}}
     needs: build
     runs-on: ubuntu-latest
-    # Unreleased Node.js versions are tested, but their failures do not fail the CI
-    continue-on-error: ${{ matrix.allow-failure == true }}
+    # Alpha Node.js versions are tested, but their failures do not fail the CI
+    continue-on-error: ${{ contains(matrix.node-version, 'alpha') }}
     strategy:
       fail-fast: false
       matrix:
-        node-version: [25, 24, 22, 20, 18, 16, 14, 12, 10, 8, 6]
-        include:
-          - node-version: "^27.0.0-alpha"
-            allow-failure: true
+        node-version: [25, 24, 22, 20, 18, 16, 14, 12, 10, 8, 6, ">=27.0.0-alpha <27.0.0"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -287,6 +284,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Ensure that @babel/node's list of node flags is up to date
+        if: ${{ !contains(matrix.node-version, 'alpha') }}
         run: |
           node ./packages/babel-node/scripts/list-node-flags.js
       - name: Test on node.js ${{ matrix.node-version }}
