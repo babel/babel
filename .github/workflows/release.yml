@@ -57,18 +57,22 @@ jobs:
 
   git-version:
     permissions:
-      contents: write # for Git to git push
+      contents: write # for Git to push the tag
     name: Create git tag and commit
     runs-on: ubuntu-latest
     needs:
       - ensure-npm-packages-exist
     if: github.event_name == 'workflow_dispatch'
+    # Holds the credentials of the release GitHub App
+    environment: release
     outputs:
       tag: ${{ steps.tag-name.outputs.tag }}
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          # Otherwise the persisted GITHUB_TOKEN is used instead of the token in the push URL
+          persist-credentials: false
 
       - name: Set @babel-bot as committer
         run: |
@@ -87,13 +91,30 @@ jobs:
           echo "$tag"
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
 
+      # The release GitHub App is exempt from the merge queue ruleset, so it can
+      # push the release commit directly to the branch.
+      - name: Generate release GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+
       # Push the release commit before building and publishing, so that if the
       # branch has moved since this workflow started, the push is rejected as
       # non-fast-forward and the release fails before anything reaches npm.
-      # --atomic makes sure that the tag is only created if the branch is updated.
+      # The tag is pushed only after the branch has been updated, and with
+      # GITHUB_TOKEN: a tag pushed with the app token would trigger this
+      # workflow again through `on: push: tags`.
       - name: Push to GitHub
+        env:
+          APP_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.tag-name.outputs.tag }}
         run: |
-          git push --atomic "https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" HEAD:"${GITHUB_REF}" "refs/tags/${{ steps.tag-name.outputs.tag }}"
+          git push "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:"${GITHUB_REF}"
+          git push "https://babel-bot:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "refs/tags/${TAG}"
 
   npm-release:
     name: Build, Test and Publish
@@ -201,8 +222,6 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
 
   github-push:
-    permissions:
-      contents: write # for Git to git push
     name: Push CHANGELOG.md to "main"
     runs-on: ubuntu-latest
     needs:
@@ -215,12 +234,16 @@ jobs:
       needs.npm-release.result == 'success' &&
       needs.github-release.result == 'success' &&
       needs.github-release.outputs.is-main == 'true'
+    # Holds the credentials of the release GitHub App
+    environment: release
     steps:
       # The release commit and tag are already on GitHub, so this job only adds
       # the CHANGELOG.md commit on top of the current "main".
       - uses: actions/checkout@v7
         with:
           ref: main
+          # Otherwise the persisted GITHUB_TOKEN is used instead of the token in the push URL
+          persist-credentials: false
 
       - name: Update CHANGELOG.md
         uses: babel/actions/update-changelog@v2
@@ -236,11 +259,21 @@ jobs:
           git add CHANGELOG.md
           git commit -m "Add ${{ needs.github-release.outputs.version }} to CHANGELOG.md [skip ci]" --no-verify --quiet
 
+      - name: Generate release GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+
       # "main" may have moved since the checkout. The CHANGELOG.md commit is not
       # tagged, so it is safe to rebase it on top of the new commits.
       - name: Push to GitHub
+        env:
+          APP_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          remote="https://babel-bot:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
+          remote="https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           for _ in 1 2 3; do
             if git push "$remote" HEAD:main; then
               exit 0
