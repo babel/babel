@@ -128,34 +128,24 @@ describe("usage from cjs", () => {
 });
 
 describe("sync loading of ESM plugins", () => {
-  describe("without --experimental-require-module flag", () => {
-    it("sync", async () => {
-      const { stdout } = await run(
-        "transform-sync-esm-plugin.mjs",
-        "--experimental-require-module",
-      );
-      expect(stdout).toMatchInlineSnapshot(`
-        ""Replaced!";
-        "
-      `);
-    });
+  it("sync", async () => {
+    const { stdout } = await run("transform-sync-esm-plugin.mjs");
+    expect(stdout).toMatchInlineSnapshot(`
+      ""Replaced!";
+      "
+    `);
+  });
 
-    it("top-level await", async () => {
-      await expect(
-        run(
-          "transform-sync-esm-plugin-tla.mjs",
-          "--experimental-require-module",
+  it("top-level await", async () => {
+    await expect(run("transform-sync-esm-plugin-tla.mjs")).rejects.toEqual(
+      expect.objectContaining({
+        killed: false,
+        code: 1,
+        message: expect.stringContaining(
+          "You appear to be using a plugin that contains top-level await, " +
+            "which is only supported when running Babel asynchronously.",
         ),
-      ).rejects.toEqual(
-        expect.objectContaining({
-          killed: false,
-          code: 1,
-          message: expect.stringContaining(
-            "You appear to be using a plugin that contains top-level await, " +
-              "which is only supported when running Babel asynchronously.",
-          ),
-        }),
-      );
-    });
+      }),
+    );
   });
 });

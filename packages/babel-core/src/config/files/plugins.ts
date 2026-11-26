@@ -226,9 +226,6 @@ function* requireModule(
     return yield* loadCodeDefault(
       name,
       loader,
-      `You appear to be using a native ECMAScript module ${type}, ` +
-        "which is only supported when running Babel asynchronously " +
-        "or when using the Node.js `--experimental-require-module` flag.",
       `You appear to be using a ${type} that contains top-level await, ` +
         "which is only supported when running Babel asynchronously.",
     );
