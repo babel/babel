@@ -70,7 +70,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: ["25.6.1", 24, 22]
+        node-version: [24, 22]
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -236,7 +236,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [25, 24, 22, 20, 18, 16, 14, 12, 10, 8, 6, ">=27.0.0-alpha <27.0.0"]
+        node-version: [24, 22, 20, 18, 16, 14, 12, 10, 8, 6, ">=27.0.0-alpha <27.0.0"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
