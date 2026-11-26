@@ -18,7 +18,7 @@ export default function _iterableToArray<T>(iter: Iterable<T>) {
   if (iterator == null) return;
   // don't use Array.from, it would read the iterator a second time
   var arr: T[] = [];
-  for (var it = iterator.call(iter), step; !(step = it.next()).done;) {
+  for (var it = iterator.call(iter), step; !(step = it.next()).done; ) {
     arr.push(step.value);
   }
   return arr;
