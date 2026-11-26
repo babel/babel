@@ -18,9 +18,11 @@ jobs:
     name: Prepare Cache
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - &checkout
+        name: Checkout code
         uses: actions/checkout@v7
-      - name: Use Node.js latest
+      - &setup-node
+        name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
           node-version: 26
@@ -39,14 +41,8 @@ jobs:
     needs: prepare-yarn-cache
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: 'Check for unmet constraints (fix w/ "yarn constraints --fix")'
         run: |
           yarn constraints
@@ -71,14 +67,8 @@ jobs:
     # env:
     #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Build babel artifacts
         run: |
           make -j build-standalone-ci
@@ -124,14 +114,8 @@ jobs:
     # env:
     #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Build babel artifacts
         shell: bash
         run: |
@@ -151,14 +135,8 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Install
         run: yarn install
       - name: Prepublish
@@ -170,14 +148,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v8
@@ -214,14 +186,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Install
         run: |
           yarn install
@@ -252,14 +218,8 @@ jobs:
       matrix:
         node-version: [24, 22, ">=27.0.0-alpha <27.0.0"]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest # Run yarn on latest node
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node # Run yarn on latest node
       - name: Install
         run: |
           yarn install
@@ -291,14 +251,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v8
@@ -317,14 +271,8 @@ jobs:
     # env:
     #    YARN_NODE_LINKER: pnp # use pnp linker for better linking performance and stricter checks
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Build babel artifacts
         run: |
           make -j build-standalone-ci
@@ -352,14 +300,8 @@ jobs:
     needs: build-babel9
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v8
@@ -376,14 +318,8 @@ jobs:
     needs: build-babel9
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Install
         run: |
           yarn install
@@ -413,14 +349,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v8
@@ -437,14 +367,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Install
         run: yarn install
       - uses: actions/download-artifact@v8
@@ -464,14 +388,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       # See https://github.com/babel/babel/pull/12906
       - name: Support self-references on old Node.js
         run: |
@@ -516,8 +434,7 @@ jobs:
       matrix:
         eslint-version: [9]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
+      - *checkout
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
@@ -540,8 +457,7 @@ jobs:
     outputs:
       test262-commit: ${{ steps.test262-commit.outputs.sha1 }}
     steps:
-      - name: Checkout Babel
-        uses: actions/checkout@v7
+      - *checkout
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
@@ -580,8 +496,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build, test262-prepare]
     steps:
-      - name: Checkout Babel
-        uses: actions/checkout@v7
+      - *checkout
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
@@ -704,14 +619,8 @@ jobs:
     needs: yarn-validate
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Install
         run: yarn install
       - name: Ensure npm packages exist
@@ -721,8 +630,7 @@ jobs:
     name: Publint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
+      - *checkout
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
@@ -765,14 +673,8 @@ jobs:
             parallel: "1"
             args: "--iterations=40"
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v7
-      - name: Use Node.js latest
-        uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          check-latest: true
-          cache: "yarn"
+      - *checkout
+      - *setup-node
       - name: Install
         run: yarn install
       - name: Build
