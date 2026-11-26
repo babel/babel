@@ -51,9 +51,11 @@ function syncScopeForReplacedVoidPattern(path: NodePath<t.Identifier>) {
       case "AssignmentExpression":
       case "ForInStatement":
       case "ForOfStatement": {
-        const { scope } = parentPath;
+        const scope =
+          parentPath.scope.getFunctionParent() ??
+          parentPath.scope.getProgramParent();
         scope.push({ id: cloneNode(path.node) });
-        scope.getBinding(path.node.name)?.reassign(parentPath);
+        scope.getBinding(path.node.name)!.reassign(parentPath);
         return;
       }
       case "CatchClause":
