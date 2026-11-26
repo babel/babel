@@ -237,11 +237,12 @@ export function merge(
   wrapper?: Function | null,
 ): ExplodedVisitor<unknown>;
 export function merge(
-  visitors: any[],
+  visitors: (Visitor<any> & { noScope?: boolean })[],
   states: any[] = [],
   wrapper?: VisitWrapper | null,
 ): ExplodedVisitor {
   const mergedVisitor: ExplodedVisitor = { _verified: true, _exploded: true };
+  let noScope = visitors.length > 0;
   if (!process.env.BABEL_8_BREAKING) {
     // For compatibility with old Babel versions, we must hide _verified and _exploded.
     // Otherwise, old versions of the validator will throw sayng that `true` is not
@@ -253,6 +254,8 @@ export function merge(
   for (let i = 0; i < visitors.length; i++) {
     const visitor = explode$1(visitors[i]);
     const state = states[i];
+
+    noScope &&= !!visitor.noScope;
 
     let topVisitor: ExplVisitNode<unknown, Node> = visitor;
     if (state || wrapper) {
@@ -273,6 +276,10 @@ export function merge(
       const nodeVisitor = (mergedVisitor[key] ||= {});
       mergePair(nodeVisitor, typeVisitor);
     }
+  }
+
+  if (noScope) {
+    mergedVisitor.noScope = true;
   }
 
   return mergedVisitor;

@@ -154,5 +154,31 @@ describe("visitors", () => {
         }
       `);
     });
+
+    it("should respect `noScope`", () => {
+      const visitor = visitors.merge([
+        { enter() {}, noScope: true },
+        { enter() {}, noScope: true },
+      ]);
+      expect(visitor.noScope).toBe(true);
+    });
+
+    it("should omit `noScope` when merging no visitors", () => {
+      expect(visitors.merge([])).not.toHaveProperty("noScope");
+    });
+
+    it("should respect `noScope` partially", () => {
+      const visitor = visitors.merge([
+        { enter() {}, noScope: true },
+        { enter() {} },
+      ]);
+      expect(visitor.noScope).toBe(undefined);
+
+      const visitor2 = visitors.merge([
+        { enter() {} },
+        { enter() {}, noScope: true },
+      ]);
+      expect(visitor2.noScope).toBe(undefined);
+    });
   });
 });

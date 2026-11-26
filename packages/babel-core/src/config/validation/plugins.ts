@@ -12,7 +12,7 @@ import type {
   RootPath,
 } from "./option-assertions.ts";
 import type { parse, ParserOptions } from "@babel/parser";
-import type { Visitor } from "@babel/traverse";
+import type { ExplodedVisitor, Visitor, VisitorBase } from "@babel/traverse";
 import type { ResolvedOptions } from "./options.ts";
 import type { File, PluginAPI, PluginPass } from "../../index.ts";
 import type { GeneratorOptions, GeneratorResult } from "@babel/generator";
@@ -94,7 +94,7 @@ export type PluginObject<S extends PluginPass = PluginPass> = {
     options: unknown,
     dirname: string,
   ) => PluginObject;
-  visitor?: Visitor<S>;
+  visitor?: VisitorBase<S> | Omit<ExplodedVisitor<S>, "noScope">;
   parserOverride?: (
     ...args: [...Parameters<typeof parse>, typeof parse]
   ) => ReturnType<typeof parse>;

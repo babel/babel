@@ -22,6 +22,7 @@ export interface ExplVisitNode<S, P extends t.Node> {
 export interface ExplodedVisitor<S = unknown>
   extends ExplVisitorBase<S>,
     ExplVisitNode<S, t.Node> {
+  noScope?: boolean;
   _exploded: true;
   _verified: true;
 }

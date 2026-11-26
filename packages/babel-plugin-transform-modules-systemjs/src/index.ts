@@ -741,7 +741,6 @@ export default declare<PluginState>((api, options: Options) => {
               Function(path) {
                 path.skip();
               },
-              // @ts-expect-error - todo: add noScope to type definitions
               noScope: true,
             });
           }
