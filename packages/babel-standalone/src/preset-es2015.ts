@@ -1,25 +1,19 @@
 import * as babelPlugins from "./generated/plugins.ts";
 
 export default (_: any, opts: any): any => {
-  let loose = false;
-  let modules = "commonjs";
-  let spec = false;
+  const { loose, modules = "commonjs", spec } = opts ?? {};
 
-  if (opts !== undefined) {
-    if (opts.loose !== undefined) loose = opts.loose;
-    if (opts.modules !== undefined) modules = opts.modules;
-    if (opts.spec !== undefined) spec = opts.spec;
-  }
-
-  // be DRY
-  const optsLoose = { loose };
+  // `loose` and `spec` are deprecated plugin options, and the plugins warn
+  // whenever they are present: only forward them when they are set.
+  const optsLoose = loose === undefined ? {} : { loose };
+  const optsSpec = spec === undefined ? {} : { spec };
 
   return {
     plugins: [
-      [babelPlugins.transformTemplateLiterals, { loose, spec }],
+      [babelPlugins.transformTemplateLiterals, optsLoose],
       babelPlugins.transformLiterals,
       babelPlugins.transformFunctionName,
-      [babelPlugins.transformArrowFunctions, { spec }],
+      [babelPlugins.transformArrowFunctions, optsSpec],
       babelPlugins.transformBlockScopedFunctions,
       [babelPlugins.transformClasses, optsLoose],
       babelPlugins.transformObjectSuper,
