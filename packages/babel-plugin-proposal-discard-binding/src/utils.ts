@@ -59,7 +59,7 @@ function syncScopeForReplacedVoidPattern(path: NodePath<t.Identifier>) {
         return;
       }
       case "CatchClause":
-        parentPath.scope.registerBinding("let", parentPath);
+        parentPath.scope.registerBinding("let", path, parentPath);
         return;
       default:
         if (parentPath.isFunction()) {
