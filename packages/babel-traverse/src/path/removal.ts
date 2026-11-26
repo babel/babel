@@ -30,7 +30,13 @@ export function remove(this: NodePath) {
 
 export function _removeFromScope(this: NodePath) {
   const bindings = t.getBindingIdentifiers(this.node, false, false, true);
-  Object.keys(bindings).forEach(name => this.scope.removeBinding(name));
+  const scope =
+    t.isVar(this.node) ||
+    (t.isVariableDeclarator(this.node) && t.isVar(this.parent)) ||
+    (t.isForXStatement(this.node) && t.isVar(this.node.left))
+      ? (this.scope.getFunctionParent() ?? this.scope.getProgramParent())
+      : this.scope;
+  Object.keys(bindings).forEach(name => scope.removeBinding(name));
 }
 
 export function _callRemovalHooks(this: NodePath) {
