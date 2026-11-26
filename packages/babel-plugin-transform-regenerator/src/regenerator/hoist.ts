@@ -65,10 +65,11 @@ export function hoist(
         if (expr === null) {
           path.remove();
         } else {
+          const scope = path.node.kind === "var" ? funPath.scope : path.scope;
           for (const name of Object.keys(path.getBindingIdentifiers())) {
             // Remove the binding, to avoid "duplicate declaration" errors when it will
             // be injected again.
-            path.scope.removeBinding(name);
+            scope.removeBinding(name);
           }
 
           // We don't need to traverse this expression any further because
