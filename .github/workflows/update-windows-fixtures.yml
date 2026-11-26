@@ -10,12 +10,27 @@ on:
 permissions:
   contents: read
 
+# This workflow runs code from the selected pull request, which must be
+# considered untrusted, and then pushes the result to the pull request branch
+# using BOT_TOKEN. These two things MUST happen in different jobs: anything
+# running on the same runner as the pull request code (even in later steps) can
+# be tampered with by it, for example through git hooks or by replacing
+# executables in the PATH.
+#
+# - `pr-meta` and `push` never run code from the pull request
+# - `generate` runs code from the pull request, and has access to no secrets.
+#   Its only output is a patch, which `push` handles as untrusted data.
+
 jobs:
-  update-windows-fixtures:
+  pr-meta:
+    name: Get Pull Request info
     permissions:
-      contents: read # to fetch code
       pull-requests: read # to get PR metadata
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    outputs:
+      repository: ${{ steps.pr-meta.outputs.repository }}
+      branch: ${{ steps.pr-meta.outputs.branch }}
+      sha: ${{ steps.pr-meta.outputs.sha }}
     steps:
       - name: Get Pull Request branch
         uses: actions/github-script@v9
@@ -33,25 +48,33 @@ jobs:
 
             const {
               ref: branch,
+              sha,
               repo: { full_name: repository }
             } = pullRequest.head;
 
             core.setOutput("branch", branch);
             core.setOutput("repository", repository);
+            core.setOutput("sha", sha);
 
+  generate:
+    name: Regenerate fixtures
+    needs: pr-meta
+    permissions:
+      contents: read # to fetch code
+    runs-on: windows-latest
+    steps:
       - name: Checkout code
         uses: actions/checkout@v7
         with:
-          repository: ${{ steps.pr-meta.outputs.repository }}
-          ref: ${{ steps.pr-meta.outputs.branch }}
-          fetch-depth: 0 # Otherwise we cannot push
-          persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
+          repository: ${{ needs.pr-meta.outputs.repository }}
+          ref: ${{ needs.pr-meta.outputs.sha }}
+          persist-credentials: false
 
       - name: Use Node.js latest
         uses: actions/setup-node@v7
         with:
           node-version: 26
-          cache: "yarn"
+          package-manager-cache: false # This job runs untrusted code, it must not save any cache.
 
       - name: Install and build
         # make bootstrap modifies some files (babel-runtime-*/package.json), so we reset them
@@ -66,18 +89,58 @@ jobs:
           BABEL_ENV: test
           OVERWRITE: true
 
+      - name: Create patch
+        shell: bash
+        run: |
+          git add .
+          git diff --cached --binary HEAD > "$RUNNER_TEMP/fixtures.patch"
+
+      - name: Upload patch
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-fixtures-patch
+          path: ${{ runner.temp }}/fixtures.patch
+          if-no-files-found: error
+          retention-days: 1
+
+  push:
+    name: Push updates
+    needs: [pr-meta, generate]
+    permissions:
+      contents: read # to fetch code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          repository: ${{ needs.pr-meta.outputs.repository }}
+          ref: ${{ needs.pr-meta.outputs.sha }}
+          fetch-depth: 0 # Otherwise we cannot push
+          persist-credentials: false # So that we can push with BOT_TOKEN, otherwise it doesn't trigger CI
+
+      - name: Download patch
+        uses: actions/download-artifact@v8
+        with:
+          name: windows-fixtures-patch
+          path: ${{ runner.temp }}/windows-fixtures-patch
+
+      # NOTE: Do not run any code from the checked out repository in this job.
       - name: Commit updates
-        # The branch name is chosen by the PR author, and can contain shell
-        # metacharacters. Never interpolate it (or any other ${{ }} expression)
-        # in the script: pass values as environment variables instead.
-        # NOTE: This runs in PowerShell, so they are read as ${env:NAME}.
+        # The patch, the repository and the branch name are controlled by the
+        # PR author. Never interpolate ${{ }} expressions in the script: pass
+        # values as environment variables instead.
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
-          REPOSITORY: ${{ steps.pr-meta.outputs.repository }}
-          BRANCH: ${{ steps.pr-meta.outputs.branch }}
+          REPOSITORY: ${{ needs.pr-meta.outputs.repository }}
+          BRANCH: ${{ needs.pr-meta.outputs.branch }}
+          PATCH: ${{ runner.temp }}/windows-fixtures-patch/fixtures.patch
         run: |
+          if [ ! -s "$PATCH" ]; then
+            echo "No fixtures to update"
+            exit 0
+          fi
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
-          git add .
+          git apply --index "$PATCH"
           git commit -m "Update fixtures (Windows)" --no-verify --quiet
-          git push "https://babel-bot:${env:BOT_TOKEN}@github.com/${env:REPOSITORY}.git" "HEAD:refs/heads/${env:BRANCH}"
+          git push --no-verify "https://babel-bot:${BOT_TOKEN}@github.com/${REPOSITORY}.git" "HEAD:refs/heads/${BRANCH}"
