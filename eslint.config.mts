@@ -33,9 +33,8 @@ const sourceFiles = (exts: string) => [
 export default defineConfig([
   {
     ignores: [
-      "/lib",
-      "/build",
-      "/.git",
+      "lib",
+      "build",
       "package.json",
       "packages/babel-runtime",
       "packages/babel-runtime-corejs2",

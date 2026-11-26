@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
 declare module "js-tokens" {
   // TODO(Babel 8): Remove this
   export { default } from "js-tokens-BABEL_8_BREAKING-true";

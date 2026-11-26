@@ -3,7 +3,5 @@
 // tsconfig.dts-bundles.json because we don't want other .d.ts files to
 // accidentally rely on DOM features.
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-object-type
 declare interface HTMLCollectionOf<T> {}
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 declare interface HTMLScriptElement {}
