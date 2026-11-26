@@ -214,7 +214,7 @@ jobs:
       always() &&
       needs.npm-release.result == 'success' &&
       needs.github-release.result == 'success' &&
-      needs.github-release.outputs.is-main
+      needs.github-release.outputs.is-main == 'true'
     steps:
       # The release commit and tag are already on GitHub, so this job only adds
       # the CHANGELOG.md commit on top of the current "main".
@@ -259,7 +259,7 @@ jobs:
       always() &&
       needs.github-push.result == 'success' &&
       needs.github-release.result == 'success' &&
-      needs.github-release.outputs.is-main
+      needs.github-release.outputs.is-main == 'true'
     steps:
       - uses: actions/checkout@v7
         with:
