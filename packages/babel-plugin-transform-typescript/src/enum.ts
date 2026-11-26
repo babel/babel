@@ -81,6 +81,8 @@ function getMergedBinding(path: NodePath<t.TSEnumDeclaration>) {
   if (!binding) return;
   if (
     binding.scope === path.scope ||
+    // Block-scoping may have already turned the let from a previous enum in
+    // this block into a var and moved it up to the function scope.
     binding.path.parentPath?.parent === path.parent
   ) {
     return binding;
