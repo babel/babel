@@ -48,6 +48,17 @@ export default class Binding {
       this.reassign(path);
     }
 
+    // Imports are live bindings: even if this module never writes to them,
+    // the exporting module can reassign them whenever its code runs.
+    // Namespace and source phase imports always refer to the same object.
+    if (
+      kind === "module" &&
+      !path.isImportNamespaceSpecifier() &&
+      (path.parent as t.ImportDeclaration).phase !== "source"
+    ) {
+      this.constant = false;
+    }
+
     this.clearValue();
   }
 
