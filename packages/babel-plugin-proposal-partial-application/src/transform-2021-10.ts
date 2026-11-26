@@ -1,9 +1,4 @@
-import {
-  types as t,
-  type NodePath,
-  type Scope,
-  type Visitor,
-} from "@babel/core";
+import { types as t, type NodePath, type Visitor } from "@babel/core";
 import {
   isTransparentExprWrapper,
   skipTransparentExprWrapperNodes,
@@ -27,30 +22,90 @@ type PartialNode =
 const MAX_PARAMS = 256;
 
 // Whether `node` can be referenced from the partially applied function
-// instead of being evaluated eagerly and captured
-function isStableReference(node: t.Node, scope: Scope) {
+// instead of being evaluated eagerly and captured: reading it when the
+// function is called must give the value it has when `path` is evaluated,
+// and must not throw
+function isStableReference(node: t.Node, path: NodePath<PartialNode>) {
   // JSX elements are "immutable" nodes, but create a new object every time
   if (t.isImmutable(node)) return !t.isJSX(node);
-  if (!t.isIdentifier(node)) return false;
-  const binding = scope.getBinding(node.name);
+  // The partially applied function has its own `arguments`
+  if (!t.isIdentifier(node) || node.name === "arguments") return false;
+  const binding = path.scope.getBinding(node.name);
   if (!binding?.constant) return false;
   switch (binding.kind) {
-    case "module":
+    case "hoisted":
+      // Function declarations are initialized when their scope is entered
+      return true;
+    case "local":
+      // The name of a function expression. A class expression's name is in
+      // TDZ while its heritage and computed keys are evaluated.
+      return binding.path.isFunctionExpression();
+    case "param":
+      return (
+        // Parameters are initialized in order, so a parameter default can
+        // read a later parameter in TDZ
+        path.find(p => p.parentPath === binding.scope.path)?.key === "body" &&
+        // Sloppy mode parameters can be reassigned through `arguments`
+        (binding.scope.path.isArrowFunctionExpression() ||
+          binding.path.isInStrictMode())
+      );
+    case "let":
+      // Catch clause parameters can be reassigned by an Annex B `var`
+      // redeclaration, which isn't tracked as a constant violation
+      if (binding.path.isCatchClause()) return false;
+    // falls through
+    case "var":
+    case "const":
+      // Temporary variables, such as the ones injected by `scope.push`, are
+      // reassigned without being tracked as constant violations. A `let` or
+      // `const` in a `for-in` or `for-of` head has no initializer, but every
+      // iteration has its own binding.
+      if (
+        binding.path.isVariableDeclarator() &&
+        binding.path.node.init == null &&
+        !(
+          binding.kind !== "var" &&
+          binding.path.parentPath.parentPath.isForXStatement()
+        )
+      ) {
+        return false;
+      }
+      return isInitializedBefore(binding.path, path);
+    default:
       // Imports are live bindings
       return false;
-    case "param":
-      // Sloppy mode parameters can be reassigned through `arguments`
-      return (
-        binding.scope.path.isArrowFunctionExpression() ||
-        binding.path.isInStrictMode()
-      );
-    default:
-      // Temporary variables, such as the ones injected by `scope.push`, are
-      // reassigned without being tracked as constant violations
-      return !(
-        binding.path.isVariableDeclarator() && binding.path.node.init == null
-      );
   }
+}
+
+// Whether the declaration at `declPath` has always been evaluated when
+// `path` is: either it's a statement before an ancestor of `path` in the
+// same statement list, or it's the head of a loop that contains `path`.
+// Being in scope isn't enough: `let` and `const` are in TDZ, and `var` is
+// `undefined`, until their declaration runs.
+function isInitializedBefore(declPath: NodePath, path: NodePath) {
+  let decl = declPath;
+  if (decl.isVariableDeclarator()) decl = decl.parentPath;
+  const loop = decl.parentPath;
+  let loopBody: string[] | undefined;
+  if (loop?.isForXStatement() && decl.key === "left") {
+    loopBody = ["body"];
+  } else if (loop?.isForStatement() && decl.key === "init") {
+    loopBody = ["test", "update", "body"];
+  } else if (!decl.inList) {
+    return false;
+  }
+  for (let p = path; p.parentPath; p = p.parentPath) {
+    // A function declaration can be called before the code above it runs.
+    // Other functions and classes are created where they are, so their
+    // bodies run after it.
+    if (p.isFunctionDeclaration()) return false;
+    if (loopBody) {
+      if (p.parentPath === loop) return loopBody.includes(p.key as string);
+    } else if (p.container === decl.container && p.listKey === decl.listKey) {
+      return (p.key as number) > (decl.key as number);
+    }
+  }
+  return false;
 }
 
 function buildNullishCheck(
@@ -82,6 +137,18 @@ function buildNullishCheck(
  *
  * For `f?.~()`, the result is `undefined` if the callee is nullish, and the
  * arguments are not evaluated.
+ *
+ * Known limitations: the spec creates a bound function exotic object, but
+ * this is a plain function, so
+ * - a non-callable callee, or a non-constructor in `new C~()`, throws only
+ *   when the partially applied function is called;
+ * - its `name` is not `"bound " + f.name`, its [[Prototype]] is always
+ *   `Function.prototype`, and it has its own `prototype` property;
+ * - `new` on it calls `f` with `new` only for `new C~()`. For `f~()`, it
+ *   calls `f` without `new`, even when `f` is not a constructor, and
+ *   `new.target` is not forwarded;
+ * - inside `with`, `m~()` calls `m` with `undefined` as `this`;
+ * - placeholders are limited to `MAX_PARAMS` parameters.
  */
 function buildPartialApplication(
   path: NodePath<PartialNode>,
@@ -91,7 +158,7 @@ function buildPartialApplication(
   const params: t.Identifier[] = [];
   const values: t.Expression[] = [];
   const capture = (value: t.Expression): t.Expression => {
-    if (isStableReference(value, scope)) return value;
+    if (isStableReference(value, path)) return value;
     const id = scope.generateUidIdentifierBasedOnNode(value);
     params.push(id);
     values.push(value);
