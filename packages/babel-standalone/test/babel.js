@@ -39,10 +39,33 @@ describe("@babel/standalone", () => {
     );
   });
   it("handles the es2015-loose preset", () => {
-    const output = Babel.transform("class A {}", {
-      sourceType: "script",
-      presets: ["es2015-loose"],
-    }).code;
+    // es2015-loose passes the deprecated `loose` option to its plugins
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+    let output;
+    try {
+      output = Babel.transform("class A {}", {
+        sourceType: "script",
+        presets: ["es2015-loose"],
+      }).code;
+      expect(warn.mock.calls.map(([msg]) => msg.split(":")[0]))
+        .toMatchInlineSnapshot(`
+        [
+          "@babel/plugin-transform-template-literals",
+          "@babel/plugin-transform-classes",
+          "@babel/plugin-transform-computed-properties",
+          "@babel/plugin-transform-for-of",
+          "@babel/plugin-transform-spread",
+          "@babel/plugin-transform-parameters",
+          "@babel/plugin-transform-destructuring",
+          "@babel/plugin-transform-modules-commonjs",
+        ]
+      `);
+      for (const [msg] of warn.mock.calls) {
+        expect(msg).toContain("The 'loose' option has been deprecated");
+      }
+    } finally {
+      warn.mockRestore();
+    }
     expect(output).toBe('var A = function A() {\n  "use strict";\n};');
   });
   it("handles the typescript preset", () => {
@@ -154,10 +177,10 @@ describe("@babel/standalone", () => {
   });
 
   it("handles plugins with options", () => {
-    const output = Babel.transform("`${x}`", {
-      plugins: [["transform-template-literals", { loose: true }]],
+    const output = Babel.transform("<div />", {
+      plugins: [["transform-react-jsx", { runtime: "classic", pragma: "h" }]],
     }).code;
-    expect(output).toBe('"" + x;');
+    expect(output).toBe('h("div", null);');
   });
 
   it("throws on invalid preset name", () => {
