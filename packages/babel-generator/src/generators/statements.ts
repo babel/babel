@@ -276,7 +276,7 @@ export function VariableDeclaration(
   const { kind } = node;
   switch (kind) {
     case "await using":
-      this.word("await");
+      this.word("await", true);
       this.space();
     // fallthrough
     case "using":
