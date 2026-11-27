@@ -25,6 +25,53 @@ This file contains the changelog from v7.28.6 onwards. Changes in this file are 
 
 <!-- DO NOT CHANGE THESE COMMENTS - See .github/actions/trigger-github-release/update-changelog.js -->
 <!-- insert-new-changelog-here -->
+## v7.29.16 (2026-11-27)
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-typescript`
+  * [#18751](https://github.com/babel/babel/pull/18751) Fix ts enum negative and block merge ([@babel-bot](https://github.com/babel-bot))
+  * [#18720](https://github.com/babel/babel/pull/18720) fix(ts): don't share enum values between nested enums with the same name ([@babel-bot](https://github.com/babel-bot))
+* `babel-helpers`, `babel-plugin-transform-spread`, `babel-runtime-corejs3`
+  * [#18750](https://github.com/babel/babel/pull/18750) Fix spread for arrays with a custom iterator ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-regenerator`, `babel-traverse`
+  * [#18748](https://github.com/babel/babel/pull/18748) fix(traverse,transform-regenerator): resolve var binding scope on removal ([@babel-bot](https://github.com/babel-bot))
+* `babel-generator`
+  * [#18749](https://github.com/babel/babel/pull/18749) fix(generator): avoid newlines and parens after no-LineTerminator tokens ([@babel-bot](https://github.com/babel-bot))
+  * [#18729](https://github.com/babel/babel/pull/18729) fix: only separate `>` from `=` & `>` after TS instantiation expression ([@babel-bot](https://github.com/babel-bot))
+  * [#18685](https://github.com/babel/babel/pull/18685) fix: add generator `retainLines` roundtrip test ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-bugfix-v8-spread-parameters-in-optional-chaining`, `babel-plugin-proposal-function-bind`, `babel-plugin-proposal-partial-application`, `babel-plugin-proposal-pipeline-operator`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-for-of`, `babel-plugin-transform-logical-assignment-operators`, `babel-plugin-transform-optional-chaining`, `babel-plugin-transform-react-constant-elements`, `babel-plugin-transform-spread`, `babel-traverse`
+  * [#18745](https://github.com/babel/babel/pull/18745) Treat imported bindings as not constant ([@babel-bot](https://github.com/babel-bot))
+* `babel-core`, `babel-plugin-transform-modules-systemjs`, `babel-traverse`
+  * [#18742](https://github.com/babel/babel/pull/18742) fix: Should respect `noScope` ([@babel-bot](https://github.com/babel-bot))
+* `babel-helpers`, `babel-plugin-transform-destructuring`, `babel-plugin-transform-modules-commonjs`, `babel-runtime-corejs2`, `babel-runtime-corejs3`, `babel-runtime`
+  * [#18741](https://github.com/babel/babel/pull/18741) Fix `_arrayWithHoles` bypassing custom `Symbol.iterator` on array-backed Proxies ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-regenerator`
+  * [#18722](https://github.com/babel/babel/pull/18722) fix(regenerator): compile `yield` in object spreads and computed keys ([@babel-bot](https://github.com/babel-bot))
+  * [#18711](https://github.com/babel/babel/pull/18711) fix: reject untranspiled ??, &&=, ||=, ??= before yield expression ([@babel-bot](https://github.com/babel-bot))
+* `babel-generator`, `babel-parser`
+  * [#18724](https://github.com/babel/babel/pull/18724) fix: handle TSInstantiation before `<` ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-block-scoping`
+  * [#18716](https://github.com/babel/babel/pull/18716) fix(block-scoping): don't add TDZ checks for loop head refs in the body ([@babel-bot](https://github.com/babel-bot))
+* `babel-helpers`, `babel-plugin-transform-class-static-block`, `babel-runtime-corejs3`
+  * [#18721](https://github.com/babel/babel/pull/18721) fix(helpers): name functions "[]" for symbols with an empty description ([@babel-bot](https://github.com/babel-bot))
+* `babel-traverse`
+  * [#18715](https://github.com/babel/babel/pull/18715) Make `getFunctionParent` skip decorators/keys ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-proto-to-assign`
+  * [#18706](https://github.com/babel/babel/pull/18706) fix(proto-to-assign): only transform prototype setters ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-new-target`
+  * [#18704](https://github.com/babel/babel/pull/18704) fix(class-features): `new.target` is undefined in instance field initializers ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-replace-supers`, `babel-plugin-transform-classes`, `babel-plugin-transform-object-super`
+  * [#18703](https://github.com/babel/babel/pull/18703) fix(replace-supers): keep the receiver of super tagged templates ([@babel-bot](https://github.com/babel-bot))
+* `babel-helper-create-class-features-plugin`, `babel-plugin-proposal-decorators`, `babel-plugin-proposal-do-expressions`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-classes`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-plugin-transform-private-methods`, `babel-plugin-transform-private-property-in-object`, `babel-plugin-transform-spread`, `babel-plugin-transform-typescript`, `babel-preset-typescript`
+  * [#18701](https://github.com/babel/babel/pull/18701) fix(class-features): do not compile accessor properties as fields ([@babel-bot](https://github.com/babel-bot))
+* `babel-plugin-transform-classes`
+  * [#18697](https://github.com/babel/babel/pull/18697) fix(transform-classes): throw on class elements that are not compiled ([@babel-bot](https://github.com/babel-bot))
+* `babel-helpers`, `babel-plugin-proposal-import-defer`, `babel-plugin-transform-dynamic-import`, `babel-plugin-transform-modules-amd`, `babel-plugin-transform-modules-commonjs`, `babel-plugin-transform-modules-systemjs`, `babel-runtime-corejs3`
+  * [#18696](https://github.com/babel/babel/pull/18696) fix(modules): do not compile `import.{defer,source,sync}()` as `import()` ([@babel-bot](https://github.com/babel-bot))
+
+#### :microscope: Output optimization
+* `babel-helper-module-transforms`, `babel-plugin-transform-dynamic-import`
+  * [#18693](https://github.com/babel/babel/pull/18693) fix(dynamic-import): treat template literals without expressions as static specifiers ([@babel-bot](https://github.com/babel-bot))
 ## v7.29.15 (2026-11-20)
 
 #### :eyeglasses: Spec Compliance
