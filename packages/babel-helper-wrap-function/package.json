@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-wrap-function",
-  "version": "8.1.3",
+  "version": "8.1.4",
   "description": "Helper to wrap functions inside a function call.",
   "repository": {
     "type": "git",
