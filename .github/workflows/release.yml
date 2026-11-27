@@ -199,7 +199,28 @@ jobs:
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
           commit="$(git rev-parse "$TAG^{commit}")"
-          git revert --no-commit "$commit"
+          # The revert conflicts when a commit merged after the release
+          # changes a line next to a version that the release has bumped
+          if ! git revert --no-commit "$commit"; then
+            echo "::error::The revert of $TAG conflicts with a commit merged after it. Abort it by hand, see the log of this step."
+            cat <<EOF
+          To abort $TAG by hand:
+          1. As an admin, delete the tag, so that the release can no longer be published:
+               git push https://github.com/$GITHUB_REPOSITORY.git :refs/tags/$TAG
+          2. Revert the release commit on a new branch:
+               git fetch https://github.com/$GITHUB_REPOSITORY.git $GITHUB_REF_NAME
+               git switch -c revert-$TAG FETCH_HEAD
+               git revert $commit
+             Resolve the conflicts so that the "version" fields and the @babel/*
+             dependency ranges get their previous values back, then:
+               git add -u
+               git revert --continue
+               git push https://github.com/$GITHUB_REPOSITORY.git revert-$TAG
+          3. Open a pull request from "revert-$TAG" to "$GITHUB_REF_NAME" and merge it.
+             Do not start a new release before it is merged.
+          EOF
+            exit 1
+          fi
           git commit -m "Revert \"$TAG\" [skip ci]" -m "This reverts commit $commit." --no-verify --quiet
 
       - name: Generate release GitHub App token
