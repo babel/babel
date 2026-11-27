@@ -20,13 +20,15 @@ jobs:
       - name: Get Pull Request branch
         uses: actions/github-script@v9
         id: pr-meta
+        env:
+          PULL_REQUEST: ${{ inputs.pull_request }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { data: pullRequest } = await github.rest.pulls.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: ${{ github.event.inputs.pull_request }},
+              pull_number: Number(process.env.PULL_REQUEST),
             });
 
             const {
@@ -34,10 +36,8 @@ jobs:
               repo: { full_name: repository }
             } = pullRequest.head;
 
-            const fs = require("fs");
-            const { GITHUB_OUTPUT } = process.env;
-            fs.appendFileSync(GITHUB_OUTPUT, `branch=${branch}\n`);
-            fs.appendFileSync(GITHUB_OUTPUT, `repository=${repository}\n`);
+            core.setOutput("branch", branch);
+            core.setOutput("repository", repository);
 
       - name: Checkout code
         uses: actions/checkout@v7
@@ -67,9 +67,17 @@ jobs:
           OVERWRITE: true
 
       - name: Commit updates
+        # The branch name is chosen by the PR author, and can contain shell
+        # metacharacters. Never interpolate it (or any other ${{ }} expression)
+        # in the script: pass values as environment variables instead.
+        # NOTE: This runs in PowerShell, so they are read as ${env:NAME}.
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          REPOSITORY: ${{ steps.pr-meta.outputs.repository }}
+          BRANCH: ${{ steps.pr-meta.outputs.branch }}
         run: |
           git config user.name "Babel Bot"
           git config user.email "babel-bot@users.noreply.github.com"
           git add .
           git commit -m "Update fixtures (Windows)" --no-verify --quiet
-          git push "https://babel-bot:${{ secrets.BOT_TOKEN }}@github.com/${{ steps.pr-meta.outputs.repository }}.git" ${{ steps.pr-meta.outputs.branch }}
+          git push "https://babel-bot:${env:BOT_TOKEN}@github.com/${env:REPOSITORY}.git" "HEAD:refs/heads/${env:BRANCH}"
