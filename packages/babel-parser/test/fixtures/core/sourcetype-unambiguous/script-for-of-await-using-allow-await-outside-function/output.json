@@ -1,0 +1,49 @@
+{
+  "type": "File",
+  "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start":0,"end":28,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":28,"index":28}},
+        "await": false,
+        "left": {
+          "type": "VariableDeclaration",
+          "start":5,"end":18,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":18,"index":18}},
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18}},
+              "id": {
+                "type": "Identifier",
+                "start":17,"end":18,"loc":{"start":{"line":1,"column":17,"index":17},"end":{"line":1,"column":18,"index":18},"identifierName":"x"},
+                "name": "x"
+              },
+              "init": null
+            }
+          ],
+          "kind": "await using"
+        },
+        "right": {
+          "type": "Identifier",
+          "start":22,"end":24,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":24,"index":24},"identifierName":"xs"},
+          "name": "xs"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start":26,"end":28,"loc":{"start":{"line":1,"column":26,"index":26},"end":{"line":1,"column":28,"index":28}},
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": true
+    }
+  }
+}

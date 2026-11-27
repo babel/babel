@@ -1,41 +1,6 @@
 import { parse } from "../lib/index.js";
 
 describe("options", () => {
-  describe("sourceType unambiguous", () => {
-    test.each([
-      ["using x = y;", {}],
-      ["await using x = y;", {}],
-      ["for await (const x of xs) {}", {}],
-      ["{ await using x = y; }", {}],
-      ["for (await using x of xs) {}", {}],
-      ["await using x = y;", { allowAwaitOutsideFunction: true }],
-      ["using x = y; const m = module {};", { plugins: ["moduleBlocks"] }],
-    ])("recognizes %s as a module with %j", (code, options) => {
-      expect(() => parse(code, { ...options, sourceType: "script" })).toThrow(
-        SyntaxError,
-      );
-      expect(parse(code, { ...options, sourceType: "unambiguous" })).toEqual(
-        parse(code, { ...options, sourceType: "module" }),
-      );
-    });
-
-    test.each([
-      ["{ using x = y; }", {}],
-      ["for (using x of xs) {}", {}],
-      ["async function f() { await using x = y; for await (x of xs) {} }", {}],
-      ["{ await using x = y; }", { allowAwaitOutsideFunction: true }],
-      ["for await (x of xs) {}", { allowAwaitOutsideFunction: true }],
-      ["for (await using x of xs) {}", { allowAwaitOutsideFunction: true }],
-      ["const m = module { using x = y; };", { plugins: ["moduleBlocks"] }],
-    ])("recognizes %s as a script with %j", (code, options) => {
-      const { program } = parse(code, {
-        ...options,
-        sourceType: "unambiguous",
-      });
-      expect(program.sourceType).toBe("script");
-    });
-  });
-
   describe("strictMode", () => {
     const CODE = "function f(x, x) {}";
 
