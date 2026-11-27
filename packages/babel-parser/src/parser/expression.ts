@@ -2967,7 +2967,7 @@ export default abstract class ExpressionParser extends LValParser {
   recordAwaitIfAllowed(unambiguous = false): boolean {
     const isAwaitAllowed = this.prodParam.hasAwait;
 
-    if (isAwaitAllowed && !this.scope.inFunction) {
+    if (isAwaitAllowed && this.prodParam.allowsTopLevelAwait) {
       this.state.hasTopLevelAwait = true;
       // In `for await` and `await using`, `await` can only be a keyword.
       if (
@@ -3001,7 +3001,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     if (
-      !this.scope.inFunction &&
+      this.prodParam.allowsTopLevelAwait &&
       !(this.optionFlags & OptionFlags.AllowAwaitOutsideFunction)
     ) {
       if (this.isAmbiguousPrefixOrIdentifier()) {
