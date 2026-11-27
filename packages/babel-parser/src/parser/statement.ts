@@ -328,11 +328,12 @@ export default abstract class StatementParser extends ExpressionParser {
     );
   }
 
-  allowsUsing(): boolean {
-    return (
-      (this.scope.inModule || !this.scope.inTopLevel) &&
-      !this.scope.inBareCaseStatement
-    );
+  recordUsingIfAllowed(): boolean {
+    if (this.scope.inTopLevel) {
+      this.sawUnambiguousESM = true;
+      return this.scope.inModule;
+    }
+    return !this.scope.inBareCaseStatement;
   }
 
   // https://tc39.es/ecma262/#prod-ModuleItem
@@ -474,11 +475,11 @@ export default abstract class StatementParser extends ExpressionParser {
       case tt._await:
         // [+Await] await [no LineTerminator here] using [no LineTerminator here] BindingList[+Using]
         if (this.isAwaitUsing()) {
-          if (!this.allowsUsing()) {
+          if (!this.recordUsingIfAllowed()) {
             this.raise(Errors.UnexpectedUsingDeclaration, node);
           } else if (!allowDeclaration) {
             this.raise(Errors.UnexpectedLexicalDeclaration, node);
-          } else if (!this.recordAwaitIfAllowed()) {
+          } else if (!this.recordAwaitIfAllowed(/* unambiguous */ true)) {
             this.raise(Errors.AwaitUsingNotInAsyncContext, node);
           }
           this.next(); // eat 'await'
@@ -493,7 +494,7 @@ export default abstract class StatementParser extends ExpressionParser {
         ) {
           break;
         }
-        if (!this.allowsUsing()) {
+        if (!this.recordUsingIfAllowed()) {
           this.raise(Errors.UnexpectedUsingDeclaration, this.state.startLoc);
         } else if (!allowDeclaration) {
           this.raise(Errors.UnexpectedLexicalDeclaration, this.state.startLoc);
@@ -832,7 +833,10 @@ export default abstract class StatementParser extends ExpressionParser {
 
     let awaitAt = null;
 
-    if (this.isContextual(tt._await) && this.recordAwaitIfAllowed()) {
+    if (
+      this.isContextual(tt._await) &&
+      this.recordAwaitIfAllowed(/* unambiguous */ true)
+    ) {
       awaitAt = this.state.startLoc;
       this.next();
     }
@@ -860,7 +864,7 @@ export default abstract class StatementParser extends ExpressionParser {
         let kind;
         if (startsWithAwaitUsing) {
           kind = "await using";
-          if (!this.recordAwaitIfAllowed()) {
+          if (!this.recordAwaitIfAllowed(/* unambiguous */ true)) {
             this.raise(Errors.AwaitUsingNotInAsyncContext, this.state.startLoc);
           }
           this.next(); // eat 'await'
