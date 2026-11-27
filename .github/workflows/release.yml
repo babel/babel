@@ -16,6 +16,12 @@ on:
           - prerelease
           - patch
           - "8.0.0"
+      abort-last-release:
+        # A string instead of a checkbox, so that a release cannot be aborted
+        # by a misclick.
+        description: Abort the last release instead of creating a new one. Type its tag (e.g. v8.1.4). Only possible when none of its packages are on npm yet.
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -24,6 +30,7 @@ jobs:
   log-updates:
     name: Log packages to publish
     runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_dispatch' || inputs.abort-last-release == ''
     steps:
       - name: Checkout the new tag
         uses: actions/checkout@v7
@@ -62,7 +69,7 @@ jobs:
   git-version:
     name: Create git tag and commit
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && inputs.abort-last-release == ''
     # Holds the credentials of the release GitHub App
     environment: release
     steps:
@@ -116,6 +123,106 @@ jobs:
           git push --atomic "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
             HEAD:"${GITHUB_REF}" "refs/tags/${TAG}"
 
+  # Undoes `git-version` for a release whose tag-triggered run failed before
+  # publishing and cannot be fixed by re-running it. Releasing the next version
+  # instead would skip the packages of the failed one, because only the
+  # packages modified in the release commit are published.
+  abort-release:
+    name: Abort the last release
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && inputs.abort-last-release != ''
+    # Holds the credentials of the release GitHub App
+    environment: release
+    permissions:
+      contents: read
+      actions: read # to list the workflow runs of the tag
+    env:
+      TAG: ${{ inputs.abort-last-release }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          # Otherwise the persisted GITHUB_TOKEN is used instead of the token in the push URL
+          persist-credentials: false
+      - name: Use Node.js latest
+        uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          check-latest: true
+          package-manager-cache: false
+
+      - name: Check that the tag is the last release
+        run: |
+          # The revert is pushed to the ref that this workflow runs on
+          if [ "$GITHUB_REF_TYPE" != "branch" ]; then
+            echo "::error::Run this workflow from the branch that $TAG was released from, not from a tag"
+            exit 1
+          fi
+          last="$(git describe --abbrev=0 --match "v*")"
+          if [ "$TAG" != "$last" ]; then
+            echo "::error::\"$TAG\" is not the last release on \"$GITHUB_REF_NAME\", which is $last"
+            exit 1
+          fi
+
+      # Such a run could still publish the release after it has been aborted
+      - name: Check that no workflow run is releasing the tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          active="$(
+            gh run list --repo "$GITHUB_REPOSITORY" --workflow release.yml --event push --branch "$TAG" \
+              --json status,url --jq '.[] | select(.status != "completed") | .url'
+          )"
+          if [ -n "$active" ]; then
+            echo "::error::Cancel the workflow run that is releasing $TAG first: $active"
+            exit 1
+          fi
+
+      # Twice, because a package that has just been published, for example by
+      # a run that was cancelled a moment ago, may not be visible yet.
+      - name: Check that nothing has been published to npm
+        run: |
+          for attempt in 1 2; do
+            statuses="$(node ./scripts/release-npm-status.ts "$TAG")"
+            if published="$(grep '^published' <<< "$statuses")"; then
+              echo "$published"
+              echo "::error::$TAG cannot be aborted, some of its packages are already on npm"
+              exit 1
+            fi
+            if [ "$attempt" != 2 ]; then
+              sleep 30
+            fi
+          done
+
+      - name: Revert the release commit
+        run: |
+          git config user.name "Babel Bot"
+          git config user.email "babel-bot@users.noreply.github.com"
+          commit="$(git rev-parse "$TAG^{commit}")"
+          git revert --no-commit "$commit"
+          git commit -m "Revert \"$TAG\" [skip ci]" -m "This reverts commit $commit." --no-verify --quiet
+
+      - name: Generate release GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+
+      # If the branch has moved since this workflow started, the push is
+      # rejected as non-fast-forward and nothing is aborted. The push is
+      # atomic, so the tag is never deleted without the revert.
+      - name: Push to GitHub
+        env:
+          APP_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          git push --atomic "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            HEAD:"${GITHUB_REF}" ":refs/tags/${TAG}"
+          # `git fetch` neither deletes this tag from a clone that already has
+          # it, nor updates it when the version is released again
+          echo "::notice::$TAG has been deleted. If you have already fetched it, run \"git tag -d $TAG\" before the next release."
+
   npm-release:
     name: Build, Test and Publish
     runs-on: ubuntu-latest
@@ -149,6 +256,18 @@ jobs:
           # Remove once `chalk` is bumped to 4.0.
           FORCE_COLOR: true
 
+      # This run may have been started, or re-run, for a release that has been
+      # aborted since: the checkout still finds its commit after the tag is gone.
+      - name: Check that the release has not been aborted
+        run: |
+          # Not in a pipeline, which would hide a failure of `git ls-remote`
+          refs="$(git ls-remote origin "$GITHUB_REF" "$GITHUB_REF^{}")"
+          tagged="$(tail -n 1 <<< "$refs" | cut -f 1)"
+          if [ "$tagged" != "$GITHUB_SHA" ]; then
+            echo "::error::$GITHUB_REF_NAME no longer points to $GITHUB_SHA on GitHub"
+            exit 1
+          fi
+
       - name: Publish to npm
         run: yarn release-tool publish --yes --provenance
 
@@ -169,8 +288,9 @@ jobs:
   github-release:
     name: Create GitHub release draft
     runs-on: ubuntu-latest
+    # After publishing, so that a release that is aborted has no draft
     needs:
-      - ensure-npm-packages-exist
+      - npm-release
     # A workflow_dispatch run only creates and pushes the tag, see git-version
     if: github.event_name == 'push'
     outputs:
