@@ -268,8 +268,58 @@ jobs:
             exit 1
           fi
 
+      # Whether this run has anything to publish, for the check after publishing
+      - name: Check which packages are already on npm
+        id: npm-status
+        run: |
+          statuses="$(node ./scripts/release-npm-status.ts HEAD)"
+          echo "$statuses"
+          if grep -q '^missing' <<< "$statuses"; then
+            echo "has-missing=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has-missing=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Publish to npm
+        id: publish
+        # A failure is judged by the next step
+        continue-on-error: true
         run: yarn release-tool publish --yes --provenance
+
+      # Publishing is neither atomic nor repeatable. If only some packages were
+      # published, re-running this job publishes the missing ones, but the
+      # step above still fails because npm rejects the ones it already has.
+      # That failure is accepted when this run had packages to publish and
+      # every package of the release is on npm afterwards.
+      #
+      # A run that had nothing to publish keeps failing. Otherwise re-running
+      # all jobs of a finished release would repeat the jobs after this one,
+      # which draft the GitHub release and push CHANGELOG.md.
+      - name: Check that all packages are on npm
+        if: steps.publish.outcome == 'failure'
+        env:
+          HAD_MISSING: ${{ steps.npm-status.outputs.has-missing }}
+        run: |
+          if [ "$HAD_MISSING" != "true" ]; then
+            echo "::error::Publishing failed, and every package of this release was already on npm before this run"
+            exit 1
+          fi
+          # A package that has just been published may not be visible yet, and
+          # a lookup may fail, so try for a while
+          missing=""
+          for attempt in 1 2 3 4 5; do
+            if statuses="$(node ./scripts/release-npm-status.ts HEAD)"; then
+              if ! missing="$(grep '^missing' <<< "$statuses")"; then
+                exit 0
+              fi
+            fi
+            if [ "$attempt" != 5 ]; then
+              sleep 30
+            fi
+          done
+          echo "$missing"
+          echo "::error::Not every package of this release could be found on npm"
+          exit 1
 
       - name: Generate babel-types docs
         continue-on-error: true
