@@ -450,10 +450,8 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - github-release
-      - github-push
     if: |
       always() &&
-      needs.github-push.result == 'success' &&
       needs.github-release.result == 'success' &&
       needs.github-release.outputs.is-main == 'true'
     steps:
