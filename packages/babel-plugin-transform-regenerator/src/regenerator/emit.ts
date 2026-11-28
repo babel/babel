@@ -820,7 +820,7 @@ export class Emitter {
             self.updateContextPrevLoc(self.mark(catchLoc));
 
             const bodyPath = path.get("handler.body");
-            const param = handler!.param;
+            const param = handler.param;
             const useNewHelpers =
               process.env.BABEL_8_BREAKING ||
               util.newHelpersAvailable(this.pluginPass);
