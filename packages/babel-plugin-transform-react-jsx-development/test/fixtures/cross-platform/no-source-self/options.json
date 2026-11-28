@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    ["transform-react-jsx-development", { "sourceSelf": false }],
+    "transform-react-display-name",
+    "transform-arrow-functions"
+  ]
+}

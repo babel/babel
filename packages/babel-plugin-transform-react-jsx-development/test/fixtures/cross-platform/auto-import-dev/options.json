@@ -1,4 +1,4 @@
 {
-  "plugins": ["transform-react-jsx-development"],
+  "plugins": [["transform-react-jsx-development", { "sourceSelf": true }]],
   "sourceType": "module"
 }
