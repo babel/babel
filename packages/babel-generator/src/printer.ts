@@ -953,7 +953,8 @@ class Printer {
       | t.NumericLiteral
       | t.BigIntLiteral
       | t.DirectiveLiteral
-      | t.JSXText,
+      | t.JSXText
+      | t.PlaceholderOrdinal,
   ): string | undefined {
     const extra = node.extra;
     if (

@@ -65,6 +65,9 @@ export const hasPostfixPart = (node: t.Node, parent: any, parentId: number) => {
     case __node("CallExpression"):
     case __node("OptionalCallExpression"):
     case __node("NewExpression"):
+    case __node("PartialCallExpression"):
+    case __node("OptionalPartialCallExpression"):
+    case __node("PartialNewExpression"):
       return parent.callee === node;
     case __node("TaggedTemplateExpression"):
       return parent.tag === node;
@@ -389,6 +392,11 @@ export function TSInstantiationExpression(
     case __node("TSNonNullExpression"):
       // `a<b>!` is invalid
       return true;
+    // `f<T>~()` is parsed as a comparison
+    case __node("PartialCallExpression"):
+    case __node("OptionalPartialCallExpression"):
+    case __node("PartialNewExpression"):
+      return parent.callee === node;
   }
 
   return false;

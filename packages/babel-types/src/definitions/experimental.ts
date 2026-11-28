@@ -7,13 +7,88 @@ import defineType, {
   arrayOfType,
   assertNodeType,
   assertNodeOrValueType,
+  assertOptionalChainStart,
   assertValueType,
   chain,
+  combine,
   validateArrayOfType,
 } from "./utils.ts";
 
 // https://github.com/tc39/proposal-partial-application
-defineType("ArgumentPlaceholder", {});
+defineType("ArgumentPlaceholder", {
+  visitor: ["ordinal"],
+  fields: {
+    ordinal: {
+      validate: assertNodeType("PlaceholderOrdinal"),
+      optional: true,
+    },
+  },
+});
+
+defineType("PlaceholderOrdinal", {
+  builder: ["value"],
+  fields: {
+    value: {
+      validate: chain(
+        assertValueType("number"),
+        combine(
+          function (node, key, val) {
+            if (!Number.isInteger(val) || val < 0) {
+              throw new TypeError(
+                `PlaceholderOrdinal values must be non-negative integers, but got ${val}.`,
+              );
+            }
+          },
+          { type: "number" },
+        ),
+      ),
+    },
+  },
+});
+
+defineType("RestPlaceholder", {});
+
+defineType("PartialCallExpression", {
+  visitor: ["callee", "arguments"],
+  aliases: ["Expression"],
+  fields: {
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+    arguments: {
+      validate: arrayOfType(
+        "Expression",
+        "SpreadElement",
+        "ArgumentPlaceholder",
+        "RestPlaceholder",
+      ),
+    },
+  },
+});
+
+defineType("PartialNewExpression", { inherits: "PartialCallExpression" });
+
+defineType("OptionalPartialCallExpression", {
+  visitor: ["callee", "arguments"],
+  builder: ["callee", "arguments", "optional"],
+  aliases: ["Expression"],
+  fields: {
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+    arguments: {
+      validate: arrayOfType(
+        "Expression",
+        "SpreadElement",
+        "ArgumentPlaceholder",
+        "RestPlaceholder",
+      ),
+    },
+    optional: {
+      validate: chain(assertValueType("boolean"), assertOptionalChainStart()),
+    },
+  },
+});
 
 // https://github.com/tc39/proposal-bind-operator
 defineType("BindExpression", {

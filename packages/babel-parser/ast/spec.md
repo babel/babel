@@ -75,6 +75,8 @@ These are the core @babel/parser (babylon) AST node types.
       - [LogicalOperator](#logicaloperator)
     - [SpreadElement](#spreadelement)
     - [ArgumentPlaceholder](#argumentplaceholder)
+    - [PlaceholderOrdinal](#placeholderordinal)
+    - [RestPlaceholder](#restplaceholder)
     - [MemberExpression](#memberexpression)
     - [OptionalMemberExpression](#optionalmemberexpression)
     - [BindExpression](#bindexpression)
@@ -86,6 +88,9 @@ These are the core @babel/parser (babylon) AST node types.
   - [ParenthesizedExpression](#parenthesizedexpression)
   - [DoExpression](#doexpression)
   - [ModuleExpression](#moduleexpression)
+  - [PartialCallExpression](#partialcallexpression)
+  - [PartialNewExpression](#partialnewexpression)
+  - [OptionalPartialCallExpression](#optionalpartialcallexpression)
 - [Template Literals](#template-literals)
   - [TemplateLiteral](#templateliteral)
   - [TaggedTemplateExpression](#taggedtemplateexpression)
@@ -901,7 +906,27 @@ interface SpreadElement <: Node {
 
 ```js
 interface ArgumentPlaceholder <: Node {
-    type: "ArgumentPlaceholder";
+  type: "ArgumentPlaceholder";
+  ordinal: PlaceholderOrdinal | null;
+}
+```
+
+The `ordinal` of `?1` in `f~(?1)`. It is absent in the `2018-07` version of the proposal, which has no ordinals.
+
+### PlaceholderOrdinal
+
+```js
+interface PlaceholderOrdinal <: Node {
+  type: "PlaceholderOrdinal";
+  value: number;
+}
+```
+
+### RestPlaceholder
+
+```js
+interface RestPlaceholder <: Node {
+  type: "RestPlaceholder";
 }
 ```
 
@@ -1034,6 +1059,37 @@ interface ModuleExpression <: Expression {
 ```
 
 A inline module expression proposed in https://github.com/tc39/proposal-js-module-blocks.
+
+## PartialCallExpression
+
+```js
+interface PartialCallExpression <: Expression {
+  type: "PartialCallExpression";
+  callee: Expression;
+  arguments: [ Expression | SpreadElement | ArgumentPlaceholder | RestPlaceholder ];
+}
+```
+
+## PartialNewExpression
+
+```js
+interface PartialNewExpression <: Expression {
+  type: "PartialNewExpression";
+  callee: Expression;
+  arguments: [ Expression | SpreadElement | ArgumentPlaceholder | RestPlaceholder ];
+}
+```
+
+## OptionalPartialCallExpression
+
+```js
+interface OptionalPartialCallExpression <: Expression {
+  type: "OptionalPartialCallExpression";
+  callee: Expression;
+  arguments: [ Expression | SpreadElement | ArgumentPlaceholder | RestPlaceholder ];
+  optional: boolean;
+}
+```
 
 ## TopicReference
 

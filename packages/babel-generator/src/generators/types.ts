@@ -35,8 +35,27 @@ export function Identifier(this: Printer, node: t.Identifier) {
   this.word(name);
 }
 
-export function ArgumentPlaceholder(this: Printer) {
+export function ArgumentPlaceholder(
+  this: Printer,
+  node: t.ArgumentPlaceholder,
+) {
   this.token("?");
+  this.print(node.ordinal);
+}
+
+export function PlaceholderOrdinal(this: Printer, node: t.PlaceholderOrdinal) {
+  const { value } = node;
+  // Placeholder ordinals are decimal integer literals, so neither
+  // `jsescOption.numbers` nor the exponent form of large numbers applies
+  this.number(
+    this.getPossibleRaw(node) ??
+      (Number.isInteger(value) ? BigInt(value).toString() : value + ""),
+    value,
+  );
+}
+
+export function RestPlaceholder(this: Printer) {
+  this.token("...");
 }
 
 export function RestElement(this: Printer, node: t.RestElement) {

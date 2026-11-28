@@ -145,14 +145,22 @@ export interface ExplVisitorBase<S> {
   OptionalCallExpression?: ExplVisitNode<S, t.OptionalCallExpression>;
   OptionalIndexedAccessType?: ExplVisitNode<S, t.OptionalIndexedAccessType>;
   OptionalMemberExpression?: ExplVisitNode<S, t.OptionalMemberExpression>;
+  OptionalPartialCallExpression?: ExplVisitNode<
+    S,
+    t.OptionalPartialCallExpression
+  >;
   ParenthesizedExpression?: ExplVisitNode<S, t.ParenthesizedExpression>;
+  PartialCallExpression?: ExplVisitNode<S, t.PartialCallExpression>;
+  PartialNewExpression?: ExplVisitNode<S, t.PartialNewExpression>;
   Placeholder?: ExplVisitNode<S, t.Placeholder>;
+  PlaceholderOrdinal?: ExplVisitNode<S, t.PlaceholderOrdinal>;
   PrivateName?: ExplVisitNode<S, t.PrivateName>;
   Program?: ExplVisitNode<S, t.Program>;
   QualifiedTypeIdentifier?: ExplVisitNode<S, t.QualifiedTypeIdentifier>;
   RegExpLiteral?: ExplVisitNode<S, t.RegExpLiteral>;
   RegexLiteral?: ExplVisitNode<S, t.RegexLiteral>;
   RestElement?: ExplVisitNode<S, t.RestElement>;
+  RestPlaceholder?: ExplVisitNode<S, t.RestPlaceholder>;
   RestProperty?: ExplVisitNode<S, t.RestProperty>;
   ReturnStatement?: ExplVisitNode<S, t.ReturnStatement>;
   SequenceExpression?: ExplVisitNode<S, t.SequenceExpression>;
@@ -411,14 +419,19 @@ export interface VisitorBaseNodes<S> {
   OptionalCallExpression?: VisitNode<S, t.OptionalCallExpression>;
   OptionalIndexedAccessType?: VisitNode<S, t.OptionalIndexedAccessType>;
   OptionalMemberExpression?: VisitNode<S, t.OptionalMemberExpression>;
+  OptionalPartialCallExpression?: VisitNode<S, t.OptionalPartialCallExpression>;
   ParenthesizedExpression?: VisitNode<S, t.ParenthesizedExpression>;
+  PartialCallExpression?: VisitNode<S, t.PartialCallExpression>;
+  PartialNewExpression?: VisitNode<S, t.PartialNewExpression>;
   Placeholder?: VisitNode<S, t.Placeholder>;
+  PlaceholderOrdinal?: VisitNode<S, t.PlaceholderOrdinal>;
   PrivateName?: VisitNode<S, t.PrivateName>;
   Program?: VisitNode<S, t.Program>;
   QualifiedTypeIdentifier?: VisitNode<S, t.QualifiedTypeIdentifier>;
   RegExpLiteral?: VisitNode<S, t.RegExpLiteral>;
   RegexLiteral?: VisitNode<S, t.RegexLiteral>;
   RestElement?: VisitNode<S, t.RestElement>;
+  RestPlaceholder?: VisitNode<S, t.RestPlaceholder>;
   RestProperty?: VisitNode<S, t.RestProperty>;
   ReturnStatement?: VisitNode<S, t.ReturnStatement>;
   SequenceExpression?: VisitNode<S, t.SequenceExpression>;
