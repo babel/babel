@@ -74,4 +74,45 @@ describe("conversion", function () {
       expect(generateCode(rootPath)).toBe("for (;;) {\n  false;\n}");
     });
   });
+
+  describe("ensureFunctionName", function () {
+    function getFunctionPath(code) {
+      const ast = parse(code);
+      let path;
+      traverse(ast, {
+        "FunctionExpression|ClassExpression"(_path) {
+          path = _path;
+          _path.stop();
+        },
+      });
+      return path;
+    }
+
+    it("registers the name as a local binding", function () {
+      const path = getFunctionPath("var o = { g: function () {} }");
+      path.ensureFunctionName(false);
+      const binding = path.scope.getOwnBinding("g");
+      expect(binding.kind).toBe("local");
+      expect(binding.identifier).toBe(path.node.id);
+    });
+
+    it("registers the name of a class expression", function () {
+      const path = getFunctionPath("var C = class {}");
+      path.ensureFunctionName(false);
+      expect(path.scope.getOwnBinding("C").kind).toBe("local");
+    });
+
+    it("registers the name after renaming a param", function () {
+      const path = getFunctionPath("var g = function (g) {}");
+      path.ensureFunctionName(false);
+      expect(path.node.params[0].name).not.toBe("g");
+      expect(path.scope.getOwnBinding("g").kind).toBe("local");
+    });
+
+    it("keeps the own binding shadowing the name", function () {
+      const path = getFunctionPath("var g = function () { var g; }");
+      path.ensureFunctionName(false);
+      expect(path.scope.getOwnBinding("g").kind).toBe("var");
+    });
+  });
 });
