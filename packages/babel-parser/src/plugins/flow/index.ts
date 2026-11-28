@@ -3905,6 +3905,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.EnumDeclaration {
       const id = this.parseIdentifier();
       node.id = id;
+      this.checkIdentifier(id, BindingFlag.TYPE_LEXICAL);
       node.body = this.flowEnumBody(this.startNode(), id);
       return this.finishNode(node, "EnumDeclaration");
     }

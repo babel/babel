@@ -2195,8 +2195,12 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.TSModuleDeclaration {
       node.id = this.tsParseEntityName(tsParseEntityNameFlags.NONE);
 
-      if (node.id.type === "Identifier") {
-        this.checkIdentifier(node.id, BindingFlag.TYPE_TS_NAMESPACE);
+      let root = node.id;
+      while (root.type === "TSQualifiedName") {
+        root = root.left;
+      }
+      if (root.type === "Identifier") {
+        this.checkIdentifier(root, BindingFlag.TYPE_TS_NAMESPACE);
       }
 
       this.scope.enter(ScopeFlag.TS_NAMESPACE);
