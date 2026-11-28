@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "plugins": ["proposal-bytes-modules", "transform-modules-systemjs"]
+}

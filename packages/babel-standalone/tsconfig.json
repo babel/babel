@@ -27,6 +27,9 @@
       "path": "../../packages/babel-plugin-external-helpers"
     },
     {
+      "path": "../../packages/babel-plugin-proposal-bytes-modules"
+    },
+    {
       "path": "../../packages/babel-plugin-proposal-decorators"
     },
     {
@@ -55,6 +58,9 @@
     },
     {
       "path": "../../packages/babel-plugin-proposal-pipeline-operator"
+    },
+    {
+      "path": "../../packages/babel-plugin-proposal-text-modules"
     },
     {
       "path": "../../packages/babel-plugin-proposal-throw-expressions"

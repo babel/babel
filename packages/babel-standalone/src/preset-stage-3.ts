@@ -11,6 +11,7 @@ export default (_: any, opts: any = {}) => {
       },
     ],
     babelPlugins.transformExplicitResourceManagement,
+    babelPlugins.proposalTextModules,
     // These are Stage 4
     ...[],
   ];

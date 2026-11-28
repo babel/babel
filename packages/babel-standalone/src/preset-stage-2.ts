@@ -15,6 +15,7 @@ export default (_: any, opts: any = {}) => {
       babelPlugins.proposalFunctionSent,
       babelPlugins.proposalThrowExpressions,
       babelPlugins.syntaxModuleBlocks,
+      babelPlugins.proposalBytesModules,
       ...[],
     ],
   };

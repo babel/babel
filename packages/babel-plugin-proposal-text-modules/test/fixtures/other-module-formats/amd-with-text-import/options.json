@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "plugins": ["proposal-text-modules", "transform-modules-amd"],
+  "throws": "@babel/plugin-proposal-text-modules can only be used when not compiling modules, or when compiling them to CommonJS."
+}
