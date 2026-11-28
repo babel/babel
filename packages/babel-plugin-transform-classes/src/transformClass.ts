@@ -61,6 +61,38 @@ type PropertyInfo = {
   static: t.ObjectExpression[] | null;
 };
 
+/**
+ * Whether `key` is a variable declared without an initializer and only
+ * assigned by a statement evaluated before the class, such as the computed key
+ * memos of @babel/helper-create-class-features-plugin: its value cannot change
+ * while the class is defined.
+ */
+function isAssignedOnceBefore(key: t.Node, path: NodePath<t.Class>) {
+  if (!t.isIdentifier(key)) return false;
+  const binding = path.scope.getBinding(key.name);
+  if (
+    (binding?.kind !== "var" && binding?.kind !== "let") ||
+    !binding.path.isVariableDeclarator() ||
+    binding.path.node.init ||
+    binding.constantViolations.length !== 1
+  ) {
+    return false;
+  }
+  const [assignment] = binding.constantViolations;
+  if (
+    !assignment.isAssignmentExpression({ operator: "=" }) ||
+    !assignment.parentPath.isExpressionStatement()
+  ) {
+    return false;
+  }
+  const statement = path.getStatementParent();
+  if (statement?.parent !== assignment.parentPath.parent) return false;
+  const { container } = statement;
+  if (!Array.isArray(container)) return false;
+  const index = container.indexOf(assignment.parent);
+  return index !== -1 && index < container.indexOf(statement.node);
+}
+
 export default function transformClass(
   path: NodePath<t.Class>,
   file: File,
@@ -713,6 +745,7 @@ export default function transformClass(
     for (const elem of node.body.body) {
       if (!t.isClassMethod(elem) || !elem.computed) continue;
       if (scope.isPure(elem.key, /* constants only*/ true)) continue;
+      if (isAssignedOnceBefore(elem.key, path)) continue;
 
       const id = scope.generateUidIdentifierBasedOnNode(elem.key);
       dynamicKeys.set(id.name, elem.key);
