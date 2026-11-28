@@ -944,6 +944,30 @@ export class Emitter {
     return result;
   }
 
+  explodeMemberExpressionReference(
+    path: NodePath<t.MemberExpression>,
+  ): t.MemberExpression {
+    const objectPath = path.get("object");
+    const object =
+      objectPath.isSuper() || objectPath.isThisExpression()
+        ? objectPath.node
+        : this.explodeViaTempVar(
+            null,
+            objectPath as NodePath<t.Expression>,
+            true,
+          );
+
+    const property = path.node.computed
+      ? this.explodeViaTempVar(
+          null,
+          path.get("property") as NodePath<t.Expression>,
+          true,
+        )
+      : path.node.property;
+
+    return t.memberExpression(object, property, path.node.computed);
+  }
+
   explodeExpression(
     path: NodePath<t.Expression>,
     ignoreResult?: boolean,
@@ -982,6 +1006,18 @@ export class Emitter {
 
     switch (path.type) {
       case "MemberExpression":
+        if (
+          path.node.computed &&
+          meta.containsLeap(
+            (path as NodePath<t.MemberExpression>).node.property,
+          )
+        ) {
+          return finish(
+            self.explodeMemberExpressionReference(
+              path as NodePath<t.MemberExpression>,
+            ),
+          );
+        }
         return finish(
           t.memberExpression(
             self.explodeExpression(
@@ -1301,21 +1337,7 @@ export class Emitter {
           ),
         );
 
-      case "AssignmentExpression":
-        if (path.node.operator === "=") {
-          // If this is a simple assignment, the left hand side does not need
-          // to be read before the right hand side is evaluated, so we can
-          // avoid the more complicated logic below.
-          return finish(
-            t.assignmentExpression(
-              path.node.operator,
-              // @ts-expect-error `ArrayPattern` cannot cast to `ArrayExpression`
-              self.explodeExpression(path.get("left")),
-              self.explodeExpression(path.get("right")),
-            ),
-          );
-        }
-
+      case "AssignmentExpression": {
         if (
           path.node.operator === "||=" ||
           path.node.operator === "&&=" ||
@@ -1329,8 +1351,27 @@ export class Emitter {
           );
         }
 
-        // @ts-expect-error `ArrayPattern` cannot cast to `ArrayExpression`
-        const lhs = self.explodeExpression(path.get("left"));
+        const leftPath = path.get("left");
+        const rightPath = path.get("right");
+        const lhs =
+          leftPath.isMemberExpression() && meta.containsLeap(rightPath.node)
+            ? self.explodeMemberExpressionReference(leftPath)
+            : self.explodeExpression(leftPath as NodePath<t.Expression>);
+
+        if (path.node.operator === "=") {
+          // If this is a simple assignment, the left hand side does not need
+          // to be read before the right hand side is evaluated, so we can
+          // avoid the more complicated logic below.
+          return finish(
+            t.assignmentExpression(
+              path.node.operator,
+              // @ts-expect-error `ArrayPattern` cannot cast to `ArrayExpression`
+              lhs,
+              self.explodeExpression(rightPath),
+            ),
+          );
+        }
+
         const temp = self.emitAssign(self.makeTempVar(), lhs);
 
         // For example,
@@ -1353,10 +1394,11 @@ export class Emitter {
             t.assignmentExpression(
               path.node.operator,
               t.cloneNode(temp),
-              self.explodeExpression(path.get("right")),
+              self.explodeExpression(rightPath),
             ),
           ),
         );
+      }
 
       case "UpdateExpression":
         return finish(
