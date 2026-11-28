@@ -1,0 +1,144 @@
+{
+  "type": "File",
+  "start":0,"end":131,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":2,"index":131}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":131,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":2,"index":131}},
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start":0,"end":131,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":6,"column":2,"index":131}},
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start":6,"end":130,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":6,"column":1,"index":130}},
+            "id": {
+              "type": "Identifier",
+              "start":6,"end":7,"loc":{"start":{"line":1,"column":6,"index":6},"end":{"line":1,"column":7,"index":7},"identifierName":"p"},
+              "name": "p"
+            },
+            "init": {
+              "type": "DoExpression",
+              "start":10,"end":130,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":6,"column":1,"index":130}},
+              "async": true,
+              "body": {
+                "type": "BlockStatement",
+                "start":19,"end":130,"loc":{"start":{"line":1,"column":19,"index":19},"end":{"line":6,"column":1,"index":130}},
+                "body": [
+                  {
+                    "type": "ForOfStatement",
+                    "start":23,"end":51,"loc":{"start":{"line":2,"column":2,"index":23},"end":{"line":2,"column":30,"index":51}},
+                    "await": true,
+                    "left": {
+                      "type": "VariableDeclaration",
+                      "start":34,"end":41,"loc":{"start":{"line":2,"column":13,"index":34},"end":{"line":2,"column":20,"index":41}},
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
+                          "start":40,"end":41,"loc":{"start":{"line":2,"column":19,"index":40},"end":{"line":2,"column":20,"index":41}},
+                          "id": {
+                            "type": "Identifier",
+                            "start":40,"end":41,"loc":{"start":{"line":2,"column":19,"index":40},"end":{"line":2,"column":20,"index":41},"identifierName":"x"},
+                            "name": "x"
+                          },
+                          "init": null
+                        }
+                      ],
+                      "kind": "const"
+                    },
+                    "right": {
+                      "type": "Identifier",
+                      "start":45,"end":47,"loc":{"start":{"line":2,"column":24,"index":45},"end":{"line":2,"column":26,"index":47},"identifierName":"xs"},
+                      "name": "xs"
+                    },
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":49,"end":51,"loc":{"start":{"line":2,"column":28,"index":49},"end":{"line":2,"column":30,"index":51}},
+                      "body": [],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "VariableDeclaration",
+                    "start":54,"end":83,"loc":{"start":{"line":3,"column":2,"index":54},"end":{"line":3,"column":31,"index":83}},
+                    "declarations": [
+                      {
+                        "type": "VariableDeclarator",
+                        "start":66,"end":82,"loc":{"start":{"line":3,"column":14,"index":66},"end":{"line":3,"column":30,"index":82}},
+                        "id": {
+                          "type": "Identifier",
+                          "start":66,"end":74,"loc":{"start":{"line":3,"column":14,"index":66},"end":{"line":3,"column":22,"index":74},"identifierName":"resource"},
+                          "name": "resource"
+                        },
+                        "init": {
+                          "type": "Identifier",
+                          "start":77,"end":82,"loc":{"start":{"line":3,"column":25,"index":77},"end":{"line":3,"column":30,"index":82},"identifierName":"value"},
+                          "name": "value"
+                        }
+                      }
+                    ],
+                    "kind": "await using"
+                  },
+                  {
+                    "type": "ForOfStatement",
+                    "start":86,"end":114,"loc":{"start":{"line":4,"column":2,"index":86},"end":{"line":4,"column":30,"index":114}},
+                    "await": false,
+                    "left": {
+                      "type": "VariableDeclaration",
+                      "start":91,"end":104,"loc":{"start":{"line":4,"column":7,"index":91},"end":{"line":4,"column":20,"index":104}},
+                      "declarations": [
+                        {
+                          "type": "VariableDeclarator",
+                          "start":103,"end":104,"loc":{"start":{"line":4,"column":19,"index":103},"end":{"line":4,"column":20,"index":104}},
+                          "id": {
+                            "type": "Identifier",
+                            "start":103,"end":104,"loc":{"start":{"line":4,"column":19,"index":103},"end":{"line":4,"column":20,"index":104},"identifierName":"x"},
+                            "name": "x"
+                          },
+                          "init": null
+                        }
+                      ],
+                      "kind": "await using"
+                    },
+                    "right": {
+                      "type": "Identifier",
+                      "start":108,"end":110,"loc":{"start":{"line":4,"column":24,"index":108},"end":{"line":4,"column":26,"index":110},"identifierName":"xs"},
+                      "name": "xs"
+                    },
+                    "body": {
+                      "type": "BlockStatement",
+                      "start":112,"end":114,"loc":{"start":{"line":4,"column":28,"index":112},"end":{"line":4,"column":30,"index":114}},
+                      "body": [],
+                      "directives": []
+                    }
+                  },
+                  {
+                    "type": "ExpressionStatement",
+                    "start":117,"end":128,"loc":{"start":{"line":5,"column":2,"index":117},"end":{"line":5,"column":13,"index":128}},
+                    "expression": {
+                      "type": "AwaitExpression",
+                      "start":117,"end":127,"loc":{"start":{"line":5,"column":2,"index":117},"end":{"line":5,"column":12,"index":127}},
+                      "argument": {
+                        "type": "Identifier",
+                        "start":123,"end":127,"loc":{"start":{"line":5,"column":8,"index":123},"end":{"line":5,"column":12,"index":127},"identifierName":"done"},
+                        "name": "done"
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

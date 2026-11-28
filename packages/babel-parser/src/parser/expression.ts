@@ -2964,11 +2964,18 @@ export default abstract class ExpressionParser extends LValParser {
 
   // Returns whether `await` is allowed or not in this context, and if it is
   // keeps track of it to determine whether a module uses top-level await.
-  recordAwaitIfAllowed(): boolean {
+  recordAwaitIfAllowed(unambiguous = false): boolean {
     const isAwaitAllowed = this.prodParam.hasAwait;
 
-    if (isAwaitAllowed && !this.scope.inFunction) {
+    if (isAwaitAllowed && this.prodParam.allowsTopLevelAwait) {
       this.state.hasTopLevelAwait = true;
+      // In `for await` and `await using`, `await` can only be a keyword.
+      if (
+        unambiguous &&
+        !(this.optionFlags & OptionFlags.AllowAwaitOutsideFunction)
+      ) {
+        this.sawUnambiguousESM = true;
+      }
     }
 
     return isAwaitAllowed;
@@ -2994,7 +3001,7 @@ export default abstract class ExpressionParser extends LValParser {
     }
 
     if (
-      !this.scope.inFunction &&
+      this.prodParam.allowsTopLevelAwait &&
       !(this.optionFlags & OptionFlags.AllowAwaitOutsideFunction)
     ) {
       if (this.isAmbiguousPrefixOrIdentifier()) {
@@ -3212,9 +3219,12 @@ export default abstract class ExpressionParser extends LValParser {
     const revertScopes = this.initializeScopes(/** inModule */ true);
     this.enterInitialScopes();
 
+    // A module block has its own source type regardless of the enclosing file.
+    const outerSawUnambiguousESM = this.sawUnambiguousESM;
     try {
       node.body = this.parseProgram(program, tt.braceR, "module");
     } finally {
+      this.sawUnambiguousESM = outerSawUnambiguousESM;
       revertScopes();
     }
     return this.finishNode<N.ModuleExpression>(node, "ModuleExpression");

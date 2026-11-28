@@ -32,6 +32,8 @@ export const enum ParamKind {
   PARAM_IN = 0b1000,
   // Mark most productions as not being directly in F# pipeline body
   PARAM_NOT_FSHARP_PIPELINE_DIRECT_BODY = 0b10000,
+  // [Await] is inherited from the program.
+  PARAM_TOP_LEVEL_AWAIT = 0b100000,
 }
 
 export default class ProductionParameterHandler {
@@ -50,6 +52,10 @@ export default class ProductionParameterHandler {
 
   get hasAwait(): boolean {
     return (this.currentFlags() & ParamKind.PARAM_AWAIT) > 0;
+  }
+
+  get allowsTopLevelAwait(): boolean {
+    return (this.currentFlags() & ParamKind.PARAM_TOP_LEVEL_AWAIT) > 0;
   }
 
   get hasYield(): boolean {

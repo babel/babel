@@ -400,7 +400,7 @@ export default abstract class UtilParser extends Tokenizer {
       this.inModule ||
       this.optionFlags & OptionFlags.AllowAwaitOutsideFunction
     ) {
-      paramFlags |= ParamKind.PARAM_AWAIT;
+      paramFlags |= ParamKind.PARAM_AWAIT | ParamKind.PARAM_TOP_LEVEL_AWAIT;
     }
     if (this.optionFlags & OptionFlags.AllowYieldOutsideFunction) {
       paramFlags |= ParamKind.PARAM_YIELD;
