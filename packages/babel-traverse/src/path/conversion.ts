@@ -244,7 +244,10 @@ function hoistFunctionEnvironment(
   allowInsertArrowWithRest: boolean = true,
 ): { thisBinding: string; fnPath: NodePath<t.Function> } {
   let arrowParent;
+  let child: NodePath = fnPath;
   let thisEnvFn: NodePath<t.Function> = fnPath.findParent(p => {
+    const fromValue = child.key === "value";
+    child = p;
     if (p.isArrowFunctionExpression()) {
       arrowParent ??= p;
       return false;
@@ -252,8 +255,8 @@ function hoistFunctionEnvironment(
     return (
       p.isFunction() ||
       p.isProgram() ||
-      p.isClassProperty({ static: false }) ||
-      p.isClassPrivateProperty({ static: false })
+      ((p.isClassProperty() || p.isClassPrivateProperty()) && fromValue) ||
+      p.isStaticBlock()
     );
   }) as NodePath<t.Function>;
   const inConstructor = thisEnvFn.isClassMethod({ kind: "constructor" });
@@ -275,7 +278,10 @@ function hoistFunctionEnvironment(
         )[0]
         .get("callee") as NodePath<t.ArrowFunctionExpression>;
       fnPath = thisEnvFn.get("body") as NodePath<t.FunctionExpression>;
-    } else {
+    } else if (
+      !noNewArrows ||
+      Object.values(getScopeInformation(fnPath)).some(paths => paths.length)
+    ) {
       throw fnPath.buildCodeFrameError(
         "Unable to transform arrow inside class property",
       );
