@@ -8316,10 +8316,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:1.0.30001800":
-  version: 1.0.30001800
-  resolution: "caniuse-lite@npm:1.0.30001800"
-  checksum: 10/7fb170f87cf0cf3633b660371eeabf981b7c878a14efcdb17c86f7262432e036cd43d228cbe2d442f3795194f8f9e0d520877d93b6d265ca841bcd2a4c16500a
+"caniuse-lite@npm:1.0.30001828":
+  version: 1.0.30001828
+  resolution: "caniuse-lite@npm:1.0.30001828"
+  checksum: 10/c5f7c046700a3ad0cbb56231e5a8cede0a91333674707b28843b7b0f12f2dd3a2b5a6f33fed5094281f7e8105b8fa797331bcbe33f89bcac0eb78f6ba0b2e7ef
   languageName: node
   linkType: hard
 
