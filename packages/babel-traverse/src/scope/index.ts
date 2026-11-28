@@ -1297,7 +1297,10 @@ class Scope {
         if (
           previousPath?.isPattern() &&
           binding.kind !== "param" &&
-          binding.kind !== "local"
+          binding.kind !== "local" &&
+          // The bindings of a catch parameter are registered as `let` on
+          // the CatchClause, but they are visible in the parameter itself.
+          !binding.path.isCatchClause()
         ) {
           // do nothing
         } else {
