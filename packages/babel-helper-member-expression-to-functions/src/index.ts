@@ -234,7 +234,9 @@ const handle = {
         parent: t.Node,
       ): parent is t.OptionalCallExpression => parentIsOptionalCall;
       // if parentIsCall is true, it implies that node.extra.parenthesized is always true
-      const parentIsCall = parentPath.isCallExpression({ callee: node });
+      const parentIsCall =
+        parentPath.isCallExpression({ callee: node }) ||
+        parentPath.isTaggedTemplateExpression({ tag: node });
       startingOptional.replaceWith(toNonOptional(startingOptional, baseRef));
       if (isOptionalCall(parent)) {
         if (parent.optional) {
@@ -244,6 +246,7 @@ const handle = {
         }
       } else if (parentIsCall) {
         // `(a?.#b)()` to `(a == null ? void 0 : a.#b.bind(a))()`
+        // `(a?.#b)``  to `(a == null ? void 0 : a.#b.bind(a))``
         member.replaceWith(this.boundGet(member));
       } else if (
         (process.env.BABEL_8_BREAKING || this.delete) &&
