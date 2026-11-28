@@ -41,12 +41,28 @@ export default function transpileNamespace(
     registerGlobalType(program.scope, name);
 
     path.remove();
-  } else if (path.scope.hasOwnBinding(name)) {
-    path.replaceWith(value);
   } else {
-    path.scope.registerDeclaration(
-      path.replaceWithMultiple([getDeclaration(name), value])[0],
-    );
+    let valuePath: NodePath<t.ExpressionStatement>;
+    if (path.scope.hasOwnBinding(name)) {
+      [valuePath] = path.replaceWith(
+        value,
+      ) as NodePath<t.ExpressionStatement>[];
+    } else {
+      const [declarationPath, newValuePath] = path.replaceWithMultiple([
+        getDeclaration(name),
+        value,
+      ]) as [NodePath<t.VariableDeclaration>, NodePath<t.ExpressionStatement>];
+      path.scope.registerDeclaration(declarationPath);
+      valuePath = newValuePath;
+    }
+    // Register the `name = {}` in `(function (_name) {})(name || (name = {}))`
+    valuePath.scope
+      .getBinding(name)
+      ?.reassign(
+        valuePath.get(
+          "expression.arguments.0.right",
+        ) as NodePath<t.AssignmentExpression>,
+      );
   }
 }
 
