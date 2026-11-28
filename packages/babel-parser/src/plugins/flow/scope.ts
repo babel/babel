@@ -9,8 +9,18 @@ class FlowScope extends Scope {
 }
 
 export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
+  private topLevelEnums = new Set<string>();
+
   createScope(flags: ScopeFlag): FlowScope {
     return new FlowScope(flags);
+  }
+
+  // Flow permits enum redeclarations during parsing. Track their names for exports.
+  declareEnum(name: string) {
+    if (this.inTopLevel) {
+      this.topLevelEnums.add(name);
+      this.maybeExportDefined(this.currentScope(), name);
+    }
   }
 
   declareName(name: string, bindingType: BindingFlag, loc: number) {
@@ -44,7 +54,10 @@ export default class FlowScopeHandler extends ScopeHandler<FlowScope> {
   }
 
   checkLocalExport(id: N.Identifier) {
-    if (!this.scopeStack[0].declareFunctions.has(id.name)) {
+    if (
+      !this.topLevelEnums.has(id.name) &&
+      !this.scopeStack[0].declareFunctions.has(id.name)
+    ) {
       super.checkLocalExport(id);
     }
   }
