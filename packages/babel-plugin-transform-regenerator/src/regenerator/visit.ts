@@ -5,7 +5,7 @@ import { hoist } from "./hoist.ts";
 import { Emitter } from "./emit.ts";
 import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod.ts";
 import * as util from "./util.ts";
-import type { NodePath, PluginPass, Scope, Visitor } from "@babel/core";
+import type { NodePath, PluginPass, Visitor } from "@babel/core";
 import { types as t, traverse } from "@babel/core";
 
 export const getVisitor = (): Visitor<PluginPass> =>
@@ -104,6 +104,11 @@ export const getVisitor = (): Visitor<PluginPass> =>
           (node as t.FunctionDeclaration | t.FunctionExpression).id,
         );
 
+        // Block-scoped bindings named `arguments` would end up in the inner
+        // function, where `arguments` is that function's own.
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
+        path.get("body").traverse(renameArgumentsBindingsVisitor);
+
         // Turn all declarations into vars, and replace the original
         // declarations with equivalent assignment expressions.
         const vars = hoist(
@@ -114,10 +119,10 @@ export const getVisitor = (): Visitor<PluginPass> =>
           usesThis: false,
           usesArguments: false,
           getArgsId: () => t.cloneNode(argsId),
-          functionScope: path.scope,
         };
+        // The parameters stay in the outer function.
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        path.traverse(argumentsThisVisitor, context);
+        path.get("body").traverse(argumentsThisVisitor, context);
 
         if (context.usesArguments) {
           vars.push(
@@ -342,20 +347,22 @@ function getMarkedFunctionId(
   return t.cloneNode(markedId);
 }
 
+const renameArgumentsBindingsVisitor = traverse.visitors.environmentVisitor({
+  Scopable({ scope }) {
+    if (scope.hasOwnBinding("arguments")) scope.rename("arguments");
+  },
+});
+
 // Arrow functions inherit `this` and `arguments`, so they are not skipped.
+// Every `arguments` left in the body refers to the generator's own, because
+// renameArgumentsBindingsVisitor renamed the block-scoped ones.
 const argumentsThisVisitor = traverse.visitors.environmentVisitor<{
   usesThis: boolean;
   usesArguments: boolean;
   getArgsId: () => t.Identifier;
-  functionScope: Scope;
 }>({
   Identifier: function (path, state) {
     if (path.node.name === "arguments" && util.isReference(path)) {
-      // A block-scoped binding, such as a catch parameter, is renamed when
-      // the block is compiled.
-      const binding = path.scope.getBinding("arguments");
-      if (binding && binding.scope !== state.functionScope) return;
-
       path.replaceWith(state.getArgsId());
       state.usesArguments = true;
     }
