@@ -96,6 +96,7 @@ function classOrObjectMethod(
     params,
     blockStatement(body.body),
     true,
+    node.async,
   );
 
   if (shouldForwardParams) {
