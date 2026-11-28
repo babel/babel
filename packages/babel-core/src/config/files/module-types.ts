@@ -50,13 +50,6 @@ const loadMjsFromPath = endHiddenCallStack(async function loadMjsFromPath(
   return await import(url);
 });
 
-const tsNotSupportedError = (ext: string) => `\
-You are using a ${ext} config file, but Babel only supports transpiling .cts configs. Either:
-- Use a .cts config file
-- Update to Node.js 23.6.0, which has native TypeScript support
-- Install tsx to transpile ${ext} files on the fly\
-`;
-
 const SUPPORTED_EXTENSIONS = {
   ".js": "unknown",
   ".mjs": "esm",
@@ -66,16 +59,22 @@ const SUPPORTED_EXTENSIONS = {
   ".cts": "cjs",
 } as const;
 
+/**
+ * Load a config file, plugin or preset.
+ *
+ * Every supported Node.js version can `require()` ES modules, so we always try
+ * `require()` first (unless `loader` is "auto" and the file is known to be an
+ * ES module) and only fall back to `import()` when the module, or one of its
+ * dependencies, uses top-level await.
+ *
+ * `loader` is "auto" only when Babel is running asynchronously.
+ */
 export default function* loadCodeDefault(
   filepath: string,
   loader: "require" | "auto",
-  esmError: string,
   tlaError: string,
 ): Handler<unknown> {
-  let async;
-
   const ext = path.extname(filepath);
-  const isTS = ext === ".ts" || ext === ".cts" || ext === ".mts";
 
   const type =
     SUPPORTED_EXTENSIONS[
@@ -96,25 +95,16 @@ export default function* loadCodeDefault(
       try {
         return loadCjsDefault(filepath);
       } catch (e) {
-        if ((e as NodeJS.ErrnoException).code === "ERR_REQUIRE_ASYNC_MODULE") {
-          if (!(async ??= yield* isAsync())) {
-            throw new ConfigError(tlaError, filepath);
-          }
-          // fall through: require() failed due to TLA
-        } else {
+        if ((e as NodeJS.ErrnoException).code !== "ERR_REQUIRE_ASYNC_MODULE") {
           throw e;
+        }
+        if (!(yield* isAsync())) {
+          throw new ConfigError(tlaError, filepath);
         }
       }
     // fall through: require() failed due to TLA, try import()
     case "auto esm":
-      if (async ?? (yield* isAsync())) {
-        return (yield* waitFor(loadMjsFromPath(filepath))).default;
-      }
-      if (isTS) {
-        throw new ConfigError(tsNotSupportedError(ext), filepath);
-      } else {
-        throw new ConfigError(esmError, filepath);
-      }
+      return (yield* waitFor(loadMjsFromPath(filepath))).default;
     default:
       throw new Error("Internal Babel error: unreachable code.");
   }
