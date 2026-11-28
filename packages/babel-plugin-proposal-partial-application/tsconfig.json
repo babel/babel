@@ -15,7 +15,13 @@
       "path": "../../packages/babel-helper-plugin-utils"
     },
     {
+      "path": "../../packages/babel-helper-skip-transparent-expression-wrappers"
+    },
+    {
       "path": "../../packages/babel-plugin-syntax-partial-application"
+    },
+    {
+      "path": "../../packages/babel-plugin-transform-optional-chaining"
     },
     {
       "path": "../../packages/babel-core"

@@ -1,0 +1,3 @@
+{
+  "throws": "Partial applications with more than 256 parameters are not supported."
+}
