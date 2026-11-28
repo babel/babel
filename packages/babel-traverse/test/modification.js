@@ -1,5 +1,6 @@
 import { parse } from "@babel/parser";
 import * as t from "@babel/types";
+import template from "@babel/template";
 
 import traverse from "../lib/index.js";
 import generate from "@babel/generator";
@@ -72,6 +73,36 @@ describe("modification", function () {
     });
   });
   describe("unshiftContainer", function () {
+    it("inserts a string statement that prints as a directive", function () {
+      const ast = parse(`foo();`);
+      traverse(ast, {
+        Program(path) {
+          path.unshiftContainer("body", template.statement.ast`"use client"`);
+          path.stop();
+        },
+      });
+      const { code } = generate(ast);
+
+      expect(code).toBe(`"use client";\nfoo();`);
+      expect(parse(code).program.directives).toHaveLength(1);
+    });
+
+    it("keeps a parenthesized string from becoming a directive", function () {
+      const ast = parse(`("use strict"); foo();`);
+      traverse(ast, {
+        Program(path) {
+          path.unshiftContainer("body", template.statement.ast`"use client"`);
+          path.stop();
+        },
+      });
+      const { code } = generate(ast);
+
+      expect(code).toBe(`"use client";\n("use strict");\nfoo();`);
+      expect(parse(code).program.directives.map(d => d.value.value)).toEqual([
+        "use client",
+      ]);
+    });
+
     it("unshifts identifier into params", function () {
       const rootPath = getPath("function test(a) {}");
       rootPath.unshiftContainer("params", t.identifier("b"));

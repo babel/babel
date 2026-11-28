@@ -36,20 +36,11 @@ const GENERATOR_FAILURES = [
 const PARSER_FAILURES = [
   // `({ a: a = 1 } = {})` is printed as `({ a = 1 } = {})`
   "esprima/es2015-destructuring-assignment-object-pattern/object-pattern-assignment/input.js",
-
-  // A parenthesized string at the start of a program is printed as a
-  // directive
-  "es2019/json-strings/string-line-separator/input.js",
-  "es2019/json-strings/string-paragraph-separator/input.js",
 ];
 
 // Parser fixtures whose generated code is expected to be rejected by the
 // parser, relative to `babel-parser/test/fixtures`
 const PARSER_REPARSE_ERRORS = [
-  // `("use strict");` is printed as a directive, so the `"\5"` that follows
-  // is rejected in strict mode
-  "core/categorized/not-directive/input.js",
-
   // The parenthesized right-hand side of a bind expression loses its
   // parentheses
   "experimental/bind-operator/binary-parenthesized-import-call/input.js",

@@ -1,5 +1,6 @@
-import { NodePath } from "../../lib/index.js";
+import traverse, { NodePath } from "../../lib/index.js";
 
+import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
 describe("NodePath", () => {
@@ -160,6 +161,20 @@ describe("NodePath", () => {
           "willIMaybeExecuteBefore",
         ]
       `);
+    });
+  });
+
+  describe("toString", () => {
+    it("prints a string statement", () => {
+      let path;
+      traverse(parse(`("use strict");`), {
+        ExpressionStatement(_path) {
+          path = _path;
+          _path.stop();
+        },
+      });
+
+      expect(path.toString()).toBe(`"use strict";`);
     });
   });
 });
