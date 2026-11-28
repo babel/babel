@@ -1,0 +1,3 @@
+{
+  "throws": "When using '@babel/plugin-transform-arrow-functions', it's not possible to compile `this` or `super` in an arrow function in the parameters of a derived class constructor without compiling parameters.\nPlease add '@babel/plugin-transform-parameters' to your Babel configuration."
+}
