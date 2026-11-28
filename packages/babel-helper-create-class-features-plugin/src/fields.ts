@@ -12,6 +12,7 @@ import annotateAsPure from "@babel/helper-annotate-as-pure";
 import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";
 
 import * as ts from "./typescript.ts";
+import { registerInsertedNodes } from "./misc.ts";
 
 interface PrivateNameMetadata {
   id: t.Identifier;
@@ -1603,6 +1604,9 @@ export function buildFieldsInitNodes(
           "superClass",
           t.assignmentExpression("=", injectSuperRef, path.node.superClass!),
         );
+        registerInsertedNodes([
+          path.get("superClass") as NodePath<t.AssignmentExpression>,
+        ]);
       }
 
       if (classRefFlags !== ClassRefFlag.None) {
@@ -1615,6 +1619,7 @@ export function buildFieldsInitNodes(
           if (innerBindingRef == null) {
             // export anonymous class declaration
             path.node.id = ref;
+            registerInsertedNodes([path]);
           }
           if (classBindingNode != null) {
             scope.push({ id: classRefForInnerBinding, kind });

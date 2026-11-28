@@ -255,3 +255,48 @@ export function extractComputedKeys(
 
   return declarations;
 }
+
+function registerAssignment(path: NodePath<t.AssignmentExpression>) {
+  for (const name of Object.keys(t.getAssignmentIdentifiers(path.node))) {
+    const binding = path.scope.getBinding(name);
+    if (
+      binding &&
+      !binding.constantViolations.some(v => v.node === path.node)
+    ) {
+      binding.reassign(path);
+    }
+  }
+}
+
+const registerAssignmentsVisitor: Visitor = {
+  // Nested scopes are crawled when they are first visited
+  Scope(path) {
+    path.skip();
+  },
+  AssignmentExpression(path) {
+    registerAssignment(path);
+  },
+};
+
+/**
+ * Register the declarations and the assignments of nodes inserted in a scope
+ * that has already been crawled.
+ */
+export function registerInsertedNodes(paths: NodePath[]) {
+  for (const path of paths) {
+    if (
+      path.isVariableDeclaration() ||
+      path.isFunctionDeclaration() ||
+      path.isClassDeclaration()
+    ) {
+      const scope = path.parentPath.scope;
+      (path.isVariableDeclaration({ kind: "var" })
+        ? (scope.getFunctionParent() ?? scope.getProgramParent())
+        : scope.getBlockParent()
+      ).registerDeclaration(path);
+    } else if (path.isAssignmentExpression()) {
+      registerAssignment(path);
+    }
+    if (!path.isScope()) path.traverse(registerAssignmentsVisitor);
+  }
+}
