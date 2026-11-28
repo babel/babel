@@ -1,4 +1,5 @@
 {
   "plugins": ["proposal-function-sent"],
-  "parserOpts": { "allowReturnOutsideFunction": true }
+  "parserOpts": { "allowReturnOutsideFunction": true },
+  "minNodeVersion": "10.0.0"
 }
