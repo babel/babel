@@ -184,6 +184,139 @@ describe("evaluation", function () {
     expect(evalResult.confident).toBe(false);
   });
 
+  describe("method calls", function () {
+    function evaluate(code) {
+      const path = getPath(code);
+      return path.get("body").at(-1).get("expression").evaluate();
+    }
+
+    it.each([
+      ["'abc'.charCodeAt(1)", 98],
+      ["'abc'.toUpperCase()", "ABC"],
+      ["'abc'.slice(1)", "bc"],
+      ["'a-b-c'.indexOf('b')", 2],
+      ["' ab '.trim()", "ab"],
+      ["(1.005).toFixed(1)", "1.0"],
+      ["(255).toString(16)", "ff"],
+      ["Math.max(1, 2)", 2],
+      ["Number.isInteger(1)", true],
+      ["String.fromCharCode(97, 98)", "ab"],
+      ["'ab'.repeat(2)", "abab"],
+      ["'a'.padStart(3)", "  a"],
+      ["'a'.padEnd(3, '-')", "a--"],
+      ["'e\\u0301'.normalize()", "é"],
+    ])("should evaluate allowed method %s", function (code, value) {
+      const evalResult = evaluate(code);
+      expect(evalResult.confident).toBe(true);
+      expect(evalResult.value).toEqual(value);
+    });
+
+    it.each([
+      // Compile their argument to a RegExp, which can take exponential time
+      // with longer strings. Keep the strings short so that, if these methods
+      // are ever evaluated again, this test fails rather than hanging.
+      "'aaaa!'.match('(a+)+$')",
+      "'aaaa!'.matchAll('(a+)+$')",
+      "'aaaa!'.search('(a+)+$')",
+      "'a-b-c'.replace('-', '+')",
+      "'a-b-c'.replaceAll('-', '+')",
+      // Meant to be called as a template tag
+      "String.raw({ raw: ['a', 'b'] }, 1)",
+      "String.raw({ raw: { length: 5e7 } })",
+      // Not deterministic
+      "Math.random()",
+      // Depend on the locale
+      "'a'.localeCompare('b')",
+      "'i'.toLocaleUpperCase()",
+      "(1234.5).toLocaleString()",
+      // Allocates once per element, and the receiver can be huge
+      "'a-b-c'.split('-')",
+      // Not methods
+      "'a'.constructor(1)",
+      "(1).constructor('2')",
+      "Math.PI()",
+      "Number.prototype()",
+      // Inherited from Object.prototype
+      "'a'.hasOwnProperty('length')",
+      "(1).isPrototypeOf(1)",
+      // Legacy HTML methods
+      "'a'.bold()",
+    ])("should not evaluate disallowed method %s", function (code) {
+      expect(evaluate(code).confident).toBe(false);
+    });
+
+    it.each([
+      ["const s = 'abc'; s.toUpperCase()", "ABC"],
+      ["`a${1}`.toUpperCase()", "A1"],
+      ["('a' + 'b').toUpperCase()", "AB"],
+      ["'aBc'.toUpperCase().toLowerCase()", "abc"],
+      ["(1 + 2).toFixed(1)", "3.0"],
+      ["const n = 255; n.toString(16)", "ff"],
+    ])(
+      "should evaluate methods on evaluated receiver %s",
+      function (code, value) {
+        const evalResult = evaluate(code);
+        expect(evalResult.confident).toBe(true);
+        expect(evalResult.value).toEqual(value);
+      },
+    );
+
+    it.each([
+      "foo.toUpperCase()",
+      "[1, 2].slice(1)",
+      "({ toString: 1 }).toString()",
+      "true.toString()",
+      "let s = 'abc'; s = 'def'; s.toUpperCase()",
+    ])("should not evaluate methods on receiver %s", function (code) {
+      expect(evaluate(code).confident).toBe(false);
+    });
+
+    describe("string length limit", function () {
+      // 8_000_000 characters
+      const MAX = "const a = 'x'.repeat(4_000_000);";
+
+      it.each([
+        ["'x'.repeat(8_000_000)", "repeat"],
+        ["'x'.padStart(8_000_000)", "padStart"],
+        ["'x'.padEnd(8_000_000)", "padEnd"],
+        [`${MAX} a + a`, "+"],
+        [`${MAX} \`\${a}\${a}\``, "template literal"],
+        [`${MAX} String.raw\`\${a}\${a}\``, "String.raw"],
+      ])("should evaluate strings up to the limit: %s", function (code) {
+        const evalResult = evaluate(code);
+        expect(evalResult.confident).toBe(true);
+        expect(evalResult.value).toHaveLength(8_000_000);
+      });
+
+      it.each([
+        "'x'.repeat(8_000_001)",
+        "'x'.repeat(1e9)",
+        "'x'.repeat('2')",
+        "'x'.padStart(8_000_001)",
+        "'x'.padEnd(1e9)",
+        "'x'.repeat(444_445).normalize()",
+        `${MAX} a + a + 'x'`,
+        `${MAX} \`\${a}\${a}x\``,
+        `${MAX} String.raw\`\${a}\${a}x\``,
+      ])("should not evaluate strings over the limit: %s", function (code) {
+        expect(evaluate(code).confident).toBe(false);
+      });
+    });
+
+    it("should not evaluate methods on bigint literals", function () {
+      expect(evaluate("10n.toString(16)").confident).toBe(false);
+    });
+
+    it("should not evaluate computed method calls as non-computed", function () {
+      expect(
+        evaluate("const charAt = 'toUpperCase'; 'abc'[charAt](0)").confident,
+      ).toBe(false);
+      expect(evaluate("const min = 'max'; Math[min](1, 2)").confident).toBe(
+        false,
+      );
+    });
+  });
+
   it("should evaluate global call expressions", function () {
     expect(
       getPath("isFinite(1);").get("body.0.expression").evaluate().value,

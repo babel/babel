@@ -17,7 +17,146 @@ const VALID_IDENTIFIER_CALLEES = [
   "atob",
 ] as const;
 
-const INVALID_METHODS = ["random"] as const;
+const MAX_STRING_LENGTH = 8_000_000;
+
+type MethodFilter = ((receiver: any, args: any[]) => boolean) | null;
+
+// Allowlists of the methods that the evaluator is allowed to call. Babel calls
+// the real method on values that come from the code being compiled, so a method
+// can only be listed here if:
+// - it is deterministic and does not depend on the environment running Babel;
+// - it runs in time linear in the size of its arguments and of its result
+//   (so nothing that has to do with RegExps)
+// - it doesn't allow very big values from small inputs, unless its filter can
+//   guess from the arguments how big its result is going to be.
+
+const VALID_STATIC_METHODS: Record<
+  (typeof VALID_OBJECT_CALLEES)[number],
+  ReadonlyMap<string, MethodFilter>
+> = {
+  Math: new Map([
+    ["abs", null],
+    ["acos", null],
+    ["acosh", null],
+    ["asin", null],
+    ["asinh", null],
+    ["atan", null],
+    ["atan2", null],
+    ["atanh", null],
+    ["cbrt", null],
+    ["ceil", null],
+    ["clz32", null],
+    ["cos", null],
+    ["cosh", null],
+    ["exp", null],
+    ["expm1", null],
+    ["f16round", null],
+    ["floor", null],
+    ["fround", null],
+    ["hypot", null],
+    ["imul", null],
+    ["log", null],
+    ["log10", null],
+    ["log1p", null],
+    ["log2", null],
+    ["max", null],
+    ["min", null],
+    ["pow", null],
+    // "random", // Not deterministic
+    ["round", null],
+    ["sign", null],
+    ["sin", null],
+    ["sinh", null],
+    ["sqrt", null],
+    ["sumPrecise", null],
+    ["tan", null],
+    ["tanh", null],
+    ["trunc", null],
+  ]),
+  Number: new Map([
+    ["isFinite", null],
+    ["isInteger", null],
+    ["isNaN", null],
+    ["isSafeInteger", null],
+    ["parseFloat", null],
+    ["parseInt", null],
+  ]),
+  String: new Map([
+    ["fromCharCode", null],
+    ["fromCodePoint", null],
+    // "raw", // Meant to be called as a template tag: String.raw`...`
+  ]),
+};
+
+const VALID_STRING_METHODS: ReadonlyMap<string, MethodFilter> = new Map<
+  string,
+  MethodFilter
+>([
+  ["at", null],
+  ["charAt", null],
+  ["charCodeAt", null],
+  ["codePointAt", null],
+  ["concat", null],
+  // "constructor",
+  ["endsWith", null],
+  ["includes", null],
+  ["indexOf", null],
+  ["isWellFormed", null],
+  ["lastIndexOf", null],
+  // "localeCompare", // Locale-dependent
+  // "match",    // RegExp
+  // "matchAll", // RegExp
+  // Normalization can expand a character to up to 18 characters (e.g. U+FDFA)
+  ["normalize", (str: string) => str.length * 18 <= MAX_STRING_LENGTH],
+  [
+    "padEnd",
+    (_, [maxLength]) =>
+      typeof maxLength === "number" && maxLength <= MAX_STRING_LENGTH,
+  ],
+  [
+    "padStart",
+    (_, [maxLength]) =>
+      typeof maxLength === "number" && maxLength <= MAX_STRING_LENGTH,
+  ],
+  [
+    "repeat",
+    (str: string, [count]) =>
+      typeof count === "number" && str.length * count <= MAX_STRING_LENGTH,
+  ],
+  // "replace",    // RegExp
+  // "replaceAll", // RegExp
+  // "search",     // RegExp
+  ["slice", null],
+  // "split",      // Allocates potentially huge arrays
+  ["startsWith", null],
+  ["substring", null],
+  // "toLocaleLowerCase", // Locale-dependent
+  // "toLocaleUpperCase", // Locale-dependent
+  ["toLowerCase", null],
+  ["toString", null],
+  ["toUpperCase", null],
+  ["toWellFormed", null],
+  ["trim", null],
+  ["trimEnd", null],
+  ["trimLeft", null],
+  ["trimRight", null],
+  ["trimStart", null],
+  ["valueOf", null],
+  // Annex B, so implementation-dependent
+  // "substr",
+  // "anchor", "big", "blink", "bold", "fixed", "fontcolor", "fontsize",
+  // "italics", "link", "small", "strike", "sub", "sup",
+]);
+
+const VALID_NUMBER_METHODS: ReadonlyMap<string, MethodFilter> = new Map([
+  // "constructor",
+  ["toExponential", null],
+  ["toFixed", null],
+  // "toLocaleString", // Locale-dependent
+  ["toPrecision", null],
+  ["toString", null],
+  ["valueOf", null],
+]);
 
 function isValidObjectCallee(
   val: string,
@@ -32,13 +171,6 @@ function isValidIdentifierCallee(
   val: string,
 ): val is NonNullable<(typeof VALID_IDENTIFIER_CALLEES)[number]> {
   return VALID_IDENTIFIER_CALLEES.includes(
-    // @ts-expect-error val is a string
-    val,
-  );
-}
-
-function isInvalidMethod(val: string): val is (typeof INVALID_METHODS)[number] {
-  return INVALID_METHODS.includes(
     // @ts-expect-error val is a string
     val,
   );
@@ -174,6 +306,14 @@ function evaluateCached(path: NodePath, state: State): any {
     seen.set(node, item);
 
     const val = _evaluate(path, state);
+    // By this point we'll have already build the too-long string (e.g. by
+    // concatenating two strings), but its length is still of the same order of
+    // magnitude as the limit (because thinkgs like .repeat are handled before
+    // calling the method itself).
+    if (typeof val === "string" && val.length > MAX_STRING_LENGTH) {
+      deopt(path, state);
+      return;
+    }
     if (state.confident) {
       item.resolved = true;
       item.value = val;
@@ -510,6 +650,7 @@ function _evaluate(path: NodePath, state: State): any {
     const callee = path.get("callee");
     let context;
     let func;
+    let filter: MethodFilter | undefined;
 
     // Number(1);
     if (
@@ -518,36 +659,48 @@ function _evaluate(path: NodePath, state: State): any {
       (isValidObjectCallee(callee.node.name) ||
         isValidIdentifierCallee(callee.node.name))
     ) {
-      func = global[callee.node.name];
+      func = globalThis[callee.node.name];
     }
 
-    if (callee.isMemberExpression()) {
+    if (callee.isMemberExpression() && !callee.node.computed) {
       const object = callee.get("object");
       const property = callee.get("property");
 
-      // Math.min(1, 2)
-      if (
-        object.isIdentifier() &&
-        property.isIdentifier() &&
-        isValidObjectCallee(object.node.name) &&
-        !isInvalidMethod(property.node.name) &&
-        !path.scope.getBinding(object.node.name)
-      ) {
-        context = global[object.node.name];
+      if (property.isIdentifier()) {
         const key = property.node.name;
-        if (Object.hasOwn(context, key)) {
-          func = context[key as keyof typeof context];
-        }
-      }
 
-      // "abc".charCodeAt(4)
-      if (object.isLiteral() && property.isIdentifier()) {
-        // @ts-expect-error todo(flow->ts): consider checking ast node type instead of value type (StringLiteral and NumberLiteral)
-        const type = typeof object.node.value;
-        if (type === "string" || type === "number") {
-          // @ts-expect-error todo(flow->ts): consider checking ast node type instead of value type
-          context = object.node.value;
-          func = context[property.node.name];
+        if (
+          object.isIdentifier() &&
+          isValidObjectCallee(object.node.name) &&
+          !path.scope.getBinding(object.node.name)
+        ) {
+          const methods = VALID_STATIC_METHODS[object.node.name];
+          if (methods.has(key)) {
+            context = globalThis[object.node.name];
+            if (Object.hasOwn(context, key)) {
+              func = context[key as keyof typeof context];
+              filter = methods.get(key);
+            }
+          }
+        } else if (
+          VALID_STRING_METHODS.has(key) ||
+          VALID_NUMBER_METHODS.has(key)
+        ) {
+          const value = evaluateCached(object, state);
+          if (!state.confident) return;
+
+          if (typeof value === "string" && VALID_STRING_METHODS.has(key)) {
+            context = value;
+            func = String.prototype[key as keyof string];
+            filter = VALID_STRING_METHODS.get(key);
+          } else if (
+            typeof value === "number" &&
+            VALID_NUMBER_METHODS.has(key)
+          ) {
+            context = value;
+            func = Number.prototype[key as keyof number];
+            filter = VALID_NUMBER_METHODS.get(key);
+          }
         }
       }
     }
@@ -556,7 +709,12 @@ function _evaluate(path: NodePath, state: State): any {
       const args = path.get("arguments").map(arg => evaluateCached(arg, state));
       if (!state.confident) return;
 
-      return func.apply(context, args);
+      if (filter && !filter(context, args)) {
+        deopt(path, state);
+        return;
+      }
+
+      return (func as (...args: unknown[]) => unknown).apply(context, args);
     }
   }
 
