@@ -1,7 +1,7 @@
 import type { TokenType } from "../tokenizer/types.ts";
 import type Parser from "../parser/index.ts";
 import type * as N from "../types.ts";
-import type { Node as NodeType, BaseNode } from "../types.ts";
+import type { Node as NodeType } from "../types.ts";
 import { Position } from "../util/location.ts";
 import { Errors } from "../parse-error.ts";
 import type { Undone } from "../parser/node.ts";
@@ -9,16 +9,6 @@ import type { BindingFlag } from "../util/scopeflags.ts";
 import { OptionFlags } from "../options.ts";
 import type { ExpressionErrors } from "../parser/util.ts";
 import type { ParseResult, File } from "../index.ts";
-
-function toESTreeLocation(node: any) {
-  if (node.loc) {
-    const { start, end } = node.loc;
-    node.loc.start = new Position(start.line, start.column);
-    node.loc.end = new Position(end.line, end.column);
-  }
-
-  return node;
-}
 
 export default (superClass: typeof Parser) =>
   class ESTreeParserMixin extends superClass implements Parser {
@@ -30,10 +20,15 @@ export default (superClass: typeof Parser) =>
       const file = super.parse();
 
       if (this.optionFlags & OptionFlags.Tokens) {
-        file.tokens = file.tokens!.map(toESTreeLocation);
+        file.tokens = file.tokens!.map(function (token) {
+          const { start, end } = token.loc;
+          token.loc.start = new Position(start.line, start.column);
+          token.loc.end = new Position(end.line, end.column);
+          return token;
+        });
       }
 
-      return toESTreeLocation(file);
+      return file;
     }
 
     // @ts-expect-error ESTree plugin changes node types
@@ -632,39 +627,10 @@ export default (superClass: typeof Parser) =>
       return super.cloneStringLiteral(node);
     }
 
-    finishNodeAt<T extends NodeType>(
-      node: Undone<T>,
-      type: T["type"],
-      endLoc: Position,
-    ): T {
-      return toESTreeLocation(super.finishNodeAt(node, type, endLoc));
-    }
-
-    finishNodeAtNode<T extends NodeType>(
-      node: Undone<T>,
-      type: T["type"],
-      endNode: NodeType,
-    ): T {
-      return toESTreeLocation(super.finishNodeAtNode(node, type, endNode));
-    }
-
     // Override for TS-ESLint that does not allow optional AST properties
     finishNode<T extends NodeType>(node: Undone<T>, type: T["type"]): T {
       const result = super.finishNode(node, type);
       this.fillOptionalPropertiesForTSESLint(result);
       return result;
-    }
-
-    resetStartLocation(node: N.Node, startLoc: Position) {
-      super.resetStartLocation(node, startLoc);
-      toESTreeLocation(node);
-    }
-
-    resetEndLocation(
-      node: BaseNode,
-      endLoc: Position = this.state.lastTokEndLoc!,
-    ): void {
-      super.resetEndLocation(node, endLoc);
-      toESTreeLocation(node);
     }
   };
