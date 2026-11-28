@@ -770,15 +770,10 @@ export class Emitter {
 
             self.updateContextPrevLoc(self.mark(catchLoc));
 
-            const bodyPath = path.get(
-              "handler.body",
-            ) as NodePath<t.BlockStatement>;
-            const param = handler!.param;
+            const handlerPath = path.get("handler") as NodePath<t.CatchClause>;
+            const paramPath = handlerPath.get("param");
 
-            if (param) {
-              const paramPath = path.get("handler.param") as NodePath<
-                t.Identifier | t.ArrayPattern | t.ObjectPattern
-              >;
+            if (paramPath.node) {
               if (containsYieldOrAwait(paramPath)) {
                 throw paramPath.buildCodeFrameError(
                   "`yield` or `await` in a `catch` parameter is not supported by the regenerator transform. " +
@@ -787,17 +782,16 @@ export class Emitter {
               }
               // The catch clause becomes part of the function body, so its
               // bindings become function-level temporaries.
-              const handlerScope = path.get("handler").scope;
               for (const name of Object.keys(
                 paramPath.getBindingIdentifiers(),
               )) {
-                handlerScope.rename(name, self.makeTempVar().name);
+                handlerPath.scope.rename(name, self.makeTempVar().name);
               }
-              self.emitAssign(param, self.contextProperty("v"));
+              self.emitAssign(paramPath.node, self.contextProperty("v"));
             }
 
             self.leapManager.withEntry(catchEntry!, function () {
-              self.explodeStatement(bodyPath);
+              self.explodeStatement(handlerPath.get("body"));
             });
           }
 

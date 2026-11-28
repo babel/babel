@@ -5,7 +5,7 @@ import { hoist } from "./hoist.ts";
 import { Emitter } from "./emit.ts";
 import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod.ts";
 import * as util from "./util.ts";
-import type { NodePath, PluginPass, Scope, Visitor } from "@babel/core";
+import type { NodePath, PluginPass, Visitor } from "@babel/core";
 import { types as t, traverse } from "@babel/core";
 
 export const getVisitor = (): Visitor<PluginPass> =>
@@ -107,9 +107,7 @@ export const getVisitor = (): Visitor<PluginPass> =>
         // Block-scoped bindings named `arguments` would end up in the inner
         // function, where `arguments` is that function's own.
         // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        path.get("body").traverse(renameArgumentsBindingsVisitor, {
-          functionScope: path.scope,
-        });
+        path.get("body").traverse(renameArgumentsBindingsVisitor);
 
         // Turn all declarations into vars, and replace the original
         // declarations with equivalent assignment expressions.
@@ -349,14 +347,9 @@ function getMarkedFunctionId(
   return t.cloneNode(markedId);
 }
 
-const renameArgumentsBindingsVisitor = traverse.visitors.environmentVisitor<{
-  functionScope: Scope;
-}>({
-  Scopable(path, state) {
-    const { scope } = path;
-    if (scope !== state.functionScope && scope.hasOwnBinding("arguments")) {
-      scope.rename("arguments");
-    }
+const renameArgumentsBindingsVisitor = traverse.visitors.environmentVisitor({
+  Scopable({ scope }) {
+    if (scope.hasOwnBinding("arguments")) scope.rename("arguments");
   },
 });
 
