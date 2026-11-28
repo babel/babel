@@ -1,0 +1,7 @@
+{
+  "presets": null,
+  "plugins": ["transform-regenerator"],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
+}
