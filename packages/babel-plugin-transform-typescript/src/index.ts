@@ -47,6 +47,16 @@ function isInType(path: NodePath) {
   }
 }
 
+function isInAmbientDeclaration(path: NodePath) {
+  return !!path.findParent(
+    p =>
+      p.isClassDeclaration({ declare: true }) ||
+      p.isVariableDeclaration({ declare: true }) ||
+      p.isTSEnumDeclaration({ declare: true }) ||
+      p.isTSModuleDeclaration({ declare: true }),
+  );
+}
+
 // Track programs which contain imports/exports of values, so that we can include
 // empty exports for programs that do not, but were parsed as modules. This allows
 // tools to infer unambiguously that results are ESM.
@@ -713,7 +723,7 @@ export default declare((api, opts: Options) => {
     pragmaFragImportName: string;
   }) {
     for (const path of binding.referencePaths) {
-      if (!isInType(path)) {
+      if (!isInType(path) && !isInAmbientDeclaration(path)) {
         return false;
       }
     }
