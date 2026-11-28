@@ -3,7 +3,7 @@ class C {
   static #p;
   static #x;
   static {
-    var _p4, _5;
+    var _p4, _5, _8;
     function f0(x, _p, _p2) {
       var _ = _p.#p,
         [z,,] = _p2;
@@ -36,10 +36,7 @@ class C {
     for ({
       valueOf: _8,
       ...rest
-    } in {}) {
-      var _8;
-      ;
-    }
+    } in {});
     [, _p4] = [0, {
       p: 1,
       q: 2,
