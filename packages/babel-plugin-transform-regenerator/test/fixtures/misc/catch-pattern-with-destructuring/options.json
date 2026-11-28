@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "transform-regenerator",
+    "transform-destructuring",
+    "transform-block-scoping"
+  ]
+}

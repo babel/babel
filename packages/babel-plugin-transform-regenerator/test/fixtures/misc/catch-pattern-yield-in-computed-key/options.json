@@ -1,0 +1,3 @@
+{
+  "throws": "`yield` or `await` in a `catch` parameter is not supported by the regenerator transform. Please add @babel/plugin-transform-destructuring to your Babel config."
+}
