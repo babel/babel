@@ -643,38 +643,28 @@ jobs:
         run: node ./scripts/publint.ts
 
   codspeed:
-    name: Codspeed (${{ matrix.mode }}${{ matrix.shard && format(' {0}', matrix.shard) || '' }})
-    runs-on: ubuntu-26.04-arm
+    name: Codspeed
+    runs-on: [self-hosted, linux, arm64, benchmark-runner]
     permissions:
       contents: read # required for actions/checkout
       id-token: write # required for OIDC authentication with CodSpeed
     needs: prepare-yarn-cache
     # CodSpeed does not support the merge_group event
     if: github.event_name != 'merge_group'
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          # Valgrind runs all threads of a process on one core, so run one
-          # process per suite and fixture, as many at a time as there are
-          # cores, split across two jobs.
-          - mode: simulation
-            shard: 1/2
-            parallel: "$(nproc)"
-            args: ""
-          - mode: simulation
-            shard: 2/2
-            parallel: "$(nproc)"
-            args: ""
-          # Cases too slow for simulation mode. Walltime measures elapsed
-          # time, so the cases run one at a time. 40 samples per case make
-          # this job take about as long as the simulation ones.
-          - mode: walltime
-            parallel: "1"
-            args: "--iterations=40"
     steps:
       - *checkout
-      - *setup-node
+      - name: Install Yarn
+        run: |
+          npm install --global --prefix "$RUNNER_TEMP/yarn" yarn@1.22.22
+          echo "$RUNNER_TEMP/yarn/bin" >> "$GITHUB_PATH"
+      - name: Locate Yarn cache
+        id: yarn-cache
+        run: echo "path=$(yarn config get cacheFolder)" >> "$GITHUB_OUTPUT"
+      - name: Cache Yarn packages
+        uses: actions/cache@v6
+        with:
+          path: ${{ steps.yarn-cache.outputs.path }}
+          key: yarn-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('yarn.lock') }}
       - name: Install
         run: yarn install
       - name: Build
@@ -684,23 +674,11 @@ jobs:
           BABEL_ENV: "production"
           STRIP_BABEL_VERSION_FLAG: "true"
           IS_PUBLISH: "true"
-      # Listed outside of the CodSpeed step, which runs every process under
-      # Valgrind in simulation mode.
-      - name: List benchmark cases
-        run: |
-          node ./benchmark/index.mjs --list=${{ matrix.mode }} ${{ matrix.shard && format('--shard={0}', matrix.shard) || '' }} > benchmark-cases.txt
-          cat benchmark-cases.txt
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v5
         with:
-          mode: ${{ matrix.mode }}
-          # CodSpeed's node wrapper first runs each process only to read the
-          # V8 flags the plugin needs. --import loads the plugin first, so that
-          # run ends before the Babel packages are loaded.
-          run: >-
-            xargs -P "${{ matrix.parallel }}" -L 1 sh -c
-            'exec node --import @codspeed/tinybench-plugin --expose-gc --no-allocation-site-pretenuring "./benchmark/$0" --only-current --fixture="$1" ${{ matrix.args }}'
-            < benchmark-cases.txt
+          mode: walltime
+          run: node --expose-gc --no-allocation-site-pretenuring ./benchmark/index.mjs --only-current
 
   required-checks:
     name: Required Checks
