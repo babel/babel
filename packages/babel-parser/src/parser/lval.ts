@@ -349,27 +349,30 @@ export default abstract class LValParser extends NodeUtils {
           return (
             prop.type !== "ObjectMethod" &&
             (i === last || prop.type !== "SpreadElement") &&
-            this.isAssignable(prop)
+            this.isAssignable(prop, isBinding)
           );
         });
       }
 
       case "ObjectProperty":
-        return this.isAssignable(node.value);
+        return this.isAssignable(node.value, isBinding);
 
       case "SpreadElement":
-        return this.isAssignable(node.argument);
+        return this.isAssignable(node.argument, isBinding);
 
       case "ArrayExpression":
         return node.elements.every(
-          element => element === null || this.isAssignable(element),
+          element => element === null || this.isAssignable(element, isBinding),
         );
 
       case "AssignmentExpression":
-        return node.operator === "=";
+        return (
+          node.operator === "=" &&
+          (!isBinding || this.isAssignable(node.left, isBinding))
+        );
 
       case "ParenthesizedExpression":
-        return this.isAssignable(node.expression);
+        return this.isAssignable(node.expression, isBinding);
 
       case "MemberExpression":
       case "OptionalMemberExpression":

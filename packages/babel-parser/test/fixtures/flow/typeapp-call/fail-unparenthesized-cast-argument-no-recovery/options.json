@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "flow",
+      {
+        "all": true
+      }
+    ]
+  ],
+  "errorRecovery": false,
+  "throws": "The type cast expression is expected to be wrapped with parenthesis. (1:6)"
+}
