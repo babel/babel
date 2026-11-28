@@ -40,7 +40,7 @@ const getRenameVisitor = () =>
       }
     },
 
-    ObjectProperty({ node, scope }, state) {
+    ObjectProperty({ node, parent, scope }, state) {
       const { name } = node.key as Identifier;
       if (
         node.shorthand &&
@@ -53,6 +53,12 @@ const getRenameVisitor = () =>
         scope.getBindingIdentifier(name) === state.binding.identifier
       ) {
         node.shorthand = false;
+        // `{ __proto__ }` defines an own property, while `{ __proto__: v }`
+        // sets the prototype.
+        if (name === "__proto__" && t.isObjectExpression(parent)) {
+          node.computed = true;
+          node.key = t.stringLiteral("__proto__");
+        }
       }
     },
 
