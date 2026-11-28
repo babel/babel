@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { NodePath, Scope, Visitor, PluginPass } from "@babel/core";
+import type { NodePath, Scope, PluginPass } from "@babel/core";
 import { types as t } from "@babel/core";
 
 import {
@@ -11,6 +11,10 @@ import {
   wrapLoopBody,
 } from "./loop.ts";
 import { validateUsage } from "./validation.ts";
+import {
+  renameConflictingFunctions,
+  renameConflictingFunctionsBeforeLoopWrap,
+} from "./conflicting-functions.ts";
 
 export interface Options {
   tdz?: boolean;
@@ -143,6 +147,7 @@ export default declare((api, opts: Options) => {
         }
 
         if (needsBodyWrap) {
+          renameConflictingFunctionsBeforeLoopWrap(path, state);
           const varPath = wrapLoopBody(
             path,
             captured,
@@ -222,57 +227,6 @@ export default declare((api, opts: Options) => {
   };
 });
 
-const conflictingFunctionsVisitor: Visitor<{ names: string[] }> = {
-  Scope(path, { names }) {
-    for (const name of names) {
-      const binding = path.scope.getOwnBinding(name);
-      if (binding?.kind === "hoisted") {
-        path.scope.rename(name);
-      }
-    }
-  },
-  "Expression|Declaration"(path) {
-    path.skip();
-  },
-};
-
-// The names, per scope, that the conflicting functions check already covered.
-const checkedNamesByScope = new WeakMap<Scope, Set<string>>();
-
-// Once a let/const becomes a var, a function declared with the same name in
-// a nested block would be hoisted over it (Annex B), so rename that function.
-// The check walks the whole scope, so it runs once for every let/const
-// declared in the scope that has not been converted yet, rather than once per
-// declaration, which would be quadratic in the number of declarations.
-function renameConflictingFunctions(blockScope: Scope, names: string[]) {
-  let checkedNames = checkedNamesByScope.get(blockScope);
-  if (checkedNames === undefined) {
-    checkedNames = new Set();
-    checkedNamesByScope.set(blockScope, checkedNames);
-  }
-  if (names.every(name => checkedNames.has(name))) return;
-
-  const pendingNames = new Set(names);
-  for (const name of Object.keys(blockScope.bindings)) {
-    const binding = blockScope.bindings[name];
-    if (
-      (binding.kind === "let" || binding.kind === "const") &&
-      binding.path.isVariableDeclarator() &&
-      // TypeScript removes `declare let` and `declare const` declarations,
-      // so they will never become a var.
-      !binding.path.parent.declare
-    ) {
-      pendingNames.add(name);
-    }
-  }
-  for (const name of checkedNames) pendingNames.delete(name);
-  for (const name of pendingNames) checkedNames.add(name);
-
-  blockScope.path.traverse(conflictingFunctionsVisitor, {
-    names: Array.from(pendingNames),
-  });
-}
-
 function transformBlockScopedVariable(
   path: NodePath<t.VariableDeclaration>,
   state: PluginPass,
@@ -330,7 +284,7 @@ function transformBlockScopedVariable(
     }
   }
 
-  renameConflictingFunctions(blockScope, bindingNames);
+  renameConflictingFunctions(blockScope, bindingNames, state);
 
   // Pushing to the loop's own scope would place the sentinel at the start of
   // its body, overwriting the values assigned by the loop head. Initialize it
