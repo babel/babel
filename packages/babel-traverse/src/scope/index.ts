@@ -2,7 +2,7 @@ import Renamer from "./lib/renamer.ts";
 import type NodePath from "../path/index.ts";
 import traverse, { NodePath as NodePathClass } from "../index.ts";
 import traverseForScope from "./traverseForScope.ts";
-import Binding from "./binding.ts";
+import Binding, { redeclareBinding } from "./binding.ts";
 import type { BindingKind } from "./binding.ts";
 import globalsBuiltinLower from "@babel/helper-globals/data/builtin-lower.json" with { type: "json" };
 import globalsBuiltinUpper from "@babel/helper-globals/data/builtin-upper.json" with { type: "json" };
@@ -432,6 +432,52 @@ let uid = 0;
 export type { Binding };
 
 export { Scope as default };
+
+/**
+ * The number of crawls collecting bindings. The bindings they register again
+ * keep their declarations: e.g. a parameter turned into a `var` declarator in
+ * the body, whose new scope is crawled, is still a parameter.
+ */
+let collectingBindings = 0;
+
+function collectBindings(path: NodePath, state: CollectVisitorState) {
+  scopeVisitor ||= traverse.visitors.merge([
+    {
+      Scope(path) {
+        resetScope(path.scope);
+      },
+    },
+    collectorVisitor,
+  ]);
+  // traverse does not visit the root node, here we explicitly collect
+  // root node binding info when the root is not a Program.
+  if (path.type !== "Program") {
+    const typeVisitors = scopeVisitor[path.type];
+    if (typeVisitors) {
+      for (const visit of typeVisitors.enter!) {
+        (visit as Function).call(state, path, state);
+      }
+    }
+  }
+
+  traverseForScope(path, scopeVisitor as Visitor, state);
+}
+
+/**
+ * The binding of `id` in a parent scope of `scope`, when the declaration of
+ * `id` was moved into `scope`.
+ */
+function getMovedBinding(
+  scope: Scope,
+  name: string,
+  id: t.Identifier,
+): Binding | undefined {
+  for (let s = scope.parent; s; s = s.parent) {
+    const binding = s.getOwnBinding(name);
+    if (binding) return binding.identifier === id ? binding : undefined;
+  }
+}
+
 class Scope {
   uid;
 
@@ -781,26 +827,33 @@ class Scope {
       parent.referencesSet.add(name);
 
       for (const id of ids[name]) {
-        const local = this.getOwnBinding(name);
+        let local = this.getOwnBinding(name);
 
-        if (local) {
-          // same identifier so continue safely as we're likely trying to register it
-          // multiple times
-          if (local.identifier === id) continue;
-
-          this.checkBlockScopedCollisions(local, kind, name, id);
+        if (
+          !local &&
+          (kind === "let" || kind === "const") &&
+          collectingBindings === 0 &&
+          (local = getMovedBinding(this, name, id))
+        ) {
+          // A lexical declaration moved into a nested scope keeps its
+          // binding, with the references and constant violations recorded
+          local.scope.moveBindingTo(name, this);
         }
 
-        // A redeclaration of an existing variable is a modification
-        if (local) {
-          local.reassign(bindingPath);
-        } else {
+        if (!local) {
           this.bindings[name] = new Binding({
             identifier: id,
             scope: this,
             path: bindingPath,
             kind: kind,
           });
+        } else if (local.identifier !== id) {
+          this.checkBlockScopedCollisions(local, kind, name, id);
+          // A redeclaration of an existing variable is a modification
+          local.reassign(bindingPath);
+        } else if (collectingBindings === 0 && local.path !== bindingPath) {
+          // The same identifier, registered again by a new declaration
+          redeclareBinding(local, kind, bindingPath);
         }
       }
     }
@@ -987,28 +1040,13 @@ class Scope {
     };
 
     this.crawling = true;
-    scopeVisitor ||= traverse.visitors.merge([
-      {
-        Scope(path) {
-          resetScope(path.scope);
-        },
-      },
-      collectorVisitor,
-    ]);
-    // traverse does not visit the root node, here we explicitly collect
-    // root node binding info when the root is not a Program.
-    if (path.type !== "Program") {
-      const typeVisitors = scopeVisitor[path.type];
-      if (typeVisitors) {
-        for (const visit of typeVisitors.enter!) {
-          (visit as Function).call(state, path, state);
-        }
-      }
+    collectingBindings++;
+    try {
+      collectBindings(path, state);
+    } finally {
+      collectingBindings--;
+      this.crawling = false;
     }
-
-    traverseForScope(path, scopeVisitor as Visitor, state);
-
-    this.crawling = false;
 
     // register assignments
     for (const path of state.assignments) {
@@ -1109,9 +1147,16 @@ class Scope {
     const declarator = variableDeclarator(id, init);
     const { declarations } = declarPath.node;
     const len = declarations.push(declarator);
+    // Like `crawl`, register a `var` in the function scope rather than in
+    // the scope of the block declaring it.
+    const { scope } = path;
+    const registerScope =
+      kind === "var"
+        ? scope.getFunctionParent() || scope.getProgramParent()
+        : scope;
     // Only create the path of the new declarator, like `get("declarations")`
     // does for all of them.
-    path.scope.registerBinding(
+    registerScope.registerBinding(
       kind,
       NodePathClass.get({
         listKey: "declarations",

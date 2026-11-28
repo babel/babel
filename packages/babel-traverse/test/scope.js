@@ -683,6 +683,17 @@ describe("scope", () => {
       expect(fnScope.getBinding("a").references).toBe(1);
     });
 
+    it("crawls again after a crawl threw", function () {
+      const path = getPath("let a;");
+      path.node.body.push(
+        t.variableDeclaration("let", [t.variableDeclarator(t.identifier("a"))]),
+      );
+      expect(() => path.scope.crawl()).toThrow('Duplicate declaration "a"');
+      path.node.body.pop();
+      path.scope.crawl();
+      expect(path.scope.hasOwnBinding("a")).toBe(true);
+    });
+
     test("generateUid collision check after re-crawling", function () {
       const path = getPath("function Foo() { var _jsx; }");
 
@@ -1118,7 +1129,128 @@ describe("scope", () => {
     });
   });
 
+  describe(".registerDeclaration", () => {
+    it("updates the binding of an identifier declared again", () => {
+      const program = getPath("let { a } = b; a;");
+      const binding = program.scope.getBinding("a");
+      const declaration = program.get("body.0");
+      const id = declaration.node.declarations[0].id.properties[0].value;
+      const [newPath] = declaration.replaceWith(
+        t.variableDeclaration("const", [
+          t.variableDeclarator(id, t.memberExpression(t.identifier("b"), id)),
+        ]),
+      );
+      program.scope.registerDeclaration(newPath);
+      expect(program.scope.getBinding("a")).toBe(binding);
+      expect(binding.kind).toBe("const");
+      expect(binding.path).toBe(newPath.get("declarations.0"));
+      expect(binding.referencePaths).toHaveLength(1);
+    });
+    it("moves the binding of a lexical declaration moved into a nested scope", () => {
+      const program = getPath("for (const { a } of b) { a; }");
+      const loop = program.get("body.0");
+      const binding = loop.scope.getBinding("a");
+      const id = loop.node.left.declarations[0].id.properties[0].value;
+      const [newPath] = loop
+        .get("body")
+        .unshiftContainer(
+          "body",
+          t.variableDeclaration("const", [
+            t.variableDeclarator(id, t.identifier("ref")),
+          ]),
+        );
+      loop.get("body").scope.registerDeclaration(newPath);
+      expect(loop.scope.hasOwnBinding("a")).toBe(false);
+      expect(loop.get("body").scope.getOwnBinding("a")).toBe(binding);
+      expect(binding.scope).toBe(loop.get("body").scope);
+      expect(binding.path).toBe(newPath.get("declarations.0"));
+      expect(binding.referencePaths).toHaveLength(1);
+    });
+    it("replaces the old declaration of a var in a loop as constant violation", () => {
+      const program = getPath("while (1) { var { a, ...b } = c; }");
+      const binding = program.scope.getBinding("b");
+      expect(binding.constantViolations).toEqual([binding.path]);
+      const declaration = program.get("body.0.body.body.0");
+      const pattern = declaration.node.declarations[0].id;
+      const id = pattern.properties.pop().argument;
+      const [newPath] = declaration.replaceWith(
+        t.variableDeclaration("var", [
+          t.variableDeclarator(pattern, t.identifier("c")),
+          t.variableDeclarator(id, t.identifier("c")),
+        ]),
+      );
+      program.scope.registerDeclaration(newPath);
+      expect(program.scope.getBinding("b")).toBe(binding);
+      expect(binding.path).toBe(newPath.get("declarations.1"));
+      expect(binding.constantViolations).toEqual([binding.path]);
+    });
+    it("marks a var declared again outside its loop as constant", () => {
+      const program = getPath("while (1) { var a = 1; }");
+      const binding = program.scope.getBinding("a");
+      expect(binding.constant).toBe(false);
+      const loop = program.get("body.0");
+      const declarator = loop.node.body.body[0].declarations[0];
+      const [newPath] = loop.replaceWith(
+        t.variableDeclaration("var", [declarator]),
+      );
+      program.scope.registerDeclaration(newPath);
+      expect(program.scope.getBinding("a")).toBe(binding);
+      expect(binding.path).toBe(newPath.get("declarations.0"));
+      expect(binding.constantViolations).toEqual([]);
+      expect(binding.constant).toBe(true);
+    });
+    it("keeps the binding when a crawl registers its identifier again", () => {
+      const program = getPath("function f(...a) {}");
+      const fn = program.get("body.0");
+      const binding = fn.scope.getBinding("a");
+      const id = fn.node.params[0].argument;
+      fn.get("body").unshiftContainer(
+        "body",
+        t.forStatement(
+          t.variableDeclaration("var", [t.variableDeclarator(id)]),
+          null,
+          null,
+          t.blockStatement([]),
+        ),
+      );
+      expect(fn.scope.getBinding("a")).toBe(binding);
+      expect(binding.kind).toBe("param");
+    });
+  });
+
   describe(".push", () => {
+    it("registers a var in the function scope", () => {
+      const program = getPath("function f() { { x; } }");
+      const block = program.get("body.0.body.body.0");
+      block.scope.push({ id: t.identifier("ref") });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "function f() {
+          {
+            var ref;
+            x;
+          }
+        }"
+      `);
+      expect(block.scope.hasOwnBinding("ref")).toBe(false);
+      expect(program.get("body.0").scope.hasOwnBinding("ref")).toBe(true);
+    });
+    it("does not register the body of a loop again when wrapping it in a block", () => {
+      const program = getPath("function f(x) { for (;;) x; }");
+      const loop = program.get("body.0.body.body.0");
+      loop.scope.push({ id: t.identifier("ref"), kind: "let" });
+      expect(program.toString()).toMatchInlineSnapshot(`
+        "function f(x) {
+          for (;;) {
+            let ref;
+            x;
+          }
+        }"
+      `);
+      expect(loop.get("body").scope.hasOwnBinding("ref")).toBe(true);
+      expect(
+        program.get("body.0").scope.getBinding("x").referencePaths,
+      ).toHaveLength(1);
+    });
     it("registers the new binding in the correct scope", () => {
       const program = getPath("class A {}");
       const classDeclaration = program.get("body.0");

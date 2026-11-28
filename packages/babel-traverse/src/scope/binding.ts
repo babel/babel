@@ -125,6 +125,28 @@ export default class Binding {
   }
 }
 
+/**
+ * Update `binding` when its identifier is declared by a new declaration,
+ * e.g. after the old one was replaced.
+ */
+export function redeclareBinding(
+  binding: Binding,
+  kind: BindingKind,
+  path: NodePath,
+) {
+  // The old declaration is not a constant violation anymore
+  const index = binding.constantViolations.indexOf(binding.path);
+  if (index !== -1) {
+    binding.constantViolations.splice(index, 1);
+    binding.constant = binding.constantViolations.length === 0;
+  }
+  binding.path = path;
+  binding.kind = kind;
+  if ((kind === "var" || kind === "hoisted") && isInitInLoop(path)) {
+    binding.reassign(path);
+  }
+}
+
 function isInitInLoop(path: NodePath) {
   const isFunctionDeclarationOrHasInit =
     !path.isVariableDeclarator() || path.node.init;

@@ -169,10 +169,13 @@ function isAlmostConstantAssignment(
   const blockScope = scope.getBlockParent();
 
   // If the variable is defined in the current scope and only assigned here,
-  // we can be sure that its value won't change.
+  // we can be sure that its value won't change. A `var` declared in the
+  // current block is registered in the function scope.
+  const binding = blockScope.getBinding(node.left.name);
   return (
-    blockScope.hasOwnBinding(node.left.name) &&
-    blockScope.getOwnBinding(node.left.name)!.constantViolations.length <= 1
+    binding != null &&
+    (binding.scope === blockScope || binding.path.scope === blockScope) &&
+    binding.constantViolations.length <= 1
   );
 }
 
