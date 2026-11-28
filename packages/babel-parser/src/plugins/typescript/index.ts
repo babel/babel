@@ -1499,7 +1499,16 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
             if (nextToken.type !== tt.num && nextToken.type !== tt.bigint) {
               this.unexpected();
             }
-            node.literal = this.parseMaybeUnary() as N.UnaryExpression;
+
+            const unary = this.startNode<N.UnaryExpression>();
+            this.next();
+            unary.operator = "-";
+            unary.prefix = true;
+            unary.argument =
+              nextToken.type === tt.num
+                ? this.parseNumericLiteral(this.state.value)
+                : this.parseBigIntLiteral(this.state.value);
+            node.literal = this.finishNode(unary, "UnaryExpression");
             return this.finishNode(node, "TSLiteralType");
           }
           break;
