@@ -29,6 +29,10 @@ const GENERATOR_FAILURES = [
   "parentheses/ts-tagged-template-expression/input.ts",
   "typescript/instantiation-expression-callee-tag-parentheses/input.js",
   "typescript/instantiation-expression-new-callee-minified/input.js",
+
+  // `(a |> %) |> f(%)` is printed as `a |> % |> f(%)`, which is parsed as
+  // `a |> (% |> f(%))` and has the same runtime semantics
+  "parentheses/hack-pipeline-in-pipe/input.js",
 ];
 
 // Parser fixtures whose AST is expected to change shape, relative to

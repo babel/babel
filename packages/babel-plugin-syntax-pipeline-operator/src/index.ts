@@ -34,8 +34,11 @@ export default declare((api, { proposal, topicToken }: Options) => {
       // Add parser options.
       parserOpts.plugins.push(["pipelineOperator", { proposal, topicToken }]);
 
-      // Add generator options.
-      opts.generatorOpts.topicToken = topicToken;
+      // Add generator options. The generator prints `|>` as a Hack pipe
+      // when it has a topic token, so it must not get one for F# pipes.
+      if (proposal === "hack") {
+        opts.generatorOpts.topicToken = topicToken;
+      }
     },
   };
 });

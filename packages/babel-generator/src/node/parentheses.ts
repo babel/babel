@@ -9,6 +9,7 @@ import type * as t from "@babel/types";
 import { TokenContext } from "./index.ts";
 
 const PRECEDENCE = new Map([
+  ["|>", -1],
   ["||", 0],
   ["??", 1],
   ["&&", 2],
@@ -416,6 +417,19 @@ export function BinaryExpression(
   parentId: number,
   tokenContext: number,
 ): boolean {
+  if (node.operator === "|>" && tokenContext & TokenContext.hackPipeline) {
+    // The body of a Hack pipe is an assignment expression, so `a |> % |> f(%)`
+    // is `a |> (% |> f(%))`, which has the same runtime semantics as
+    // `(a |> %) |> f(%)`. F# pipes are left-associative.
+    if (parentId === __node("BinaryExpression") && parent.operator === "|>") {
+      return false;
+    }
+    // `(a |> %) ? b : c` is not `a |> (% ? b : c)`
+    if (parentId === __node("ConditionalExpression") && parent.test === node) {
+      return true;
+    }
+  }
+
   if (BinaryLike(node, parent, parentId, BinaryLikeType.Binary)) return true;
 
   // for ((1 in []);;);

@@ -24,6 +24,10 @@ export const enum TokenContext {
   // Set while printing a class heritage and the leading `new`s of its
   // expression; cleared by the next printed token.
   classHeritage = 1 << 9,
+  // Whether `|>` is a Hack pipe, rather than an F# pipe. Unlike the other
+  // flags it does not depend on the position: the printer sets it on every
+  // token context passed to the parentheses handlers.
+  hackPipeline = 1 << 10,
 }
 
 export type NodeHandler<R> = (
@@ -107,12 +111,18 @@ function isWrappedOptionalChain(node: t.Node): boolean {
 }
 
 // Whether `child` is printed in parentheses inside `parent`.
-function printsParens(child: t.Node, parent: t.Node): boolean {
+// `tokenContext` only has the flags that do not depend on the position.
+function printsParens(
+  child: t.Node,
+  parent: t.Node,
+  tokenContext: number,
+): boolean {
   const parentId = generatorInfosMap.get(parent.type)![1];
   const needsParens = generatorInfosMap.get(child.type)?.[2];
   return (
-    parentNeedsParens(child, parent, parentId) ||
-    (needsParens != null && !!needsParens(child, parent, parentId))
+    parentNeedsParens(child, parent, parentId, tokenContext) ||
+    (needsParens != null &&
+      !!needsParens(child, parent, parentId, tokenContext))
   );
 }
 
@@ -144,6 +154,7 @@ function isAmbiguousAfterTypeArguments(operator: string): boolean {
 function endsBeforeOperatorAmbiguously(
   node: t.Node,
   operator: string,
+  tokenContext: number,
 ): boolean {
   // All the ambiguous operators are ambiguous after type arguments
   if (!isAmbiguousAfterTypeArguments(operator)) return false;
@@ -179,7 +190,9 @@ function endsBeforeOperatorAmbiguously(
         return false;
     }
     // A parenthesized operand ends with `)`
-    if (parent !== null && printsParens(current, parent)) return false;
+    if (parent !== null && printsParens(current, parent, tokenContext)) {
+      return false;
+    }
     if (next === undefined) return result;
     parent = current;
     current = next;
@@ -190,11 +203,16 @@ export function parentNeedsParens(
   node: t.Node,
   parent: any,
   parentId: number,
+  tokenContext: number,
 ): boolean {
   switch (parentId) {
     case __node("BinaryExpression"):
       if (parent.left === node) {
-        return endsBeforeOperatorAmbiguously(node, parent.operator);
+        return endsBeforeOperatorAmbiguously(
+          node,
+          parent.operator,
+          tokenContext,
+        );
       }
       break;
     case __node("NewExpression"):
