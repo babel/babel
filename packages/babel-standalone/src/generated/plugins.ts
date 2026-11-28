@@ -36,6 +36,7 @@ import transformOptionalCatchBinding from "@babel/plugin-transform-optional-catc
 import transformOptionalChaining from "@babel/plugin-transform-optional-chaining";
 import proposalOptionalChainingAssign from "@babel/plugin-proposal-optional-chaining-assign";
 import proposalPipelineOperator from "@babel/plugin-proposal-pipeline-operator";
+import proposalStructs from "@babel/plugin-proposal-structs";
 import transformPrivateMethods from "@babel/plugin-transform-private-methods";
 import transformPrivatePropertyInObject from "@babel/plugin-transform-private-property-in-object";
 import transformRegexpModifiers from "@babel/plugin-transform-regexp-modifiers";
@@ -126,6 +127,7 @@ export {
   transformOptionalChaining,
   proposalOptionalChainingAssign,
   proposalPipelineOperator,
+  proposalStructs,
   transformPrivateMethods,
   transformPrivatePropertyInObject,
   transformRegexpModifiers,
@@ -218,6 +220,7 @@ export const all: Record<string, any> = {
   "transform-optional-chaining": transformOptionalChaining,
   "proposal-optional-chaining-assign": proposalOptionalChainingAssign,
   "proposal-pipeline-operator": proposalPipelineOperator,
+  "proposal-structs": proposalStructs,
   "transform-private-methods": transformPrivateMethods,
   "transform-private-property-in-object": transformPrivatePropertyInObject,
   "transform-regexp-modifiers": transformRegexpModifiers,

@@ -33,6 +33,7 @@ const pluginOptions = {
 // throw BABEL_VERSION_UNSUPPORTED.
 const requiresNewerCore = new Set([
   "@babel/plugin-proposal-filtered-namespaces",
+  "@babel/plugin-proposal-structs",
 ]);
 
 // Run from the root of the monorepo.

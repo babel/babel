@@ -100,6 +100,12 @@ const pluginNameMap: Record<
       url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-syntax-record-and-tuple",
     },
   },
+  structs: {
+    transform: {
+      name: "@babel/plugin-proposal-structs",
+      url: "https://github.com/babel/babel/tree/main/packages/babel-plugin-proposal-structs",
+    },
+  },
   throwExpressions: {
     syntax: {
       name: "@babel/plugin-syntax-throw-expressions",
@@ -164,6 +170,14 @@ If you want to leave it as-is, add ${syntaxPluginInfo} to the 'plugins' section 
           `\n\nAdd ${syntaxPluginInfo} to the 'plugins' section of your Babel config ` +
           `to enable parsing.`;
       }
+    } else if (transformPlugin) {
+      // The syntax is only enabled by the transform plugin
+      const sectionType = transformPlugin.name.startsWith("@babel/plugin")
+        ? "plugins"
+        : "presets";
+      helpMessage +=
+        `\n\nAdd ${getNameURLCombination(transformPlugin)} to the '${sectionType}' section ` +
+        `of your Babel config to enable transformation.`;
     }
   }
 

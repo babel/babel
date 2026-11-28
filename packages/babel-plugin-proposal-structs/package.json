@@ -1,0 +1,50 @@
+{
+  "name": "@babel/plugin-proposal-structs",
+  "version": "8.1.3",
+  "description": "Transform structs proposal (non-shared structs)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/babel.git",
+    "directory": "packages/babel-plugin-proposal-structs"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^",
+    "@babel/traverse": "workspace:^"
+  },
+  "peerDependencies": {
+    "@babel/core": "^8.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "workspace:^",
+    "@babel/helper-plugin-test-runner": "workspace:^",
+    "@babel/plugin-transform-async-to-generator": "workspace:^",
+    "@babel/plugin-transform-class-properties": "workspace:^",
+    "@babel/plugin-transform-class-static-block": "workspace:^",
+    "@babel/plugin-transform-private-methods": "workspace:^",
+    "@babel/plugin-transform-regenerator": "workspace:^",
+    "@babel/plugin-transform-typescript": "workspace:^",
+    "@babel/preset-env": "workspace:^"
+  },
+  "homepage": "https://babel.dev/docs/en/next/babel-plugin-proposal-structs",
+  "engines": {
+    "node": "^22.18.0 || >=24.11.0"
+  },
+  "author": "The Babel Team (https://babel.dev/team)",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "type": "module"
+}

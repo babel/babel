@@ -1,0 +1,1 @@
+{ "plugins": ["proposal-structs", "../../../scripts/check-transform-scope-integrity.cjs", "transform-class-properties", "transform-private-methods", "transform-class-static-block"], "assumptions": {"setPublicClassFields": true} }

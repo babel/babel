@@ -1,0 +1,1 @@
+{ "plugins": ["proposal-structs", "../../../scripts/check-transform-scope-integrity.cjs"], "parserOpts": {"plugins": ["typescript"]}, "throws": "Fields with the 'declare' modifier are not supported in structs" }

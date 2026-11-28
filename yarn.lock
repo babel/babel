@@ -1722,6 +1722,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/plugin-proposal-structs@workspace:^, @babel/plugin-proposal-structs@workspace:packages/babel-plugin-proposal-structs":
+  version: 0.0.0-use.local
+  resolution: "@babel/plugin-proposal-structs@workspace:packages/babel-plugin-proposal-structs"
+  dependencies:
+    "@babel/core": "workspace:^"
+    "@babel/helper-plugin-test-runner": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-skip-transparent-expression-wrappers": "workspace:^"
+    "@babel/plugin-transform-async-to-generator": "workspace:^"
+    "@babel/plugin-transform-class-properties": "workspace:^"
+    "@babel/plugin-transform-class-static-block": "workspace:^"
+    "@babel/plugin-transform-private-methods": "workspace:^"
+    "@babel/plugin-transform-regenerator": "workspace:^"
+    "@babel/plugin-transform-typescript": "workspace:^"
+    "@babel/preset-env": "workspace:^"
+    "@babel/traverse": "workspace:^"
+  peerDependencies:
+    "@babel/core": ^8.0.0
+  languageName: unknown
+  linkType: soft
+
 "@babel/plugin-proposal-text-modules@workspace:packages/babel-plugin-proposal-text-modules":
   version: 0.0.0-use.local
   resolution: "@babel/plugin-proposal-text-modules@workspace:packages/babel-plugin-proposal-text-modules"
@@ -3979,6 +4000,7 @@ __metadata:
     "@babel/plugin-proposal-import-defer": "workspace:^"
     "@babel/plugin-proposal-optional-chaining-assign": "workspace:^"
     "@babel/plugin-proposal-pipeline-operator": "workspace:^"
+    "@babel/plugin-proposal-structs": "workspace:^"
     "@babel/plugin-proposal-throw-expressions": "workspace:^"
     "@babel/plugin-syntax-decorators": "workspace:^"
     "@babel/plugin-syntax-destructuring-private": "workspace:^"

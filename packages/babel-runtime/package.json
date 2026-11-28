@@ -155,6 +155,11 @@
       "import": "./helpers/esm/construct.js",
       "default": "./helpers/construct.js"
     },
+    "./helpers/constructStruct": {
+      "node": "./helpers/constructStruct.js",
+      "import": "./helpers/esm/constructStruct.js",
+      "default": "./helpers/constructStruct.js"
+    },
     "./helpers/createClass": {
       "node": "./helpers/createClass.js",
       "import": "./helpers/esm/createClass.js",
@@ -194,6 +199,11 @@
       "node": "./helpers/defineProperty.js",
       "import": "./helpers/esm/defineProperty.js",
       "default": "./helpers/defineProperty.js"
+    },
+    "./helpers/defineStruct": {
+      "node": "./helpers/defineStruct.js",
+      "import": "./helpers/esm/defineStruct.js",
+      "default": "./helpers/defineStruct.js"
     },
     "./helpers/extends": {
       "node": "./helpers/extends.js",
@@ -375,6 +385,11 @@
       "import": "./helpers/esm/regeneratorValues.js",
       "default": "./helpers/regeneratorValues.js"
     },
+    "./helpers/sealStruct": {
+      "node": "./helpers/sealStruct.js",
+      "import": "./helpers/esm/sealStruct.js",
+      "default": "./helpers/sealStruct.js"
+    },
     "./helpers/set": {
       "node": "./helpers/set.js",
       "import": "./helpers/esm/set.js",
@@ -399,6 +414,21 @@
       "node": "./helpers/slicedToArray.js",
       "import": "./helpers/esm/slicedToArray.js",
       "default": "./helpers/slicedToArray.js"
+    },
+    "./helpers/structHeritage": {
+      "node": "./helpers/structHeritage.js",
+      "import": "./helpers/esm/structHeritage.js",
+      "default": "./helpers/structHeritage.js"
+    },
+    "./helpers/structPrivateMethod": {
+      "node": "./helpers/structPrivateMethod.js",
+      "import": "./helpers/esm/structPrivateMethod.js",
+      "default": "./helpers/structPrivateMethod.js"
+    },
+    "./helpers/structSuper": {
+      "node": "./helpers/structSuper.js",
+      "import": "./helpers/esm/structSuper.js",
+      "default": "./helpers/structSuper.js"
     },
     "./helpers/superPropBase": {
       "node": "./helpers/superPropBase.js",
