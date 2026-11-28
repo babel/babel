@@ -8,6 +8,7 @@ import {
   callExpression,
   conditionalExpression,
   expressionStatement,
+  functionExpression,
   identifier,
   jsxIdentifier,
   logicalExpression,
@@ -174,7 +175,11 @@ export function arrowFunctionToExpression(
     self = self.ensureFunctionName(false) ?? self;
   }
 
-  const { thisBinding, fnPath: fn } = hoistFunctionEnvironment(
+  const {
+    thisBinding,
+    fnPath: fn,
+    capturedInParams,
+  } = hoistFunctionEnvironment(
     self,
     noNewArrows,
     allowInsertArrow,
@@ -210,7 +215,11 @@ export function arrowFunctionToExpression(
     return fn
       .replaceWith(
         callExpression(memberExpression(fn.node, identifier("bind")), [
-          checkBinding ? identifier(checkBinding.name) : thisExpression(),
+          checkBinding
+            ? identifier(checkBinding.name)
+            : capturedInParams
+              ? identifier(thisBinding)
+              : thisExpression(),
         ]),
       )[0]
       .get("callee.object") as NodePath<t.FunctionExpression>;
@@ -228,6 +237,12 @@ const getSuperCallsVisitor = environmentVisitor<{
   },
 });
 
+const paramCaptureWrappers = new WeakSet<t.Node>();
+
+function isInParamsOf(path: NodePath, fn: NodePath) {
+  return path.find(p => p.parent === fn.node)?.listKey === "params";
+}
+
 /**
  * Given a function, traverse its contents, and if there are references to "this", "arguments", "super",
  * or "new.target", ensure that these references reference the parent environment around this function.
@@ -242,7 +257,11 @@ function hoistFunctionEnvironment(
   noNewArrows: boolean = true,
   allowInsertArrow: boolean = true,
   allowInsertArrowWithRest: boolean = true,
-): { thisBinding: string; fnPath: NodePath<t.Function> } {
+): {
+  thisBinding: string;
+  fnPath: NodePath<t.Function>;
+  capturedInParams: boolean;
+} {
   let arrowParent;
   let thisEnvFn: NodePath<t.Function> = fnPath.findParent(p => {
     if (p.isArrowFunctionExpression()) {
@@ -282,8 +301,54 @@ function hoistFunctionEnvironment(
     }
   }
 
+  let scopeInfo = getScopeInformation(fnPath);
+  let capturedInParams = false;
+
+  if (
+    (scopeInfo.thisPaths.length > 0 ||
+      !noNewArrows ||
+      scopeInfo.argumentsPaths.length > 0 ||
+      scopeInfo.newTargetPaths.length > 0 ||
+      scopeInfo.superProps.length > 0 ||
+      (inConstructor && scopeInfo.superCalls.length > 0)) &&
+    isInParamsOf(fnPath, thisEnvFn)
+  ) {
+    if (
+      inConstructor &&
+      hasSuperClass(thisEnvFn) &&
+      (scopeInfo.thisPaths.length > 0 ||
+        !noNewArrows ||
+        scopeInfo.superProps.length > 0 ||
+        scopeInfo.superCalls.length > 0)
+    ) {
+      throw fnPath.buildCodeFrameError(
+        "When using '@babel/plugin-transform-arrow-functions', " +
+          "it's not possible to compile `this` or `super` in an arrow function in the parameters of a derived class constructor without compiling parameters.\n" +
+          "Please add '@babel/plugin-transform-parameters' to your Babel configuration.",
+      );
+    }
+
+    const wrapper = fnPath
+      .replaceWith(
+        callExpression(
+          functionExpression(
+            null,
+            [],
+            blockStatement([returnStatement(fnPath.node as t.Expression)]),
+          ),
+          [],
+        ),
+      )[0]
+      .get("callee") as NodePath<t.FunctionExpression>;
+    paramCaptureWrappers.add(wrapper.node);
+    thisEnvFn = wrapper;
+    fnPath = wrapper.get("body.body.0.argument") as NodePath<t.Function>;
+    scopeInfo = getScopeInformation(fnPath);
+    capturedInParams = true;
+  }
+
   const { thisPaths, argumentsPaths, newTargetPaths, superProps, superCalls } =
-    getScopeInformation(fnPath);
+    scopeInfo;
 
   // Convert all super() calls in the constructor, if super is used in an arrow.
   if (inConstructor && superCalls.length > 0) {
@@ -452,7 +517,7 @@ function hoistFunctionEnvironment(
     }
   }
 
-  return { thisBinding: thisBinding!, fnPath };
+  return { thisBinding: thisBinding!, fnPath, capturedInParams };
 }
 
 type LogicalOp = Parameters<typeof logicalExpression>[0];
@@ -718,10 +783,20 @@ function getBinding(
     data = id.name;
     thisEnvFn.setData(cacheKey, data);
 
-    thisEnvFn.scope.push({
-      id: id,
-      init: init(data),
-    });
+    if (paramCaptureWrappers.has(thisEnvFn.node)) {
+      const wrapper = thisEnvFn as NodePath<t.FunctionExpression>;
+      const [paramPath] = wrapper.pushContainer("params", id);
+      wrapper.scope.registerBinding("param", paramPath);
+      (wrapper.parentPath as NodePath<t.CallExpression>).pushContainer(
+        "arguments",
+        init(data)!,
+      );
+    } else {
+      thisEnvFn.scope.push({
+        id: id,
+        init: init(data),
+      });
+    }
   }
 
   return data;
