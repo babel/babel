@@ -35,6 +35,10 @@ startLocalRegistry "$root"/verdaccio-config.yml
 yarn install --no-immutable
 yarn info
 
+# https://github.com/babel/babel/pull/18705 added `typeParameters` to StructDeclaration,
+# so these `@ts-expect-error` are now unused
+perl -ni -e 'print unless m#^\s*// \@ts-expect-error -- Missing in `StructDeclaration`\s*$#' src/language-js/comments/handle-comments.js
+
 # Test typings for @babel/parser
 yarn lint:typecheck
 

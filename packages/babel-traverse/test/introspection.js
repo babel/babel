@@ -46,6 +46,25 @@ describe("path/introspection", function () {
       });
     });
 
+    describe("structs", function () {
+      const options = { sourceType: "script", plugins: ["structs"] };
+
+      it("returns parent's strictness for struct", function () {
+        const program = getPath("struct Test extends Super {}", options);
+        expect(program.get("body.0").isInStrictMode()).toBeFalsy();
+      });
+
+      it("returns true inside struct", function () {
+        const program = getPath(
+          "struct Test extends Super { test() {} }",
+          options,
+        );
+        expect(program.get("body.0.id").isInStrictMode()).toBeTruthy();
+        expect(program.get("body.0.superClass").isInStrictMode()).toBeTruthy();
+        expect(program.get("body.0.body.body.0").isInStrictMode()).toBeTruthy();
+      });
+    });
+
     describe("program", function () {
       describe("when script", function () {
         it("returns true when strict", function () {

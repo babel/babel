@@ -1,0 +1,1 @@
+{ "throws": "TypeScript parameter properties are not supported in struct constructors, since all the struct fields must be declared in the struct body." }

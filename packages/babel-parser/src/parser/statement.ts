@@ -2228,6 +2228,33 @@ export default abstract class StatementParser extends ExpressionParser {
     }
   }
 
+  // `export default struct<T> {}`, but not the generic call or comparison
+  // `export default struct<T>(x)`: check that the type parameters are
+  // followed by the struct heritage or body.
+  isAnonymousGenericStructStart(this: Parser): boolean {
+    if (
+      !this.hasPlugin("structs") ||
+      !(this.hasPlugin("typescript") || this.hasPlugin("flow"))
+    ) {
+      return false;
+    }
+    const oldState = this.state.clone();
+    const result = this.tryParse(() => {
+      this.next(); // 'struct'
+      const node = this.startNode<N.StructDeclaration>();
+      this.parseClassId(node, /* isStatement */ true, /* optionalId */ true);
+      return node as N.Node;
+    }, oldState.clone());
+    const isStruct =
+      !result.error &&
+      !result.aborted &&
+      (this.match(tt.braceL) ||
+        this.match(tt._extends) ||
+        this.isContextual(tt._implements));
+    this.state = oldState;
+    return isStruct;
+  }
+
   parseStructDeclaration(
     this: Parser,
     node: Undone<N.StructDeclaration>,
@@ -2534,7 +2561,8 @@ export default abstract class StatementParser extends ExpressionParser {
       const nextCh = this.codePointAtPos(next);
       if (
         nextCh === charCodes.leftCurlyBrace ||
-        this.chStartsBindingIdentifier(nextCh, next)
+        this.chStartsBindingIdentifier(nextCh, next) ||
+        (nextCh === charCodes.lessThan && this.isAnonymousGenericStructStart())
       ) {
         this.expectPlugin("structs");
         return this.parseStructDeclaration(expr, true);

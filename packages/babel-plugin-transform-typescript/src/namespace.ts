@@ -208,6 +208,7 @@ function handleNested(
       case "TSEnumDeclaration":
       case "FunctionDeclaration":
       case "ClassDeclaration":
+      case "StructDeclaration":
         isEmpty = false;
         names.add(subNode.id!.name);
         continue;
@@ -238,7 +239,8 @@ function handleNested(
         EXPORTED_CONST_ENUMS_IN_NAMESPACE.add(subNode.declaration);
       // fallthrough
       case "FunctionDeclaration":
-      case "ClassDeclaration": {
+      case "ClassDeclaration":
+      case "StructDeclaration": {
         isEmpty = false;
         const itemName = subNode.declaration.id!.name;
         names.add(itemName);

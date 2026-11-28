@@ -1,0 +1,1 @@
+{ "throws": "Fields with the 'declare' modifier are not supported in structs" }

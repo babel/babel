@@ -666,7 +666,7 @@ export function isInStrictMode(this: NodePath<t.Node | null>) {
   const strictParent = start.find(path => {
     if (path.isProgram({ sourceType: "module" })) return true;
 
-    if (path.isClass()) return true;
+    if (path.isClass() || path.isStructDeclaration()) return true;
 
     if (
       path.isArrowFunctionExpression() &&

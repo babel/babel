@@ -662,6 +662,38 @@ describe("scope", () => {
       expect(path.scope.bindings.a).toBe(path.get("body[0]").scope.bindings.a);
     });
 
+    it("struct declarations are registered as block-scoped bindings", function () {
+      const path = getPath(
+        `{ struct a extends B { build() { return new a(); } } }
+         export struct b {}
+         export default struct c {}`,
+        { sourceType: "module", plugins: ["structs"] },
+      );
+      const block = path.get("body.0");
+
+      const a = block.scope.getOwnBinding("a");
+      expect(a.kind).toBe("let");
+      expect(a.path.isStructDeclaration()).toBe(true);
+      expect(a.referencePaths).toHaveLength(1);
+      expect(path.scope.hasOwnBinding("a")).toBe(false);
+      expect(block.get("body.0").scope.bindings.a).toBe(a);
+
+      expect(path.scope.getOwnBinding("b").kind).toBe("let");
+      expect(path.scope.getOwnBinding("c").kind).toBe("let");
+      expect(path.scope.hasGlobal("B")).toBe(true);
+    });
+
+    it("declare struct declarations are not registered as bindings", function () {
+      const path = getPath(
+        `declare struct a {}
+         export declare struct b {}`,
+        { sourceType: "module", plugins: ["typescript", "structs"] },
+      );
+
+      expect(path.scope.hasOwnBinding("a")).toBe(false);
+      expect(path.scope.hasOwnBinding("b")).toBe(false);
+    });
+
     it("references after re-crawling", function () {
       const path = getPath("function Foo() { var _jsx; }");
 

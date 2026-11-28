@@ -4,8 +4,8 @@ import * as t from "@babel/types";
 import traverse from "../lib/index.js";
 import generate from "@babel/generator";
 
-function getPath(code) {
-  const ast = parse(code);
+function getPath(code, options) {
+  const ast = parse(code, options);
   let path;
   traverse(ast, {
     Program: function (_path) {
@@ -22,6 +22,25 @@ function generateCode(path) {
 }
 
 describe("conversion", function () {
+  describe("splitExportDeclaration", function () {
+    it("keeps struct declarations standalone", function () {
+      const options = { sourceType: "module", plugins: ["structs"] };
+      let path = getPath("export default struct {}", options);
+      path.splitExportDeclaration();
+      expect(generateCode(path)).toMatchInlineSnapshot(`
+        "struct _default {}
+        export { _default as default };"
+      `);
+
+      path = getPath("export default struct S {}", options);
+      path.splitExportDeclaration();
+      expect(generateCode(path)).toMatchInlineSnapshot(`
+        "struct S {}
+        export { S as default };"
+      `);
+    });
+  });
+
   describe("ensureBlock", function () {
     it("throws converting node without body to block", function () {
       const rootPath = getPath("true;");

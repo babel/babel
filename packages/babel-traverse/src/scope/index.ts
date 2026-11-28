@@ -17,6 +17,7 @@ import {
   isClass,
   isClassBody,
   isClassDeclaration,
+  isStructDeclaration,
   isExportAllDeclaration,
   isExportDefaultDeclaration,
   isExportNamedDeclaration,
@@ -181,6 +182,7 @@ function gatherNodeParts(node: t.Node | null | undefined, parts: NodePart[]) {
     case "FunctionDeclaration":
     case "ClassExpression":
     case "ClassDeclaration":
+    case "StructDeclaration":
       gatherNodeParts(node.id, parts);
       break;
 
@@ -337,7 +339,11 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
       // ExportAllDeclaration does not have `declaration`
       if (isExportAllDeclaration(node)) return;
       const declar = node.declaration;
-      if (isClassDeclaration(declar) || isFunctionDeclaration(declar)) {
+      if (
+        isClassDeclaration(declar) ||
+        isFunctionDeclaration(declar) ||
+        isStructDeclaration(declar)
+      ) {
         const id = declar.id;
         if (!id) return;
 
@@ -380,7 +386,10 @@ const collectorVisitor: Visitor<CollectVisitorState> = {
     parent.registerDeclaration(path);
 
     // Register class identifier in class' scope if this is a class declaration.
-    if (path.isClassDeclaration() && path.node.id) {
+    if (
+      (path.isClassDeclaration() || path.isStructDeclaration()) &&
+      path.node.id
+    ) {
       const id = path.node.id;
       const name = id.name;
 
@@ -724,6 +733,10 @@ class Scope {
     } else if (path.isClassDeclaration()) {
       if (path.node.declare) return;
       this.registerBinding("let", path);
+    } else if (path.isStructDeclaration()) {
+      // TypeScript's `declare struct`
+      if (path.node.declare) return;
+      this.registerBinding("let", path);
     } else if (path.isImportDeclaration()) {
       const isTypeDeclaration =
         path.node.importKind === "type" || path.node.importKind === "typeof";
@@ -743,6 +756,7 @@ class Scope {
       if (
         declar.isClassDeclaration() ||
         declar.isFunctionDeclaration() ||
+        declar.isStructDeclaration() ||
         declar.isVariableDeclaration()
       ) {
         this.registerDeclaration(declar);

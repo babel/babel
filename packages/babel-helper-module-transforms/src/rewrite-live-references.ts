@@ -1,7 +1,10 @@
 import { template, types as t } from "@babel/core";
 import type { NodePath, Visitor, Scope } from "@babel/core";
 
-import type { ModuleMetadata } from "./normalize-and-load-metadata.ts";
+import {
+  supportsStructs,
+  type ModuleMetadata,
+} from "./normalize-and-load-metadata.ts";
 
 interface RewriteReferencesVisitorState {
   exported: Map<any, any>;
@@ -136,6 +139,34 @@ export default function rewriteLiveReferences(
   programPath.traverse(rewriteReferencesVisitor, rewriteReferencesVisitorState);
 }
 
+function rewriteClassOrStructBindingInit(
+  this: RewriteBindingInitVisitorState,
+  path: NodePath<t.ClassDeclaration | t.StructDeclaration>,
+) {
+  const { requeueInParent, exported, metadata } = this;
+
+  const { id } = path.node;
+  if (!id) throw new Error("Expected class to have a name");
+  const localName = id.name;
+
+  const exportNames = exported.get(localName) || [];
+  if (exportNames.length > 0) {
+    const statement = t.expressionStatement(
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      buildBindingExportAssignmentExpression(
+        metadata,
+        exportNames,
+        t.identifier(localName),
+        path.scope,
+      ),
+    );
+    // @ts-expect-error todo(flow->ts): avoid mutations
+    statement._blockHoist = path.node._blockHoist;
+
+    requeueInParent(path.insertAfter(statement)[0]);
+  }
+}
+
 /**
  * A visitor to inject export update statements during binding initialization.
  */
@@ -143,30 +174,10 @@ const rewriteBindingInitVisitor: Visitor<RewriteBindingInitVisitorState> = {
   Scope(path) {
     path.skip();
   },
-  ClassDeclaration(path) {
-    const { requeueInParent, exported, metadata } = this;
-
-    const { id } = path.node;
-    if (!id) throw new Error("Expected class to have a name");
-    const localName = id.name;
-
-    const exportNames = exported.get(localName) || [];
-    if (exportNames.length > 0) {
-      const statement = t.expressionStatement(
-        // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        buildBindingExportAssignmentExpression(
-          metadata,
-          exportNames,
-          t.identifier(localName),
-          path.scope,
-        ),
-      );
-      // @ts-expect-error todo(flow->ts): avoid mutations
-      statement._blockHoist = path.node._blockHoist;
-
-      requeueInParent(path.insertAfter(statement)[0]);
-    }
-  },
+  ClassDeclaration: rewriteClassOrStructBindingInit,
+  ...(supportsStructs
+    ? { StructDeclaration: rewriteClassOrStructBindingInit }
+    : {}),
   VariableDeclaration(path) {
     const { requeueInParent, exported, metadata } = this;
 

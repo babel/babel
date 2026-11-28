@@ -1,0 +1,2 @@
+declare struct
+T {}

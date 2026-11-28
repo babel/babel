@@ -1,0 +1,1 @@
+{ "plugins": ["transform-flow-strip-types"], "parserOpts": { "plugins": ["structs"] }, "throws": "Fields with the 'declare' modifier are not supported in structs" }

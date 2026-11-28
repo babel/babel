@@ -2844,6 +2844,8 @@ export function structBody(
     | t.ClassPrivateProperty
     | t.StaticBlock
     | t.ClassAccessorProperty
+    | t.TSDeclareMethod
+    | t.TSIndexSignature
   )[],
 ): t.StructBody {
   const node: t.StructBody = {

@@ -1,0 +1,92 @@
+{
+  "type": "File",
+  "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":49}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":49}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start":0,"end":49,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":3,"column":1,"index":49}},
+        "exportKind": "value",
+        "declaration": {
+          "type": "StructDeclaration",
+          "start":15,"end":49,"loc":{"start":{"line":1,"column":15,"index":15},"end":{"line":3,"column":1,"index":49}},
+          "id": null,
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start":21,"end":24,"loc":{"start":{"line":1,"column":21,"index":21},"end":{"line":1,"column":24,"index":24}},
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start":22,"end":23,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":23,"index":23}},
+                "name": {
+                  "type": "Identifier",
+                  "start":22,"end":23,"loc":{"start":{"line":1,"column":22,"index":22},"end":{"line":1,"column":23,"index":23},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            ]
+          },
+          "superClass": {
+            "type": "Identifier",
+            "start":33,"end":34,"loc":{"start":{"line":1,"column":33,"index":33},"end":{"line":1,"column":34,"index":34},"identifierName":"B"},
+            "name": "B"
+          },
+          "superTypeArguments": {
+            "type": "TSTypeParameterInstantiation",
+            "start":34,"end":37,"loc":{"start":{"line":1,"column":34,"index":34},"end":{"line":1,"column":37,"index":37}},
+            "params": [
+              {
+                "type": "TSTypeReference",
+                "start":35,"end":36,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":36,"index":36}},
+                "typeName": {
+                  "type": "Identifier",
+                  "start":35,"end":36,"loc":{"start":{"line":1,"column":35,"index":35},"end":{"line":1,"column":36,"index":36},"identifierName":"T"},
+                  "name": "T"
+                }
+              }
+            ]
+          },
+          "body": {
+            "type": "StructBody",
+            "start":38,"end":49,"loc":{"start":{"line":1,"column":38,"index":38},"end":{"line":3,"column":1,"index":49}},
+            "body": [
+              {
+                "type": "ClassProperty",
+                "start":42,"end":47,"loc":{"start":{"line":2,"column":2,"index":42},"end":{"line":2,"column":7,"index":47}},
+                "static": false,
+                "key": {
+                  "type": "Identifier",
+                  "start":42,"end":43,"loc":{"start":{"line":2,"column":2,"index":42},"end":{"line":2,"column":3,"index":43},"identifierName":"x"},
+                  "name": "x"
+                },
+                "computed": false,
+                "typeAnnotation": {
+                  "type": "TSTypeAnnotation",
+                  "start":43,"end":46,"loc":{"start":{"line":2,"column":3,"index":43},"end":{"line":2,"column":6,"index":46}},
+                  "typeAnnotation": {
+                    "type": "TSTypeReference",
+                    "start":45,"end":46,"loc":{"start":{"line":2,"column":5,"index":45},"end":{"line":2,"column":6,"index":46}},
+                    "typeName": {
+                      "type": "Identifier",
+                      "start":45,"end":46,"loc":{"start":{"line":2,"column":5,"index":45},"end":{"line":2,"column":6,"index":46},"identifierName":"T"},
+                      "name": "T"
+                    }
+                  }
+                },
+                "value": null
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
