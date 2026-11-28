@@ -16,9 +16,9 @@ module.exports = function checkTransformScopeIntegrity({ types: t }) {
       if (binding === undefined) continue;
       assert.ok(
         binding.constantViolations.some(
-          violation => violation.node === path.node,
+          violation => violation.node === path.node
         ),
-        `The ${path.type} is not registered as an assignment of '${name}'`,
+        `The ${path.type} is not registered as an assignment of '${name}'`
       );
     }
   }
