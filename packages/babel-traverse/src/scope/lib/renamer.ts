@@ -25,6 +25,15 @@ const getRenameVisitor = () =>
         if (path.isMethod()) {
           path.requeueComputedKeyAndDecorators();
         }
+        if (path.isFunction()) {
+          // Parameters cannot see the declarations of the function body.
+          const kind = path.scope.getOwnBinding(state.oldName)?.kind;
+          if (kind && kind !== "param" && kind !== "local") {
+            for (const param of path.get("params")) {
+              path.context.maybeQueue(param);
+            }
+          }
+        }
         if (path.isSwitchStatement()) {
           path.context.maybeQueue(path.get("discriminant"));
         }
