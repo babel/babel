@@ -16,7 +16,12 @@ import createDecoratorTransform, {
 } from "./decorators.ts";
 import type { DecoratorVersionKind } from "./decorators.ts";
 
-import { injectInitialization, extractComputedKeys } from "./misc.ts";
+import {
+  injectInitialization,
+  extractComputedKeys,
+  getLoopBodyScope,
+  registerInsertedNodes,
+} from "./misc.ts";
 import {
   enableFeature,
   FEATURES,
@@ -231,11 +236,15 @@ export function createClassFeaturePlugin({
           privateFieldsAsSymbolsOrProperties ?? loose,
           props,
         );
+        const loopBody = getLoopBodyScope(path);
+        const loopScope = loopBody?.scope;
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
           privateFieldsAsProperties ?? loose,
           privateFieldsAsSymbols ?? false,
           file,
+          loopScope,
+          loopBody?.reevaluated,
         );
 
         transformPrivateNamesUsage(
@@ -272,6 +281,7 @@ export function createClassFeaturePlugin({
           noUninitializedPrivateFieldAccess,
           constantSuper ?? loose,
           innerBinding,
+          loopScope,
         );
 
         if (instanceNodes.length > 0) {
@@ -291,18 +301,29 @@ export function createClassFeaturePlugin({
 
         // rename to make ts happy
         const wrappedPath = wrapClass(path);
-        wrappedPath.insertBefore([...privateNamesNodes, ...keysNodes]);
+        // The paths of the inserted statements, or the expression that
+        // replaced the class expression
+        const insertedPaths: NodePath[] = [];
+        const record = (paths: NodePath | NodePath[]) => {
+          if (pathIsClassDeclaration) insertedPaths.push(...[paths].flat());
+        };
+        record(wrappedPath.insertBefore([...privateNamesNodes, ...keysNodes]));
         if (staticNodes.length > 0) {
-          wrappedPath.insertAfter(staticNodes);
+          record(wrappedPath.insertAfter(staticNodes));
         }
         if (pureStaticNodes.length > 0) {
-          wrappedPath
-            .find(parent => parent.isStatement() || parent.isDeclaration())!
-            .insertAfter(pureStaticNodes);
+          record(
+            wrappedPath
+              .find(parent => parent.isStatement() || parent.isDeclaration())!
+              .insertAfter(pureStaticNodes),
+          );
         }
         if (classBindingNode != null && pathIsClassDeclaration) {
-          wrappedPath.insertAfter(classBindingNode);
+          record(wrappedPath.insertAfter(classBindingNode));
         }
+        registerInsertedNodes(
+          pathIsClassDeclaration ? insertedPaths : [wrappedPath],
+        );
       },
     },
   };

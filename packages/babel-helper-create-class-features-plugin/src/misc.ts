@@ -62,6 +62,60 @@ interface RenamerState {
   scope: Scope;
 }
 
+// The variables holding the private names and the class references are
+// declared with `let` when the class is evaluated in a loop body, so that
+// each iteration has its own variables, like the class itself. Otherwise,
+// the functions extracted from a class created in a previous iteration would
+// use the private names and the class created in the last iteration.
+// Returns the scope of the closest block containing the class in the loop
+// body, which is entered each time the class is evaluated. Switch cases, catch
+// parameters and the heads of nested loops are not blocks, so it is the block
+// containing them. The variables of a class in the head of the loop itself, or
+// outside of loops, are declared with `var`.
+// `reevaluated` is true when the class can be evaluated more than once each
+// time the block is entered: in the parts of nested loop heads that are
+// evaluated in each of their iterations. Their variables are assigned each
+// time, but are still shared by the iterations of the nested loop.
+export function getLoopBodyScope(
+  path: NodePath<t.Class>,
+): { scope: Scope; reevaluated: boolean } | undefined {
+  let block: NodePath | undefined;
+  let reevaluated = false;
+  // Whether the class is in the key of `child`
+  let inMemberKey = false;
+  for (
+    let child: NodePath = path, parent: NodePath | null = path.parentPath;
+    parent;
+    child = parent, parent = parent.parentPath
+  ) {
+    if (parent.isLoop()) {
+      if (child.key === "body") {
+        // Without a block body, Scope#push adds one to the loop
+        return { scope: (block ?? parent).scope, reevaluated };
+      }
+      if (
+        !(parent.isForStatement() && child.key === "init") &&
+        !(parent.isForXStatement() && child.key === "right")
+      ) {
+        reevaluated = true;
+      }
+    }
+    if (
+      // The computed keys of methods and class members are evaluated in the
+      // enclosing scope
+      (parent.isFunction() && child.key !== "key") ||
+      parent.isProgram() ||
+      parent.isStaticBlock() ||
+      (parent.isClassBody() && !inMemberKey)
+    ) {
+      return undefined;
+    }
+    inMemberKey = child.key === "key";
+    if (!block && parent.isBlockStatement()) block = parent;
+  }
+  return undefined;
+}
+
 export function injectInitialization(
   path: NodePath<t.Class>,
   constructor: NodePath<t.ClassMethod> | undefined,
@@ -200,4 +254,49 @@ export function extractComputedKeys(
   }
 
   return declarations;
+}
+
+function registerAssignment(path: NodePath<t.AssignmentExpression>) {
+  for (const name of Object.keys(t.getAssignmentIdentifiers(path.node))) {
+    const binding = path.scope.getBinding(name);
+    if (
+      binding &&
+      !binding.constantViolations.some(v => v.node === path.node)
+    ) {
+      binding.reassign(path);
+    }
+  }
+}
+
+const registerAssignmentsVisitor: Visitor = {
+  // Nested scopes are crawled when they are first visited
+  Scope(path) {
+    path.skip();
+  },
+  AssignmentExpression(path) {
+    registerAssignment(path);
+  },
+};
+
+/**
+ * Register the declarations and the assignments of nodes inserted in a scope
+ * that has already been crawled.
+ */
+export function registerInsertedNodes(paths: NodePath[]) {
+  for (const path of paths) {
+    if (
+      path.isVariableDeclaration() ||
+      path.isFunctionDeclaration() ||
+      path.isClassDeclaration()
+    ) {
+      const scope = path.parentPath.scope;
+      (path.isVariableDeclaration({ kind: "var" })
+        ? (scope.getFunctionParent() ?? scope.getProgramParent())
+        : scope.getBlockParent()
+      ).registerDeclaration(path);
+    } else if (path.isAssignmentExpression()) {
+      registerAssignment(path);
+    }
+    if (!path.isScope()) path.traverse(registerAssignmentsVisitor);
+  }
 }

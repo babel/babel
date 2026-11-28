@@ -12,6 +12,7 @@ import annotateAsPure from "@babel/helper-annotate-as-pure";
 import { skipTransparentExprWrapperNodes } from "@babel/helper-skip-transparent-expression-wrappers";
 
 import * as ts from "./typescript.ts";
+import { registerInsertedNodes } from "./misc.ts";
 
 interface PrivateNameMetadata {
   id: t.Identifier;
@@ -115,11 +116,33 @@ export function buildPrivateNamesMap(
   return privateNamesMap;
 }
 
+// `var id = init`, or `id = init` with `let id` in loopScope: the class can be
+// an expression, before which only `var` declarations can be inserted. The
+// assignment is evaluated where the class was, since `init` can contain user
+// code (like `static x = 1` assignments, it changes the completion value).
+function declareVariable(
+  id: t.Identifier,
+  init: t.Expression | null | undefined,
+  loopScope: Scope | undefined,
+): t.Statement {
+  if (!loopScope) {
+    return t.variableDeclaration("var", [t.variableDeclarator(id, init)]);
+  }
+  loopScope.push({ id: t.cloneNode(id), kind: "let" });
+  return t.expressionStatement(
+    t.assignmentExpression("=", id, init ?? t.buildUndefinedNode()),
+  );
+}
+
 export function buildPrivateNamesNodes(
   privateNamesMap: PrivateNamesMap,
   privateFieldsAsProperties: boolean,
   privateFieldsAsSymbols: boolean,
   state: File,
+  // The scope declaring the variables with `let`, for classes in loop bodies
+  loopScope?: Scope,
+  // Whether the class can be evaluated more than once in loopScope
+  reevaluated?: boolean,
 ) {
   const initNodes: t.Statement[] = [];
 
@@ -161,7 +184,13 @@ export function buildPrivateNamesNodes(
       if (!privateFieldsAsSymbols) {
         annotateAsPure(init);
       }
-      initNodes.push(template.statement.ast`var ${id} = ${init}`);
+      if (loopScope && !reevaluated) {
+        // The private names can be created when entering the block: unlike an
+        // assignment, the declaration does not change the completion value.
+        loopScope.push({ id, init, kind: "let" });
+      } else {
+        initNodes.push(declareVariable(id, init, loopScope));
+      }
     }
   }
 
@@ -881,6 +910,7 @@ function buildPrivateStaticFieldInitSpec(
   prop: NodePath<t.ClassPrivateProperty>,
   privateNamesMap: PrivateNamesMap,
   noUninitializedPrivateFieldAccess: boolean,
+  loopScope: Scope | undefined,
 ) {
   const privateName = privateNamesMap.get(prop.node.key.id.name)!;
 
@@ -891,9 +921,7 @@ function buildPrivateStaticFieldInitSpec(
       }`;
 
   return inheritPropComments(
-    t.variableDeclaration("var", [
-      t.variableDeclarator(t.cloneNode(privateName.id), value),
-    ]),
+    declareVariable(t.cloneNode(privateName.id), value, loopScope),
     prop,
   );
 }
@@ -1303,7 +1331,9 @@ export function buildFieldsInitNodes(
   noUninitializedPrivateFieldAccess: boolean,
   constantSuper: boolean,
   innerBindingRef: t.Identifier | undefined | null,
+  loopScope?: Scope,
 ) {
+  const kind = loopScope ? "let" : "var";
   let classRefFlags = ClassRefFlag.None;
   let injectSuperRef: t.Identifier;
   const staticNodes: (t.Statement | undefined)[] = [];
@@ -1414,6 +1444,7 @@ export function buildFieldsInitNodes(
             prop,
             privateNamesMap,
             noUninitializedPrivateFieldAccess,
+            loopScope,
           ),
         );
 
@@ -1556,6 +1587,7 @@ export function buildFieldsInitNodes(
     pureStaticNodes: pureStaticNodes.filter(Boolean) as t.Statement[],
     classBindingNode,
     wrapClass(path: NodePath<t.Class>) {
+      const scope = loopScope ?? path.scope;
       for (const prop of props) {
         // Delete leading comments so that they don't get attached as
         // trailing comments of the previous sibling.
@@ -1567,16 +1599,19 @@ export function buildFieldsInitNodes(
       }
 
       if (injectSuperRef) {
-        path.scope.push({ id: t.cloneNode(injectSuperRef) });
+        scope.push({ id: t.cloneNode(injectSuperRef), kind });
         path.set(
           "superClass",
           t.assignmentExpression("=", injectSuperRef, path.node.superClass!),
         );
+        registerInsertedNodes([
+          path.get("superClass") as NodePath<t.AssignmentExpression>,
+        ]);
       }
 
       if (classRefFlags !== ClassRefFlag.None) {
         if (path.isClassExpression()) {
-          path.scope.push({ id: ref! });
+          scope.push({ id: ref!, kind });
           path.replaceWith(
             t.assignmentExpression("=", t.cloneNode(ref!), path.node),
           );
@@ -1584,9 +1619,10 @@ export function buildFieldsInitNodes(
           if (innerBindingRef == null) {
             // export anonymous class declaration
             path.node.id = ref;
+            registerInsertedNodes([path]);
           }
           if (classBindingNode != null) {
-            path.scope.push({ id: classRefForInnerBinding });
+            scope.push({ id: classRefForInnerBinding, kind });
           }
         }
       }
