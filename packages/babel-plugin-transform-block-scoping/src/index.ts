@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import type { NodePath, Scope, Visitor, PluginPass } from "@babel/core";
+import type { NodePath, Scope, PluginPass } from "@babel/core";
 import { types as t } from "@babel/core";
 
 import {
@@ -11,6 +11,10 @@ import {
   wrapLoopBody,
 } from "./loop.ts";
 import { validateUsage } from "./validation.ts";
+import {
+  renameConflictingFunctions,
+  renameConflictingFunctionsBeforeLoopWrap,
+} from "./conflicting-functions.ts";
 
 export interface Options {
   tdz?: boolean;
@@ -143,6 +147,7 @@ export default declare((api, opts: Options) => {
         }
 
         if (needsBodyWrap) {
+          renameConflictingFunctionsBeforeLoopWrap(path, state);
           const varPath = wrapLoopBody(
             path,
             captured,
@@ -222,20 +227,6 @@ export default declare((api, opts: Options) => {
   };
 });
 
-const conflictingFunctionsVisitor: Visitor<{ names: string[] }> = {
-  Scope(path, { names }) {
-    for (const name of names) {
-      const binding = path.scope.getOwnBinding(name);
-      if (binding?.kind === "hoisted") {
-        path.scope.rename(name);
-      }
-    }
-  },
-  "Expression|Declaration"(path) {
-    path.skip();
-  },
-};
-
 function transformBlockScopedVariable(
   path: NodePath<t.VariableDeclaration>,
   state: PluginPass,
@@ -293,9 +284,7 @@ function transformBlockScopedVariable(
     }
   }
 
-  blockScope.path.traverse(conflictingFunctionsVisitor, {
-    names: bindingNames,
-  });
+  renameConflictingFunctions(blockScope, bindingNames, state);
 
   // Pushing to the loop's own scope would place the sentinel at the start of
   // its body, overwriting the values assigned by the loop head. Initialize it
