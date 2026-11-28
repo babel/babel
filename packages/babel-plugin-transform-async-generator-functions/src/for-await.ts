@@ -37,19 +37,24 @@ export default function (
 
   const stepKey = scope.generateUidIdentifier("step");
   const stepValue = t.memberExpression(stepKey, t.identifier("value"));
-  const left = node.left;
+  let left = node.left as t.Node;
+  // for await ((i) of test) with createParenthesizedExpressions
+  while (t.isParenthesizedExpression(left)) {
+    left = left.expression;
+  }
   let declar;
 
-  if (t.isIdentifier(left) || t.isPattern(left) || t.isMemberExpression(left)) {
-    // for await (i of test), for await ({ i } of test)
-    declar = t.expressionStatement(
-      t.assignmentExpression("=", left, stepValue),
-    );
-  } else if (t.isVariableDeclaration(left)) {
+  if (t.isVariableDeclaration(left)) {
     // for await (let i of test)
     declar = t.variableDeclaration(left.kind, [
       t.variableDeclarator(left.declarations[0].id, stepValue),
     ]);
+  } else {
+    // for await (i of test), for await ({ i } of test),
+    // for await ((i as any) of test)
+    declar = t.expressionStatement(
+      t.assignmentExpression("=", left as t.LVal, stepValue),
+    );
   }
   let template = buildForAwait({
     ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),

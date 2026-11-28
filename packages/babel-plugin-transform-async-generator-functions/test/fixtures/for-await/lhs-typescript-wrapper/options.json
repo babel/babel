@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "transform-typescript",
+    "transform-async-generator-functions"
+  ],
+  "parserOpts": { "allowReturnOutsideFunction": true }
+}
