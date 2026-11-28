@@ -1,10 +1,11 @@
-export default function () {
+module.exports = function () {
   return {
     visitor: {
       CatchClause: {
         exit(path) {
           const { name } = path.node.param;
-          if (path.scope.getOwnBinding(name)?.path !== path) {
+          const binding = path.scope.getOwnBinding(name);
+          if (!binding || binding.path !== path) {
             throw new Error(`${name} is not registered`);
           }
           path.scope.rename(name, "renamed");
@@ -12,4 +13,4 @@ export default function () {
       },
     },
   };
-}
+};
