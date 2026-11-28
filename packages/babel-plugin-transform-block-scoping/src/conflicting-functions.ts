@@ -7,20 +7,30 @@ import { types as t } from "@babel/core";
 //
 // The statements of a function, program or expression are walked once, when
 // their first let/const is converted (or before a loop body in them is moved
-// to a closure): the walk collects the functions declared in nested blocks,
+// to a closure): the walk collects the hoisted bindings of the nested blocks,
 // which are rare, and renames those that have a let/const with the same name
 // in an enclosing scope. The other ones are remembered, so that a let/const
 // added to these statements later only needs a lookup.
+//
+// Hoisted bindings are function declarations, or the vars that
+// @babel/plugin-transform-block-scoped-functions replaced them with.
 
-// The functions declared in nested blocks that did not conflict with any
-// let/const, by the block nodes of their enclosing scopes and by name.
-type NestedFunctions = Map<t.Node, Map<string, t.FunctionDeclaration[]>>;
+// A hoisted binding of a nested block.
+interface NestedFunction {
+  scope: Scope;
+  name: string;
+}
+
+// The nested functions that did not conflict with any let/const: by the
+// block nodes of their enclosing scopes, by name, the block nodes of the
+// scopes they are declared in.
+type NestedFunctions = Map<t.Node, Map<string, t.Node[]>>;
 
 interface WalkState {
   // The functions declared directly in this scope cannot conflict.
   scope: Scope;
-  functions: NodePath<t.FunctionDeclaration>[];
-  // Whether a function was found in a path that has no scope yet.
+  functions: NestedFunction[];
+  // Whether a path has no scope yet.
   missingScope: boolean;
 }
 
@@ -45,16 +55,28 @@ function isCompoundStatement(statement: t.Statement) {
   return !boundaryTypes.has(statement.type);
 }
 
-// Whether a function can be declared in this statement, which is in a nested
-// block.
-function mayContainFunctions(statement: t.Statement) {
-  return (
-    statement.type === "FunctionDeclaration" || isCompoundStatement(statement)
-  );
+function collectHoistedBindings(path: NodePath, state: WalkState) {
+  const { scope } = path;
+  // `scope` is null or undefined if the path was never visited with a scope.
+  if (scope == null) {
+    state.missingScope = true;
+    return;
+  }
+  // The body of a function or catch clause is in their scope.
+  if (scope.block !== path.node || scope === state.scope) return;
+  for (const name of Object.keys(scope.bindings)) {
+    if (scope.bindings[name].kind === "hoisted") {
+      state.functions.push({ scope, name });
+    }
+  }
 }
 
-function skipIfNoFunctions(path: NodePath<t.BlockStatement | t.StaticBlock>) {
-  if (!path.node.body.some(mayContainFunctions)) path.skip();
+function visitBlock(
+  path: NodePath<t.BlockStatement | t.StaticBlock>,
+  state: WalkState,
+) {
+  collectHoistedBindings(path, state);
+  if (!path.node.body.some(isCompoundStatement)) path.skip();
 }
 
 // Visits the statements only, skipping the keys that can only contain
@@ -62,24 +84,24 @@ function skipIfNoFunctions(path: NodePath<t.BlockStatement | t.StaticBlock>) {
 // the main traversal, so it is not computed again.
 const nestedFunctionsVisitor: Visitor<WalkState> = {
   noScope: true,
-  "Expression|Declaration"(path, state) {
-    if (path.isFunctionDeclaration()) {
-      const { scope } = path.parentPath;
-      if (scope === undefined) state.missingScope = true;
-      else if (scope !== state.scope) state.functions.push(path);
-    }
-    path.skip();
-  },
-  "ExpressionStatement|ReturnStatement|ThrowStatement|BreakStatement|ContinueStatement"(
+  "Expression|Declaration|ExpressionStatement|ReturnStatement|ThrowStatement|BreakStatement|ContinueStatement"(
     path,
   ) {
     path.skip();
   },
-  BlockStatement: skipIfNoFunctions,
-  StaticBlock: skipIfNoFunctions,
+  BlockStatement: visitBlock,
+  StaticBlock: visitBlock,
+  SwitchStatement(path, state) {
+    collectHoistedBindings(path, state);
+    path.skipKey("discriminant");
+  },
   SwitchCase(path) {
-    if (!path.node.consequent.some(mayContainFunctions)) path.skip();
+    if (!path.node.consequent.some(isCompoundStatement)) path.skip();
     else path.skipKey("test");
+  },
+  CatchClause(path, state) {
+    collectHoistedBindings(path, state);
+    path.skipKey("param");
   },
   "IfStatement|WhileStatement|DoWhileStatement"(path) {
     path.skipKey("test");
@@ -90,12 +112,6 @@ const nestedFunctionsVisitor: Visitor<WalkState> = {
   },
   "ForInStatement|ForOfStatement"(path) {
     path.skipKey("right");
-  },
-  SwitchStatement(path) {
-    path.skipKey("discriminant");
-  },
-  CatchClause(path) {
-    path.skipKey("param");
   },
   LabeledStatement(path) {
     path.skipKey("label");
@@ -119,14 +135,11 @@ function collectNestedFunctions(path: NodePath, scope: Scope) {
 }
 
 // The scopes between the scope where `fn` is declared and `root`.
-function getEnclosingScopes(
-  fn: NodePath<t.FunctionDeclaration>,
-  root: NodePath,
-) {
+function getEnclosingScopes(fn: NestedFunction, root: NodePath) {
   const scopes: Scope[] = [];
   const rootScope = root.scope;
   for (
-    let scope = fn.parentPath.scope.parent;
+    let scope = fn.scope.parent;
     scope && (scope !== rootScope || rootScope.block === root.node);
     scope = scope.parent
   ) {
@@ -147,13 +160,8 @@ function declaresLetConst(scope: Scope, name: string) {
   );
 }
 
-function renameFunction(fn: NodePath<t.FunctionDeclaration>) {
-  const { name } = fn.node.id!;
-  const { scope } = fn.parentPath;
-  const binding = scope.getOwnBinding(name);
-  if (binding?.kind === "hoisted" && binding.path.node === fn.node) {
-    scope.rename(name);
-  }
+function renameFunction({ scope, name }: NestedFunction) {
+  if (scope.getOwnBinding(name)?.kind === "hoisted") scope.rename(name);
 }
 
 // A declaration that was already converted to a var.
@@ -191,7 +199,7 @@ function walkStatements(
 
   const nestedFunctions: NestedFunctions = new Map();
   for (const fn of functions) {
-    const { name } = fn.node.id!;
+    const { name } = fn;
     const scopes = getEnclosingScopes(fn, root);
     const conflicts = scopes.some(
       scope =>
@@ -213,7 +221,7 @@ function walkStatements(
         list = [];
         byName.set(name, list);
       }
-      list.push(fn.node);
+      list.push(fn.scope.block);
     }
   }
   return nestedFunctions.size > 0 ? nestedFunctions : null;
@@ -277,14 +285,14 @@ export function renameConflictingFunctions(
   // walked are already checked, but this one may have been added later.
   const byName = nestedFunctions?.get(scope.block);
   if (byName === undefined) return;
-  const candidates = new Set<t.Node>();
-  for (const name of names) {
-    for (const node of byName.get(name) ?? []) {
-      if (node.id!.name === name) candidates.add(node);
-    }
-  }
-  if (candidates.size === 0) return;
+  const candidates = names.filter(name => byName.has(name));
+  if (candidates.length === 0) return;
   for (const fn of collectNestedFunctions(scope.path, scope)) {
-    if (candidates.has(fn.node)) renameFunction(fn);
+    if (
+      candidates.includes(fn.name) &&
+      byName.get(fn.name)!.includes(fn.scope.block)
+    ) {
+      renameFunction(fn);
+    }
   }
 }
