@@ -98,6 +98,23 @@ if (process.env.TSCHECK_EMIT_ONLY) {
   process.exit(status ?? 1);
 }
 
+type TaskResult = {
+  code: number | null;
+  signal: NodeJS.Signals | null;
+  // What the task printed, or null when it printed to the terminal
+  output: string | null;
+};
+
+async function readOutput(child: cp.ChildProcess) {
+  const chunks: Buffer[] = [];
+  await Promise.all(
+    [child.stdout!, child.stderr!].map(async stream => {
+      for await (const chunk of stream) chunks.push(chunk as Buffer);
+    })
+  );
+  return Buffer.concat(chunks).toString();
+}
+
 class Pool {
   #filename;
   #concurrency;
@@ -130,7 +147,7 @@ class Pool {
     onTaskStart: (tasks: string[], weight: number) => void;
     onTaskDone: (
       tasks: string[],
-      code: number,
+      result: TaskResult,
       duration: number
     ) => Promise<void>;
     onTaskError: (tasks: string[]) => void;
@@ -175,15 +192,19 @@ class Pool {
     }
     this.#pending = this.#pending.filter((_, i) => !toRemove.has(i));
 
+    const showOutput = this.#showOutput(tasks);
     const taskProcess = cp.fork(this.#filename, ["-b", ...tasks, "--pretty"], {
-      stdio: this.#showOutput(tasks) ? "inherit" : "ignore",
+      stdio: showOutput ? "inherit" : ["ignore", "pipe", "pipe", "ipc"],
     });
+    const output = showOutput ? null : readOutput(taskProcess);
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    taskProcess.once("exit", async code => {
-      const startTime = this.#running.get(taskProcess)!;
-      const duration = performance.now() - startTime;
-      await this.#onTaskDone(tasks, code!, duration);
+    // The "exit" event may or may not fire after an "error" event
+    let finished = false;
+    const finish = async (report: () => void | Promise<void>) => {
+      if (finished) return;
+      finished = true;
+
+      await report();
       this.#running.delete(taskProcess);
 
       // Spin the event loop so that #run can pick up the next task
@@ -194,12 +215,25 @@ class Pool {
       if (this.#running.size === 0 && this.#pending.length === 0) {
         this.#emptyListeners.forEach(f => f());
       }
+    };
+
+    taskProcess.once("exit", (code, signal) => {
+      const startTime = this.#running.get(taskProcess)!;
+      const duration = performance.now() - startTime;
+      void finish(async () => {
+        await this.#onTaskDone(
+          tasks,
+          { code, signal, output: await output },
+          duration
+        );
+      });
     });
 
     taskProcess.once("error", err => {
-      console.error("Error in task process:", err);
-      this.#onTaskError(tasks);
-      this.#running.delete(taskProcess);
+      void finish(() => {
+        console.error("Error in task process:", err);
+        this.#onTaskError(tasks);
+      });
     });
 
     this.#onTaskStart(tasks, weight);
@@ -222,6 +256,8 @@ class Pool {
 const total = projectToDependencies.size + ready.size;
 let done = 0;
 
+const failures: (TaskResult & { projects: string[] })[] = [];
+
 const pool = new Pool({
   filename: tscPath,
   concurrency: os.cpus().length,
@@ -235,8 +271,13 @@ const pool = new Pool({
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onTaskStart(projects, weight) {},
-  async onTaskDone(projects, code, duration) {
-    if (code !== 0) process.exitCode = code;
+  async onTaskDone(projects, result, duration) {
+    const { code } = result;
+    if (code !== 0) {
+      // The code is null when tsc was killed by a signal
+      process.exitCode = code ?? 1;
+      failures.push({ ...result, projects });
+    }
 
     await Promise.all(projects.map(copyDeclarationFiles));
 
@@ -268,6 +309,28 @@ const pool = new Pool({
 for (const project of ready) pool.run(project);
 
 await pool.waitForEmpty;
+
+// An entry project builds the projects that have errors again and prints those
+// errors, unless tsc was killed before it could.
+const entryReportedErrors = failures.some(
+  ({ output, signal }) => output === null && !signal
+);
+for (const { projects, code, signal, output } of failures) {
+  // The output of the other projects was hidden, so it is printed here unless
+  // an entry project has already reported the errors. A killed tsc is always
+  // reported.
+  if (output !== null && entryReportedErrors && !signal) continue;
+  const names = projects.map(
+    project => relativePath(process.cwd(), project) || "."
+  );
+  let message = `tsc ${signal ? `was killed by ${signal}` : `exited with code ${code}`} while type checking ${names.join(" ")}`;
+  if (output) {
+    message += `:\n${output}`;
+  } else if (output === "") {
+    message += " without any output.";
+  }
+  console.error(message);
+}
 
 if (projectToDependencies.size > 0) {
   console.error("Did not typecheck the following projects:");
