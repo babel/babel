@@ -7,9 +7,9 @@ var _x = {
   _: void 0
 };
 (() => {
-  var _p, _m;
+  var _ref, _ref$0$x;
   var x, z;
-  [..._p] = [_C], _m = babelHelpers.assertClassBrand(_C, _p[0], _x)._, x = _m === void 0 ? 1 : _m, z = babelHelpers.objectWithoutProperties(_p, _excluded);
+  [..._ref] = [_C], x = (_ref$0$x = babelHelpers.assertClassBrand(_C, _ref[0], _x)._) === void 0 ? 1 : _ref$0$x, z = babelHelpers.objectWithoutProperties(_ref, _excluded);
   result = {
     x,
     z

@@ -1,12 +1,10 @@
 const _excluded = ["excluded", "excluded2", "used", "used2"],
   _excluded2 = ["unused"];
+var _c;
 // should not remove when destructuring into existing bindings
-var _c = c2;
 ({
   a2
-} = _c);
-b2 = babelHelpers.objectWithoutProperties(_c, ["a2"]);
-_c;
+} = _c = c2), b2 = babelHelpers.objectWithoutProperties(_c, ["a2"]), _c;
 function render() {
   const _this$props = this.props,
     {
@@ -18,6 +16,7 @@ function render() {
   return React.createElement("input", props);
 }
 function smth(_ref) {
-  let rest = babelHelpers.objectWithoutProperties(_ref, _excluded2);
+  let {} = _ref,
+    rest = babelHelpers.objectWithoutProperties(_ref, _excluded2);
   call(rest);
 }

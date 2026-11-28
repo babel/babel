@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "transform-parameters",
+    "transform-object-rest-spread",
+    "../../../helpers/checkScopeInfo.js"
+  ],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
+}

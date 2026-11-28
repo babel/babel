@@ -2,9 +2,11 @@ import { template, types as t } from "@babel/core";
 import type { NodePath, Visitor } from "@babel/core";
 
 import {
-  getIIFEVisitor,
   collectShadowedParamsNames,
-  buildScopeIIFE,
+  getParamsInitBlock,
+  hasDirectEval,
+  referencesBodyDeclaration,
+  wrapBodyInScopeIIFE,
 } from "./shadow-utils.ts";
 
 const buildRest = template.statement(`
@@ -50,7 +52,6 @@ type State = {
   references: NodePath<t.Identifier | t.JSXIdentifier>[];
   offset: number;
 
-  argumentsNode: t.Identifier;
   outerBinding: t.Identifier;
 
   // candidate member expressions we could optimise if there are no other references
@@ -289,7 +290,16 @@ function optimiseLengthGetter(
   }
 }
 
-export default function convertFunctionRest(path: NodePath<t.Function>) {
+export default function convertFunctionRest(
+  path: NodePath<t.Function>,
+  // For callers wrapping the body in an IIFE, which is passed the parameters
+  // redeclared in the body: inserts the statements initializing the rest
+  // parameter (the loop building its array, then the destructuring of a rest
+  // pattern) before the IIFE, which is not created here. By default, the loop
+  // is inserted before the first reference to the parameter (out of loops),
+  // or at the beginning of the body.
+  insertBeforeBody?: (statements: t.Statement[]) => void,
+) {
   const { node, scope } = path;
   if (!hasRest(node)) return false;
 
@@ -297,43 +307,62 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
     `params.${node.params.length - 1}.argument`,
   ) as NodePath<t.ArrayPattern | t.ObjectPattern | t.Identifier>;
 
-  if (!restPath.isIdentifier()) {
-    const shadowedParams = new Set<string>();
-    collectShadowedParamsNames(restPath, path.scope, shadowedParams);
+  // The statements initializing the rest parameter are inserted at the
+  // beginning of this list: the body, unless it is moved into an IIFE.
+  let init: t.Statement[] | undefined;
 
-    let needsIIFE = shadowedParams.size > 0;
-    if (!needsIIFE) {
-      const state = {
-        needsOuterBinding: false,
-        scope,
-      };
-      restPath.traverse(getIIFEVisitor(), state);
-      needsIIFE = state.needsOuterBinding;
+  if (!insertBeforeBody) {
+    const shadowedParams = new Set<string>();
+    let needsIIFE: boolean;
+    if (restPath.isIdentifier()) {
+      // The array is built in the body, after its function declarations are
+      // initialized: one redeclaring the parameter would be overwritten.
+      const { name } = restPath.node;
+      needsIIFE = !!scope
+        .getOwnBinding(name)
+        ?.constantViolations.some(violation =>
+          violation.isFunctionDeclaration(),
+        );
+      if (needsIIFE) shadowedParams.add(name);
+    } else {
+      collectShadowedParamsNames(restPath, path.scope, shadowedParams);
+      needsIIFE =
+        // The parameters of generators are initialized when they are called,
+        // not when they are first resumed.
+        node.generator ||
+        shadowedParams.size > 0 ||
+        referencesBodyDeclaration([restPath], scope);
     }
 
     if (needsIIFE) {
-      path.ensureBlock();
-      path.set(
-        "body",
-        t.blockStatement([
-          buildScopeIIFE(shadowedParams, path.node.body as t.BlockStatement),
-        ]),
-      );
+      // The IIFE is also passed the other parameters redeclared in the body.
+      const params = path.get("params");
+      for (let i = 0; i < params.length - 1; i++) {
+        collectShadowedParamsNames(params[i], scope, shadowedParams);
+      }
+      init = wrapBodyInScopeIIFE(path, shadowedParams).init;
     }
   }
 
   let rest = restPath.node;
   node.params.pop(); // This returns 'rest'
 
+  // The destructuring of a rest pattern, in the body while its references to
+  // the rest parameter are collected
+  let declar: t.VariableDeclaration | undefined;
   if (t.isPattern(rest)) {
     const pattern = rest;
     rest = scope.generateUidIdentifier("ref");
 
-    const declar = t.variableDeclaration("let", [
-      t.variableDeclarator(pattern, rest),
+    // A direct eval of the body can redeclare the bindings with `var`, which
+    // would conflict with a lexical declaration (not with one before an IIFE).
+    const kind =
+      init || insertBeforeBody || !hasDirectEval(path) ? "let" : "var";
+    declar = t.variableDeclaration(kind, [
+      t.variableDeclarator(pattern, t.cloneNode(rest)),
     ]);
-    path.ensureBlock();
-    (node.body as t.BlockStatement).body.unshift(declar);
+    init ??= getParamsInitBlock(path).node.body;
+    init.unshift(declar);
   } else if (rest.name === "arguments") {
     scope.rename(rest.name);
   }
@@ -345,7 +374,6 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
   const state: State = {
     references: [],
     offset: paramsCount,
-    argumentsNode: argsId,
     outerBinding: scope.getBindingIdentifier(rest.name)!,
     candidates: [],
     name: rest.name,
@@ -353,6 +381,9 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
   };
 
   path.traverse(memberExpressionOptimisationVisitor, state);
+
+  const statementsBeforeBody: t.Statement[] =
+    insertBeforeBody && declar ? init!.splice(init!.indexOf(declar), 1) : [];
 
   // There are only "shorthand" references
   if (!state.deopted && !state.references.length) {
@@ -369,6 +400,7 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
           path.replaceWith(clonedArgsId);
       }
     }
+    insertBeforeBody?.(statementsBeforeBody);
     return true;
   }
 
@@ -411,8 +443,10 @@ export default function convertFunctionRest(path: NodePath<t.Function>) {
     LEN: len,
   });
 
-  if (state.deopted) {
-    (node.body as t.BlockStatement).body.unshift(loop);
+  if (insertBeforeBody) {
+    insertBeforeBody([loop, ...statementsBeforeBody]);
+  } else if (state.deopted) {
+    (init ?? getParamsInitBlock(path).node.body).unshift(loop);
   } else {
     let target = path
       .getEarliestCommonAncestorFrom(state.references)

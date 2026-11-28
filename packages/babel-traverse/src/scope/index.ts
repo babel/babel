@@ -33,6 +33,7 @@ import {
   isPureish,
   isRegExpLiteral,
   isRestElement,
+  isSequenceExpression,
   isSuper,
   isTaggedTemplateExpression,
   isTemplateLiteral,
@@ -831,7 +832,14 @@ class Scope {
   isPure(node: t.Node | null | undefined, constantsOnly?: boolean): boolean {
     if (isIdentifier(node)) {
       const binding = this.getBinding(node.name);
-      if (!binding) return false;
+      // Non-writable and non-configurable globals
+      if (!binding) {
+        return (
+          node.name === "undefined" ||
+          node.name === "NaN" ||
+          node.name === "Infinity"
+        );
+      }
       if (constantsOnly) return binding.constant;
       return true;
     } else if (
@@ -891,7 +899,14 @@ class Scope {
       }
       return true;
     } else if (isUnaryExpression(node)) {
+      // `delete` removes a property
+      if (node.operator === "delete") return false;
       return this.isPure(node.argument, constantsOnly);
+    } else if (isSequenceExpression(node)) {
+      for (const expression of node.expressions) {
+        if (!this.isPure(expression, constantsOnly)) return false;
+      }
+      return true;
     } else if (isTemplateLiteral(node)) {
       for (const expression of node.expressions) {
         if (!this.isPure(expression, constantsOnly)) return false;

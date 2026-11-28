@@ -3,6 +3,11 @@ function s(_x) {
 }
 function _s() {
   _s = babelHelpers.asyncToGenerator(function* (x) {
+    arguments = function () {
+      "use strict";
+
+      return arguments;
+    }.apply(void 0, arguments);
     var _arguments = arguments,
       _this = this;
     for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {

@@ -15,10 +15,11 @@ var pureE = {};
 function impureFunc() {
   console.log('hello');
 }
-var output = babelHelpers.extends({}, pureA, {
-  get foo() {},
+var output = babelHelpers.objectSpread2(babelHelpers.defineAccessor("get", babelHelpers.defineAccessor("get", babelHelpers.objectSpread2({}, pureA), "foo", Object.getOwnPropertyDescriptor({
+  get foo() {}
+}, "foo").get), "bar", Object.getOwnPropertyDescriptor({
   get bar() {}
-}, pureB, pureC, impureFunc(), pureD, {
+}, "bar").get), pureB, {}, pureC, {}, impureFunc(), {}, pureD, {
   pureD
 });
 var simpleOutput = babelHelpers.extends({}, pureA, {

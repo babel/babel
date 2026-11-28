@@ -1,4 +1,7 @@
 {
-  "plugins": ["proposal-destructuring-private"],
+  "plugins": [
+    "proposal-destructuring-private",
+    "../../helpers/checkScopeInfo.js"
+  ],
   "minNodeVersion": "16.11.0"
 }

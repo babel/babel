@@ -1,0 +1,8 @@
+{
+  "sourceType": "script",
+  "plugins": [
+    "transform-object-rest-spread",
+    ["transform-react-jsx", { "runtime": "classic" }],
+    ["../../../helpers/checkScopeInfo.js", { "strict": false }]
+  ]
+}
