@@ -37,7 +37,11 @@ export default function (
 
   const stepKey = scope.generateUidIdentifier("step");
   const stepValue = t.memberExpression(stepKey, t.identifier("value"));
-  const left = node.left;
+  let left = node.left as t.Node;
+  // for await ((i) of test) with createParenthesizedExpressions
+  while (t.isParenthesizedExpression(left)) {
+    left = left.expression;
+  }
   let declar;
 
   if (t.isVariableDeclaration(left)) {
@@ -49,7 +53,7 @@ export default function (
     // for await (i of test), for await ({ i } of test),
     // for await ((i as any) of test)
     declar = t.expressionStatement(
-      t.assignmentExpression("=", left, stepValue),
+      t.assignmentExpression("=", left as t.LVal, stepValue),
     );
   }
   let template = buildForAwait({
