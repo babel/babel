@@ -901,6 +901,16 @@ const getRefersOuterBindingVisitor = (): Visitor<{
     },
   });
 
+function registerLocalName(
+  path: NodePath<t.FunctionExpression | t.ClassExpression>,
+) {
+  path.scope.registerBinding(
+    "local",
+    path.get("id") as NodePath<t.Identifier>,
+    path,
+  );
+}
+
 export function ensureFunctionName<
   N extends t.FunctionExpression | t.ClassExpression,
 >(this: NodePath<N>, supportUnicodeId: boolean): null | NodePath<N> {
@@ -961,6 +971,8 @@ export function ensureFunctionName<
 
   if (!state.needsRename) {
     this.node.id = id;
+    // An own binding of the same name shadows the function name
+    if (!binding) registerLocalName(this);
 
     scope.getProgramParent().referencesSet.add(id.name);
 
@@ -971,6 +983,7 @@ export function ensureFunctionName<
     // we can just munge the local binding
     scope.rename(id.name);
     this.node.id = id;
+    registerLocalName(this);
 
     scope.getProgramParent().referencesSet.add(id.name);
 
