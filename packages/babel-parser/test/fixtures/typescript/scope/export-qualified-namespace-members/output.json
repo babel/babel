@@ -1,0 +1,93 @@
+{
+  "type": "File",
+  "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":16,"index":35}},
+  "errors": [
+    "SyntaxError: Export 'B' is not defined. (2:9)",
+    "SyntaxError: Export 'C' is not defined. (2:12)"
+  ],
+  "program": {
+    "type": "Program",
+    "start":0,"end":35,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":2,"column":16,"index":35}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start":0,"end":18,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":18,"index":18}},
+        "kind": "namespace",
+        "id": {
+          "type": "TSQualifiedName",
+          "start":10,"end":15,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":15,"index":15}},
+          "left": {
+            "type": "TSQualifiedName",
+            "start":10,"end":13,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":13,"index":13}},
+            "left": {
+              "type": "Identifier",
+              "start":10,"end":11,"loc":{"start":{"line":1,"column":10,"index":10},"end":{"line":1,"column":11,"index":11},"identifierName":"A"},
+              "name": "A"
+            },
+            "right": {
+              "type": "Identifier",
+              "start":12,"end":13,"loc":{"start":{"line":1,"column":12,"index":12},"end":{"line":1,"column":13,"index":13},"identifierName":"B"},
+              "name": "B"
+            }
+          },
+          "right": {
+            "type": "Identifier",
+            "start":14,"end":15,"loc":{"start":{"line":1,"column":14,"index":14},"end":{"line":1,"column":15,"index":15},"identifierName":"C"},
+            "name": "C"
+          }
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start":16,"end":18,"loc":{"start":{"line":1,"column":16,"index":16},"end":{"line":1,"column":18,"index":18}},
+          "body": []
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start":19,"end":35,"loc":{"start":{"line":2,"column":0,"index":19},"end":{"line":2,"column":16,"index":35}},
+        "exportKind": "value",
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start":28,"end":29,"loc":{"start":{"line":2,"column":9,"index":28},"end":{"line":2,"column":10,"index":29}},
+            "local": {
+              "type": "Identifier",
+              "start":28,"end":29,"loc":{"start":{"line":2,"column":9,"index":28},"end":{"line":2,"column":10,"index":29},"identifierName":"B"},
+              "name": "B"
+            },
+            "exportKind": "value",
+            "exported": {
+              "type": "Identifier",
+              "start":28,"end":29,"loc":{"start":{"line":2,"column":9,"index":28},"end":{"line":2,"column":10,"index":29},"identifierName":"B"},
+              "name": "B"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start":31,"end":32,"loc":{"start":{"line":2,"column":12,"index":31},"end":{"line":2,"column":13,"index":32}},
+            "local": {
+              "type": "Identifier",
+              "start":31,"end":32,"loc":{"start":{"line":2,"column":12,"index":31},"end":{"line":2,"column":13,"index":32},"identifierName":"C"},
+              "name": "C"
+            },
+            "exportKind": "value",
+            "exported": {
+              "type": "Identifier",
+              "start":31,"end":32,"loc":{"start":{"line":2,"column":12,"index":31},"end":{"line":2,"column":13,"index":32},"identifierName":"C"},
+              "name": "C"
+            }
+          }
+        ],
+        "source": null,
+        "attributes": [],
+        "declaration": null
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}

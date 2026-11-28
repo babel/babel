@@ -305,6 +305,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     // past the initial comment.
     flowPragma: void | null | "flow" | "noflow" = undefined;
 
+    declare scope: FlowScopeHandler;
     getScopeHandler(): new (...args: any) => FlowScopeHandler {
       return FlowScopeHandler;
     }
@@ -3905,6 +3906,7 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
     ): N.EnumDeclaration {
       const id = this.parseIdentifier();
       node.id = id;
+      this.scope.declareEnum(id.name);
       node.body = this.flowEnumBody(this.startNode(), id);
       return this.finishNode(node, "EnumDeclaration");
     }

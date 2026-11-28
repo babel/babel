@@ -1,0 +1,108 @@
+{
+  "type": "File",
+  "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":12,"index":55}},
+  "program": {
+    "type": "Program",
+    "start":0,"end":55,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":4,"column":12,"index":55}},
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "EnumDeclaration",
+        "start":0,"end":12,"loc":{"start":{"line":1,"column":0,"index":0},"end":{"line":1,"column":12,"index":12}},
+        "id": {
+          "type": "Identifier",
+          "start":5,"end":6,"loc":{"start":{"line":1,"column":5,"index":5},"end":{"line":1,"column":6,"index":6},"identifierName":"E"},
+          "name": "E"
+        },
+        "body": {
+          "type": "EnumStringBody",
+          "start":7,"end":12,"loc":{"start":{"line":1,"column":7,"index":7},"end":{"line":1,"column":12,"index":12}},
+          "hasUnknownMembers": false,
+          "explicitType": false,
+          "members": [
+            {
+              "type": "EnumDefaultedMember",
+              "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10}},
+              "id": {
+                "type": "Identifier",
+                "start":9,"end":10,"loc":{"start":{"line":1,"column":9,"index":9},"end":{"line":1,"column":10,"index":10},"identifierName":"A"},
+                "name": "A"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "EnumDeclaration",
+        "start":13,"end":25,"loc":{"start":{"line":2,"column":0,"index":13},"end":{"line":2,"column":12,"index":25}},
+        "id": {
+          "type": "Identifier",
+          "start":18,"end":19,"loc":{"start":{"line":2,"column":5,"index":18},"end":{"line":2,"column":6,"index":19},"identifierName":"E"},
+          "name": "E"
+        },
+        "body": {
+          "type": "EnumStringBody",
+          "start":20,"end":25,"loc":{"start":{"line":2,"column":7,"index":20},"end":{"line":2,"column":12,"index":25}},
+          "hasUnknownMembers": false,
+          "explicitType": false,
+          "members": [
+            {
+              "type": "EnumDefaultedMember",
+              "start":22,"end":23,"loc":{"start":{"line":2,"column":9,"index":22},"end":{"line":2,"column":10,"index":23}},
+              "id": {
+                "type": "Identifier",
+                "start":22,"end":23,"loc":{"start":{"line":2,"column":9,"index":22},"end":{"line":2,"column":10,"index":23},"identifierName":"B"},
+                "name": "B"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start":26,"end":42,"loc":{"start":{"line":3,"column":0,"index":26},"end":{"line":3,"column":16,"index":42}},
+        "id": {
+          "type": "Identifier",
+          "start":31,"end":32,"loc":{"start":{"line":3,"column":5,"index":31},"end":{"line":3,"column":6,"index":32},"identifierName":"T"},
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "NumberTypeAnnotation",
+          "start":35,"end":41,"loc":{"start":{"line":3,"column":9,"index":35},"end":{"line":3,"column":15,"index":41}}
+        }
+      },
+      {
+        "type": "EnumDeclaration",
+        "start":43,"end":55,"loc":{"start":{"line":4,"column":0,"index":43},"end":{"line":4,"column":12,"index":55}},
+        "id": {
+          "type": "Identifier",
+          "start":48,"end":49,"loc":{"start":{"line":4,"column":5,"index":48},"end":{"line":4,"column":6,"index":49},"identifierName":"T"},
+          "name": "T"
+        },
+        "body": {
+          "type": "EnumStringBody",
+          "start":50,"end":55,"loc":{"start":{"line":4,"column":7,"index":50},"end":{"line":4,"column":12,"index":55}},
+          "hasUnknownMembers": false,
+          "explicitType": false,
+          "members": [
+            {
+              "type": "EnumDefaultedMember",
+              "start":52,"end":53,"loc":{"start":{"line":4,"column":9,"index":52},"end":{"line":4,"column":10,"index":53}},
+              "id": {
+                "type": "Identifier",
+                "start":52,"end":53,"loc":{"start":{"line":4,"column":9,"index":52},"end":{"line":4,"column":10,"index":53},"identifierName":"A"},
+                "name": "A"
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": [],
+    "extra": {
+      "topLevelAwait": false
+    }
+  }
+}
