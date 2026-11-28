@@ -5,8 +5,9 @@ import { hoist } from "./hoist.ts";
 import { Emitter } from "./emit.ts";
 import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod.ts";
 import * as util from "./util.ts";
-import type { NodePath, PluginPass, Visitor } from "@babel/core";
+import type { NodePath, PluginPass, Scope, Visitor } from "@babel/core";
 import { types as t } from "@babel/core";
+import { visitors } from "@babel/traverse";
 
 export const getVisitor = (): Visitor<PluginPass> => ({
   Method(path, state) {
@@ -117,6 +118,7 @@ export const getVisitor = (): Visitor<PluginPass> => ({
         usesThis: false,
         usesArguments: false,
         getArgsId: () => t.cloneNode(argsId),
+        functionScope: path.scope,
       };
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       path.traverse(argumentsThisVisitor, context);
@@ -347,17 +349,20 @@ function getMarkedFunctionId(
   return t.cloneNode(markedId);
 }
 
-const argumentsThisVisitor: Visitor<{
+// Arrow functions inherit `this` and `arguments`, so they are not skipped.
+const argumentsThisVisitor = visitors.environmentVisitor<{
   usesThis: boolean;
   usesArguments: boolean;
   getArgsId: () => t.Identifier;
-}> = {
-  "FunctionExpression|FunctionDeclaration|Method": function (path) {
-    path.skip();
-  },
-
+  functionScope: Scope;
+}>({
   Identifier: function (path, state) {
     if (path.node.name === "arguments" && util.isReference(path)) {
+      // A block-scoped binding, such as a catch parameter, is renamed when
+      // the block is compiled.
+      const binding = path.scope.getBinding("arguments");
+      if (binding && binding.scope !== state.functionScope) return;
+
       path.replaceWith(state.getArgsId());
       state.usesArguments = true;
     }
@@ -366,7 +371,7 @@ const argumentsThisVisitor: Visitor<{
   ThisExpression: function (path, state) {
     state.usesThis = true;
   },
-};
+});
 
 const functionSentVisitor: Visitor<{
   context: t.Identifier;

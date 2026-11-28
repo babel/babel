@@ -3530,6 +3530,7 @@ __metadata:
     "@babel/plugin-transform-modules-commonjs": "workspace:^"
     "@babel/plugin-transform-parameters": "workspace:^"
     "@babel/plugin-transform-runtime": "workspace:^"
+    "@babel/traverse": "workspace:^"
     babel-plugin-polyfill-regenerator: "npm:^0.6.6"
     recast: "npm:^0.23.3"
     uglify-js: "npm:^3.14.0"
