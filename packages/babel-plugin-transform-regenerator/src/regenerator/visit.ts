@@ -6,7 +6,8 @@ import { Emitter } from "./emit.ts";
 import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod.ts";
 import * as util from "./util.ts";
 import type { NodePath, PluginPass, Scope, Visitor } from "@babel/core";
-import { types as t, traverse } from "@babel/core";
+import { types as t } from "@babel/core";
+import { visitors } from "@babel/traverse";
 
 export const getVisitor = (): Visitor<PluginPass> => ({
   Method(path, state) {
@@ -349,7 +350,7 @@ function getMarkedFunctionId(
 }
 
 // Arrow functions inherit `this` and `arguments`, so they are not skipped.
-const argumentsThisVisitor = traverse.visitors.environmentVisitor<{
+const argumentsThisVisitor = visitors.environmentVisitor<{
   usesThis: boolean;
   usesArguments: boolean;
   getArgsId: () => t.Identifier;

@@ -5,7 +5,8 @@ import * as meta from "./meta.ts";
 import * as util from "./util.ts";
 
 import type { NodePath, PluginPass, Scope } from "@babel/core";
-import { types as t, traverse } from "@babel/core";
+import { types as t } from "@babel/core";
+import { visitors } from "@babel/traverse";
 
 // From packages/babel-helpers/src/helpers/regenerator.ts
 const enum OperatorType {
@@ -44,7 +45,7 @@ function getDeclError(node: t.Node) {
 
 // Finds a `yield` or `await` of the function being compiled, so it does not
 // look into nested functions, except the computed keys of methods.
-const yieldOrAwaitVisitor = traverse.visitors.environmentVisitor<{
+const yieldOrAwaitVisitor = visitors.environmentVisitor<{
   found: boolean;
 }>({
   ArrowFunctionExpression(path) {

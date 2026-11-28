@@ -1,5 +1,6 @@
 {
   "parserOpts": {
     "allowReturnOutsideFunction": true
-  }
+  },
+  "minNodeVersion": "16.11.0"
 }

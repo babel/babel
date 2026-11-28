@@ -11,7 +11,8 @@
   },
   "main": "./lib/index.js",
   "dependencies": {
-    "@babel/helper-plugin-utils": "workspace:^"
+    "@babel/helper-plugin-utils": "workspace:^",
+    "@babel/traverse": "workspace:^"
   },
   "license": "MIT",
   "publishConfig": {
