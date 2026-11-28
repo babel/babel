@@ -4247,11 +4247,9 @@ export default (superClass: ClassWithMixin<typeof Parser, IJSXParserMixin>) =>
           expr.typeParameters.params.length === 1 &&
           !expr.typeParameters.extra?.trailingComma
         ) {
-          // report error if single type parameter used without trailing comma.
           const parameter = expr.typeParameters.params[0];
-          if (!parameter.constraint) {
-            // A single type parameter must either have constraints
-            // or a trailing comma, otherwise it's ambiguous with JSX.
+          if (!parameter.constraint && !parameter.default) {
+            // A bare `<T>` is ambiguous with a JSX opening tag.
             this.raise(
               TSErrors.SingleTypeParameterWithoutTrailingComma,
               this.optionFlags & OptionFlags.Locations
